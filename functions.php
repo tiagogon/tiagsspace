@@ -856,6 +856,7 @@ function taxonomy_list($post_id_of_the_tags,$custom_taxonomy, $tag_before, $tag_
 }
 
 
+
 // List of tags with post number
 function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_before, $tag_after, $separator_term, $separator_term_last, $tax_link) {
 
