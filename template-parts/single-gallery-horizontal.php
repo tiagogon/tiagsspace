@@ -279,7 +279,7 @@ if (!get_field('deactivate_gallery')) {
         // ---------------
         ?>
 
-           
+    
             
             <script>
                     
