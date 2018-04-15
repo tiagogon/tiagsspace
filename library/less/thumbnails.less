@@ -1,0 +1,47 @@
+//
+// Thumbnails.less
+// --------------------------------------------------
+
+
+// Mixin and adjust the regular image class
+.thumbnail {
+  display: block;
+  margin-bottom: @grid-gutter-width;
+  .transition(all .2s ease-in-out);
+
+  > img,
+  a > img {
+    .img-responsive();
+    margin-left: auto;
+    margin-right: auto;
+    &.max-height{
+      max-height: 90vh;
+      width: auto;
+    }
+  }
+
+  // Add a hover state for linked versions only
+  a&:hover,
+  a&:focus,
+  a&.active {
+    border-color: @link-color;
+  }
+
+  // Image captions
+  .caption {
+    padding: @thumbnail-caption-padding;
+    color: @thumbnail-caption-color;
+  }
+
+  .intense {
+  cursor: url("../js/intense-images/img/plus_cursor.png") 25 25, pointer;
+  }
+}
+@media (max-width: @screen-xs-max){
+  .thumbnail {
+    margin-bottom: @grid-gutter-width/2;
+
+  }
+}
+
+

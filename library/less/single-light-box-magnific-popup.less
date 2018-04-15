@@ -1,0 +1,189 @@
+//
+// Lightbox Style
+// --------------------------------------------------
+
+.mfp-container {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.mfp-fade {
+  &.mfp-bg {
+    opacity: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    background: @bg1;
+    &.mfp-ready {
+      opacity: 0.90;
+    }
+    &.mfp-removing {
+      opacity: 0;
+    }
+  }
+}
+&.mfp-wrap {
+  .mfp-content {
+    opacity: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    //close button
+    .mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
+        color: @bg1;
+    }
+    .mfp-title{
+      color: @bg1;
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mfp-counter{
+      color: @bg1;
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;   
+    }
+  }
+  .mfp-preloader{
+    color: @bg1; 
+    span{
+      font-size: 80px;
+    }
+  }
+  &.mfp-ready .mfp-content {
+    opacity: 1;
+  }
+  &.mfp-removing .mfp-content {
+    opacity: 0;
+  }
+}
+.mfp-figure {
+  &:after {
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0.6);
+    background: @bg1;
+  }
+  
+}
+
+// Close button
+.mfp-close {
+  text-align: right;
+  opacity: 1;
+}
+.mfp-close:hover, .mfp-close:focus {
+  opacity: 0.7;
+  filter: alpha(opacity=100);
+}
+
+// Clean up Arrow
+.mfp-arrow-left:after, .mfp-arrow-right:after {
+  display: none;
+}
+
+
+
+// Background colors
+.magic-pink{
+  .mfp-fade {
+    &.mfp-bg {
+      background: @magic-pink;
+    }
+  }
+}
+.indigo{
+  .mfp-fade {
+    &.mfp-bg {
+      background: @indigo;
+    }
+  }
+}
+.deep-purple{
+  .mfp-fade {
+    &.mfp-bg {
+      background: @deep-purple;
+    }
+  }
+}
+.blue{
+  .mfp-fade {
+    &.mfp-bg {
+      background: @blue;
+    }
+  }
+}
+.lime{
+  .mfp-fade {
+    &.mfp-bg {
+      background: @lime;
+    }
+  }
+}
+.yellow{
+  .mfp-fade {
+    &.mfp-bg {
+      background: @yellow;
+    }
+  }
+}
+
+.mfp-arrow-left:before, .mfp-arrow-left .mfp-b {
+  border-right: 27px solid @bg1;
+  opacity: 1;
+}
+.mfp-arrow-right:before, .mfp-arrow-right .mfp-b {
+  border-left: 27px solid @bg1;
+  opacity: 1;
+
+}
+.mfp-arrow{
+  opacity: 1;
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+// In case is a light bacground (white, blue, yellow and lime)
+.header-ligh{
+  .mfp-arrow-left:before, .mfp-arrow-left .mfp-b {
+    border-right: 27px solid @gray-dark;
+  }
+  .mfp-arrow-right:before, .mfp-arrow-right .mfp-b {
+    border-left: 27px solid @gray-dark;
+  }
+
+  .mfp-wrap {
+    .mfp-content {
+      .mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
+          color: @gray-dark;
+      }
+      .mfp-title{
+        color: @gray-dark;
+      }
+      .mfp-counter{
+        color: @gray-dark;        
+      }
+    }
+    .mfp-preloader{
+      color: @gray-dark; 
+    }
+  }
+  .mfp-figure {
+    &:after {
+      background: @gray-dark;
+    }
+    
+  }
+  .mfp-close {
+    color: @gray-dark;
+  }
+  .mfp-close-btn-in {
+    .mfp-close {
+      color: @gray-dark;
+    }
+  }
+}
