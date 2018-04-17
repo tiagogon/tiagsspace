@@ -1,0 +1,86 @@
+// Core variables and mixins
+@import "google-color-palette.scss";
+@import "variables.scss";
+@import "mixins.scss";
+
+// Reset
+@import "normalize.scss";
+@import "print.scss";
+
+// Core CSS
+@import "scaffolding.scss";
+@import "type.scss";
+//@import "code.scss";
+@import "grid.scss";
+@import "tables.scss";
+@import "forms.scss";
+@import "buttons.scss";
+
+// Components
+@import "component-animations.scss";
+// @import "glyphicons.scss";
+//@import "dropdowns.scss";
+//@import "button-groups.scss";
+//@import "input-groups.scss";
+//@import "navs.scss";
+//@import "navbar.scss";
+//@import "breadcrumbs.scss";
+//@import "pagination.scss";
+//@import "pager.scss";
+@import "labels.scss";
+	//@import "badges.scss";
+	//@import "jumbotron.scss";
+@import "thumbnails.scss";
+//@import "alerts.scss";
+//@import "progress-bars.scss";
+	//@import "media.scss";
+//@import "list-group.scss";
+//@import "panels.scss";
+//@import "wells.scss";
+//@import "close.scss";
+
+// Components w/ JavaScript
+//@import "modals.scss";
+//@import "tooltip.scss";
+//@import "popovers.scss";
+//@import "carousel.scss";
+
+// Utility classes
+@import "utilities.scss";
+@import "responsive-utilities.scss";
+
+// WP-Bootstrap Styles
+@import "wp.scss";
+
+
+
+// ----- ADDED BY ME----
+
+
+//@import "front-header.scss";
+@import "front-header-slider.scss"; 
+@import "front-main-index.scss"; 
+
+// @import "front-blocks-hyper-log.scss"; // to delete!
+
+// No destruction BLOG
+// @import "archive.scss";
+// @import "archive-log.scss";  //to delete
+
+@import "single-gallery.scss"; 
+@import "video-js-player-skin.scss"; 
+@import "single-map.scss"; 
+@import "single-content.scss"; 
+
+@import "single-light-box-magnific-popup-original.scss"; // IMPORTED from plugin
+@import "single-light-box-magnific-popup.scss"; 
+
+@import "variables-classes.scss"; 
+
+@import "front-footer.scss";
+
+@import "override.scss";
+
+
+
+

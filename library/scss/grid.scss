@@ -1,0 +1,280 @@
+//
+// Grid system
+// --------------------------------------------------
+
+// Set the container width, and override it for fixed navbars in media queries
+.container {
+  @include container-fixed();
+
+  // @media (min-width: $screen-sm) {
+  //   width: $container-sm;
+  // }
+  // @media (min-width: $screen-md) {
+  //   width: $container-md;
+  // }
+  @media (min-width: $screen-lg-min) {
+    width: 1280px;
+  }
+}
+
+// mobile first defaults
+.row {
+  @include make-row();
+}
+
+
+
+//Spacement 2px
+$spacement-2: 2px;
+.container.spacement-2{
+  padding-left: $grid-gutter-width + 20 - ($spacement-2 / 2);
+  padding-right: $grid-gutter-width + 20 - ($spacement-2 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-2;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-2 / 2);
+    padding-right: ($spacement-2 / 2);
+    margin-bottom: $spacement-2;
+  }
+}
+.container-fluid.spacement-2{
+  padding-left: 40-($spacement-2 / 2);
+  padding-right: 40-($spacement-2 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-2;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-2 / 2);
+    padding-right: ($spacement-2 / 2);
+    margin-bottom: $spacement-2;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+//Spacement 4px
+$spacement-4: 4px;
+.container.spacement-4{
+  padding-left: $grid-gutter-width + 20 - ($spacement-4 / 2);
+  padding-right: $grid-gutter-width + 20 - ($spacement-4 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-4;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-4 / 2);
+    padding-right: ($spacement-4 / 2);
+    margin-bottom: $spacement-4;
+  }
+}
+.container-fluid.spacement-4{
+  padding-left: 40-($spacement-4 / 2);
+  padding-right: 40-($spacement-4 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-4;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-4 / 2);
+    padding-right: ($spacement-4 / 2);
+    margin-bottom: $spacement-4;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+//Spacement 8px
+$spacement-8: 8px;
+.container.spacement-8{
+  padding-left: $grid-gutter-width + 20 - ($spacement-8 / 2);
+  padding-right: $grid-gutter-width + 20 - ($spacement-8 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-8;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-8 / 2);
+    padding-right: ($spacement-8 / 2);
+    margin-bottom: $spacement-8;
+  }
+}
+.container-fluid.spacement-8{
+  padding-left: 40-($spacement-8 / 2);
+  padding-right: 40-($spacement-8 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-8;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-8 / 2);
+    padding-right: ($spacement-8 / 2);
+    margin-bottom: $spacement-8;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+//Spacement 16px
+$spacement-16: 16px;
+.container.spacement-16{
+  padding-left: $grid-gutter-width + 20 - ($spacement-16 / 2);
+  padding-right: $grid-gutter-width + 20 - ($spacement-16 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-16;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-16 / 2);
+    padding-right: ($spacement-16 / 2);
+    margin-bottom: $spacement-16;
+  }
+}
+.container-fluid.spacement-16{
+  padding-left: 40-($spacement-16 / 2);
+  padding-right: 40-($spacement-16 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-16;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-16 / 2);
+    padding-right: ($spacement-16 / 2);
+    margin-bottom: $spacement-16;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+//Spacement 20px  -----> THE ONLY ONE WORKING GOOD ON MOBILE the other need to be fixed but i am hangover
+$spacement-20: 20px;
+.container.spacement-20{
+  padding-left: 30px; //--> this value should be calculated with variables. no mind to do it now
+  padding-right: 30px;
+  @media (min-width: $screen-sm-min) {
+    padding-left: $grid-gutter-width + 20 - ($spacement-20 / 2);
+    padding-right: $grid-gutter-width + 20 - ($spacement-20 / 2); 
+  }
+  margin-bottom: $grid-gutter-width - $spacement-20;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-20 / 2);
+    padding-right: ($spacement-20 / 2);
+    margin-bottom: $spacement-20;
+  }
+}
+.container-fluid.spacement-20{
+  padding-left: 10px; //--> this value should be calculated with variables. no mindo to do it now
+  padding-right: 10px;
+  @media (min-width: $screen-sm-min) {
+    padding-left: 40-($spacement-20 / 2);
+    padding-right: 40-($spacement-20 / 2);
+  } 
+  margin-bottom: $grid-gutter-width - $spacement-20;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-20 / 2);
+    padding-right: ($spacement-20 / 2);
+    margin-bottom: $spacement-20;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+// remove no borer with class="row no-pad" -- via: http://stackoverflow.com/a/25023129
+.row.no-pad {
+  margin-right:0;
+  margin-left:0;
+}
+.row.no-pad > [class*='col-'] {
+  padding-right:0;
+  padding-left:0;
+  margin-bottom: -1px;
+  //margin: -1px; // Fix Mazory problem
+
+}
+
+
+// for no spacement in a container
+.row-inverted{
+  margin-left: ($grid-gutter-width / 2);
+  margin-right: ($grid-gutter-width / 2);
+}
+
+
+//
+
+// Common styles for small and large grid columns
+
+@mixin calc-grid-column($index, $class, $type) {
+  @if ($type == width) and ($index > 0) {
+    .col-#{$class}-#{$index} {
+      width: percentage(($index / $grid-columns));
+    }
+  }
+  @if ($type == push) and ($index > 0) {
+    .col-#{$class}-push-#{$index} {
+      left: percentage(($index / $grid-columns));
+    }
+  }
+  @if ($type == push) and ($index == 0) {
+    .col-#{$class}-push-0 {
+      left: auto;
+    }
+  }
+  @if ($type == pull) and ($index > 0) {
+    .col-#{$class}-pull-#{$index} {
+      right: percentage(($index / $grid-columns));
+    }
+  }
+  @if ($type == pull) and ($index == 0) {
+    .col-#{$class}-pull-0 {
+      right: auto;
+    }
+  }
+  @if ($type == offset) {
+    .col-#{$class}-offset-#{$index} {
+      margin-left: percentage(($index / $grid-columns));
+    }
+  }
+}
+
+
+
+// Extra small grid
+//
+// Columns, offsets, pushes, and pulls for extra small devices like
+// smartphones.
+
+@include make-grid-columns-float(xs);
+@include make-grid($grid-columns, xs, width);
+@include make-grid($grid-columns, xs, pull);
+@include make-grid($grid-columns, xs, push);
+@include make-grid($grid-columns, xs, offset);
+
+
+// Small grid
+//
+// Columns, offsets, pushes, and pulls for the small device range, from phones
+// to tablets.
+
+@media (min-width: $screen-sm-min) {
+  @include make-grid-columns-float(sm);
+  @include make-grid($grid-columns, sm, width);
+  @include make-grid($grid-columns, sm, pull);
+  @include make-grid($grid-columns, sm, push);
+  @include make-grid($grid-columns, sm, offset);
+}
+
+
+// Medium grid
+//
+// Columns, offsets, pushes, and pulls for the desktop device range.
+
+@media (min-width: $screen-md-min) {
+  @include make-grid-columns-float(md);
+  @include make-grid($grid-columns, md, width);
+  @include make-grid($grid-columns, md, pull);
+  @include make-grid($grid-columns, md, push);
+  @include make-grid($grid-columns, md, offset);
+}
+
+
+// Large grid
+//
+// Columns, offsets, pushes, and pulls for the large desktop device range.
+
+@media (min-width: $screen-lg-min) {
+  @include make-grid-columns-float(lg);
+  @include make-grid($grid-columns, lg, width);
+  @include make-grid($grid-columns, lg, pull);
+  @include make-grid($grid-columns, lg, push);
+  @include make-grid($grid-columns, lg, offset);
+}
+
