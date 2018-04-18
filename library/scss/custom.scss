@@ -1,0 +1,68 @@
+// Import files that will override bootstrap variables-custom
+@import "google-color-palette.scss";
+@import "custom-variables.scss";
+
+// Require All
+@import "../bootstrap/scss/bootstrap";
+
+  // OR REQUIRE JUST SOME COMPONENTS
+
+  // // Required
+  // @import "bootstrap/scss/functions";
+  // @import "bootstrap/scss/variables";
+  // @import "bootstrap/scss/mixins";
+  //
+  // // Optional
+  // @import "bootstrap/scss/reboot";
+  // @import "bootstrap/scss/type";
+  // @import "bootstrap/scss/images";
+  // @import "bootstrap/scss/code";
+  // @import "bootstrap/scss/grid";
+
+
+
+
+
+// // OLD FROM BONES
+//
+// TO // Review
+//
+// // Core CSS
+// @import "scaffolding.scss";
+// @import "type.scss";
+// @import "grid.scss";
+// @import "tables.scss";
+// @import "forms.scss";
+// @import "buttons.scss";
+//
+// // Components
+// @import "component-animations.scss";
+// @import "labels.scss";
+// @import "thumbnails.scss";
+//
+// // Utility classes
+// @import "utilities.scss";
+// @import "responsive-utilities.scss";
+//
+// // WP-Bootstrap Styles
+// @import "wp.scss";
+
+
+
+// ----- My SASS ----
+
+// Bootstrap features overrides
+@import "custom-grid.scss";
+@import "custom-thumbnails.scss";
+
+// Custom features
+@import "front-header-slider";
+@import "front-main-index.scss";
+@import "single-gallery.scss";
+@import "video-js-player-skin.scss";
+@import "single-map.scss";
+@import "single-content.scss";
+@import "single-light-box-magnific-popup-original.scss"; // IMPORTED from plugin
+@import "single-light-box-magnific-popup.scss";
+@import "front-footer.scss";
+@import "override.scss";

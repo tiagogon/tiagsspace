@@ -7,7 +7,7 @@
 #site-header{
   padding-top: 20px;
   padding-bottom: 40px;
-  @media (max-width: $screen-xs-max) {
+  @media (max-width: map-get($grid-breakpoints, sm)) {
     padding-bottom: 20px;
   }
   h1{
@@ -36,7 +36,7 @@
     display: none!important;
   }
   // NAV MENU
-  @media (max-width: $screen-sm-max){
+  @media (max-width: map-get($grid-breakpoints, md)){
     //Before Javascript run
     #topbar {
       display: none;
@@ -76,7 +76,7 @@
           text-align: right;
           color: $bg1;
           float: right;
-          
+
         }
         .slicknav_icon {
           display: none;
@@ -96,13 +96,13 @@
       .slicknav_nav {
             float: right;
         text-align: right;
-        
+
         padding:0;
         list-style:none;
         clear:both;
         margin:0;
         font-size:.875em;
-        
+
         width: 10px;
         ul {
           padding:0;
@@ -120,7 +120,7 @@
               text-decoration: none;
               text-transform: uppercase;
               letter-spacing: 1px;
-              font-family: $font-family-sans-serif-2;
+              font-family: $font-family-base;
               font-weight: 800;
               font-size: 14px;
               margin-left: 13px;
@@ -170,8 +170,8 @@
     }
   }
 
-  @media (min-width: $screen-md-min) { 
-    
+  @media (min-width: map-get($grid-breakpoints, md)) {
+
     // .slicknav_menu {
       .slicknav_menutxt {
         display: none;
@@ -179,10 +179,10 @@
       .slicknav_nav.slicknav_hidden {
         display: block!important;
       }
-    
+
       #topbar, .slicknav_nav{
         float: right;
-        
+
         ul {
           text-align: right;
           margin: 0;
@@ -196,7 +196,7 @@
               text-decoration: none;
               text-transform: uppercase;
               letter-spacing: 1px;
-              font-family: $font-family-sans-serif-2;
+              font-family: $font-family-base;
               font-weight: 800;
               font-size: 14px;
               margin-left: 13px;
@@ -267,7 +267,7 @@
 //   }
 // }
 
-@media (max-width: $screen-sm-max){
+@media (max-width: map-get($grid-breakpoints, md)){
   #site-header{
     background-color: transparent;
   }
@@ -291,7 +291,7 @@
       }
     }
     // NAV MENU
-    @media (max-width: $screen-xs-max){
+    @media (max-width: map-get($grid-breakpoints, sm)){
       // After Javascript
       .slicknav_menu {
         .slicknav_btn {
@@ -322,8 +322,8 @@
       }
     }
 
-    @media (min-width: $screen-md-min) { 
-      
+    @media (min-width: map-get($grid-breakpoints, md)) {
+
       #topbar, .slicknav_nav{
         ul {
           li{
@@ -603,7 +603,7 @@
 
 .header-front-page{
   .home-link{
-    @media (min-width: $screen-md-min) {
+    @media (min-width: map-get($grid-breakpoints, md)) {
       display: none!important;
     }
   }
@@ -615,7 +615,7 @@
 
 .submenu {
   list-style:none;
-  @media (min-width: $screen-sm-min) {
+  @media (min-width: map-get($grid-breakpoints, sm)) {
       text-align: right;
     }
   ul {
@@ -627,7 +627,7 @@
       margin-top: 15px;
       margin-bottom: 5px;
       margin-right: 13px;
-      @media (min-width: $screen-sm-min) {
+      @media (min-width: map-get($grid-breakpoints, sm)) {
         margin-right: 0px;
         margin-left: 13px;
         text-align: right;
@@ -640,7 +640,7 @@
         text-decoration: none;
         text-transform: uppercase;
         letter-spacing: 1px;
-        font-family: $font-family-sans-serif-2;
+        font-family: $font-family-base;
         font-weight: 800;
         font-size: 14px;
         margin-right: 13px;
@@ -649,10 +649,10 @@
         line-height: 1.3;
         background-color: transparent;
         margin: 0px;
-        @media (min-width: $screen-sm-min) {
+        @media (min-width: map-get($grid-breakpoints, sm)) {
           border: 2px solid transparent;
           padding: 1px 4px 2px 4px;
-          
+
         }
         @include transition(all 1s ease-out);
         &:hover{
@@ -715,7 +715,7 @@
   background-color: #663feff2;
   .overlay-close {
     color: $bg1;
-    font-family: $font-family-sans-serif-2;
+    font-family: $font-family-base;
     font-weight:800;
     width:80px;
     height:70px;
@@ -724,7 +724,7 @@
     top:0px;
     overflow:hidden;
     border:none;
-    background-color: transparent; 
+    background-color: transparent;
     outline:none;
     z-index:10;
     text-align: right;
@@ -758,7 +758,7 @@
         color:pink;
       }
       a {
-        font-family: $font-family-sans-serif-2;
+        font-family: $font-family-base;
         font-weight:800;
         display:inline-block;
         color:$bg1;
@@ -775,7 +775,7 @@
 }
 
 // Mobile smaller size fon
-@media (max-width: $screen-xs-max){
+@media (max-width: map-get($grid-breakpoints, sm)){
   .overlay {
     ul {
       li {
@@ -840,7 +840,7 @@
     @media (min-width: 1921px) {
         display: none !important;
     }
-    
+
     .swiper-wrapper{
       .swiper-slide{
         a{
@@ -876,7 +876,7 @@
             span{
                 font-size: 80px;
             }
-            
+
           }
           .slider-cap{
             text-align: center;
@@ -884,7 +884,7 @@
             bottom: 65px;
             width: 100%;
             .series{
-              font-family: $font-family-sans-serif-2;
+              font-family: $font-family-base;
               color: $bg1;
               font-weight: 600;
               font-size: 16px;
@@ -927,7 +927,7 @@
       }
       .swiper-slide-prev, .swiper-slide-next{
         img{
-          
+
         }
       }
     }
@@ -977,4 +977,3 @@
     display: none;
   }
 }
-

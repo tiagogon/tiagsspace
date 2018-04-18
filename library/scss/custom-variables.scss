@@ -1,0 +1,90 @@
+// Your variable overrides
+// Grays
+// -------------------------
+
+$gray-darker:            lighten(#000, 13.5%); // #222
+$gray-dark:              lighten(#000, 20%);   // #333
+$gray:                   lighten(#000, 33.5%); // #555
+$gray-light:             lighten(#000, 60%);   // #999
+$gray-lighter:           lighten(#000, 93.5%); // #eee
+
+// Background colors
+// -------------------------
+
+$bg1:      		#fff; //#F5F5F5; // Light Grey
+
+
+// Color Combinations
+// -------------------------
+
+$magic-pink: 			    $palette-Pink-A400; //none-white-bg
+$magic-pink-light: 		$palette-Pink-50;
+$dark: 					      #222222; //none-white-bg
+$indigo: 				      $palette-Indigo-400; //none-white-bg
+$deep-purple: 			  $palette-Deep-Purple-A700; //none-white-bg
+$blue: 					      $palette-Indigo-A400;
+$blue-light: 			    $palette-Indigo-50;
+$lime: 					      $palette-Lime-400;
+$yellow: 				      $palette-Blue-Grey-50; // $palette-Deep-Purple-50; //;
+$yellow-light: 				$bg1;
+
+// OTHER
+$brand-primary:         $gray-dark;
+
+
+// stylelint-disable value-keyword-case
+$font-family-sans-serif: "Nunito Sans", BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+
+// Background colors
+.magic-pink{
+	background-color: $magic-pink;
+}
+.magic-pink-heading{
+	color: $lime;
+}
+
+.dark{
+	background-color: $dark;
+}
+.dark-heading{
+	color: $magic-pink;
+}
+
+.indigo{
+background-color: $indigo;
+}
+.indigo-heading{
+	color: $yellow;
+}
+
+.deep-purple{
+	background-color: $deep-purple;
+}
+.deep-purple-heading{
+	color: $blue;
+}
+
+.blue{
+	background-color: $blue;
+
+}
+.blue-heading{
+	color: $magic-pink;
+}
+
+.lime{
+	background-color: $lime;
+
+}
+.lime-heading{
+	color: $deep-purple;
+}
+
+.yellow{
+	background-color: $yellow;
+
+}
+.yellow-heading{
+	color: $indigo;
+}

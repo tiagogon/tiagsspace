@@ -3,11 +3,11 @@
 // added by me
 
   .side-padding, .container{
-	@media (max-width: $screen-sm-min) {
+	@media (max-width: map-get($grid-breakpoints, sm)) {
 	    padding-left: 20px;
 	    padding-right: 20px;
 	}
-	@media (min-width: $screen-sm-min) {
+	@media (min-width: map-get($grid-breakpoints, sm)) {
 	    padding-left: 40px;
 	    padding-right: 40px;
     }
@@ -15,7 +15,7 @@
 
 // Remove Thumbnails grid on mobile
 .series-block{
-    @media (max-width: $screen-xs-max) { 
+    @media (max-width: map-get($grid-breakpoints, sm)) { 
 	    padding-left: 0px;
 	    padding-right: 0px; 
 	    padding-bottom: 40px;

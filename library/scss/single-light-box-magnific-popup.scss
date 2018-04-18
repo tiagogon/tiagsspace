@@ -22,7 +22,7 @@
     }
   }
 }
-&.mfp-wrap {
+.mfp-wrap {  // SCSS erro. before was: "&.mfp-wrap {"
   .mfp-content {
     opacity: 0;
     -webkit-transition: all 0.5s ease;
@@ -46,11 +46,11 @@
       line-height: 18px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1px;   
+      letter-spacing: 1px;
     }
   }
   .mfp-preloader{
-    color: $bg1; 
+    color: $bg1;
     span{
       font-size: 80px;
     }
@@ -67,7 +67,7 @@
     box-shadow: 0 0 0px rgba(0, 0, 0, 0.6);
     background: $bg1;
   }
-  
+
 }
 
 // Close button
@@ -165,18 +165,18 @@
         color: $gray-dark;
       }
       .mfp-counter{
-        color: $gray-dark;        
+        color: $gray-dark;
       }
     }
     .mfp-preloader{
-      color: $gray-dark; 
+      color: $gray-dark;
     }
   }
   .mfp-figure {
     &:after {
       background: $gray-dark;
     }
-    
+
   }
   .mfp-close {
     color: $gray-dark;

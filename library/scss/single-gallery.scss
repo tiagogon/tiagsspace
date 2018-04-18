@@ -23,6 +23,7 @@ div.gallery{
     display:inline-block;
 		figure{
 			overflow: hidden;
+			    margin: 0;
 			.imgcontainer{
 				img{
 					max-width: 100%;
@@ -82,7 +83,7 @@ div.gallery{
 	padding-right: 0px;
 	padding-bottom: 0;
 	margin-bottom: 40px;
-	@media (min-width: $screen-sm-min) {
+	@media (min-width: map-get($grid-breakpoints, sm)) {
 	    padding-left: 40px;
 	    padding-right: 20px;
 	}
@@ -103,17 +104,17 @@ div.gallery-horizontal{
 						max-height: 100%;
 						max-width: 100%;
 						/* Small devices (tablets, 768px and up) */
-						@media (min-width: $screen-sm-min) {
+						@media (min-width: map-get($grid-breakpoints, sm)) {
 							max-height: 85vh;
 						}
 
 						/* Medium devices (desktops, 992px and up) */
-						@media (min-width: $screen-md-min) {
+						@media (min-width: map-get($grid-breakpoints, md)) {
 							max-height: 80vh;
 						}
 
 						/* Large devices (large desktops, 1200px and up) */
-						@media (min-width: $screen-lg-min) { 
+						@media (min-width: map-get($grid-breakpoints, lg)) { 
 							//max-height: 75vh; 
 						}
 					}

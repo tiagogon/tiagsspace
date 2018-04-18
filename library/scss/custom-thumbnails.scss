@@ -1,0 +1,33 @@
+//
+// Thumbnails.less
+// --------------------------------------------------
+
+
+// Mixin and adjust the regular image class
+.thumbnail {
+  display: block;
+  margin-bottom: $grid-gutter-width;
+  @include transition(all .2s ease-in-out);
+
+  > img,
+  a > img {
+    //@include img-responsive();
+    margin-left: auto;
+    margin-right: auto;
+    &.max-height{
+      max-height: 90vh;
+      width: auto;
+    }
+  }
+
+
+  .intense {
+  cursor: url("../js/intense-images/img/plus_cursor.png") 25 25, pointer;
+  }
+}
+@media (max-width: map-get($grid-breakpoints, sm)){
+  .thumbnail {
+    margin-bottom: $grid-gutter-width/2;
+
+  }
+}
