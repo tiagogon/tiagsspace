@@ -4,7 +4,7 @@ Author: Eddie Machado
 URL: htp://themble.com/bones/
 
 This is where you can drop your custom functions or
-just edit things like thumbnail sizes, header images, 
+just edit things like thumbnail sizes, header images,
 sidebars, comments, ect.
 */
 
@@ -31,7 +31,7 @@ add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 
 /************* THUMBNAIL SIZE OPTIONS *************/
 
-// HD/6 
+// HD/6
 add_image_size( 'thumbnail', 480, 960, false ); // update also on /wp-admin/options-media.php
 
 // container on tablets
@@ -64,10 +64,10 @@ function custom_password_form() {
 	return $o;
 }
 
-// --- Bottraps STYLE --- 
+// --- Bottraps STYLE ---
 // enqueue styles
-    // if( !function_exists("theme_styles") ) {  
-    //     function theme_styles() { 
+    // if( !function_exists("theme_styles") ) {
+    //     function theme_styles() {
     //         // This is the compiled css file from LESS - this means you compile the LESS file locally and put it in the appropriate directory if you want to make any changes to the master bootstrap.css.
     //         wp_register_style( 'bootstrap', get_template_directory_uri() . '/library/css/bootstrap.css', array(), '1.0', 'all' );
     //         wp_enqueue_style( 'bootstrap' );
@@ -81,28 +81,28 @@ function custom_password_form() {
 
 // enqueue javascript
     // removed by me!
-    // if( !function_exists( "theme_js" ) ) {  
+    // if( !function_exists( "theme_js" ) ) {
     //   function theme_js(){
-      
-    //     wp_register_script( 'bootstrap', 
-    //       get_template_directory_uri() . '/library/js/bootstrap.min.js', 
-    //       array('jquery'), 
+
+    //     wp_register_script( 'bootstrap',
+    //       get_template_directory_uri() . '/library/js/bootstrap.min.js',
+    //       array('jquery'),
     //       '1.2' );
-      
-    //     wp_register_script( 'wpbs-scripts', 
-    //       get_template_directory_uri() . '/library/js/scripts.js', 
-    //       array('jquery'), 
+
+    //     wp_register_script( 'wpbs-scripts',
+    //       get_template_directory_uri() . '/library/js/scripts.js',
+    //       array('jquery'),
     //       '1.2' );
-      
-    //     wp_register_script(  'modernizr', 
-    //       get_template_directory_uri() . '/library/js/modernizr.full.min.js', 
-    //       array('jquery'), 
+
+    //     wp_register_script(  'modernizr',
+    //       get_template_directory_uri() . '/library/js/modernizr.full.min.js',
+    //       array('jquery'),
     //       '1.2' );
-      
+
     //     wp_enqueue_script('bootstrap');
     //     wp_enqueue_script('wpbs-scripts');
     //     wp_enqueue_script('modernizr');
-        
+
     //   }
     // }
     // add_action( 'wp_enqueue_scripts', 'theme_js' );
@@ -570,7 +570,7 @@ function places_taxonomy() {
   $args = array(
     'labels'                     => $labels,
     'hierarchical'               => false,
-    'rewrite'                    => array( 
+    'rewrite'                    => array(
                                     'slug' => 'in'),
     'public'                     => true,
     'show_ui'                    => true,
@@ -637,7 +637,7 @@ function medium_taxonomy() {
   $args = array(
     'labels'                     => $labels,
     'hierarchical'               => true,
-    'rewrite'                    => array( 
+    'rewrite'                    => array(
                                     'hierarchical' => true,
                                     'slug' => 'm'),
     'public'                     => true,
@@ -737,7 +737,7 @@ function year_from_taxonomy() {
   $args = array(
     'labels'                     => $labels,
     'hierarchical'               => false,
-    'rewrite'                    => array( 
+    'rewrite'                    => array(
                                     'slug' => 'from'),
     'public'                     => true,
     'show_ui'                    => true,
@@ -819,14 +819,14 @@ function taxonomy_list($post_id_of_the_tags,$custom_taxonomy, $tag_before, $tag_
     //ID of the current post
     $this_id = $post_id_of_the_tags;
 
-    // Get Series terms    
+    // Get Series terms
     $terms = get_the_terms( $this_id, $custom_taxonomy);
 
     $count = count( $terms );
 
     $terms_list = "";
 
-    if ( $terms && ! is_wp_error( $terms ) ) { 
+    if ( $terms && ! is_wp_error( $terms ) ) {
         $i = 0;
         foreach ( $terms as $term ) {
             $i++;
@@ -845,14 +845,14 @@ function taxonomy_list($post_id_of_the_tags,$custom_taxonomy, $tag_before, $tag_
                 $terms_list = $terms_list.$separator.'<a href="'.$term_link.'" rel="category tag">'.$term->name.'</a>';
             } else {
                 $terms_list = $terms_list.$separator.$term->name;
-            }                
+            }
         }
 
     // add content after and after the string
     $terms_list = $tag_before.$terms_list.$tag_after;
     }
 
-    return $terms_list; 
+    return $terms_list;
 }
 
 
@@ -871,9 +871,9 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
     $i = 0;
 
     $terms_list = "";
-                            
+
     if ( $terms && ! is_wp_error( $terms ) ) :
-        
+
         // Define variables
         $series_number = "";
 
@@ -900,12 +900,12 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
             );
             $series_posts = new WP_Query( $args );
 
-            $count = 0; 
-            if($series_posts->have_posts()) : 
-                while($series_posts->have_posts()) : 
+            $count = 0;
+            if($series_posts->have_posts()) :
+                while($series_posts->have_posts()) :
                     $series_posts->the_post();
 
-                    $count++; 
+                    $count++;
 
                     $id_loop_post = get_the_ID();
                     if ($id_loop_post == $this_id) {
@@ -926,16 +926,16 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
             if ($tax_link == 'link') {
 
                 $terms_list = $terms_list.'<a href="'.get_term_link( $term ).'" rel="category tag">'.$series_name.sprintf('%02d', $series_number).'</a>'.$separator;
-            } else { 
+            } else {
 
-                $terms_list = $terms_list .$series_name.sprintf('%02d', $series_number).$separator; 
+                $terms_list = $terms_list .$series_name.sprintf('%02d', $series_number).$separator;
             }
-             
-        }                 
+
+        }
 
         $terms_list = $tag_before.$terms_list.$tag_after;
-    
-    endif; 
+
+    endif;
 
     return $terms_list;
 }
@@ -945,7 +945,7 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
 
 // post content wrap styles
 function content_wrap() {
-    echo "col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-7 col-lg-offset-2";
+    echo "col-xs-12 offset-xs-0 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-7 offset-lg-2";
 
 }
 
@@ -1027,12 +1027,12 @@ add_action( 'admin_head', 'add_my_favicon_admin' ); //admin end
 add_action('admin_head', 'my_custom_featured_image_css');
 function my_custom_featured_image_css() {
   echo '<style>
-    .featured-image.column-featured-image img { 
+    .featured-image.column-featured-image img {
         max-width: 60px;
         height: auto;
         vertical-align: top;
         max-height: none;
-    } 
+    }
   </style>';
 }
 
@@ -1112,7 +1112,7 @@ function titlerss($content) {
         // } else {
             $content = 'dusk // '.$content;
         // }
-        
+
 
     } elseif ($post_type == 'films') {
 
@@ -1134,7 +1134,7 @@ function titlerss($content) {
     return $content;
 
 }
-add_filter('the_title_rss', 'titlerss'); 
+add_filter('the_title_rss', 'titlerss');
 
 // add custom field
 // -- read here: http://goo.gl/TsIVG2
@@ -1146,11 +1146,11 @@ add_filter('the_title_rss', 'titlerss');
 
 // thumbnails is RSS, linking them to the associated post
 function wptuts_feedimgs($content) {
-        
+
     if (is_feed()) {
-         
+
         // empety Images HTML array
-        $imageshtml = ""; 
+        $imageshtml = "";
 
         // Info about the post
         global $post;
@@ -1171,20 +1171,20 @@ function wptuts_feedimgs($content) {
         $images = get_posts( $args );
 
         // Count images
-        $number_of_imgs = count($images); 
+        $number_of_imgs = count($images);
 
         // Output the "view more" depending on the post type
         if ($post_type == 'post' OR
             $post_type == 'dusk' OR
             $post_type == 'emulsion' OR
             $post_type == 'hyper') {
-            
+
             $imageshtml = '<a href="'. get_permalink($post->ID) .'" class="webfeedsFeaturedVisual"><img src="'. wp_get_attachment_url( get_post_thumbnail_id($post->ID) ).'"/></a>
                     <p>view the '.$number_of_imgs.' images <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
 
             // get images atached to the post
             $content =  $imageshtml;
-        
+
         } elseif ($post_type == 'log') {
 
             $imageshtml = '<a href="'. get_permalink($post->ID) .'" class="webfeedsFeaturedVisual"><img src="'. wp_get_attachment_url( get_post_thumbnail_id($post->ID) ).'"/></a>
@@ -1200,7 +1200,7 @@ function wptuts_feedimgs($content) {
 
             // get images atached to the post
             $content =  $imageshtml;
-        }            
+        }
 
         // Get the full gallery and content
         else {
@@ -1216,7 +1216,7 @@ function wptuts_feedimgs($content) {
                         } else {
                             $featured_image = '';
                         }
-                        
+
                         $imageshtml .= '<a href="'. get_permalink($post->ID) .' '.$featured_image.'"><img src="'. esc_url( wp_get_attachment_url($image->ID)) .'"/></a>';
                     }
                 }
@@ -1227,15 +1227,15 @@ function wptuts_feedimgs($content) {
             $content =  $imageshtml.$content;
         }
     }
-        
+
 
     return $content;
-        
+
 }
 add_filter('the_content', 'wptuts_feedimgs'); // for full feeds
 
 
-function wp_rss_title() { 
+function wp_rss_title() {
     if (is_feed()) {
 
             return 'Diferent feed name';
@@ -1250,8 +1250,8 @@ function wp_rss_title() {
 // -------- NUMBER OF THE POST --------
 // ---------------- // ----------------
 // ---------------- // ----------------
-function number_of_the_post($post_ID) 
-{ 
+function number_of_the_post($post_ID)
+{
     $the_post = get_post($post_ID);
     $post_type = get_post_type( $post_ID );
     $date = $the_post->post_date;
@@ -1261,8 +1261,8 @@ function number_of_the_post($post_ID)
     global $wpdb;
     $count = $wpdb->get_var("SELECT count(*) FROM $wpdb->posts  WHERE post_status='publish' AND post_type='$post_type' AND post_date<='{$date}'");
 
-    return $count; 
-} 
+    return $count;
+}
 
 
 // ---------------- // ----------------
@@ -1276,15 +1276,15 @@ function number_of_images_in_total() {
 global $wpdb;
         $res = $wpdb->get_results("select p1.*
             FROM {$wpdb->posts} p1, {$wpdb->posts} p2
-            WHERE p1.post_parent = p2.ID 
+            WHERE p1.post_parent = p2.ID
                AND p1.post_mime_type LIKE 'image%'
-               
+
                AND p2.post_status = 'publish'
             ;"
         );
         $return = count($res);
-        return $return; 
-} 
+        return $return;
+}
 
 
 // ---------------- // ----------------
@@ -1298,15 +1298,15 @@ function number_of_images_in_the_post_type($in_post_type) {
     global $wpdb;
         $res = $wpdb->get_results("select p1.*
             FROM {$wpdb->posts} p1, {$wpdb->posts} p2
-            WHERE p1.post_parent = p2.ID 
+            WHERE p1.post_parent = p2.ID
                AND p1.post_mime_type LIKE 'image%'
                AND p2.post_type = '$in_post_type'
                AND p2.post_status = 'publish'
             ;"
         );
         $return = count($res);
-        return $return; 
-} 
+        return $return;
+}
 
 
 
@@ -1320,16 +1320,16 @@ function number_of_days_in_the_post_type($in_post_type) {
     $last_post  =   get_posts("post_type=".$in_post_type."&numberposts=1");
     $first_post     =   get_posts("post_type=".$in_post_type."&numberposts=1&order=asc");
 
-    $last_post_date     = get_the_time('Y-m-d',$last_post[0]->ID); 
-    $first_post_date    = get_the_time('Y-m-d',$first_post[0]->ID); 
+    $last_post_date     = get_the_time('Y-m-d',$last_post[0]->ID);
+    $first_post_date    = get_the_time('Y-m-d',$first_post[0]->ID);
 
     $datetime1 = date_create($first_post_date );
     $datetime2 = date_create($last_post_date );
     $interval = date_diff($datetime1, $datetime2);
 
     $return = $interval->days;
-    return $return; 
-} 
+    return $return;
+}
 
 
 // ---------------- // ----------------
@@ -1337,31 +1337,31 @@ function number_of_days_in_the_post_type($in_post_type) {
 // -------- ROMAN NUMBERS --------
 // ---------------- // ----------------
 // ---------------- // ----------------
-function romanic_number($integer, $upcase = true) 
-{ 
-    $table = array('M'=>1000, 'CM'=>900, 'D'=>500, 'CD'=>400, 'C'=>100, 'XC'=>90, 'L'=>50, 'XL'=>40, 'X'=>10, 'IX'=>9, 'V'=>5, 'IV'=>4, 'I'=>1); 
-    $return = ''; 
-    while($integer > 0) 
-    { 
-        foreach($table as $rom=>$arb) 
-        { 
-            if($integer >= $arb) 
-            { 
-                $integer -= $arb; 
-                $return .= $rom; 
-                break; 
-            } 
-        } 
-    } 
+function romanic_number($integer, $upcase = true)
+{
+    $table = array('M'=>1000, 'CM'=>900, 'D'=>500, 'CD'=>400, 'C'=>100, 'XC'=>90, 'L'=>50, 'XL'=>40, 'X'=>10, 'IX'=>9, 'V'=>5, 'IV'=>4, 'I'=>1);
+    $return = '';
+    while($integer > 0)
+    {
+        foreach($table as $rom=>$arb)
+        {
+            if($integer >= $arb)
+            {
+                $integer -= $arb;
+                $return .= $rom;
+                break;
+            }
+        }
+    }
 
-    return $return; 
-} 
-
-
+    return $return;
+}
 
 
 
-/// ------------ Background Colours -- 
+
+
+/// ------------ Background Colours --
 // -----------------------------------
 // -----------------------------------
 
@@ -1373,38 +1373,38 @@ function add_color_class( $classes ) {
     // Get selected color from ACF
     $selected_color = null;
     $selected_color = get_field('background_colour');
-    
-    
+
+
     // Is Hyper
-    if ((is_singular( 'hyper' ) && $selected_color==0) 
+    if ((is_singular( 'hyper' ) && $selected_color==0)
                 OR is_post_type_archive('hyper')) {
-        
+
 
         $classes[] = 'none-white-bg';
         $classes[] = 'deep-purple';
 
     // Is Dusk
-    } elseif ((is_singular( 'dusk' ) && $selected_color==0) 
+    } elseif ((is_singular( 'dusk' ) && $selected_color==0)
                 OR is_post_type_archive('dusk')) {
 
         $classes[] = 'none-white-bg';
         $classes[] = 'blue';
 
     // Is Emulsion
-    } elseif ((is_singular( 'emulsion' ) && $selected_color==0) 
+    } elseif ((is_singular( 'emulsion' ) && $selected_color==0)
                 OR is_post_type_archive('emulsion')) {
 
         $classes[] = 'header-ligh';
         $classes[] = 'yellow';
 
     // Is Log
-    } elseif ((is_singular( 'log' ) && $selected_color==0) 
+    } elseif ((is_singular( 'log' ) && $selected_color==0)
                 OR is_post_type_archive('log')
                 OR is_tax('log-branch')) {
 
         $classes[] = 'header-ligh';
         $classes[] = 'header-white';
-    
+
     // Is Films
     } elseif ((is_singular( 'films' ) && $selected_color==0) ) {
         $classes[] = 'none-white-bg';
@@ -1413,7 +1413,7 @@ function add_color_class( $classes ) {
 
         $classes[] = 'none-white-bg';
         $classes[] = 'magic-pink';
-    
+
     // If there is selection on ACF
     } elseif (!$selected_color==0 && is_singular()) {
         $classes[] = $selected_color;
@@ -1430,23 +1430,23 @@ function add_color_class( $classes ) {
         } elseif ($selected_color=="indigo") {
             $classes[] = 'none-white-bg';
         }
-        
-    } 
-    
+
+    }
+
     // Other cases
     elseif ( $selected_color==0) {
-        
+
         if (is_singular( ) && $selected_color==0) {
-        
+
             $classes[] = 'header-ligh';
             $classes[] = 'header-white';
 
-        // Default color    
+        // Default color
         } else {
             $classes[] = 'none-white-bg';
             $classes[] = 'magic-pink'; // $default_color;
         }
-        
+
     }
 
 
@@ -1459,7 +1459,7 @@ add_filter( 'body_class', 'add_color_class' );
 
 // ---------------- // -------------------------------- // ----------------
 // ---------------- // -------------------------------- // ----------------
-// ---------------- // ------------ SEO HOOKS -- 
+// ---------------- // ------------ SEO HOOKS --
 // ---------------- // -------------------------------- // ----------------
 // ---------------- // -------------------------------- // ----------------
 
@@ -1497,79 +1497,79 @@ function seo_image($image) {
     // Is Post Type archive
     if( is_post_type_archive( 'hyper' )) {
 
-        $args = array( 
+        $args = array(
             'numberposts' => '1',
             'post_type' => 'hyper',
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-        
+
         $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
    }
-   
+
    if( is_post_type_archive( 'log' )) {
 
-        $args = array( 
+        $args = array(
             'numberposts' => '1',
             'post_type' => 'log',
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-        
+
         $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
    }
-   
+
    if( is_post_type_archive( 'dusk' )) {
 
-        $args = array( 
+        $args = array(
             'numberposts' => '1',
             'post_type' => 'dusk',
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-        
+
         $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
-   }  
-   
+   }
+
    if( is_post_type_archive( 'emulsion' )) {
 
-        $args = array( 
+        $args = array(
             'numberposts' => '1',
             'post_type' => 'emulsion',
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-        
+
         $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
-   }  
-   
+   }
+
    if( is_post_type_archive( 'films' )) {
 
-        $args = array( 
+        $args = array(
             'numberposts' => '1',
             'post_type' => 'films',
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-        
+
         $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
-   }  
-   
+   }
+
    if( is_post_type_archive( 'cityburns' )) {
 
-        $args = array( 
+        $args = array(
             'numberposts' => '1',
             'post_type' => 'cityburns',
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-        
+
         $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
    }
 
@@ -1582,7 +1582,7 @@ function seo_image($image) {
         $term_slug = $term->slug;
 
 
-        $args = array( 
+        $args = array(
             'numberposts' => '1',
             'post_status' => 'publish',
             'post_type' => array('post','dusk','films','log','emulsion','hyper','cityburns'),
@@ -1596,22 +1596,22 @@ function seo_image($image) {
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-        
+
         $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
    }
 
    if( is_home() ) {
 
-        $args = array( 
+        $args = array(
             'numberposts' => '1',
             'post_type' => array('post','dusk','films','emulsion','hyper','cityburns'),
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-        
+
         $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
-   }  
+   }
 
    // Return Final image
    return $image;
@@ -1659,8 +1659,8 @@ function index_next_post_type($current_post_id) {
     );
     $inner_query = new WP_Query( $args );
 
-    // if($inner_query->have_posts()) : 
-    //     while($inner_query->have_posts()) : 
+    // if($inner_query->have_posts()) :
+    //     while($inner_query->have_posts()) :
 
     //         $id_loop_post = get_the_ID();
 
@@ -1851,7 +1851,7 @@ function build_email_and_send_1() {
 
         if ($posts) {
             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong>LOG</strong></span></br></br>';
-            
+
             $posts_content = $posts_content.'<strong><a href="https://trouble.place/log/" style="color:#ec407a!important; text-decoration: none;">'.count($posts).' NEW ENTRIES</a></strong></br></br>';
 
             $posts_content = $posts_content."</br><hr />";
@@ -1866,7 +1866,7 @@ function build_email_and_send_1() {
         $month_name = "[".date("M", strtotime('-32 days'))."-".date("M")."]";
         $year_numb = date('Y');
 
-        
+
         // Combine Variables
         $to[]           = 'beamer-2383360638cc0beb42be76b60ce4d17510528977@tinyletter.com';
         $subject        = 'Trouble Letter // '.$month_name;
@@ -1881,7 +1881,7 @@ function build_email_and_send_1() {
 
         // Send Email
         wp_mail( $to, $subject, $message, $headers );
-    
+
     } // If is the last day of the month
 
 }

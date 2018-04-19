@@ -36,55 +36,25 @@ $brand-primary:         $gray-dark;
 $font-family-sans-serif: "Nunito Sans", BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
 
-// Background colors
-.magic-pink{
-	background-color: $magic-pink;
-}
-.magic-pink-heading{
-	color: $lime;
+// Font weight
+$font-weight-light:           400;
+$font-weight-normal:          600;
+$font-weight-bold:            700;
+$headings-font-weight:        600;
+
+// font colors
+body.none-white-bg{
+  color: $bg1;
 }
 
-.dark{
-	background-color: $dark;
-}
-.dark-heading{
-	color: $magic-pink;
-}
 
-.indigo{
-background-color: $indigo;
-}
-.indigo-heading{
-	color: $yellow;
-}
+// grid
+$grid-gutter-width:           40px;
 
-.deep-purple{
-	background-color: $deep-purple;
-}
-.deep-purple-heading{
-	color: $blue;
-}
-
-.blue{
-	background-color: $blue;
-
-}
-.blue-heading{
-	color: $magic-pink;
-}
-
-.lime{
-	background-color: $lime;
-
-}
-.lime-heading{
-	color: $deep-purple;
-}
-
-.yellow{
-	background-color: $yellow;
-
-}
-.yellow-heading{
-	color: $indigo;
-}
+// Container max with -- remove and keep just on big screens
+$container-max-widths: (
+	// sm: 540px,
+  // md: 720px,
+  // lg: 960px,
+  xl: 1280px // 1200 + 40 + 0 -- before xl: 1140px
+) !default;

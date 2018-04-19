@@ -15,12 +15,13 @@
 
 // Remove Thumbnails grid on mobile
 .series-block{
-    @media (max-width: map-get($grid-breakpoints, sm)) { 
+    @media (max-width: map-get($grid-breakpoints, sm)) {
 	    padding-left: 0px;
-	    padding-right: 0px; 
+	    padding-right: 0px;
 	    padding-bottom: 40px;
   }
 }
 
-
-
+body {
+	font-size: 14px;
+}
