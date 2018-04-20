@@ -113,7 +113,7 @@ Index of posts for Home and Archives
                                 </figure>
                             </li>
                             <li class="loadpost year-separator item col-12  item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper">Publish in <?php echo $year; ?></div>
+                                <div class="separator-wrapper"><?php echo $year; ?></div>
                             </li>
                         <?php }
 
@@ -183,7 +183,7 @@ Index of posts for Home and Archives
                             ?>
 
                             <li class="item loadpost year-separator col-12 item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper">Publish in <?php echo $year; ?></div>
+                                <div class="separator-wrapper"><?php echo $year; ?></div>
                             </li>
 
                         <?php }
@@ -508,9 +508,15 @@ Index of posts for Home and Archives
     if (($prev_link || $next_link) AND !is_singular()) { ?>
 
         <div class="container-fluid pagination-container">
-                <nav class="archive-navigation col-12">
-                    <span class="nav-next"><?php previous_posts_link( '< newer' ); ?></span> <span class="nav-previous"><?php next_posts_link( 'older >' ); ?></span>
+            <div class="row justify-content-between">
+                <nav class="archive-navigation col-6">
+                    <span class="nav-next"><?php previous_posts_link( '< ####' ); ?></span>
                 </nav>
+                <nav class="archive-navigation col-6">
+                    <span class="nav-previous"><?php next_posts_link( '#### >' ); ?></span>
+                </nav>
+            </div>
+
         </div>
     <?php } ?>
 

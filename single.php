@@ -4,7 +4,7 @@
 
 	<article id="?p=<?php the_ID(); ?>" <?php post_class('clearfix'); ?> role="article" itemscope itemtype="http://schema.org/BlogPosting">
 
-		<?PHP		
+		<?PHP
 		// Video
 		if (get_field('video_embed')) {
 			get_template_part( 'template-parts/single', 'video' );
@@ -25,9 +25,9 @@
 		}?>
 
 		<div class="container single-content">
-		    
+
 		    <div class="clearfix row">
-		    
+
 		        <div id="main" class="<?php content_wrap() ?> clearfix" role="main">
 
 		            <?php if (have_posts()) : while (have_posts()) : the_post();?>
@@ -36,8 +36,8 @@
 						get_template_part( 'template-parts/single', 'content' );
 						?>
 
-		            <?php endwhile; ?>          
-		            
+		            <?php endwhile; ?>
+
 		            <?php else : ?>
 
 		                <header>
@@ -48,13 +48,13 @@
 		                </section>
 		                <footer>
 		                </footer>
-		            
+
 		            <?php endif; ?>
-		    
+
 		        </div> <!-- end #main -->
-		  
+
 		        <?php // get_sidebar(); // sidebar 1 ?>
-		  
+
 		    </div> <!-- end #content -->
 
 		</div> <!-- end #container -->
@@ -63,24 +63,11 @@
 
 </div>
 
-<?php // PAGINATION links 
+<?php // PAGINATION links
 
 $post_type = get_post_type($post->ID);
 
-if ($post_type == "post") { ?>
-
-	<div class="single-navigation container-fluid side-padding">
-		<div class="row clearfix">
-		    <nav class="nav-next col-sm-6">
-		        <span><?php next_post_link('%link', '< next'); ?></span>
-		    </nav>
-		    <nav class="nav-previous col-sm-6">
-		    	<span><?php previous_post_link('%link', 'previous >'); ?></span>
-		    </nav>
-		</div>
-	</div>
-
-<?php } elseif ($post_type == "hyper") { 
+if ($post_type == "hyper") {
 
 	$next_number = number_of_the_post($post->ID) + 1;
 	$previous_number = number_of_the_post($post->ID) - 1;
@@ -93,21 +80,21 @@ if ($post_type == "post") { ?>
 	        </nav>
 	        <nav class="nav-previous col-sm-6">
 	        	<span><?php previous_post_link('%link', '#'.$previous_number.' >'); ?></span>
-	        </nav> 
+	        </nav>
         </div>
 	</div>
 
 <?php } else { ?>
 
 	<div class="single-navigation container-fluid side-padding">
-		<div class="row clearfix">
-	        <nav class="nav-next col-sm-6">
-	            <span><?php next_post_link('%link', '< next on '.$post_type); ?></span>
+		<div class="row row justify-content-between">
+	        <nav class="nav-next col-6">
+	            <span><?php next_post_link('%link', '< ####'); ?></span>
 	        </nav>
-	        <nav class="nav-previous col-sm-6">
-	        	<span><?php previous_post_link('%link', 'previous on '.$post_type.' >'); ?></span>
-	        </nav> 
-		</div>	        
+	        <nav class="nav-previous col-6">
+	        	<span><?php previous_post_link('%link', '#### >'); ?></span>
+	        </nav>
+		</div>
 	</div>
 
 <?php } ?>
@@ -116,10 +103,10 @@ if ($post_type == "post") { ?>
 
 <?php // get related posts
 
-if( !(is_singular( 'log' ))) { 
+if( !(is_singular( 'log' ))) {
 	related_posts();
 } ?>
-		
+
 <?php // get Footer
 
 get_footer(); ?>

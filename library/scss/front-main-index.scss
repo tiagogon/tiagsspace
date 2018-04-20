@@ -21,7 +21,7 @@ ul.thumb-container{
 // Year Separator
 .year-separator{
   text-align: left;
-  font-size: 14px;
+  font-size: 18px;
   margin: 40px 0 0;
   font-style: italic;
   font-weight:400;
@@ -678,35 +678,29 @@ li.log-thumb.post-group {
 
 
 .archive-navigation{
-    text-align: right;
     margin-bottom: 60px;
     @media (min-width: map-get($grid-breakpoints, sm)) {
       padding-left: 40px;
       padding-right: 40px;
 
     }
-
-  .more-sets{
-
-  }
+    .nav-next {
+      
+    }
+    .nav-previous{
+      float: right;
+    }
   .nav-previous,.nav-next,.more-sets{
 
     a{
       text-transform: uppercase;
       color: $white;
-      /*border-bottom: 2px solid $white;*/
       font-size: 16px;
       font-style: italic;
-      margin-left: 13px;
-      padding: 2px 5px 0 6px;
+      //margin-left: 13px;
+      //padding: 2px 5px 0 6px;
       line-height: 1.3;
-      /*background-color: transparent;
-      @include transition(all 1s ease-out);
-      &:hover{
-        background-color: $magic-pink;
-        border-bottom: 2px solid transparent;
-        @include transition(all 1s ease-out);
-      }*/
+      font-weight:600;
     }
   }
 }
