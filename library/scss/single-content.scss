@@ -1,5 +1,5 @@
 //
-// Single Content Style 
+// Single Content Style
 //
 // -- ( used af Single and Archive Log )
 //
@@ -42,12 +42,13 @@
       font-size: 12px;
     font-weight: 600;
     display: none;
-      
+
     }
 
   }
   section.post-content{
     p{
+        // text-align: justify;
       a{
         color: $magic-pink;
         border-bottom: 1px solid transparent;
