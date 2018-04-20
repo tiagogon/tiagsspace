@@ -28,7 +28,6 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title><?php wp_title( '|', true, 'right' ); ?></title>
-		<!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  <!--320-->
 
@@ -183,11 +182,9 @@
 				}
 
 			?>
-			<div class="col-xs-10 col-sm-5 col-md-4 col-lg-5 header-front-page-title">
-				<?php /*<h1><a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>">trrooooouuubble.place</a><?php echo $section_name; ?></h1>*/ ?>
-			</div>
 
-			<div id="topbar-parent" class="col-xs-2 col-sm-7 col-md-8 col-lg-7">
+
+			<div id="topbar-parent" class="col-12">
 				<div id="topbar">
 					<ul id="menu">
 						<?php if (!is_home()) { ?>

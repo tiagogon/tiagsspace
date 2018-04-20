@@ -115,13 +115,14 @@
               color: $white;
               text-decoration: none;
               text-transform: uppercase;
-              font-size: 14px;
+              font-size: 16px;
               margin-left: 13px;
               // border: 2px solid transparent;
               padding: 2px 4px 0 4px;
               line-height: 1.3;
               float: right;
               margin-bottom: 10px;
+                  font-weight: 600;
             }
           }
         }
@@ -277,13 +278,12 @@
         color: $gray-dark;
         @include transition(all 1s ease-out);
         &:hover{
-          border-bottom: 2px solid $gray-dark;
           @include transition(all 1s ease-out);
         }
       }
     }
     // NAV MENU
-    @media (max-width: map-get($grid-breakpoints, sm)){
+    @media (max-width: map-get($grid-breakpoints, md)){
       // After Javascript
       .slicknav_menu {
         .slicknav_btn {
@@ -296,7 +296,6 @@
             li {
               a {
                 color: $gray-dark;
-                border-bottom: 2px solid $gray-dark;
               }
             }
           }
@@ -510,7 +509,6 @@
             }
           }
           a.active {
-            border: 2px solid $white;
             padding: 1px 5px 0 6px;
           }
         }
@@ -611,6 +609,7 @@
   list-style:none;
   @media (min-width: map-get($grid-breakpoints, sm)) {
       text-align: right;
+          margin-top: 10px;
     }
   ul {
     padding:0;
@@ -618,7 +617,7 @@
     display:block;
     li {
       display:inline-block;
-      margin-top: 15px;
+      margin-top: 5px;
       margin-bottom: 5px;
       margin-right: 13px;
       @media (min-width: map-get($grid-breakpoints, sm)) {
@@ -748,7 +747,6 @@
       a {
         display:inline-block;
         color:$white;
-        border-bottom: 2px solid $white;
         -webkit-transition:color 0.2s;
         transition:color 0.2s;
         text-transform: uppercase;
