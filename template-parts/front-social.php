@@ -38,7 +38,7 @@ if (!is_singular( 'log' )) { ?>
 						<input type="hidden" value="1" name="embed"/>
 						<input class="input-button" type="submit" value="Subscribe" />
 					</form>
-					<p>Sent every 2 months.</p>
+					<!-- <p>Sent every 2 months.</p> -->
 				</div>
 				<h3>elsewhere</h3>
 				<ul class="social-links">
