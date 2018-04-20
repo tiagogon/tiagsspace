@@ -7,26 +7,24 @@ Index of posts for Home and Archives
 
 
     <div class="container-fluid side-padding series-block front-block " id="index">
-        
-        <div id="main" role="main" class="<?php if (!is_post_type_archive( "hyper" ) AND !is_post_type_archive( "films" )) {
-                    echo "clearfix row";
-            } ?>">
-            
+
+        <div id="main" role="main" class="">
+
             <ul id="thumb-container"
-                class="loadcontainer <?php if (is_post_type_archive( "hyper" ) OR is_post_type_archive( "films" )) {
-                    echo "clearfix row no-pad";
+                class="loadcontainer clearfix row <?php if (is_post_type_archive( "hyper" ) OR is_post_type_archive( "films" )) {
+                    echo " no-pad";
             } ?>">
 
-                <?php 
+                <?php
                 // grid on archive
-                $grid_base = 'col-xs-12 col-sm-6 col-md-4 col-lg-4';
+                $grid_base = 'col-12 col-sm-6 col-md-4 col-lg-4';
 
                 if (is_post_type_archive( "hyper" )) {
-                    $grid_base = 'col-xs-12 col-sm-6 col-md-4 col-lg-4';
+                    $grid_base = 'col-12 col-sm-6 col-md-4 col-lg-4';
                 }
                 if (is_post_type_archive( "films" )) {
-                    $grid_base = 'col-xs-12 col-sm-6 col-md-6 col-lg-6';
-                } 
+                    $grid_base = 'col-12 col-sm-6 col-md-6 col-lg-6';
+                }
 
                 // Is sugested posts loop
                 $is_sugested_posts = 0;
@@ -41,7 +39,7 @@ Index of posts for Home and Archives
                 //current year
                 $year = date("Y");
 
-                if (have_posts()) : while (have_posts()) : the_post(); 
+                if (have_posts()) : while (have_posts()) : the_post();
 
 
                     //increment the variable by 1 each time the loop executes
@@ -84,11 +82,11 @@ Index of posts for Home and Archives
                         $grid = $grid_base;
 
                         if ($grid_multiplayer == 2) {
-                            $grid = 'col-xs-12 col-sm-12 col-md-8 col-lg-8';
+                            $grid = 'col-12 col-sm-12 col-md-8 col-lg-8';
                         }
 
                         if ($grid_multiplayer == 3) {
-                            $grid = 'col-xs-12 col-sm-12 col-md-12 col-lg-12';
+                            $grid = 'col-12 col-sm-12 col-md-12 col-lg-12';
                         }
 
 
@@ -105,18 +103,18 @@ Index of posts for Home and Archives
 
 
                         // HTML - Year Separator
-                        // Print Year Separator if the 
+                        // Print Year Separator if the
                         if ($year == get_the_time("Y") OR $count == 1) {
                             $year = get_the_time("Y");
                         // Year is diferent
-                        } else { 
+                        } else {
                             $year = get_the_time("Y");?>
                                         </figcaption>
                                 </figure>
                             </li>
-                            <div class="loadpost year-separator item col-xs-12  item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper">Published in <?php echo $year; ?></div>
-                            </div>
+                            <li class="loadpost year-separator item col-12  item-post" <?php post_class('clearfix'); ?> >
+                                <div class="separator-wrapper">Publish in <?php echo $year; ?></div>
+                            </li>
                         <?php }
 
                         // Item sizer for masory
@@ -127,18 +125,18 @@ Index of posts for Home and Archives
                         // HTML - Open Log Posts container
                         if ($count == 1 OR !($next_post_type == "log") OR !($next_post_year == $year)) { ?>
                             <li id="post-group-<?php echo $count; ?>" class="loadpost post-group <?php echo $grid; ?> <?php echo $post_type; ?>-thumb item item<?php echo $count; ?> item-post" <?php post_class('clearfix'); ?> role="article">
-                                <figure>  
+                                <figure>
                                     <figcaption>
                                         <p class="series">log</p>
                         <?php }
 
                         // HTML - Log post title and link ?>
 
-                                
+
                         <a href="<?php echo get_permalink(); ?>" rel="bookmark">
                             <h2><?php echo taxonomy_list_w_numbers($post->ID,'log-branch','',' ',', ', ' & ', 'no-link');?><span class="branch"> <?php the_title();?> ></span></h2>
                         </a>
-                                
+
                         <?php
                         // HTML - Close Log Posts container
                         // If is last post of the page
@@ -172,30 +170,30 @@ Index of posts for Home and Archives
 
                         }
 
-                        // Print Year Separator if the 
+                        // Print Year Separator if the
                         if ($year == get_the_time("Y") OR ($count == 1 AND !is_post_type_archive( "cityburns" )) OR (is_front_page() && !is_paged())) {
 
                             $year = get_the_time("Y");
 
                         // Year is diferent
-                        } elseif (!is_post_type_archive( "hyper" ) OR (is_front_page() && !is_paged())) { 
+                        } elseif (!is_post_type_archive( "hyper" ) OR (is_front_page() && !is_paged())) {
 
                             $year = get_the_time("Y");
 
                             ?>
 
-                            <div class="item loadpost year-separator col-xs-12 item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper">Published in <?php echo $year; ?></div>
-                            </div>
+                            <li class="item loadpost year-separator col-12 item-post" <?php post_class('clearfix'); ?> >
+                                <div class="separator-wrapper">Publish in <?php echo $year; ?></div>
+                            </li>
 
                         <?php }
 
                         // Get Custom Post Info
-                        $obj = get_post_type_object( $post_type ); 
+                        $obj = get_post_type_object( $post_type );
 
                         // Get Image info
                         if ( has_post_thumbnail() and (!($post_type == "log")) ) {
-                            
+
 
                             // Imgcontainer calculations -- intrinsic ratio
 
@@ -219,7 +217,7 @@ Index of posts for Home and Archives
 
                                     // Else, it must be an ID:
                                     } else {
-                                        
+
                                         // Make sure is a number inteiro
                                         $video_array = (int)$video_array;
                                         // https://codex.wordpress.org/Function_Reference/wp_get_attachment_metadata
@@ -235,7 +233,7 @@ Index of posts for Home and Archives
 
                                 } else {
                                     // If there is an animated thumbail
-                                    
+
                                     if ($animated_thumbnail_array) {
 
                                         $image_animate_thumb_attributes = wp_get_attachment_image_src($animated_thumbnail_array['ID'], 'full');
@@ -248,7 +246,7 @@ Index of posts for Home and Archives
                                         $intrinsic_ratio = $image_thumb_attributes[2] * 100 / $image_thumb_attributes[1];
                                     }
                                 }
-                        
+
 
                         // --- SRCSET calculation ---
                             // Original image File
@@ -292,7 +290,7 @@ Index of posts for Home and Archives
                                 $image_thumb_HD_srcset = $image_thumb_HD_attributes[0]." ".$image_thumb_HD_attributes[1]."w, ";
                             }
 
-                            // FINAL SRCSET 
+                            // FINAL SRCSET
                             $image_srcset = $image_thumb_thumbnail_srcset.
                                             $image_thumb_small_srcset.
                                             $image_thumb_medium_srcset.
@@ -301,7 +299,7 @@ Index of posts for Home and Archives
                                             $image_thumb_srcset;
                         // --- Sizes ---
                         //Container or Full width?
-                        
+
                             $size_lg = (100 / 3)."vw";
                             $size_md = (100 / 3)."vw";
                             $size_sm = (100 / 2)."vw";
@@ -333,28 +331,28 @@ Index of posts for Home and Archives
                         // Thumbnail image source code
 
                             if ($animated_thumbnail_array and $video_array == array()) {
-                                
+
 
                                 $source = 'src="'.$animated_thumbnail_array['url'].'" style="width: 100%;"';
 
                             } else {
                                 $source = 'srcset="'.$image_srcset.'" sizes="'.$image_sizes.'" ';
-                            }                        
+                            }
                         } ?>
-                        
+
                         <li id="post-<?php the_ID(); ?>" class="loadpost item <?php echo $grid; ?> <?php echo $post_type; ?>-thumb item<?php echo $count; ?> item-post" <?php post_class('clearfix'); ?> role="article">
-                            
+
                             <?php if (!($post_type == "log")) { ?>
-                            
+
                             <figure>
-                                
+
                                 <a href="<?php echo get_permalink(); ?>" rel="bookmark">
-                                
+
                                     <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
 
                                         <?php // IF IS VIDEO -- via: https://codepen.io/dudleystorey/pen/knqyK
                                         if (!empty($video_array)) { ?>
-                                
+
                                             <video poster="<?php echo $video_poster; ?>" id="bgvid" playsinline autoplay muted loop>
                                                 <source src="<?php echo $video_webm; ?>" type="video/webm">
                                                 <source src="<?php echo $video_mp4; ?>" type="video/mp4">
@@ -364,16 +362,16 @@ Index of posts for Home and Archives
                                         } else { ?>
 
                                             <img <?php echo $source; ?> alt="<?php the_title(); ?>" />
-                                        
+
                                         <?php } ?>
-                                        
+
 
                                     </div>
-                                    
+
 
                                     <figcaption>
 
-                                        <?php 
+                                        <?php
                                         // Is series archive
                                         if( is_post_type_archive() ) {
 
@@ -381,9 +379,9 @@ Index of posts for Home and Archives
                                                 $series_number = number_of_the_post($post->ID);?>
 
                                                     <p class="series">hyper#<?php echo $series_number;?><?php //the_time('Y'); ?></p>
-                                            
+
                                             <?php } elseif ($post_type == "emulsion") { ?>
-                                                
+
                                                 <p class="series"><?php the_time('M d'); ?></p>
 
                                             <?php } elseif ($post_type == "dusk") { ?>
@@ -398,7 +396,7 @@ Index of posts for Home and Archives
 
                                             <?php } else { ?>
 
-                                                
+
                                                 <div class="series"><?php if (!($post_type == "post")) { echo $obj->labels->name;}?></div>
 
                                             <?php }
@@ -410,9 +408,9 @@ Index of posts for Home and Archives
                                                 $series_number = number_of_the_post($post->ID);?>
 
                                                     <p class="series">hyper#<?php echo $series_number;?></p>
-                                            
+
                                             <?php } elseif ($post_type == "emulsion") { ?>
-                                                
+
                                                 <p class="series">emulsion</p>
 
                                             <?php } elseif ($post_type == "dusk") { ?>
@@ -423,8 +421,8 @@ Index of posts for Home and Archives
                                             <?php } elseif ($post_type == "films") { ?>
 
 
-                                                <p class="series"><?php  
-                                                    if (get_field('film_length')) { 
+                                                <p class="series"><?php
+                                                    if (get_field('film_length')) {
                                                         echo get_field('film_length')."′"." // ";
                                                     }
                                                     echo taxonomy_list($post->ID,'from', '', '', ', ', ' & ', '');
@@ -450,9 +448,9 @@ Index of posts for Home and Archives
 
                             <?php } else { ?>
                                 <figure>
-                                    
+
                                     <a href="<?php echo get_permalink(); ?>" rel="bookmark">
-                                        
+
                                         <figcaption>
 
                                             <p class="series"><?php echo $obj->labels->name;?></p>
@@ -467,22 +465,22 @@ Index of posts for Home and Archives
                             <?php } ?>
 
                         </li>
-                    
-                    <?php } // Else 
+
+                    <?php } // Else
 
                     // Send this post type for the next loop iteration
                     $post_id_before = $post->ID;
 
-                endwhile; ?>  
+                endwhile; ?>
 
             </ul>
-            
-        
- 
-            
-            
+
+
+
+
+
             <?php else : ?>
-            
+
             <article id="post-not-found">
                 <header>
                     <h1><?php _e("Not Found", "wpbootstrap"); ?></h1>
@@ -493,48 +491,60 @@ Index of posts for Home and Archives
                 <footer>
                 </footer>
             </article>
-            
+
             <?php endif; ?>
-        
+
         </div> <!-- end #main -->
 
     </div> <!-- end #container -->
 
-    <?php // PAGINATION 
+    <?php // PAGINATION
 
     // Check if there are previouse or next pages
     $prev_link = get_previous_posts_link(__('&laquo; Older Entries'));
     $next_link = get_next_posts_link(__('Newer Entries &raquo;'));
-    
+
     // if exists links
     if (($prev_link || $next_link) AND !is_singular()) { ?>
 
         <div class="container-fluid pagination-container">
-                <nav class="archive-navigation col-xs-12">
+                <nav class="archive-navigation col-12">
                     <span class="nav-next"><?php previous_posts_link( '< newer' ); ?></span> <span class="nav-previous"><?php next_posts_link( 'older >' ); ?></span>
-                </nav> 
+                </nav>
         </div>
     <?php } ?>
 
 
     <?php  // --- Masory  ?>
 
-    <?php 
+    <?php
 
     if (!is_post_type_archive( "hyper" ) AND !is_post_type_archive( "films" )) { ?>
         <script>
+            // $('#thumb-container').masonry({
+            //   itemSelector: '.item',
+            //   columnWidth: '.item-sizer',
+            //   percentPosition: true,
+            //   transitionDuration: '0.6s'
+            // })
+
+
             $('#thumb-container').masonry({
+              // set itemSelector so .grid-sizer is not used in layout
               itemSelector: '.item',
+              // use element for option
               columnWidth: '.item-sizer',
               percentPosition: true,
-              transitionDuration: '0.6s'
+              transitionDuration: '0.6s',
+              gutter: 0,
+              percentPosition: true,
             })
         </script>
-    <?php } 
+    <?php }
 
-    // Play videos just on the view port and fix of iOS 
+    // Play videos just on the view port and fix of iOS
     // VIA: https://stackoverflow.com/questions/15395920/play-html5-video-when-scrolled-to
-    if (is_post_type_archive( "films" )     
+    if (is_post_type_archive( "films" )
        // Acitvate it for Log series with video autoplay -- NEEDS TO BE TESTED
        // OR is_post_type_archive( "log" ) OR is_tax( 'log-branch' )
     ) { ?>
@@ -572,12 +582,12 @@ Index of posts for Home and Archives
 
 
 
-    <?php  // --- Infinite Scrool  
+    <?php  // --- Infinite Scrool
 
-    if (is_tax( 'medium', 'photography') ) { ?>   
-        
+    if (is_tax( 'medium', 'photography') ) { ?>
+
         <script type="text/javascript">
-            
+
             // get Masonry instance
             var msnry = $('#thumb-container').data('masonry');
 
@@ -610,7 +620,7 @@ Index of posts for Home and Archives
                 // remove event listener
                 $container.off( 'load.infiniteScroll', onPageLoad );
               }
-            } 
+            }
 
             $container.on( 'append.infiniteScroll', function(){
               picturefill();
@@ -618,4 +628,4 @@ Index of posts for Home and Archives
 
         </script>
 
-    <?php } ?>   
+    <?php } ?>

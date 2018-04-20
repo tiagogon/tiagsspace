@@ -18,9 +18,9 @@ if (!get_field('deactivate_gallery')) {
         'post_type'         => 'attachment'
     );
     $attachmens = get_children( $args );
-    
 
-    if($attachmens){ 
+
+    if($attachmens){
 
 		// --- Extra contente // Videos ---
 	    // --------------------------------
@@ -33,7 +33,7 @@ if (!get_field('deactivate_gallery')) {
 
 				$extra_content[] = array( get_sub_field('the_image_before'), get_sub_field('vimeo_id'));
 
-			endwhile; 
+			endwhile;
 
             // GET VIMEO API SCRIPT from CDN?>
             <script src="//f.vimeocdn.com/js/froogaloop2.min.js"></script>
@@ -72,7 +72,7 @@ if (!get_field('deactivate_gallery')) {
                 $number_of_columns_sm   = 4;
                 $number_of_columns_md   = 4;
                 $number_of_columns_lg   = 4;
-                $no_space               = 'no-pad';   
+                $no_space               = 'no-pad';
                 $light_box              = 'intense-images';
                 $deactivat_masonry      = true;
             }
@@ -84,7 +84,7 @@ if (!get_field('deactivate_gallery')) {
                 $number_of_columns_sm   = 1;
                 $number_of_columns_md   = 1;
                 $number_of_columns_lg   = 1;
-                $no_space               = '';  
+                $no_space               = '';
                 $light_box              = 'magnific_popup';
             }
 
@@ -102,14 +102,14 @@ if (!get_field('deactivate_gallery')) {
 
             // Others
             else {
-                // LOG > Blowww brunch 
+                // LOG > Blowww brunch
                 if (has_term( 'blwww', 'log-branch' ) ) {
                     $class_container        = 'container-fluid';
                     $number_of_columns_xs   = 2;
                     $number_of_columns_sm   = 4;
                     $number_of_columns_md   = 4;
                     $number_of_columns_lg   = 4;
-                    $no_space               = 'no-pad';   
+                    $no_space               = 'no-pad';
                     $light_box              = 'intense-images';
                     $deactivat_masonry      = true;
 
@@ -122,7 +122,7 @@ if (!get_field('deactivate_gallery')) {
                     $number_of_columns_lg   = 1;
                     $no_space               = '';
                     $light_box              = 'magnific_popup';
-                }    
+                }
             }
         }
 
@@ -166,12 +166,12 @@ if (!get_field('deactivate_gallery')) {
         // DEFAULT VIDEO PLAYER OPTIONS PER POST TYPE
 
             //define variables:
-            $post_video_mute = ''; 
-            $post_video_loop = ''; 
-            $post_video_autoplay = ''; 
-            $post_video_pauseothervideos = ''; 
-            $post_video_preload = ''; 
-            $post_video_schema = ''; 
+            $post_video_mute = '';
+            $post_video_loop = '';
+            $post_video_autoplay = '';
+            $post_video_pauseothervideos = '';
+            $post_video_preload = '';
+            $post_video_schema = '';
 
             // Dusk posts
             if ( is_singular( 'dusk' )) {
@@ -190,20 +190,20 @@ if (!get_field('deactivate_gallery')) {
 
             // Others
             else {
-                // LOG > blwww brunch 
+                // LOG > blwww brunch
                 if (has_term( 'blwww', 'log-branch' ) ) {
-                    $post_video_mute = true; 
+                    $post_video_mute = true;
                     $post_video_loop = true;
                     $post_video_autoplay = true;
                     $post_video_pauseothervideos = false;
                     $post_video_schema = "false";
-                }  
+                }
             }
 
 
-        // DEFAULT VIDEO PLAYER OPTIONS PER POST TYPE 
+        // DEFAULT VIDEO PLAYER OPTIONS PER POST TYPE
             if ( get_field('alternative_video_player_options_on_post')) {
-                $post_video_mute = get_field('post_video_mute'); 
+                $post_video_mute = get_field('post_video_mute');
                 $post_video_loop = get_field('post_video_loop');
                 $post_video_autoplay = get_field('post_video_autoplay');
                 $post_video_pauseothervideos = get_field('post_video_pauseothervideos');
@@ -251,10 +251,10 @@ if (!get_field('deactivate_gallery')) {
 
             if (get_field('spacement')) {
                 $spacement = get_field('spacement');
-            } 
-            
+            }
+
             $deactivat_masonry = get_field('deactivat_masonry');
-            
+
             // Image Box
             $light_box = get_field('light_box');
         }
@@ -277,14 +277,14 @@ if (!get_field('deactivate_gallery')) {
             $max_height = 'max-height';
         }
 
- 
+
 
         // Intense Images
         $intense = '';
         if ($light_box == 'intense-images') {
             $intense = 'intense';?>
-            <script src='<?php bloginfo('template_url'); ?>/library/js/intense-images/intense.min.js'></script><?php 
-        } 
+            <script src='<?php bloginfo('template_url'); ?>/library/js/intense-images/intense.min.js'></script><?php
+        }
 
         // Magnific Pop Up gallery
         $magnific_popup = "";
@@ -295,14 +295,14 @@ if (!get_field('deactivate_gallery')) {
         <?php } ?>
 
         <div class="<?php echo $class_container; ?> <?php echo $spacement;?> container-gallery">
-            
+
             <div id="gallery-<?php the_ID(); ?>" class="gallery clearfix <?php echo $magnific_popup;?>  <?php echo $row;?> <?php echo $no_space;?>" itemscope itemtype="http://schema.org/ImageGallery">
 
                 <?php
                 $count_item = 0;
 
                 // loop the atached images
-                foreach($attachmens as $image){ 
+                foreach($attachmens as $image){
 
                 	//Check IF atachment is not to be removed
                 	if (!get_field('remove_from_default_gallery',$image->ID)) {
@@ -316,7 +316,7 @@ if (!get_field('deactivate_gallery')) {
                         if (get_field('diferent_size_on_gallery',$image->ID)) {
                             $size_on_gallery_factor = get_field('diferent_size_on_gallery',$image->ID);
                         }
-                        
+
                         // If Gallery item size factor is making item smaller, deactivate it on mobile
                         if ($size_on_gallery_factor > 1) {
                             $number_of_columns_item_xs   = $number_of_columns_xs; // deactiave on mobile //* $size_on_gallery_factor;
@@ -343,7 +343,7 @@ if (!get_field('deactivate_gallery')) {
                             } elseif($number_of_columns_item_lg > 6) { $number_of_columns_item_lg = 6;}
 
 
-                        
+
                         // calculate bootstrap responsive classes from the number of columns WITH FACTOR
                         $class_thumbnail_xs = "";
                         $class_thumbnail_sm = "";
@@ -351,10 +351,10 @@ if (!get_field('deactivate_gallery')) {
                         $class_thumbnail_lg = "";
 
 
-                        if ($number_of_columns_item_xs) {                            
+                        if ($number_of_columns_item_xs) {
                             $grid_number_xs        = (int) (12 / $number_of_columns_item_xs);
                             // If its 12, so its just one colum and thats not necessary
-                                $class_thumbnail_xs    = "col-xs-".$grid_number_xs." ";
+                                $class_thumbnail_xs    = "col-".$grid_number_xs." ";
                         }
 
                         if ($number_of_columns_item_sm) {
@@ -385,7 +385,7 @@ if (!get_field('deactivate_gallery')) {
                         $class_thumbnail = $class_thumbnail_xs.$class_thumbnail_sm.$class_thumbnail_md.$class_thumbnail_lg;
 
 
-                        
+
                         // calculate bootstrap responsive classes from the number of columns WITHOUT FACTOR
                         $class_thumbnail_xs_without_factor = "";
                         $class_thumbnail_sm_without_factor = "";
@@ -393,10 +393,10 @@ if (!get_field('deactivate_gallery')) {
                         $class_thumbnail_lg_without_factor = "";
 
 
-                        if ($number_of_columns_xs) {                            
+                        if ($number_of_columns_xs) {
                             $grid_number_xs_without_factor        = (int) (12 / $number_of_columns_xs);
                             // If its 12, so its just one colum and thats not necessary
-                                $class_thumbnail_xs_without_factor    = "col-xs-".$grid_number_xs_without_factor." ";
+                                $class_thumbnail_xs_without_factor    = "col-".$grid_number_xs_without_factor." ";
                         }
 
                         if ($number_of_columns_sm) {
@@ -465,7 +465,7 @@ if (!get_field('deactivate_gallery')) {
                             }
 
 
-                            // FINAL SRCSET 
+                            // FINAL SRCSET
                             $image_srcset = $image_thumb_thumbnail_srcset.
                                             $image_thumb_small_srcset.
                                             $image_thumb_medium_srcset.
@@ -477,7 +477,7 @@ if (!get_field('deactivate_gallery')) {
                                 $container_size_lg = 1200;
                                 // $container_size_md = 940;
                                 // $container_size_sm = 720;
-                                
+
                                 $size_lg = ($container_size_lg / $number_of_columns_item_lg)."px";
                                 // $size_md = ($container_size_md / $number_of_columns_item_md)."px";
                                 // $size_sm = ($container_size_sm / $number_of_columns_item_sm)."px";
@@ -495,8 +495,8 @@ if (!get_field('deactivate_gallery')) {
 
                                 $image_sizes = "(min-width: 992px) ".$size_lg.",
                                                 (min-width: 768px) ".$size_md.",
-                                                (min-width: 576px) ".$size_sm.", 
-                                                 ".$size_xs;                        
+                                                (min-width: 576px) ".$size_sm.",
+                                                 ".$size_xs;
                             }
 
                             // Source code
@@ -517,12 +517,12 @@ if (!get_field('deactivate_gallery')) {
                             }else{
                                 $image_alt = $image_post_title." – ".$count_item;
                             }
-                        
+
 
                         // INTRINSTIC RATIO
 
                             // AUDIO
-                            if ( $image->post_mime_type == "audio/wav" OR $image->post_mime_type == "audio/mpeg" ) { 
+                            if ( $image->post_mime_type == "audio/wav" OR $image->post_mime_type == "audio/mpeg" ) {
 
                                 // TO CODE
                                 // $intrinsic_ratio of audio container
@@ -535,26 +535,26 @@ if (!get_field('deactivate_gallery')) {
                             	$intrinsic_ratio = $video_metadata['height'] * 100 / $video_metadata['width'];
 
                             }else {
-                            
+
                                 $intrinsic_ratio = $image_thumb_attributes[2] * 100 / $image_thumb_attributes[1];
                             }
 
 
                         // COMPILE VIDEO OPTIONS
 
-                            // IF there are DEFAULT VIDEO PLAYER OPTIONS of the ATTACHEMENT 
+                            // IF there are DEFAULT VIDEO PLAYER OPTIONS of the ATTACHEMENT
                             if (get_field('alternative_video_player_options',$image->ID)) {
                                 // need to convert boleans into true/false strings >> https://stackoverflow.com/questions/2795177/how-to-convert-boolean-to-string
-                                $video_mute = (get_field('video_mute',$image->ID)) ? 'true' : 'false'; 
+                                $video_mute = (get_field('video_mute',$image->ID)) ? 'true' : 'false';
                                 $video_loop = (get_field('video_loop',$image->ID)) ? 'true' : 'false';
                                 $video_autoplay = (get_field('video_autoplay',$image->ID)) ? 'true' : 'false';
                                 $video_pauseothervideos = (get_field('video_pauseothervideos',$image->ID)) ? 'true' : 'false';
                                 $video_preload = get_field('video_preload',$image->ID); // NOT A BOLEAN - string
                                 $post_video_schema = get_field('video_schema',$image->ID);
 
-                            // Else use them on the post level                 
+                            // Else use them on the post level
                             } else {
-                                $video_mute = ($post_video_mute) ? 'true' : 'false'; 
+                                $video_mute = ($post_video_mute) ? 'true' : 'false';
                                 $video_loop = ($post_video_loop) ? 'true' : 'false';
                                 $video_autoplay = ($post_video_autoplay) ? 'true' : 'false';
                                 $video_pauseothervideos = ($post_video_pauseothervideos) ? 'true' : 'false';
@@ -562,25 +562,25 @@ if (!get_field('deactivate_gallery')) {
                                 $video_schema = ($post_video_schema) ? 'true' : 'false';
                             }
 
-                            // COMPILE VIDEO OPTIONS STRING 
+                            // COMPILE VIDEO OPTIONS STRING
 
-                                $video_otions = '   
-                                    mute="'.$video_mute.'" 
-                                    loop="'.$video_loop.'" 
-                                    autoplay="'.$video_autoplay.'" 
-                                    pauseothervideos="'.$video_pauseothervideos.'" 
+                                $video_otions = '
+                                    mute="'.$video_mute.'"
+                                    loop="'.$video_loop.'"
+                                    autoplay="'.$video_autoplay.'"
+                                    pauseothervideos="'.$video_pauseothervideos.'"
                                     preload="'.$video_preload.'"
                                     Schema="'.$video_schema.'"';
 
 
                         // add item-sizer for Masonry responsive calculations
                         if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
-                            
+
                             <div class="item-sizer <?php echo $class_thumbnail_without_factor;?>"></div>
                         <?php }?>
-						
 
-                        <?php 
+
+                        <?php
 
                         // ----------------------------------------
                         // --- Images and AUDIO from Media library
@@ -588,13 +588,13 @@ if (!get_field('deactivate_gallery')) {
 
                         // AUDIO
                         if ( $image->post_mime_type == "audio/wav" OR $image->post_mime_type == "audio/mpeg" ) { ?>
-                            
+
                             <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>" >
                                 <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
                                     <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
 
-                                            <?php 
-                                        
+                                            <?php
+
                                             $audio_url = wp_get_attachment_url( $image->ID );
                                             $attr = array(
                                                 'src'      => $audio_url,
@@ -607,7 +607,7 @@ if (!get_field('deactivate_gallery')) {
                                              ?>
                                     </div>
                                 </figure>
-                            </div><?php 
+                            </div><?php
 
                         // VIDEO
                         } elseif ( $image->post_mime_type == "video/mpeg" OR $image->post_mime_type == "video/mp4" OR $image->post_mime_type == "video/quicktime" ) { ?>
@@ -616,8 +616,8 @@ if (!get_field('deactivate_gallery')) {
                                 <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/VideoObject">
                                     <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>100%; height: 0; overflow: hidden; max-width: 100%;">
 
-                                            <?php 
-                                              
+                                            <?php
+
                                             echo do_shortcode('[KGVID id="'.$image->ID.'" '.$video_otions.' ]');
 
                                             echo "<style>
@@ -635,7 +635,7 @@ if (!get_field('deactivate_gallery')) {
                                              ?>
                                     </div>
                                 </figure>
-                            </div><?php 
+                            </div><?php
 
                         // IMAGE
                         } else { ?>
@@ -644,35 +644,35 @@ if (!get_field('deactivate_gallery')) {
 
                             <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
 
-                                <?php // IMAGE CONTAINER 
+                                <?php // IMAGE CONTAINER
                                 //if ($number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
                                 <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
                                 <?php //} ?>
-                                    <?php 
+                                    <?php
                                     // Image Link
                                     if (($light_box != 'intense-images')) { // print thumbnails with a link ?>
                                     <a href="<?php echo wp_get_attachment_url($image->ID); ?>"
-                                            class="magnific-popup-link" caption="<?php if ($caption) { echo " – <i>".$caption."</i>";} ?>" 
+                                            class="magnific-popup-link" caption="<?php if ($caption) { echo " – <i>".$caption."</i>";} ?>"
                                     itemprop="contentUrl">
-                                    <?php }?>  
+                                    <?php }?>
                                         <img    <?php echo $source; ?>
                                                 alt="<?php echo $image_alt; ?>"
                                                 class=" <?php echo $max_height; ?>        <?php echo $intense; ?>"
                                                 itemprop="http://schema.org/image"
                                                 data-image="
-                                                <?php 
+                                                <?php
                                                 // data-image ofr Intense Images Gallery
                                                 if ($light_box == 'intense-images') {
                                                     echo $image_thumb_attributes[0];
                                                 } ?>"/>
-                                        
-                                    <?php 
+
+                                    <?php
                                     // Image Link
                                     if (($light_box != 'intense-images')) {?>
                                         </a>
                                     <?php }?>
 
-                                <?php // IMAGE container 
+                                <?php // IMAGE container
                                 //if ($number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
                                 </div>
                                 <?php //} ?>
@@ -685,21 +685,21 @@ if (!get_field('deactivate_gallery')) {
                                 <?php } ?>
 
                             </figure>
-                        
+
                         </div>
                         <?php } ?>
-                        
+
 	                    <?php
 	                    // --- Add Extra Contente // Youtube Video ---
 
-	                    // If Image is an image before extra content 
+	                    // If Image is an image before extra content
 	                    foreach ($extra_content as $k => $v) {
 
 	                    	// If ID of image before is the ID of current image, then output Youtube code
-	                    	if ($v[0] == $image->ID ) { 
-                                
+	                    	if ($v[0] == $image->ID ) {
+
                                 $count_item++; ?>
-								
+
 								<style>
 									.embed-container { position: relative; padding-bottom: 177%; height: 0; overflow: hidden; max-width: 100%; }
 									.embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -708,17 +708,17 @@ if (!get_field('deactivate_gallery')) {
 	                    		<div id="x" class="thumbnail item <?php echo $class_thumbnail;?>">
 
 	                    			<div class="embed-container">
-										
-									
+
+
 										<iframe class="vimdeoiframe" src='https://player.vimeo.com/video/<?php echo $v[1]; ?>?api=1;title=0&byline=0&portrait=0&color=666666&autoplay=1&loop=1&badge=0' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-										
-										
-								
+
+
+
 									</div>
-	                    		
+
 	                    		</div>
 
-									
+
 	                    	<?php } // end if
 	                    } ?>
 
@@ -732,13 +732,13 @@ if (!get_field('deactivate_gallery')) {
 
         </div>
 
-        <?php 
+        <?php
         // ---------------
-        // --- Scripts --- 
+        // --- Scripts ---
         // ---------------
         ?>
 
-		<?php 
+		<?php
         // --- Masonry ----
         if ($number_of_columns_lg > 1 && $deactivat_masonry == false) { ?>
             <script>
@@ -792,7 +792,7 @@ if (!get_field('deactivate_gallery')) {
                           enabled: true, // By default it's false, so don't forget to enable it
 
                           duration: 500, // duration of the effect, in milliseconds
-                          easing: 'ease-in-out', // CSS transition easing function 
+                          easing: 'ease-in-out', // CSS transition easing function
 
                           // The "opener" function should return the element from which popup will be zoomed in
                           // and to which popup will be scaled down
@@ -805,7 +805,7 @@ if (!get_field('deactivate_gallery')) {
                         }
                     });
                 // });
-            </script><?php 
+            </script><?php
 
 
         // --- Intense Images
@@ -865,7 +865,7 @@ if (!get_field('deactivate_gallery')) {
 
                 // // jQuery
                 // $grid.packery( 'bindUIDraggableEvents', $items )
-                    
+
                 // // initialize Packery
                 // var $grid = $('.grid').packery({
                 //   itemSelector: '.grid-item',
@@ -895,5 +895,5 @@ if (!get_field('deactivate_gallery')) {
 // probably alredy native: http://make.wordpress.org/core/2013/04/08/audio-video-support-in-core/
 
 // this one makes the houver tittle appear:
-// title="<?php echo $image->post_title; 
+// title="<?php echo $image->post_title;
 ?>

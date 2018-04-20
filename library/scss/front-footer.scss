@@ -1,0 +1,140 @@
+//
+// Footer
+// --------------------------------------------------
+
+#social-block{
+  background: $yellow;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  h3 {
+    color: $magic-pink;
+    /*border-bottom: 2px solid $magic-pink;*/
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-style: italic;
+    text-transform: uppercase;
+    line-height: 1.3;
+    background-color: transparent;
+    display: inline-block;
+  }
+  p{
+    color: $magic-pink;
+    font-style: italic;
+    
+    a{
+      color: $magic-pink;
+    }
+  }
+  ul {
+    padding:0;
+    list-style:none;
+    display:block;
+    margin-bottom: 27px;
+    li {
+      display:inline-block;
+      margin-bottom: 13px;
+      margin-right: 13px;
+      a {
+        position: relative;
+        outline: none;
+        color: $white;
+        background-color: $magic-pink;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: 600;
+        font-style: italic;
+        margin-right: 13px;
+        border-bottom: 2px solid $magic-pink;
+            padding: 3px 6px 0 6px;
+        line-height: 1.3;
+        margin: 0px;
+        @media (min-width: map-get($grid-breakpoints, sm)) {
+          
+        }
+        @include transition(all 1s ease-out);
+        &:hover{
+          background-color: $white;
+          color: $magic-pink;
+          @include transition(all 1s ease-out);
+        }
+      }
+    }
+  }
+  .email-form{
+    margin-bottom: 40px;
+    form{
+      margin-bottom: 10px;
+      input.input-field{
+        width: 240px;
+        background: $white;
+        color: $magic-pink;
+        padding: 4px 6px;
+        border-width: 0px;
+        border-style: inset;
+        border-color: $white;
+        border-image: initial;
+        font-size: 14px;
+        margin-bottom: 10px;
+        @media (min-width: map-get($grid-breakpoints, sm)) {
+          margin-bottom: 0px; 
+        }
+      }
+      input.input-field::placeholder {
+        color: $magic-pink;
+        font-style: italic;
+        font-size: 14px;
+      }
+      input.input-button{
+        background: $magic-pink;
+        color: $white;
+        padding: 4px 6px;
+        border-width: 0px;
+        border-style: inset;
+        border-color: $white;
+        border-image: initial;
+        font-style: italic;
+        font-size: 14px;
+        border-radius: 0px;
+      }
+    }
+    p{
+      font-size: 12px;
+    }
+  }
+}
+
+// use Lime on the Yellow layouts
+  // .yellow{
+  //   #social-block{
+  //     background: $lime;
+  //     ul {
+  //       li {
+  //         a {
+  //           color: $lime;
+  //           &:hover{
+  //             background-color: $lime;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   } 
+  // }
+
+#footer-block{
+	background: $magic-pink;
+	padding-top: 40px;
+  .attribution{
+  	margin-bottom: 38px;
+  	p{
+  	  color: $white;
+      font-style: italic;
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 600;
+  		a{
+  		  color: $white;
+  		}
+  	}
+  }
+}

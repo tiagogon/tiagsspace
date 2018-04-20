@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 
 Social links block
@@ -38,7 +38,7 @@ if (!is_singular( 'log' )) { ?>
 						<input type="hidden" value="1" name="embed"/>
 						<input class="input-button" type="submit" value="Subscribe" />
 					</form>
-					<p>A trouble letter every 2 months.</p>
+					<p>Sent every 2 months.</p>
 				</div>
 				<h3>elsewhere</h3>
 				<ul class="social-links">
@@ -55,12 +55,12 @@ if (!is_singular( 'log' )) { ?>
 						<a href="https://trouble.place/feed" data-hover="Feed" target="_blank">Feed</a>
 					</li>
 				</ul>
-				<h3>say hi</h3>
+				<h3>contact</h3>
 				<p>hi[at]trouble.place</p>
 			</div>
 		</div>
 	</div>
 </div>
-<?php 
+<?php
 // End IF
 } ?>

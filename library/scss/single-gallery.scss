@@ -1,0 +1,201 @@
+//
+// gallery styles
+// --------------------------------------------------
+
+
+.container-gallery{
+	padding-bottom: 10px;
+}
+
+// .single-hyper{
+// 	.container-gallery{
+// 	    padding-bottom: 40px;
+// 	}
+// }
+
+div.gallery{
+	margin-bottom: 0;
+  div.thumbnail{
+  	float: left;
+    -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    display:inline-block;
+		figure{
+			overflow: hidden;
+			    margin: 0;
+			.imgcontainer{
+				img{
+					max-width: 100%;
+				}
+				
+			}
+			figcaption {
+			  display: block;
+			  text-align: center;
+			  font-style: italic;
+			  padding-top: 8px;
+			  font-size: 14px;
+			  max-width: 650px;
+			  margin-left: auto;
+			  margin-right: auto;    
+			  margin-bottom: -2px;
+   			  font-weight: 600;
+			}
+		}
+  }
+  div.thumbnail.media-audio{
+  	// background-color: $deep-purple;
+  	figure{
+		.imgcontainer{
+			.mejs-container {
+  				background-color: $magic-pink;
+			    position: absolute;
+			    bottom: 0%;
+			    height: 100%!important;
+			    .mejs-controls{
+			    	background-color: $magic-pink;
+			    	.mejs-time-rail {
+			    		.mejs-time-total{
+			    			//background: none;
+			    		}
+			    		.mejs-time-current {
+							background-color: $lime;
+			    		}
+			    	}
+			    }
+			}
+		}		
+	}
+  }
+  div.thumbnail.media-video{
+  	.kgvid_wrapper{
+  		margin: 0;
+  		//width: 100vw; // THIS IS A TEMPORARY FIX
+  	}
+  	.video-js, .vjs-no-js {
+  	    background-color: #fff;
+  	}
+  }
+}
+
+.container-gallery.swiper-container{
+	padding-left: 20px;
+	padding-right: 0px;
+	padding-bottom: 0;
+	margin-bottom: 40px;
+	@media (min-width: map-get($grid-breakpoints, sm)) {
+	    padding-left: 40px;
+	    padding-right: 20px;
+	}
+}
+	
+div.gallery-horizontal{
+  div.thumbnail{
+  		margin-bottom: 0;
+  		margin-right: 20px; 
+		figure{
+			display: inline-block;
+				img{
+					max-height: 65vh;
+					//max-width: 80vw;
+
+					// Horizontal devices
+					@media all and (orientation:landscape) {
+						max-height: 100%;
+						max-width: 100%;
+						/* Small devices (tablets, 768px and up) */
+						@media (min-width: map-get($grid-breakpoints, sm)) {
+							max-height: 85vh;
+						}
+
+						/* Medium devices (desktops, 992px and up) */
+						@media (min-width: map-get($grid-breakpoints, md)) {
+							max-height: 80vh;
+						}
+
+						/* Large devices (large desktops, 1200px and up) */
+						@media (min-width: map-get($grid-breakpoints, lg)) { 
+							//max-height: 75vh; 
+						}
+					}
+				}
+				
+			figcaption {
+			}
+		}
+  }
+  .swiper-slide {
+	width: initial;
+					
+  }
+}
+.swiper-scrollbar{
+	position: relative;
+    left: 0%;
+    bottom: 0px;
+    z-index: 50;
+    height: 5px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.container-fluid {
+	overflow: hidden;
+	div.no-pad{
+		margin-bottom: 30px;
+		div.thumbnail{
+	  		figure {
+	    		// 1 line bug
+	    		//margin: -1px;
+	    		//-ms-transform: translateX(1px);
+	    		//-webkit-transform: translateX(1px);
+			    //transform: translateX(1px);
+			    img{
+			    	-webkit-transition: all 1s; /* Safari */
+			    	transition: all 1s;
+			    }
+			}
+		}	
+	}
+}
+.single-hyper{
+	div.no-pad{
+		background: #888;
+	}
+}
+
+
+
+// This can be improved if intense images are trigered by a spam as this example shows: https://github.com/tholman/intense-images/issues/41
+div.thumbnail{
+	figure {
+		img{
+			&.intense--loading{
+				background: red;
+				opacity: 0.8;
+				-webkit-animation: scale 3s infinite; /* Chrome, Safari, Opera */
+				animation: scale 3s infinite;
+				-ms-transform: scale(1.2); /* IE 9 */
+				-webkit-transform: scale(1.2); /* Chrome, Safari, Opera */
+				transform: scale(1.2);
+				-webkit-animation-direction: alternate; /* Chrome, Safari, Opera */
+				animation-direction: alternate;
+
+		    }
+		}
+	}
+}
+
+@keyframes scale {
+  0% {
+  	-ms-transform: scale(1); /* IE 9 */
+  	-webkit-transform: scale(1); /* Chrome, Safari, Opera */
+    transform: scale(1);
+  }
+  100% {
+  	-ms-transform: scale(1.2); /* IE 9 */
+  	-webkit-transform: scale(1.2); /* Chrome, Safari, Opera */
+    transform: scale(1.2);
+  }
+}
