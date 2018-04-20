@@ -373,7 +373,7 @@ Index of posts for Home and Archives
 
                                         <?php
                                         // Is series archive
-                                        if( is_post_type_archive() ) {
+                                        /* if( is_post_type_archive() ) {
 
                                             if ($post_type == "hyper") {
                                                 $series_number = number_of_the_post($post->ID);?>
@@ -437,7 +437,7 @@ Index of posts for Home and Archives
                                                 <div class="series"><?php echo $obj->labels->name;?></div>
 
                                             <?php }  ?>
-                                        <?php } ?>
+                                        <?php }*/ ?>
 
                                         <h2><?php the_title();?></h2>
 
