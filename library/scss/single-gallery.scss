@@ -71,6 +71,7 @@ div.gallery{
   div.thumbnail.media-video{
   	.kgvid_wrapper{
   		margin: 0;
+  		//width: 100vw; // THIS IS A TEMPORARY FIX
   	}
   	.video-js, .vjs-no-js {
   	    background-color: #fff;

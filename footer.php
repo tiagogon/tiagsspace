@@ -3,9 +3,9 @@
  	<div id="footer-block">
  		<div class="container">
 			<footer role="contentinfo">
-			
+
 				<div id="inner-footer" class="clearfix row">
-					
+
 					<div class="attribution <?php content_wrap() ?>">
 
 
@@ -25,7 +25,7 @@
 						</nav> -->
 
 						<p>
-							 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">trouble.place</span></a> is an open archive by <a xmlns:cc="http://creativecommons.org/ns#" href="https://trouble.place" property="cc:attributionName" rel="cc:attributionURL">tiago henriques</a> and its content is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">creative commons attribution-noncommercial-noderivatives</a>.
+							 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">trouble.place</span></a> is an open docufiction archive by <a xmlns:cc="http://creativecommons.org/ns#" href="https://trouble.place" property="cc:attributionName" rel="cc:attributionURL">tiago</a> (design, code and content) licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">creative commons attribution-noncommercial-noderivatives</a>.
 							<br>
 							<br>
 							<a href="https://trouble.place">trouble.place</a> <i class="fa fa-creative-commons"></i> 2010-<?php echo date("Y"); ?>
@@ -39,7 +39,7 @@
 
 
 				</div> <!-- end #inner-footer -->
-				
+
 			</footer> <!-- end footer -->
 		</div>
 	</div>
@@ -48,9 +48,9 @@
 			<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
 			<script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
 	<![endif]-->
-	
+
 	<?php wp_footer(); // js scripts are inserted using this function ?>
-	
+
 
 
 	<?php // --- Menu --- Follow?>
@@ -103,7 +103,7 @@
 			</ul>
 		</nav>
 	</div>
-			
+
 	<script>
 		// DEACTIVATED FOLLOW OVERLAY SCREEN
 
@@ -148,8 +148,8 @@
 		// 	closeBttnfollow.addEventListener( 'click', toggleOverlayfollow );
 		// })();
 	</script>
-	
-	
+
+
 	</body>
 
 </html>

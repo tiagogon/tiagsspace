@@ -8,24 +8,22 @@ Index of posts for Home and Archives
 
     <div class="container-fluid side-padding series-block front-block " id="index">
 
-        <div id="main" role="main" class="<?php if (!is_post_type_archive( "hyper" ) AND !is_post_type_archive( "films" )) {
-                    echo "clearfix row";
-            } ?>">
+        <div id="main" role="main" class="">
 
             <ul id="thumb-container"
-                class="loadcontainer <?php if (is_post_type_archive( "hyper" ) OR is_post_type_archive( "films" )) {
-                    echo "clearfix row no-pad";
+                class="loadcontainer clearfix row <?php if (is_post_type_archive( "hyper" ) OR is_post_type_archive( "films" )) {
+                    echo " no-pad";
             } ?>">
 
                 <?php
                 // grid on archive
-                $grid_base = 'col-xs-12 col-sm-6 col-md-4 col-lg-4';
+                $grid_base = 'col-12 col-sm-6 col-md-4 col-lg-4';
 
                 if (is_post_type_archive( "hyper" )) {
-                    $grid_base = 'col-xs-12 col-sm-6 col-md-4 col-lg-4';
+                    $grid_base = 'col-12 col-sm-6 col-md-4 col-lg-4';
                 }
                 if (is_post_type_archive( "films" )) {
-                    $grid_base = 'col-xs-12 col-sm-6 col-md-6 col-lg-6';
+                    $grid_base = 'col-12 col-sm-6 col-md-6 col-lg-6';
                 }
 
                 // Is sugested posts loop
@@ -84,11 +82,11 @@ Index of posts for Home and Archives
                         $grid = $grid_base;
 
                         if ($grid_multiplayer == 2) {
-                            $grid = 'col-xs-12 col-sm-12 col-md-8 col-lg-8';
+                            $grid = 'col-12 col-sm-12 col-md-8 col-lg-8';
                         }
 
                         if ($grid_multiplayer == 3) {
-                            $grid = 'col-xs-12 col-sm-12 col-md-12 col-lg-12';
+                            $grid = 'col-12 col-sm-12 col-md-12 col-lg-12';
                         }
 
 
@@ -114,9 +112,9 @@ Index of posts for Home and Archives
                                         </figcaption>
                                 </figure>
                             </li>
-                            <div class="loadpost year-separator item col-xs-12  item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper">Published in <?php echo $year; ?></div>
-                            </div>
+                            <li class="loadpost year-separator item col-12  item-post" <?php post_class('clearfix'); ?> >
+                                <div class="separator-wrapper">P. in <?php echo $year; ?></div>
+                            </li>
                         <?php }
 
                         // Item sizer for masory
@@ -184,9 +182,9 @@ Index of posts for Home and Archives
 
                             ?>
 
-                            <div class="item loadpost year-separator col-xs-12 item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper">Published in <?php echo $year; ?></div>
-                            </div>
+                            <li class="item loadpost year-separator col-12 item-post" <?php post_class('clearfix'); ?> >
+                                <div class="separator-wrapper">P. in <?php echo $year; ?></div>
+                            </li>
 
                         <?php }
 
@@ -510,7 +508,7 @@ Index of posts for Home and Archives
     if (($prev_link || $next_link) AND !is_singular()) { ?>
 
         <div class="container-fluid pagination-container">
-                <nav class="archive-navigation col-xs-12">
+                <nav class="archive-navigation col-12">
                     <span class="nav-next"><?php previous_posts_link( '< newer' ); ?></span> <span class="nav-previous"><?php next_posts_link( 'older >' ); ?></span>
                 </nav>
         </div>
@@ -520,17 +518,29 @@ Index of posts for Home and Archives
     <?php  // --- Masory  ?>
 
     <?php
-    /*
+
     if (!is_post_type_archive( "hyper" ) AND !is_post_type_archive( "films" )) { ?>
         <script>
+            // $('#thumb-container').masonry({
+            //   itemSelector: '.item',
+            //   columnWidth: '.item-sizer',
+            //   percentPosition: true,
+            //   transitionDuration: '0.6s'
+            // })
+
+
             $('#thumb-container').masonry({
+              // set itemSelector so .grid-sizer is not used in layout
               itemSelector: '.item',
+              // use element for option
               columnWidth: '.item-sizer',
               percentPosition: true,
-              transitionDuration: '0.6s'
+              transitionDuration: '0.6s',
+              gutter: 0,
+              percentPosition: true,
             })
         </script>
-    <?php } */
+    <?php }
 
     // Play videos just on the view port and fix of iOS
     // VIA: https://stackoverflow.com/questions/15395920/play-html5-video-when-scrolled-to
