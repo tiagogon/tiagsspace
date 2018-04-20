@@ -125,9 +125,6 @@
 
 	<body <?php body_class();?> >
 
-
-
-
 		<header id="site-header" class="header-front-page container-fluid side-padding" role="banner">
 		<div class="clearfix row">
 
