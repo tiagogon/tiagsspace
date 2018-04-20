@@ -44,7 +44,7 @@
 		<?php // ----- FONTS ----- ?>
 			<!-- <link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/fonts/font-awesome/css/font-awesome.min.css"> -->
 			<!-- <link href='https://fonts.googleapis.com/css?family=Raleway:600,600italic,800,800italic' rel='stylesheet' type='text/css'> -->
-			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,600,600i" rel="stylesheet">
 
 			<!-- <link href="https://fonts.googleapis.com/css?family=Work+Sans:600,800" rel="stylesheet">
 			<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i,800,800i" rel="stylesheet">
