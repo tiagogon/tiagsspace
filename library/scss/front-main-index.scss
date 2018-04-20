@@ -169,7 +169,7 @@ li.item-post {
         padding-left: 0;
         padding-right: 0;
         position: absolute;
-        bottom: 11%;
+        bottom: 15%;
         @include transition(bottom 1s ease-in-out);
         left: 0;
         width: 100%;
@@ -211,7 +211,7 @@ li.item-post {
         }
       }
     }
-    box-shadow: 8px 8px 8px $magic-pink;
+    box-shadow: 8px 8px 8px $magic-pink-darker;
     //@include transition(background-color 1s ease);
     @include transition(box-shadow 1s ease);
     &:hover{
@@ -227,7 +227,7 @@ li.item-post {
             transition: opacity 0.5s ease-in-out;
         }
       }
-      box-shadow: 8px 8px 12px $magic-pink-light;
+      box-shadow: 8px 8px 12px $magic-pink-darker;
       //background-color: $magic-pink;
       @include transition(background-color 1s ease);
       @include transition(box-shadow 1s ease);

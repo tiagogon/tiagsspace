@@ -52,8 +52,8 @@ if (is_singular() && !is_page()) {
     $taxonomies_string = '';
 
     $taxonomies = array(
-      'from',
-      'places',
+      //'from',
+      //'places',
       'medium',
       'with',
       'post_tag',
@@ -96,12 +96,14 @@ if (is_singular() && !is_page()) {
 
             ?>
             <p class= "footer-meta">
+                <?php echo taxonomy_list($post->ID,'places', '', ', ', ', ', ' & ', 'link'); ?><?php echo taxonomy_list($post->ID,'from', '', '. ', ', ', ' & ', 'link'); ?>
                 <?php if ($obj->labels->name == "Posts") {
                     echo "undefined";
                 } else {
-                    echo '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>';
-                } ?><?php echo $logs_branch;?>. <?php echo taxonomy_list($post->ID,'places', '', ', ', ', ', ' & ', 'link'); ?><?php echo taxonomy_list($post->ID,'from', '', ' // ', ', ', ' & ', 'link'); ?>
-                P. <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('d.m.Y'); ?></time>
+                    echo '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.'.';
+                } ?>
+
+                Published on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('d/m/Y'); ?></time>.
             </p>
             <p class= "footer-meta">
                 <?php echo $taxonomies_string.' ';

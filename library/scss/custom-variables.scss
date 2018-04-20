@@ -17,16 +17,16 @@ $white:      		#fff; //#F5F5F5; // Light Grey
 // Color Combinations
 // -------------------------
 
-$magic-pink: 			    $palette-Pink-A400; //none-white-bg
-$magic-pink-light: 		$palette-Pink-50;
-$dark: 					      #222222; //none-white-bg
-$indigo: 				      $palette-Indigo-400; //none-white-bg
-$deep-purple: 			  $palette-Deep-Purple-A700; //none-white-bg
-$blue: 					      $palette-Indigo-A400;
-$blue-light: 			    $palette-Indigo-50;
-$lime: 					      $palette-Lime-400;
-$yellow: 				      $palette-Blue-Grey-50; // $palette-Deep-Purple-50; //;
-$yellow-light: 				$white;
+$magic-pink: 			   #f50044; //none-white-bg
+$magic-pink-darker: 		   #b90033; // it's actually DARKER
+$dark: 					   #222222; //none-white-bg
+$indigo: 				   $palette-Indigo-400; //none-white-bg
+$deep-purple: 			   #3c00f5; // HYPER SERIES COLOR
+$blue: 					   #3c00f5; // Dusk color
+$blue-light: 			   #142aa5; // blue dark!!
+$lime: 					   $palette-Lime-400;
+$yellow: 				   $palette-Blue-Grey-50; // $palette-Deep-Purple-50; //;
+$yellow-light: 	           $white;
 
 // OTHER
 $brand-primary:         $gray-dark;

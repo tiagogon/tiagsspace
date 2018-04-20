@@ -113,7 +113,7 @@ Index of posts for Home and Archives
                                 </figure>
                             </li>
                             <li class="loadpost year-separator item col-12  item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper">P. in <?php echo $year; ?></div>
+                                <div class="separator-wrapper">Publish in <?php echo $year; ?></div>
                             </li>
                         <?php }
 
@@ -183,7 +183,7 @@ Index of posts for Home and Archives
                             ?>
 
                             <li class="item loadpost year-separator col-12 item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper">P. in <?php echo $year; ?></div>
+                                <div class="separator-wrapper">Publish in <?php echo $year; ?></div>
                             </li>
 
                         <?php }
