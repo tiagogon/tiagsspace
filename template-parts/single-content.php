@@ -98,7 +98,7 @@ if (is_singular() && !is_page()) {
             <p class= "footer-meta">
                 <?php echo taxonomy_list($post->ID,'places', '', ', ', ', ', ' & ', 'link'); ?><?php echo taxonomy_list($post->ID,'from', '', '. ', ', ', ' & ', 'link'); ?>
                 <?php if ($obj->labels->name == "Posts") {
-                    echo "undefined";
+                    echo "";
                 } else {
                     echo '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.'.';
                 } ?>
