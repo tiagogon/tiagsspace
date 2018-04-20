@@ -42,7 +42,7 @@
 
 
 		<?php // ----- FONTS ----- ?>
-			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/fonts/font-awesome/css/font-awesome.min.css">
+			<!-- <link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/fonts/font-awesome/css/font-awesome.min.css"> -->
 			<!-- <link href='https://fonts.googleapis.com/css?family=Raleway:600,600italic,800,800italic' rel='stylesheet' type='text/css'> -->
 			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
@@ -216,7 +216,7 @@
 				<div class="submenu submenu-log col-xs-12 col-sm-12 col-md-12">
 					<ul>
 
-						<li><a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if (is_post_type_archive('log')) { echo "active";} ?>">all</a></li>
+						<li><a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if (is_post_type_archive('log')) { echo "active";} ?>">all-branches</a></li>
 
 						<li><a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">blwww</a></li>
 
@@ -241,7 +241,7 @@
 				$('#topbar').slicknav({
 					prependTo: '#topbar-parent',//'.header-front-page',
 					//closeOnClick: true,
-					label :'<span class="open fa fa-bars"></span><span class="close fa fa-times"></span>',
+					label :'<span class="open">[_]</span><span class="close">[x]</span>',
 					duplicate : false,
 					removeIds : false,
 				});

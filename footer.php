@@ -28,7 +28,7 @@
 							 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">trouble.place</span></a> is an open docufiction archive by <a xmlns:cc="http://creativecommons.org/ns#" href="https://trouble.place" property="cc:attributionName" rel="cc:attributionURL">tiago</a>. The design, code and content are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">creative commons attribution-noncommercial-noderivatives</a>.
 							<br>
 							<br>
-							<a href="https://trouble.place">trouble.place</a> <i class="fa fa-creative-commons"></i> 2010-<?php echo date("Y"); ?>
+							<a href="https://trouble.place">trouble.place</a> © 2010-<?php echo date("Y"); ?>
 						</p>
 					</div>
 

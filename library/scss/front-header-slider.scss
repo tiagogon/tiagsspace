@@ -68,10 +68,12 @@
         .slicknav_menutxt {
           display:block;
           line-height:1.188em;
-          font-size: 21px;
+          font-size: 18px;
+          font-weight: 600;
           text-align: right;
           color: $white;
           float: right;
+          font-style: italic;
 
         }
         .slicknav_icon {
@@ -90,16 +92,16 @@
         }
       }
       .slicknav_nav {
-            float: right;
+        float: right;
         text-align: right;
-
         padding:0;
         list-style:none;
         clear:both;
         margin:0;
         font-size:.875em;
-
         width: 10px;
+        margin-bottom: 20px;
+
         ul {
           padding:0;
           list-style:none;
@@ -611,6 +613,10 @@
       text-align: right;
           margin-top: 10px;
     }
+  // MOBILE
+  @media (max-width: map-get($grid-breakpoints, md)){
+    margin-top: 20px;
+  }
   ul {
     padding:0;
     list-style:none;
