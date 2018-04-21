@@ -49,12 +49,7 @@
         @media (min-width: map-get($grid-breakpoints, sm)) {
 
         }
-        @include transition(all 1s ease-out);
-        &:hover{
-          background-color: $white;
-          color: $magic-pink;
-          @include transition(all 1s ease-out);
-        }
+        
       }
     }
   }
