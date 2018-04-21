@@ -13,13 +13,13 @@ if (!is_singular( 'log' )) { ?>
 	<div class="container">
 		<div class="clearfix row">
 			<div class="<?php content_wrap() ?>">
-				<h3>Connect</h3>
+				<h3>Follow</h3>
 				<ul class="social-links">
 					<li>
 						<a href="https://www.instagram.com/trouble.place/" data-hover="Facebook" target="_blank">Instagram</a>
 					</li>
 					<li>
-						<a href="https://facebook.com/trouble.place" data-hover="Facebook" target="_blank">Facebook</a>
+						<a href="https://facebook.com/trouble.place" data-hover="Facebook" target="_blank">FB</a>
 					</li>
 					<li>
 						<a href="https://twitter.com/troubleplace" data-hover="Twitter" target="_blank">Twitter</a>
@@ -28,17 +28,17 @@ if (!is_singular( 'log' )) { ?>
 						<a href="https://vimeo.com/troubleplace" data-hover="Tumbler" target="_blank">Vimeo</a>
 					</li>
 					<li>
-						<a href="https://soundcloud.com/skeid-16" data-hover="Flickr" target="_blank">SoundCloud</a>
+						<a href="https://soundcloud.com/skeid-16" data-hover="SoundCloud" target="_blank">SC</a>
 					</li>
 					<li>
-						<a href="https://troubleplace.tumblr.com" data-hover="Tumbler" target="_blank">Tumblr I</a>
-					<li>
-					<li>
-						<a href="https://imtakingtwo.tumblr.com" data-hover="Tumbler" target="_blank">Tumblr II</a>
+						<a href="https://troubleplace.tumblr.com" data-hover="SoundCloud" target="_blank">Tumblr I</a>
 					</li>
-					<!-- <li>
+					<li>
+						<a href="https://imtakingtwo.tumblr.com" data-hover="SoundCloud" target="_blank">Tumblr II</a>
+					</li>
+					<li>
 						<a href="https://www.flickr.com/photos/cityburns/" data-hover="Flickr" target="_blank">Flickr</a>
-					</li> -->
+					</li>
 					<li>
 						<a href="https://trouble.place/feed" data-hover="Feed" target="_blank">Feed</a>
 					</li>

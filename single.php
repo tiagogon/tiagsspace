@@ -74,11 +74,11 @@ if ($post_type == "hyper") {
 	?>
 
 	<div class="single-navigation container-fluid side-padding">
-		<div class="row clearfix">
-	        <nav class="nav-next col-sm-6">
+		<div class="row justify-content-between">
+	        <nav class="nav-next col-6">
 	            <span><?php next_post_link('%link', '< #'.$next_number); ?></span>
 	        </nav>
-	        <nav class="nav-previous col-sm-6">
+	        <nav class="nav-previous col-6">
 	        	<span><?php previous_post_link('%link', '#'.$previous_number.' >'); ?></span>
 	        </nav>
         </div>
@@ -87,7 +87,7 @@ if ($post_type == "hyper") {
 <?php } else { ?>
 
 	<div class="single-navigation container-fluid side-padding">
-		<div class="row row justify-content-between">
+		<div class="row justify-content-between">
 	        <nav class="nav-next col-6">
 	            <span><?php next_post_link('%link', '< ####'); ?></span>
 	        </nav>

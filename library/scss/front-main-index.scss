@@ -529,7 +529,10 @@ li.hyper-thumb {
         }
       }
       figcaption{
-        bottom: 40%;
+        bottom: 12%;
+        @media (max-width: map-get($grid-breakpoints, sm)) {
+          bottom: 7%;
+        }
         @include transition(bottom 1s ease-in-out);
         .series{
           color: $white;
