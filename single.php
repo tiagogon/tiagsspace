@@ -10,7 +10,6 @@
 			get_template_part( 'template-parts/single', 'video' );
 		}
 
-
 		// Gallery
 		if (!get_field('horizontal_gallery')) {
 			get_template_part( 'template-parts/single', 'gallery' );
