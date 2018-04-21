@@ -511,7 +511,9 @@ li.hyper-thumb {
         width: 100%;
         padding: 12px 50px 17px;
         background-color: transparent;
-        //@include transition(background-color 1.5s ease);
+        @media (max-width: map-get($grid-breakpoints, sm)) {
+          bottom: 7%;
+        }
       }
     }
 
