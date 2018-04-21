@@ -98,8 +98,6 @@ if ($post_type == "hyper") {
 
 <?php } ?>
 
-
-
 <?php // get related posts
 
 if( !(is_singular( 'log' ))) {
