@@ -28,7 +28,7 @@ if (!is_singular( 'log' )) { ?>
 						<a href="https://vimeo.com/troubleplace" data-hover="Tumbler" target="_blank">Vimeo</a>
 					</li>
 					<li>
-						<a href="https://soundcloud.com/skeid-16" data-hover="SoundCloud" target="_blank">SC</a>
+						<a href="https://soundcloud.com/skeid-16" data-hover="SoundCloud" target="_blank">Soundcloud</a>
 					</li>
 					<li>
 						<a href="https://troubleplace.tumblr.com" data-hover="SoundCloud" target="_blank">Tumblr I</a>

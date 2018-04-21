@@ -563,6 +563,11 @@ li.hyper-thumb {
       figcaption{
         bottom: 10%;
       }
+      &:hover{
+        figcaption{
+          bottom: 40%;
+        }
+      }
 
     }
   }
