@@ -51,12 +51,6 @@
         // text-align: justify;
       a{
         color: $magic-pink;
-        border-bottom: 1px solid transparent;
-        @include transition(all 1s ease-out);
-        &:hover{
-          border-bottom: 1px solid $magic-pink;
-          @include transition(all 1s ease-out);
-        }
       }
     }
     margin-bottom: 40px;
