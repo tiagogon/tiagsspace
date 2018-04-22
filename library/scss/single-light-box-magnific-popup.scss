@@ -15,7 +15,7 @@
     transition: all 0.5s ease;
     background: $white;
     &.mfp-ready {
-      opacity: 0.90;
+      opacity: 0.95;
     }
     &.mfp-removing {
       opacity: 0;
@@ -163,6 +163,7 @@
       }
       .mfp-title{
         color: $gray-dark;
+        display: none; // deactivate
       }
       .mfp-counter{
         color: $gray-dark;

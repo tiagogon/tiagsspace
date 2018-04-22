@@ -773,14 +773,14 @@ if (!get_field('deactivate_gallery')) {
                     $('.magnific_popup-gallery-<?php the_ID(); ?>').magnificPopup({
                       delegate: 'a',
                       type: 'image',
-                      tLoading: '<span class="fa fa-bolt fa-spin"></span>',
+                      tLoading: '...',
                       mainClass: 'mfp-fade',
                       midClick: true,
                       gallery: {
                         enabled: true,
                         navigateByImgClick: true,
                         preload: [1,2], // Will preload 0 - before current, and 1 after the current image
-                        tCounter: '<span class="mfp-counter">%curr% // %total%</span>' // markup of counter
+                        tCounter: '<span class="mfp-counter">%curr%/%total%</span>' // markup of counter
                       },
                       image: {
                         tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
