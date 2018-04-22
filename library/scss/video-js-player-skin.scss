@@ -18,7 +18,7 @@ $background_color_4: rgba(255, 255, 255, 0.2);
 			}
 			&:before {
 				font-family: $font-family-base;
-				text-shadow: 0 0 1em #333;
+				text-shadow: 0 0 1em $black;
 				top: 20%;
 			}
 		}
@@ -70,13 +70,13 @@ $background_color_4: rgba(255, 255, 255, 0.2);
 
 	.vjs-control {
 	    width: 62px;
-	    text-shadow: 0 0 1em #333;
+	    text-shadow: 0 0 1em $black;
 		&:before {
 			font-size: 22px;
 			line-height: 60px;
 		}
 		&:focus {
-			text-shadow: 0 0 1em #333;
+			text-shadow: 0 0 1em $black;
 		}
 	}
 
@@ -249,7 +249,7 @@ $background_color_4: rgba(255, 255, 255, 0.2);
 
 /*
 
-$color_1: #333;
+$color_1: $black;
 $color_2: #fff;
 
 

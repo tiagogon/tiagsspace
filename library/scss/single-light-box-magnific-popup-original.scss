@@ -1,5 +1,5 @@
 //
-// Magnific Popup v1.0.0 -- orignal css 
+// Magnific Popup v1.0.0 -- orignal css
 // converted with http://www.fishsticss.com/// --------------------------------------------------
 
 
@@ -168,7 +168,7 @@ button {
 }
 .mfp-close-btn-in {
   .mfp-close {
-    color: #333;
+    color: $black;
   }
 }
 .mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
@@ -407,7 +407,7 @@ img {
     padding: 0;
   }
 }
-} 
+}
 
 
 
@@ -450,4 +450,3 @@ img {
     padding-top: 0;
   }
 }
-
