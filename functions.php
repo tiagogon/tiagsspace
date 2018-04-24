@@ -1387,8 +1387,8 @@ function add_color_class( $classes ) {
     } elseif ((is_singular( 'dusk' ) && $selected_color==0)
                 OR is_post_type_archive('dusk')) {
 
-        $classes[] = 'none-white-bg';
-        $classes[] = 'blue';
+        $classes[] = 'header-ligh';
+        $classes[] = 'yellow';
 
     // Is Emulsion
     } elseif ((is_singular( 'emulsion' ) && $selected_color==0)
@@ -1406,13 +1406,10 @@ function add_color_class( $classes ) {
         $classes[] = 'header-white';
 
     // Is Films
-    } elseif ((is_singular( 'films' ) && $selected_color==0) ) {
+    } elseif ((is_singular( 'films' ) && $selected_color==0)
+ 				OR is_post_type_archive('films')) {
         $classes[] = 'none-white-bg';
         $classes[] = 'dark';
-    } elseif (is_post_type_archive('films')) {
-
-        $classes[] = 'none-white-bg';
-        $classes[] = 'magic-pink';
 
     // If there is selection on ACF
     } elseif (!$selected_color==0 && is_singular()) {

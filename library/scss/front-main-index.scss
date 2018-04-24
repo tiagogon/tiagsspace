@@ -261,7 +261,7 @@ li.item-post {
 
 
 // Emulsion THumbnail
-li.emulsion-thumb {
+li.emulsion-thumb, li.dusk-thumb {
   figure {
     background: $yellow;
     a{
@@ -280,7 +280,7 @@ li.emulsion-thumb {
         background: $dark;
         @include transition(background-color 1s ease-in-out);
         img{
-          opacity: 0.8;
+          opacity: 0.6;
         }
       }
       // figcaption{
@@ -297,13 +297,13 @@ li.emulsion-thumb {
   }
 }
 // emulsion archive
-.post-type-archive-emulsion{
-  li.emulsion-thumb {
+.post-type-archive-emulsion,.post-type-archive-dusk{
+  li.emulsion-thumb,li.dusk-thumb {
     figure{
-      box-shadow: 8px 8px 8px $yellow;
+      box-shadow: 8px 8px 8px #aaa;
       @include transition(box-shadow 1s ease);
       &:hover{
-        box-shadow: 8px 8px 8px $white;
+        box-shadow: 8px 8px 8px #888;
         @include transition(box-shadow 1s ease);
       }
     }
@@ -311,52 +311,8 @@ li.emulsion-thumb {
 }
 
 
-// Dusk THumbnail
-li.dusk-thumb {
-  figure {
-    background: $blue;
-    a{
 
-      figcaption{
-        .series{
-          color: $white;
-        }
-        h2{
-          color: $white;
-        }
-      }
-    }
-    &:hover{
-      .imgcontainer{
-        background: $blue;
-        @include transition(background-color 1s ease-in-out);
-      }
-      // figcaption{
-      //   .series{
-      //     color: $gray-dark;
-      //     @include transition(color 1.5s ease);
-      //   }
-      //   h2{
-      //     color: $gray-dark;
-      //     @include transition(color 1.5s ease);
-      //   }
-      // }
-    }
-  }
-}
-// dusk archive
-.post-type-archive-dusk{
-  li.dusk-thumb {
-    figure{
-      box-shadow: 8px 8px 8px $blue;
-      @include transition(box-shadow 1s ease);
-      &:hover{
-        box-shadow: 8px 8px 8px $blue-light; // dark blue // Dark lime is: #c0ca33
-        @include transition(box-shadow 1s ease);
-      }
-    }
-  }
-}
+
 
 
 // Remove the frame on the Emulsion and Dusk pages

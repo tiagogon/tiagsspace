@@ -380,8 +380,8 @@
   }
 }
 
-// Active Menu for Emulsion
-.post-type-archive-emulsion,.single-emulsion{
+// Active Menu for Emulsion and Dusk
+.post-type-archive-emulsion,.single-emulsion,.post-type-archive-dusk,.single-dusk{
   #site-header{
     .slicknav_nav {
       ul {
@@ -414,63 +414,10 @@
   }
 }
 
-// Active Menu for Dusk
-.post-type-archive-dusk,.single-dusk{
-  #site-header{
-    .slicknav_nav {
-      ul {
-        li {
-          a{
-            background-color: transparent;
-            @include transition(all 1s ease-out);
-            &:hover{
-              background-color: $white;
-              color: $blue;
-              @include transition(all 1s ease-out);
-            }
-          }
-          a.active {
-              background-color: $white;
-              color: $blue;
-              @include transition(all 1s ease-out);
-          }
-          a.belongs {
-              background-color: $white;
-              color: $blue;
-              @include transition(all 1s ease-out);
-          }
-        }
-      }
-    }
-  }
-}
 
-// Active Menu for Films
-.post-type-archive-films{
-  #site-header{
-    .slicknav_nav {
-      ul {
-        li {
-          a{
-            background-color: transparent;
-            @include transition(all 1s ease-out);
-            &:hover{
-              background-color: $white;
-              color: $magic-pink;
-              @include transition(all 1s ease-out);
-            }
-          }
-          a.active {
-              background-color: $white;
-              color: $magic-pink;
-              @include transition(all 1s ease-out);
-          }
-        }
-      }
-    }
-  }
-}
-.single-films{
+
+// Menu for Films
+.post-type-archive-films, .single-films{
   #site-header{
     .slicknav_nav {
       ul {
@@ -483,6 +430,11 @@
               color: $dark;
               @include transition(all 1s ease-out);
             }
+          }
+          a.active {
+              background-color: $white;
+              color: $dark;
+              @include transition(all 1s ease-out);
           }
           a.belongs {
               background-color: $white;
