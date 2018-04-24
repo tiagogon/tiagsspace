@@ -16,7 +16,7 @@ Single // log Archive pages >> Content
                 // Hyper series number
                 if (is_singular('hyper')) {
 
-                    echo 'Hyper#'.number_of_the_post($post->ID).', ';
+                    echo 'H'.sprintf("%02d", number_of_the_post($post->ID)).', ';
 
                 }
 

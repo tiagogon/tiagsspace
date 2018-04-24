@@ -70,15 +70,19 @@ if ($post_type == "hyper") {
 
 	$next_number = number_of_the_post($post->ID) + 1;
 	$previous_number = number_of_the_post($post->ID) - 1;
+
+    // Add 2 digits number
+    $next_number = sprintf("%02d", $next_number);
+	$previous_number = sprintf("%02d", $previous_number);
 	?>
 
 	<div class="single-navigation container-fluid side-padding">
 		<div class="row justify-content-between">
 	        <nav class="nav-next col-6">
-	            <span><?php next_post_link('%link', '< #'.$next_number); ?></span>
+	            <span><?php next_post_link('%link', '< H'.$next_number); ?></span>
 	        </nav>
 	        <nav class="nav-previous col-6">
-	        	<span><?php previous_post_link('%link', '#'.$previous_number.' >'); ?></span>
+	        	<span><?php previous_post_link('%link', 'H'.$previous_number.' >'); ?></span>
 	        </nav>
         </div>
 	</div>
