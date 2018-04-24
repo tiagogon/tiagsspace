@@ -1713,7 +1713,7 @@ function build_email_and_send_1() {
                         <a href="'.get_permalink($post->ID).'" target="_blank">
                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%"/>
                         </a>
-                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#ec407a!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
+                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#f50044!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
 
                     $posts_content = $posts_content.$post_content;
 
@@ -1742,7 +1742,7 @@ function build_email_and_send_1() {
                         <a href="'.get_permalink($post->ID).'" target="_blank">
                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
                         </a>
-                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#ec407a!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
+                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#f50044!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
 
                     $posts_content = $posts_content.$post_content;
 
@@ -1771,7 +1771,7 @@ function build_email_and_send_1() {
                         <a href="'.get_permalink($post->ID).'" target="_blank">
                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
                         </a>
-                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#ec407a!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
+                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#f50044!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
 
                     $posts_content = $posts_content.$post_content;
 
@@ -1800,7 +1800,7 @@ function build_email_and_send_1() {
                         <a href="'.get_permalink($post->ID).'" target="_blank">
                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
                         </a>
-                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#ec407a!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
+                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#f50044!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
 
                     $posts_content = $posts_content.$post_content;
 
@@ -1829,7 +1829,7 @@ function build_email_and_send_1() {
                         <a href="'.get_permalink($post->ID).'" target="_blank">
                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
                         </a>
-                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#ec407a!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
+                        <strong><a href="'.get_post_permalink($post->id).'" style="color:#f50044!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></strong><br /></br>';
 
                     $posts_content = $posts_content.$post_content;
 
@@ -1849,7 +1849,7 @@ function build_email_and_send_1() {
         if ($posts) {
             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong>LOG</strong></span></br></br>';
 
-            $posts_content = $posts_content.'<strong><a href="https://trouble.place/log/" style="color:#ec407a!important; text-decoration: none;">'.count($posts).' NEW ENTRIES</a></strong></br></br>';
+            $posts_content = $posts_content.'<strong><a href="https://trouble.place/log/" style="color:#f50044!important; text-decoration: none;">'.count($posts).' NEW ENTRIES</a></strong></br></br>';
 
             $posts_content = $posts_content."</br><hr />";
         }
@@ -1869,7 +1869,7 @@ function build_email_and_send_1() {
         $subject        = 'Trouble Letter // '.$month_name;
         $message        = '
             <div style="text-align: center;"><span style="font-size: small;"><strong>'.strtolower($month_name).' '.$year_numb.'</strong></span><br />
-            <strong><a href="https://trouble.place" style="color:#ec407a!important; text-decoration: none;"><em>TROUBLE.PLACE</em></a></strong></div>
+            <strong><a href="https://trouble.place" style="color:#f50044!important; text-decoration: none;"><em>TROUBLE.PLACE</em></a></strong></div>
 
             <div style="text-align: center;"><br />
             <br />'.$posts_content.'</div>';
