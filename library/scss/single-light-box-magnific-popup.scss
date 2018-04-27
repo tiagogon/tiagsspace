@@ -43,7 +43,7 @@
     .mfp-counter{
       color: $white;
       font-size: 14px;
-      line-height: 18px;
+      line-height: 26px;
       text-transform: uppercase;
       letter-spacing: 1px;
       font-weight:600;
@@ -187,4 +187,8 @@
       color: $gray-dark;
     }
   }
+}
+
+img.mfp-img {
+    padding: 20px 0 40px;
 }
