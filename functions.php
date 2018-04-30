@@ -1871,14 +1871,10 @@ function build_email_and_send_1() {
             <div style="text-align: center;">
 				<span style="font-size: small;">
 					<strong>
-					<em>'.$month_name.'</em>
+					<em><a href="https://trouble.place">TROUBLE.PLACE</a> // NEWSLETTER //'.strtoupper($month_name).' '.strtoupper($year_numb)</em>
 					</strong>
 				</span>
 				<br>
-				<br>
-            	<strong>
-					<a href="https://trouble.place" style="color:#f50044!important; text-decoration: none;"><em>TROUBLE.PLACE</em></a>
-				</strong>
 			</div>
 
             <div style="text-align: center;"><br />
