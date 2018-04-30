@@ -1874,7 +1874,6 @@ function build_email_and_send_1() {
 					<em><a href="https://trouble.place">TROUBLE.PLACE</a> // NEWSLETTER // '.strtoupper($month_name).' '.strtoupper($year_numb).'</em>
 					</strong>
 				</span>
-				<br>
 			</div>
 
             <div style="text-align: center;"><br />
