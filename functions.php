@@ -1871,7 +1871,7 @@ function build_email_and_send_1() {
             <div style="text-align: center;">
 				<span style="font-size: small;">
 					<strong>
-					<em><a href="https://trouble.place">TROUBLE.PLACE</a> // NEWSLETTER //'.strtoupper($month_name).' '.strtoupper($year_numb).'</em>
+					<em><a href="https://trouble.place">TROUBLE.PLACE</a> // NEWSLETTER // '.strtoupper($month_name).' '.strtoupper($year_numb).'</em>
 					</strong>
 				</span>
 				<br>
