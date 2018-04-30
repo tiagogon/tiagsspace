@@ -1731,7 +1731,7 @@ function build_email_and_send_1() {
         $posts = get_posts( $args );
 
         if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong>FILMS</strong></span><br/>';
+            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>FILMS</em></strong></span><br/>';
             foreach ( $posts as $post ) {
 
                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
@@ -1760,7 +1760,7 @@ function build_email_and_send_1() {
         $posts = get_posts( $args );
 
         if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong>EMULSION</strong></span><br/>';
+            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>EMULSION</em></strong></span><br/>';
             foreach ( $posts as $post ) {
 
                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
@@ -1789,7 +1789,7 @@ function build_email_and_send_1() {
         $posts = get_posts( $args );
 
         if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong>DUSK</strong></span><br/>';
+            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>DUSK</em></strong></span><br/>';
             foreach ( $posts as $post ) {
 
                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
@@ -1818,7 +1818,7 @@ function build_email_and_send_1() {
         $posts = get_posts( $args );
 
         if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong>HYPER</strong></span><br/>';
+            $posts_content = $posts_content.'</br><span style="font-size: small;"><em><strong>HYPER SERIES</strong></em></span><br/>';
             foreach ( $posts as $post ) {
 
                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
@@ -1847,7 +1847,7 @@ function build_email_and_send_1() {
         $posts = get_posts( $args );
 
         if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong>LOG</strong></span></br></br>';
+            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>LOG</em></strong></span></br></br>';
 
             $posts_content = $posts_content.'<strong><a href="https://trouble.place/log/" style="color:#f50044!important; text-decoration: none;">'.count($posts).' NEW ENTRIES</a></strong></br></br>';
 
@@ -1870,7 +1870,7 @@ function build_email_and_send_1() {
         $message        = '
             <div style="text-align: center;">
 				<span style="font-size: small;">
-					<strong>'.strtolower($month_name).', '.$year_numb.'
+					<strong><em>'.$month_name.', '.$year_numb.'</em>
 					</strong>
 				</span>
 				<br />
