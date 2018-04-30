@@ -1860,7 +1860,7 @@ function build_email_and_send_1() {
 
 
         // Month name
-        $month_name = "[".date("M", strtotime('-32 days'))."-".date("M")."]";
+        $month_name = "".date("F", strtotime('-32 days'))." & ".date("F")."";
         $year_numb = date('Y');
 
 
@@ -1868,8 +1868,16 @@ function build_email_and_send_1() {
         $to[]           = 'beamer-2383360638cc0beb42be76b60ce4d17510528977@tinyletter.com';
         $subject        = 'Trouble Letter // '.$month_name;
         $message        = '
-            <div style="text-align: center;"><span style="font-size: small;"><strong>'.strtolower($month_name).' '.$year_numb.'</strong></span><br />
-            <strong><a href="https://trouble.place" style="color:#f50044!important; text-decoration: none;"><em>TROUBLE.PLACE</em></a></strong></div>
+            <div style="text-align: center;">
+				<span style="font-size: small;">
+					<strong>'.strtolower($month_name).', '.$year_numb.'
+					</strong>
+				</span>
+				<br />
+            	<strong>
+					<a href="https://trouble.place" style="color:#f50044!important; text-decoration: none;"><em>TROUBLE.PLACE</em></a>
+				</strong>
+			</div>
 
             <div style="text-align: center;"><br />
             <br />'.$posts_content.'</div>';
