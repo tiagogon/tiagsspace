@@ -13,7 +13,7 @@ if (!is_singular( 'log' )) { ?>
 	<div class="container">
 		<div class="clearfix row">
 			<div class="<?php content_wrap() ?>">
-				<h3>Follow</h3>
+				<h3>Elsewhere</h3>
 				<ul class="social-links">
 					<li>
 						<a href="https://www.instagram.com/trouble.place/" data-hover="Facebook" target="_blank">Instagram</a>
