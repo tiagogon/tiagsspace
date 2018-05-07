@@ -47,6 +47,7 @@ add_image_size( 'large', 1200, 2400, false ); // update also on /wp-admin/option
 // ->2400px
 
 
+
 /************* SEARCH FORM LAYOUT *****************/
 
 /****************** password protected post form *****/
@@ -1487,6 +1488,12 @@ function custom_seo_title( $site_title ) {
 add_filter( 'wpseo_title', 'custom_seo_title', 10, 1 );
 
 
+// Change SEO image to smaller size - compatible with whatsapp
+
+add_filter( 'wpseo_opengraph_image_size', 'cm1_rectangular_facebook_wpseo_image_size', 10, 1 );
+function cm1_rectangular_facebook_wpseo_image_size( $string ) {
+return 'medium';
+}
 
 // Change SEO image -- Hoked by Twitter and Facebook image filter
 function seo_image($image) {
