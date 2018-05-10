@@ -228,7 +228,7 @@ li.item-post {
         background: $magic-pink;
         @include transition(background-color 1s ease-in-out);
         img{
-          opacity: 0.6;
+          // opacity: 0.6; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
           -webkit-transition: opacity 0.5s ease-in-out;
             -moz-transition: opacity 0.5s ease-in-out;
             -ms-transition: opacity 0.5s ease-in-out;
@@ -280,7 +280,7 @@ li.emulsion-thumb, li.dusk-thumb {
         background: $dark;
         @include transition(background-color 1s ease-in-out);
         img{
-          opacity: 0.6;
+          // opacity: 0.6; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
         }
       }
       // figcaption{
