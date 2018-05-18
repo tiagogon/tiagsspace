@@ -741,7 +741,7 @@ if (!get_field('deactivate_gallery')) {
 		<?php
         // --- Masonry ----
         if ($number_of_columns_lg > 1 && $deactivat_masonry == false) { ?>
-            <script>
+            <script type="text/javascript">
                // var $grid = $('#gallery-<?php the_ID(); ?>').masonry({
                //      percentPosition: true,
                //      itemSelector: ".item",
@@ -810,7 +810,7 @@ if (!get_field('deactivate_gallery')) {
 
         // --- Intense Images
         } elseif ($light_box == 'intense-images') { ?>
-            <script>
+            <script type="text/javascript">
             window.onload = function() {
                 // Intensify all images with the 'intense' classname.
                 var elements = document.querySelectorAll( '.intense' );
@@ -821,7 +821,7 @@ if (!get_field('deactivate_gallery')) {
 
         // VIDEO
         if ($there_is_video == true) { ?>
-            <script>
+            <script type="text/javascript">
                 // var video = document.querySelector('video');
                 // enableInlineVideo(video);
             </script><?php
@@ -840,7 +840,7 @@ if (!get_field('deactivate_gallery')) {
             $animation_period = 1 / ( $animation_frequency / 60000 ); // miliseconds
         ?>
 
-            <script>
+            <script type="text/javascript">
 
                 // Randam Swap function
                 function randomDivsPosition<?php the_ID(); ?>() {
@@ -857,11 +857,10 @@ if (!get_field('deactivate_gallery')) {
 
         <?php }
 
-
-
-        // EDIT IMAGES ORDER WITH packery
-        if (is_user_logged_in()) { ?>
-            <script>
+        // When previeweing posts
+        if (is_user_logged_in() && is_preview()) { ?>
+            <!-- <script src="<?php bloginfo('template_url'); ?>/library/js/packery/packery.pkgd.min.js"></script> -->
+            <script type="text/javascript">
 
                 // // jQuery
                 // $grid.packery( 'bindUIDraggableEvents', $items )
@@ -877,6 +876,16 @@ if (!get_field('deactivate_gallery')) {
                 // var $items = $grid.find('.grid-item').draggable();
                 // // bind drag events to Packery
                 // $grid.packery( 'bindUIDraggableEvents', $items );
+            </script>
+
+            // As an Admin, I can sort the media elements on a gallery when I am previewing the post
+            // -- does not work with masonry!!
+            // documentation here: https://github.com/RubaXa/Sortable
+            <script src="<?php bloginfo('template_url'); ?>/library/js/Sortable-master/Sortable.js"></script>
+            <script type="text/javascript">
+                // Simple list
+                var el = document.getElementById('gallery-<?php the_ID(); ?>');
+                var sortable = Sortable.create(el, { /* options */ });
             </script>
         <?php }?>
 

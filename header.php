@@ -84,11 +84,6 @@
 		  	<?php // infinite-scroll.com ?>
 		  		<script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
 
-		  	<!-- <?php // DRAG IMAGES ORDER WITH packery
-		  	if (is_user_logged_in()) { ?>
-		  	    <script src="<?php bloginfo('template_url'); ?>/library/js/packery/packery.pkgd.min.js"></script>
-		  	<?php }?> -->
-
 		  	<?php // Play video on iphone wihtout fullscreen ?>
 		  		<!-- <script src="<?php bloginfo('template_url'); ?>/library/js/iphone-inline-video-master/dist/iphone-inline-video.min.js"></script> -->
 
