@@ -110,10 +110,11 @@ if (is_singular() && !is_page()) {
                 // Edit link
                 if( is_user_logged_in() ) {
 
-                    edit_post_link('#edit', '', '');
-
                     // Delete post button
                     echo ' <a href="'.get_delete_post_link( $id).'">#trash</a>';
+
+                    // Edit post
+                    edit_post_link('#edit', '', '');
 
                 }?>
             </p>
