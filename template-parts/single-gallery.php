@@ -878,12 +878,11 @@ if (!get_field('deactivate_gallery')) {
                 // $grid.packery( 'bindUIDraggableEvents', $items );
             </script>
 
-            // As an Admin, I can sort the media elements on a gallery when I am previewing the post
-            // -- does not work with masonry!!
-            // documentation here: https://github.com/RubaXa/Sortable
             <script src="<?php bloginfo('template_url'); ?>/library/js/Sortable-master/Sortable.js"></script>
             <script type="text/javascript">
-                // Simple list
+                // As an Admin, I can sort the media elements on a gallery when I am previewing the post
+                // -- does not work with masonry!!
+                // documentation here: https://github.com/RubaXa/Sortable
                 var el = document.getElementById('gallery-<?php the_ID(); ?>');
                 var sortable = Sortable.create(el, { /* options */ });
             </script>

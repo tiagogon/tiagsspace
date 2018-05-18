@@ -18,9 +18,9 @@ if (!get_field('deactivate_gallery')) {
         'post_type'         => 'attachment'
     );
     $images = get_children( $args );
-    
+
     // if there are images atached to the post
-    if($images){ 
+    if($images){
 
 		// --- Extra contente // Videos ---
 	    // --------------------------------
@@ -33,7 +33,7 @@ if (!get_field('deactivate_gallery')) {
 
 				$extra_content[] = array( get_sub_field('the_image_before'), get_sub_field('vimeo_id'));
 
-			endwhile; 
+			endwhile;
 
             // GET VIMEO API SCRIPT from CDN?>
             <script src="//f.vimeocdn.com/js/froogaloop2.min.js"></script>
@@ -53,7 +53,7 @@ if (!get_field('deactivate_gallery')) {
 
         if ( !get_field('alternative_gallery')) {
 
-           
+
             $no_space               = '';
             $spacement              = 'spacement-20';
             $light_box              = 'magnific_popup';
@@ -74,8 +74,8 @@ if (!get_field('deactivate_gallery')) {
 
             if (get_field('spacement')) {
                 $spacement = get_field('spacement');
-            } 
-            
+            }
+
         }
 
 
@@ -93,14 +93,14 @@ if (!get_field('deactivate_gallery')) {
         ?>
 
         <div class="<?php echo $class_container; ?> container-gallery swiper-container">
-            
+
             <div id="gallery-<?php the_ID(); ?>" class="gallery gallery-horizontal swiper-wrapper" itemscope itemtype="http://schema.org/ImageGallery">
 
                 <?php
                 $count_item = 0;
 
                 // loop the atached images
-                foreach($images as $image){ 
+                foreach($images as $image){
 
                 	//Check IF image is not to be removed
                 	if (!get_field('remove_from_default_gallery',$image->ID)) {
@@ -150,7 +150,7 @@ if (!get_field('deactivate_gallery')) {
                                 $image_thumb_HD_srcset = $image_thumb_HD_attributes[0]." ".$image_thumb_HD_attributes[1]."w, ";
                             }
 
-                            // FINAL SRCSET 
+                            // FINAL SRCSET
                             $image_srcset = $image_thumb_thumbnail_srcset.
                                             $image_thumb_small_srcset.
                                             $image_thumb_medium_srcset.
@@ -163,7 +163,7 @@ if (!get_field('deactivate_gallery')) {
                             //     $container_size_lg = 1200;
                             //     $container_size_md = 940;
                             //     $container_size_sm = 720;
-                                
+
                             //     $size_lg = $container_size_lg."px";
                             //     $size_md = $container_size_md."px";
                             //     $size_sm = $container_size_sm."px";
@@ -182,8 +182,8 @@ if (!get_field('deactivate_gallery')) {
                                 // $image_sizes = "(min-width: 1240px) ".$size_lg.",
                                 //                 (min-width: 992px) ".$size_md.",
                                 //                 (min-width: 768px) ".$size_sm.",
-                                //                  ".$size_xs;   
-                                $image_sizes = "130vh";                        
+                                //                  ".$size_xs;
+                                $image_sizes = "130vh";
                             // }
 
                             // Source code
@@ -204,12 +204,12 @@ if (!get_field('deactivate_gallery')) {
                             }else{
                                 $image_alt = $image_post_title." – ".$count_item;
                             }
-                        
+
                         // Imgcontainer-gallery< calculations -- intrinsic ratio
-                            $intrinsic_ratio = $image_thumb_attributes[2] * 100 / $image_thumb_attributes[1]; 
+                            $intrinsic_ratio = $image_thumb_attributes[2] * 100 / $image_thumb_attributes[1];
 
                         ?>
-						
+
                         <div class="thumbnail item swiper-slide" >
 
                             <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" >
@@ -217,7 +217,7 @@ if (!get_field('deactivate_gallery')) {
 	                            <img    <?php echo $source; ?>
 	                                    alt="<?php echo $image_alt; ?>"
                                         class=""/>
-                                        
+
                                 <?php //Caption
                                 if ($caption) { ?>
                                 <figcaption itemprop="caption description">
@@ -226,20 +226,20 @@ if (!get_field('deactivate_gallery')) {
                                 <?php } ?>
 
                             </figure>
-                        
+
                         </div>
 
 	                    <?php
 	                    // --- Add Extra Contente // Youtube Video ---
 
-	                    // If Image is an image before extra content 
+	                    // If Image is an image before extra content
 	                    foreach ($extra_content as $k => $v) {
 
 	                    	// If ID of image before is the ID of current image, then output Youtube code
-	                    	if ($v[0] == $image->ID ) { 
-                                
+	                    	if ($v[0] == $image->ID ) {
+
                                 $count_item++; ?>
-								
+
 								<style>
 									.embed-container { position: relative; padding-bottom: 177%; height: 0; overflow: hidden; max-width: 100%; }
 									.embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -248,17 +248,17 @@ if (!get_field('deactivate_gallery')) {
 	                    		<div id="x" class="thumbnail item">
 
 	                    			<div class="embed-container">
-										
-									
+
+
 										<iframe class="vimdeoiframe" src='https://player.vimeo.com/video/<?php echo $v[1]; ?>?api=1;title=0&byline=0&portrait=0&color=666666&autoplay=1&loop=1&badge=0' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-										
-										
-								
+
+
+
 									</div>
-	                    		
+
 	                    		</div>
 
-									
+
 	                    	<?php } // end if
 	                    } ?>
 
@@ -273,21 +273,21 @@ if (!get_field('deactivate_gallery')) {
 
         </div>
 
-        <?php 
+        <?php
         // ---------------
-        // --- Scripts --- 
+        // --- Scripts ---
         // ---------------
         ?>
 
-    
-            
+
+
             <script>
-                    
+
                     // ADD gallery ID in the end if you want to use in LOG
                     var mySwiper = new Swiper ('.swiper-container', {
 
                         freeMode: true,
-                        
+
                         grabCursor: true,
 
                         mousewheelControl: true,
@@ -321,32 +321,32 @@ if (!get_field('deactivate_gallery')) {
 
                     });
 
-                    
+
                     mySwiper.once('slideChangeStart', function () {
                         console.log('slide change start');
                         mySwiper.update();
-                        mySwiper.updateContainerSize() 
+                        mySwiper.updateContainerSize()
                         mySwiper.onResize();
                     });
 
                     mySwiper.once('sliderMove', function () {
                         console.log('slide move');
                         mySwiper.update();
-                        mySwiper.updateContainerSize() 
+                        mySwiper.updateContainerSize()
                         mySwiper.onResize();
                     });
 
                     mySwiper.once('scroll', function () {
                         console.log('slide scroll');
                         mySwiper.update();
-                        mySwiper.updateContainerSize() 
+                        mySwiper.updateContainerSize()
                         mySwiper.onResize();
                     });
 
                     document.addEventListener("DOMContentLoaded", function(event) {
                         console.log("DOM fully loaded and parsed");
                     });
-                
+
             </script>
 
 
@@ -365,5 +365,5 @@ if (!get_field('deactivate_gallery')) {
 // probably alredy native: http://make.wordpress.org/core/2013/04/08/audio-video-support-in-core/
 
 // this one makes the houver tittle appear:
-// title="<?php echo $image->post_title; 
+// title="<?php echo $image->post_title;
 ?>
