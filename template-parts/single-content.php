@@ -113,7 +113,7 @@ if (is_singular() && !is_page()) {
                     edit_post_link('#edit', '', '');
 
                     // Delete post button
-                    echo ' <a href="'.get_delete_post_link( $id, $deprecated, $force_delete ).'">#trash</a>';
+                    echo ' <a href="'.get_delete_post_link( $id).'">#trash</a>';
 
                 }?>
             </p>
