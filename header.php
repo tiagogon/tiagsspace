@@ -1,18 +1,3 @@
-<?php
-
-// ATENTION!!!
-// REDIRECT WORDPRESS IF NOT LOGED IN
-
-/* if( !is_user_logged_in()
-	// AND !is_post_type_archive( "hyper" )
-	// AND !is_singular( 'hyper' )
-	) {
-	// not public yet!
-		wp_redirect('http://tumblr.trouble.place'); // default 302
-		exit;
-
-}RELEASE!*/?>
-
 <!doctype html>
 
 <!--[if IEMobile 7 ]> <html <?php language_attributes(); ?>class="no-js iem7"> <![endif]-->
