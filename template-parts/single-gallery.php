@@ -844,7 +844,11 @@ if (!get_field('deactivate_gallery')) {
 
                 // Randam Swap function
                 function randomDivsPosition<?php the_ID(); ?>() {
-                    $("#gallery-<?php the_ID(); ?>").html($("#gallery-<?php the_ID(); ?>").children().sort(function() { return 0.5 - Math.random() }));
+                    $("#gallery-<?php the_ID(); ?>").html(
+                        $("#gallery-<?php the_ID(); ?>").children().sort(
+                            function() { return 0.5 - Math.random() }
+                        )
+                    );
                 }
 
                 // Repeat functions every X miliseconds
