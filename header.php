@@ -19,7 +19,7 @@
 		<?php // ----- CSS ----- ?>
 			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
 
-				<link rel="stylesheet" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
+				<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
 
 
 		<?php // ----- FONTS ----- ?>
@@ -64,7 +64,7 @@
 				<script src="<?php bloginfo('template_url'); ?>/library/js/fresh_url/fresh_url.min.js" async></script>
 
 			<?php // Slider Swiper ?>
-		  		<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.js"></script>
+		  		<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.jquery.min.js"></script>
 
 
 		  	<?php // Play video on iphone wihtout fullscreen ?>
