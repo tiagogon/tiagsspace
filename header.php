@@ -35,7 +35,7 @@
 					// Picture element HTML5 shiv
 					document.createElement( "picture" );
 				</script>
-				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/picturefill/picturefill.min.js"></script>
+				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/picturefill/picturefill.min.js" async></script>
 				<?php /*<script src="//cdnjs.cloudflare.com/ajax/libs/picturefill/2.3.1/picturefill.min.js"  async></script>*/ ?>
 
 
@@ -66,8 +66,6 @@
 			<?php // Slider Swiper ?>
 		  		<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.js"></script>
 
-		  	<?php // infinite-scroll.com ?>
-		  		<script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
 
 		  	<?php // Play video on iphone wihtout fullscreen ?>
 		  		<!-- <script src="<?php bloginfo('template_url'); ?>/library/js/iphone-inline-video-master/dist/iphone-inline-video.min.js"></script> -->

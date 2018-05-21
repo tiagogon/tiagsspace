@@ -592,6 +592,8 @@ Index of posts for Home and Archives
 
     if (is_tax( 'medium', 'photography') ) { ?>
 
+        <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+        
         <script type="text/javascript">
 
             // get Masonry instance
