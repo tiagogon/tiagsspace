@@ -73,7 +73,7 @@ if (is_singular() && !is_page()) {
             $taxonomies_string = $taxonomies_string.'<a href="' . esc_url( get_term_link( $term ) ) . '">#' . str_replace(" ","-",$term->name) . '</a> ';
         }
 
-        $taxonomies_string = $taxonomies_string.get_edit_post_link(' #edit', ' ', ''); // Edit post link for loged in users
+        $taxonomies_string = $taxonomies_string.get_edit_post_link('#edit', ' ', ''); // Edit post link for loged in users
 
     }
 
@@ -111,7 +111,7 @@ if (is_singular() && !is_page()) {
                 if( is_user_logged_in() ) {
 
                     // Delete post button
-                    echo ' <a href="'.get_delete_post_link( $id).'">#trash</a>';
+                    echo ' <a href="'.get_delete_post_link( $id).'">#trash</a> ';
 
                     // Edit post
                     edit_post_link('#edit', '', '');
