@@ -56,9 +56,9 @@ if (is_singular() && !is_page()) {
       //'places',
       'medium',
       'with',
-      'post_tag',
+      'post_tag'
       //'category',
-      'log-branch'
+      //'log-branch'
     );
 
     $args = array(  'orderby' => 'name',
