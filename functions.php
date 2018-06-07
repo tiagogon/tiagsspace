@@ -552,7 +552,7 @@ add_filter('request', 'myfeed_request');
 
 function places_taxonomy() {
   $labels = array(
-    'name'                       => _x( 'Places', 'Taxonomy General Name', 'text_domain' ),
+    'name'                       => _x( 'Place', 'Taxonomy General Name', 'text_domain' ),
     'singular_name'              => _x( 'Place', 'Taxonomy Singular Name', 'text_domain' ),
     'menu_name'                  => __( 'Places', 'text_domain' ),
     'all_items'                  => __( 'All Places', 'text_domain' ),
@@ -719,8 +719,8 @@ add_action( 'init', 'log_branch_taxonomy', 0 );
 
 function year_from_taxonomy() {
   $labels = array(
-    'name'                       => _x( 'From', 'Taxonomy General Name', 'text_domain' ),
-    'singular_name'              => _x( 'From', 'Taxonomy Singular Name', 'text_domain' ),
+    'name'                       => _x( 'Year Archive', 'Taxonomy General Name', 'text_domain' ),
+    'singular_name'              => _x( 'Year Archive', 'Taxonomy Singular Name', 'text_domain' ),
     'menu_name'                  => __( 'From', 'text_domain' ),
     'all_items'                  => __( 'All years', 'text_domain' ),
     'parent_item'                => __( 'Parent years', 'text_domain' ),

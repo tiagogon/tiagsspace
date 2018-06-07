@@ -99,7 +99,7 @@
         clear:both;
         margin:0;
         font-size:.875em;
-        width: 10px;
+        //width: 10px;
         margin-bottom: 20px;
 
         ul {
@@ -534,7 +534,38 @@
   }
 }
 
+// active for arquive tags and taxonamy
 
+// Active Menu for Hyper
+.tag,.tax-medium,.tax-from,.tax-places{
+  #site-header{
+    .slicknav_nav {
+      ul {
+        li {
+          a{
+            background-color: transparent;
+            @include transition(all 1s ease-out);
+            &:hover{
+              background-color: $white;
+              color: $magic-pink;
+              @include transition(all 1s ease-out);
+            }
+          }
+          a.active {
+              background-color: $white;
+              color: $magic-pink;
+              @include transition(all 1s ease-out);
+          }
+          a.belongs {
+              background-color: $white;
+              color: $magic-pink;
+              @include transition(all 1s ease-out);
+          }
+        }
+      }
+    }
+  }
+}
 
 
 // Make header bar with color Indigo for LOG

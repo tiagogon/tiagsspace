@@ -136,6 +136,27 @@
 							<li class=""><a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>">all</a></li>
 						<?php } ?>
 
+						<?php
+
+							// --- Tags and Custom taxonamies menu item ---
+
+							if ( is_tag() ) {
+						        echo '<li class="">
+									<a href="#" class="active">Tag: '.single_tag_title("", false).'</a>
+								</li>';
+						    }
+
+							if ( is_tax() AND !is_tax('log-branch') ) {
+								$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
+
+						        echo '<li class="">
+									<a href="#" class="active">'.$term->taxonomy.': '.$term->name.'</a>
+								</li>';
+						    }
+
+
+						 ?>
+
 						<li><a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">films</a></li>
 
 						<li><a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">emulsion</a></li>
