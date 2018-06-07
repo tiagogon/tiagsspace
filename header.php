@@ -142,7 +142,7 @@
 
 							if ( is_tag() ) {
 						        echo '<li class="">
-									<a href="#" class="active">Tag: '.single_tag_title("", false).'</a>
+									<a href="#" class="active">Tag #'.str_replace(" ","-",single_tag_title("", false)).'</a>
 								</li>';
 						    }
 
@@ -150,7 +150,7 @@
 								$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
 
 						        echo '<li class="">
-									<a href="#" class="active">'.$term->taxonomy.': '.$term->name.'</a>
+									<a href="#" class="active">'.$term->taxonomy.' #'.str_replace(" ","-",$term->name).'</a>
 								</li>';
 						    }
 
