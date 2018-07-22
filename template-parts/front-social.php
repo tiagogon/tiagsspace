@@ -16,7 +16,7 @@ if (!is_singular( 'log' )) { ?>
 				<h3>Elsewhere</h3>
 				<ul class="social-links">
 					<li>
-						<a href="https://www.instagram.com/trouble.place/" data-hover="Facebook" target="_blank">Instagram</a>
+						<a href="https://www.instagram.com/tiagsssss/" data-hover="Facebook" target="_blank">Instagram</a>
 					</li>
 					<li>
 						<a href="https://facebook.com/trouble.place" data-hover="Facebook" target="_blank">FB</a>
