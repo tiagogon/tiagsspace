@@ -61,7 +61,7 @@
 		<nav>
 			<ul>
 				<li>
-					<a href="https://www.instagram.com/trouble.place/" target="_blank">
+					<a href="https://www.instagram.com/tiagsssss/" target="_blank">
 						Instagram
 					</a>
 				</li>
