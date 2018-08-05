@@ -2,7 +2,6 @@
 // gallery styles
 // --------------------------------------------------
 
-
 .container-gallery{
 	padding-bottom: 10px;
 }
@@ -198,4 +197,40 @@ div.thumbnail{
   	-webkit-transform: scale(1.2); /* Chrome, Safari, Opera */
     transform: scale(1.2);
   }
+}
+
+
+// Edit atachment media (image/video/etc) -- hide and delete
+button.remove{
+	opacity: 0;
+	position: absolute;
+    z-index: 1;
+	padding: 5px;
+	color: white;
+	font-style: italic;
+	font-size: 16px;
+	font-weight: 600;
+	border-color: transparent;
+    border-style: none;
+    border-width: 0;
+    background-color: transparent!important;
+	&:hover{
+		opacity: 1;
+	}
+}
+
+a.delete{
+	opacity: 0;
+	position: absolute;
+    z-index: 1;
+	right: 0;
+	padding: 5px;
+	color: white;
+	font-style: italic;
+	font-size: 16px;
+	font-weight: 600;
+	&:hover{
+		opacity: 1;
+		text-decoration: none;
+	}
 }

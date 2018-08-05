@@ -1897,6 +1897,45 @@ function build_email_and_send_1() {
 
 
 
+/************* Gallery Functions *************/
+
+// Edit atachment media (image/video/etc) -- hide and delete
+
+function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachment_id ) {
+
+	// HIDE based on: https://stackoverflow.com/questions/40144638/how-to-remove-the-div-that-a-button-is-contained-in-when-the-button-is-clicked
+
+	echo '
+		<script type="text/javascript">
+			function removeDiv(btn){
+			((btn.parentNode).parentNode).removeChild(btn.parentNode);
+			$("#gallery-'.$gallery_id.'").masonry();
+
+			}
+		</script>
+
+		<button class="remove" onclick="removeDiv(this);">HIDE</button>
+	';
+
+	// DELETE based on: https://stackoverflow.com/questions/15729334/how-to-trigger-a-link-with-jquery-without-refreshing-the-page
+
+	echo '
+		<a class="delete" href="javascript:;" rel="' . wp_nonce_url( get_bloginfo('url') . '/wp-admin/post.php?action=delete&amp;post=' . $attachment_id, 'delete-post_' . $attachment_id) . '" onclick="removeDiv(this);">DELETE</a>
+
+		<script type="text/javascript">
+			$(".delete").click(function(e){
+			 	e.preventDefault();
+				var targetUrl = $(this).attr("rel");
+			 	$.ajax({
+					url: targetUrl,
+					type: "GET"
+				});
+				$("#gallery-'.$gallery_id.'").masonry();
+			});
+		</script>
+	';
+}
+
 
 
 // END -- don't add any space after php close ?>

@@ -590,6 +590,15 @@ if (!get_field('deactivate_gallery')) {
                         if ( $image->post_mime_type == "audio/wav" OR $image->post_mime_type == "audio/mpeg" ) { ?>
 
                             <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>" >
+
+                                <?php
+                                // Edit atachment media -- hide and delete
+                                if (is_user_logged_in() && is_preview()) {
+                                    $gallery_id = get_the_ID();
+                                    gallery_edit_atachement_options($gallery_id, $count_item, $image->ID );
+                                }
+                                ?>
+
                                 <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
                                     <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
 
@@ -613,6 +622,15 @@ if (!get_field('deactivate_gallery')) {
                         } elseif ( $image->post_mime_type == "video/mpeg" OR $image->post_mime_type == "video/mp4" OR $image->post_mime_type == "video/quicktime" ) { ?>
 
                             <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $image->ID;?> attachmen-<?php echo $count_item;?>" >
+
+                                <?php
+                                // Edit atachment media -- hide and delete
+                                if (is_user_logged_in() && is_preview()) {
+                                    $gallery_id = get_the_ID();
+                                    gallery_edit_atachement_options($gallery_id, $count_item, $image->ID );
+                                }
+                                ?>
+
                                 <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/VideoObject">
                                     <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>100%; height: 0; overflow: hidden; max-width: 100%;">
 
@@ -641,6 +659,15 @@ if (!get_field('deactivate_gallery')) {
                         } else { ?>
 
                             <div class="thumbnail item <?php echo $class_thumbnail;?> attachmen-<?php echo $count_item;?>" >
+
+                                <?php
+                                // Edit atachment media -- hide and delete
+                                if (is_user_logged_in() && is_preview()) {
+                                    $gallery_id = get_the_ID();
+                                    gallery_edit_atachement_options($gallery_id, $count_item, $image->ID );
+                                }
+                                ?>
+
 
                             <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
 
