@@ -589,7 +589,7 @@ if (!get_field('deactivate_gallery')) {
                         // AUDIO
                         if ( $image->post_mime_type == "audio/wav" OR $image->post_mime_type == "audio/mpeg" ) { ?>
 
-                            <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>" >
+                            <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $image->ID;?>" attachmentOrder="<?php echo $image->menu_order;?>">
 
                                 <?php
                                 // Edit atachment media -- hide and delete
@@ -621,7 +621,7 @@ if (!get_field('deactivate_gallery')) {
                         // VIDEO
                         } elseif ( $image->post_mime_type == "video/mpeg" OR $image->post_mime_type == "video/mp4" OR $image->post_mime_type == "video/quicktime" ) { ?>
 
-                            <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $image->ID;?> attachmen-<?php echo $count_item;?>" >
+                            <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $image->ID;?> attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $image->ID;?>" attachmentOrder="<?php echo $image->menu_order;?>">
 
                                 <?php
                                 // Edit atachment media -- hide and delete
@@ -658,7 +658,7 @@ if (!get_field('deactivate_gallery')) {
                         // IMAGE
                         } else { ?>
 
-                            <div class="thumbnail item <?php echo $class_thumbnail;?> attachmen-<?php echo $count_item;?>" >
+                            <div class="thumbnail item <?php echo $class_thumbnail;?> attachmen-<?php echo $count_item;?>" attachmentId="<?php echo $image->ID;?>" attachmentOrder="<?php echo $image->menu_order;?>">
 
                                 <?php
                                 // Edit atachment media -- hide and delete
@@ -891,32 +891,62 @@ if (!get_field('deactivate_gallery')) {
         // When previeweing posts
         if (is_user_logged_in() && is_preview()) { ?>
             <!-- <script src="<?php bloginfo('template_url'); ?>/library/js/packery/packery.pkgd.min.js"></script> -->
-            <script type="text/javascript">
-
-                // // jQuery
-                // $grid.packery( 'bindUIDraggableEvents', $items )
-
-                // // initialize Packery
-                // var $grid = $('.grid').packery({
-                //   itemSelector: '.grid-item',
-                //   // columnWidth helps with drop positioning
-                //   columnWidth: 100
-                // });
-
-                // // make all items draggable
-                // var $items = $grid.find('.grid-item').draggable();
-                // // bind drag events to Packery
-                // $grid.packery( 'bindUIDraggableEvents', $items );
-            </script>
 
             <script src="<?php bloginfo('template_url'); ?>/library/js/Sortable-master/Sortable.js"></script>
             <script type="text/javascript">
                 // As an Admin, I can sort the media elements on a gallery when I am previewing the post
-                // -- does not work with masonry!!
                 // documentation here: https://github.com/RubaXa/Sortable
                 var el = document.getElementById('gallery-<?php the_ID(); ?>');
-                var sortable = Sortable.create(el, { /* options */ });
+                var sortable = Sortable.create(el, {
+                    dataIdAttr: 'attachmentId',
+                    onSort: console.log("Sorted happend."),
+                    onMove: console.log("Move happend.")
+                });
+
             </script>
+
+
+            // Function that order Gallery via Ajax calls
+            <script type="text/javascript">
+
+                function orderAttachmentesOnWpDb() {
+
+                    var menuOrderCount = 0;
+
+                    $('#gallery-<?php the_ID(); ?>').children('div').each(function () {
+
+                        menuOrderCount++;
+
+                        console.log(menuOrderCount);
+                        console.log(this.getAttribute('attachmentid')); //log every element found to console output
+
+                        var attachmentId = this.getAttribute('attachmentid');
+                        var attachmentOrder = menuOrderCount;
+
+                        // This does the ajax request to change the menu_order value on the wp_db
+                        $.ajax({
+                            url: example_ajax_obj.ajaxurl,
+                            data: {
+                                'action': 'gallery_media_order_change_request',
+                                'attachmentId' : attachmentId,
+                                'attachmentOrder' : attachmentOrder
+                            },
+                            success:function(data) {
+                                // This outputs the result of the ajax request
+                                console.log(data);
+                            },
+                            error: function(errorThrown){
+                                console.log(errorThrown);
+                            }
+                        });
+
+                    });
+
+                }
+
+            </script>
+
+
         <?php }?>
 
     <?php } // if there are images

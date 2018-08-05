@@ -1899,8 +1899,8 @@ function build_email_and_send_1() {
 
 /************* Gallery Functions *************/
 
-// Edit atachment media (image/video/etc) -- hide and delete
 
+// Edit atachment media (image/video/etc) -- hide, delete and save gallery order
 function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachment_id) {
 
 	// HIDE based on: https://stackoverflow.com/questions/40144638/how-to-remove-the-div-that-a-button-is-contained-in-when-the-button-is-clicked
@@ -1934,7 +1934,14 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 				var targetUrl = $(this).attr("rel");
 			 	$.ajax({
 					url: targetUrl,
-					type: "GET"
+					type: "GET",
+                    success:function(data) {
+                        // This outputs the result of the ajax request
+                        console.log(data);
+                    },
+                    error: function(errorThrown){
+                        console.log(errorThrown);
+                    }
 				});
 
 				// reiniciate sortable
@@ -1947,7 +1954,74 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 			});
 		</script>
 	';
+
+	// save order of gallery -- function on single-gallery -- ajax functions on functions.php
+	echo '
+	<button class="saveorder" onclick="orderAttachmentesOnWpDb();">SAVE ORDER</button>
+	';
 }
+
+// change order of media atachments on database
+	// via: https://wptheming.com/2013/07/simple-ajax-example/
+
+// Activate ajax on the frontend
+
+
+
+// define ajaxurl as a global variable on the frontend
+function example_ajax_enqueue() {
+	// Enqueue javascript on the frontend.
+	wp_enqueue_script(
+		'example-ajax-script',
+		get_template_directory_uri() . '/js/simple-ajax-example.js',
+		array('jquery')
+	);
+	// The wp_localize_script allows us to output the ajax_url path for our script to use.
+	wp_localize_script(
+		'example-ajax-script',
+		'example_ajax_obj',
+		array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
+	);
+}
+add_action( 'wp_enqueue_scripts', 'example_ajax_enqueue' );
+
+
+// Change database wp_posts >> menu_order via Ajax request
+function gallery_media_order_change_request() {
+
+    // The $_REQUEST contains all the data sent via ajax
+    if ( isset($_REQUEST) ) {
+
+
+        $attachmentId = $_REQUEST['attachmentId'];
+        $attachmentOrder = $_REQUEST['attachmentOrder'];
+
+        // Let's take the data that was sent and do something with it
+        if ( $attachmentId ) {
+			$debug_result = $attachmentId + $attachmentOrder;
+
+			global $wpdb;
+			$wpdb->update( 'wp_posts', array( 'menu_order'=>$attachmentOrder),array('ID'=>$attachmentId));
+
+			if ( false === $updated ) {
+			    echo "There was an error tring to move the attachmente ".$attachmentId." to the menu position number ".$attachmentOrder;
+			} else {
+			    echo "The attachment ".$attachmentId." is now on the position ".$attachmentOrder;
+			}
+
+        }
+
+        // If you're debugging, it might be useful to see what was sent in the $_REQUEST
+        // print_r($_REQUEST);
+
+    }
+
+    // Always die in functions echoing ajax content
+   die();
+}
+
+add_action( 'wp_ajax_gallery_media_order_change_request', 'gallery_media_order_change_request' );
+
 
 
 
