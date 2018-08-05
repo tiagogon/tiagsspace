@@ -1920,7 +1920,7 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 	// DELETE based on: https://stackoverflow.com/questions/15729334/how-to-trigger-a-link-with-jquery-without-refreshing-the-page
 
 	echo '
-		<a class="delete" onclick="removeDiv(this);" href="javascript:;" rel="' . wp_nonce_url( get_bloginfo('url') . '/wp-admin/post.php?action=delete&amp;post=' . $attachment_id, 'delete-post_' . $attachment_id) . '" >DELETE</a>
+		<a class="delete" href="javascript:;" rel="' . wp_nonce_url( get_bloginfo('url') . '/wp-admin/post.php?action=delete&amp;post=' . $attachment_id, 'delete-post_' . $attachment_id) . '" onclick="removeDiv(this);">DELETE</a>
 
 		<script type="text/javascript">
 			$(".delete").click(function(e){
