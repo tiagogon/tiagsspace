@@ -906,7 +906,6 @@ if (!get_field('deactivate_gallery')) {
             </script>
 
 
-            // Function that order Gallery via Ajax calls
             <script type="text/javascript">
 
                 function orderAttachmentesOnWpDb() {
