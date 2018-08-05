@@ -1911,6 +1911,10 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 			((btn.parentNode).parentNode).removeChild(btn.parentNode);
 			$("#gallery-'.$gallery_id.'").masonry();
 
+			//reiniciate sortable
+			var el = document.getElementById("#gallery-'.$gallery_id.'");
+			var sortable = Sortable.create(el, { /* options */ });
+
 			}
 		</script>
 
