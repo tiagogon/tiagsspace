@@ -1909,6 +1909,8 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 		<script type="text/javascript">
 			function removeDiv(btn){
 			((btn.parentNode).parentNode).removeChild(btn.parentNode);
+
+			// reiniciate masonry
 			$("#gallery-'.$gallery_id.'").masonry();
 
 			//reiniciate sortable
