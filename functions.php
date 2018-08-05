@@ -1901,7 +1901,7 @@ function build_email_and_send_1() {
 
 // Edit atachment media (image/video/etc) -- hide and delete
 
-function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachment_id ) {
+function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachment_id) {
 
 	// HIDE based on: https://stackoverflow.com/questions/40144638/how-to-remove-the-div-that-a-button-is-contained-in-when-the-button-is-clicked
 
@@ -1910,12 +1910,12 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 			function removeDiv(btn){
 			((btn.parentNode).parentNode).removeChild(btn.parentNode);
 
-			// reiniciate masonry
-			$("#gallery-'.$gallery_id.'").masonry();
-
-			//reiniciate sortable
+			// reiniciate sortable
 			var el = document.getElementById("#gallery-'.$gallery_id.'");
 			var sortable = Sortable.create(el, { /* options */ });
+
+			// reiniciate masonry
+			$("#gallery-'.$gallery_id.'").masonry();
 
 			}
 		</script>
@@ -1936,7 +1936,14 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 					url: targetUrl,
 					type: "GET"
 				});
+
+				// reiniciate sortable
+				var el = document.getElementById("#gallery-'.$gallery_id.'");
+				var sortable = Sortable.create(el, { /* options */ });
+
+				// reiniciate masonry
 				$("#gallery-'.$gallery_id.'").masonry();
+
 			});
 		</script>
 	';
