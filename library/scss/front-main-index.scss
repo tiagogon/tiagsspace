@@ -236,7 +236,7 @@ li.item-post {
             transition: opacity 0.5s ease-in-out;
         }
       }
-      box-shadow: 8px 8px 12px $magic-pink-darker;
+      box-shadow: 8px 8px 12px $magic-pink-darker-darker;
       //background-color: $magic-pink;
       @include transition(background-color 1s ease);
       @include transition(box-shadow 1s ease);
@@ -464,7 +464,7 @@ li.hyper-thumb {
         padding-left: 0;
         padding-right: 0;
         position: absolute;
-        bottom: 16%; 
+        bottom: 16%;
         @include transition(bottom 1s ease-in-out);
         left: 0;
         width: 100%;
@@ -656,7 +656,7 @@ li.log-thumb.post-group {
 
     }
     .nav-next {
-      
+
     }
     .nav-previous{
       float: right;
