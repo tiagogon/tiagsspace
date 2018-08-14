@@ -18,9 +18,9 @@ if (!is_singular( 'log' )) { ?>
 					<li>
 						<a href="https://www.instagram.com/tiagsssss/" data-hover="Facebook" target="_blank">Instagram</a>
 					</li>
-					<li>
+					<!-- <li>
 						<a href="https://facebook.com/trouble.place" data-hover="Facebook" target="_blank">FB</a>
-					</li>
+					</li> -->
 					<li>
 						<a href="https://twitter.com/tiagsssss" data-hover="Twitter" target="_blank">Twitter</a>
 					</li>
