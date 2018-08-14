@@ -22,10 +22,10 @@ if (!is_singular( 'log' )) { ?>
 						<a href="https://facebook.com/trouble.place" data-hover="Facebook" target="_blank">FB</a>
 					</li>
 					<li>
-						<a href="https://twitter.com/troubleplace" data-hover="Twitter" target="_blank">Twitter</a>
+						<a href="https://twitter.com/tiagsssss" data-hover="Twitter" target="_blank">Twitter</a>
 					</li>
 					<li>
-						<a href="https://vimeo.com/troubleplace" data-hover="Tumbler" target="_blank">Vimeo</a>
+						<a href="https://vimeo.com/tiags" data-hover="Tumbler" target="_blank">Vimeo</a>
 					</li>
 					<li>
 						<a href="https://soundcloud.com/tiagsssss" data-hover="SoundCloud" target="_blank">Soundcloud</a>
