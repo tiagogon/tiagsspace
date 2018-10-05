@@ -25,7 +25,7 @@
 						</nav> -->
 
 						<p>
-							 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">trouble.place</span></a> is an open docufiction archive by <a xmlns:cc="http://creativecommons.org/ns#" href="https://trouble.place" property="cc:attributionName" rel="cc:attributionURL">tiago</a> - hi@trouble.place. The design, code and content are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">creative commons attribution-noncommercial-noderivatives</a>.
+							 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">tiags.place</span></a> is a digital archive by <a xmlns:cc="http://creativecommons.org/ns#" href="https://trouble.place" property="cc:attributionName" rel="cc:attributionURL">tiago</a> - hi@trouble.place. The design, code and content are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">creative commons attribution-noncommercial-noderivatives</a>.
 							<br>
 							<br>
 							<a href="https://trouble.place">trouble.place</a> © 2010-<?php echo date("Y"); ?>
