@@ -1384,21 +1384,20 @@ function add_color_class( $classes ) {
         $classes[] = 'none-white-bg';
         $classes[] = 'deep-purple';
 
-    // Is Dusk
-    } elseif ((is_singular( 'dusk' ) && $selected_color==0)
-                OR is_post_type_archive('dusk')) {
+	// Is Dusk single
+    } elseif ((is_singular( 'dusk' ) && $selected_color==0)) {
 
         $classes[] = 'header-ligh';
         $classes[] = 'yellow';
 
-    // Is Emulsion
-    } elseif ((is_singular( 'emulsion' ) && $selected_color==0)
-                OR is_post_type_archive('emulsion')) {
+    // Is Emulsion single
+    } elseif ((is_singular( 'emulsion' ) && $selected_color==0)) {
 
         $classes[] = 'header-ligh';
         $classes[] = 'yellow';
 
-    // Is Log
+
+	// Is Log
     } elseif ((is_singular( 'log' ) && $selected_color==0)
                 OR is_post_type_archive('log')
                 OR is_tax('log-branch')) {
@@ -1406,14 +1405,8 @@ function add_color_class( $classes ) {
         $classes[] = 'header-ligh';
         $classes[] = 'header-white';
 
-    // Is Films Archive
-    } elseif (is_post_type_archive('films')) {
-
-		$classes[] = 'none-white-bg';
-        $classes[] = 'deep-purple';
-
-	// Is Films single
-	} elseif ((is_singular( 'films' ) && $selected_color==0)) {
+    // Is Films single
+    } elseif ((is_singular( 'films' ) && $selected_color==0)) {
 		$classes[] = 'none-white-bg';
 		$classes[] = 'dark';
 

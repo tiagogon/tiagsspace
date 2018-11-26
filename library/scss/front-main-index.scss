@@ -261,54 +261,54 @@ li.item-post {
 
 
 // Emulsion THumbnail
-li.emulsion-thumb, li.dusk-thumb {
-  figure {
-    background: $yellow;
-    a{
-
-      figcaption{
-        .series{
-          color: $white;
-        }
-        h2{
-          color: $white;
-        }
-      }
-    }
-    &:hover{
-      .imgcontainer{
-        background: $dark;
-        @include transition(background-color 1s ease-in-out);
-        img{
-          // opacity: 0.6; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
-        }
-      }
-      // figcaption{
-      //   .series{
-      //     color: $gray-dark;
-      //     @include transition(color 1.5s ease);
-      //   }
-      //   h2{
-      //     color: $gray-dark;
-      //     @include transition(color 1.5s ease);
-      //   }
-      // }
-    }
-  }
-}
-// emulsion archive
-.post-type-archive-emulsion,.post-type-archive-dusk{
-  li.emulsion-thumb,li.dusk-thumb {
-    figure{
-      box-shadow: 8px 8px 8px #aaa;
-      @include transition(box-shadow 1s ease);
-      &:hover{
-        box-shadow: 8px 8px 8px #888;
-        @include transition(box-shadow 1s ease);
-      }
-    }
-  }
-}
+    // li.emulsion-thumb, li.dusk-thumb {
+    //   figure {
+    //     background: $yellow;
+    //     a{
+    //
+    //       figcaption{
+    //         .series{
+    //           color: $white;
+    //         }
+    //         h2{
+    //           color: $white;
+    //         }
+    //       }
+    //     }
+    //     &:hover{
+    //       .imgcontainer{
+    //         background: $dark;
+    //         @include transition(background-color 1s ease-in-out);
+    //         img{
+    //           // opacity: 0.6; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
+    //         }
+    //       }
+    //       // figcaption{
+    //       //   .series{
+    //       //     color: $gray-dark;
+    //       //     @include transition(color 1.5s ease);
+    //       //   }
+    //       //   h2{
+    //       //     color: $gray-dark;
+    //       //     @include transition(color 1.5s ease);
+    //       //   }
+    //       // }
+    //     }
+    //   }
+    // }
+    // // emulsion archive
+    // .post-type-archive-emulsion,.post-type-archive-dusk{
+    //   li.emulsion-thumb,li.dusk-thumb {
+    //     figure{
+    //       box-shadow: 8px 8px 8px #aaa;
+    //       @include transition(box-shadow 1s ease);
+    //       &:hover{
+    //         box-shadow: 8px 8px 8px #888;
+    //         @include transition(box-shadow 1s ease);
+    //       }
+    //     }
+    //   }
+    // }
 
 
 
