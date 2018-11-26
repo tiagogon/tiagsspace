@@ -1406,11 +1406,16 @@ function add_color_class( $classes ) {
         $classes[] = 'header-ligh';
         $classes[] = 'header-white';
 
-    // Is Films
-    } elseif ((is_singular( 'films' ) && $selected_color==0)
- 				OR is_post_type_archive('films')) {
-        $classes[] = 'none-white-bg';
-        $classes[] = 'dark';
+    // Is Films Archive
+    } elseif (is_post_type_archive('films')) {
+
+		$classes[] = 'none-white-bg';
+        $classes[] = 'deep-purple';
+
+	// Is Films single
+	} elseif ((is_singular( 'films' ) && $selected_color==0)) {
+		$classes[] = 'none-white-bg';
+		$classes[] = 'dark';
 
     // If there is selection on ACF
     } elseif (!$selected_color==0 && is_singular()) {
