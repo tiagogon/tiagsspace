@@ -134,7 +134,7 @@ li.item-post {
       .imgcontainer{
         margin-bottom: 30px;
         margin-bottom: 0px;
-        background: #666;
+        background: $magic-pink;
         @include transition(background-color 1s ease-in-out);
         img{
           outline: none;
@@ -142,7 +142,7 @@ li.item-post {
           display: block;
           max-width: 100%;
           width: 100%;
-          opacity: 0.80;
+          opacity: 1;
           -webkit-transition: opacity 0.5s ease-in-out;
             -moz-transition: opacity 0.5s ease-in-out;
             -ms-transition: opacity 0.5s ease-in-out;
@@ -162,8 +162,8 @@ li.item-post {
           //background: url('//demosthenes.info/assets/images/polina.jpg') no-repeat;
           background-size: cover;
           transition: 1s opacity;
-          opacity: 0.8;
-              max-width: 100%;
+          opacity: 1;
+          max-width: 100%;
         }
       }
       figcaption{
@@ -225,10 +225,9 @@ li.item-post {
     }
     &:hover{
       .imgcontainer{
-        background: $magic-pink;
         @include transition(background-color 1s ease-in-out);
         img{
-          // opacity: 0.6; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
+          opacity: 0.4; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
           -webkit-transition: opacity 0.5s ease-in-out;
             -moz-transition: opacity 0.5s ease-in-out;
             -ms-transition: opacity 0.5s ease-in-out;
@@ -442,10 +441,10 @@ li.hyper-thumb {
 
       .imgcontainer{
         margin-bottom: 0px;
-        background: #666;
+        background: $deep-purple;
         @include transition(background-color 1s ease-in-out);
         img{
-          opacity: 0.80;
+          opacity: 1;
           -webkit-transition: opacity 0.5s ease-in-out;
             -moz-transition: opacity 0.5s ease-in-out;
             -ms-transition: opacity 0.5s ease-in-out;
@@ -478,10 +477,9 @@ li.hyper-thumb {
 
     &:hover{
       .imgcontainer{
-        background: $deep-purple;
         @include transition(background-color 1s ease-in-out);
         img{
-          // opacity: 0.4; // causes bug on chrome Version 66.0.3359.139 (Official Build) (64-bit)
+          opacity: 0.4; // causes bug on chrome Version 66.0.3359.139 (Official Build) (64-bit)
           -webkit-transition: opacity 0.5s ease-in-out;
             -moz-transition: opacity 0.5s ease-in-out;
             -ms-transition: opacity 0.5s ease-in-out;
@@ -518,6 +516,13 @@ li.hyper-thumb {
   li.hyper-thumb {
     padding-bottom: 0px;
     figure {
+        a {
+            .imgcontainer{
+              img{
+                opacity: 0.8;
+              }
+            }
+        }
       box-shadow: none;
       figcaption{
         bottom: 10%;
@@ -544,6 +549,7 @@ li.log-thumb {
       padding: 45px 40px 40px;
 
       img{
+          opacity: 0.8;
       }
       figcaption{
         padding-left: 0;
