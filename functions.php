@@ -27,6 +27,9 @@ function wp_bootstrap_custom_admin_footer() {
 add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 
 
+// Enqueue CSS and Scripts
+
+wp_enqueue_style( 'main', get_template_directory_uri() . '/library/css/bootstrap.css',false,'1','all');
 
 
 /************* THUMBNAIL SIZE OPTIONS *************/
