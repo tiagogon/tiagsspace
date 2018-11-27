@@ -67,14 +67,17 @@ div.gallery{
 					.mejs-horizontal-volume-slider{
 						display: none!important;
 					}
-					
+
 			    	.mejs-time-rail {
 			    		.mejs-time-total{
 			    			//background: none;
 			    		}
 			    		.mejs-time-current {
-							background-color: $lime;
+							background-color: $white;
 			    		}
+						.mejs-time-loaded {
+						    background: $magic-pink;
+						}
 			    	}
 			    }
 			}

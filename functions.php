@@ -30,7 +30,7 @@ add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 // Enqueue CSS and Scripts
 
 	// it workds and this how it should be!! To convert soon!
-	
+
 
 
 /************* THUMBNAIL SIZE OPTIONS *************/
@@ -956,7 +956,7 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
 
 // post content wrap styles
 function content_wrap() {
-    echo "col-12 offset-0 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-7 offset-lg-2";
+    echo "col-12 offset-0 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-1";
 
 }
 

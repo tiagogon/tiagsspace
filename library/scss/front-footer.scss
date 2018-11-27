@@ -4,8 +4,8 @@
 
 #social-block{
   background: white;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 60px;
+  padding-bottom: 0px;
   h3 {
     color: $magic-pink;
     /*border-bottom: 2px solid $magic-pink;*/
@@ -40,7 +40,7 @@
         color: $magic-pink;
 
         text-transform: uppercase;
-        font-size: 14px;
+        font-size: 18px;
         font-weight: 600;
         font-style: italic;
         margin-right: 13px;
@@ -61,15 +61,16 @@
         width: 240px;
         background: $yellow;
         color: $magic-pink;
-        padding: 4px 6px;
+        padding: 8px 12px;
         border-width: 0px;
         border-style: inset;
         border-color: $white;
         border-image: initial;
         font-size: 16px;
         margin-bottom: 10px;
+        text-align: center;
 
-    font-weight: 400;
+        font-weight: 600;
         @media (min-width: map-get($grid-breakpoints, sm)) {
           margin-bottom: 0px;
         }
@@ -79,12 +80,12 @@
         font-style: italic;
         font-size: 16px;
 
-        font-weight: 400;
+        font-weight: 600;
       }
       input.input-button{
         background: $magic-pink;
         color: $white;
-        padding: 4px 6px;
+        padding: 8px 12px;
         border-width: 0px;
         border-style: inset;
         border-color: $white;
@@ -92,6 +93,7 @@
         font-style: italic;
         font-size: 16px;
         border-radius: 0px;
+        font-weight: 600;
       }
     }
     p{
@@ -118,19 +120,73 @@
   // }
 
 #footer-block{
-	background: $magic-pink;
-	padding-top: 40px;
+	background: $white;
+	padding-top: 0px;
   .attribution{
-  	margin-bottom: 38px;
+    margin-top: 10px;
+  	margin-bottom: 30px;
   	p{
-  	  color: $white;
-      font-style: italic;
-      font-size: 12px;
-      text-transform: uppercase;
+  	  color: $magic-pink;
+      // font-style: italic;
+      font-size: 16px;
+      // text-transform: uppercase;
       font-weight: 600;
   		a{
-  		  color: $white;
+  		  color: $magic-pink;
   		}
   	}
   }
+}
+
+
+// Inert Footer colors for Log pages
+
+.post-type-archive-log,.single-log,.tax-log-branch{
+    #social-block{
+      background: $magic-pink;
+      h3 {
+        color: $white;
+      }
+      p{
+        color: $white;
+        a{
+          color: $white;
+        }
+      }
+      ul {
+        li {
+          a {
+            color: $white;
+          }
+        }
+      }
+      .email-form{
+        form{
+          input.input-field{
+            background: $yellow;
+            color: $magic-pink;
+            border-color: $magic-pink;
+          }
+          input.input-field::placeholder {
+            color: $magic-pink;
+          }
+          input.input-button{
+            background: $white;
+            color: $magic-pink;
+            border-color: $magic-pink;
+          }
+        }
+      }
+    }
+    #footer-block{
+    	background: $magic-pink;
+      .attribution{
+      	p{
+      	  color: $white;
+      		a{
+      		  color: $white;
+      		}
+      	}
+      }
+    }
 }
