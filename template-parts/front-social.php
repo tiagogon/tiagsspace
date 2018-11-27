@@ -1,14 +1,3 @@
-<?php
-/*
-
-Social links block
-
-*/
-
-// inpired at http://tympanus.net/Development/CreativeLinkEffects/
-
-//if (!is_singular( 'log' )) { ?>
-
 <div id="social-block" class="front-block">
 	<div class="container">
 		<div class="clearfix row">
@@ -40,13 +29,10 @@ Social links block
 					<form action="https://tinyletter.com/trouble-letter" method="post" target="popupwindow" onsubmit="window.open('https://tinyletter.com/trouble-letter', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true">
 						<input class="input-field" type="text" name="email" id="tlemail" placeholder="Your email address"/>
 						<input type="hidden" value="1" name="embed"/>
-						<input class="input-button" type="submit" value="Subscribe bimonthly" />
+						<input class="input-button" type="submit" value="Subscribe" />
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<?php
-// End IF
-//} ?>

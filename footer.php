@@ -1,47 +1,30 @@
 	<?php get_template_part( 'template-parts/front', 'social' ); ?>
 
  	<div id="footer-block">
+
  		<div class="container">
+			
 			<footer role="contentinfo">
 
 				<div id="inner-footer" class="clearfix row">
 
 					<div class="attribution <?php content_wrap() ?>">
 
-
-
-
-
-
-
-
-
-						<!-- <nav class="social-links">
-							<a href="http://tumblr.cityburns.com" data-hover="Tumbler" target="_blank">Tumbler</a>
-							<a href="http://facebook.com/cityburns" data-hover="Facebook" target="_blank">Facebook</a>
-							<a href="http://twitter.com/cityburns" data-hover="Twitter" target="_blank">Twitter</a>
-							<a href="https://www.flickr.com/photos/cityburns/" data-hover="Flickr" target="_blank">Flickr</a>
-							<a href="#" data-hover="Feed">Feed</a>
-						</nav> -->
-
 						<p>
-							 Hello, World! My name is <a xmlns:cc="http://creativecommons.org/ns#" href="https://tiags.space" property="cc:attributionName" rel="cc:attributionURL">Tiago</a> and this is my digital archive published under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">creative commons attribution-noncommercial-noderivatives</a> license. You can reach me at mail@tiags.space.
+							 Hello, World! My name is <a xmlns:cc="http://creativecommons.org/ns#" href="https://tiags.space" property="cc:attributionName" rel="cc:attributionURL">Tiago</a> and this is my digital archive published under an <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"> attribution-noncommercial-noderivatives</a> license. You can reach me at mail@tiags.space.
 							<br>
 							<br>
 							<a href="https://trouble.place"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">https://tiags.space</span></a> © 2010-<?php echo date("Y"); ?>
 						</p>
+
 					</div>
-
-					<?php /* -- Search box --
-					<input name="s" id="s" type="text" class="search-query form-control" autocomplete="off" placeholder="<?php _e('Search','wpbootstrap'); ?>" data-provide="typeahead" data-items="4" data-source='<?php echo $typeahead_data; ?>'>
-					*/ ?>
-
-
 
 				</div> <!-- end #inner-footer -->
 
 			</footer> <!-- end footer -->
+
 		</div>
+
 	</div>
 
 	<!--[if lt IE 7 ]>
