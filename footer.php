@@ -134,7 +134,7 @@
 
 		<?php 	// Audio (and video) Player support
 				// -- CSS on header ?>
-		<script src="https://cdn.plyr.io/3.4.7/plyr.js" crossorigin="anonymous"></script>
+		<script src="<?php bloginfo('template_url'); ?>/library/js/plyr-master/src/js/plyr.js" crossorigin="anonymous"></script>
 		<script>
 			const players = Plyr.setup('audio'); //can be audioTag, .someClass, #someID
 		</script>
