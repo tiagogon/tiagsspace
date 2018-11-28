@@ -1,0 +1,155 @@
+// Overiding Plyr JS original css
+
+
+// GENERAL Audio overide
+
+$plyr-tab-focus-default-color: none !default;
+$plyr-color-main: transparent !default;
+$plyr-audio-control-bg-hover: $plyr-tab-focus-default-color !default;
+
+.plyr--audio .plyr__controls {
+    background: transparent;
+    color: $gray-darker;
+}
+
+.plyr {
+    font-family: $font-family-sans-serif;
+    width: 100%;
+}
+audio{
+    width: 100%;
+}
+
+.plyr__time {
+    font-size: 16px;
+}
+
+.plyr__tooltip {
+    box-shadow: none;
+    line-height: 1;
+}
+
+// Audio control
+.header-white{
+    .plyr--audio .plyr__control {
+        color: $gray-darker;
+        &.plyr__tab-focus,
+        &:hover,
+        &[aria-expanded='true'] {
+            background: none!important;
+            color: $gray-darker;
+        }
+    }
+    @mixin plyr-tab-focus($color: $plyr-tab-focus-default-color) {
+        box-shadow: none;
+        outline: 0;
+    }
+
+    .plyr--audio {
+        .plyr__controls {
+            color: $gray-darker;
+        }
+        .plyr__tooltip {
+            background: transparent;
+            color: $gray-darker;
+            font-size: 16px;
+            font-weight: $font-weight-normal;
+            &::before {
+                border-top: $plyr-tooltip-arrow-size solid $gray-darker;
+            }
+        }
+    }
+    .plyr--full-ui input[type='range'] {
+
+        color: $gray-darker;
+    }
+}
+
+// Audio control
+.plyr--audio .plyr__control {
+    &.plyr__tab-focus,
+    &:hover,
+    &[aria-expanded='true'] {
+        background: transparent;
+    }
+}
+
+// Overide with none-white-bg // E.g.: Blue or dark grey
+.none-white-bg{
+    .plyr--audio .plyr__controls {
+        color: $white;
+        &.plyr__tab-focus,
+        &:hover,
+        &[aria-expanded='true'] {
+            background: none!important;
+            color: $white;
+        }
+    }
+    @mixin plyr-tab-focus($color: $plyr-tab-focus-default-color) {
+        box-shadow: none;
+        outline: 0;
+    }
+
+    .plyr--audio {
+        .plyr__controls {
+            color: $white;
+        }
+        .plyr__tooltip {
+            background: transparent;
+            color: $white;
+            font-size: 16px;
+            font-weight: $font-weight-normal;
+            &::before {
+                border-top: $plyr-tooltip-arrow-size solid $white;
+            }
+        }
+    }
+
+    .plyr--full-ui input[type='range'] {
+        color: $white;
+    }
+}
+
+
+
+// INSIDE post-content
+.post-content{
+    .plyr--audio .plyr__controls {
+        padding-left: 0;
+        padding-right: 0;
+
+        > .plyr__control:first-child,
+        > .plyr__control:first-child + [data-plyr='pause'] {
+            padding-left: 0;
+        }
+
+        .plyr__volume {
+            display: none;
+        }
+        .plyr__menu {
+            display: none;
+        }
+    }
+}
+
+
+
+// Inside a gallery
+.thumbnail.media-audio{
+        .plyr{
+            position: absolute;
+            bottom: 0;
+        }
+    .plyr--audio .plyr__controls {
+
+        .plyr__volume {
+            display: none;
+        }
+        .plyr__menu {
+            display: none;
+        }
+        .plyr__time {
+            display: none;
+        }
+    }
+}

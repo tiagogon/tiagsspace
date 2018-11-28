@@ -604,16 +604,16 @@ if (!get_field('deactivate_gallery')) {
 
                                             <?php
 
-                                            $audio_url = wp_get_attachment_url( $image->ID );
-                                            $attr = array(
-                                                'src'      => $audio_url,
-                                                'loop'     => '', // true
-                                                'autoplay' => '',
-                                                'preload'  => 'none'
-                                            );
-                                            echo wp_audio_shortcode( $attr );
+                                            $audio_url = wp_get_attachment_url( $image->ID );?>
 
-                                             ?>
+                                            <audio class="plyr" controls>
+                                                  <source src="<?php echo $audio_url;?>" type="audio/mpeg">
+                                                Your browser does not support the audio element.
+                                            </audio>
+
+
+
+
                                     </div>
                                 </figure>
                             </div><?php

@@ -67,6 +67,8 @@
 		  		<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.jquery.min.js"></script>
 
 
+
+
 		  	<?php // Play video on iphone wihtout fullscreen ?>
 		  		<!-- <script src="<?php bloginfo('template_url'); ?>/library/js/iphone-inline-video-master/dist/iphone-inline-video.min.js"></script> -->
 
