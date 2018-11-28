@@ -1097,14 +1097,14 @@ function feedly() {
 }
 
 // feedly Logo and Cover image
-// add_filter( 'rss2_head', 'feedly_head' );
-// function feedly_head() {
-//  echo '<webfeeds:cover image="https://trouble.place/wp-content/uploads/2016/07/Trouble-to-dome.png" />';
-//  echo '<webfeeds:icon>'.get_bloginfo('template_url').'/library/svg/logo.svg</webfeeds:icon>';
-//  echo '<webfeeds:logo>'.get_bloginfo('template_url').'/library/svg/logo.svg</webfeeds:logo>';
-//  echo '<webfeeds:accentColor>ec407a</webfeeds:accentColor>';
-//  echo '<webfeeds:related layout=”card” target=”browser”/>';
-// }
+	// add_filter( 'rss2_head', 'feedly_head' );
+	// function feedly_head() {
+	//  echo '<webfeeds:cover image="https://trouble.place/wp-content/uploads/2016/07/Trouble-to-dome.png" />';
+	//  echo '<webfeeds:icon>'.get_bloginfo('template_url').'/library/svg/logo.svg</webfeeds:icon>';
+	//  echo '<webfeeds:logo>'.get_bloginfo('template_url').'/library/svg/logo.svg</webfeeds:logo>';
+	//  echo '<webfeeds:accentColor>ec407a</webfeeds:accentColor>';
+	//  echo '<webfeeds:related layout=”card” target=”browser”/>';
+	// }
 
 
 // Feed titles for diferente post tips
