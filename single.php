@@ -92,10 +92,10 @@ if ($post_type == "hyper") {
 	<div class="single-navigation container-fluid side-padding">
 		<div class="row justify-content-between">
 	        <nav class="nav-next col-6">
-	            <span><?php next_post_link('%link', '< ####'); ?></span>
+	            <span><?php next_post_link('%link', '< Future'); ?></span>
 	        </nav>
 	        <nav class="nav-previous col-6">
-	        	<span><?php previous_post_link('%link', '#### >'); ?></span>
+	        	<span><?php previous_post_link('%link', 'Past >'); ?></span>
 	        </nav>
 		</div>
 	</div>

@@ -510,10 +510,10 @@ Index of posts for Home and Archives
         <div class="container-fluid pagination-container">
             <div class="row justify-content-between">
                 <nav class="archive-navigation col-6">
-                    <span class="nav-next"><?php previous_posts_link( '< ####' ); ?></span>
+                    <span class="nav-next"><?php previous_posts_link( '< Past' ); ?></span>
                 </nav>
                 <nav class="archive-navigation col-6">
-                    <span class="nav-previous"><?php next_posts_link( '#### >' ); ?></span>
+                    <span class="nav-previous"><?php next_posts_link( 'Future >' ); ?></span>
                 </nav>
             </div>
 
@@ -593,7 +593,7 @@ Index of posts for Home and Archives
     if (is_tax( 'medium', 'photography') ) { ?>
 
         <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
-        
+
         <script type="text/javascript">
 
             // get Masonry instance
