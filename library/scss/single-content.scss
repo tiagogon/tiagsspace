@@ -115,9 +115,10 @@
         a{
           color: $yellow;
           border-bottom: 1px solid transparent;
+          text-decoration: underline;
           @include transition(all 1s ease-out);
           &:hover{
-            text-decoration: underline;
+            text-decoration: none;
           }
         }
       }
