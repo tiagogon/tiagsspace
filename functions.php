@@ -1201,7 +1201,7 @@ function wptuts_feedimgs($content) {
                     <p>view the '.$number_of_imgs.' images <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
 
             // get images atached to the post
-            $content =  $content->post_content.$imageshtml;
+            $content =  $imageshtml;
 
         } elseif ($post_type == 'hyper') {
 
@@ -1209,7 +1209,7 @@ function wptuts_feedimgs($content) {
                     <p>view the complete set <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
 
             // get images atached to the post
-            $content =  $imageshtml;
+            $content =  $content->post_content.$imageshtml;
 
         } elseif ($post_type == 'films') {
 
