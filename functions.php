@@ -1129,9 +1129,9 @@ function titlerss($content) {
 
         $content = 'film // '.$content;
 
-    } elseif ($post_type == 'hyper') {
-
-        $content = 'hyper series #'.number_of_the_post($post->ID).' // '.$content;
+    // } elseif ($post_type == 'hyper') {
+	//
+    //     $content = 'hyper series #'.number_of_the_post($post->ID).' // '.$content;
 
     } elseif ($post_type == 'log') {
 
