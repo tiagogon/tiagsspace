@@ -1187,8 +1187,7 @@ function wptuts_feedimgs($content) {
         // Output the "view more" depending on the post type
         if ($post_type == 'post' OR
             $post_type == 'dusk' OR
-            $post_type == 'emulsion' OR
-            $post_type == 'hyper') {
+            $post_type == 'emulsion') {
 
             $imageshtml = '<a href="'. get_permalink($post->ID) .'" class="webfeedsFeaturedVisual"><img src="'. wp_get_attachment_url( get_post_thumbnail_id($post->ID) ).'"/></a>
                     <p>view the '.$number_of_imgs.' images <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
@@ -1197,6 +1196,14 @@ function wptuts_feedimgs($content) {
             $content =  $imageshtml;
 
         } elseif ($post_type == 'log') {
+
+			$imageshtml = '<a href="'. get_permalink($post->ID) .'" class="webfeedsFeaturedVisual"><img src="'. wp_get_attachment_url( get_post_thumbnail_id($post->ID) ).'"/></a>
+                    <p>view the '.$number_of_imgs.' images <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
+
+            // get images atached to the post
+            $content =  $content.$imageshtml;
+
+        } elseif ($post_type == 'hyper') {
 
             $imageshtml = '<a href="'. get_permalink($post->ID) .'" class="webfeedsFeaturedVisual"><img src="'. wp_get_attachment_url( get_post_thumbnail_id($post->ID) ).'"/></a>
                     <p>view the complete set <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
