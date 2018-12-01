@@ -1209,7 +1209,7 @@ function wptuts_feedimgs($content) {
                     <p>view the complete set <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
 
             // get images atached to the post
-            $content =  $content->post_content.$imageshtml;
+            $content =  $post->post_content.$imageshtml;
 
         } elseif ($post_type == 'films') {
 
