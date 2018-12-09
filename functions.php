@@ -339,7 +339,7 @@ add_action( 'init', 'custom_post_type_hyper', 0 );
 
         if(is_post_type_archive( 'hyper' ) && !is_feed() && !is_admin() ){
           // show 50 posts on custom taxonomy pages
-          $query->set('posts_per_page', 24);
+          $query->set('posts_per_page', 15);
         }
       }
     add_action( 'pre_get_posts', 'my_post_queries' );
