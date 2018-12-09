@@ -439,7 +439,12 @@ Index of posts for Home and Archives
                                             <?php }  ?>
                                         <?php }*/ ?>
 
-                                        <h2><?php the_title();?></h2>
+                                        <h2>
+                                            <?php
+                                            
+
+                                            the_title();?>
+                                        </h2>
 
 
                                     </figcaption>
