@@ -167,7 +167,13 @@
 
 						<li><a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">emulsion</a></li>
 
+						<?php /*
 						<li><a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_singular( 'log' )
+										OR is_post_type_archive('log')
+										or is_tax('log-branch')) { echo " belongs";} ?>">log</a></li>
+						 */ ?>
+
+						<li><a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_singular( 'log' )
 										OR is_post_type_archive('log')
 										or is_tax('log-branch')) { echo " belongs";} ?>">log</a></li>
 
