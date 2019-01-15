@@ -901,6 +901,7 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
                 'post_type' => 'log',
                 'post_status' => array( 'publish' ),
                 'order'     => 'ASC',
+				'posts_per_page'   => -1,
                 'tax_query' => array(
                     array(
                         'taxonomy' => $custom_taxonomy,
@@ -1901,7 +1902,7 @@ function build_email_and_send_1() {
             <div style="text-align: center;"><br />
             <br />'.$posts_content.'</div>';
 
-        $headers        = array('From:tiago <tiago@trouble.place>');
+        $headers        = array('From:tiago <letter@tiags.space>');
 
         // Send Email
         wp_mail( $to, $subject, $message, $headers );
