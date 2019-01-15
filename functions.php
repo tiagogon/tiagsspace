@@ -391,14 +391,15 @@ add_action( 'init', 'custom_post_type_log', 0 );
 
 
 // Add 30 post per log archive page
-    function define_number_of_posts_per_page_on_log( $query ) {
-
-        if(is_post_type_archive( 'log' ) && !is_feed() && !is_admin() ){
-          // show 50 posts on custom taxonomy pages
-          $query->set('posts_per_page', 30);
-        }
-      }
-    add_action( 'pre_get_posts', 'define_number_of_posts_per_page_on_log' );
+    // BREAKES THE taxonomy_list_w_numbers custom function
+	// function define_number_of_posts_per_page_on_log( $query ) {
+	//
+    //     if(is_post_type_archive( 'log' ) && !is_feed() && !is_admin() ){
+    //       // show 50 posts on custom taxonomy pages
+    //       $query->set('posts_per_page', 30);
+    //     }
+    //   }
+    // add_action( 'pre_get_posts', 'define_number_of_posts_per_page_on_log' );
 
 /**
  * Display a custom taxonomy log-branch dropdown in admin
