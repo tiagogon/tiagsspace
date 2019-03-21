@@ -2040,6 +2040,82 @@ function gallery_media_order_change_request() {
 add_action( 'wp_ajax_gallery_media_order_change_request', 'gallery_media_order_change_request' );
 
 
+// ------------------------------------------------------------
+// Count media attached -- images, video, sound
+// ------------------------------------------------------------
+
+function count_media_files_in_published_posts() {
+
+	global $wpdb ;
+
+	/* Adapted from https://snippets.khromov.se/get-all-attachments-whose-post-parent-is-published-in-wordpress/ */
+	$sql = "SELECT
+				ID,
+				post_parent as parent,
+				post_status,
+				(SELECT post_status
+					FROM {$wpdb->prefix}posts wp2
+					WHERE wp2.ID = wp.post_parent
+				) as parent_status,
+				(SELECT post_date
+					FROM {$wpdb->prefix}posts wp3
+					WHERE wp3.ID = wp.post_parent
+				) as parent_date,
+				(SELECT post_type
+					FROM {$wpdb->prefix}posts wp4
+					WHERE wp4.ID = wp.post_parent
+				) as parent_type
+			FROM {$wpdb->prefix}posts wp
+			WHERE post_type = 'attachment'
+				AND post_status = 'inherit'
+				AND post_parent <> 0
+			HAVING parent_status = 'publish'
+			ORDER BY parent_date DESC" ;
+
+	$count_media_files = count($wpdb->get_results ($sql)) ;
+
+	// Count Films (from VIMEO)
+	$count_films = wp_count_posts('films');
+	$published_films = $count_films->publish;
+
+	return ($count_media_files + $published_films);
+
+}
+
+function count_media_files_in_published_post_type($post_type) {
+
+	global $wpdb ;
+
+	/* Adapted from https://snippets.khromov.se/get-all-attachments-whose-post-parent-is-published-in-wordpress/ */
+	$sql = "SELECT
+				ID,
+				post_parent as parent,
+				post_status,
+				(SELECT post_status
+					FROM {$wpdb->prefix}posts wp2
+					WHERE wp2.ID = wp.post_parent
+				) as parent_status,
+				(SELECT post_date
+					FROM {$wpdb->prefix}posts wp3
+					WHERE wp3.ID = wp.post_parent
+				) as parent_date,
+				(SELECT post_type
+					FROM {$wpdb->prefix}posts wp4
+					WHERE wp4.ID = wp.post_parent
+				) as parent_type
+			FROM {$wpdb->prefix}posts wp
+			WHERE post_type = 'attachment'
+				AND post_status = 'inherit'
+				AND post_parent <> 0
+			HAVING parent_status = 'publish'
+				AND parent_type =  '{$post_type}'
+			ORDER BY parent_date DESC" ;
+
+	$count_media_files = count($wpdb->get_results ($sql)) ;
+
+	return $count_media_files;
+
+}
 
 
 // END -- don't add any space after php close ?>

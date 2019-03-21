@@ -11,10 +11,10 @@
 						<div class="attribution <?php content_wrap() ?>">
 
 							<p>
-								 Hello, World! My name is <a xmlns:cc="http://creativecommons.org/ns#" href="https://tiags.space" property="cc:attributionName" rel="cc:attributionURL">Tiago</a> and this is my digital archive published under an <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"> attribution-noncommercial-noderivatives</a> license. You can reach me via mail@tiags.space :)
+								 Hello, World! My name is <a xmlns:cc="http://creativecommons.org/ns#" href="https://tiags.space" property="cc:attributionName" rel="cc:attributionURL">Tiago</a> and this is my digital archive published under an <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"> attribution-noncommercial-noderivatives</a> license. You can reach me via mail@tiags.space.
 								<br>
 								<br>
-								<a href="https://trouble.place"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">https://tiags.space</span></a> © 2010-<?php echo date("Y"); ?>
+								<a href="https://trouble.place"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">https://tiags.space</span></a>/#<?php echo count_media_files_in_published_post_type('hyper'); ?> © 2010-<?php echo date("Y"); ?>
 							</p>
 
 						</div>
