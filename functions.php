@@ -1890,7 +1890,7 @@ function build_email_and_send_1() {
 
         // Combine Variables
         $to[]           = 'beamer-2383360638cc0beb42be76b60ce4d17510528977@tinyletter.com';
-        $subject        = 'TIAGS.SPACE</a> // NEWSLETTER // '.strtoupper($month_name).' '.strtoupper($year_numb);
+        $subject        = 'Tiags Newsletter';
         $message        = '
             <div style="text-align: center;">
 				<span style="font-size: small;">
