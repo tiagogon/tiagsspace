@@ -576,10 +576,7 @@ if (!get_field('deactivate_gallery')) {
                         // add item-sizer for Masonry responsive calculations
                         if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
 
-                            <!-- This was brewaking the grid when video was 1st post:
                             <div class="item-sizer <?php echo $class_thumbnail_without_factor;?>"></div>
-                            -->
-                            <div class="item-sizer <?php echo $class_thumbnail;?>
 
                         <?php }?>
 
