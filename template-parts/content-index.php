@@ -213,7 +213,8 @@ Index of posts for Home and Archives
                                         $intrinsic_ratio = $video_array['height'] * 100 / $video_array['width'];
                                         $video_poster = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full')[0];
                                         $video_mp4 = $video_array['url'];
-                                        $video_webm = str_replace(".mp4","-vp9.webm",$video_array['url']);
+                                        $video_webmvp8 = str_replace(".mp4","-vp8.webm",$video_array['url']);
+                                        $video_webmvp9 = str_replace(".mp4","-vp9.webm",$video_array['url']);
 
                                     // Else, it must be an ID:
                                     } else {
@@ -227,7 +228,8 @@ Index of posts for Home and Archives
                                         $intrinsic_ratio = $video_attachment_metadata['height'] * 100 / $video_attachment_metadata['width'];
                                         $video_poster = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full')[0];
                                         $video_mp4 = wp_get_attachment_url( $video_array );
-                                        $video_webm = str_replace(".mp4","-vp9.webm",$video_mp4);
+                                        $video_webmvp8 = str_replace(".mp4","-vp8.webm",$video_mp4);
+                                        $video_webmvp9 = str_replace(".mp4","-vp9.webm",$video_mp4);
                                     }
 
 
@@ -354,7 +356,8 @@ Index of posts for Home and Archives
                                         if (!empty($video_array)) { ?>
 
                                             <video poster="<?php echo $video_poster; ?>" id="bgvid" playsinline autoplay muted loop>
-                                                <source src="<?php echo $video_webm; ?>" type="video/webm">
+                                                <source src="<?php echo $video_webmvp8; ?>" type="video/webm">
+                                                <source src="<?php echo $video_webmvp9; ?>" type="video/webm">
                                                 <source src="<?php echo $video_mp4; ?>" type="video/mp4">
                                             </video>
 
