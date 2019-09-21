@@ -7,7 +7,7 @@
 						<a href="https://www.instagram.com/tiagsssss/" data-hover="Facebook" target="_blank">Instagram</a>
 					</li>
 					<li>
-						<a href="https://tiagsssss.tumblr.com/" data-hover="SoundCloud" target="_blank">Tumblr</a>
+						<a href="https://tiagssssspace.tumblr.com/" data-hover="SoundCloud" target="_blank">Tumblr</a>
 					</li>
 					<li>
 						<a href="https://soundcloud.com/tiagsssss" data-hover="SoundCloud" target="_blank">Soundcloud</a>

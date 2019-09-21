@@ -159,7 +159,7 @@
 
 						 ?>
 
-						<li><a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">films</a></li>
+						<?php /* <li><a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">films</a></li>*/ ?>
 
 						<li><a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " belongs";} ?>">hyper </a></li>
 
@@ -175,7 +175,7 @@
 
 						<li><a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if (is_singular( 'log' )
 										OR is_post_type_archive('log')
-										or is_tax('log-branch')) { echo " belongs";} ?>">log</a></li>
+										or is_tax('log-branch')) { echo " belongs";} ?>">🦠</a></li>
 
 						<!-- <li ><a id="trigger-overlay-follow" href="#"><span class="fa fa-rss"></span></a></li> -->
 					</ul>
