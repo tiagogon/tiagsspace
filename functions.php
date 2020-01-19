@@ -878,7 +878,10 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
     $terms = get_the_terms( $this_id, $custom_taxonomy );
 
     // cont number of terms
-    $terms_count = count( $terms );
+	if ($terms) {
+		$terms_count = count( $terms );
+	}
+
 
     $i = 0;
 
