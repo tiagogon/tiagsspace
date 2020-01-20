@@ -352,13 +352,13 @@ if (!get_field('deactivate_gallery')) {
 
 
                         if ($number_of_columns_item_xs) {
-                            $grid_number_xs        = (int) (12 / $number_of_columns_item_xs);
-                            // If its 12, so its just one colum and thats not necessary
+                            $grid_number_xs        = (int) (48 / $number_of_columns_item_xs);
+                            // If its 48, so its just one colum and thats not necessary
                                 $class_thumbnail_xs    = "col-".$grid_number_xs." ";
                         }
 
                         if ($number_of_columns_item_sm) {
-                            $grid_number_sm        = (int) (12 / $number_of_columns_item_sm);
+                            $grid_number_sm        = (int) (48 / $number_of_columns_item_sm);
                             // If is not the same columns for the smaller size before
                             if ($grid_number_sm != $grid_number_xs) {
                                 $class_thumbnail_sm    = "col-sm-".$grid_number_sm." ";
@@ -366,7 +366,7 @@ if (!get_field('deactivate_gallery')) {
                         }
 
                         if ($number_of_columns_item_md) {
-                            $grid_number_md        = (int) (12 / $number_of_columns_item_md);
+                            $grid_number_md        = (int) (48 / $number_of_columns_item_md);
                             // If is not the same columns for the smaller size before
                             if ($grid_number_md != $grid_number_sm) {
                                 $class_thumbnail_md    = "col-md-".$grid_number_md." ";
@@ -374,7 +374,7 @@ if (!get_field('deactivate_gallery')) {
                         }
 
                         if ($number_of_columns_item_lg) {
-                            $grid_number_lg        = (int) (12 / $number_of_columns_item_lg);
+                            $grid_number_lg        = (int) (48 / $number_of_columns_item_lg);
                             // If is not the same columns for the smaller size before
                             if ($grid_number_lg != $grid_number_md) {
                                 $class_thumbnail_lg    = "col-lg-".$grid_number_lg." ";
@@ -394,13 +394,13 @@ if (!get_field('deactivate_gallery')) {
 
 
                         if ($number_of_columns_xs) {
-                            $grid_number_xs_without_factor        = (int) (12 / $number_of_columns_xs);
-                            // If its 12, so its just one colum and thats not necessary
+                            $grid_number_xs_without_factor        = (int) (48 / $number_of_columns_xs);
+                            // If its 48, so its just one colum and thats not necessary
                                 $class_thumbnail_xs_without_factor    = "col-".$grid_number_xs_without_factor." ";
                         }
 
                         if ($number_of_columns_sm) {
-                            $grid_number_sm_without_factor        = (int) (12 / $number_of_columns_sm);
+                            $grid_number_sm_without_factor        = (int) (48 / $number_of_columns_sm);
                             // If is not the same columns for the smaller size before
                             if ($grid_number_sm_without_factor != $grid_number_xs_without_factor) {
                                 $class_thumbnail_sm_without_factor    = "col-sm-".$grid_number_sm_without_factor." ";
@@ -408,7 +408,7 @@ if (!get_field('deactivate_gallery')) {
                         }
 
                         if ($number_of_columns_md) {
-                            $grid_number_md_without_factor        = (int) (12 / $number_of_columns_md);
+                            $grid_number_md_without_factor        = (int) (48 / $number_of_columns_md);
                             // If is not the same columns for the smaller size before
                             if ($grid_number_md_without_factor != $grid_number_sm_without_factor) {
                                 $class_thumbnail_md_without_factor    = "col-md-".$grid_number_md_without_factor." ";
@@ -416,7 +416,7 @@ if (!get_field('deactivate_gallery')) {
                         }
 
                         if ($number_of_columns_lg) {
-                            $grid_number_lg_without_factor        = (int) (12 / $number_of_columns_lg);
+                            $grid_number_lg_without_factor        = (int) (48 / $number_of_columns_lg);
                             // If is not the same columns for the smaller size before
                             if ($grid_number_lg_without_factor != $grid_number_md_without_factor) {
                                 $class_thumbnail_lg_without_factor    = "col-lg-".$grid_number_lg_without_factor." ";
@@ -576,7 +576,7 @@ if (!get_field('deactivate_gallery')) {
                         // add item-sizer for Masonry responsive calculations
                         if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
 
-                            <div class="item-sizer <?php echo $class_thumbnail_without_factor;?>"></div>
+                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-1"></div>
 
                         <?php }?>
 
