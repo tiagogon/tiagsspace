@@ -63,6 +63,7 @@ if (!get_field('deactivate_gallery')) {
                 $no_space               = 'no-pad';
                 $spacement              = '';
                 $light_box              = 'magnific_popup';
+
             }
 
             // HYPER
@@ -576,7 +577,7 @@ if (!get_field('deactivate_gallery')) {
                         // add item-sizer for Masonry responsive calculations
                         if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
 
-                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-1"></div>
+                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-8"></div>
 
                         <?php }?>
 

@@ -37,8 +37,8 @@ $spacement-2: 2px;
   }
 }
 .container-fluid.spacement-2{
-  padding-left: 40-($spacement-2 / 2);
-  padding-right: 40-($spacement-2 / 2);
+  padding-left: $grid-gutter-width - ($spacement-2 / 2);
+  padding-right: $grid-gutter-width - ($spacement-2 / 2);
   margin-bottom: $grid-gutter-width - $spacement-2;
   .row > [class*='col-'] {
     padding-left: ($spacement-2 / 2);
@@ -64,8 +64,8 @@ $spacement-4: 4px;
   }
 }
 .container-fluid.spacement-4{
-  padding-left: 40-($spacement-4 / 2);
-  padding-right: 40-($spacement-4 / 2);
+  padding-left: $grid-gutter-width - ($spacement-4 / 2);
+  padding-right: $grid-gutter-width - ($spacement-4 / 2);
   margin-bottom: $grid-gutter-width - $spacement-4;
   .row > [class*='col-'] {
     padding-left: ($spacement-4 / 2);
@@ -91,8 +91,8 @@ $spacement-8: 8px;
   }
 }
 .container-fluid.spacement-8{
-  padding-left: 40-($spacement-8 / 2);
-  padding-right: 40-($spacement-8 / 2);
+  padding-left: $grid-gutter-width - ($spacement-8 / 2);
+  padding-right: $grid-gutter-width - ($spacement-8 / 2);
   margin-bottom: $grid-gutter-width - $spacement-8;
   .row > [class*='col-'] {
     padding-left: ($spacement-8 / 2);
@@ -118,8 +118,8 @@ $spacement-16: 16px;
   }
 }
 .container-fluid.spacement-16{
-  padding-left: 40-($spacement-16 / 2);
-  padding-right: 40-($spacement-16 / 2);
+  padding-left: $grid-gutter-width - ($spacement-16 / 2);
+  padding-right: $grid-gutter-width - ($spacement-16 / 2);
   margin-bottom: $grid-gutter-width - $spacement-16;
   .row > [class*='col-'] {
     padding-left: ($spacement-16 / 2);
@@ -152,8 +152,9 @@ $spacement-20: 20px;
   padding-left: 10px; //--> this value should be calculated with variables. no mindo to do it now
   padding-right: 10px;
   @media (min-width: map-get($grid-breakpoints, sm)) {
-    padding-left: 40-($spacement-20 / 2);
-    padding-right: 40-($spacement-20 / 2);
+    padding-left: $grid-gutter-width - ($spacement-20 / 2);
+    padding-right: $grid-gutter-width - ($spacement-20 / 2);
+    margin-bottom: $spacement-20;
   }
   margin-bottom: $grid-gutter-width - $spacement-20;
   .row > [class*='col-'] {
