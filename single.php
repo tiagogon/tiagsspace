@@ -78,10 +78,10 @@ if ($post_type == "hyper") {
 
 	<div class="single-navigation container-fluid side-padding">
 		<div class="row justify-content-between">
-	        <nav class="nav-next col-6">
+	        <nav class="nav-next col-24">
 	            <span><?php next_post_link('%link', '< H'.$next_number); ?></span>
 	        </nav>
-	        <nav class="nav-previous col-6">
+	        <nav class="nav-previous col-24">
 	        	<span><?php previous_post_link('%link', 'H'.$previous_number.' >'); ?></span>
 	        </nav>
         </div>
@@ -91,10 +91,10 @@ if ($post_type == "hyper") {
 
 	<div class="single-navigation container-fluid side-padding">
 		<div class="row justify-content-between">
-	        <nav class="nav-next col-6">
+	        <nav class="nav-next col-24">
 	            <span><?php next_post_link('%link', '< Future'); ?></span>
 	        </nav>
-	        <nav class="nav-previous col-6">
+	        <nav class="nav-previous col-24">
 	        	<span><?php previous_post_link('%link', 'Past >'); ?></span>
 	        </nav>
 		</div>

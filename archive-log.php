@@ -37,7 +37,7 @@
 		if ($prev_link || $next_link) { ?>
 
 		    <div class="container-fluid pagination-container">
-		            <nav class="archive-navigation col-xs-12">
+		            <nav class="archive-navigation col-xs-48">
 		                <span class="nav-next"><?php previous_posts_link( '< Future' ); ?></span> <span class="nav-previous"><?php next_posts_link( 'Past >' ); ?></span>
 		            </nav>
 		    </div>

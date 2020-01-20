@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 
 Front posts for Log Nots
@@ -9,7 +9,7 @@ $block_type = 'log';
  ?>
 
 	<div id="log-block" class="front-block series-block">
-		
+
 		<div class="block-header">
 			<h1>// Log</h1>
 		</div>
@@ -20,7 +20,7 @@ $block_type = 'log';
 
 			<div class="clearfix row no-pad">
 
-				<?php 
+				<?php
                 $args = array(
                     'post_type' => 'log',
                     'posts_per_page' =>6,
@@ -45,11 +45,11 @@ $block_type = 'log';
 
                 // set up the counter variable as 0
                 $count = 0;
-                
+
                 // start the ride
                 $my_query = new WP_Query( $args );
 			    while ($my_query->have_posts()) : $my_query->the_post();
-			    
+
 			        //increment the variable by 1 each time the loop executes
 			    	$count++;
 			    	$hidden = "";
@@ -59,7 +59,7 @@ $block_type = 'log';
 			    		$hidden = " hidden-xs";
 			    	}  ?>
 
-			        <div class="col-sm-6 col-md-3 <?php echo "item".$count.$hidden; ?>">
+			        <div class="col-sm-24 col-md-12 <?php echo "item".$count.$hidden; ?>">
 
 			        	<a href="<?php echo get_permalink(); ?>">
 
@@ -76,7 +76,7 @@ $block_type = 'log';
 			        	    </a>
 			        </div>
 
-		        <?php 
+		        <?php
 		        // finish the ride
 		        endwhile;
 
@@ -88,11 +88,11 @@ $block_type = 'log';
 		</div><?php // container-fluid ?>
 
 		<div class="block-footer">
-			
+
 			<div class="block-footer">
 			  	<a role="button" class="btn btn-default btn-lg" href="<?php echo get_post_type_archive_link( $block_type ); ?>">View more...</a>
 			</div>
-		
+
 		</div>
 
 	</div>

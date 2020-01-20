@@ -17,13 +17,13 @@ Index of posts for Home and Archives
 
                 <?php
                 // grid on archive
-                $grid_base = 'col-12 col-sm-6 col-md-4 col-lg-4';
+                $grid_base = 'col-48 col-sm-24 col-md-16 col-lg-16';
 
                 if (is_post_type_archive( "hyper" )) {
-                    $grid_base = 'col-12 col-sm-6 col-md-4 col-lg-4';
+                    $grid_base = 'col-48 col-sm-24 col-md-16 col-lg-16';
                 }
                 if (is_post_type_archive( "films" )) {
-                    $grid_base = 'col-12 col-sm-6 col-md-6 col-lg-6';
+                    $grid_base = 'col-48 col-sm-24 col-md-24 col-lg-24';
                 }
 
                 // Is sugested posts loop
@@ -82,11 +82,11 @@ Index of posts for Home and Archives
                         $grid = $grid_base;
 
                         if ($grid_multiplayer == 2) {
-                            $grid = 'col-12 col-sm-12 col-md-8 col-lg-8';
+                            $grid = 'col-48 col-sm-48 col-md-32 col-lg-32';
                         }
 
                         if ($grid_multiplayer == 3) {
-                            $grid = 'col-12 col-sm-12 col-md-12 col-lg-12';
+                            $grid = 'col-48 col-sm-48 col-md-48 col-lg-48';
                         }
 
 
@@ -112,7 +112,7 @@ Index of posts for Home and Archives
                                         </figcaption>
                                 </figure>
                             </li>
-                            <li class="loadpost year-separator item col-12  item-post" <?php post_class('clearfix'); ?> >
+                            <li class="loadpost year-separator item col-48  item-post" <?php post_class('clearfix'); ?> >
                                 <div class="separator-wrapper"><?php echo $year; ?></div>
                             </li>
                         <?php }
@@ -182,7 +182,7 @@ Index of posts for Home and Archives
 
                             ?>
 
-                            <li class="item loadpost year-separator col-12 item-post" <?php post_class('clearfix'); ?> >
+                            <li class="item loadpost year-separator col-48 item-post" <?php post_class('clearfix'); ?> >
                                 <div class="separator-wrapper"><?php echo $year; ?></div>
                             </li>
 
@@ -517,10 +517,10 @@ Index of posts for Home and Archives
 
         <div class="container-fluid pagination-container">
             <div class="row justify-content-between">
-                <nav class="archive-navigation col-6">
+                <nav class="archive-navigation col-24">
                     <span class="nav-next"><?php previous_posts_link( '< Future' ); ?></span>
                 </nav>
-                <nav class="archive-navigation col-6">
+                <nav class="archive-navigation col-24">
                     <span class="nav-previous"><?php next_posts_link( 'Past >' ); ?></span>
                 </nav>
             </div>

@@ -131,7 +131,7 @@
 			?>
 
 
-			<div id="topbar-parent" class="col-12">
+			<div id="topbar-parent" class="col-48">
 				<div id="topbar">
 					<ul id="menu">
 						<?php if (!is_home()) { ?>
@@ -187,7 +187,7 @@
 					OR is_post_type_archive('log')
 					or is_tax('log-branch')) { ?>
 
-				<div class="submenu submenu-log col-xs-12 col-sm-12 col-md-12">
+				<div class="submenu submenu-log col-xs-48 col-sm-48 col-md-48">
 					<ul>
 
 						<li><a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if (is_post_type_archive('log')) { echo "active";} ?>">all</a></li>

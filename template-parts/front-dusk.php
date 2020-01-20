@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 
 Front posts for Dusk Series
@@ -6,7 +6,7 @@ Front posts for Dusk Series
 */ ?>
 
 	<div id="dusk-block" class="front-block series-block">
-		
+
 		<div class="block-header">
 			<h1>Dusk Series</h1>
 		</div>
@@ -16,7 +16,7 @@ Front posts for Dusk Series
 
 			<div class="clearfix row no-pad">
 
-				<?php 
+				<?php
                 $args = array(
                     'post_type' => 'dusk',
                     'posts_per_page' => 6,
@@ -35,11 +35,11 @@ Front posts for Dusk Series
 
                 // set up the counter variable as 0
                 $count = 0;
-                
+
                 // start the ride
                 $my_query = new WP_Query( $args );
 			    while ($my_query->have_posts()) : $my_query->the_post();
-			    
+
 			        //increment the variable by 1 each time the loop executes
 			    	$count++;
 			    	$hidden = "";
@@ -49,8 +49,8 @@ Front posts for Dusk Series
 			    		$hidden = " hidden-xs";
 			    	}  ?>
 
-			        <figure class="col-sm-6 col-md-4 thumb-series thumb-dusk <?php echo "item".$count.$hidden; ?>">
-						
+			        <figure class="col-sm-24 col-md-16 thumb-series thumb-dusk <?php echo "item".$count.$hidden; ?>">
+
 						<a href="<?php echo get_permalink(); ?>">
 
 			        	<?php
@@ -58,10 +58,10 @@ Front posts for Dusk Series
 						$image_thumb_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), $thumbnail_size);
 						$image_thumb_url 		= $image_thumb_attributes[0];?>
 
-						<img 	data-original="<?php echo $image_thumb_url; ?>" 
+						<img 	data-original="<?php echo $image_thumb_url; ?>"
 				            	alt="<?php the_title(); ?>"
 				            	class="lazy attachment-post-thumbnail"/>
-						
+
 			        	<figcaption>
 				        	<h2>
 				        		<?php the_title(); ?>
@@ -69,11 +69,11 @@ Front posts for Dusk Series
 							<p>
 								Lily likes to play with crayons and pencils
 							</p>
-						</figcaption>			        			
+						</figcaption>
 			            </a>
 			        </figure>
 
-		        <?php 
+		        <?php
 		        // finish the ride
 		        endwhile;
 
@@ -84,10 +84,10 @@ Front posts for Dusk Series
 		</div><?php // container-fluid ?>
 
 		<div class="block-footer">
-			
+
 			  <button type="button" class="btn btn-primary btn-lg">View more from Hyper Series</button>
 			  <button type="button" class="btn btn-default btn-lg">Whatever</button>
-		
+
 		</div>
 
 	</div>
