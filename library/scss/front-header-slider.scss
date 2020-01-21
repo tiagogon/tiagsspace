@@ -6,7 +6,7 @@
 
 #site-header{
   padding-top: 20px;
-  padding-bottom: 40px;
+  padding-bottom: $grid-gutter-width;
   @media (max-width: map-get($grid-breakpoints, sm)) {
     padding-bottom: 20px;
   }
