@@ -1999,9 +1999,13 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 		<div class="GridSize">
 		<p>buu</p>
 		<p>atachementChangeMargin</p>
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'top\', changeSize=\'5\');">+ </button>
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'top\', changeSize=1);">top+ </button>
 			//
-			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'top\', changeSize=\'-5\');">- </button>
+			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'top\', changeSize=-1);">top - </button>
+			//
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'right\', changeSize=1);">right+ </button>
+			//
+			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'right\', changeSize=-1);">right - </button>
 		</div>
 	';
 }

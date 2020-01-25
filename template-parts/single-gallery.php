@@ -995,14 +995,21 @@ if (!get_field('deactivate_gallery')) {
                     var str1 = "margin-";
                     var str2 = marginName;
                     var cssMarginName = str1.concat(str2);
-                            console.log("CSS rule name to chnge: " + cssMarginName);
 
                     // Get current Margin value
-                    var marginValue = $( ".thumbnail[attachmentid='"+ attachmentID +"'] figure" ).css( cssMarginName );
-                            console.log("CSS rule value to chnge: " + marginValue);
+                    var marginValue = ( 100 * parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").css(cssMarginName)) / parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").parent().css('width')) );
+
+                    // Round it
+                    marginValue = Math.round(marginValue);
+
+                    // New margin %
+                    var marginValueNEW =  marginValue + incrementalValue;
+
+                    // Convert Margin % to px
+                    var marginValueNEWpx = ( marginValueNEW * parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").parent().css('width'))) / 100;
 
                     // Update Element with the correct style
-                      //$( ".thumbnail[attachmentid='"+ attachmentID +"'] figure" ).css( cssMarginName, "10%" );
+                    $( ".thumbnail[attachmentid='"+ attachmentID +"'] figure" ).css( cssMarginName, marginValueNEWpx );
 
                     // This does the ajax request to change the menu_order value on the wp_db
                     $.ajax({
