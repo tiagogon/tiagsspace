@@ -586,7 +586,7 @@ if (!get_field('deactivate_gallery')) {
                         // add item-sizer for Masonry responsive calculations
                         if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
 
-                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-8"></div>
+                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-12"></div>
 
                         <?php }?>
 
@@ -1010,6 +1010,13 @@ if (!get_field('deactivate_gallery')) {
 
                     // Update Element with the correct style
                     $( ".thumbnail[attachmentid='"+ attachmentID +"'] figure" ).css( cssMarginName, marginValueNEWpx );
+
+
+                    // Restart Masonry
+                    $('#gallery-<?php the_ID(); ?>').masonry({
+
+                    })
+
 
                     // This does the ajax request to change the menu_order value on the wp_db
                     $.ajax({
