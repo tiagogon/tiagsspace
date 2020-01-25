@@ -834,7 +834,10 @@ function taxonomy_list($post_id_of_the_tags,$custom_taxonomy, $tag_before, $tag_
     // Get Series terms
     $terms = get_the_terms( $this_id, $custom_taxonomy);
 
-    $count = count( $terms );
+	if ($terms) {
+		$count = count( $terms );
+	}
+
 
     $terms_list = "";
 
@@ -1979,6 +1982,28 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 	echo '
 	<button class="saveorder" onclick="orderAttachmentesOnWpDb();">SAVE ORDER</button>
 	';
+
+	// Change Atachement Grid Size
+	echo '
+		<div class="GridSize">
+		<p>buu</p>
+		<p>buu</p>
+			<button class="GridSizePlus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'increase\');">+ </button>
+			//
+			<button class="GridSizeMinus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'decrease\');">- </button>
+		</div>
+	';
+
+	// Change Atachement Margin
+	echo '
+		<div class="GridSize">
+		<p>buu</p>
+		<p>atachementChangeMargin</p>
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'top\', changeSize=\'5\');">+ </button>
+			//
+			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'top\', changeSize=\'-5\');">- </button>
+		</div>
+	';
 }
 
 // change order of media atachments on database
@@ -1986,9 +2011,7 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 
 // Activate ajax on the frontend
 
-
-
-// define ajaxurl as a global variable on the frontend
+// define ajax url as a global variable on the frontend
 function example_ajax_enqueue() {
 	// Enqueue javascript on the frontend.
 	wp_enqueue_script(
@@ -2005,8 +2028,10 @@ function example_ajax_enqueue() {
 }
 add_action( 'wp_enqueue_scripts', 'example_ajax_enqueue' );
 
-
-// Change database wp_posts >> menu_order via Ajax request
+// ----------------------
+//
+// AJAX: Atachments Order -- Change database wp_posts >> menu_order via Ajax request
+// ----------------------
 function gallery_media_order_change_request() {
 
     // The $_REQUEST contains all the data sent via ajax
@@ -2039,9 +2064,139 @@ function gallery_media_order_change_request() {
     // Always die in functions echoing ajax content
    die();
 }
-
 add_action( 'wp_ajax_gallery_media_order_change_request', 'gallery_media_order_change_request' );
 
+// ----------------------
+// AJAX: Attachmens Diferent size on Gallery
+// ----------------------
+function change_attachment_field_diferent_size_on_gallery() {
+
+    // The $_REQUEST contains all the data sent via ajax
+    if ( isset($_REQUEST) ) {
+
+        $attachmentId = $_REQUEST['attachmentID'];
+        $changeSize = $_REQUEST['changeSize'];
+
+        // Let's take the data that was sent and do something with it
+        if ( $attachmentId ) {
+
+			// Grid scale steps -- get it from ACF, does not work: https://support.advancedcustomfields.com/forums/topic/list-all-values-in-select-field/
+			$GridScaleDenominators = array(0.25, 0.3333333, 0.5, 0.75, 1, 2, 3, 4, 5);
+
+			// Current Denominator
+			$GridScaleDenominatorOld = get_field( 'diferent_size_on_gallery',$attachmentId );
+			if (empty($GridScaleDenominatorOld) OR !in_array($GridScaleDenominatorOld, $GridScaleDenominators)) {
+				$GridScaleDenominatorOld = 1;
+			}
+
+			// Index and logic for new denominator
+			$index = array_search($GridScaleDenominatorOld, $GridScaleDenominators);
+			if($index !== false && $index > 0 ) $prev = $GridScaleDenominators[$index-1];
+			if($index !== false && $index < count($GridScaleDenominators)-1) $next = $GridScaleDenominators[$index+1];
+
+			if ($changeSize == "increase") {
+					$GridScaleDenominatorNew = $prev;
+			}
+			if ($changeSize == "decrease") {
+					$GridScaleDenominatorNew = $next;
+			}
+
+			// Update Database
+			if (!empty($GridScaleDenominatorNew)) {
+				update_field(diferent_size_on_gallery, $GridScaleDenominatorNew, $attachmentId);
+			}
+
+			// Output log message to the front end
+			if ( false === $updated ) {
+			    echo "There was an error tring to move the change attachment ".$attachmentId." grid size in ".$changeSize." driection";
+			} else {
+			    echo "The attachment ".$attachmentId." chage the grid size in ".$changeSize." driection. DEBUG - old: ".$GridScaleDenominatorOld." New: ".$GridScaleDenominatorNew;
+
+			}
+
+        }
+
+    }
+
+    // Always die in functions echoing ajax content
+   die();
+}
+add_action( 'wp_ajax_change_attachment_field_diferent_size_on_gallery', 'change_attachment_field_diferent_size_on_gallery' );
+
+// ----------------------
+// AJAX: Attachmens Change Margins
+// ----------------------
+function change_attachment_margin() {
+
+    // The $_REQUEST contains all the data sent via ajax
+    if ( isset($_REQUEST) ) {
+
+        $attachmentId = $_REQUEST['attachmentID'];
+        $marginName = $_REQUEST['marginName'];
+        $incrementalValue = $_REQUEST['incrementalValue'];
+
+        // Let's take the data that was sent and do something with it
+        if ( $attachmentId ) {
+
+			// Get Current Margin Values
+			$marginTop = get_field( 'attachment_margin_top',$attachmentId );
+			$marginRight = get_field( 'attachment_margin_right',$attachmentId );
+			$marginBottom = get_field( 'attachment_margin_bottom',$attachmentId );
+			$marginLeft = get_field( 'attachment_margin_left',$attachmentId );
+
+			// Compute new margin Values and update database
+			$updated = false;
+
+			if ($marginName == "top") {
+				$marginTop = $marginTop + $incrementalValue;
+				update_field(attachment_margin_top, $marginTop, $attachmentId);
+				$updated = true;
+			}
+			if ($marginName == "right") {
+				$marginRight = $marginRight + $incrementalValue;
+				update_field(attachment_margin_right, $marginRight, $attachmentId);
+				$updated = true;
+			}
+			if ($marginName == "bottom") {
+				$marginBottom = $marginBottom + $incrementalValue;
+				update_field(attachment_margin_bottom, $marginBottom, $attachmentId);
+				$updated = true;
+			}
+			if ($marginName == "left") {
+				$marginLeft = $marginLeft + $incrementalValue;
+				update_field(attachment_margin_left, $marginLeft, $attachmentId);
+				$updated = true;
+			}
+
+			// Output log message to the front end
+			if ( $updated === true ) {
+			    echo "There was an error with attachment ".$attachmentId." chage of the ".$marginName." in ".$incrementalValue."%";
+			} else {
+			    echo "The attachment ".$attachmentId." chage the margin-".$marginName." in ".$incrementalValue."%";
+			}
+        }
+    }
+
+    // Always die in functions echoing ajax content
+   die();
+}
+add_action( 'wp_ajax_change_attachment_margin', 'change_attachment_margin' );
+
+function atachement_custom_margin($attachmentId) {
+
+		$marginTop = get_field( 'attachment_margin_top',$attachmentId );
+		$marginRight = get_field( 'attachment_margin_right',$attachmentId );
+		$marginBottom = get_field( 'attachment_margin_bottom',$attachmentId );
+		$marginLeft = get_field( 'attachment_margin_left',$attachmentId );
+
+		if ($marginTop OR $marginRight OR $marginBottom OR $marginLeft) {
+			echo "
+			margin-top: ".$marginTop."%;
+			margin-right: ".$marginRight."%;
+			margin-bottom: ".$marginBottom."%;
+			margin-left: ".$marginLeft."%;";
+		}
+}
 
 // ------------------------------------------------------------
 // Count media attached -- images, video, sound
