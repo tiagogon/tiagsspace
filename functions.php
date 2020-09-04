@@ -1986,10 +1986,9 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 	// Change Atachement Grid Size
 	echo '
 		<div class="GridSize">
-		<p>buu</p>
-		<p>buu</p>
+
+		<p>__</p>
 			<button class="GridSizePlus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'increase\');">+ </button>
-			//
 			<button class="GridSizeMinus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'decrease\');">- </button>
 		</div>
 	';
@@ -1997,15 +1996,25 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 	// Change Atachement Margin
 	echo '
 		<div class="GridSize">
-		<p>buu</p>
-		<p>atachementChangeMargin</p>
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'top\', changeSize=1);">t+ </button>
-			//
-			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'top\', changeSize=-1);">t- </button>
-			//
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'right\', changeSize=1);">r+ </button>
-			//
-			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'right\', changeSize=-1);">r- </button>
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=1);">M+ </button>
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=\'clear\');">Mc</button>
+			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=-1);">M- </button>
+
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=1);">MT+ </button>
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=\'clear\');">MTc</button>
+			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=-1);">MT- </button>
+
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=1);">MR+ </button>
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=\'clear\');">MRc</button>
+			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=-1);">MR- </button>
+
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=1);">MB+ </button>
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=\'clear\');">MBc</button>
+			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=-1);">MB- </button>
+
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=1);">ML+ </button>
+			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=\'clear\');">MLc</button>
+			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=-1);">ML- </button>
 		</div>
 	';
 }
@@ -2143,6 +2152,7 @@ function change_attachment_margin() {
         if ( $attachmentId ) {
 
 			// Get Current Margin Values
+			$margin = get_field( 'attachment_margin',$attachmentId );
 			$marginTop = get_field( 'attachment_margin_top',$attachmentId );
 			$marginRight = get_field( 'attachment_margin_right',$attachmentId );
 			$marginBottom = get_field( 'attachment_margin_bottom',$attachmentId );
@@ -2151,32 +2161,67 @@ function change_attachment_margin() {
 			// Compute new margin Values and update database
 			$updated = false;
 
-			if ($marginName == "top") {
-				$marginTop = $marginTop + $incrementalValue;
-				update_field(attachment_margin_top, $marginTop, $attachmentId);
-				$updated = true;
+			if ($marginName == "margin") {
+				if ($incrementalValue== "clear") {
+					$margin = "";
+					update_field(attachment_margin, $margin, $attachmentId);
+					$updated = true;
+				}else {
+					$margin = $margin + $incrementalValue;
+					update_field(attachment_margin, $margin, $attachmentId);
+					$updated = true;
+				}
 			}
-			if ($marginName == "right") {
-				$marginRight = $marginRight + $incrementalValue;
-				update_field(attachment_margin_right, $marginRight, $attachmentId);
-				$updated = true;
+			if ($marginName == "margin-top") {
+				if ($incrementalValue== "clear") {
+					$marginTop = "";
+					update_field(attachment_margin_top, $marginTop, $attachmentId);
+					$updated = true;
+				}else {
+					$marginTop = $marginTop + $incrementalValue;
+					update_field(attachment_margin_top, $marginTop, $attachmentId);
+					$updated = true;
+				}
 			}
-			if ($marginName == "bottom") {
-				$marginBottom = $marginBottom + $incrementalValue;
-				update_field(attachment_margin_bottom, $marginBottom, $attachmentId);
-				$updated = true;
+			if ($marginName == "margin-right") {
+				if ($incrementalValue== "clear") {
+					$marginRight = "";
+					update_field(attachment_margin_right, $marginRight, $attachmentId);
+					$updated = true;
+				}else {
+					$marginRight = $marginRight + $incrementalValue;
+					update_field(attachment_margin_right, $marginRight, $attachmentId);
+					$updated = true;
+				}
 			}
-			if ($marginName == "left") {
-				$marginLeft = $marginLeft + $incrementalValue;
-				update_field(attachment_margin_left, $marginLeft, $attachmentId);
-				$updated = true;
+			if ($marginName == "margin-bottom") {
+				if ($incrementalValue== "clear") {
+					$marginBottom = "";
+					update_field(attachment_margin_bottom, $marginBottom, $attachmentId);
+					$updated = true;
+				}else {
+					$marginBottom = $marginBottom + $incrementalValue;
+					update_field(attachment_margin_bottom, $marginBottom, $attachmentId);
+					$updated = true;
+				}
+			}
+			if ($marginName == "margin-left") {
+				if ($incrementalValue== "clear") {
+					$marginLeft = "";
+					update_field(attachment_margin_left, $marginLeft, $attachmentId);
+					$updated = true;
+				}else {
+					$marginLeft = $marginLeft + $incrementalValue;
+					update_field(attachment_margin_left, $marginLeft, $attachmentId);
+					$updated = true;
+				}
 			}
 
 			// Output log message to the front end
-			if ( $updated === true ) {
-			    echo "There was an error with attachment ".$attachmentId." chage of the ".$marginName." in ".$incrementalValue."%";
+			if ( $updated === false ) {
+			    echo "There was an ERROR with attachment ".$attachmentId." chage of the ".$marginName." in ".$incrementalValue."%";
 			} else {
-			    echo "The attachment ".$attachmentId." chage the margin-".$marginName." in ".$incrementalValue."%";
+			    echo "The attachment ".$attachmentId." chage the ".$marginName." in ".$incrementalValue."%. The value on the DB for all Margins are: [".$margin."%]. For each one are: [".$marginTop."%,".$marginRight."%,".$marginBottom."%,".$marginLeft."%]";
 			}
         }
     }
@@ -2188,18 +2233,31 @@ add_action( 'wp_ajax_change_attachment_margin', 'change_attachment_margin' );
 
 function atachement_custom_margin($attachmentId) {
 
+		$margin = get_field( 'attachment_margin',$attachmentId );
 		$marginTop = get_field( 'attachment_margin_top',$attachmentId );
 		$marginRight = get_field( 'attachment_margin_right',$attachmentId );
 		$marginBottom = get_field( 'attachment_margin_bottom',$attachmentId );
 		$marginLeft = get_field( 'attachment_margin_left',$attachmentId );
 
-		if ($marginTop OR $marginRight OR $marginBottom OR $marginLeft) {
-			echo "
-			margin-top: ".$marginTop."%;
-			margin-right: ".$marginRight."%;
-			margin-bottom: ".$marginBottom."%;
-			margin-left: ".$marginLeft."%;";
+		$marginEchoString = "";
+
+		if ($margin) {
+			$marginEchoString = $marginEchoString."margin: ".$margin."%;";
 		}
+		if ($marginTop) {
+			$marginEchoString = $marginEchoString."margin-top: ".$marginTop."%;";
+		}
+		if ($marginRight) {
+			$marginEchoString = $marginEchoString."margin-right: ".$marginRight."%;";
+		}
+		if ($marginBottom) {
+			$marginEchoString = $marginEchoString."margin-bottom: ".$marginBottom."%;";
+		}
+		if ($marginLeft) {
+			$marginEchoString = $marginEchoString."margin-left: ".$marginLeft."%;";
+		}
+
+		echo $marginEchoString;
 }
 
 // ------------------------------------------------------------

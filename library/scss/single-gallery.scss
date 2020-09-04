@@ -21,7 +21,7 @@ div.gallery{
       box-sizing: border-box;
     display:inline-block;
 		figure{
-			overflow: hidden;
+			overflow: visible;
 			    margin: 0;
 			.imgcontainer{
 				img{
@@ -158,7 +158,7 @@ div.gallery-horizontal{
 }
 
 .container-fluid {
-	overflow: hidden;
+	overflow: visible;
 	div.no-pad{
 		margin-bottom: 30px;
 		div.thumbnail{

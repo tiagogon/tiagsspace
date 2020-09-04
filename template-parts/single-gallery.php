@@ -586,7 +586,7 @@ if (!get_field('deactivate_gallery')) {
                         // add item-sizer for Masonry responsive calculations
                         if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
 
-                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-12"></div>
+                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-4"></div>
 
                         <?php }?>
 
@@ -959,7 +959,10 @@ if (!get_field('deactivate_gallery')) {
                         }
                     });
 
-                });
+                }); // loop ends
+
+                // Reload pages
+                location.reload();
 
             }
 
@@ -991,13 +994,12 @@ if (!get_field('deactivate_gallery')) {
             // Change Attachment Margin
             function atachementChangeMargin(attachmentID, marginName, incrementalValue) {
 
-                    // Generate Margin Name
-                    var str1 = "margin-";
-                    var str2 = marginName;
-                    var cssMarginName = str1.concat(str2);
-
+                if (incrementalValue === "clear") {
+                    $( ".thumbnail[attachmentid='"+ attachmentID +"'] figure" ).css( marginName, 0 );
+                    console.log('Cleared margins on browser.');
+                } else {
                     // Get current Margin value
-                    var marginValue = ( 100 * parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").css(cssMarginName)) / parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").parent().css('width')) );
+                    var marginValue = ( 100 * parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").css(marginName)) / parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").parent().css('width')) );
 
                     // Round it
                     marginValue = Math.round(marginValue);
@@ -1009,34 +1011,31 @@ if (!get_field('deactivate_gallery')) {
                     var marginValueNEWpx = ( marginValueNEW * parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").parent().css('width'))) / 100;
 
                     // Update Element with the correct style
-                    $( ".thumbnail[attachmentid='"+ attachmentID +"'] figure" ).css( cssMarginName, marginValueNEWpx );
+                    $( ".thumbnail[attachmentid='"+ attachmentID +"'] figure" ).css( marginName, marginValueNEWpx );
+                }
 
+                // Restart Masonry
+                $('#gallery-<?php the_ID(); ?>').masonry({ })
 
-                    // Restart Masonry
-                    $('#gallery-<?php the_ID(); ?>').masonry({
+                // This does the ajax request to change the menu_order value on the wp_db
+                $.ajax({
+                    url: example_ajax_obj.ajaxurl,
+                    data: {
+                        'action': 'change_attachment_margin',
+                        'attachmentID' : attachmentID,
+                        'marginName' : marginName,
+                        'incrementalValue' : incrementalValue
 
-                    })
-
-
-                    // This does the ajax request to change the menu_order value on the wp_db
-                    $.ajax({
-                        url: example_ajax_obj.ajaxurl,
-                        data: {
-                            'action': 'change_attachment_margin',
-                            'attachmentID' : attachmentID,
-                            'marginName' : marginName,
-                            'incrementalValue' : incrementalValue
-
-                        },
-                        success:function(data) {
-                            // This outputs the result of the ajax request
-                            console.log(data);
-                        },
-                        error: function(errorThrown){
-                            console.log(errorThrown);
-                            alert("Failed to change margin!");
-                        }
-                    });
+                    },
+                    success:function(data) {
+                        // This outputs the result of the ajax request
+                        console.log(data);
+                    },
+                    error: function(errorThrown){
+                        console.log(errorThrown);
+                        alert("Failed to change margin!");
+                    }
+                });
 
             }
 
