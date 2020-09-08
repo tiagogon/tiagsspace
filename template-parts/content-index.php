@@ -11,9 +11,7 @@ Index of posts for Home and Archives
         <div id="main" role="main" class="">
 
             <ul id="thumb-container"
-                class="loadcontainer clearfix row <?php if (is_post_type_archive( "hyper" ) OR is_post_type_archive( "films" )) {
-                    echo " no-pad";
-            } ?>">
+                class="loadcontainer clearfix row">
 
                 <?php
                 // grid on archive

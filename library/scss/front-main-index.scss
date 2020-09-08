@@ -11,11 +11,11 @@ ul.thumb-container{
 
 
 // hyper archive
-.post-type-archive-hyper{
-  #index {
-      padding: 0px;
-  }
-}
+    // .post-type-archive-hyper{
+    //   #index {
+    //       padding: 0px;
+    //   }
+    // }
 
 
 // Year Separator
@@ -411,131 +411,131 @@ li.films-thumb {
 }
 
 // films archive
-.post-type-archive-films{
-  #index {
-      padding: 0px;
-      // padding-bottom: 40px;
-  }
-  li.films-thumb {
-    padding-bottom: 0px;
-    figure {
-      box-shadow: none;
-      figcaption{
-        bottom: 11%;
-      }
-
-    }
-  }
-}
+    // .post-type-archive-films{
+    //   #index {
+    //       padding: 0px;
+    //       // padding-bottom: 40px;
+    //   }
+    //   li.films-thumb {
+    //     padding-bottom: 0px;
+    //     figure {
+    //       box-shadow: none;
+    //       figcaption{
+    //         bottom: 11%;
+    //       }
+    //
+    //     }
+    //   }
+    // }
 
 
 
 
 // Hyper THumbnail
-li.hyper-thumb {
-    //padding-bottom: 0px;
-  figure {
-    //border: 2px dashed;
-    a{
-      //padding: ($grid-gutter-width);
+    li.hyper-thumb {
+        //padding-bottom: 0px;
+      figure {
+        //border: 2px dashed;
+        a{
+          //padding: ($grid-gutter-width);
 
-      .imgcontainer{
-        margin-bottom: 0px;
-        background: $deep-purple;
-        @include transition(background-color 1s ease-in-out);
-        img{
-          opacity: 1;
-          -webkit-transition: opacity 0.5s ease-in-out;
-            -moz-transition: opacity 0.5s ease-in-out;
-            -ms-transition: opacity 0.5s ease-in-out;
-            -o-transition: opacity 0.5s ease-in-out;
-            transition: opacity 0.5s ease-in-out;
+          .imgcontainer{
+            margin-bottom: 0px;
+            background: $deep-purple;
+            @include transition(background-color 1s ease-in-out);
+            img{
+              opacity: 1;
+              -webkit-transition: opacity 0.5s ease-in-out;
+                -moz-transition: opacity 0.5s ease-in-out;
+                -ms-transition: opacity 0.5s ease-in-out;
+                -o-transition: opacity 0.5s ease-in-out;
+                transition: opacity 0.5s ease-in-out;
+            }
+          }
+          figcaption{
+            .series{
+              color: $white;
+              //font-style: normal;
+            }
+            h2{
+              color: $white;
+            }
+            padding-left: 0;
+            padding-right: 0;
+            position: absolute;
+            bottom: 16%;
+            @include transition(bottom 1s ease-in-out);
+            left: 0;
+            width: 100%;
+            padding: 12px 50px 17px;
+            background-color: transparent;
+            @media (max-width: map-get($grid-breakpoints, sm)) {
+              bottom: 7%;
+            }
+          }
         }
-      }
-      figcaption{
-        .series{
-          color: $white;
-          //font-style: normal;
-        }
-        h2{
-          color: $white;
-        }
-        padding-left: 0;
-        padding-right: 0;
-        position: absolute;
-        bottom: 16%;
-        @include transition(bottom 1s ease-in-out);
-        left: 0;
-        width: 100%;
-        padding: 12px 50px 17px;
-        background-color: transparent;
-        @media (max-width: map-get($grid-breakpoints, sm)) {
-          bottom: 7%;
+
+        &:hover{
+          .imgcontainer{
+            @include transition(background-color 1s ease-in-out);
+            img{
+              opacity: 0.4; // causes bug on chrome Version 66.0.3359.139 (Official Build) (64-bit)
+              -webkit-transition: opacity 0.5s ease-in-out;
+                -moz-transition: opacity 0.5s ease-in-out;
+                -ms-transition: opacity 0.5s ease-in-out;
+                -o-transition: opacity 0.5s ease-in-out;
+                transition: opacity 0.5s ease-in-out;
+            }
+          }
+          figcaption{
+            bottom: 40%;
+            @media (max-width: map-get($grid-breakpoints, sm)) {
+              bottom: 7%;
+            }
+            @include transition(bottom 1s ease-in-out);
+            .series{
+              color: $white;
+              @include transition(color 1.5s ease);
+            }
+            h2{
+              color: $white;
+              @include transition(color 1.5s ease);
+            }
+
+          }
         }
       }
     }
-
-    &:hover{
-      .imgcontainer{
-        @include transition(background-color 1s ease-in-out);
-        img{
-          opacity: 0.4; // causes bug on chrome Version 66.0.3359.139 (Official Build) (64-bit)
-          -webkit-transition: opacity 0.5s ease-in-out;
-            -moz-transition: opacity 0.5s ease-in-out;
-            -ms-transition: opacity 0.5s ease-in-out;
-            -o-transition: opacity 0.5s ease-in-out;
-            transition: opacity 0.5s ease-in-out;
-        }
-      }
-      figcaption{
-        bottom: 40%;
-        @media (max-width: map-get($grid-breakpoints, sm)) {
-          bottom: 7%;
-        }
-        @include transition(bottom 1s ease-in-out);
-        .series{
-          color: $white;
-          @include transition(color 1.5s ease);
-        }
-        h2{
-          color: $white;
-          @include transition(color 1.5s ease);
-        }
-
-      }
-    }
-  }
-}
 
 // hyper archive
-.post-type-archive-hyper{
-  #index {
-      padding: 0px;
-      padding-bottom: 40px;
-  }
-  li.hyper-thumb {
-    padding-bottom: 0px;
-    figure {
-        a {
-            .imgcontainer{
-              img{
-                //opacity: 0.8;
-              }
-            }
-        }
-      box-shadow: none;
-      figcaption{
-        bottom: 10%;
-      }
-      &:hover{
-        figcaption{
-          bottom: 40%;
-        }
-      }
-
-    }
-  }
-}
+    // .post-type-archive-hyper{
+    //   #index {
+    //       padding: 0px;
+    //       padding-bottom: 40px;
+    //   }
+    //   li.hyper-thumb {
+    //     padding-bottom: 0px;
+    //     figure {
+    //         a {
+    //             .imgcontainer{
+    //               img{
+    //                 //opacity: 0.8;
+    //               }
+    //             }
+    //         }
+    //       box-shadow: none;
+    //       figcaption{
+    //         bottom: 10%;
+    //       }
+    //       &:hover{
+    //         figcaption{
+    //           bottom: 40%;
+    //         }
+    //       }
+    //
+    //     }
+    //   }
+    // }
 
 
 
