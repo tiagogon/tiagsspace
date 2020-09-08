@@ -1926,6 +1926,7 @@ function build_email_and_send_1() {
 // Edit atachment media (image/video/etc) -- hide, delete and save gallery order
 function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachment_id) {
 
+
 	// HIDE based on: https://stackoverflow.com/questions/40144638/how-to-remove-the-div-that-a-button-is-contained-in-when-the-button-is-clicked
 
 	echo '
@@ -1985,36 +1986,43 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 
 	// Change Atachement Grid Size
 	echo '
-		<div class="GridSize">
+		<div class="itemPosition">
+			<div class="GridSize">
+				<button class="GridSizePlus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'increase\');">+ </button>
+				<button class="GridSizeMinus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'decrease\');">- </button>
+			</div>
 
-		<p>__</p>
-			<button class="GridSizePlus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'increase\');">+ </button>
-			<button class="GridSizeMinus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'decrease\');">- </button>
-		</div>
-	';
+			<div class="attachmentPosition">
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=1);">M+ </button>
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=\'clear\');">Mc</button>
+				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=-1);">M- </button>
+			</div>
 
-	// Change Atachement Margin
-	echo '
-		<div class="GridSize">
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=1);">M+ </button>
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=\'clear\');">Mc</button>
-			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=-1);">M- </button>
+			<div class="attachmentPositionX">
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=1);">ML+ </button>
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=\'clear\');">MLc</button>
+				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=-1);">ML- </button>
+				<-->
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=1);">MR+ </button>
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=\'clear\');">MRc</button>
+				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=-1);">MR- </button>
+			</div>
 
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=1);">MT+ </button>
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=\'clear\');">MTc</button>
-			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=-1);">MT- </button>
+			<div class="attachmentPositionY">
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=1);">MT+ </button>
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=\'clear\');">MTc</button>
+				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=-1);">MT- </button>
+				/--/
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=1);">MB+ </button>
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=\'clear\');">MBc</button>
+				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=-1);">MB- </button>
+			</div>
 
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=1);">MR+ </button>
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=\'clear\');">MRc</button>
-			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=-1);">MR- </button>
-
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=1);">MB+ </button>
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=\'clear\');">MBc</button>
-			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=-1);">MB- </button>
-
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=1);">ML+ </button>
-			<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=\'clear\');">MLc</button>
-			<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=-1);">ML- </button>
+			<div class="attachmentPositionZ">
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'z-index\', changeSize=1);">Z+ </button>
+				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'z-index\', changeSize=\'clear\');">Zc</button>
+				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'z-index\', changeSize=-1);">Z- </button>
+			</div>
 		</div>
 	';
 }
@@ -2157,6 +2165,7 @@ function change_attachment_margin() {
 			$marginRight = get_field( 'attachment_margin_right',$attachmentId );
 			$marginBottom = get_field( 'attachment_margin_bottom',$attachmentId );
 			$marginLeft = get_field( 'attachment_margin_left',$attachmentId );
+			$zIndex = get_field( 'attachment_z_index',$attachmentId );
 
 			// Compute new margin Values and update database
 			$updated = false;
@@ -2216,12 +2225,23 @@ function change_attachment_margin() {
 					$updated = true;
 				}
 			}
+			if ($marginName == "z-index") {
+				if ($incrementalValue== "clear") {
+					$zIndex = "";
+					update_field(attachment_z_index, $zIndex, $attachmentId);
+					$updated = true;
+				}else {
+					$zIndex = $zIndex + $incrementalValue;
+					update_field(attachment_z_index, $zIndex, $attachmentId);
+					$updated = true;
+				}
+			}
 
 			// Output log message to the front end
 			if ( $updated === false ) {
 			    echo "There was an ERROR with attachment ".$attachmentId." chage of the ".$marginName." in ".$incrementalValue."%";
 			} else {
-			    echo "The attachment ".$attachmentId." chage the ".$marginName." in ".$incrementalValue."%. The value on the DB for all Margins are: [".$margin."%]. For each one are: [".$marginTop."%,".$marginRight."%,".$marginBottom."%,".$marginLeft."%]";
+			    echo "The attachment ".$attachmentId." chage the ".$marginName." in ".$incrementalValue."%. The value on the DB for all Margins are: [".$margin."%]. For each one are: [".$marginTop."%,".$marginRight."%,".$marginBottom."%,".$marginLeft."%]. Z-index is ".$zIndex;
 			}
         }
     }
@@ -2238,6 +2258,7 @@ function atachement_custom_margin($attachmentId) {
 		$marginRight = get_field( 'attachment_margin_right',$attachmentId );
 		$marginBottom = get_field( 'attachment_margin_bottom',$attachmentId );
 		$marginLeft = get_field( 'attachment_margin_left',$attachmentId );
+		$zIndex = get_field( 'attachment_z_index',$attachmentId );
 
 		$marginEchoString = "";
 
@@ -2255,6 +2276,9 @@ function atachement_custom_margin($attachmentId) {
 		}
 		if ($marginLeft) {
 			$marginEchoString = $marginEchoString."margin-left: ".$marginLeft."%;";
+		}
+		if ($zIndex) {
+			$marginEchoString = $marginEchoString."z-index: ".$zIndex.";";
 		}
 
 		echo $marginEchoString;

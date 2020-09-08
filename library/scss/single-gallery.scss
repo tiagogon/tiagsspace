@@ -219,9 +219,40 @@ div.thumbnail{
 
 
 // Edit atachment media (image/video/etc) -- hide and delete
+.itemPosition{
+	opacity: 0;
+	position: absolute;
+    z-index: 1;
+	padding: 5px;
+	color: white;
+	font-style: italic;
+	font-size: 16px;
+	font-weight: 600;
+	border-color: transparent;
+    border-style: none;
+    border-width: 0;
+    background-color: transparent!important;
+	&:hover{
+		opacity: 1;
+	}
+	button{
+
+		color: white;
+		font-style: italic;
+		font-size: 16px;
+		font-weight: 600;
+		border-color: transparent;
+	    border-style: none;
+	    border-width: 0;
+	    background-color: transparent!important;
+
+	}
+}
 button.remove{
 	opacity: 0;
 	position: absolute;
+	bottom: 0;
+	right: 0;
     z-index: 1;
 	padding: 5px;
 	color: white;
