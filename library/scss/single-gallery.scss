@@ -21,7 +21,7 @@ div.gallery{
       box-sizing: border-box;
     display:inline-block;
 		figure{
-			overflow: hidden;
+			overflow: visible;
 			    margin: 0;
 			.imgcontainer{
 				img{
@@ -158,7 +158,7 @@ div.gallery-horizontal{
 }
 
 .container-fluid {
-	overflow: hidden;
+	overflow: visible;
 	div.no-pad{
 		margin-bottom: 30px;
 		div.thumbnail{
@@ -219,9 +219,40 @@ div.thumbnail{
 
 
 // Edit atachment media (image/video/etc) -- hide and delete
+.itemPosition{
+	opacity: 0;
+	position: absolute;
+    z-index: 1;
+	padding: 5px;
+	color: white;
+	font-style: italic;
+	font-size: 16px;
+	font-weight: 600;
+	border-color: transparent;
+    border-style: none;
+    border-width: 0;
+    background-color: transparent!important;
+	&:hover{
+		opacity: 1;
+	}
+	button{
+
+		color: white;
+		font-style: italic;
+		font-size: 16px;
+		font-weight: 600;
+		border-color: transparent;
+	    border-style: none;
+	    border-width: 0;
+	    background-color: transparent!important;
+
+	}
+}
 button.remove{
 	opacity: 0;
 	position: absolute;
+	bottom: 0;
+	right: 0;
     z-index: 1;
 	padding: 5px;
 	color: white;

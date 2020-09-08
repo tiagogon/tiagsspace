@@ -303,10 +303,10 @@ if (!get_field('deactivate_gallery')) {
                 $count_item = 0;
 
                 // loop the atached images
-                foreach($attachmens as $image){
+                foreach($attachmens as $attachmen){
 
                 	//Check IF atachment is not to be removed
-                	if (!get_field('remove_from_default_gallery',$image->ID)) {
+                	if (!get_field('remove_from_default_gallery',$attachmen->ID)) {
 
                         $count_item++;
 
@@ -314,8 +314,8 @@ if (!get_field('deactivate_gallery')) {
                         $size_on_gallery_factor = 1;
 
                         // Diferent image size factor
-                        if (get_field('diferent_size_on_gallery',$image->ID)) {
-                            $size_on_gallery_factor = get_field('diferent_size_on_gallery',$image->ID);
+                        if (get_field('diferent_size_on_gallery',$attachmen->ID)) {
+                            $size_on_gallery_factor = get_field('diferent_size_on_gallery',$attachmen->ID);
                         }
 
                         // If Gallery item size factor is making item smaller, deactivate it on mobile
@@ -325,24 +325,33 @@ if (!get_field('deactivate_gallery')) {
                             $number_of_columns_item_xs   = $number_of_columns_xs * $size_on_gallery_factor;
                         }
 
-                            if ($number_of_columns_item_xs < 1) { $number_of_columns_item_xs = 1;
-                            } elseif($number_of_columns_item_xs > 6) { $number_of_columns_item_xs = 6;}
+
+                        if ($number_of_columns_item_xs < 1) {
+                            $number_of_columns_item_xs = 1;
+                        } elseif(
+                            $number_of_columns_item_xs > 12) { $number_of_columns_item_xs = 12;
+                        }
 
                         $number_of_columns_item_sm   = $number_of_columns_sm * $size_on_gallery_factor;
-
-                            if ($number_of_columns_item_sm < 1) { $number_of_columns_item_sm = 1;
-                            } elseif($number_of_columns_item_sm > 6) { $number_of_columns_item_sm = 6;}
+                        if ($number_of_columns_item_sm < 1) {
+                            $number_of_columns_item_sm = 1;
+                        } elseif(
+                            $number_of_columns_item_sm > 12) { $number_of_columns_item_sm = 12;
+                        }
 
                         $number_of_columns_item_md   = $number_of_columns_md * $size_on_gallery_factor;
-
-                            if ($number_of_columns_item_md < 1) { $number_of_columns_item_md = 1;
-                            } elseif($number_of_columns_item_md > 6) { $number_of_columns_item_md = 6;}
+                        if ($number_of_columns_item_md < 1) {
+                            $number_of_columns_item_md = 1;
+                        } elseif(
+                            $number_of_columns_item_md > 12) { $number_of_columns_item_md = 12;
+                        }
 
                         $number_of_columns_item_lg   = $number_of_columns_lg * $size_on_gallery_factor;
-
-                            if ($number_of_columns_item_lg < 1) { $number_of_columns_item_lg = 1;
-                            } elseif($number_of_columns_item_lg > 6) { $number_of_columns_item_lg = 6;}
-
+                        if ($number_of_columns_item_lg < 1) {
+                            $number_of_columns_item_lg = 1;
+                        } elseif(
+                            $number_of_columns_item_lg > 12) { $number_of_columns_item_lg = 12;
+                        }
 
 
                         // calculate bootstrap responsive classes from the number of columns WITH FACTOR
@@ -432,46 +441,46 @@ if (!get_field('deactivate_gallery')) {
 
                         // --- SRC calculation ---
                             // Original image File
-    	                    $image_thumb_attributes = wp_get_attachment_image_src($image->ID, false);
-    	                    $image_thumb_srcset = $image_thumb_attributes[0]." ".$image_thumb_attributes[1]."w";
+    	                    $attachmen_thumb_attributes = wp_get_attachment_image_src($attachmen->ID, false);
+    	                    $attachmen_thumb_srcset = $attachmen_thumb_attributes[0]." ".$attachmen_thumb_attributes[1]."w";
 
                             // IF diferent sizes exist
 
                             // thumbnail
-                            $image_thumb_thumbnail_srcset ="";
-                            $image_thumb_thumbnail_attributes = wp_get_attachment_image_src($image->ID, "thumbnail");
-                            if ($image_thumb_thumbnail_attributes[3]) {
-                                $image_thumb_thumbnail_srcset = $image_thumb_thumbnail_attributes[0]." ".$image_thumb_thumbnail_attributes[1]."w, ";
+                            $attachmen_thumb_thumbnail_srcset ="";
+                            $attachmen_thumb_thumbnail_attributes = wp_get_attachment_image_src($attachmen->ID, "thumbnail");
+                            if ($attachmen_thumb_thumbnail_attributes[3]) {
+                                $attachmen_thumb_thumbnail_srcset = $attachmen_thumb_thumbnail_attributes[0]." ".$attachmen_thumb_thumbnail_attributes[1]."w, ";
                             }
 
                             // small
-                            $image_thumb_small_srcset ="";
-                            $image_thumb_small_attributes = wp_get_attachment_image_src($image->ID, "small");
-                            if ($image_thumb_small_attributes[3]) {
-                                $image_thumb_small_srcset = $image_thumb_small_attributes[0]." ".$image_thumb_small_attributes[1]."w, ";
+                            $attachmen_thumb_small_srcset ="";
+                            $attachmen_thumb_small_attributes = wp_get_attachment_image_src($attachmen->ID, "small");
+                            if ($attachmen_thumb_small_attributes[3]) {
+                                $attachmen_thumb_small_srcset = $attachmen_thumb_small_attributes[0]." ".$attachmen_thumb_small_attributes[1]."w, ";
                             }
 
                             // medium
-                            $image_thumb_medium_srcset ="";
-                            $image_thumb_medium_attributes = wp_get_attachment_image_src($image->ID, "medium");
-                            if ($image_thumb_medium_attributes[3]) {
-                                $image_thumb_medium_srcset = $image_thumb_medium_attributes[0]." ".$image_thumb_medium_attributes[1]."w, ";
+                            $attachmen_thumb_medium_srcset ="";
+                            $attachmen_thumb_medium_attributes = wp_get_attachment_image_src($attachmen->ID, "medium");
+                            if ($attachmen_thumb_medium_attributes[3]) {
+                                $attachmen_thumb_medium_srcset = $attachmen_thumb_medium_attributes[0]." ".$attachmen_thumb_medium_attributes[1]."w, ";
                             }
 
                             // large
-                            $image_thumb_large_srcset ="";
-                            $image_thumb_large_attributes = wp_get_attachment_image_src($image->ID, "large");
-                            if ($image_thumb_large_attributes[3]) {
-                                $image_thumb_large_srcset = $image_thumb_large_attributes[0]." ".$image_thumb_large_attributes[1]."w, ";
+                            $attachmen_thumb_large_srcset ="";
+                            $attachmen_thumb_large_attributes = wp_get_attachment_image_src($attachmen->ID, "large");
+                            if ($attachmen_thumb_large_attributes[3]) {
+                                $attachmen_thumb_large_srcset = $attachmen_thumb_large_attributes[0]." ".$attachmen_thumb_large_attributes[1]."w, ";
                             }
 
 
                             // FINAL SRCSET
-                            $image_srcset = $image_thumb_thumbnail_srcset.
-                                            $image_thumb_small_srcset.
-                                            $image_thumb_medium_srcset.
-                                            $image_thumb_large_srcset.
-                                            $image_thumb_srcset;
+                            $attachmen_srcset = $attachmen_thumb_thumbnail_srcset.
+                                            $attachmen_thumb_small_srcset.
+                                            $attachmen_thumb_medium_srcset.
+                                            $attachmen_thumb_large_srcset.
+                                            $attachmen_thumb_srcset;
                             // --- Sizes ---
                             //Container or Full width?
                             if ($class_container == 'container') {
@@ -486,7 +495,7 @@ if (!get_field('deactivate_gallery')) {
                                 $size_sm = (100 / $number_of_columns_item_sm)."vw";
                                 $size_xs = (100 / $number_of_columns_item_xs)."vw";
 
-                                $image_sizes = "(min-width: 1240px) ".$size_lg.",
+                                $attachmen_sizes = "(min-width: 1240px) ".$size_lg.",
                                                  ".$size_xs;
                             } else {
                                 $size_lg = (100 / $number_of_columns_item_lg)."vw";
@@ -494,64 +503,64 @@ if (!get_field('deactivate_gallery')) {
                                 $size_sm = (100 / $number_of_columns_item_sm)."vw";
                                 $size_xs = (100 / $number_of_columns_item_xs)."vw";
 
-                                $image_sizes = "(min-width: 992px) ".$size_lg.",
+                                $attachmen_sizes = "(min-width: 992px) ".$size_lg.",
                                                 (min-width: 768px) ".$size_md.",
                                                 (min-width: 576px) ".$size_sm.",
                                                  ".$size_xs;
                             }
 
                             // Source code
-                            if (!get_field('insert_src_of_higher_resolution',$image->ID)) {
-                                $source = 'srcset="'.$image_srcset.'" sizes="'.$image_sizes.'" ';
+                            if (!get_field('insert_src_of_higher_resolution',$attachmen->ID)) {
+                                $source = 'srcset="'.$attachmen_srcset.'" sizes="'.$attachmen_sizes.'" ';
                             } else {
-                                $source = 'src="'.$image_thumb_attributes[0].'"';
+                                $source = 'src="'.$attachmen_thumb_attributes[0].'"';
                             }
 
                         // --- AlT ---
-                            $alt = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
-                            $caption = $image->post_excerpt;
-                            $image_post_title = get_the_title();
+                            $alt = get_post_meta($attachmen->ID, '_wp_attachment_image_alt', true);
+                            $caption = $attachmen->post_excerpt;
+                            $attachmen_post_title = get_the_title();
                             if ($alt) {
-                                $image_alt = $alt;
+                                $attachmen_alt = $alt;
                             } elseif($caption) {
-                                $image_alt = $caption." – ".$image_post_title;
+                                $attachmen_alt = $caption." – ".$attachmen_post_title;
                             }else{
-                                $image_alt = $image_post_title." – ".$count_item;
+                                $attachmen_alt = $attachmen_post_title." – ".$count_item;
                             }
 
 
                         // INTRINSTIC RATIO
 
                             // AUDIO
-                            if ( $image->post_mime_type == "audio/wav" OR $image->post_mime_type == "audio/mpeg" ) {
+                            if ( $attachmen->post_mime_type == "audio/wav" OR $attachmen->post_mime_type == "audio/mpeg" ) {
 
                                 // TO CODE
                                 // $intrinsic_ratio of audio container
 
                             // VIDEO
-                            } elseif ( $image->post_mime_type == "video/mpeg" OR $image->post_mime_type == "video/mp4" OR $image->post_mime_type == "video/quicktime" ) {
+                            } elseif ( $attachmen->post_mime_type == "video/mpeg" OR $attachmen->post_mime_type == "video/mp4" OR $attachmen->post_mime_type == "video/quicktime" ) {
 
-                            	$video_metadata = wp_get_attachment_metadata( $image->ID );
+                            	$video_metadata = wp_get_attachment_metadata( $attachmen->ID );
 
                             	$intrinsic_ratio = $video_metadata['height'] * 100 / $video_metadata['width'];
 
                             }else {
 
-                                $intrinsic_ratio = $image_thumb_attributes[2] * 100 / $image_thumb_attributes[1];
+                                $intrinsic_ratio = $attachmen_thumb_attributes[2] * 100 / $attachmen_thumb_attributes[1];
                             }
 
 
                         // COMPILE VIDEO OPTIONS
 
                             // IF there are DEFAULT VIDEO PLAYER OPTIONS of the ATTACHEMENT
-                            if (get_field('alternative_video_player_options',$image->ID)) {
+                            if (get_field('alternative_video_player_options',$attachmen->ID)) {
                                 // need to convert boleans into true/false strings >> https://stackoverflow.com/questions/2795177/how-to-convert-boolean-to-string
-                                $video_mute = (get_field('video_mute',$image->ID)) ? 'true' : 'false';
-                                $video_loop = (get_field('video_loop',$image->ID)) ? 'true' : 'false';
-                                $video_autoplay = (get_field('video_autoplay',$image->ID)) ? 'true' : 'false';
-                                $video_pauseothervideos = (get_field('video_pauseothervideos',$image->ID)) ? 'true' : 'false';
-                                $video_preload = get_field('video_preload',$image->ID); // NOT A BOLEAN - string
-                                $post_video_schema = get_field('video_schema',$image->ID);
+                                $video_mute = (get_field('video_mute',$attachmen->ID)) ? 'true' : 'false';
+                                $video_loop = (get_field('video_loop',$attachmen->ID)) ? 'true' : 'false';
+                                $video_autoplay = (get_field('video_autoplay',$attachmen->ID)) ? 'true' : 'false';
+                                $video_pauseothervideos = (get_field('video_pauseothervideos',$attachmen->ID)) ? 'true' : 'false';
+                                $video_preload = get_field('video_preload',$attachmen->ID); // NOT A BOLEAN - string
+                                $post_video_schema = get_field('video_schema',$attachmen->ID);
 
                             // Else use them on the post level
                             } else {
@@ -577,7 +586,7 @@ if (!get_field('deactivate_gallery')) {
                         // add item-sizer for Masonry responsive calculations
                         if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
 
-                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-8"></div>
+                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-4"></div>
 
                         <?php }?>
 
@@ -589,24 +598,24 @@ if (!get_field('deactivate_gallery')) {
                         // ----------------------------------------
 
                         // AUDIO
-                        if ( $image->post_mime_type == "audio/wav" OR $image->post_mime_type == "audio/mpeg" ) { ?>
+                        if ( $attachmen->post_mime_type == "audio/wav" OR $attachmen->post_mime_type == "audio/mpeg" ) { ?>
 
-                            <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $image->ID;?>" attachmentOrder="<?php echo $image->menu_order;?>">
+                            <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
                                 <?php
                                 // Edit atachment media -- hide and delete
                                 if (is_user_logged_in() && is_preview()) {
                                     $gallery_id = get_the_ID();
-                                    gallery_edit_atachement_options($gallery_id, $count_item, $image->ID );
+                                    gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                                 }
                                 ?>
 
-                                <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+                                <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" style="<?php atachement_custom_margin($attachmen->ID); ?>">
                                     <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
 
                                             <?php
 
-                                            $audio_url = wp_get_attachment_url( $image->ID );?>
+                                            $audio_url = wp_get_attachment_url( $attachmen->ID );?>
 
                                             <audio class="plyr" controls>
                                                   <source src="<?php echo $audio_url;?>" type="audio/mpeg">
@@ -621,32 +630,32 @@ if (!get_field('deactivate_gallery')) {
                             </div><?php
 
                         // VIDEO
-                        } elseif ( $image->post_mime_type == "video/mpeg" OR $image->post_mime_type == "video/mp4" OR $image->post_mime_type == "video/quicktime" ) { ?>
+                        } elseif ( $attachmen->post_mime_type == "video/mpeg" OR $attachmen->post_mime_type == "video/mp4" OR $attachmen->post_mime_type == "video/quicktime" ) { ?>
 
-                            <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $image->ID;?> attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $image->ID;?>" attachmentOrder="<?php echo $image->menu_order;?>">
+                            <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
                                 <?php
                                 // Edit atachment media -- hide and delete
                                 if (is_user_logged_in() && is_preview()) {
                                     $gallery_id = get_the_ID();
-                                    gallery_edit_atachement_options($gallery_id, $count_item, $image->ID );
+                                    gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                                 }
                                 ?>
 
-                                <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/VideoObject">
+                                <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/VideoObject" style="<?php atachement_custom_margin($attachmen->ID); ?>">
                                     <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>100%; height: 0; overflow: hidden; max-width: 100%;">
 
                                             <?php
 
-                                            echo do_shortcode('[KGVID id="'.$image->ID.'" '.$video_otions.' ]');
+                                            echo do_shortcode('[KGVID id="'.$attachmen->ID.'" '.$video_otions.' ]');
 
                                             echo "<style>
-                                                        .video-id-".$image->ID." .vjs-fluid {padding-top: ".$intrinsic_ratio."%!important;
+                                                        .video-id-".$attachmen->ID." .vjs-fluid {padding-top: ".$intrinsic_ratio."%!important;
                                                         }
                                                     </style>";
                                             if ($video_mute == "true") {
                                                 echo "<style>
-                                                    .video-id-".$image->ID." .vjs-volume-menu-button {display: none!important;}
+                                                    .video-id-".$attachmen->ID." .vjs-volume-menu-button {display: none!important;}
                                                 </style>";
                                             }
 
@@ -660,60 +669,66 @@ if (!get_field('deactivate_gallery')) {
                         // IMAGE
                         } else { ?>
 
-                            <div class="thumbnail item <?php echo $class_thumbnail;?> attachmen-<?php echo $count_item;?>" attachmentId="<?php echo $image->ID;?>" attachmentOrder="<?php echo $image->menu_order;?>">
+                            <div class="thumbnail item <?php echo $class_thumbnail;?> attachmen-<?php echo $count_item;?>"
+                                attachmentId="<?php echo $attachmen->ID;?>"
+                                attachmentOrder="<?php echo $attachmen->menu_order;?>"  attachment_field_diferent_size_on_gallery="<?php
+                                    if (get_field('diferent_size_on_gallery',$attachmen->ID)) {
+                                        echo get_field('diferent_size_on_gallery',$attachmen->ID);
+                                    }else{
+                                        echo "1";
+                                    };?>">
 
                                 <?php
                                 // Edit atachment media -- hide and delete
                                 if (is_user_logged_in() && is_preview()) {
                                     $gallery_id = get_the_ID();
-                                    gallery_edit_atachement_options($gallery_id, $count_item, $image->ID );
+                                    gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                                 }
                                 ?>
 
+                                <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" style="<?php atachement_custom_margin($attachmen->ID); ?>">
 
-                            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+                                    <?php // IMAGE CONTAINER
+                                    //if ($number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
+                                    <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
+                                    <?php //} ?>
+                                        <?php
+                                        // Image Link
+                                        if (($light_box != 'intense-images')) { // print thumbnails with a link ?>
+                                        <a href="<?php echo wp_get_attachment_url($attachmen->ID); ?>"
+                                                class="magnific-popup-link" caption="<?php if ($caption) { echo " – <i>".$caption."</i>";} ?>"
+                                        itemprop="contentUrl">
+                                        <?php }?>
+                                            <img    <?php echo $source; ?>
+                                                    alt="<?php echo $attachmen_alt; ?>"
+                                                    class=" <?php echo $max_height; ?>        <?php echo $intense; ?>"
+                                                    itemprop="http://schema.org/image"
+                                                    data-image="
+                                                    <?php
+                                                    // data-image ofr Intense Images Gallery
+                                                    if ($light_box == 'intense-images') {
+                                                        echo $attachmen_thumb_attributes[0];
+                                                    } ?>"/>
 
-                                <?php // IMAGE CONTAINER
-                                //if ($number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
-                                <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
-                                <?php //} ?>
-                                    <?php
-                                    // Image Link
-                                    if (($light_box != 'intense-images')) { // print thumbnails with a link ?>
-                                    <a href="<?php echo wp_get_attachment_url($image->ID); ?>"
-                                            class="magnific-popup-link" caption="<?php if ($caption) { echo " – <i>".$caption."</i>";} ?>"
-                                    itemprop="contentUrl">
-                                    <?php }?>
-                                        <img    <?php echo $source; ?>
-                                                alt="<?php echo $image_alt; ?>"
-                                                class=" <?php echo $max_height; ?>        <?php echo $intense; ?>"
-                                                itemprop="http://schema.org/image"
-                                                data-image="
-                                                <?php
-                                                // data-image ofr Intense Images Gallery
-                                                if ($light_box == 'intense-images') {
-                                                    echo $image_thumb_attributes[0];
-                                                } ?>"/>
+                                        <?php
+                                        // Image Link
+                                        if (($light_box != 'intense-images')) {?>
+                                            </a>
+                                        <?php }?>
 
-                                    <?php
-                                    // Image Link
-                                    if (($light_box != 'intense-images')) {?>
-                                        </a>
-                                    <?php }?>
+                                    <?php // IMAGE container
+                                    //if ($number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
+                                    </div>
+                                    <?php //} ?>
 
-                                <?php // IMAGE container
-                                //if ($number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
-                                </div>
-                                <?php //} ?>
+                                    <?php //Caption
+                                    if ($caption) { ?>
+                                    <figcaption itemprop="caption description">
+                                        <?php echo $caption; ?>
+                                    </figcaption>
+                                    <?php } ?>
 
-                                <?php //Caption
-                                if ($caption) { ?>
-                                <figcaption itemprop="caption description">
-                                    <?php echo $caption; ?>
-                                </figcaption>
-                                <?php } ?>
-
-                            </figure>
+                                </figure>
 
                         </div>
                         <?php } ?>
@@ -725,7 +740,7 @@ if (!get_field('deactivate_gallery')) {
 	                    foreach ($extra_content as $k => $v) {
 
 	                    	// If ID of image before is the ID of current image, then output Youtube code
-	                    	if ($v[0] == $image->ID ) {
+	                    	if ($v[0] == $attachmen->ID ) {
 
                                 $count_item++; ?>
 
@@ -891,9 +906,9 @@ if (!get_field('deactivate_gallery')) {
         <?php }
 
         // When previeweing posts
-        if (is_user_logged_in() && is_preview()) { ?>
-            <!-- <script src="<?php bloginfo('template_url'); ?>/library/js/packery/packery.pkgd.min.js"></script> -->
+        if (is_user_logged_in() && is_preview()) {
 
+            // Manual order images ?>
             <script src="<?php bloginfo('template_url'); ?>/library/js/Sortable-master/Sortable.js"></script>
             <script type="text/javascript">
                 // As an Admin, I can sort the media elements on a gallery when I am previewing the post
@@ -907,54 +922,130 @@ if (!get_field('deactivate_gallery')) {
 
             </script>
 
-
+            <!-- CUSTOM FUNCTIONS -->
             <script type="text/javascript">
 
-                function orderAttachmentesOnWpDb() {
+            // Custom functions
 
-                    var menuOrderCount = 0;
+            // Reorder Gallery Attachments via AJAX call
+            function orderAttachmentesOnWpDb() {
 
-                    $('#gallery-<?php the_ID(); ?>').children('div').each(function () {
+                var menuOrderCount = 0;
 
-                        menuOrderCount++;
+                $('#gallery-<?php the_ID(); ?>').children('div').each(function () {
 
-                        console.log(menuOrderCount);
-                        console.log(this.getAttribute('attachmentid')); //log every element found to console output
+                    menuOrderCount++;
 
-                        var attachmentId = this.getAttribute('attachmentid');
-                        var attachmentOrder = menuOrderCount;
+                    console.log(menuOrderCount);
+                    console.log(this.getAttribute('attachmentid')); //log every element found to console output
 
-                        // This does the ajax request to change the menu_order value on the wp_db
-                        $.ajax({
-                            url: example_ajax_obj.ajaxurl,
-                            data: {
-                                'action': 'gallery_media_order_change_request',
-                                'attachmentId' : attachmentId,
-                                'attachmentOrder' : attachmentOrder
-                            },
-                            success:function(data) {
-                                // This outputs the result of the ajax request
-                                console.log(data);
-                            },
-                            error: function(errorThrown){
-                                console.log(errorThrown);
-                            }
-                        });
+                    var attachmentId = this.getAttribute('attachmentid');
+                    var attachmentOrder = menuOrderCount;
 
+                    // This does the ajax request to change the menu_order value on the wp_db
+                    $.ajax({
+                        url: example_ajax_obj.ajaxurl,
+                        data: {
+                            'action': 'gallery_media_order_change_request',
+                            'attachmentId' : attachmentId,
+                            'attachmentOrder' : attachmentOrder
+                        },
+                        success:function(data) {
+                            // This outputs the result of the ajax request
+                            console.log(data);
+                        },
+                        error: function(errorThrown){
+                            console.log(errorThrown);
+                        }
                     });
 
+                }); // loop ends
+
+                // Reload pages
+                location.reload();
+
+            }
+
+            // Increase Attachment Grid Size
+            function atachementGridSizeChange(attachmentID, changeSize) {
+
+                    // This does the ajax request to change the menu_order value on the wp_db
+                    $.ajax({
+                        url: example_ajax_obj.ajaxurl,
+                        data: {
+                            'action': 'change_attachment_field_diferent_size_on_gallery',
+                            'attachmentID' : attachmentID,
+                            'changeSize' : changeSize
+                        },
+                        success:function(data) {
+                            // This outputs the result of the ajax request
+                            console.log(data);
+                            // Reload Page
+                            location.reload();
+                        },
+                        error: function(errorThrown){
+                            console.log(errorThrown);
+                            alert("Failed to change grid denominator!");
+                        }
+                    });
+
+            }
+
+            // Change Attachment Margin
+            function atachementChangeMargin(attachmentID, marginName, incrementalValue) {
+
+                if (incrementalValue === "clear") {
+                    $( ".thumbnail[attachmentid='"+ attachmentID +"'] figure" ).css( marginName, 0 );
+                    console.log('Cleared margins on browser.');
+                } else {
+                    // Get current Margin value
+                    var marginValue = ( 100 * parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").css(marginName)) / parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").parent().css('width')) );
+
+                    // Round it
+                    marginValue = Math.round(marginValue);
+
+                    // New margin %
+                    var marginValueNEW =  marginValue + incrementalValue;
+
+                    // Convert Margin % to px
+                    var marginValueNEWpx = ( marginValueNEW * parseFloat($(".thumbnail[attachmentid='"+ attachmentID +"'] figure").parent().css('width'))) / 100;
+
+                    // Update Element with the correct style
+                    $( ".thumbnail[attachmentid='"+ attachmentID +"'] figure" ).css( marginName, marginValueNEWpx );
                 }
 
-            </script>
+                // Restart Masonry
+                $('#gallery-<?php the_ID(); ?>').masonry({ })
 
+                // This does the ajax request to change the menu_order value on the wp_db
+                $.ajax({
+                    url: example_ajax_obj.ajaxurl,
+                    data: {
+                        'action': 'change_attachment_margin',
+                        'attachmentID' : attachmentID,
+                        'marginName' : marginName,
+                        'incrementalValue' : incrementalValue
+
+                    },
+                    success:function(data) {
+                        // This outputs the result of the ajax request
+                        console.log(data);
+                    },
+                    error: function(errorThrown){
+                        console.log(errorThrown);
+                        alert("Failed to change margin!");
+                    }
+                });
+
+            }
+
+            </script>
 
         <?php }?>
 
     <?php } // if there are images
 
 } // if gallery is not deactivated
-
-
 
 // _______________________________
 // NOTES:
@@ -965,5 +1056,5 @@ if (!get_field('deactivate_gallery')) {
 // probably alredy native: http://make.wordpress.org/core/2013/04/08/audio-video-support-in-core/
 
 // this one makes the houver tittle appear:
-// title="<?php echo $image->post_title;
+// title="<?php echo $attachmen->post_title;
 ?>
