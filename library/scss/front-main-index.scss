@@ -89,18 +89,18 @@ ul.thumb-container{
     // }
 
 // Remove from home first page:
-  .home {
-    .year-separator{
-      display: none;
-    }
-  }
-  .home {
-    &.paged {
-      .year-separator{
-        display: block;
-      }
-    }
-  }
+  // .home {
+  //   .year-separator{
+  //     display: none;
+  //   }
+  // }
+  // .home {
+  //   &.paged {
+  //     .year-separator{
+  //       display: block;
+  //     }
+  //   }
+  // }
 
 //Masory fix so it does not move items on loading
 .item-sizer{
