@@ -17,11 +17,11 @@ Index of posts for Home and Archives
                 // grid on archive
                 $grid_base = 'col-48 col-sm-24 col-md-16 col-lg-16';
 
-                if (is_post_type_archive( "hyper" )) {
-                    $grid_base = 'col-48 col-sm-24 col-md-16 col-lg-16';
-                }
+                // if (is_post_type_archive( "hyper" )) {
+                //     $grid_base = 'col-48 col-sm-24 col-md-16 col-lg-16';
+                // }
                 if (is_post_type_archive( "films" )) {
-                    $grid_base = 'col-48 col-sm-24 col-md-24 col-lg-24';
+                    $grid_base = 'col-48 col-sm-48 col-md-32 col-lg-32';
                 }
 
                 // Is sugested posts loop
@@ -90,7 +90,7 @@ Index of posts for Home and Archives
 
 
                     // Grouping Log posts on the front and taxonomies archives
-                    if ($post_type == "log" && (is_front_page() OR is_tag() OR is_tax() )  ) { //&& !is_paged()
+                    if ($post_type == "log" && (is_front_page() OR is_tag() OR is_tax() )  ) {
 
 
                         // Get next post_types and Year
@@ -171,12 +171,12 @@ Index of posts for Home and Archives
                         }
 
                         // Print Year Separator if the
-                        if ($year == get_the_time("Y") OR ($count == 1 AND !is_post_type_archive( "cityburns" )) OR (is_front_page() && !is_paged())) {
+                        if ($year == get_the_time("Y")) {
 
                             $year = get_the_time("Y");
 
                         // Year is diferent
-                        } elseif (!is_post_type_archive( "hyper" ) OR (is_front_page() && !is_paged())) {
+                        } else {
 
                             $year = get_the_time("Y");
 
