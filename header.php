@@ -25,6 +25,9 @@
 		<?php // ----- FONTS ----- ?>
 			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,600,600i" rel="stylesheet">
 
+			<!-- <style type="text/css">@font-face{ font-family: "calyces-regular-webfont"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/calyces-regular-webfont.woff") format("woff"); } @font-face{ font-family: "serifbabe-regular-webfont"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/serifbabe-regular-webfont.woff") format("woff"); } @font-face{ font-family: "SerifbabeAlpha-Regular"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/SerifbabeAlpha-Regular-2.woff2") format("woff"); } @font-face{ font-family: "Keroine-IntenseLegere"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/Keroine-IntenseLegere.woff") format("woff"); } @font-face{ font-family: "Keroine-DouxExtreme"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/Keroine-DouxExtreme.woff") format("woff"); }
+			</style> -->
+
 
 		<?php wp_head(); ?>
 
