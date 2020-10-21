@@ -25,7 +25,17 @@
 		<?php // ----- FONTS ----- ?>
 			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,600,600i" rel="stylesheet">
 
-			<!-- <style type="text/css">@font-face{ font-family: "calyces-regular-webfont"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/calyces-regular-webfont.woff") format("woff"); } @font-face{ font-family: "serifbabe-regular-webfont"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/serifbabe-regular-webfont.woff") format("woff"); } @font-face{ font-family: "SerifbabeAlpha-Regular"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/SerifbabeAlpha-Regular-2.woff2") format("woff"); } @font-face{ font-family: "Keroine-IntenseLegere"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/Keroine-IntenseLegere.woff") format("woff"); } @font-face{ font-family: "Keroine-DouxExtreme"; src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/Keroine-DouxExtreme.woff") format("woff"); }
+			<!-- <style type="text/css">
+			@font-face{ font-family: "calyces-regular-webfont";
+				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/calyces-regular-webfont.woff") format("woff"); }
+			@font-face{ font-family: "serifbabe-regular-webfont";
+				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/serifbabe-regular-webfont.woff") format("woff"); }
+			@font-face{ font-family: "SerifbabeAlpha-Regular";
+				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/SerifbabeAlpha-Regular-2.woff2") format("woff"); }
+			@font-face{ font-family: "Keroine-IntenseLegere";
+				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/Keroine-IntenseLegere.woff") format("woff"); }
+			@font-face{ font-family: "Keroine-DouxExtreme";
+				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/Keroine-DouxExtreme.woff") format("woff"); }
 			</style> -->
 
 
@@ -162,13 +172,13 @@
 
 						 ?>
 
-						<?php /* <li><a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">films</a></li> */?>
-
 						<li><a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " belongs";} ?>">Hyper</a></li>
 
-						<?php /* <li><a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " belongs";} ?>">dusk</a></li>
+						<li><a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " belongs";} ?>">dusk</a></li>
 
-						<li><a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">emulsion</a></li> */?>
+						<li><a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">films</a></li>
+
+						<?php /* <li><a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">emulsion</a></li> */?>
 
 						<?php /*
 						<li><a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_singular( 'log' )
