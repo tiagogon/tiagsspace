@@ -34,6 +34,7 @@ add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 
 
 /************* THUMBNAIL SIZE OPTIONS *************/
+add_theme_support( 'post-thumbnails' );
 
 // HD/6
 add_image_size( 'thumbnail', 480, 960, false ); // update also on /wp-admin/options-media.php
