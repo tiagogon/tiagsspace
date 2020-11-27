@@ -48,8 +48,8 @@ add_image_size( 'medium', 940, 1880, false ); // update also on /wp-admin/option
 // container large desktop size
 add_image_size( 'large', 1200, 2400, false ); // update also on /wp-admin/options-media.php
 
-// Full -- container size x2 Retina Mac displays
-// ->2400px
+// Disable Wordpress -scaled version created on 5.3 https://make.wordpress.org/core/2019/10/09/introducing-handling-of-big-images-in-wordpress-5-3/
+add_filter( 'big_image_size_threshold', '__return_false' );
 
 
 
