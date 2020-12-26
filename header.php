@@ -230,7 +230,7 @@
 				$('#topbar').slicknav({
 					prependTo: '#topbar-parent',//'.header-front-page',
 					//closeOnClick: true,
-					label :'<span class="open">[_]</span><span class="close">[x]</span>',
+					label :'<span class="open">+</span><span class="close">-</span>',
 					duplicate : false,
 					removeIds : false,
 				});

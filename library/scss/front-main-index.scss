@@ -25,14 +25,14 @@ ul.thumb-container{
   margin: 40px 0 0;
   font-style: italic;
   font-weight:400;
-  @media (max-width: map-get($grid-breakpoints, sm)) {
-    margin: 60px 0 20px!important;
-  }
+  // @media (max-width: map-get($grid-breakpoints, sm)) {
+  //   margin: 60px 0 20px!important;
+  // }
   .separator-wrapper{
     /*border-top: 2px solid $gray-dark;*/
-    @media (max-width: map-get($grid-breakpoints, sm)) {
-      padding-left: 20px;
-    }
+    // @media (max-width: map-get($grid-breakpoints, sm)) {
+    //   padding-left: 20px;
+    // }
 
   }
 }
@@ -113,10 +113,10 @@ li.item-post {
   display: block;
   float: left;
   padding-bottom: $grid-gutter-width;
-  @media (max-width: map-get($grid-breakpoints, sm)) {
-    padding-bottom: 0px;
-    margin-bottom: -1px;
-  }
+  // @media (max-width: map-get($grid-breakpoints, sm)) {
+  //   padding-bottom: 0px;
+  //   margin-bottom: -1px;
+  // }
 
   // NEW ANIMATED
   figure {
@@ -220,9 +220,9 @@ li.item-post {
     @include transition(box-shadow 1s ease);
 
     // remove shadow on mobile
-    @media (max-width: map-get($grid-breakpoints, sm)) {
-        box-shadow: none;
-    }
+    // @media (max-width: map-get($grid-breakpoints, sm)) {
+    //     box-shadow: none;
+    // }
     &:hover{
       .imgcontainer{
         @include transition(background-color 1s ease-in-out);
@@ -258,6 +258,18 @@ li.item-post {
   }
 }
 
+// Add same side spacement than betwene thumbnails
+// had this tag on container-fluid element
+.side-padding, .container{
+  @media (max-width: map-get($grid-breakpoints, sm)) {
+      padding-left: 20px;
+      padding-right: 20px;
+  }
+  @media (min-width: map-get($grid-breakpoints, sm)) {
+      padding-left: $grid-gutter-width;
+      padding-right: $grid-gutter-width;
+  }
+}
 
 // Emulsion THumbnail
     // li.emulsion-thumb, li.dusk-thumb {
