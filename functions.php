@@ -336,14 +336,61 @@ function custom_post_type_hyper() {
 add_action( 'init', 'custom_post_type_hyper', 0 );
 
 // Add 30 post per Hyper archive page
-    function my_post_queries( $query ) {
+    // function my_post_queries( $query ) {
+	//
+    //     if(is_post_type_archive( 'hyper' ) && !is_feed() && !is_admin() ){
+    //       // show 50 posts on custom taxonomy pages
+    //       $query->set('posts_per_page', 24);
+    //     }
+    //   }
+    // add_action( 'pre_get_posts', 'my_post_queries' );
 
-        if(is_post_type_archive( 'hyper' ) && !is_feed() && !is_admin() ){
-          // show 50 posts on custom taxonomy pages
-          $query->set('posts_per_page', 24);
-        }
-      }
-    add_action( 'pre_get_posts', 'my_post_queries' );
+
+
+// Register Custom Post Type 4K LENTO
+function custom_post_type_4klento() {
+  $labels = array(
+    'name'                => _x( '4k Lento Series', 'Post Type General Name', 'text_domain' ),
+    'singular_name'       => _x( '4k Lento', 'Post Type Singular Name', 'text_domain' ),
+    'menu_name'           => __( '4k Lento', 'text_domain' ),
+    'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
+    'all_items'           => __( 'All 4k Lento Mixes', 'text_domain' ),
+    'view_item'           => __( 'View 4k Lento Mix', 'text_domain' ),
+    'add_new_item'        => __( 'Add New 4k Lento Mix', 'text_domain' ),
+    'add_new'             => __( 'Add New 4k Lento Mix', 'text_domain' ),
+    'edit_item'           => __( 'Edit 4k Lento Mix', 'text_domain' ),
+    'update_item'         => __( 'Update 4k Lento Mix', 'text_domain' ),
+    'search_items'        => __( 'Search 4k Lento Mix', 'text_domain' ),
+    'not_found'           => __( 'Not found', 'text_domain' ),
+    'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
+  );
+  $args = array(
+    'label'               => __( '4k-lento', 'text_domain' ),
+    'description'         => __( '4k Lento description.', 'text_domain' ),
+    'labels'              => $labels,
+    'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'trackbacks', 'revisions', 'custom-fields', 'post-formats', ),
+    'taxonomies'          => array( 'category', 'post_tag' ),
+    'hierarchical'        => false,
+    'public'              => true,
+    'show_ui'             => true,
+	'show_in_rest'        => true,
+    'show_in_menu'        => true,
+    'show_in_nav_menus'   => true,
+    'show_in_admin_bar'   => true,
+    'menu_position'       => 4,
+    'menu_icon'           => 'dashicons-album',
+    'can_export'          => true,
+    'has_archive'         => true,
+    'exclude_from_search' => false,
+    'publicly_queryable'  => true,
+    'capability_type'     => 'post',
+    'yarpp_support'       => true,
+  );
+  register_post_type( '4k-lento', $args );
+}
+// Hook into the 'init' action
+add_action( 'init', 'custom_post_type_4klento', 0 );
+
 
 
 
@@ -354,7 +401,7 @@ function custom_post_type_log() {
     'singular_name'       => _x( 'Log', 'Post Type Singular Name', 'text_domain' ),
     'menu_name'           => __( 'Log', 'text_domain' ),
     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
-    'all_items'           => __( 'All Log Posts', 'text_domain' ),
+    'all_items'           => __( 'All Log Mixes', 'text_domain' ),
     'view_item'           => __( 'View Log Post', 'text_domain' ),
     'add_new_item'        => __( 'Add New Log Post', 'text_domain' ),
     'add_new'             => __( 'Add New Log Post', 'text_domain' ),
@@ -378,7 +425,7 @@ function custom_post_type_log() {
     'show_in_nav_menus'   => true,
     'show_in_admin_bar'   => true,
     'menu_position'       => 4,
-    'menu_icon'           => 'dashicons-format-status',
+    'menu_icon'           => 'dashicons-smiley',
     'can_export'          => true,
     'has_archive'         => true,
     'exclude_from_search' => false,
@@ -513,7 +560,7 @@ function tsm_convert_id_to_term_in_query($query) {
 function my_get_posts( $query ) {
 
     if ( is_home() && $query->is_main_query() )
-        $query->set( 'post_type', array( 'post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns') );
+        $query->set( 'post_type', array( 'post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns', '4k-lento') );
 
     return $query;
 }
@@ -591,41 +638,41 @@ function places_taxonomy() {
     'show_in_nav_menus'          => true,
     'show_tagcloud'              => true,
   );
-  register_taxonomy( 'places', array( 'post', 'emulsion', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cityburns' ), $args );
+  register_taxonomy( 'places', array( 'post', 'emulsion', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cityburns'), $args );
 }
 add_action( 'init', 'places_taxonomy', 0 );
 
 
-function with_taxonomy() {
-  $labels = array(
-    'name'                       => _x( 'With', 'Taxonomy General Name', 'text_domain' ),
-    'singular_name'              => _x( 'With', 'Taxonomy Singular Name', 'text_domain' ),
-    'menu_name'                  => __( 'With', 'text_domain' ),
-    'all_items'                  => __( 'All With', 'text_domain' ),
-    'parent_item'                => __( 'Parent With', 'text_domain' ),
-    'parent_item_colon'          => __( 'Parent With:', 'text_domain' ),
-    'new_item_name'              => __( 'New With Name', 'text_domain' ),
-    'add_new_item'               => __( 'Add New With', 'text_domain' ),
-    'edit_item'                  => __( 'Edit With', 'text_domain' ),
-    'update_item'                => __( 'Update With', 'text_domain' ),
-    'separate_items_with_commas' => __( 'Separate with with commas', 'text_domain' ),
-    'search_items'               => __( 'Search with', 'text_domain' ),
-    'add_or_remove_items'        => __( 'Add or remove with', 'text_domain' ),
-    'choose_from_most_used'      => __( 'Choose from the most used with', 'text_domain' ),
-    'not_found'                  => __( 'Not Found', 'text_domain' ),
-  );
-  $args = array(
-    'labels'                     => $labels,
-    'hierarchical'               => false,
-    'public'                     => true,
-    'show_ui'                    => true,
-    'show_admin_column'          => true,
-    'show_in_nav_menus'          => true,
-    'show_tagcloud'              => true,
-  );
-  register_taxonomy( 'with', array( 'post', 'emulsion', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cityburns' ), $args );
-}
-add_action( 'init', 'with_taxonomy', 0 );
+// function with_taxonomy() {
+//   $labels = array(
+//     'name'                       => _x( 'With', 'Taxonomy General Name', 'text_domain' ),
+//     'singular_name'              => _x( 'With', 'Taxonomy Singular Name', 'text_domain' ),
+//     'menu_name'                  => __( 'With', 'text_domain' ),
+//     'all_items'                  => __( 'All With', 'text_domain' ),
+//     'parent_item'                => __( 'Parent With', 'text_domain' ),
+//     'parent_item_colon'          => __( 'Parent With:', 'text_domain' ),
+//     'new_item_name'              => __( 'New With Name', 'text_domain' ),
+//     'add_new_item'               => __( 'Add New With', 'text_domain' ),
+//     'edit_item'                  => __( 'Edit With', 'text_domain' ),
+//     'update_item'                => __( 'Update With', 'text_domain' ),
+//     'separate_items_with_commas' => __( 'Separate with with commas', 'text_domain' ),
+//     'search_items'               => __( 'Search with', 'text_domain' ),
+//     'add_or_remove_items'        => __( 'Add or remove with', 'text_domain' ),
+//     'choose_from_most_used'      => __( 'Choose from the most used with', 'text_domain' ),
+//     'not_found'                  => __( 'Not Found', 'text_domain' ),
+//   );
+//   $args = array(
+//     'labels'                     => $labels,
+//     'hierarchical'               => false,
+//     'public'                     => true,
+//     'show_ui'                    => true,
+//     'show_admin_column'          => true,
+//     'show_in_nav_menus'          => true,
+//     'show_tagcloud'              => true,
+//   );
+//   register_taxonomy( 'with', array( 'post', 'emulsion', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cityburns' ), $args );
+// }
+// add_action( 'init', 'with_taxonomy', 0 );
 
 
 function medium_taxonomy() {
@@ -659,7 +706,7 @@ function medium_taxonomy() {
     'show_in_nav_menus'          => true,
     'show_tagcloud'              => true,
   );
-  register_taxonomy( 'medium', array( 'post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns' ), $args );
+  register_taxonomy( 'medium', array( 'post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns', '4k-lento'  ), $args );
 
 }
 add_action( 'init', 'medium_taxonomy', 0 );
@@ -758,7 +805,7 @@ function year_from_taxonomy() {
     'show_in_nav_menus'          => true,
     'show_tagcloud'              => true,
   );
-  register_taxonomy( 'from', array('post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns'), $args );
+  register_taxonomy( 'from', array('post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns', '4k-lento' ), $args );
 }
 add_action( 'init', 'year_from_taxonomy', 0 );
 
@@ -776,6 +823,7 @@ add_action( 'auto-draft_post_dusk', 'current_year_as_default_year_from' );
 add_action( 'auto-draft_post_emulsion', 'current_year_as_default_year_from' );
 add_action( 'auto-draft_post_log', 'current_year_as_default_year_from' );
 add_action( 'auto-draft_post_hyper', 'current_year_as_default_year_from' );
+add_action( 'auto-draft_post_4k-lento', 'current_year_as_default_year_from' );
 add_action( 'auto-draft_post_films', 'current_year_as_default_year_from' );
 
 
@@ -1406,9 +1454,14 @@ function add_color_class( $classes ) {
     if ((is_singular( 'hyper' ) && $selected_color==0)
                 OR is_post_type_archive('hyper')) {
 
-
         $classes[] = 'none-white-bg';
         $classes[] = 'deep-purple';
+
+	// Is 4k Lento
+} elseif ((is_singular( '4k-lento' ) && $selected_color==0)) {
+
+		$classes[] = 'none-white-bg';
+		$classes[] = 'deep-purple';
 
 	// Is Dusk single
     } elseif ((is_singular( 'dusk' ) && $selected_color==0)) {
