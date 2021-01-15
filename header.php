@@ -20,7 +20,6 @@
 
 				<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
 
-
 		<?php // ----- FONTS ----- ?>
 			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,600,600i" rel="stylesheet">
 
