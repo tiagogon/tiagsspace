@@ -66,23 +66,32 @@
 
 $post_type = get_post_type($post->ID);
 
-if ($post_type == "hyper") {
+if ($post_type == "hyper" OR $post_type == "4k-lento") {
 
+    //number
 	$next_number = number_of_the_post($post->ID) + 1;
 	$previous_number = number_of_the_post($post->ID) - 1;
 
-    // Add 2 digits number
-    $next_number = sprintf("%02d", $next_number);
-	$previous_number = sprintf("%02d", $previous_number);
+    //prefix
+    if ($post_type == "hyper") {
+        $prefix = "H";
+    }
+    if ($post_type == "4k-lento") {
+        $prefix = "4KL";
+    }
+
+    // final sring
+    $next_string = $prefix.sprintf("%02d", $next_number);
+	$previous_string = $prefix.sprintf("%02d", $previous_number);
 	?>
 
 	<div class="single-navigation container-fluid side-padding">
 		<div class="row justify-content-between">
 	        <nav class="nav-next col-24">
-	            <span><?php next_post_link('%link', '< H'.$next_number); ?></span>
+	            <span><?php next_post_link('%link', '< '.$next_string); ?></span>
 	        </nav>
 	        <nav class="nav-previous col-24">
-	        	<span><?php previous_post_link('%link', 'H'.$previous_number.' >'); ?></span>
+	        	<span><?php previous_post_link('%link', $previous_string.' >'); ?></span>
 	        </nav>
         </div>
 	</div>
