@@ -568,7 +568,7 @@ add_filter( 'pre_get_posts', 'my_get_posts' );
 
 function myfeed_request($qv) {
     if (isset($qv['feed']) && !isset($qv['post_type']))
-        $qv['post_type'] = array('post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns');
+        $qv['post_type'] = array('post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns', '4k-lento');
     return $qv;
 }
 add_filter('request', 'myfeed_request');
@@ -587,7 +587,7 @@ function query_post_type($query) {
         if($post_type) {
             $post_type = $post_type;
         } else {
-            $post_type = array('post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns'); // replace CPT to your custom post type
+            $post_type = array('post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns', '4k-lento'); // replace CPT to your custom post type
         }
         $query->set('post_type',$post_type);
 
@@ -638,7 +638,7 @@ function places_taxonomy() {
     'show_in_nav_menus'          => true,
     'show_tagcloud'              => true,
   );
-  register_taxonomy( 'places', array( 'post', 'emulsion', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cityburns'), $args );
+  register_taxonomy( 'places', array( 'post', 'emulsion', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cityburns', '4k-lento'), $args );
 }
 add_action( 'init', 'places_taxonomy', 0 );
 
