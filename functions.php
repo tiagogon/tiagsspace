@@ -955,7 +955,7 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
             //Get posts with the Serie of the current post
             $args = array(
                 'post_type' => 'log',
-                'post_status' => array( 'publish' ),
+                'post_status' => array( 'publish', 'private' ),
                 'order'     => 'ASC',
 				'posts_per_page'   => -1,
                 'tax_query' => array(
