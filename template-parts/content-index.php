@@ -54,7 +54,11 @@ Index of posts for Home and Archives
                     $next_post = "";
                     $next_post_type = "";
                     $next_post_year = "";
+                    $hide_figcaption = "";
 
+                    if ($post_type == "4k-lento"){
+                        $hide_figcaption = "hide-figcaption";
+                    }
 
 
                     // Diferent Grid size for this item -- Ex: FILMS
@@ -125,7 +129,7 @@ Index of posts for Home and Archives
                         if ($count == 1 OR !($next_post_type == "log") OR !($next_post_year == $year)) { ?>
                             <li id="post-group-<?php echo $count; ?>" class="loadpost post-group <?php echo $grid; ?> <?php echo $post_type; ?>-thumb item item<?php echo $count; ?> item-post" <?php post_class('clearfix'); ?> role="article">
                                 <figure>
-                                    <figcaption>
+                                    <figcaption class="<?php echo $hide_figcaption;?>">
                                         <p class="series">log</p>
                         <?php }
 
@@ -372,7 +376,7 @@ Index of posts for Home and Archives
                                     </div>
 
 
-                                    <figcaption>
+                                    <figcaption  class="<?php echo $hide_figcaption;?>">
 
                                         <?php
                                         // Is series archive
@@ -459,7 +463,7 @@ Index of posts for Home and Archives
 
                                     <a href="<?php echo get_permalink(); ?>" rel="bookmark">
 
-                                        <figcaption>
+                                        <figcaption  class="<?php echo $hide_figcaption;?>">
 
                                             <p class="series"><?php echo $obj->labels->name;?></p>
 

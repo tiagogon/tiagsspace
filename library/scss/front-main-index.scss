@@ -214,6 +214,9 @@ li.item-post {
           margin-bottom: 6px;
         }
       }
+      figcaption.hide-figcaption{
+          opacity: 0;
+      }
     }
     box-shadow: 8px 8px 8px $magic-pink-darker;
     //@include transition(background-color 1s ease);
@@ -253,6 +256,14 @@ li.item-post {
           color: $white;
           @include transition(color 1.5s ease);
         }
+      }
+      figcaption.hide-figcaption{
+          opacity: 1;
+          -webkit-transition: opacity 0.5s ease-in-out;
+            -moz-transition: opacity 0.5s ease-in-out;
+            -ms-transition: opacity 0.5s ease-in-out;
+            -o-transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.5s ease-in-out;
       }
     }
   }
