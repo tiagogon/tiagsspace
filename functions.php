@@ -1433,9 +1433,6 @@ function romanic_number($integer, $upcase = true)
 }
 
 
-
-
-
 /// ------------ Background Colours --
 // -----------------------------------
 // -----------------------------------
