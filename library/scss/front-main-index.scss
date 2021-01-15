@@ -679,6 +679,7 @@ li.log-thumb.post-group {
 
 .archive-navigation{
     margin-bottom: 60px;
+    height: 60px;
     @media (min-width: map-get($grid-breakpoints, sm)) {
       padding-left: 40px;
       padding-right: 40px;
