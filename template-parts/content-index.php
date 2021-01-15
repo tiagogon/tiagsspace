@@ -446,12 +446,22 @@ Index of posts for Home and Archives
                                             <?php }  ?>
                                         <?php }*/ ?>
 
-                                        <h2>
-                                            <?php
 
+                                        <?php if ( $post_type == "hyper") {?>
+                                            <h2>
+                                                <?php echo "4KL".sprintf("%02d", number_of_the_post($post->ID))." ";?><?php the_title(); ?>
+                                            </h2>
+                                        <?php }elseif (
+                                            $post_type == "4k-lento") {?>
+                                            <h2>
+                                                <?php echo "4KL".sprintf("%02d", number_of_the_post($post->ID))." ";?><?php the_title(); ?>
+                                            </h2>
+                                        <?php } else { ?>
+                                            <h2>
+                                                <?php the_title();?>
+                                            </h2>
+                                        <?php  } ?>
 
-                                            the_title();?>
-                                        </h2>
 
 
                                     </figcaption>

@@ -231,11 +231,11 @@ li.item-post {
         @include transition(background-color 1s ease-in-out);
         img{
           opacity: 0.4; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
-          -webkit-transition: opacity 0.5s ease-in-out;
-            -moz-transition: opacity 0.5s ease-in-out;
-            -ms-transition: opacity 0.5s ease-in-out;
-            -o-transition: opacity 0.5s ease-in-out;
-            transition: opacity 0.5s ease-in-out;
+          -webkit-transition: opacity 1s ease-in-out;
+            -moz-transition: opacity 1s ease-in-out;
+            -ms-transition: opacity 1s ease-in-out;
+            -o-transition: opacity 1s ease-in-out;
+            transition: opacity 1s ease-in-out;
         }
       }
       box-shadow: 8px 8px 12px $magic-pink-darker-darker;
@@ -250,20 +250,20 @@ li.item-post {
         @include transition(bottom 1s ease-in-out);
         .series{
           color: $white;
-          @include transition(color 1.5s ease);
+          @include transition(color 1s ease);
         }
         h2{
           color: $white;
-          @include transition(color 1.5s ease);
+          @include transition(color 1s ease);
         }
       }
       figcaption.hide-figcaption{
           opacity: 1;
-          -webkit-transition: opacity 0.5s ease-in-out;
-            -moz-transition: opacity 0.5s ease-in-out;
-            -ms-transition: opacity 0.5s ease-in-out;
-            -o-transition: opacity 0.5s ease-in-out;
-            transition: opacity 0.5s ease-in-out;
+          -webkit-transition: opacity 1s ease-in-out;
+            -moz-transition: opacity 1s ease-in-out;
+            -ms-transition: opacity 1s ease-in-out;
+            -o-transition: opacity 1s ease-in-out;
+            transition: opacity 1s ease-in-out;
       }
     }
   }

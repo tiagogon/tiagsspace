@@ -16,7 +16,12 @@ Single // log Archive pages >> Content
                 // Hyper series number
                 if (is_singular('hyper')) {
 
-                    echo 'H'.sprintf("%02d", number_of_the_post($post->ID)).', ';
+                    echo 'H'.sprintf("%02d", number_of_the_post($post->ID)).' ';
+
+                }
+                if (is_singular('4k-lento')) {
+
+                    echo '4KL'.sprintf("%02d", number_of_the_post($post->ID)).' ';
 
                 }
 
