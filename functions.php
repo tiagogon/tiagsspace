@@ -1260,7 +1260,7 @@ function wptuts_feedimgs($content) {
             // get images atached to the post
             $content =  $imageshtml;
 
-        } elseif ($post_type == 'hyper') {
+        } elseif ($post_type == 'hyper' OR $post_type == '4k-lento') {
 
             $imageshtml = '<a href="'. get_permalink($post->ID) .'" class="webfeedsFeaturedVisual"><img src="'. wp_get_attachment_url( get_post_thumbnail_id($post->ID) ).'"/></a>
                     <p>view the complete set <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
