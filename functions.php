@@ -1334,7 +1334,7 @@ function number_of_the_post($post_ID)
     $count='';
 
     global $wpdb;
-    $count = $wpdb->get_var("SELECT count(*) FROM $wpdb->posts  WHERE post_status='publish' AND post_type='$post_type' AND post_date<='{$date}'");
+    $count = $wpdb->get_var("SELECT count(*) FROM $wpdb->posts  WHERE (post_status='publish' OR post_status='private') AND post_type='$post_type' AND post_date<='{$date}'");
 
     return $count;
 }
