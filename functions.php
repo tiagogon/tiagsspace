@@ -2084,21 +2084,21 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 // Activate ajax on the frontend
 
 // define ajax url as a global variable on the frontend
-function example_ajax_enqueue() {
-	// Enqueue javascript on the frontend.
-	wp_enqueue_script(
-		'example-ajax-script',
-		get_template_directory_uri() . '/js/simple-ajax-example.js',
-		array('jquery')
-	);
-	// The wp_localize_script allows us to output the ajax_url path for our script to use.
-	wp_localize_script(
-		'example-ajax-script',
-		'example_ajax_obj',
-		array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
-	);
-}
-add_action( 'wp_enqueue_scripts', 'example_ajax_enqueue' );
+	function example_ajax_enqueue() {
+		// Enqueue javascript on the frontend.
+		wp_enqueue_script(
+			'example-ajax-script',
+			get_template_directory_uri() . '/library/js/simple-ajax-example.js',
+			array('jquery')
+		);
+		// The wp_localize_script allows us to output the ajax_url path for our script to use.
+		wp_localize_script(
+			'example-ajax-script',
+			'example_ajax_obj',
+			array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
+		);
+	}
+	add_action( 'wp_enqueue_scripts', 'example_ajax_enqueue' );
 
 // ----------------------
 //
