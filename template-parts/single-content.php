@@ -35,11 +35,6 @@ Single // log Archive pages >> Content
             <?php }?>
 
         </h1>
-        <?php /* ?>
-        <p class="meta">
-            <?php echo taxonomy_list($post->ID,'with', 'with ', ' in ', ', ', ' & ', 'link'); ?><?php echo taxonomy_list($post->ID,'places', '', ' // ', ', ', ' & ', 'link'); ?><?php echo taxonomy_list($post->ID,'from', '', '', ', ', ' & ', 'link'); ?>
-        </p>
-        */ ?>
     </div>
 
 </header> <!-- end article header -->
@@ -60,7 +55,6 @@ if (is_singular() && !is_page()) {
       //'from',
       //'places',
       'medium',
-      'with',
       'post_tag'
       //'category',
       //'log-branch'
@@ -70,7 +64,7 @@ if (is_singular() && !is_page()) {
                   'order' => 'ASC',
                   'fields' => 'all');
 
-    $terms = wp_get_post_terms($post->ID, $taxonomies, $args);
+    $terms = get_the_terms($post->ID, $taxonomies, $args);
 
     if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
 
