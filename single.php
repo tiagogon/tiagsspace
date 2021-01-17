@@ -2,7 +2,31 @@
 
 <div class="single-wrapper">
 
-	<article id="?p=<?php the_ID(); ?>" <?php post_class('clearfix'); ?> role="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<article    id="?p=<?php the_ID(); ?>"
+                <?php post_class( array('clearfix', 'first-block')); ?>
+                role="article" itemscope itemtype="http://schema.org/BlogPosting"
+
+                <?php
+                $background_image = get_field('background_image');
+                if ($background_image) {
+                    echo 'style="
+                    /* Location of the image */
+                      background-image: url('.esc_url($background_image['url']).');
+
+                      /* Background image is centered vertically and horizontally at all times */
+                      background-position: center center;
+
+                      /* Background image doesnt tile */
+                      background-repeat: no-repeat;
+
+                      /* Background image is fixed in the viewport so that it doesnt move when
+                         the contents height is greater than the images height
+                      background-attachment: fixed; */
+
+                      /* This is what makes the background image rescale based
+                         on the containers size */
+                      background-size: cover;"';
+                }?> >
 
 		<?PHP
 		// Video

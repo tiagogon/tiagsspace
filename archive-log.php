@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-	<div id="archive-log" class="archive-wrapper" role="main">
+	<div id="archive-log" class="archive-wrapper first-block" role="main">
 
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 

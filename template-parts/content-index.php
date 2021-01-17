@@ -5,8 +5,7 @@ Index of posts for Home and Archives
 
 */ ?>
 
-
-    <div class="container-fluid side-padding series-block front-block " id="index">
+    <div class="first-block container-fluid side-padding series-block front-block " id="index">
 
         <div id="main" role="main" class="">
 
