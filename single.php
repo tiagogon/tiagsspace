@@ -1,32 +1,32 @@
  <?php get_header(); ?>
 
-<div class="single-wrapper">
+<div class="single-wrapper first-block"
+<?php
+// Background Image for 4k Lento et all
+$background_image = get_field('background_image');
+if ($background_image) {
+    echo 'style="
+    /* Location of the image */
+      background-image: url('.esc_url($background_image['url']).');
+
+      /* Background image is centered vertically and horizontally at all times */
+      background-position: center center;
+
+      /* Background image doesnt tile */
+      background-repeat: no-repeat;
+
+      /* Background image is fixed in the viewport so that it doesnt move when
+         the contents height is greater than the images height
+      background-attachment: fixed; */
+
+      /* This is what makes the background image rescale based
+         on the containers size */
+      background-size: cover;"';
+}?>>
 
 	<article    id="?p=<?php the_ID(); ?>"
-                <?php post_class( array('clearfix', 'first-block')); ?>
-                role="article" itemscope itemtype="http://schema.org/BlogPosting"
-
-                <?php
-                $background_image = get_field('background_image');
-                if ($background_image) {
-                    echo 'style="
-                    /* Location of the image */
-                      background-image: url('.esc_url($background_image['url']).');
-
-                      /* Background image is centered vertically and horizontally at all times */
-                      background-position: center center;
-
-                      /* Background image doesnt tile */
-                      background-repeat: no-repeat;
-
-                      /* Background image is fixed in the viewport so that it doesnt move when
-                         the contents height is greater than the images height
-                      background-attachment: fixed; */
-
-                      /* This is what makes the background image rescale based
-                         on the containers size */
-                      background-size: cover;"';
-                }?> >
+                <?php post_class( array('clearfix', '')); ?>
+                role="article" itemscope itemtype="http://schema.org/BlogPosting">
 
 		<?PHP
 		// Video
@@ -84,56 +84,55 @@
 
 	</article>
 
-</div>
 
-<?php // PAGINATION links
 
-$post_type = get_post_type($post->ID);
+    <div class="single-navigation container-fluid side-padding">
+        <div class="row justify-content-between">
 
-if ($post_type == "hyper" OR $post_type == "4k-lento") {
+            <?php // PAGINATION links
 
-    //number
-	$next_number = number_of_the_post($post->ID) + 1;
-	$previous_number = number_of_the_post($post->ID) - 1;
+            $post_type = get_post_type($post->ID);
 
-    //prefix
-    if ($post_type == "hyper") {
-        $prefix = "H";
-    }
-    if ($post_type == "4k-lento") {
-        $prefix = "4KL";
-    }
+            if ($post_type == "hyper" OR $post_type == "4k-lento") {
 
-    // final sring
-    $next_string = $prefix.sprintf("%02d", $next_number);
-	$previous_string = $prefix.sprintf("%02d", $previous_number);
-	?>
+                //number
+            	$next_number = number_of_the_post($post->ID) + 1;
+            	$previous_number = number_of_the_post($post->ID) - 1;
 
-	<div class="single-navigation container-fluid side-padding">
-		<div class="row justify-content-between">
-	        <nav class="nav-next col-24">
-	            <span><?php next_post_link('%link', '< '.$next_string); ?></span>
-	        </nav>
-	        <nav class="nav-previous col-24">
-	        	<span><?php previous_post_link('%link', $previous_string.' >'); ?></span>
-	        </nav>
+                //prefix
+                if ($post_type == "hyper") {
+                    $prefix = "H";
+                }
+                if ($post_type == "4k-lento") {
+                    $prefix = "4KL";
+                }
+
+                // final sring
+                $next_string = $prefix.sprintf("%02d", $next_number);
+            	$previous_string = $prefix.sprintf("%02d", $previous_number);
+            	?>
+
+    	        <nav class="nav-next col-24">
+    	            <span><?php next_post_link('%link', '< '.$next_string); ?></span>
+    	        </nav>
+    	        <nav class="nav-previous col-24">
+    	        	<span><?php previous_post_link('%link', $previous_string.' >'); ?></span>
+    	        </nav>
+
+            <?php } else { ?>
+
+    	        <nav class="nav-next col-24">
+    	            <span><?php next_post_link('%link', '< Future'); ?></span>
+    	        </nav>
+    	        <nav class="nav-previous col-24">
+    	        	<span><?php previous_post_link('%link', 'Past >'); ?></span>
+    	        </nav>
+
+            <?php } ?>
+
         </div>
-	</div>
-
-<?php } else { ?>
-
-	<div class="single-navigation container-fluid side-padding">
-		<div class="row justify-content-between">
-	        <nav class="nav-next col-24">
-	            <span><?php next_post_link('%link', '< Future'); ?></span>
-	        </nav>
-	        <nav class="nav-previous col-24">
-	        	<span><?php previous_post_link('%link', 'Past >'); ?></span>
-	        </nav>
-		</div>
-	</div>
-
-<?php } ?>
+    </div>
+</div>
 
 <?php // get related posts
 
