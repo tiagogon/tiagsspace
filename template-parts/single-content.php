@@ -72,7 +72,7 @@ if (is_singular() && !is_page()) {
             $taxonomies_string = $taxonomies_string.'<a href="' . esc_url( get_term_link( $term ) ) . '">#' . str_replace(" ","",$term->name) . '</a> ';
         }
 
-        $taxonomies_string = $taxonomies_string.get_edit_post_link('#edit', ' ', ''); // Edit post link for loged in users
+        //$taxonomies_string = $taxonomies_string.get_edit_post_link('#edit', ' ', ''); // Edit post link for loged in users
 
     }
 
