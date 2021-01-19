@@ -53,6 +53,9 @@
         color: $magic-pink;
       }
     }
+    ol, ul, dl {
+        padding: $grid-gutter-width;
+    }
     margin-bottom: 40px;
   }
   footer{
