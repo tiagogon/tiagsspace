@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-	<div class="single-wrapper">
+	<div class="single-wrapper first-block">
 
 		<article id="post-<?php the_ID(); ?>" <?php post_class('clearfix'); ?> role="article" itemscope itemtype="http://schema.org/BlogPosting">
 
@@ -14,9 +14,9 @@
 			}?>
 
 			<div class="container single-content">
-			    
+
 			    <div class="clearfix row">
-			    
+
 			        <div id="main" class="<?php content_wrap() ?> clearfix" role="main">
 
 			            <?php if (have_posts()) : while (have_posts()) : the_post();?>
@@ -25,8 +25,8 @@
 							get_template_part( 'template-parts/single', 'content' );
 							?>
 
-			            <?php endwhile; ?>          
-			            
+			            <?php endwhile; ?>
+
 			            <?php else : ?>
 
 			                <header>
@@ -37,19 +37,19 @@
 			                </section>
 			                <footer>
 			                </footer>
-			            
+
 			            <?php endif; ?>
-			    
+
 			        </div> <!-- end #main -->
-			  
+
 			        <?php // get_sidebar(); // sidebar 1 ?>
-			  
+
 			    </div> <!-- end #content -->
 
 			</div> <!-- end #container -->
 
 		</article>
-	
+
 	</div>
-		
+
 <?php get_footer(); ?>
