@@ -1384,7 +1384,6 @@ function number_of_images_in_the_post_type($in_post_type) {
 }
 
 
-
 // ---------------- // ----------------
 // ---------------- // ----------------
 // - NUMBER OF days of a series ---- --
