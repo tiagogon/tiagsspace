@@ -1454,12 +1454,6 @@ function add_color_class( $classes ) {
         $classes[] = 'none-white-bg';
         $classes[] = 'deep-purple';
 
-	// Is 4k Lento
-} elseif ((is_singular( '4k-lento' ) && $selected_color==0)) {
-
-		$classes[] = 'none-white-bg';
-		$classes[] = 'deep-purple';
-
 	// Is Dusk single
     } elseif ((is_singular( 'dusk' ) && $selected_color==0)) {
 
@@ -1483,6 +1477,11 @@ function add_color_class( $classes ) {
 
     // Is Films single
     } elseif ((is_singular( 'films' ) && $selected_color==0)) {
+		$classes[] = 'none-white-bg';
+		$classes[] = 'dark';
+
+    // If 4k lento
+	} elseif ((is_singular( '4k-lento' ) && $selected_color==0)) {
 		$classes[] = 'none-white-bg';
 		$classes[] = 'dark';
 
