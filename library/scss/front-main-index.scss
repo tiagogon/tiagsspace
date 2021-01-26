@@ -30,7 +30,7 @@ ul.thumb-container{
 .year-separator{
   text-align: left;
   font-size: 18px;
-  margin: 40px 0 0;
+  margin: ($grid-gutter-width / 2) 0 0;
   font-style: italic;
   font-weight:400;
   // @media (max-width: map-get($grid-breakpoints, sm)) {

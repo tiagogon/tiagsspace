@@ -498,9 +498,9 @@ function tsm_convert_id_to_term_in_query($query) {
     // Register Custom Post Type cityburns.com // ARCHIVED
     function custom_post_type_cityburns() {
       $labels = array(
-        'name'                => _x( 'cityburns', 'Post Type General Name', 'text_domain' ),
-        'singular_name'       => _x( 'CB', 'Post Type Singular Name', 'text_domain' ),
-        'menu_name'           => __( 'CB', 'text_domain' ),
+        'name'                => _x( 'City', 'Post Type General Name', 'text_domain' ),
+        'singular_name'       => _x( 'City', 'Post Type Singular Name', 'text_domain' ),
+        'menu_name'           => __( 'City', 'text_domain' ),
         'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
         'all_items'           => __( 'All CB Posts', 'text_domain' ),
         'view_item'           => __( 'View CB Post', 'text_domain' ),
