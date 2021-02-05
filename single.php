@@ -134,7 +134,7 @@ if ($background_image) {
     </div>
 </div>
 
-<!-- Relate posts section -->
+
 <div class="container-fluid side-padding yarpp-related">
     <div class="row justify-content-between">
         <nav class="nav-next col-24">
@@ -142,6 +142,8 @@ if ($background_image) {
         </nav>
     </div>
 </div>
+
+<?php  related_posts(); ?>
 
 
 <?php // get Footer
