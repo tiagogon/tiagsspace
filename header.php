@@ -146,7 +146,7 @@
 				<div id="topbar">
 					<ul id="menu">
 						<?php if (!is_home()) { ?>
-							<li class=""><a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>">all</a></li>
+							<li class=""><a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>">Space</a></li>
 						<?php } ?>
 
 						<?php
@@ -203,7 +203,7 @@
 				<div class="submenu submenu-log col-xs-48 col-sm-48 col-md-48">
 					<ul>
 
-						<li><a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if (is_post_type_archive('log')) { echo "active";} ?>">all</a></li>
+						<li><a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if (is_post_type_archive('log')) { echo "active";} ?>">Space</a></li>
 
 						<li><a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">blwww</a></li>
 
