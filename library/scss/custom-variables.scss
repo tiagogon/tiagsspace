@@ -14,23 +14,23 @@ $gray-lighter:           lighten(#000, 93.5%); // #eee
 $white:      		#fff; //#F5F5F5; // Light Grey
 
 
-// Color Combinations
-// -------------------------
+// Brand Colors
+$blue: 			      #3c00f5;
+$blue-darker:         #23008e; // shadow
+$blue-light: 	      #dfd4ff; // blue ligh when mouse is houver
+$red: 			      #ff001e;
+$red-darker:          #990012; // shadow
+$red-light: 	      #ffb5be; // blue ligh when mouse is houver
 
-$blue: 					   #3c00f5; // Dusk color
-$blue-pink-darker: 		   #23008e; // shadow
-$blue-light: 			   #dfd4ff; // blue ligh when mouse is houver!!
 
-$blue-pink-darker-darker:  #8c0000; // shadow & houver ????
-
-$magic-pink: 			   $blue; // PINK OLD COLOR: #fe0000; //none-white-bg
-$magic-pink-darker: 	   $blue-pink-darker; // Old pink version #d00000; // shadow
-$magic-pink-darker-darker: $blue-light; // old pink version #8c0000; // shadow & houver
+$brand-color: 			    $red; // PINK OLD COLOR: #fe0000; //none-white-bg
+$brand-color-darker: 	    $red-darker; // Old pink version #d00000; // shadow
+$brand-color-darker-darker: $red-light; // old pink version #8c0000; // shadow & houver
 $dark: 					   #222222; //none-white-bg
 $indigo: 				   $palette-Indigo-400; //none-white-bg
 $deep-purple: 			   #3c00f5; // HYPER SERIES COLOR
 $lime: 					   $palette-Lime-400;
-$yellow: 				   $palette-Blue-Grey-50; // $palette-Deep-Purple-50; //;
+$yellow: 				   $white; // $palette-Deep-Purple-50; //;
 $yellow-light: 	           $white;
 
 // OTHER

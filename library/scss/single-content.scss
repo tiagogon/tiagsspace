@@ -50,7 +50,7 @@
     p{
         // text-align: justify;
       a{
-        color: $magic-pink;
+        color: $brand-color;
       }
     }
     ol, ul, dl {
@@ -139,18 +139,18 @@
 
 
 // Tags matching colors and Single Navigation links
-.magic-pink{
+.brand-color{
   .single-content{
     footer{
       ul{
         li{
           a{
-            color: $magic-pink;
+            color: $brand-color;
             background-color: $white;
             @include transition(all 1s ease-out);
             &:hover{
               color: $white;
-              background-color: $magic-pink;
+              background-color: $brand-color;
               @include transition(all 1s ease-out);
             }
           }
@@ -164,11 +164,11 @@
     section.post-content{
       p{
         a{
-          color: $magic-pink;
+          color: $brand-color;
           border-bottom: 1px solid transparent;
           @include transition(all 1s ease-out);
           &:hover{
-            border-bottom: 1px solid $magic-pink;
+            border-bottom: 1px solid $brand-color;
             @include transition(all 1s ease-out);
           }
         }
@@ -193,18 +193,18 @@
     }
   }
 }
-.deep-purple{
+.brand-color{
   .single-content{
     footer{
       ul{
         li{
           a{
-            color: $deep-purple;
+            color: $brand-color;
             background-color: $white;
             @include transition(all 1s ease-out);
             &:hover{
               color: $white;
-              background-color: $deep-purple;
+              background-color: $brand-color;
               @include transition(all 1s ease-out);
             }
           }

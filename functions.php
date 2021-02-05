@@ -1450,7 +1450,7 @@ function add_color_class( $classes ) {
                 OR is_post_type_archive('hyper')) {
 
         $classes[] = 'none-white-bg';
-        $classes[] = 'deep-purple';
+        $classes[] = 'brand-color';
 
 	// Is Dusk single
     } elseif ((is_singular( 'dusk' ) && $selected_color==0)) {
@@ -1492,9 +1492,9 @@ function add_color_class( $classes ) {
             $classes[] = 'header-ligh';
         } elseif ($selected_color=="yellow") {
             $classes[] = 'header-ligh';
-        } elseif ($selected_color=="magic-pink") {
+        } elseif ($selected_color=="brand-color") {
             $classes[] = 'none-white-bg';
-        } elseif ($selected_color=="deep-purple") {
+        } elseif ($selected_color=="brand-color") {
             $classes[] = 'none-white-bg';
         } elseif ($selected_color=="indigo") {
             $classes[] = 'none-white-bg';
@@ -1513,7 +1513,7 @@ function add_color_class( $classes ) {
         // Default color
         } else {
             $classes[] = 'none-white-bg';
-            $classes[] = 'magic-pink'; // $default_color;
+            $classes[] = 'brand-color'; // $default_color;
         }
 
     }

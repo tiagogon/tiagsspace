@@ -7,8 +7,8 @@
   padding-top: 60px;
   padding-bottom: 0px;
   h3 {
-    color: $magic-pink;
-    /*border-bottom: 2px solid $magic-pink;*/
+    color: $brand-color;
+    /*border-bottom: 2px solid $brand-color;*/
     margin-bottom: 15px;
     font-size: 18px;
     font-style: italic;
@@ -18,11 +18,11 @@
     display: inline-block;
   }
   p{
-    color: $magic-pink;
+    color: $brand-color;
     font-style: italic;
 
     a{
-      color: $magic-pink;
+      color: $brand-color;
     }
   }
   ul {
@@ -37,7 +37,7 @@
       a {
         position: relative;
         outline: none;
-        color: $magic-pink;
+        color: $brand-color;
 
         text-transform: uppercase;
         font-size: 18px;
@@ -60,8 +60,8 @@
       input.input-field{
         width: 240px;
         max-width: 64%;
-        background: $yellow;
-        color: $magic-pink;
+        background: $gray-lighter;
+        color: $brand-color;
         padding: 8px 12px;
         border-width: 0px;
         border-style: inset;
@@ -77,14 +77,14 @@
         }
       }
       input.input-field::placeholder {
-        color: $magic-pink;
+        color: $brand-color;
         font-style: italic;
         font-size: 16px;
 
         font-weight: 600;
       }
       input.input-button{
-        background: $magic-pink;
+        background: $brand-color;
         color: $white;
         padding: 8px 12px;
         border-width: 0px;
@@ -127,13 +127,13 @@
     margin-top: 10px;
   	margin-bottom: 30px;
   	p{
-  	  color: $magic-pink;
+  	  color: $brand-color;
       // font-style: italic;
       font-size: 16px;
       // text-transform: uppercase;
       font-weight: 600;
   		a{
-  		  color: $magic-pink;
+  		  color: $brand-color;
   		}
   	}
   }
@@ -144,7 +144,7 @@
 
 .post-type-archive-log,.single-log,.tax-log-branch{
     #social-block{
-      background: $magic-pink;
+      background: $brand-color;
       h3 {
         color: $white;
       }
@@ -165,22 +165,22 @@
         form{
           input.input-field{
             background: $yellow;
-            color: $magic-pink;
-            border-color: $magic-pink;
+            color: $brand-color;
+            border-color: $brand-color;
           }
           input.input-field::placeholder {
-            color: $magic-pink;
+            color: $brand-color;
           }
           input.input-button{
             background: $white;
-            color: $magic-pink;
-            border-color: $magic-pink;
+            color: $brand-color;
+            border-color: $brand-color;
           }
         }
       }
     }
     #footer-block{
-    	background: $magic-pink;
+    	background: $brand-color;
       .attribution{
       	p{
       	  color: $white;

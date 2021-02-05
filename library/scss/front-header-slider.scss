@@ -229,7 +229,7 @@
 // TO DELETE WHEN YOU SEE IT _ for now it stays as backup
 // .home{
 //   #site-header{
-//     background: $magic-pink;
+//     background: $brand-color;
 //   }
 // }
 // .home.paged{
@@ -240,7 +240,7 @@
 // }
 // .post-type-archive-hyper,.single-hyper{
 //   #site-header{
-//     background: $deep-purple;
+//     background: $brand-color;
 //   }
 // }
 // .post-type-archive-emulsion,.single-emulsion{
@@ -460,7 +460,7 @@
             @include transition(all 1s ease-out);
             &:hover{
               background-color: $white;
-              color: $magic-pink;
+              color: $brand-color;
               @include transition(all 1s ease-out);
             }
           }
@@ -485,18 +485,18 @@
             @include transition(all 1s ease-out);
             &:hover{
               background-color: $white;
-              color: $deep-purple;
+              color: $brand-color;
               @include transition(all 1s ease-out);
             }
           }
           a.active {
               background-color: $white;
-              color: $deep-purple;
+              color: $brand-color;
               @include transition(all 1s ease-out);
           }
           a.belongs {
               background-color: $white;
-              color: $deep-purple;
+              color: $brand-color;
               @include transition(all 1s ease-out);
           }
         }
@@ -549,18 +549,18 @@
             @include transition(all 1s ease-out);
             &:hover{
               background-color: $white;
-              color: $magic-pink;
+              color: $brand-color;
               @include transition(all 1s ease-out);
             }
           }
           a.active {
               background-color: $white;
-              color: $magic-pink;
+              color: $brand-color;
               @include transition(all 1s ease-out);
           }
           a.belongs {
               background-color: $white;
-              color: $magic-pink;
+              color: $brand-color;
               @include transition(all 1s ease-out);
           }
         }
@@ -573,7 +573,7 @@
 // Make header bar with color Indigo for LOG
 .post-type-archive-log {
   #site-header{
-    //background: $deep-purple;
+    //background: $brand-color;
   }
 }
 
@@ -781,7 +781,7 @@
   }
 }
 .overlay-hugeinc.open {
-  background: $magic-pink;
+  background: $brand-color;
   opacity:0.95;
   visibility:visible;
   -webkit-transition:opacity 0.5s;

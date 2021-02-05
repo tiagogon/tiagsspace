@@ -44,17 +44,17 @@ div.gallery{
 		}
   }
   div.thumbnail.media-audio{
-  	background-color: $magic-pink;
+  	background-color: $brand-color;
   	figure{
 		.imgcontainer{
 			.mejs-container {
-  				background-color: $magic-pink;
+  				background-color: $brand-color;
 			    position: absolute;
 			    bottom: 0%;
 			    height: 100%!important;
 				font-family: $font-family-sans-serif!important;
 			    .mejs-controls{
-			    	background-color: $magic-pink;
+			    	background-color: $brand-color;
 
 					.mejs-time {
 					    display: none!important;
@@ -76,7 +76,7 @@ div.gallery{
 							background-color: $white;
 			    		}
 						.mejs-time-loaded {
-						    background: $magic-pink;
+						    background: $brand-color;
 						}
 			    	}
 			    }

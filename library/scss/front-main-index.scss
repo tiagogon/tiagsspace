@@ -62,7 +62,7 @@ ul.thumb-container{
   @media (max-width: map-get($grid-breakpoints, sm)) {
     display: none;
   }
-  background-color: $magic-pink;
+  background-color: $brand-color;
   padding-top: 40px;
   padding-bottom: 20px;
   h3 {
@@ -148,7 +148,7 @@ li.item-post {
       .imgcontainer{
         margin-bottom: 30px;
         margin-bottom: 0px;
-        background: $magic-pink;
+        background: $brand-color;
         @include transition(background-color 1s ease-in-out);
         img{
           outline: none;
@@ -232,7 +232,7 @@ li.item-post {
           opacity: 0;
       }
     }
-    box-shadow: 8px 8px 8px $magic-pink-darker;
+    box-shadow: 8px 8px 8px $brand-color-darker;
     //@include transition(background-color 1s ease);
     @include transition(box-shadow 1s ease);
 
@@ -252,8 +252,8 @@ li.item-post {
             transition: opacity 1s ease-in-out;
         }
       }
-      box-shadow: 8px 8px 12px $magic-pink-darker-darker;
-      //background-color: $magic-pink;
+      box-shadow: 8px 8px 12px $brand-color-darker-darker;
+      //background-color: $brand-color;
       @include transition(background-color 1s ease);
       @include transition(box-shadow 1s ease);
       @media (max-width: map-get($grid-breakpoints, sm)) {
@@ -411,7 +411,7 @@ li.films-thumb {
 
     &:hover{
       .imgcontainer{
-        background: $magic-pink;
+        background: $brand-color;
         @include transition(background-color 1s ease-in-out);
         img{
           opacity: 0.6;
@@ -478,7 +478,6 @@ li.films-thumb {
 
           .imgcontainer{
             margin-bottom: 0px;
-            background: $deep-purple;
             @include transition(background-color 1s ease-in-out);
             img{
               opacity: 1;
@@ -593,11 +592,11 @@ li.log-thumb {
         padding-right: 0;
         padding-bottom: 0;
         .series{
-          color: $magic-pink;
+          color: $brand-color;
           margin-bottom: 18px;
         }
         h2{
-          color: $magic-pink;
+          color: $brand-color;
           line-height: 2;
           .branch{
             display: none;
@@ -610,7 +609,7 @@ li.log-thumb {
     }
     @include transition(all 1s ease-out);
     &:hover{
-      background-color: $magic-pink;
+      background-color: $brand-color;
       @include transition(all 1s ease-out);
       figcaption{
         .series{
@@ -638,7 +637,7 @@ li.log-thumb.post-group {
           font-size: 12px;
           font-style: italic;
           margin: 0px 0 6px 0;
-          color: $magic-pink;
+          color: $brand-color;
           margin-bottom: 18px;
           text-transform: uppercase;
           font-weight: 600;
@@ -646,14 +645,14 @@ li.log-thumb.post-group {
         a{
           padding: 0;
           h2{
-            color: $magic-pink;
+            color: $brand-color;
             // overflow: hidden; //it hides acentos
             font-size: 18px;
             font-style: italic;
             text-transform: uppercase;
             line-height: 1;
             margin: 0;
-            color: $magic-pink;
+            color: $brand-color;
             line-height: 2;
             .branch{
               @media (min-width: map-get($grid-breakpoints, sm)) {
@@ -674,7 +673,7 @@ li.log-thumb.post-group {
       }
     @include transition(all 1s ease-out);
     &:hover{
-      background-color: $magic-pink;
+      background-color: $brand-color;
       @include transition(all 1s ease-out);
       figcaption{
         .series{
