@@ -134,16 +134,18 @@ if ($background_image) {
     </div>
 </div>
 
-
-<div class="container-fluid side-padding yarpp-related">
-    <div class="row justify-content-between">
-        <nav class="nav-next col-24">
-        <h3>random-reveal</h3>
-        </nav>
+<!-- Related Posts -->
+<?php if (!($post_type == "log")) { ?>
+    <div class="container-fluid side-padding yarpp-related-header">
+        <div class="row justify-content-between">
+            <nav class="nav-next col-24">
+                <h3>random-reveal</h3>
+            </nav>
+        </div>
     </div>
-</div>
+    <?php  related_posts(); ?>
+<?php } ?>
 
-<?php  related_posts(); ?>
 
 
 <?php // get Footer
