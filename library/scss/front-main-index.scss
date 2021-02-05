@@ -7,6 +7,12 @@
     // had space for header menu to be position fixed
     padding-top: ($grid-gutter-width * 2.5);
 }
+.post-type-archive-log, .single-log, .tax-log-branch{
+    .first-block{
+    // had space for header menu to be position fixed
+    padding-top: ($grid-gutter-width * 3.5);
+}
+}
 .yarpp-related{
     .first-block{
         padding-top: 0;
