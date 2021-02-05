@@ -135,6 +135,7 @@ if ($background_image) {
 </div>
 
 <!-- Related Posts -->
+<!-- Does not work in Log Pages -->
 <?php if (!($post_type == "log")) { ?>
     <div class="container-fluid side-padding yarpp-related-header">
         <div class="row justify-content-between">
