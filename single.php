@@ -134,11 +134,15 @@ if ($background_image) {
     </div>
 </div>
 
-<?php // get related posts
+<!-- Relate posts section -->
+<div class="container-fluid side-padding yarpp-related">
+    <div class="row justify-content-between">
+        <nav class="nav-next col-24">
+        <h3>random-reveal</h3>
+        </nav>
+    </div>
+</div>
 
-if( !(is_singular( 'log' ))) {
-	related_posts();
-} ?>
 
 <?php // get Footer
 

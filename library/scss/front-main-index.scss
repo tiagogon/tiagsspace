@@ -59,22 +59,20 @@ ul.thumb-container{
   }
 }
 .yarpp-related{
-  @media (max-width: map-get($grid-breakpoints, sm)) {
-    display: none;
-  }
   background-color: $brand-color;
-  padding-top: 40px;
-  padding-bottom: 20px;
+  padding-bottom: $grid-gutter-width;
+    @media (max-width: map-get($grid-breakpoints, sm)) {
+      padding-bottom: ($grid-gutter-width / 2);
+    }
   h3 {
-    color: #fff;
-    /*border-bottom: 2px solid #fff;*/
-    margin: 0 0 $grid-gutter-width $grid-gutter-width;
+    color: $white;
     font-size: 18px;
     font-style: italic;
     line-height: 1.3;
     background-color: transparent;
     display: inline-block;
     text-transform: uppercase;
+    margin: 0;
   }
   .year-separator{
     display: none!important;
