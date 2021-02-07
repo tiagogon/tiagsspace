@@ -350,7 +350,7 @@ add_action( 'init', 'custom_post_type_hyper', 0 );
 // Register Custom Post Type 4K LENTO
 function custom_post_type_4klento() {
   $labels = array(
-    'name'                => _x( '4k Lento Series', 'Post Type General Name', 'text_domain' ),
+    'name'                => _x( '4k Lento', 'Post Type General Name', 'text_domain' ),
     'singular_name'       => _x( '4k Lento', 'Post Type Singular Name', 'text_domain' ),
     'menu_name'           => __( '4k Lento', 'text_domain' ),
     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
