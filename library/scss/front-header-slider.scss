@@ -8,7 +8,7 @@
   padding-top: 20px;
   padding-bottom: $grid-gutter-width;
   position: fixed;
-  z-index: 10000;
+  z-index: 1000;
   @media (max-width: map-get($grid-breakpoints, sm)) {
     padding-bottom: 20px;
   }
