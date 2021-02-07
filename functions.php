@@ -1044,6 +1044,7 @@ function lm_dequeue_footer_styles()
 
 // -- get diferent favicon on admin backend
 // -------- via: http://goo.gl/MWgn4t
+// -------- generated here: https://www.favicon-generator.org/
 function add_my_favicon() {
    $favicon_path = get_template_directory_uri() . '/favicon.ico';
 
