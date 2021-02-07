@@ -350,23 +350,22 @@ add_action( 'init', 'custom_post_type_hyper', 0 );
 // Register Custom Post Type 4K LENTO
 function custom_post_type_4klento() {
   $labels = array(
-    'name'                => _x( '4k Lento', 'Post Type General Name', 'text_domain' ),
-    'singular_name'       => _x( '4k Lento', 'Post Type Singular Name', 'text_domain' ),
-    'menu_name'           => __( '4k Lento', 'text_domain' ),
+    'singular_name'       => _x( '4K Lento', 'Post Type Singular Name', 'text_domain' ),
+    'menu_name'           => __( '4K Lento', 'text_domain' ),
     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
-    'all_items'           => __( 'All 4k Lento Mixes', 'text_domain' ),
-    'view_item'           => __( 'View 4k Lento Mix', 'text_domain' ),
-    'add_new_item'        => __( 'Add New 4k Lento Mix', 'text_domain' ),
-    'add_new'             => __( 'Add New 4k Lento Mix', 'text_domain' ),
-    'edit_item'           => __( 'Edit 4k Lento Mix', 'text_domain' ),
-    'update_item'         => __( 'Update 4k Lento Mix', 'text_domain' ),
-    'search_items'        => __( 'Search 4k Lento Mix', 'text_domain' ),
+    'all_items'           => __( 'All 4K Lento Mixes', 'text_domain' ),
+    'view_item'           => __( 'View 4K Lento Mix', 'text_domain' ),
+    'add_new_item'        => __( 'Add New 4K Lento Mix', 'text_domain' ),
+    'add_new'             => __( 'Add New 4K Lento Mix', 'text_domain' ),
+    'edit_item'           => __( 'Edit 4K Lento Mix', 'text_domain' ),
+    'update_item'         => __( 'Update 4K Lento Mix', 'text_domain' ),
+    'search_items'        => __( 'Search 4K Lento Mix', 'text_domain' ),
     'not_found'           => __( 'Not found', 'text_domain' ),
     'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
   );
   $args = array(
     'label'               => __( '4k-lento', 'text_domain' ),
-    'description'         => __( '4k Lento description.', 'text_domain' ),
+    'description'         => __( '4K Lento description.', 'text_domain' ),
     'labels'              => $labels,
     'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'trackbacks', 'revisions', 'custom-fields', 'post-formats', ),
     'taxonomies'          => array( 'category', 'post_tag' ),
