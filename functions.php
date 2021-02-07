@@ -1067,7 +1067,7 @@ function add_my_favicon() {
             <meta name="theme-color" content="#f50057">';
 }
 function add_my_favicon_admin() {
-   $favicon_path = get_template_directory_uri() . '/favicon.ico/admin';
+   $favicon_path = get_template_directory_uri() . '/favicon.ico/adminarea';
 
    echo '   <link rel="apple-touch-icon" sizes="57x57" href="'.$favicon_path.'/apple-icon-57x57.png">
             <link rel="apple-touch-icon" sizes="60x60" href="'.$favicon_path.'/apple-icon-60x60.png">
