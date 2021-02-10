@@ -809,22 +809,6 @@ function year_from_taxonomy() {
 }
 add_action( 'init', 'year_from_taxonomy', 0 );
 
-// Set current year as the default one
-function current_year_as_default_year_from( $post_id ) {
-    $current_post = get_post( $post_id );
-
-    // This makes sure the taxonomy is only set when a new post is created
-    if ( $current_post->post_date == $current_post->post_modified ) {
-        wp_set_object_terms( $post_id, date( 'Y' ), 'from', true );
-    }
-}
-add_action( 'auto-draft_post', 'current_year_as_default_year_from' );
-add_action( 'auto-draft_post_dusk', 'current_year_as_default_year_from' );
-add_action( 'auto-draft_post_emulsion', 'current_year_as_default_year_from' );
-add_action( 'auto-draft_post_log', 'current_year_as_default_year_from' );
-add_action( 'auto-draft_post_hyper', 'current_year_as_default_year_from' );
-add_action( 'auto-draft_post_4k-lento', 'current_year_as_default_year_from' );
-add_action( 'auto-draft_post_films', 'current_year_as_default_year_from' );
 
 
 // show taxonomy on the posts lists @admin
@@ -853,6 +837,15 @@ switch($typenow){
 add_action( 'restrict_manage_posts', 'kc_add_taxonomy_filters' );
 
 
+// Show custom Post Types on post_tags archive
+// https://wordpress.stackexchange.com/questions/108067/custom-post-type-taxonomy-tag-archive-no-post-found
+// Tag and Category archive queries default to querying only the post post type, to add your custom post type to those queries, you can use the pre_get_posts action:
+function wpa_cpt_tags( $query ) {
+    if ( $query->is_tag() && $query->is_main_query() ) {
+        $query->set( 'post_type', array( 'post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns', '4k-lento' ) );
+    }
+}
+add_action( 'pre_get_posts', 'wpa_cpt_tags' );
 
 
 // ----------------------------
