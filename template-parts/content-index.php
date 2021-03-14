@@ -168,7 +168,7 @@ Index of posts for Home and Archives
 
                         // Item Sizer for masonry
 
-                        if ($count == 1 && !is_post_type_archive( "hyper" )) {
+                        if ($count == 1) {
                             // echo '<div class="item-sizer '.$grid_base.'"></div>';
                             echo '<div class="item-sizer col-8"></div>';
 
