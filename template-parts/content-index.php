@@ -346,7 +346,14 @@ Index of posts for Home and Archives
                             }
                         } ?>
 
-                        <li id="post-<?php the_ID(); ?>" class="loadpost item <?php echo $grid; ?> <?php echo $post_type; ?>-thumb item<?php echo $count; ?> item-post" <?php post_class('clearfix'); ?> role="article">
+                        <li id="post-<?php the_ID(); ?>" class="loadpost item
+                            <?php echo $grid; ?>
+                            <?php echo $post_type; ?>-thumb
+                            <?php if ($intrinsic_ratio >= 56.25) { // 16:9 percentage ratio (9/16*100)
+                                echo "wide-thumb";
+                            }  ?>
+                            item<?php echo $count; ?>
+                            item-post" <?php post_class('clearfix'); ?> role="article">
 
                             <?php if (!($post_type == "log")) { ?>
 
