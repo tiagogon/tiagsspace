@@ -374,85 +374,7 @@ li.item-post {
 
 
 
-// films THumbnail
-li.films-thumb, li.wide-thumb {
-    //padding-bottom: 0px;
-  figure {
-    //border: 2px dashed;
-    a{
-      //padding: ($grid-gutter-width);
 
-      .imgcontainer{
-        margin-bottom: 0px;
-        background: #666;
-        @include transition(background-color 1s ease-in-out);
-        img{
-          opacity: 0.80;
-          -webkit-transition: opacity 0.5s ease-in-out;
-            -moz-transition: opacity 0.5s ease-in-out;
-            -ms-transition: opacity 0.5s ease-in-out;
-            -o-transition: opacity 0.5s ease-in-out;
-            transition: opacity 0.5s ease-in-out;
-        }
-      }
-      figcaption{
-        .series{
-          color: $white;
-          //font-style: normal;
-        }
-        h2{
-          color: $white;
-        }
-        padding-left: 0;
-        padding-right: 0;
-        position: absolute;
-        bottom: 18%;
-        @include transition(bottom 1s ease-in-out);
-        left: 0;
-        width: 100%;
-        padding: 12px 50px 17px;
-        background-color: transparent;
-        //@include transition(background-color 1.5s ease);
-      }
-    }
-
-    &:hover{
-      .imgcontainer{
-        background: $brand-color;
-        @include transition(background-color 1s ease-in-out);
-        img{
-          opacity: 0.6;
-          -webkit-transition: opacity 0.5s ease-in-out;
-            -moz-transition: opacity 0.5s ease-in-out;
-            -ms-transition: opacity 0.5s ease-in-out;
-            -o-transition: opacity 0.5s ease-in-out;
-            transition: opacity 0.5s ease-in-out;
-        }
-        video{
-          opacity: 0.6;
-          -webkit-transition: opacity 0.5s ease-in-out;
-            -moz-transition: opacity 0.5s ease-in-out;
-            -ms-transition: opacity 0.5s ease-in-out;
-            -o-transition: opacity 0.5s ease-in-out;
-            transition: opacity 0.5s ease-in-out;
-        }
-      }
-      figcaption{
-        bottom: 40%!important;
-        @include transition(bottom 1s ease-in-out);
-        .series{
-          color: $white;
-          @include transition(color 1.5s ease);
-        }
-        h2{
-          color: $white;
-          @include transition(color 1.5s ease);
-        }
-
-      }
-    }
-  }
-}
 
 // films archive
     // .post-type-archive-films{
@@ -581,7 +503,85 @@ li.films-thumb, li.wide-thumb {
     // }
 
 
+    // films THumbnail
+    li.films-thumb, li.wide-thumb {
+        //padding-bottom: 0px;
+      figure {
+        //border: 2px dashed;
+        a{
+          //padding: ($grid-gutter-width);
 
+          .imgcontainer{
+            margin-bottom: 0px;
+            background: #666;
+            @include transition(background-color 1s ease-in-out);
+            img{
+              opacity: 0.80;
+              -webkit-transition: opacity 0.5s ease-in-out;
+                -moz-transition: opacity 0.5s ease-in-out;
+                -ms-transition: opacity 0.5s ease-in-out;
+                -o-transition: opacity 0.5s ease-in-out;
+                transition: opacity 0.5s ease-in-out;
+            }
+          }
+          figcaption{
+            .series{
+              color: $white;
+              //font-style: normal;
+            }
+            h2{
+              color: $white;
+            }
+            padding-left: 0;
+            padding-right: 0;
+            position: absolute;
+            bottom: 18%;
+            @include transition(bottom 1s ease-in-out);
+            left: 0;
+            width: 100%;
+            padding: 12px 50px 17px;
+            background-color: transparent;
+            //@include transition(background-color 1.5s ease);
+          }
+        }
+
+        &:hover{
+          .imgcontainer{
+            background: $brand-color;
+            @include transition(background-color 1s ease-in-out);
+            img{
+              opacity: 0.6;
+              -webkit-transition: opacity 0.5s ease-in-out;
+                -moz-transition: opacity 0.5s ease-in-out;
+                -ms-transition: opacity 0.5s ease-in-out;
+                -o-transition: opacity 0.5s ease-in-out;
+                transition: opacity 0.5s ease-in-out;
+            }
+            video{
+              opacity: 0.6;
+              -webkit-transition: opacity 0.5s ease-in-out;
+                -moz-transition: opacity 0.5s ease-in-out;
+                -ms-transition: opacity 0.5s ease-in-out;
+                -o-transition: opacity 0.5s ease-in-out;
+                transition: opacity 0.5s ease-in-out;
+            }
+          }
+          figcaption{
+            bottom: 40%!important;
+            @include transition(bottom 1s ease-in-out);
+            .series{
+              color: $white;
+              @include transition(color 1.5s ease);
+            }
+            h2{
+              color: $white;
+              @include transition(color 1.5s ease);
+            }
+
+          }
+        }
+      }
+    }
 
 
 // LOG
