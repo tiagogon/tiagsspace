@@ -544,31 +544,27 @@ Index of posts for Home and Archives
 
 
     <?php  // --- Masory  ?>
+    <script>
+        // $('#thumb-container').masonry({
+        //   itemSelector: '.item',
+        //   columnWidth: '.item-sizer',
+        //   percentPosition: true,
+        //   transitionDuration: '0.6s'
+        // })
 
+
+        $('#thumb-container').masonry({
+          // set itemSelector so .grid-sizer is not used in layout
+          itemSelector: '.item',
+          // use element for option
+          columnWidth: '.item-sizer',
+          percentPosition: true,
+          transitionDuration: '0.6s',
+          gutter: 0,
+          percentPosition: true,
+        })
+    </script>
     <?php
-
-    if (!is_post_type_archive( "hyper" ) AND !is_post_type_archive( "films" )) { ?>
-        <script>
-            // $('#thumb-container').masonry({
-            //   itemSelector: '.item',
-            //   columnWidth: '.item-sizer',
-            //   percentPosition: true,
-            //   transitionDuration: '0.6s'
-            // })
-
-
-            $('#thumb-container').masonry({
-              // set itemSelector so .grid-sizer is not used in layout
-              itemSelector: '.item',
-              // use element for option
-              columnWidth: '.item-sizer',
-              percentPosition: true,
-              transitionDuration: '0.6s',
-              gutter: 0,
-              percentPosition: true,
-            })
-        </script>
-    <?php }
 
     // Play videos just on the view port and fix of iOS
     // VIA: https://stackoverflow.com/questions/15395920/play-html5-video-when-scrolled-to
