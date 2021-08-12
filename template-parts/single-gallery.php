@@ -49,6 +49,7 @@ if (!get_field('deactivate_gallery')) {
         $spacement = '';
         $deactivat_masonry = false;
         $there_is_video = '';
+        $light_box = 'none';
 
 
         if ( !get_field('alternative_gallery')) {
@@ -111,7 +112,7 @@ if (!get_field('deactivate_gallery')) {
                     $number_of_columns_md   = 4;
                     $number_of_columns_lg   = 4;
                     $no_space               = 'no-pad';
-                    $light_box              = 'intense-images';
+                    $light_box              = 'none';
                     $deactivat_masonry      = true;
 
                 // othes
@@ -122,7 +123,7 @@ if (!get_field('deactivate_gallery')) {
                     $number_of_columns_md   = 1;
                     $number_of_columns_lg   = 1;
                     $no_space               = '';
-                    $light_box              = '';
+                    $light_box              = 'none';
                 }
             }
         }
@@ -708,7 +709,8 @@ if (!get_field('deactivate_gallery')) {
                                     <?php //} ?>
                                         <?php
                                         // Image Link
-                                        if (($light_box != 'intense-images' AND $light_box != '')) { // print thumbnails with a link ?>
+                                        if ($light_box == 'magnific_popup') { // print thumbnails with a link ?>
+                                            <?php echo $light_box ?>
                                         <a href="<?php echo wp_get_attachment_url($attachmen->ID); ?>"
                                                 class="magnific-popup-link" caption="<?php if ($caption) { echo " – <i>".$caption."</i>";} ?>"
                                         itemprop="contentUrl">
@@ -726,7 +728,7 @@ if (!get_field('deactivate_gallery')) {
 
                                         <?php
                                         // Image Link
-                                        if (($light_box != 'intense-images') AND $light_box != '') {?>
+                                        if ($light_box == 'magnific_popup') {?>
                                             </a>
                                         <?php }?>
 
