@@ -167,6 +167,7 @@ if (!get_field('deactivate_gallery')) {
         // DEFAULT VIDEO PLAYER OPTIONS PER POST TYPE
 
             //define variables:
+            $post_video_controls = true;
             $post_video_mute = '';
             $post_video_loop = '';
             $post_video_autoplay = '';
@@ -181,11 +182,18 @@ if (!get_field('deactivate_gallery')) {
 
             // HYPER
             elseif ( is_singular( 'hyper' )) {
-                $post_video_schema = "false";
+                $post_video_schema = false;
+                $post_video_controls = true;
             }
 
             // Emulsion
-            elseif ( is_singular( 'emulsion' )) {
+            elseif ( is_singular( 'log' )) {
+                $post_video_controls = false;
+                $post_video_mute = true;
+                $post_video_loop = true;
+                $post_video_autoplay = true;
+                $post_video_pauseothervideos = false;
+                $post_video_schema = "false";
 
             }
 
