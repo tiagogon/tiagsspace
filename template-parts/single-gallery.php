@@ -122,7 +122,7 @@ if (!get_field('deactivate_gallery')) {
                     $number_of_columns_md   = 1;
                     $number_of_columns_lg   = 1;
                     $no_space               = '';
-                    $light_box              = 'magnific_popup';
+                    $light_box              = '';
                 }
             }
         }
@@ -708,7 +708,7 @@ if (!get_field('deactivate_gallery')) {
                                     <?php //} ?>
                                         <?php
                                         // Image Link
-                                        if (($light_box != 'intense-images')) { // print thumbnails with a link ?>
+                                        if (($light_box != 'intense-images' AND $light_box != '')) { // print thumbnails with a link ?>
                                         <a href="<?php echo wp_get_attachment_url($attachmen->ID); ?>"
                                                 class="magnific-popup-link" caption="<?php if ($caption) { echo " – <i>".$caption."</i>";} ?>"
                                         itemprop="contentUrl">
@@ -726,7 +726,7 @@ if (!get_field('deactivate_gallery')) {
 
                                         <?php
                                         // Image Link
-                                        if (($light_box != 'intense-images')) {?>
+                                        if (($light_box != 'intense-images') AND $light_box != '') {?>
                                             </a>
                                         <?php }?>
 
