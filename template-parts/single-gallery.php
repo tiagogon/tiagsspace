@@ -710,7 +710,6 @@ if (!get_field('deactivate_gallery')) {
                                         <?php
                                         // Image Link
                                         if ($light_box == 'magnific_popup') { // print thumbnails with a link ?>
-                                            <?php echo $light_box ?>
                                         <a href="<?php echo wp_get_attachment_url($attachmen->ID); ?>"
                                                 class="magnific-popup-link" caption="<?php if ($caption) { echo " – <i>".$caption."</i>";} ?>"
                                         itemprop="contentUrl">
