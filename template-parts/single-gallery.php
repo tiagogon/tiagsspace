@@ -193,17 +193,20 @@ if (!get_field('deactivate_gallery')) {
             else {
                 // LOG > blwww brunch
                 if (has_term( 'blwww', 'log-branch' ) ) {
+                    $post_video_controls = false;
                     $post_video_mute = true;
                     $post_video_loop = true;
                     $post_video_autoplay = true;
                     $post_video_pauseothervideos = false;
                     $post_video_schema = "false";
+
                 }
             }
 
 
         // DEFAULT VIDEO PLAYER OPTIONS PER POST TYPE
             if ( get_field('alternative_video_player_options_on_post')) {
+                $post_video_controls = get_field('post_video_controls');
                 $post_video_mute = get_field('post_video_mute');
                 $post_video_loop = get_field('post_video_loop');
                 $post_video_autoplay = get_field('post_video_autoplay');
@@ -555,6 +558,7 @@ if (!get_field('deactivate_gallery')) {
                             // IF there are DEFAULT VIDEO PLAYER OPTIONS of the ATTACHEMENT
                             if (get_field('alternative_video_player_options',$attachmen->ID)) {
                                 // need to convert boleans into true/false strings >> https://stackoverflow.com/questions/2795177/how-to-convert-boolean-to-string
+                                $video_controls = (get_field('video_controls',$attachmen->ID)) ? 'true' : 'false';
                                 $video_mute = (get_field('video_mute',$attachmen->ID)) ? 'true' : 'false';
                                 $video_loop = (get_field('video_loop',$attachmen->ID)) ? 'true' : 'false';
                                 $video_autoplay = (get_field('video_autoplay',$attachmen->ID)) ? 'true' : 'false';
@@ -564,6 +568,7 @@ if (!get_field('deactivate_gallery')) {
 
                             // Else use them on the post level
                             } else {
+                                $video_controls = ($post_video_controls) ? 'true' : 'false';
                                 $video_mute = ($post_video_mute) ? 'true' : 'false';
                                 $video_loop = ($post_video_loop) ? 'true' : 'false';
                                 $video_autoplay = ($post_video_autoplay) ? 'true' : 'false';
@@ -575,6 +580,7 @@ if (!get_field('deactivate_gallery')) {
                             // COMPILE VIDEO OPTIONS STRING
 
                                 $video_otions = '
+                                    controls="'.$video_controls.'"
                                     mute="'.$video_mute.'"
                                     loop="'.$video_loop.'"
                                     autoplay="'.$video_autoplay.'"
