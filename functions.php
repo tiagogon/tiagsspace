@@ -401,7 +401,7 @@ function custom_post_type_log() {
     'singular_name'       => _x( 'Log', 'Post Type Singular Name', 'text_domain' ),
     'menu_name'           => __( 'Log', 'text_domain' ),
     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
-    'all_items'           => __( 'All Log Mixes', 'text_domain' ),
+    'all_items'           => __( 'All Log', 'text_domain' ),
     'view_item'           => __( 'View Log Post', 'text_domain' ),
     'add_new_item'        => __( 'Add New Log Post', 'text_domain' ),
     'add_new'             => __( 'Add New Log Post', 'text_domain' ),
