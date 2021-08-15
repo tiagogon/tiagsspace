@@ -232,6 +232,7 @@ div.thumbnail{
     border-style: none;
     border-width: 0;
     background-color: transparent!important;
+	text-shadow: 1px 1px $brand-color;
 	&:hover{
 		opacity: 1;
 	}
@@ -245,6 +246,7 @@ div.thumbnail{
 	    border-style: none;
 	    border-width: 0;
 	    background-color: transparent!important;
+		text-shadow: 1px 1px $brand-color;
 
 	}
 }
@@ -263,6 +265,7 @@ button.remove{
     border-style: none;
     border-width: 0;
     background-color: transparent!important;
+	text-shadow: 1px 1px $brand-color;
 	&:hover{
 		opacity: 1;
 	}
@@ -281,6 +284,7 @@ button.saveorder{
 	border-color: transparent;
     border-style: none;
     border-width: 0;
+	text-shadow: 1px 1px $brand-color;
     background-color: transparent!important;
 	&:hover{
 		opacity: 1;
@@ -297,6 +301,7 @@ a.delete{
 	font-style: italic;
 	font-size: 16px;
 	font-weight: 600;
+	text-shadow: 1px 1px $brand-color;
 	&:hover{
 		opacity: 1;
 		text-decoration: none;
