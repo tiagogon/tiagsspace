@@ -18,7 +18,9 @@
 		<?php // ----- CSS ----- ?>
 			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
 
-				<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
+			<link href="<?php bloginfo('template_url'); ?>/library/js/mmenu-js-master/dist/mmenu.css" rel="stylesheet" />
+
+			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
 
 		<?php // ----- FONTS ----- ?>
 			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,600,600i" rel="stylesheet">
@@ -58,9 +60,45 @@
 				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/jquery/jquery.min.js"></script>
 				<?php /*<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*/ ?>
 
-			<?php // Slick Nav  ?>
+			<!-- <?php // Slick Nav  ?>
 				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/slicknav/jquery.slicknav.min.js"></script>
-				<?php /*<script src="//cdnjs.cloudflare.com/ajax/libs/SlickNav/1.0.4/jquery.slicknav.min.js"></script>	*/ ?>
+				<?php /*<script src="//cdnjs.cloudflare.com/ajax/libs/SlickNav/1.0.4/jquery.slicknav.min.js"></script>	*/ ?> -->
+
+			<?php // Mmenu ?>
+	        	<script src="<?php bloginfo('template_url'); ?>/library/js/mmenu-js-master/dist/mmenu.js"></script>
+				<script>
+		            document.addEventListener(
+		                "DOMContentLoaded", () => {
+		                    new Mmenu( "#my-menu", {
+		                       "extensions": [
+		                          "position-right",
+								  "border-none",
+								  //"listview-justify",
+								  "multiline",
+								  //"pagedim-black",
+								  //"shadow-page",
+                  				  "shadow-panels",
+								  "theme-white"
+		                       ],
+		                       "iconPanels": true,
+							   "navbar": [
+								   {
+								   "add": false,
+								   }
+							   ],
+		                       "navbars": [
+		                          {
+		                             "position": "top",
+		                             "content": [
+		                                "searchfield"
+		                             ]
+		                          }
+							  ]
+		                    });
+		                }
+		            );
+		        </script>
+
 
 			<?php // Masonry ?>
 				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/masonry/masonry.pkgd.min.js"></script>
@@ -109,6 +147,8 @@
 		<header id="site-header" class="header-front-page container-fluid side-padding" role="banner">
 		<div class="clearfix row">
 
+
+
 			<?php // Get name of the section for mobile
 
 				$section_name = '';
@@ -143,7 +183,36 @@
 
 
 			<div id="topbar-parent" class="col-48">
+
+				<!-- from Mmenu template_url -->
+				<a href="#my-menu">Open the menu</a>
+				<a href="#my-page">Close the menu</a>
+
+				<nav id="my-menu">
+					<ul>
+						<li><a href="/">Home</a></li>
+						<li><a href="/about/">About us</a>
+							<ul>
+								<li><a href="/tiagsspace/4k-lento/hold-on/">4K Lento</a></li>
+								<li><a href="/about/team/">The team</a></li>
+								<li><a href="/about/address/">Our address</a></li>
+							</ul>
+						</li>
+						<li><a href="/about/">About us</a>
+							<ul>
+								<li><a href="/about/history/">History</a></li>
+								<li><a href="/about/team/">The team</a></li>
+								<li><a href="/about/address/">Our address</a></li>
+							</ul>
+						</li>
+						<li><a href="/contact/">Contact</a></li>
+					</ul>
+				</nav>
+
 				<div id="topbar">
+
+
+
 					<ul id="menu">
 						<?php if (!is_home()) { ?>
 							<li class=""><a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>">Space</a></li>
