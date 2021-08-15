@@ -51,14 +51,17 @@ if (is_singular() && !is_page()) {
     // Get taxonamies string
     $taxonomies_string = '';
 
-    $taxonomies = array(
-      //'from',
-      //'places',
-      'medium',
-      'post_tag'
-      //'category',
-      //'log-branch'
-    );
+    // $taxonomies = array(
+    //   //'from',
+    //   //'places',
+    //   'medium',
+    //   'post_tag'
+    //   //'category',
+    //   //'log-branch'
+    // );
+    // // Error documented here:https://stackoverflow.com/questions/64174023/php-notice-array-to-string-conversion-in-taxonomy-php-on-line-3442-and-category
+
+    $taxonomies = 'medium';
 
     $args = array(  'orderby' => 'name',
                   'order' => 'ASC',
