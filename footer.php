@@ -38,7 +38,7 @@
 			<ul>
 				<?php if (!is_home()) { ?>
 				<li class="">
-					<a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>"><<</a>
+					<a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>"><< All</a>
 				</li>
 				<?php } ?>
 
@@ -157,7 +157,7 @@
 							<a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">Emulsion 2011-2018</a>
 						</li>
 						<li>
-							<a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " belongs";} ?>">City 2010-2014</a>
+							<a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " belongs";} ?>">CityBurns 2010-2014</a>
 						</li>
 					</ul>
 				</li>
