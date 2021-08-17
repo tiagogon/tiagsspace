@@ -144,7 +144,7 @@ if ($background_image) {
             </nav>
         </div>
     </div>
-    <?php  related_posts(); ?>
+    <?php  yarpp_related(); ?>
 <?php } ?>
 
 

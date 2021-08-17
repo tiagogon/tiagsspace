@@ -16,9 +16,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 		<?php // ----- CSS ----- ?>
-			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
 
-			<link href="<?php bloginfo('template_url'); ?>/library/js/mmenu-js-master/dist/mmenu.css" rel="stylesheet" />
+
+			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
 
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
 
@@ -60,44 +60,10 @@
 				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/jquery/jquery.min.js"></script>
 				<?php /*<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*/ ?>
 
-			<!-- <?php // Slick Nav  ?>
-				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/slicknav/jquery.slicknav.min.js"></script>
-				<?php /*<script src="//cdnjs.cloudflare.com/ajax/libs/SlickNav/1.0.4/jquery.slicknav.min.js"></script>	*/ ?> -->
 
 			<?php // Mmenu ?>
 	        	<script src="<?php bloginfo('template_url'); ?>/library/js/mmenu-js-master/dist/mmenu.js"></script>
-				<script>
-		            document.addEventListener(
-		                "DOMContentLoaded", () => {
-		                    new Mmenu( "#my-menu", {
-		                       "extensions": [
-		                          "position-right",
-								  "border-none",
-								  //"listview-justify",
-								  "multiline",
-								  //"pagedim-black",
-								  //"shadow-page",
-                  				  "shadow-panels",
-								  "theme-white"
-		                       ],
-		                       "iconPanels": true,
-							   "navbar": [
-								   {
-								   "add": false,
-								   }
-							   ],
-		                       "navbars": [
-		                          {
-		                             "position": "top",
-		                             "content": [
-		                                "searchfield"
-		                             ]
-		                          }
-							  ]
-		                    });
-		                }
-		            );
-		        </script>
+
 
 
 			<?php // Masonry ?>
@@ -144,7 +110,9 @@
 
 	<body <?php body_class();?> >
 
-		<header id="site-header" class="header-front-page container-fluid side-padding" role="banner">
+
+
+		<header id="site-header" class="header-front-page container-fluid side-padding Fixed" role="banner">
 		<div class="clearfix row">
 
 
@@ -153,155 +121,62 @@
 
 				$section_name = '';
 
-				// If is custom post archive or singular
-				if (is_singular( 'hyper' ) OR is_post_type_archive('hyper')) {
-					$section_name = ' _ <a href="'.get_post_type_archive_link( 'hyper').'"><span style="font-style: italic;">hyper</a></span>';
-				}
-				if (is_singular( 'log' ) OR is_post_type_archive('log')) {
-					$section_name = ' _ <a href="'.get_post_type_archive_link( 'log').'"><span style="font-style: italic;">log</a></span>';
-				}
-				if (is_singular( 'emulsion' ) OR is_post_type_archive('emulsion')) {
-					$section_name = ' _ <a href="'.get_post_type_archive_link( 'emulsion').'"><span style="font-style: italic;">emulsion</a></span>';
-				}
-				if (is_singular( 'dusk' ) OR is_post_type_archive('dusk')) {
-					$section_name = ' _ <a href="'.get_post_type_archive_link( 'dusk').'"><span style="font-style: italic;">dusk</a></span>';
-				}
-				if (is_singular( 'films' ) OR is_post_type_archive('films')) {
-					$section_name = ' _ <a href="'.get_post_type_archive_link( 'films').'"><span style="font-style: italic;">films</a></span>';
-				}
-
-				// If is a Log Branch
-				if (is_tax( 'log-branch' )) {
-					$term =	$wp_query->queried_object;
-
-					$section_name = ' _ <a href="'.get_post_type_archive_link( 'log').'"><span style="font-style: italic;">log</a></span>';
-					// removed from php:
-					// //<span style="font-style: italic;">'.$term->name.'</span>
-				}
+				// // If is custom post archive or singular
+				// if (is_singular( 'hyper' ) OR is_post_type_archive('hyper')) {
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'hyper').'"><span style="font-style: italic;">hyper</a></span>';
+				// }
+				// if (is_singular( 'log' ) OR is_post_type_archive('log')) {
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'log').'"><span style="font-style: italic;">log</a></span>';
+				// }
+				// if (is_singular( 'emulsion' ) OR is_post_type_archive('emulsion')) {
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'emulsion').'"><span style="font-style: italic;">emulsion</a></span>';
+				// }
+				// if (is_singular( 'dusk' ) OR is_post_type_archive('dusk')) {
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'dusk').'"><span style="font-style: italic;">dusk</a></span>';
+				// }
+				// if (is_singular( 'films' ) OR is_post_type_archive('films')) {
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'films').'"><span style="font-style: italic;">films</a></span>';
+				// }
+				//
+				// // If is a Log Branch
+				// if (is_tax( 'log-branch' )) {
+				// 	$term =	$wp_query->queried_object;
+				//
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'log').'"><span style="font-style: italic;">log</a></span>';
+				// 	// removed from php:
+				// 	// //<span style="font-style: italic;">'.$term->name.'</span>
+				// }
 
 			?>
 
 
 			<div id="topbar-parent" class="col-48">
 
-				<!-- from Mmenu template_url -->
-				<a href="#my-menu">Open the menu</a>
-				<a href="#my-page">Close the menu</a>
-
-				<nav id="my-menu">
-					<ul>
-						<li><a href="/">Home</a></li>
-						<li><a href="/about/">About us</a>
-							<ul>
-								<li><a href="/tiagsspace/4k-lento/hold-on/">4K Lento</a></li>
-								<li><a href="/about/team/">The team</a></li>
-								<li><a href="/about/address/">Our address</a></li>
-							</ul>
-						</li>
-						<li><a href="/about/">About us</a>
-							<ul>
-								<li><a href="/about/history/">History</a></li>
-								<li><a href="/about/team/">The team</a></li>
-								<li><a href="/about/address/">Our address</a></li>
-							</ul>
-						</li>
-						<li><a href="/contact/">Contact</a></li>
-					</ul>
-				</nav>
-
 				<div id="topbar">
 
-
-
 					<ul id="menu">
-						<?php if (!is_home()) { ?>
-							<li class=""><a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>">Space</a></li>
-						<?php } ?>
 
 						<?php
-
-							// --- Tags and Custom taxonamies menu item ---
-
-							if ( is_tag() ) {
-						        echo '<li class="">
-									<a href="#" class="active">Tag: '.str_replace(" ","",single_tag_title("", false)).'</a>
-								</li>';
-						    }
-
-							if ( is_tax() AND !is_tax('log-branch') ) {
-								$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
-
-						        echo '<li class="">
-									<a href="#" class="active">'.$term->taxonomy.': '.str_replace(" ","",$term->name).'</a>
-								</li>';
-						    }
-
-
+							// // --- Tags and Custom taxonamies menu item ---
+							// if ( is_tag() ) {
+						    //     echo '<li class="">
+							// 		<span class="active">Tag: '.str_replace(" ","",single_tag_title("", false)).'</span>
+							// 	</li>';
+						    // }
+							//
+							// if ( is_tax() AND !is_tax('log-branch') ) {
+							// 	$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
+							//
+						    //     echo '<li class="">
+							// 		<span class="active">'.$term->taxonomy.': '.str_replace(" ","",$term->name).'</span>
+							// 	</li>';
+						    // }
 						 ?>
 
-						 <li><a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">4K Lento</a></li>
-
-						 <li><a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " belongs";} ?>">Hyper</a></li>
-
-						<li><a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " belongs";} ?>">dusk</a></li>
-
-						<?php /* <li><a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">films</a></li>
-
-						<li><a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">emulsion</a></li> */?>
-
-						<?php /*
-						<li><a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_singular( 'log' )
-										OR is_post_type_archive('log')
-										or is_tax('log-branch')) { echo " belongs";} ?>">log</a></li>
-						 */ ?>
-
-						<li><a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if (is_singular( 'log' )
-										OR is_post_type_archive('log')
-										or is_tax('log-branch')) { echo " belongs";} ?>">Log</a></li>
-
-						<!-- <li ><a id="trigger-overlay-follow" href="#"><span class="fa fa-rss"></span></a></li> -->
+						<li ><a href="#tiags-menu">Reveal</a></li>
 					</ul>
 				</div>
 			</div>
 
-
-			<?php if (is_singular( 'log' )
-					OR is_post_type_archive('log')
-					or is_tax('log-branch')) { ?>
-
-				<div class="submenu submenu-log col-xs-48 col-sm-48 col-md-48">
-					<ul>
-
-						<li><a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if (is_post_type_archive('log')) { echo "active";} ?>">All</a></li>
-
-						<li><a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">blwww</a></li>
-
-						<li><a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " belongs";} ?>">hrzn</a></li>
-
-						<li><a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " belongs";} ?>">frntr</a></li>
-
-						<!-- <li><a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " belongs";} ?>">sdwlk</a></li> -->
-
-						<li><a href="<?php echo get_term_link( 'plnts', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnts')) { echo "active";} if ((is_single() and has_term( 'plnts', 'log-branch' ))) { echo " belongs";} ?>">plnts</a></li>
-
-						<!-- <li><a href="<?php echo get_term_link( 'rchv', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','rchv') or (is_single() and has_term( 'rchv', 'log-branch' ))) { echo "active";} ?>">rchv</a></li> -->
-
-					</ul>
-				</div>
-
-			<?php } ?>
 		</div>
 		</header> <!-- end header -->
-
-		<?php // Mobile Menu ?>
-		<script>
-			$(function(){
-				$('#topbar').slicknav({
-					prependTo: '#topbar-parent',//'.header-front-page',
-					//closeOnClick: true,
-					label :'<span class="open">+</span><span class="close">-</span>',
-					duplicate : false,
-					removeIds : false,
-				});
-			});
-		</script>
