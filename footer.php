@@ -43,14 +43,49 @@
 				<?php } ?>
 
 				<li>
+					<a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">Films</a>
+				</li>
+
+				<li>
 					<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " belongs";} ?>">Hyper Series</a>
 				</li>
 
 			   <li>
-				   <a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " belongs";} ?>">Dusk Collection</a>
-			   </li>
+				  <a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php
+				  if (is_singular( 'log' ) OR is_post_type_archive('log') or is_tax('log-branch'))
+					   { echo " belongs";}
+				  if (is_post_type_archive('emulsion'))
+					   { echo "active";}  ?>
+					   ">Log</a>
+				   <ul>
+					   <li>
+						   <a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">blwww</a>
+					   </li>
 
-				<li>
+					   <li>
+						   <a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " belongs";} ?>">hrzn</a>
+					   </li>
+
+					   <li>
+						   <a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " belongs";} ?>">frntr</a>
+					   </li>
+
+					   <li>
+						   <a href="<?php echo get_term_link( 'plnts', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnts')) { echo "active";} if ((is_single() and has_term( 'plnts', 'log-branch' ))) { echo " belongs";} ?>">plnts</a>
+					   </li>
+
+					   <li>
+						   <span>Discontinued</span>
+						   <ul>
+							   <li><a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " belongs";} ?>">sdwlk</a></li>
+
+							   <li><a href="<?php echo get_term_link( 'rchv', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','rchv') or (is_single() and has_term( 'rchv', 'log-branch' ))) { echo "active";} ?>">rchv</a></li>
+						   </ul>
+					   </li>
+
+				   </ul>
+			   </li>
+			   <li>
 					<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">4K LENTO</a>
 					<ul>
 						<li><a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">Mixfiles</a></li>
@@ -64,94 +99,12 @@
 				</li>
 
 			   <li>
-				   <a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php
-				   if (is_singular( 'log' ) OR is_post_type_archive('log') or is_tax('log-branch'))
-						{ echo " belongs";}
-				   if (is_post_type_archive('emulsion'))
-				   		{ echo "active";}  ?>
-						">Log</a>
-					<ul>
-						<li>
-							<a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">blwww</a>
-						</li>
+				   <a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " belongs";} ?>">Dusk</a>
+			   </li>
 
-						<li>
-							<a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " belongs";} ?>">hrzn</a>
-						</li>
-
-						<li>
-							<a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " belongs";} ?>">frntr</a>
-						</li>
-
-						<li>
-							<a href="<?php echo get_term_link( 'plnts', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnts')) { echo "active";} if ((is_single() and has_term( 'plnts', 'log-branch' ))) { echo " belongs";} ?>">plnts</a>
-						</li>
-
-						<li>
-							<span>// Discontinued</span>
-							<ul>
-								<li><a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " belongs";} ?>">sdwlk</a></li>
-
-								<li><a href="<?php echo get_term_link( 'rchv', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','rchv') or (is_single() and has_term( 'rchv', 'log-branch' ))) { echo "active";} ?>">rchv</a></li>
-							</ul>
-						</li>
-
-					</ul>
-				</li>
 
 				<li>
-					<a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">Films</a>
-				</li>
-
-				<li><span>By Medium</span>
-					<?php
-					$args = array(
-					  'taxonomy'     => 'medium',
-					  'orderby'      => 'name',
-					  'hide_empty'   => 0,
-					  'title_li'     => '',
-					  'hierarchical' => 1,
-					  'walker'       => null,
-					);
-					?>
-					<ul>
-						<?php wp_list_categories( $args ); ?>
-					</ul>
-				</li>
-				<li><span>By Year</span>
-					<?php
-					$args = array(
-					  'taxonomy'     => 'from',
-					  'orderby'      => 'name',
-					  'hide_empty'   => 0,
-					  'title_li'     => '',
-					  'hierarchical' => 1,
-					  'walker'       => null,
-					);
-					?>
-					<ul>
-						<?php wp_list_categories( $args ); ?>
-					</ul>
-				</li>
-				<li><span>By Place</span>
-
-					<?php
-					$args = array(
-					  'taxonomy'     => 'places',
-					  'orderby'      => 'name',
-					  'hide_empty'   => 0,
-					  'title_li'     => '',
-					  'hierarchical' => 1,
-					  'walker'       => null,
-					);
-					?>
-					<ul>
-						<?php wp_list_categories( $args ); ?>
-					</ul>
-
-				</li>
-				<li>
-					<span>// Discontinued</span>
+					<span>Discontinued</span>
 					<ul>
 						<li>
 							<a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">Emulsion 2011-2018</a>
@@ -161,6 +114,59 @@
 						</li>
 					</ul>
 				</li>
+
+				<li><span>Filter</span>
+					<ul>
+						<li><span>Medium</span>
+							<?php
+							$args = array(
+							  'taxonomy'     => 'medium',
+							  'orderby'      => 'name',
+							  'hide_empty'   => 0,
+							  'title_li'     => '',
+							  'hierarchical' => 1,
+							  'walker'       => null,
+							);
+							?>
+							<ul>
+								<?php wp_list_categories( $args ); ?>
+							</ul>
+						</li>
+						<li><span>Year</span>
+							<?php
+							$args = array(
+							  'taxonomy'     => 'from',
+							  'orderby'      => 'name',
+							  'hide_empty'   => 0,
+							  'title_li'     => '',
+							  'hierarchical' => 1,
+							  'walker'       => null,
+							);
+							?>
+							<ul>
+								<?php wp_list_categories( $args ); ?>
+							</ul>
+						</li>
+						<li><span>Places</span>
+
+							<?php
+							$args = array(
+							  'taxonomy'     => 'places',
+							  'orderby'      => 'name',
+							  'hide_empty'   => 0,
+							  'title_li'     => '',
+							  'hierarchical' => 1,
+							  'walker'       => null,
+							);
+							?>
+							<ul>
+								<?php wp_list_categories( $args ); ?>
+							</ul>
+
+						</li>
+					</ul>
+				</li>
+
 				<li><span>General</a></span>
 					<ul>
 						<li>
