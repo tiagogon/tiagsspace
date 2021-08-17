@@ -38,7 +38,7 @@
 			<ul>
 				<?php if (!is_home()) { ?>
 				<li class="">
-					<a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>"><< All</a>
+					<a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>"><< Home</a>
 				</li>
 				<?php } ?>
 
