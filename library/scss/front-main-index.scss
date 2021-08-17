@@ -155,7 +155,7 @@ li.item-post {
       .imgcontainer{
         margin-bottom: 30px;
         margin-bottom: 0px;
-        background: $brand-color;
+        background: $blue;
         @include transition(background-color 1s ease-in-out);
         img{
           outline: none;
@@ -249,7 +249,9 @@ li.item-post {
     // }
     &:hover{
       .imgcontainer{
+
         @include transition(background-color 1s ease-in-out);
+        background-color: $blue;
         img{
           opacity: 0.4; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
           -webkit-transition: opacity 1s ease-in-out;
@@ -259,7 +261,7 @@ li.item-post {
             transition: opacity 1s ease-in-out;
         }
       }
-      box-shadow: 8px 8px 12px $brand-color-darker-darker;
+      box-shadow: 8px 8px 12px $blue;
       //background-color: $brand-color;
       @include transition(background-color 1s ease);
       @include transition(box-shadow 1s ease);
@@ -443,6 +445,7 @@ li.item-post {
         &:hover{
           .imgcontainer{
             @include transition(background-color 1s ease-in-out);
+            background-color: $blue;
             img{
               opacity: 0.4; // causes bug on chrome Version 66.0.3359.139 (Official Build) (64-bit)
               -webkit-transition: opacity 0.5s ease-in-out;
@@ -516,7 +519,7 @@ li.item-post {
             background: #666;
             @include transition(background-color 1s ease-in-out);
             img{
-              opacity: 0.80;
+              opacity: 1;
               -webkit-transition: opacity 0.5s ease-in-out;
                 -moz-transition: opacity 0.5s ease-in-out;
                 -ms-transition: opacity 0.5s ease-in-out;
@@ -547,10 +550,10 @@ li.item-post {
 
         &:hover{
           .imgcontainer{
-            background: $brand-color;
+            background: $blue;
             @include transition(background-color 1s ease-in-out);
             img{
-              opacity: 0.6;
+              opacity: 0.7;
               -webkit-transition: opacity 0.5s ease-in-out;
                 -moz-transition: opacity 0.5s ease-in-out;
                 -ms-transition: opacity 0.5s ease-in-out;
