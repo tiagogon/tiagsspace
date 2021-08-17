@@ -19,7 +19,7 @@
 						<a href="https://twitter.com/tiagsssss" data-hover="Twitter" target="_blank">Twitter</a>
 					</li>
 					<li>
-						<a href="https://tiags.tumblr.com/" data-hover="SoundCloud" target="_blank"> References</a>
+						<a href="https://tiags.tumblr.com/" data-hover="About" target="_blank">About</a>
 					</li>
 				</ul>
 				<div class="email-form">

@@ -47,9 +47,6 @@
   // @import "../bootstrap/scss/print";
 
 
-
-
-
 // ----- My SASS ----
 
 // Bootstrap features overrides
@@ -57,9 +54,70 @@
 @import "custom-grid.scss";
 @import "custom-thumbnails.scss";
 
-// Support to JS plugins
+// Support to JS library
 @import "../js/plyr-master/src/sass/plyr.scss";
 @import "plyr-custom.scss";
+
+
+// ****************************
+// --- Support Mmenu JS library
+// ****************************
+
+// --- Master Library
+
+//	Core
+@import '../js/mmenu-js-master/src/core/oncanvas/mmenu.oncanvas.scss';
+
+//	Core add-ons
+@import '../js/mmenu-js-master/src/core/offcanvas/mmenu.offcanvas.scss';
+@import '../js/mmenu-js-master/src/core/screenreader/mmenu.screenreader.scss';
+//@import '../js/mmenu-js-master/src/core/scrollbugfix/mmenu.scrollbugfix.scss';
+
+//	Add-ons
+@import '../js/mmenu-js-master/src/addons/autoheight/mmenu.autoheight.scss';
+//@import '../js/mmenu-js-master/src/addons/backbutton/mmenu.backbutton.scss';
+@import '../js/mmenu-js-master/src/addons/columns/mmenu.columns.scss';
+@import '../js/mmenu-js-master/src/addons/counters/mmenu.counters.scss';
+@import '../js/mmenu-js-master/src/addons/dividers/mmenu.dividers.scss';
+@import '../js/mmenu-js-master/src/addons/drag/mmenu.drag.scss';
+@import '../js/mmenu-js-master/src/addons/dropdown/mmenu.dropdown.scss';
+//@import '../js/mmenu-js-master/src/addons/fixedelements/mmenu.fixedelements.scss';
+@import '../js/mmenu-js-master/src/addons/iconbar/mmenu.iconbar.scss';
+@import '../js/mmenu-js-master/src/addons/iconpanels/mmenu.iconpanels.scss';
+@import '../js/mmenu-js-master/src/addons/keyboardnavigation/mmenu.keyboardnavigation.scss';
+//@import '../js/mmenu-js-master/src/addons/lazysubmenus/mmenu.lazysubmenus.scss';
+@import '../js/mmenu-js-master/src/addons/navbars/mmenu.navbars.scss';
+//@import '../js/mmenu-js-master/src/addons/pagescroll/mmenu.pagescroll.scss';
+@import '../js/mmenu-js-master/src/addons/searchfield/mmenu.searchfield.scss';
+@import '../js/mmenu-js-master/src/addons/sectionindexer/mmenu.sectionindexer.scss';
+//@import '../js/mmenu-js-master/src/addons/setselected/mmenu.setselected.scss';
+@import '../js/mmenu-js-master/src/addons/sidebar/mmenu.sidebar.scss';
+@import '../js/mmenu-js-master/src/addons/toggles/mmenu.toggles.scss';
+
+//	Extensions
+
+@import '../js/mmenu-js-master/src/extensions/borderstyle/mmenu.borderstyle.scss';
+@import '../js/mmenu-js-master/src/extensions/effects/mmenu.effects.scss';
+@import '../js/mmenu-js-master/src/extensions/fullscreen/mmenu.fullscreen.scss';
+@import '../js/mmenu-js-master/src/extensions/listview/mmenu.listview.scss';
+@import '../js/mmenu-js-master/src/extensions/multiline/mmenu.multiline.scss';
+@import '../js/mmenu-js-master/src/extensions/pagedim/mmenu.pagedim.scss';
+@import '../js/mmenu-js-master/src/extensions/popup/mmenu.popup.scss';
+@import '../js/mmenu-js-master/src/extensions/positioning/mmenu.positioning.scss';
+@import '../js/mmenu-js-master/src/extensions/shadows/mmenu.shadows.scss';
+//@import '../js/mmenu-js-master/src/extensions/themes/mmenu.themes.scss';
+
+//	Wrappers
+//@import '../js/mmenu-js-master/src/wrappers/angular/mmenu.angular.scss';
+//@import '../js/mmenu-js-master/src/wrappers/bootstrap/mmenu.bootstrap.scss';
+//@import '../js/mmenu-js-master/src/wrappers/magento/mmenu.magento.scss';
+//@import '../js/mmenu-js-master/src/wrappers/olark/mmenu.olark.scss';
+//@import '../js/mmenu-js-master/src/wrappers/turbolinks/mmenu.turbolinks.scss';
+//@import '../js/mmenu-js-master/src/wrappers/wordpress/mmenu.wordpress.scss';
+
+// --- Custom
+@import "mmenu-custom.scss";
+
 
 // Custom features
 @import "front-header-slider";

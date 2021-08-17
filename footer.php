@@ -34,110 +34,234 @@
 
 		<?php wp_footer(); // js scripts are inserted using this function ?>
 
+		<nav id="tiags-menu">
+			<ul>
+				<?php if (!is_home()) { ?>
+				<li class="">
+					<a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>"><<</a>
+				</li>
+				<?php } ?>
+
+				<li>
+					<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " belongs";} ?>">Hyper Series</a>
+				</li>
+
+			   <li>
+				   <a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " belongs";} ?>">Dusk Collection</a>
+			   </li>
+
+				<li>
+					<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">4K LENTO</a>
+					<ul>
+						<li><a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">Mixfiles</a></li>
+						<li>
+							<a href="#">Soundcloud</a>
+						</li>
+						<li>
+							<a href="#">Podcast</a>
+						</li>
+					</ul>
+				</li>
+
+			   <li>
+				   <a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php
+				   if (is_singular( 'log' ) OR is_post_type_archive('log') or is_tax('log-branch'))
+						{ echo " belongs";}
+				   if (is_post_type_archive('emulsion'))
+				   		{ echo "active";}  ?>
+						">Log</a>
+					<ul>
+						<li>
+							<a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">blwww</a>
+						</li>
+
+						<li>
+							<a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " belongs";} ?>">hrzn</a>
+						</li>
+
+						<li>
+							<a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " belongs";} ?>">frntr</a>
+						</li>
+
+						<li>
+							<a href="<?php echo get_term_link( 'plnts', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnts')) { echo "active";} if ((is_single() and has_term( 'plnts', 'log-branch' ))) { echo " belongs";} ?>">plnts</a>
+						</li>
+
+						<li>
+							<span>// Discontinued</span>
+							<ul>
+								<li><a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " belongs";} ?>">sdwlk</a></li>
+
+								<li><a href="<?php echo get_term_link( 'rchv', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','rchv') or (is_single() and has_term( 'rchv', 'log-branch' ))) { echo "active";} ?>">rchv</a></li>
+							</ul>
+						</li>
+
+					</ul>
+				</li>
+
+				<li>
+					<a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">Films</a>
+				</li>
+
+				<li><span>By Medium</span>
+					<?php
+					$args = array(
+					  'taxonomy'     => 'medium',
+					  'orderby'      => 'name',
+					  'hide_empty'   => 0,
+					  'title_li'     => '',
+					  'hierarchical' => 1,
+					  'walker'       => null,
+					);
+					?>
+					<ul>
+						<?php wp_list_categories( $args ); ?>
+					</ul>
+				</li>
+				<li><span>By Year</span>
+					<?php
+					$args = array(
+					  'taxonomy'     => 'from',
+					  'orderby'      => 'name',
+					  'hide_empty'   => 0,
+					  'title_li'     => '',
+					  'hierarchical' => 1,
+					  'walker'       => null,
+					);
+					?>
+					<ul>
+						<?php wp_list_categories( $args ); ?>
+					</ul>
+				</li>
+				<li><span>By Place</span>
+
+					<?php
+					$args = array(
+					  'taxonomy'     => 'places',
+					  'orderby'      => 'name',
+					  'hide_empty'   => 0,
+					  'title_li'     => '',
+					  'hierarchical' => 1,
+					  'walker'       => null,
+					);
+					?>
+					<ul>
+						<?php wp_list_categories( $args ); ?>
+					</ul>
+
+				</li>
+				<li>
+					<span>// Discontinued</span>
+					<ul>
+						<li>
+							<a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">Emulsion 2011-2018</a>
+						</li>
+						<li>
+							<a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " belongs";} ?>">City 2010-2014</a>
+						</li>
+					</ul>
+				</li>
+				<li><span>General</a></span>
+					<ul>
+						<li>
+							<span>Complicity</span>
+							<ul>
+								<li>
+									<a href="https://www.instagram.com/tiagsssss/" data-hover="Facebook" target="_blank">Instagram</a>
+								</li>
+								<li>
+									<a href="https://tiagssssspace.tumblr.com/" data-hover="SoundCloud" target="_blank">Tumblr</a>
+								</li>
+								<li>
+									<a href="https://tiags.tumblr.com/" data-hover="SoundCloud" target="_blank">Tumblr II</a>
+								</li>
+								<li>
+									<a href="https://soundcloud.com/tiagsssss" data-hover="SoundCloud" target="_blank">Soundcloud</a>
+								</li>
+								<li>
+									<a href="https://vimeo.com/tiags" data-hover="Tumbler" target="_blank">Vimeo</a>
+								</li>
+								<li>
+									<a href="https://twitter.com/tiagsssss" data-hover="Twitter" target="_blank">Twitter</a>
+								</li>
+
+								<li>
+									<a href="https://www.flickr.com/photos/cityburns/" target="_blank">
+										Flickr
+									</a>
+								</li>
+								<li>
+									<a href="https://tinyletter.com/trouble-letter" target="_blank">
+										mailing list
+									</a>
+								</li>
+								<li>
+									<a href="https://trouble.place/feed" target="_blank">
+										<span class="fa fa-rss"></span> Feed
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="https://tiags.tumblr.com/" target="_blank">Conspiracy</a>
+						</li>
+
+						<li>
+							<a href="mailto:mail@tiags.space" target="_blank">Contact</a>
+						</li>
+
+					</ul>
+
+			</ul>
+
+		</nav>
 
 
-		<?php // --- Menu --- Follow?>
-		<div class="overlay overlay-follow overlay-hugeinc">
-			<button type="button" class="overlay-close overlay-follow-close">
-				<span class="close">close</span>
-			</button>
-			<nav>
-				<ul>
-					<li>
-						<a href="https://www.instagram.com/tiagsssss/" target="_blank">
-							Instagram
-						</a>
-					</li>
-					<li>
-						<a href="https://www.facebook.com/trouble.place" target="_blank">
-							Facebook
-						</a>
-					</li>
-					<li>
-						<a href="https://twitter.com/troubleplace" target="_blank">
-							Twitter
-						</a>
-					</li>
-					<li>
-						<a href="https://vimeo.com/troubleplace" target="_blank">
-							Vimeo
-						</a>
-					</li>
-					<li>
-						<a href="https://troubleplace.tumblr.com" target="_blank">
-							Tumblr
-						</a>
-					</li>
-					<li>
-						<a href="https://www.flickr.com/photos/cityburns/" target="_blank">
-							Flickr
-						</a>
-					</li>
-					<li>
-						<a href="https://tinyletter.com/trouble-letter" target="_blank">
-							mailing list
-						</a>
-					</li>
-					<li>
-						<a href="https://trouble.place/feed" target="_blank">
-							<span class="fa fa-rss"></span> Feed
-						</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-
-		<script>
-			// DEACTIVATED FOLLOW OVERLAY SCREEN
-
-			// (function() {
-			// 	var triggerBttnfollow = document.getElementById( 'trigger-overlay-follow' ),
-			// 		overlayfollow = document.querySelector( 'div.overlay-follow' ),
-			// 		closeBttnfollow = overlayfollow.querySelector( 'button.overlay-follow-close' );
-			// 		transEndEventNamesfollow = {
-			// 			'WebkitTransition': 'webkitTransitionEnd',
-			// 			'MozTransition': 'transitionend',
-			// 			'OTransition': 'oTransitionEnd',
-			// 			'msTransition': 'MSTransitionEnd',
-			// 			'transition': 'transitionend'
-			// 		},
-			// 		transEndEventNamefollow = transEndEventNamesfollow[ Modernizr.prefixed( 'transition' ) ],
-			// 		supportfollow = { transitions : Modernizr.csstransitions };
-
-			// 	function toggleOverlayfollow() {
-			// 		if( classie.has( overlayfollow, 'open' ) ) {
-			// 			classie.remove( overlayfollow, 'open' );
-			// 			classie.add( overlayfollow, 'close' );
-			// 			var onEndTransitionFnfollow = function( ev ) {
-			// 				if( supportfollow.transitions ) {
-			// 					if( ev.propertyName !== 'visibility' ) return;
-			// 					this.removeEventListener( transEndEventNamefollow, onEndTransitionFnfollow );
-			// 				}
-			// 				classie.remove( overlayfollow, 'close' );
-			// 			};
-			// 			if( supportfollow.transitions ) {
-			// 				overlayfollow.addEventListener( transEndEventNamefollow, onEndTransitionFnfollow );
-			// 			}
-			// 			else {
-			// 				onEndTransitionFnfollow();
-			// 			}
-			// 		}
-			// 		else if( !classie.has( overlayfollow, 'close' ) ) {
-			// 			classie.add( overlayfollow, 'open' );
-			// 		}
-			// 	}
-
-			// 	triggerBttnfollow.addEventListener( 'click', toggleOverlayfollow );
-			// 	closeBttnfollow.addEventListener( 'click', toggleOverlayfollow );
-			// })();
-		</script>
 
 		<?php
 		// Audio (and video) Player support
 		// -- CSS on header ?>
-		<script src="<?php bloginfo('template_url'); ?>/library/js/plyr-master/dist/plyr.min.js" crossorigin="anonymous"></script>
+		<script src="<?php bloginfo('template_url'); ?>/library/js/plyr-master/dist/plyr.min.js" ></script>
 		<script>
-			const players = Plyr.setup('audio'); //can be audioTag, .someClass, #someID
+			//const players = Plyr.setup('audio'); //can be audioTag, .someClass, #someID
+
+			const players = Array.from(document.querySelectorAll('audio')).map(p => new Plyr(p));
+		</script>
+
+		<?php
+		// MMenu Configuration ?>
+		<script>
+			document.addEventListener(
+				"DOMContentLoaded", () => {
+					new Mmenu( "#tiags-menu", {
+						"pageScroll": true,
+					   "extensions": [
+						  "position-right",
+						  "border-none",
+						  "multiline"
+					   ],
+					  "counters": true,
+					   "iconPanels": true,
+					   "navbar": [
+						   {
+						   "add": false,
+						   }
+					   ],
+					   "navbars": [
+						  {
+							  "use": false,
+							 "position": "top",
+							 // "content": [
+							 //    "searchfield"
+							 // ]
+						  }
+					  ]
+				  }
+			  );
+				}
+
+			);
 		</script>
 
 		<?php
