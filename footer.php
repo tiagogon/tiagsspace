@@ -127,7 +127,7 @@
 							$args = array(
 							  'taxonomy'     => 'medium',
 							  'orderby'      => 'name',
-							  'hide_empty'   => 0,
+							  'hide_empty'   => 1,
 							  'title_li'     => '',
 							  'hierarchical' => 1,
 							  'walker'       => null,
@@ -142,7 +142,7 @@
 							$args = array(
 							  'taxonomy'     => 'from',
 							  'orderby'      => 'name',
-							  'hide_empty'   => 0,
+							  'hide_empty'   => 1,
 							  'title_li'     => '',
 							  'hierarchical' => 1,
 							  'walker'       => null,
@@ -158,7 +158,7 @@
 							$args = array(
 							  'taxonomy'     => 'places',
 							  'orderby'      => 'name',
-							  'hide_empty'   => 0,
+							  'hide_empty'   => 1,
 							  'title_li'     => '',
 							  'hierarchical' => 1,
 							  'walker'       => null,
