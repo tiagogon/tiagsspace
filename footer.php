@@ -38,17 +38,39 @@
 			<ul>
 				<?php if (!is_home()) { ?>
 				<li class="">
-					<a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>"><< Home</a>
+					<a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>">Home</a>
 				</li>
 				<?php } ?>
 
 				<li>
-					<a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">Films</a>
-				</li>
+					<span>Series</span>
+					<ul>
 
-				<li>
-					<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " belongs";} ?>">Hyper Series</a>
-				</li>
+						<li>
+							<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " belongs";} ?>">Hyper</a>
+						</li>
+
+					   <li>
+						   <a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " belongs";} ?>">Dusk</a>
+					   </li>
+		   				<li>
+		   					<a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">Films</a>
+		   				</li>
+
+					   <li>
+						   <span>Discontinued</span>
+						   <ul>
+							   <li>
+								   <a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">Emulsion 2011-2018</a>
+							   </li>
+							   <li>
+								   <a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " belongs";} ?>">CityBurns 2010-2014</a>
+							   </li>
+						   </ul>
+					   </li>
+
+
+					</ul>
 
 			   <li>
 				  <a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php
@@ -90,27 +112,10 @@
 					<ul>
 						<li><a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">Mixfiles</a></li>
 						<li>
-							<a href="#">Soundcloud</a>
+							<a href="https://soundcloud.com/tiagsssss" target="_blank">Soundcloud</a>
 						</li>
 						<li>
-							<a href="#">Podcast</a>
-						</li>
-					</ul>
-				</li>
-
-			   <li>
-				   <a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " belongs";} ?>">Dusk</a>
-			   </li>
-
-
-				<li>
-					<span>Discontinued</span>
-					<ul>
-						<li>
-							<a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">Emulsion 2011-2018</a>
-						</li>
-						<li>
-							<a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " belongs";} ?>">CityBurns 2010-2014</a>
+							<a href="https://podcasts.apple.com/ca/podcast/4k-lento/id1445312236" target="_blank">Podcast</a>
 						</li>
 					</ul>
 				</li>
@@ -241,14 +246,27 @@
 			document.addEventListener(
 				"DOMContentLoaded", () => {
 					new Mmenu( "#tiags-menu", {
-						"pageScroll": true,
-					   "extensions": [
-						  "position-right",
-						  "border-none",
-						  "multiline"
-					   ],
-					  "counters": true,
-					   "iconPanels": true,
+						"pageScroll": {
+ 							  "scroll": true,
+ 							 "update": true,
+ 						  },
+						"extensions": [
+							"position-right",
+							//"position-front",
+							"border-none",
+							"multiline",
+							//"pagedim-black"
+							// "fx-menu-slide",
+							// "fx-panels-slide-0",
+							"shadow-panels",
+					   	],
+					    "counters": true,
+					    "iconPanels":
+							{
+								"add": true,
+								"visible": 2,
+						    }
+					     ,
 					   "navbar": [
 						   {
 						   "add": false,
@@ -262,8 +280,13 @@
 							 //    "searchfield"
 							 // ]
 						  }
-					  ]
-				  }
+					  ],
+					  wrappers: ["wordpress"],
+					  scrollBugFix: {
+                    		"use": true
+                		}
+				  },
+					}
 			  );
 				}
 
