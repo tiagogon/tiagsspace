@@ -285,7 +285,10 @@
 					  scrollBugFix: {
                     		"use": true
                 		}
-				  },
+				  }, {
+		                scrollBugFix: {
+		                    "use": true
+		                }
 					}
 			  );
 				}
