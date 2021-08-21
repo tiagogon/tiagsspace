@@ -58,6 +58,17 @@
 @import "../js/plyr-master/src/sass/plyr.scss";
 @import "plyr-custom.scss";
 
+// Custom features
+@import "front-header-slider";
+@import "front-main-index.scss";
+@import "single-gallery.scss";
+@import "single-map.scss";
+@import "single-content.scss";
+@import "single-light-box-magnific-popup-original.scss"; // IMPORTED from plugin
+@import "single-light-box-magnific-popup.scss";
+@import "front-footer.scss";
+@import "override.scss";
+@import "video-js-player-skin.scss";
 
 // ****************************
 // --- Support Mmenu JS library
@@ -117,16 +128,3 @@
 
 // --- Custom
 @import "mmenu-custom.scss";
-
-
-// Custom features
-@import "front-header-slider";
-@import "front-main-index.scss";
-@import "single-gallery.scss";
-@import "single-map.scss";
-@import "single-content.scss";
-@import "single-light-box-magnific-popup-original.scss"; // IMPORTED from plugin
-@import "single-light-box-magnific-popup.scss";
-@import "front-footer.scss";
-@import "override.scss";
-@import "video-js-player-skin.scss";

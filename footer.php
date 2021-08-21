@@ -34,13 +34,12 @@
 
 		<?php wp_footer(); // js scripts are inserted using this function ?>
 
-		<nav id="tiags-menu">
+		<nav id="my-menu">
 			<ul>
-				<?php if (!is_home()) { ?>
+
 				<li class="">
-					<a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>">Home</a>
+					<a title="<?php echo get_bloginfo('description'); ?>" href="<?php echo home_url(); ?>" class="<?php if (is_home()) { echo "active";} ?>">All</a>
 				</li>
-				<?php } ?>
 
 				<li>
 					<span>Series</span>
@@ -172,54 +171,34 @@
 					</ul>
 				</li>
 
-				<li><span>General</a></span>
+				<li><span>Metadata</a></span>
 					<ul>
+
 						<li>
-							<span>Complicity</span>
+							<a href="https://tiags.tumblr.com/" target="_blank">About</a>
+						</li>
+						<li>
+							<a href="mailto:mail@tiags.space" target="_blank">Direct</a>
+						</li>
+						<li>
+							<span>Connect</span>
 							<ul>
 								<li>
-									<a href="https://www.instagram.com/tiagsssss/" data-hover="Facebook" target="_blank">Instagram</a>
+									<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
 								</li>
 								<li>
-									<a href="https://tiagssssspace.tumblr.com/" data-hover="SoundCloud" target="_blank">Tumblr</a>
+									<a href="https://soundcloud.com/tiagsssss"  target="_blank">Soundcloud</a>
 								</li>
 								<li>
-									<a href="https://tiags.tumblr.com/" data-hover="SoundCloud" target="_blank">Tumblr II</a>
+									<a href="https://vimeo.com/tiags" target="_blank">Vimeo</a>
 								</li>
 								<li>
-									<a href="https://soundcloud.com/tiagsssss" data-hover="SoundCloud" target="_blank">Soundcloud</a>
+									<a href="https://tiagssssspace.tumblr.com/"  target="_blank">Tumblr</a>
 								</li>
 								<li>
-									<a href="https://vimeo.com/tiags" data-hover="Tumbler" target="_blank">Vimeo</a>
-								</li>
-								<li>
-									<a href="https://twitter.com/tiagsssss" data-hover="Twitter" target="_blank">Twitter</a>
-								</li>
-
-								<li>
-									<a href="https://www.flickr.com/photos/cityburns/" target="_blank">
-										Flickr
-									</a>
-								</li>
-								<li>
-									<a href="https://tinyletter.com/trouble-letter" target="_blank">
-										mailing list
-									</a>
-								</li>
-								<li>
-									<a href="https://trouble.place/feed" target="_blank">
-										<span class="fa fa-rss"></span> Feed
-									</a>
+									<a href="https://twitter.com/tiagsssss" target="_blank">Twitter</a>
 								</li>
 							</ul>
-						</li>
-
-						<li>
-							<a href="https://tiags.tumblr.com/" target="_blank">Conspiracy</a>
-						</li>
-
-						<li>
-							<a href="mailto:mail@tiags.space" target="_blank">Contact</a>
 						</li>
 
 					</ul>
@@ -245,7 +224,7 @@
 		<script>
 			document.addEventListener(
 				"DOMContentLoaded", () => {
-					new Mmenu( "#tiags-menu", {
+					new Mmenu( "#my-menu", {
 						"pageScroll": {
  							  "scroll": true,
  							 "update": true,
@@ -264,7 +243,7 @@
 					    "iconPanels":
 							{
 								"add": true,
-								"visible": 2,
+								"visible": 1,
 						    }
 					     ,
 					   "navbar": [
@@ -291,6 +270,21 @@
 		                }
 					}
 			  );
+			  // // Get the API
+			  //  const api = menu.API;
+			  //
+			  //  // Invoke a method
+			  //  const panel = document.querySelector( "#my-panel" );
+			  //  api.openPanel( panel );
+			  //
+			  // //CLose MENU
+			  // document.querySelector( "#my-close-button" )
+              //   .addEventListener(
+              //       "click", ( evnt ) => {
+              //           evnt.preventDefault();
+              //           api.close();
+              //       }
+              //   );
 				}
 
 			);
@@ -299,7 +293,7 @@
 		<?php
 		// Suport Log hover image preview
 		// -- https://github.com/zpalffy/preview-image-jquery ?>
-		<script src="<?php bloginfo('template_url'); ?>/library/js/log-preview-image/preview-image.js" crossorigin="anonymous"></script>
+		<script src="<?php bloginfo('template_url'); ?>/library/js/log-preview-image/preview-images.js" crossorigin="anonymous"></script>
 		<script type="text/javascript">
 			$.previewImage({
 			   'xOffset': 30,  // x-offset from cursor

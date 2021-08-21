@@ -7,6 +7,8 @@
 }
 
 
+
+
 .mm-menu {
     padding-top: 60px;
     background-color: $blue;
@@ -126,3 +128,11 @@
 
 // Remove click background
 .mm-menu .mm-panels .mm-panel ul .mm-listitem_selected>.mm-listitem__text{background:none}
+
+.mm-wrapper_opened,.mm-wrapper_opening{
+    #site-header{
+
+                display: none;
+
+    }
+}
