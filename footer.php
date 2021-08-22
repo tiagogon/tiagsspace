@@ -70,6 +70,20 @@
 
 
 					</ul>
+				</li>
+ 			   <li>
+ 					<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">4K LENTO</a>
+ 					<ul>
+ 						<li><a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">Mixfiles</a></li>
+ 						<li>
+ 							<a href="https://soundcloud.com/tiagsssss" target="_blank">Soundcloud</a>
+ 						</li>
+ 						<li>
+ 							<a href="https://podcasts.apple.com/ca/podcast/4k-lento/id1445312236" target="_blank">Podcast</a>
+ 						</li>
+ 					</ul>
+ 				</li>
+
 
 			   <li>
 				  <a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php
@@ -106,18 +120,6 @@
 
 				   </ul>
 			   </li>
-			   <li>
-					<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">4K LENTO</a>
-					<ul>
-						<li><a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">Mixfiles</a></li>
-						<li>
-							<a href="https://soundcloud.com/tiagsssss" target="_blank">Soundcloud</a>
-						</li>
-						<li>
-							<a href="https://podcasts.apple.com/ca/podcast/4k-lento/id1445312236" target="_blank">Podcast</a>
-						</li>
-					</ul>
-				</li>
 
 				<li><span>Filter</span>
 					<ul>
@@ -222,6 +224,9 @@
 		<?php
 		// MMenu Configuration ?>
 		<script>
+
+
+			//
 			document.addEventListener(
 				"DOMContentLoaded", () => {
 					new Mmenu( "#my-menu", {

@@ -173,7 +173,7 @@
 						    // }
 						 ?>
 
-						<li><a href="#my-menu" class="open-menu-but">Reveal</a></li>
+						<li><a href="#my-menu" >Reveal</a></li>
 					</ul>
 				</div>
 			</div>

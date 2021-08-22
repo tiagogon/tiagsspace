@@ -1450,13 +1450,13 @@ function add_color_class( $classes ) {
     } elseif ((is_singular( 'dusk' ) && $selected_color==0)) {
 
         $classes[] = 'header-ligh';
-        $classes[] = 'yellow';
+        $classes[] = 'header-white';
 
     // Is Emulsion single
     } elseif ((is_singular( 'emulsion' ) && $selected_color==0)) {
 
         $classes[] = 'header-ligh';
-        $classes[] = 'yellow';
+        $classes[] = 'header-white';
 
 
 	// Is Log
@@ -1465,7 +1465,7 @@ function add_color_class( $classes ) {
                 OR is_tax('log-branch')) {
 
         $classes[] = 'header-ligh';
-        $classes[] = 'header-white';
+        $classes[] = 'yellow';
 
     // Is Films single
     } elseif ((is_singular( 'films' ) && $selected_color==0)) {

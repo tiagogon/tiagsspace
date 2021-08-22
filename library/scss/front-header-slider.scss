@@ -69,7 +69,7 @@
   }
 
 
-  
+
 
   //Display Size
   @media (min-width: map-get($grid-breakpoints, md)) {
@@ -129,7 +129,7 @@
         }
       }
     }
-    @media (min-width: map-get($grid-breakpoints, md)) {
+
       #topbar,
       .slicknav_nav {
         ul {
@@ -159,7 +159,7 @@
           }
         }
       }
-    }
+    
   }
 }
 
