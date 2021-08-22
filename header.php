@@ -91,6 +91,7 @@
 							    "iconPanels":
 									{
 										"add": true,
+										"blockPanel":true,
 										"visible": 1,
 								    }
 							     ,
@@ -108,6 +109,9 @@
 									 // ]
 								  }
 							  ],
+							  backButton: {
+								   // back button options
+							   },
 							  wrappers: ["wordpress"],
 							  scrollBugFix: {
 		                    		"use": true
@@ -115,24 +119,10 @@
 						  }, {
 				                scrollBugFix: {
 				                    "use": true
-				                }
+				                },
 							}
 					  );
-					  // // Get the API
-					  //  const api = menu.API;
-					  //
-					  //  // Invoke a method
-					  //  const panel = document.querySelector( "#my-panel" );
-					  //  api.openPanel( panel );
-					  //
-					  // //CLose MENU
-					  // document.querySelector( "#my-close-button" )
-		              //   .addEventListener(
-		              //       "click", ( evnt ) => {
-		              //           evnt.preventDefault();
-		              //           api.close();
-		              //       }
-		              //   );
+
 						}
 
 					);
