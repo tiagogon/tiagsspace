@@ -1469,15 +1469,22 @@ function add_color_class( $classes ) {
 	                OR is_tax( 'log-branch', 'blwww') ) {
 
 	        $classes[] = 'header-ligh';
-	        $classes[] = 'lime';}
-
+	        $classes[] = 'lime';
+		}
 		// Is Log branch hrzn
 	    elseif ((has_term( 'hrzn', 'log-branch'  )  && $selected_color==0)
 	                OR is_tax( 'log-branch', 'hrzn') ) {
 
 	        $classes[] = 'header-ligh';
-	        $classes[] = 'yellow';}
+	        $classes[] = 'yellow';
+		}
+		// Is Log branch plnts
+	    elseif ((has_term( 'plnts', 'log-branch'  )  && $selected_color==0)
+	                OR is_tax( 'log-branch', 'plnts') ) {
 
+	        $classes[] = 'header-ligh';
+	        $classes[] = 'earth';
+		}
 		// Other Log Branches
 		else {
 			$classes[] = 'header-ligh';
@@ -1509,6 +1516,8 @@ function add_color_class( $classes ) {
             $classes[] = 'none-white-bg';
         } elseif ($selected_color=="indigo") {
             $classes[] = 'none-white-bg';
+        } elseif ($selected_color=="earth") {
+            $classes[] = 'header-ligh';
         }
 
     }
