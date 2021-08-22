@@ -95,6 +95,9 @@
 										"visible": 1,
 								    }
 							     ,
+								 "drag":{
+									 "open": true,
+								 }
 							   "navbar": [
 								   {
 								   "add": false,
