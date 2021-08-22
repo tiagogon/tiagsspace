@@ -89,7 +89,7 @@
 				  <span>Log</span>
 				   <ul>
 					   <li>
-						   <a href="<?php echo get_post_type_archive_link( 'log'); ?>" id="menu-log" class="<?php
+						   <a href="<?php echo get_post_type_archive_link( 'log'); ?>"  class="<?php
 		 				  if (is_singular( 'log' ) OR is_post_type_archive('log') or is_tax('log-branch'))
 		 					   { echo " belongs";}
 		 				  if (is_post_type_archive('emulsion'))
@@ -183,10 +183,10 @@
 							<a href="https://tiags.tumblr.com/" target="_blank">About</a>
 						</li>
 						<li>
-							<a href="mailto:mail@tiags.space" target="_blank">Direct</a>
+							<a href="mailto:mail@tiags.space" target="_blank">Contact</a>
 						</li>
 						<li>
-							<span>Connect</span>
+							<span>Follow</span>
 							<ul>
 								<li>
 									<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
