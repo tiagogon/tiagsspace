@@ -1464,8 +1464,25 @@ function add_color_class( $classes ) {
                 OR is_post_type_archive('log')
                 OR is_tax('log-branch')) {
 
-        $classes[] = 'header-ligh';
-        $classes[] = 'yellow';
+		// Is Log branch BLWWW
+	    if ((has_term( 'blwww', 'log-branch'  )  && $selected_color==0)
+	                OR is_tax( 'log-branch', 'blwww') ) {
+
+	        $classes[] = 'header-ligh';
+	        $classes[] = 'lime';}
+
+		// Is Log branch hrzn
+	    elseif ((has_term( 'hrzn', 'log-branch'  )  && $selected_color==0)
+	                OR is_tax( 'log-branch', 'hrzn') ) {
+
+	        $classes[] = 'header-ligh';
+	        $classes[] = 'yellow';}
+
+		// Other Log Branches
+		else {
+			$classes[] = 'header-ligh';
+	        $classes[] = 'header-white';
+		}
 
     // Is Films single
     } elseif ((is_singular( 'films' ) && $selected_color==0)) {

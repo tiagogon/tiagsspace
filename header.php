@@ -73,10 +73,10 @@
 					document.addEventListener(
 						"DOMContentLoaded", () => {
 							new Mmenu( "#my-menu", {
-								"pageScroll": {
-		 							  "scroll": true,
-		 							 "update": true,
-		 						  },
+								// "pageScroll": {
+		 						// 	  "scroll": true,
+		 						// 	 "update": true,
+		 						//   },
 								"extensions": [
 									"position-right",
 									//"position-front",
@@ -95,9 +95,9 @@
 										"visible": 1,
 								    }
 							     ,
-								 "drag":{
-									 "open": true,
-								 }
+								 // "drag":{
+									//  "open": true,
+								 // }
 							   "navbar": [
 								   {
 								   "add": false,
@@ -112,17 +112,17 @@
 									 // ]
 								  }
 							  ],
-							  backButton: {
-								   // back button options
-							   },
-							  wrappers: ["wordpress"],
-							  scrollBugFix: {
-		                    		"use": true
-		                		}
+							  // backButton: {
+								//    // back button options
+							  //  },
+							  // wrappers: ["wordpress"],
+							  // scrollBugFix: {
+		                    	// 	"use": true
+		                		// }
 						  }, {
-				                scrollBugFix: {
-				                    "use": true
-				                },
+				                // scrollBugFix: {
+				                //     "use": true
+				                // },
 							}
 					  );
 
