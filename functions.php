@@ -1478,9 +1478,9 @@ function add_color_class( $classes ) {
 	        $classes[] = 'header-ligh';
 	        $classes[] = 'yellow';
 		}
-		// Is Log branch plnts
-	    elseif ((has_term( 'plnts', 'log-branch'  )  && $selected_color==0)
-	                OR is_tax( 'log-branch', 'plnts') ) {
+		// Is Log branch plnt
+	    elseif ((has_term( 'plnt', 'log-branch'  )  && $selected_color==0)
+	                OR is_tax( 'log-branch', 'plnt') ) {
 
 	        $classes[] = 'header-ligh';
 	        $classes[] = 'earth';

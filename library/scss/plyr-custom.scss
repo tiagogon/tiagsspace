@@ -110,6 +110,10 @@ audio{
     }
 }
 
+.plyr__progress {
+    margin-right: var(--plyr-range-thumb-height,20px);
+    width: 100%;
+}
 
 
 // INSIDE post-content
