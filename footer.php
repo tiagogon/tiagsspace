@@ -72,7 +72,7 @@
 					</ul>
 				</li>
  			   <li>
- 					<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">4K LENTO</a>
+				   <span>4K Lento</span>
  					<ul>
  						<li><a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">Mixfiles</a></li>
  						<li>
@@ -86,13 +86,16 @@
 
 
 			   <li>
-				  <a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php
-				  if (is_singular( 'log' ) OR is_post_type_archive('log') or is_tax('log-branch'))
-					   { echo " belongs";}
-				  if (is_post_type_archive('emulsion'))
-					   { echo "active";}  ?>
-					   ">Log</a>
+				  <span>Log</span>
 				   <ul>
+					   <li>
+						   <a href="<?php echo get_post_type_archive_link( 'log'); ?>" id="menu-log" class="<?php
+		 				  if (is_singular( 'log' ) OR is_post_type_archive('log') or is_tax('log-branch'))
+		 					   { echo " belongs";}
+		 				  if (is_post_type_archive('emulsion'))
+		 					   { echo "active";}  ?>
+		 					   ">All</a>
+					   </li>
 					   <li>
 						   <a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">blwww</a>
 					   </li>
@@ -221,79 +224,7 @@
 			const players = Array.from(document.querySelectorAll('audio')).map(p => new Plyr(p));
 		</script>
 
-		<?php
-		// MMenu Configuration ?>
-		<script>
 
-
-			//
-			document.addEventListener(
-				"DOMContentLoaded", () => {
-					new Mmenu( "#my-menu", {
-						"pageScroll": {
- 							  "scroll": true,
- 							 "update": true,
- 						  },
-						"extensions": [
-							"position-right",
-							//"position-front",
-							"border-none",
-							"multiline",
-							//"pagedim-black"
-							// "fx-menu-slide",
-							// "fx-panels-slide-0",
-							"shadow-panels",
-					   	],
-					    "counters": true,
-					    "iconPanels":
-							{
-								"add": true,
-								"visible": 1,
-						    }
-					     ,
-					   "navbar": [
-						   {
-						   "add": false,
-						   }
-					   ],
-					   "navbars": [
-						  {
-							  "use": false,
-							 "position": "top",
-							 // "content": [
-							 //    "searchfield"
-							 // ]
-						  }
-					  ],
-					  wrappers: ["wordpress"],
-					  scrollBugFix: {
-                    		"use": true
-                		}
-				  }, {
-		                scrollBugFix: {
-		                    "use": true
-		                }
-					}
-			  );
-			  // // Get the API
-			  //  const api = menu.API;
-			  //
-			  //  // Invoke a method
-			  //  const panel = document.querySelector( "#my-panel" );
-			  //  api.openPanel( panel );
-			  //
-			  // //CLose MENU
-			  // document.querySelector( "#my-close-button" )
-              //   .addEventListener(
-              //       "click", ( evnt ) => {
-              //           evnt.preventDefault();
-              //           api.close();
-              //       }
-              //   );
-				}
-
-			);
-		</script>
 
 		<?php
 		// Suport Log hover image preview

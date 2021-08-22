@@ -64,6 +64,80 @@
 			<?php // Mmenu ?>
 	        	<script src="<?php bloginfo('template_url'); ?>/library/js/mmenu-js-master/dist/mmenu.js"></script>
 
+				<?php
+				// MMenu Configuration ?>
+				<script>
+
+
+					//
+					document.addEventListener(
+						"DOMContentLoaded", () => {
+							new Mmenu( "#my-menu", {
+								"pageScroll": {
+		 							  "scroll": true,
+		 							 "update": true,
+		 						  },
+								"extensions": [
+									"position-right",
+									//"position-front",
+									"border-none",
+									"multiline",
+									//"pagedim-black"
+									// "fx-menu-slide",
+									// "fx-panels-slide-0",
+									"shadow-panels",
+							   	],
+							    "counters": true,
+							    "iconPanels":
+									{
+										"add": true,
+										"visible": 1,
+								    }
+							     ,
+							   "navbar": [
+								   {
+								   "add": false,
+								   }
+							   ],
+							   "navbars": [
+								  {
+									  "use": false,
+									 "position": "top",
+									 // "content": [
+									 //    "searchfield"
+									 // ]
+								  }
+							  ],
+							  wrappers: ["wordpress"],
+							  scrollBugFix: {
+		                    		"use": true
+		                		}
+						  }, {
+				                scrollBugFix: {
+				                    "use": true
+				                }
+							}
+					  );
+					  // // Get the API
+					  //  const api = menu.API;
+					  //
+					  //  // Invoke a method
+					  //  const panel = document.querySelector( "#my-panel" );
+					  //  api.openPanel( panel );
+					  //
+					  // //CLose MENU
+					  // document.querySelector( "#my-close-button" )
+		              //   .addEventListener(
+		              //       "click", ( evnt ) => {
+		              //           evnt.preventDefault();
+		              //           api.close();
+		              //       }
+		              //   );
+						}
+
+					);
+				</script>
+
 
 
 			<?php // Masonry ?>
