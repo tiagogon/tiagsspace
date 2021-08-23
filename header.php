@@ -23,7 +23,10 @@
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
 
 		<?php // ----- FONTS ----- ?>
-			<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,600,600i" rel="stylesheet">
+			<link rel="preconnect" href="https://fonts.googleapis.com">
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+			<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+
 
 			<!-- <style type="text/css">
 			@font-face{ font-family: "calyces-regular-webfont";
