@@ -1483,7 +1483,7 @@ function add_color_class( $classes ) {
 	                OR is_tax( 'log-branch', 'plnt') ) {
 
 	        $classes[] = 'header-ligh';
-	        $classes[] = 'earth';
+	        $classes[] = 'sky';
 		}
 		// Other Log Branches
 		else {
@@ -1517,6 +1517,8 @@ function add_color_class( $classes ) {
         } elseif ($selected_color=="indigo") {
             $classes[] = 'none-white-bg';
         } elseif ($selected_color=="earth") {
+            $classes[] = 'header-ligh';
+        } elseif ($selected_color=="sky") {
             $classes[] = 'header-ligh';
         }
 
