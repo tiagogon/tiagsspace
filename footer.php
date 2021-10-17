@@ -88,14 +88,14 @@
 			   <li>
 				  <span>Log</span>
 				   <ul>
-					   <!-- <li>
+					   <li>
 						   <a href="<?php echo get_post_type_archive_link( 'log'); ?>"  class="<?php
 		 				  if (is_singular( 'log' ) OR is_post_type_archive('log') or is_tax('log-branch'))
 		 					   { echo " belongs";}
 		 				  if (is_post_type_archive('emulsion'))
 		 					   { echo "active";}  ?>
 		 					   ">All</a>
-					   </li> -->
+					   </li>
 					   <li>
 						   <a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">blwww</a>
 					   </li>
