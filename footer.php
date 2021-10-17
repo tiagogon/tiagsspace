@@ -1,4 +1,4 @@
-		<?php get_template_part( 'template-parts/front', 'social' ); ?>
+		<!-- <?php get_template_part( 'template-parts/front', 'social' ); ?>
 
 	 	<div id="footer-block">
 
@@ -19,13 +19,13 @@
 
 						</div>
 
-					</div> <!-- end #inner-footer -->
+					</div>
 
-				</footer> <!-- end footer -->
+				</footer>
 
 			</div>
 
-		</div>
+		</div> -->
 
 		<!--[if lt IE 7 ]>
 				<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
