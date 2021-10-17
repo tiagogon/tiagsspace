@@ -1057,7 +1057,7 @@ function add_my_favicon() {
             <link rel="manifest" href="'.$favicon_path.'/manifest.json">
             <meta name="msapplication-TileColor" content="#f50044">
             <meta name="msapplication-TileImage" content="'.$favicon_path.'/ms-icon-144x144.png">
-            <meta name="theme-color" content="#f50057">';
+            <meta name="theme-color" content="#f50044">';
 }
 function add_my_favicon_admin() {
    $favicon_path = get_template_directory_uri() . '/favicon.ico/adminarea';
@@ -1078,7 +1078,7 @@ function add_my_favicon_admin() {
             <link rel="manifest" href="'.$favicon_path.'/manifest.json">
             <meta name="msapplication-TileColor" content="#3c00f5">
             <meta name="msapplication-TileImage" content="'.$favicon_path.'/ms-icon-144x144.png">
-            <meta name="theme-color" content="#775DA6">';
+            <meta name="theme-color" content="#3c00f5">';
 }
 add_action( 'wp_head', 'add_my_favicon' ); //front end
 add_action( 'admin_head', 'add_my_favicon_admin' ); //admin end
