@@ -178,7 +178,7 @@
 					</ul>
 				</li>
 
-				<li><span>Metadata</a></span>
+				<li><span>Info</a></span>
 					<ul>
 
 						<li>
