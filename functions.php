@@ -1055,9 +1055,9 @@ function add_my_favicon() {
             <link rel="icon" type="image/png" sizes="96x96" href="'.$favicon_path.'/favicon-96x96.png">
             <link rel="icon" type="image/png" sizes="16x16" href="'.$favicon_path.'/favicon-16x16.png">
             <link rel="manifest" href="'.$favicon_path.'/manifest.json">
-            <meta name="msapplication-TileColor" content="#f50044">
+            <meta name="msapplication-TileColor" content="#ff0000">
             <meta name="msapplication-TileImage" content="'.$favicon_path.'/ms-icon-144x144.png">
-            <meta name="theme-color" content="#f50044">';
+            <meta name="theme-color" content="#ff0000">';
 }
 function add_my_favicon_admin() {
    $favicon_path = get_template_directory_uri() . '/favicon.ico/adminarea';
