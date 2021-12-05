@@ -90,38 +90,7 @@ ul.thumb-container{
     display: none!important;
   }
 }
-// ___DEADTIVATED because of infinite load
-// .date,.home,.post-type-archive-films {
-//   .year-separator{
-//     display: none;
-//   }
-// }
-// .home.paged {
-//   .year-separator{
-//     display: block;
-//   }
-// }
 
-// remove separator for Films section
-    // .post-type-archive-films { //
-    //   .year-separator{
-    //     display: none;
-    //   }
-    // }
-
-// Remove from home first page:
-  // .home {
-  //   .year-separator{
-  //     display: none;
-  //   }
-  // }
-  // .home {
-  //   &.paged {
-  //     .year-separator{
-  //       display: block;
-  //     }
-  //   }
-  // }
 
 //Masory fix so it does not move items on loading
 .item-sizer{
@@ -163,12 +132,20 @@ li.item-post {
           display: block;
           max-width: 100%;
           width: 100%;
-          opacity: 1;
-          -webkit-transition: opacity 0.5s ease-in-out;
-            -moz-transition: opacity 0.5s ease-in-out;
-            -ms-transition: opacity 0.5s ease-in-out;
-            -o-transition: opacity 0.5s ease-in-out;
-            transition: opacity 0.5s ease-in-out;
+
+            // Blur efect
+            -webkit-filter: blur(0px) contrast(1);
+            -moz-filter: blur(0px) contrast(1);
+            -o-filter: blur(0px) contrast(1);
+            -ms-filter: blur(0px) contrast(1);
+            filter: url(#blur);
+            filter: blur(0px) contrast(1);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
+            transition: 0.5s filter ease-in-out;
+            -webkit-transition: 0.5s -webkit-filter ease-in-out;
+            -moz-transition: 0.5s -moz-filter ease-in-out;
+            -ms-transition: 0.5s -ms-filter ease-in-out;
+            -o-transition: 0.5s -o-filter ease-in-out;
+            @include transition(filter 0.5s ease-in-out);
         }
         video {
           //position: fixed;
@@ -180,11 +157,23 @@ li.item-post {
           height: auto;
           z-index: -100;
           transform: translateX(0%) translateY(0%);
-          //background: url('//demosthenes.info/assets/images/polina.jpg') no-repeat;
           background-size: cover;
           transition: 1s opacity;
-          opacity: 1;
           max-width: 100%;
+
+          // Blur efect
+          -webkit-filter: blur(0px) contrast(1);
+          -moz-filter: blur(0px) contrast(1);
+          -o-filter: blur(0px) contrast(1);
+          -ms-filter: blur(0px) contrast(1);
+          filter: url(#blur);
+          filter: blur(0px) contrast(1);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
+          transition: 0.5s filter ease-in-out;
+          -webkit-transition: 0.5s -webkit-filter ease-in-out;
+          -moz-transition: 0.5s -moz-filter ease-in-out;
+          -ms-transition: 0.5s -ms-filter ease-in-out;
+          -o-transition: 0.5s -o-filter ease-in-out;
+          @include transition(filter 0.5s ease-in-out);
         }
       }
       figcaption{
@@ -241,7 +230,7 @@ li.item-post {
     }
     box-shadow: 8px 8px 8px $brand-color-darker;
     //@include transition(background-color 1s ease);
-    @include transition(box-shadow 1s ease);
+    @include transition(box-shadow 5s ease-in-out);
 
     // remove shadow on mobile
     // @media (max-width: map-get($grid-breakpoints, sm)) {
@@ -250,21 +239,25 @@ li.item-post {
     &:hover{
       .imgcontainer{
 
-        @include transition(background-color 1s ease-in-out);
-        background-color: $blue;
-        img{
-          opacity: 0.4; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
-          -webkit-transition: opacity 1s ease-in-out;
-            -moz-transition: opacity 1s ease-in-out;
-            -ms-transition: opacity 1s ease-in-out;
-            -o-transition: opacity 1s ease-in-out;
-            transition: opacity 1s ease-in-out;
-        }
+          img{
+                  -webkit-filter: blur(4px) contrast(0.85);
+                  -moz-filter: blur(4px) contrast(0.85);
+                  -o-filter: blur(4px) contrast(0.85);
+                  -ms-filter: blur(4px) contrast(0.85);
+                  filter: url(#blur);
+                  filter: blur(4px) contrast(0.85);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4');
+          }
+          video {
+                -webkit-filter: blur(4px) contrast(0.85);
+                -moz-filter: blur(4px) contrast(0.85);
+                -o-filter: blur(4px) contrast(0.85);
+                -ms-filter: blur(4px) contrast(0.85);
+                filter: url(#blur);
+                filter: blur(4px) contrast(0.85);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4');
+          }
       }
-      box-shadow: 8px 8px 12px $blue;
-      //background-color: $brand-color;
-      @include transition(background-color 1s ease);
-      @include transition(box-shadow 1s ease);
+      box-shadow: 8px 8px 12px $brand-color-darker;
+      @include transition(box-shadow 1s ease-in-out);
       @media (max-width: map-get($grid-breakpoints, sm)) {
         box-shadow: none;
       }
@@ -273,11 +266,11 @@ li.item-post {
         @include transition(bottom 1s ease-in-out);
         .series{
           color: $white;
-          @include transition(color 1s ease);
+          @include transition(color 1s ease-in-out);
         }
         h2{
           color: $white;
-          @include transition(color 1s ease);
+          @include transition(color 1s ease-in-out);
         }
       }
       figcaption.hide-figcaption{
@@ -305,96 +298,6 @@ li.item-post {
   }
 }
 
-// Emulsion THumbnail
-    // li.emulsion-thumb, li.dusk-thumb {
-    //   figure {
-    //     background: $yellow;
-    //     a{
-    //
-    //       figcaption{
-    //         .series{
-    //           color: $white;
-    //         }
-    //         h2{
-    //           color: $white;
-    //         }
-    //       }
-    //     }
-    //     &:hover{
-    //       .imgcontainer{
-    //         background: $dark;
-    //         @include transition(background-color 1s ease-in-out);
-    //         img{
-    //           // opacity: 0.6; // chrome bug Version 66.0.3359.139 (Official Build) (64-bit)
-    //         }
-    //       }
-    //       // figcaption{
-    //       //   .series{
-    //       //     color: $gray-dark;
-    //       //     @include transition(color 1.5s ease);
-    //       //   }
-    //       //   h2{
-    //       //     color: $gray-dark;
-    //       //     @include transition(color 1.5s ease);
-    //       //   }
-    //       // }
-    //     }
-    //   }
-    // }
-    // // emulsion archive
-    // .post-type-archive-emulsion,.post-type-archive-dusk{
-    //   li.emulsion-thumb,li.dusk-thumb {
-    //     figure{
-    //       box-shadow: 8px 8px 8px #aaa;
-    //       @include transition(box-shadow 1s ease);
-    //       &:hover{
-    //         box-shadow: 8px 8px 8px #888;
-    //         @include transition(box-shadow 1s ease);
-    //       }
-    //     }
-    //   }
-    // }
-
-
-
-
-
-
-// Remove the frame on the Emulsion and Dusk pages
-// .post-type-archive-emulsion, .post-type-archive-dusk {
-//   li{
-//     figure {
-//       a{
-//         padding: 0% 0% 6%;
-//       }
-//     }
-//   }
-// }
-
-
-
-
-
-
-
-
-// films archive
-    // .post-type-archive-films{
-    //   #index {
-    //       padding: 0px;
-    //       // padding-bottom: 40px;
-    //   }
-    //   li.films-thumb {
-    //     padding-bottom: 0px;
-    //     figure {
-    //       box-shadow: none;
-    //       figcaption{
-    //         bottom: 11%;
-    //       }
-    //
-    //     }
-    //   }
-    // }
 
 
 
@@ -409,15 +312,6 @@ li.item-post {
 
           .imgcontainer{
             margin-bottom: 0px;
-            @include transition(background-color 1s ease-in-out);
-            img{
-              opacity: 1;
-              -webkit-transition: opacity 0.5s ease-in-out;
-                -moz-transition: opacity 0.5s ease-in-out;
-                -ms-transition: opacity 0.5s ease-in-out;
-                -o-transition: opacity 0.5s ease-in-out;
-                transition: opacity 0.5s ease-in-out;
-            }
           }
           figcaption{
             .series{
@@ -443,18 +337,6 @@ li.item-post {
         }
 
         &:hover{
-          .imgcontainer{
-            @include transition(background-color 1s ease-in-out);
-            background-color: $blue;
-            img{
-              opacity: 0.4; // causes bug on chrome Version 66.0.3359.139 (Official Build) (64-bit)
-              -webkit-transition: opacity 0.5s ease-in-out;
-                -moz-transition: opacity 0.5s ease-in-out;
-                -ms-transition: opacity 0.5s ease-in-out;
-                -o-transition: opacity 0.5s ease-in-out;
-                transition: opacity 0.5s ease-in-out;
-            }
-          }
           figcaption{
             bottom: 40%;
             @media (max-width: map-get($grid-breakpoints, sm)) {
@@ -475,35 +357,6 @@ li.item-post {
       }
     }
 
-// hyper archive
-    // .post-type-archive-hyper{
-    //   #index {
-    //       padding: 0px;
-    //       padding-bottom: 40px;
-    //   }
-    //   li.hyper-thumb {
-    //     padding-bottom: 0px;
-    //     figure {
-    //         a {
-    //             .imgcontainer{
-    //               img{
-    //                 //opacity: 0.8;
-    //               }
-    //             }
-    //         }
-    //       box-shadow: none;
-    //       figcaption{
-    //         bottom: 10%;
-    //       }
-    //       &:hover{
-    //         figcaption{
-    //           bottom: 40%;
-    //         }
-    //       }
-    //
-    //     }
-    //   }
-    // }
 
 
     // films THumbnail
@@ -549,26 +402,7 @@ li.item-post {
         }
 
         &:hover{
-          .imgcontainer{
-            background: $blue;
-            @include transition(background-color 1s ease-in-out);
-            img{
-              opacity: 0.7;
-              -webkit-transition: opacity 0.5s ease-in-out;
-                -moz-transition: opacity 0.5s ease-in-out;
-                -ms-transition: opacity 0.5s ease-in-out;
-                -o-transition: opacity 0.5s ease-in-out;
-                transition: opacity 0.5s ease-in-out;
-            }
-            video{
-              opacity: 0.6;
-              -webkit-transition: opacity 0.5s ease-in-out;
-                -moz-transition: opacity 0.5s ease-in-out;
-                -ms-transition: opacity 0.5s ease-in-out;
-                -o-transition: opacity 0.5s ease-in-out;
-                transition: opacity 0.5s ease-in-out;
-            }
-          }
+
           figcaption{
             bottom: 40%!important;
             @include transition(bottom 1s ease-in-out);
