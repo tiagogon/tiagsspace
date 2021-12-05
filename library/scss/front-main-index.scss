@@ -124,7 +124,7 @@ li.item-post {
       .imgcontainer{
         margin-bottom: 30px;
         margin-bottom: 0px;
-        background: $blue;
+        background: $brand-color;
         @include transition(background-color 1s ease-in-out);
         img{
           outline: none;
@@ -134,12 +134,12 @@ li.item-post {
           width: 100%;
 
             // Blur efect
-            -webkit-filter: blur(0px) contrast(1);
-            -moz-filter: blur(0px) contrast(1);
-            -o-filter: blur(0px) contrast(1);
-            -ms-filter: blur(0px) contrast(1);
+            -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
+            -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
+            -o-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
+            -ms-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
             filter: url(#blur);
-            filter: blur(0px) contrast(1);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
+            filter: blur(0px) contrast(1) brightness(1) grayscale(0);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
             transition: 0.5s filter ease-in-out;
             -webkit-transition: 0.5s -webkit-filter ease-in-out;
             -moz-transition: 0.5s -moz-filter ease-in-out;
@@ -162,12 +162,12 @@ li.item-post {
           max-width: 100%;
 
           // Blur efect
-          -webkit-filter: blur(0px) contrast(1);
-          -moz-filter: blur(0px) contrast(1);
-          -o-filter: blur(0px) contrast(1);
-          -ms-filter: blur(0px) contrast(1);
+          -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
+          -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
+          -o-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
+          -ms-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           filter: url(#blur);
-          filter: blur(0px) contrast(1);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
+          filter: blur(0px) contrast(1) brightness(1) grayscale(0);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
           transition: 0.5s filter ease-in-out;
           -webkit-transition: 0.5s -webkit-filter ease-in-out;
           -moz-transition: 0.5s -moz-filter ease-in-out;
@@ -237,23 +237,37 @@ li.item-post {
     //     box-shadow: none;
     // }
     &:hover{
-      .imgcontainer{
+        a{
+          .imgcontainer{
 
-          img{
-                  -webkit-filter: blur(4px) contrast(0.85);
-                  -moz-filter: blur(4px) contrast(0.85);
-                  -o-filter: blur(4px) contrast(0.85);
-                  -ms-filter: blur(4px) contrast(0.85);
-                  filter: url(#blur);
-                  filter: blur(4px) contrast(0.85);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4');
-          }
-          video {
-                -webkit-filter: blur(4px) contrast(0.85);
-                -moz-filter: blur(4px) contrast(0.85);
-                -o-filter: blur(4px) contrast(0.85);
-                -ms-filter: blur(4px) contrast(0.85);
-                filter: url(#blur);
-                filter: blur(4px) contrast(0.85);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4');
+              img{
+                      -webkit-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                      -moz-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                      -o-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                      -ms-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                      filter: url(#blur);
+                      filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4');
+                      transition: 0.5s filter ease-in-out;
+                      -webkit-transition: 0.5s -webkit-filter ease-in-out;
+                      -moz-transition: 0.5s -moz-filter ease-in-out;
+                      -ms-transition: 0.5s -ms-filter ease-in-out;
+                      -o-transition: 0.5s -o-filter ease-in-out;
+                      @include transition(filter 0.5s ease-in-out);
+              }
+              video {
+                    -webkit-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                    -moz-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                    -o-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                    -ms-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                    filter: url(#blur);
+                    filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4');
+                    transition: 0.5s filter ease-in-out;
+                    -webkit-transition: 0.5s -webkit-filter ease-in-out;
+                    -moz-transition: 0.5s -moz-filter ease-in-out;
+                    -ms-transition: 0.5s -ms-filter ease-in-out;
+                    -o-transition: 0.5s -o-filter ease-in-out;
+                    @include transition(filter 0.5s ease-in-out);
+              }
           }
       }
       box-shadow: 8px 8px 12px $brand-color-darker;
@@ -369,16 +383,6 @@ li.item-post {
 
           .imgcontainer{
             margin-bottom: 0px;
-            background: #666;
-            @include transition(background-color 1s ease-in-out);
-            img{
-              opacity: 1;
-              -webkit-transition: opacity 0.5s ease-in-out;
-                -moz-transition: opacity 0.5s ease-in-out;
-                -ms-transition: opacity 0.5s ease-in-out;
-                -o-transition: opacity 0.5s ease-in-out;
-                transition: opacity 0.5s ease-in-out;
-            }
           }
           figcaption{
             .series{
