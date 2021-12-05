@@ -158,7 +158,6 @@ li.item-post {
           z-index: -100;
           transform: translateX(0%) translateY(0%);
           background-size: cover;
-          transition: 1s opacity;
           max-width: 100%;
 
           // Blur efect
@@ -253,6 +252,7 @@ li.item-post {
                       -ms-transition: 0.5s -ms-filter ease-in-out;
                       -o-transition: 0.5s -o-filter ease-in-out;
                       @include transition(filter 0.5s ease-in-out);
+
               }
               video {
                     -webkit-filter: blur(2px) contrast(0.9) brightness(0.8);
@@ -267,6 +267,8 @@ li.item-post {
                     -ms-transition: 0.5s -ms-filter ease-in-out;
                     -o-transition: 0.5s -o-filter ease-in-out;
                     @include transition(filter 0.5s ease-in-out);
+
+
               }
           }
       }
