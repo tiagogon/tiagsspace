@@ -241,12 +241,12 @@ li.item-post {
           .imgcontainer{
 
               img{
-                      -webkit-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
-                      -moz-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
-                      -o-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
-                      -ms-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                      -webkit-filter: blur(2px) contrast(9) brightness(0.8);
+                      -moz-filter: blur(2px) contrast(9) brightness(0.8);
+                      -o-filter: blur(2px) contrast(9) brightness(0.8);
+                      -ms-filter: blur(2px) contrast(9) brightness(0.8);
                       filter: url(#blur);
-                      filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4');
+                      filter: blur(2px) contrast(9) brightness(0.8);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='2');
                       transition: 0.5s filter ease-in-out;
                       -webkit-transition: 0.5s -webkit-filter ease-in-out;
                       -moz-transition: 0.5s -moz-filter ease-in-out;
@@ -255,12 +255,12 @@ li.item-post {
                       @include transition(filter 0.5s ease-in-out);
               }
               video {
-                    -webkit-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
-                    -moz-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
-                    -o-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
-                    -ms-filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);
+                    -webkit-filter: blur(2px) contrast(9) brightness(0.8);
+                    -moz-filter: blur(2px) contrast(9) brightness(0.8);
+                    -o-filter: blur(2px) contrast(9) brightness(0.8);
+                    -ms-filter: blur(2px) contrast(9) brightness(0.8);
                     filter: url(#blur);
-                    filter: blur(4px) contrast(0.85) brightness(0.8) grayscale(0.1);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='4');
+                    filter: blur(2px) contrast(9) brightness(0.8);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='2');
                     transition: 0.5s filter ease-in-out;
                     -webkit-transition: 0.5s -webkit-filter ease-in-out;
                     -moz-transition: 0.5s -moz-filter ease-in-out;
