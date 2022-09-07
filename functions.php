@@ -1492,7 +1492,7 @@ function add_color_class( $classes ) {
 		}
 
     // Is Films single
-    } elseif ((is_singular( 'films' ) && $selected_color==0)) {
+    } elseif ((is_singular( 'films' )   )) {
 		$classes[] = 'none-white-bg';
 		$classes[] = 'dark';
 

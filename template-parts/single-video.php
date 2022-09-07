@@ -6,10 +6,10 @@ Gallery template for single pages
 ?>
 
 <div class="container-fluid container-video">
-    
+
     <div id="video-player" class="embed-container" itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
 
-        <?php 
+        <?php
 
         // Set autoplay
         // via https://www.advancedcustomfields.com/resources/oembed/
@@ -23,10 +23,26 @@ Gallery template for single pages
         $src = $matches[1];
 
 
-        // add extra params to iframe src
-        $params = array(
-            'autoplay'    => 1,
-        );
+        // Video player parameters
+        // Documentation:
+        // https://www.w3schools.com/tags/tag_video.asp
+        // https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Player-parameters-overview
+        // https://vimeo.zendesk.com/hc/en-us/articles/115004485728-Autoplay-and-loop-embedded-videos
+            // Video Player Parameters
+            $params = array( );
+
+            $film_player_options = get_field('film_player_options');
+
+            if( $film_player_options ) {
+                foreach ($film_player_options as $film_player_option ) {
+                  $params[$film_player_option] = 1;
+                }
+            }
+
+            // [TESTED] add manual parameter sextra params to iframe src
+              $params[] = array(
+                  // 'fireworks'    => 1
+              );
 
         $new_src = add_query_arg($params, $src);
 
@@ -42,25 +58,26 @@ Gallery template for single pages
         // echo $iframe
         echo $iframe;
 
-        the_field(''); ?>
+        ?>
+
 
     </div>
-    
+
     <?php // Make it resposive ?>
     <style>
-        .embed-container { 
-            position: relative; 
+        .embed-container {
+            position: relative;
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             max-width: 100%;
             height: auto;
             margin-bottom: 20px;
-        } 
+        }
 
         .embed-container iframe,
         .embed-container object,
-        .embed-container embed { 
+        .embed-container embed {
             position: absolute;
             top: 0;
             left: 0;
@@ -86,5 +103,3 @@ Gallery template for single pages
     </script>
 
 </div>
-
-                
