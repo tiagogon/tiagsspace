@@ -242,7 +242,7 @@
 						    // }
 						 ?>
 
-						<li><a href="#my-menu" >Reveal</a></li>
+						<li><a href="#my-menu" >+</a></li>
 					</ul>
 				</div>
 			</div>
