@@ -1027,14 +1027,162 @@ function lm_dequeue_footer_styles()
 
 
 
+// -----------------------------------
+// -----------------------------------
+/// ------------ Background Colours --
+// -----------------------------------
+// -----------------------------------
 
-// ---------------- // ----------------
-// ---------------- // ----------------
-// --------    ADMIN  AREA   ----------
-// ---------------- // ----------------
-// ---------------- // ----------------
+// Map color palet with custom pages
+function color_background_parameters ($parameter) {
+
+	global $post;
+
+	$color_class = "brand-color";
+
+	// Is Hyper
+	if (is_singular( 'hyper' ) OR is_post_type_archive('hyper')) {
+
+								$color_class = 'brand-color';
+
+	// Is Dusk single
+	} elseif (is_singular( 'dusk' )) {
+
+			$color_class = 'header-white';
+
+	// Is Emulsion single
+	} elseif (is_singular( 'emulsion' )) {
+
+			$color_class = 'header-white';
+
+  // Is Log
+	} elseif (is_singular( 'log' )
+							OR is_post_type_archive('log')
+							OR is_tax('log-branch')) {
+
+			// Is Log branch BLWWW
+				if ((has_term( 'blwww', 'log-branch'  ))
+										OR is_tax( 'log-branch', 'blwww') ) {
+
+						$color_class = 'lime';
+			}
+			// Is Log branch hrzn
+				elseif ((has_term( 'hrzn', 'log-branch'  ))
+										OR is_tax( 'log-branch', 'hrzn') ) {
+
+						$color_class = 'yellow';
+			}
+			// Is Log branch plnt
+				elseif ((has_term( 'plnt', 'log-branch'  ))
+										OR is_tax( 'log-branch', 'plnt') ) {
+
+						$color_class = 'sky';
+			}
+			// Other Log Branches
+			else {
+				$color_class = 'header-white';
+
+			}
+
+	// Is Films single
+	} elseif ((is_singular( 'films' ) )) {
+
+		$color_class = 'dark';
+
+	// If 4K lento
+  } elseif (is_singular( '4k-lento' )) {
+
+	  $color_class = 'dark';
+
+	} elseif ( is_singular( ) && $selected_color==0) {
+
+					$color_class = 'header-white';
+
+	} else {
+		// Default color background parameters
+		$color_class = "brand-color";
+	}
 
 
+	// Mapping color class to HEX code and font mode
+	if ($color_class=="brand-color") {
+			$color_code = "#ff0000";
+			$font_mode = 'none-white-bg';
+	} elseif ($color_class=="header-white") {
+			$color_code = "#ffffff";
+			$font_mode = 'header-ligh';
+	} elseif ($color_class=="dark") {
+			$color_code = "#111111";
+			$font_mode = 'none-white-bg';
+	} elseif ($color_class=="deep-purple") { // old HYPER SERIES COLOR
+			$color_code = "#3c00f5";
+			$font_mode = 'none-white-bg';
+	} elseif ($color_class=="blue") {
+			$color_code = "#3c00f5";
+			$font_mode = 'header-ligh';
+	} elseif ($color_class=="yellow") {
+			$color_code = "#fffb2b";
+			$font_mode = 'header-ligh';
+	} elseif ($color_class=="indigo") {
+			$color_code = "#5C6BC0"; // Google colors $palette-Indigo-400
+			$font_mode = 'none-white-bg';
+	} elseif ($color_class=="lime") {
+			$color_code = "#aeff2b";
+			$font_mode = 'header-ligh';
+	} elseif ($color_class=="earth") {
+			$color_code = "#ffb951";
+			$font_mode = 'header-ligh';
+	} elseif ($color_class=="sky") {
+			$color_code = "#8ed0ff";
+			$font_mode = 'header-ligh';
+	}
+
+	// Return logic
+	if ($parameter == "color_class") {
+		return $color_class;
+	}
+	elseif ($parameter == "color_code") {
+		return $color_code;
+	}
+	elseif ($parameter == "font_mode") {
+		return $font_mode;
+	}
+
+}
+
+
+
+// Add css classes to BODY tag
+function add_color_class( $classes ) {
+    global $post;
+
+		$classes = array();
+		$classes[] = color_background_parameters('color_class');
+		$classes[] = color_background_parameters('font_mode');
+
+    // return the $classes array
+    return $classes;
+}
+add_filter( 'body_class', 'add_color_class' );
+
+//// DEBUUUG
+// ----- missing debug why class is always autputed as brandcolor
+	// echo 'Classes are: '.color_background_parameters('color_class');
+	// echo ' and Font Mode is: '.color_background_parameters('font_mode');
+	// echo ' and font code  is: '.color_background_parameters('color_code');
+
+
+// add HTML theme color tags - special for safary mobile
+function add_my_theme_color_tags() {
+
+	 echo '   <meta name="msapplication-TileColor" content="'.color_background_parameters('color_code').'">
+            <meta name="theme-color" content="'.color_background_parameters('color_code').'">';
+}
+add_action( 'wp_head', 'add_my_theme_color_tags' ); //front end
+
+
+// --------
+// --------
 // -- get diferent favicon on admin backend
 // -------- via: http://goo.gl/MWgn4t
 // -------- generated here: https://www.favicon-generator.org/
@@ -1055,9 +1203,8 @@ function add_my_favicon() {
             <link rel="icon" type="image/png" sizes="96x96" href="'.$favicon_path.'/favicon-96x96.png">
             <link rel="icon" type="image/png" sizes="16x16" href="'.$favicon_path.'/favicon-16x16.png">
             <link rel="manifest" href="'.$favicon_path.'/manifest.json">
-            <meta name="msapplication-TileColor" content="#ff0000">
-            <meta name="msapplication-TileImage" content="'.$favicon_path.'/ms-icon-144x144.png">
-            <meta name="theme-color" content="#ff0000">';
+            <meta name="msapplication-TileImage" content="'.$favicon_path.'/ms-icon-144x144.png">';
+
 }
 function add_my_favicon_admin() {
    $favicon_path = get_template_directory_uri() . '/favicon.ico/adminarea';
@@ -1425,126 +1572,7 @@ function romanic_number($integer, $upcase = true)
     return $return;
 }
 
-/// ------------ Background Colours --
-// -----------------------------------
-// -----------------------------------
 
-// Add specific CSS class by filter
-
-function add_color_class( $classes ) {
-    global $post;
-
-    // Get selected color from ACF
-    $selected_color = null;
-    $selected_color = get_field('background_colour');
-
-
-    // Is Hyper
-    if ((is_singular( 'hyper' ) && $selected_color==0)
-                OR is_post_type_archive('hyper')) {
-
-        $classes[] = 'none-white-bg';
-        $classes[] = 'brand-color';
-
-	// Is Dusk single
-    } elseif ((is_singular( 'dusk' ) && $selected_color==0)) {
-
-        $classes[] = 'header-ligh';
-        $classes[] = 'header-white';
-
-    // Is Emulsion single
-    } elseif ((is_singular( 'emulsion' ) && $selected_color==0)) {
-
-        $classes[] = 'header-ligh';
-        $classes[] = 'header-white';
-
-
-	// Is Log
-    } elseif ((is_singular( 'log' ) && $selected_color==0)
-                OR is_post_type_archive('log')
-                OR is_tax('log-branch')) {
-
-		// Is Log branch BLWWW
-	    if ((has_term( 'blwww', 'log-branch'  )  && $selected_color==0)
-	                OR is_tax( 'log-branch', 'blwww') ) {
-
-	        $classes[] = 'header-ligh';
-	        $classes[] = 'lime';
-		}
-		// Is Log branch hrzn
-	    elseif ((has_term( 'hrzn', 'log-branch'  )  && $selected_color==0)
-	                OR is_tax( 'log-branch', 'hrzn') ) {
-
-	        $classes[] = 'header-ligh';
-	        $classes[] = 'yellow';
-		}
-		// Is Log branch plnt
-	    elseif ((has_term( 'plnt', 'log-branch'  )  && $selected_color==0)
-	                OR is_tax( 'log-branch', 'plnt') ) {
-
-	        $classes[] = 'header-ligh';
-	        $classes[] = 'sky';
-		}
-		// Other Log Branches
-		else {
-			$classes[] = 'header-ligh';
-	        $classes[] = 'header-white';
-		}
-
-    // Is Films single
-    } elseif ((is_singular( 'films' )   )) {
-		$classes[] = 'none-white-bg';
-		$classes[] = 'dark';
-
-    // If 4K lento
-	} elseif ((is_singular( '4k-lento' ) && $selected_color==0)) {
-		$classes[] = 'none-white-bg';
-		$classes[] = 'dark';
-
-    // If there is selection on ACF
-    } elseif (!$selected_color==0 && is_singular()) {
-        $classes[] = $selected_color;
-        if ($selected_color=="lime") {
-            $classes[] = 'header-ligh';
-        } elseif ($selected_color=="blue") {
-            $classes[] = 'header-ligh';
-        } elseif ($selected_color=="yellow") {
-            $classes[] = 'header-ligh';
-        } elseif ($selected_color=="brand-color") {
-            $classes[] = 'none-white-bg';
-        } elseif ($selected_color=="brand-color") {
-            $classes[] = 'none-white-bg';
-        } elseif ($selected_color=="indigo") {
-            $classes[] = 'none-white-bg';
-        } elseif ($selected_color=="earth") {
-            $classes[] = 'header-ligh';
-        } elseif ($selected_color=="sky") {
-            $classes[] = 'header-ligh';
-        }
-
-    }
-
-    // Other cases
-    elseif ( $selected_color==0) {
-
-        if (is_singular( ) && $selected_color==0) {
-
-            $classes[] = 'header-ligh';
-            $classes[] = 'header-white';
-
-        // Default color
-        } else {
-            $classes[] = 'none-white-bg';
-            $classes[] = 'brand-color'; // $default_color;
-        }
-
-    }
-
-
-    // return the $classes array
-    return $classes;
-}
-add_filter( 'body_class', 'add_color_class' );
 
 
 
