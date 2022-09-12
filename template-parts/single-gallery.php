@@ -116,6 +116,17 @@ if (!get_field('deactivate_gallery')) {
                     $deactivat_masonry      = true;
 
                 // othes
+              } elseif (has_term( 'hrzn', 'log-branch' ) ) {
+                    $class_container        = 'container-fluid';
+                    $number_of_columns_xs   = 1;
+                    $number_of_columns_sm   = 1;
+                    $number_of_columns_md   = 1;
+                    $number_of_columns_lg   = 1;
+                    $no_space               = 'no-pad';
+                    $light_box              = 'none';
+                    $deactivat_masonry      = true;
+
+                // othes
                 } else {
                     $class_container        = 'container';
                     $number_of_columns_xs   = 1;
