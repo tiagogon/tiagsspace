@@ -1059,8 +1059,8 @@ function color_background_parameters ($parameter) {
 	} elseif (is_singular( 'log' )
 							OR is_post_type_archive('log')
 							OR is_tax('log-branch')) {
-
-								$background_color_class = 'lime';
+								
+								$background_color_class = 'header-white';
 
 			// Is Log branch BLWWW
 				if ((has_term( 'blwww', 'log-branch'  ))
