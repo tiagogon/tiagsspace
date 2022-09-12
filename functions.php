@@ -1038,114 +1038,116 @@ function color_background_parameters ($parameter) {
 
 	global $post;
 
-	$color_class = "brand-color";
+	//$background_color_class = "brand-color";
 
 	// Is Hyper
 	if (is_singular( 'hyper' ) OR is_post_type_archive('hyper')) {
 
-								$color_class = 'brand-color';
+								$background_color_class = 'brand-color';
 
 	// Is Dusk single
 	} elseif (is_singular( 'dusk' )) {
 
-			$color_class = 'header-white';
+			$background_color_class = 'header-white';
 
 	// Is Emulsion single
 	} elseif (is_singular( 'emulsion' )) {
 
-			$color_class = 'header-white';
+			$background_color_class = 'header-white';
 
   // Is Log
 	} elseif (is_singular( 'log' )
 							OR is_post_type_archive('log')
 							OR is_tax('log-branch')) {
 
+								$background_color_class = 'lime';
+
 			// Is Log branch BLWWW
 				if ((has_term( 'blwww', 'log-branch'  ))
 										OR is_tax( 'log-branch', 'blwww') ) {
 
-						$color_class = 'lime';
+						$background_color_class = 'lime';
 			}
 			// Is Log branch hrzn
 				elseif ((has_term( 'hrzn', 'log-branch'  ))
 										OR is_tax( 'log-branch', 'hrzn') ) {
 
-						$color_class = 'yellow';
+						$background_color_class = 'yellow';
 			}
 			// Is Log branch plnt
 				elseif ((has_term( 'plnt', 'log-branch'  ))
 										OR is_tax( 'log-branch', 'plnt') ) {
 
-						$color_class = 'sky';
+						$background_color_class = 'sky';
 			}
 			// Other Log Branches
 			else {
-				$color_class = 'header-white';
+				$background_color_class = 'header-white';
 
 			}
 
 	// Is Films single
 	} elseif ((is_singular( 'films' ) )) {
 
-		$color_class = 'dark';
+		$background_color_class = 'dark';
 
 	// If 4K lento
   } elseif (is_singular( '4k-lento' )) {
 
-	  $color_class = 'dark';
+	  $background_color_class = 'dark';
 
 	} elseif ( is_singular( ) && $selected_color==0) {
 
-					$color_class = 'header-white';
+					$background_color_class = 'header-white';
 
 	} else {
 		// Default color background parameters
-		$color_class = "brand-color";
+		$background_color_class = "brand-color";
 	}
 
 
 	// Mapping color class to HEX code and font mode
-	if ($color_class=="brand-color") {
-			$color_code = "#ff0000";
-			$font_mode = 'none-white-bg';
-	} elseif ($color_class=="header-white") {
-			$color_code = "#ffffff";
-			$font_mode = 'header-ligh';
-	} elseif ($color_class=="dark") {
-			$color_code = "#111111";
-			$font_mode = 'none-white-bg';
-	} elseif ($color_class=="deep-purple") { // old HYPER SERIES COLOR
-			$color_code = "#3c00f5";
-			$font_mode = 'none-white-bg';
-	} elseif ($color_class=="blue") {
-			$color_code = "#3c00f5";
-			$font_mode = 'header-ligh';
-	} elseif ($color_class=="yellow") {
-			$color_code = "#fffb2b";
-			$font_mode = 'header-ligh';
-	} elseif ($color_class=="indigo") {
-			$color_code = "#5C6BC0"; // Google colors $palette-Indigo-400
-			$font_mode = 'none-white-bg';
-	} elseif ($color_class=="lime") {
-			$color_code = "#aeff2b";
-			$font_mode = 'header-ligh';
-	} elseif ($color_class=="earth") {
-			$color_code = "#ffb951";
-			$font_mode = 'header-ligh';
-	} elseif ($color_class=="sky") {
-			$color_code = "#8ed0ff";
-			$font_mode = 'header-ligh';
+	if ($background_color_class=="brand-color") {
+			$background_color_code = "#ff0000";
+			$background_day_night_mode = 'none-white-bg';
+	} elseif ($background_color_class=="header-white") {
+			$background_color_code = "#ffffff";
+			$background_day_night_mode = 'header-ligh';
+	} elseif ($background_color_class=="dark") {
+			$background_color_code = "#111111";
+			$background_day_night_mode = 'none-white-bg';
+	} elseif ($background_color_class=="deep-purple") { // old HYPER SERIES COLOR
+			$background_color_code = "#3c00f5";
+			$background_day_night_mode = 'none-white-bg';
+	} elseif ($background_color_class=="blue") {
+			$background_color_code = "#3c00f5";
+			$background_day_night_mode = 'header-ligh';
+	} elseif ($background_color_class=="yellow") {
+			$background_color_code = "#fffb2b";
+			$background_day_night_mode = 'header-ligh';
+	} elseif ($background_color_class=="indigo") {
+			$background_color_code = "#5C6BC0"; // Google colors $palette-Indigo-400
+			$background_day_night_mode = 'none-white-bg';
+	} elseif ($background_color_class=="lime") {
+			$background_color_code = "#aeff2b";
+			$background_day_night_mode = 'header-ligh';
+	} elseif ($background_color_class=="earth") {
+			$background_color_code = "#ffb951";
+			$background_day_night_mode = 'header-ligh';
+	} elseif ($background_color_class=="sky") {
+			$background_color_code = "#8ed0ff";
+			$background_day_night_mode = 'header-ligh';
 	}
 
 	// Return logic
-	if ($parameter == "color_class") {
-		return $color_class;
+	if ($parameter == "background_color_class") {
+		return $background_color_class;
 	}
-	elseif ($parameter == "color_code") {
-		return $color_code;
+	elseif ($parameter == "background_color_code") {
+		return $background_color_code;
 	}
-	elseif ($parameter == "font_mode") {
-		return $font_mode;
+	elseif ($parameter == "background_day_night_mode") {
+		return $background_day_night_mode;
 	}
 
 }
@@ -1157,26 +1159,22 @@ function add_color_class( $classes ) {
     global $post;
 
 		$classes = array();
-		$classes[] = color_background_parameters('color_class');
-		$classes[] = color_background_parameters('font_mode');
+		$classes[] = color_background_parameters('background_color_class');
+		$classes[] = color_background_parameters('background_day_night_mode');
 
     // return the $classes array
     return $classes;
 }
 add_filter( 'body_class', 'add_color_class' );
 
-//// DEBUUUG
-// ----- missing debug why class is always autputed as brandcolor
-	// echo 'Classes are: '.color_background_parameters('color_class');
-	// echo ' and Font Mode is: '.color_background_parameters('font_mode');
-	// echo ' and font code  is: '.color_background_parameters('color_code');
+
 
 
 // add HTML theme color tags - special for safary mobile
 function add_my_theme_color_tags() {
 
-	 echo '   <meta name="msapplication-TileColor" content="'.color_background_parameters('color_code').'">
-            <meta name="theme-color" content="'.color_background_parameters('color_code').'">';
+	 echo '   <meta name="msapplication-TileColor" content="'.color_background_parameters('background_color_code').'">
+            <meta name="theme-color" content="'.color_background_parameters('background_color_code').'">';
 }
 add_action( 'wp_head', 'add_my_theme_color_tags' ); //front end
 
