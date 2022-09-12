@@ -137,7 +137,7 @@ Index of posts for Home and Archives
 
                         <a  href="<?php echo get_permalink(); ?>"
                             data-preview-image="<?php echo wp_get_attachment_image_url(get_post_thumbnail_id($post->ID), 'thumbnail'); ?>">
-                            <h2><?php echo taxonomy_list_w_numbers($post->ID,'log-branch','',' ',', ', ' & ', 'no-link');?><span class="branch"> <?php the_title();?> ></span></h2>
+                            <h2><?php echo taxonomy_list_w_numbers($post->ID,'log-branch','',' ',', ', ' & ', 'no-link');?><span class="branch"> <?php the_title();?></span></h2>
                         </a>
 
                         <?php
