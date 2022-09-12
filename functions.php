@@ -1038,12 +1038,12 @@ function color_background_parameters ($parameter) {
 
 	global $post;
 
-	//$background_color_class = "brand-color";
+	//$background_color_class = "tiagsssss-color";
 
 	// Is Hyper
 	if (is_singular( 'hyper' ) OR is_post_type_archive('hyper')) {
 
-								$background_color_class = 'brand-color';
+								$background_color_class = 'tiagsssss-color';
 
 	// Is Dusk single
 	} elseif (is_singular( 'dusk' )) {
@@ -1102,41 +1102,41 @@ function color_background_parameters ($parameter) {
 
 	} else {
 		// Default color background parameters
-		$background_color_class = "brand-color";
+		$background_color_class = "tiagsssss-color";
 	}
 
 
 	// Mapping color class to HEX code and font mode
-	if ($background_color_class=="brand-color") {
+	if ($background_color_class=="tiagsssss-color") {
 			$background_color_code = "#ff0000";
-			$background_day_night_mode = 'none-white-bg';
+			$background_day_night_mode = 'background-night-mode';
 	} elseif ($background_color_class=="header-white") {
 			$background_color_code = "#ffffff";
-			$background_day_night_mode = 'header-ligh';
+			$background_day_night_mode = 'background-day-mode';
 	} elseif ($background_color_class=="dark") {
 			$background_color_code = "#111111";
-			$background_day_night_mode = 'none-white-bg';
+			$background_day_night_mode = 'background-night-mode';
 	} elseif ($background_color_class=="deep-purple") { // old HYPER SERIES COLOR
 			$background_color_code = "#3c00f5";
-			$background_day_night_mode = 'none-white-bg';
+			$background_day_night_mode = 'background-night-mode';
 	} elseif ($background_color_class=="blue") {
 			$background_color_code = "#3c00f5";
-			$background_day_night_mode = 'header-ligh';
+			$background_day_night_mode = 'background-day-mode';
 	} elseif ($background_color_class=="yellow") {
 			$background_color_code = "#fffb2b";
-			$background_day_night_mode = 'header-ligh';
+			$background_day_night_mode = 'background-day-mode';
 	} elseif ($background_color_class=="indigo") {
 			$background_color_code = "#5C6BC0"; // Google colors $palette-Indigo-400
-			$background_day_night_mode = 'none-white-bg';
+			$background_day_night_mode = 'background-night-mode';
 	} elseif ($background_color_class=="lime") {
 			$background_color_code = "#aeff2b";
-			$background_day_night_mode = 'header-ligh';
+			$background_day_night_mode = 'background-day-mode';
 	} elseif ($background_color_class=="earth") {
 			$background_color_code = "#ffb951";
-			$background_day_night_mode = 'header-ligh';
+			$background_day_night_mode = 'background-day-mode';
 	} elseif ($background_color_class=="sky") {
 			$background_color_code = "#8ed0ff";
-			$background_day_night_mode = 'header-ligh';
+			$background_day_night_mode = 'background-day-mode';
 	}
 
 	// Return logic

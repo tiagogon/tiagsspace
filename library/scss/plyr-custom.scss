@@ -74,8 +74,8 @@ audio{
     }
 }
 
-// Overide with none-white-bg // E.g.: Blue or dark grey
-.none-white-bg{
+// Overide with background-night-mode // E.g.: Blue or dark grey
+.background-night-mode{
     .plyr--audio .plyr__controls {
         color: $white;
         &.plyr__tab-focus,

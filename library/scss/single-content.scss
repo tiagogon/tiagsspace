@@ -50,7 +50,7 @@
     p{
         // text-align: justify;
       a{
-        color: $brand-color;
+        color: $tiagsssss-color;
       }
     }
     ol, ul, dl {
@@ -100,7 +100,7 @@
 }
 
 // Content on NONE Ligh Background
-.none-white-bg{
+.background-night-mode{
   .single-content{
     .page-header{
       h1.single-title{
@@ -139,18 +139,18 @@
 
 
 // Tags matching colors and Single Navigation links
-.brand-color{
+.tiagsssss-color{
   .single-content{
     footer{
       ul{
         li{
           a{
-            color: $brand-color;
+            color: $tiagsssss-color;
             background-color: $white;
             @include transition(all 1s ease-out);
             &:hover{
               color: $white;
-              background-color: $brand-color;
+              background-color: $tiagsssss-color;
               @include transition(all 1s ease-out);
             }
           }
@@ -164,11 +164,11 @@
     section.post-content{
       p{
         a{
-          color: $brand-color;
+          color: $tiagsssss-color;
           border-bottom: 1px solid transparent;
           @include transition(all 1s ease-out);
           &:hover{
-            border-bottom: 1px solid $brand-color;
+            border-bottom: 1px solid $tiagsssss-color;
             @include transition(all 1s ease-out);
           }
         }
@@ -193,18 +193,18 @@
     }
   }
 }
-.brand-color{
+.tiagsssss-color{
   .single-content{
     footer{
       ul{
         li{
           a{
-            color: $brand-color;
+            color: $tiagsssss-color;
             background-color: $white;
             @include transition(all 1s ease-out);
             &:hover{
               color: $white;
-              background-color: $brand-color;
+              background-color: $tiagsssss-color;
               @include transition(all 1s ease-out);
             }
           }
@@ -358,7 +358,7 @@
     }
   }
 }
-.none-white-bg{
+.background-night-mode{
   .single-navigation{
     .nav-previous,.nav-next,{
       span{

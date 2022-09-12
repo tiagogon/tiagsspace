@@ -50,7 +50,7 @@ ul.thumb-container{
 
   }
 }
-.none-white-bg{
+.background-night-mode{
   .year-separator{
     color: $white;
     div{
@@ -59,7 +59,7 @@ ul.thumb-container{
   }
 }
 .yarpp-related-header{
-    background-color: $brand-color;
+    background-color: $tiagsssss-color;
     padding-bottom: $grid-gutter-width;
     padding-top: $grid-gutter-width;
     // @media (max-width: map-get($grid-breakpoints, sm)) {
@@ -78,7 +78,7 @@ ul.thumb-container{
     }
 }
 .yarpp-related{
-  background-color: $brand-color;
+  background-color: $tiagsssss-color;
   padding-bottom: $grid-gutter-width;
     @media (max-width: map-get($grid-breakpoints, sm)) {
       padding-bottom: ($grid-gutter-width / 2);
@@ -124,7 +124,7 @@ li.item-post {
       .imgcontainer{
         margin-bottom: 30px;
         margin-bottom: 0px;
-        background: $brand-color;
+        background: $tiagsssss-color;
         @include transition(background-color 1s ease-in-out);
         img{
           outline: none;
@@ -227,7 +227,7 @@ li.item-post {
           opacity: 0;
       }
     }
-    box-shadow: 8px 8px 8px $brand-color-darker;
+    box-shadow: 8px 8px 8px $tiagsssss-color-darker;
     //@include transition(background-color 1s ease);
     @include transition(box-shadow 5s ease-in-out);
 
@@ -272,7 +272,7 @@ li.item-post {
               }
           }
       }
-      box-shadow: 8px 8px 12px $brand-color-darker;
+      box-shadow: 8px 8px 12px $tiagsssss-color-darker;
       @include transition(box-shadow 1s ease-in-out);
       @media (max-width: map-get($grid-breakpoints, sm)) {
         box-shadow: none;
@@ -442,11 +442,11 @@ li.log-thumb {
         padding-right: 0;
         padding-bottom: 0;
         .series{
-          color: $brand-color;
+          color: $tiagsssss-color;
           margin-bottom: 18px;
         }
         h2{
-          color: $brand-color;
+          color: $tiagsssss-color;
           line-height: 2;
           .branch{
             display: none;
@@ -459,7 +459,7 @@ li.log-thumb {
     }
     @include transition(all 1s ease-out);
     &:hover{
-      background-color: $brand-color;
+      background-color: $tiagsssss-color;
       @include transition(all 1s ease-out);
       figcaption{
         .series{
@@ -487,7 +487,7 @@ li.log-thumb.post-group {
           font-size: 12px;
           font-style: italic;
           margin: 0px 0 6px 0;
-          color: $brand-color;
+          color: $tiagsssss-color;
           margin-bottom: 18px;
           text-transform: uppercase;
           font-weight: 600;
@@ -495,14 +495,14 @@ li.log-thumb.post-group {
         a{
           padding: 0;
           h2{
-            color: $brand-color;
+            color: $tiagsssss-color;
             // overflow: hidden; //it hides acentos
             font-size: 18px;
             font-style: italic;
             text-transform: uppercase;
             line-height: 1;
             margin: 0;
-            color: $brand-color;
+            color: $tiagsssss-color;
             line-height: 2;
             .branch{
               @media (min-width: map-get($grid-breakpoints, sm)) {
@@ -523,7 +523,7 @@ li.log-thumb.post-group {
       }
     @include transition(all 1s ease-out);
     &:hover{
-      background-color: $brand-color;
+      background-color: $tiagsssss-color;
       @include transition(all 1s ease-out);
       figcaption{
         .series{
@@ -577,7 +577,7 @@ li.log-thumb.post-group {
 }
 
 
-.header-ligh{
+.background-day-mode{
   .archive-navigation{
     .nav-previous,.nav-next,.more-sets{
       a{

@@ -44,17 +44,17 @@ div.gallery{
 		}
   }
   div.thumbnail.media-audio{
-  	background-color: $brand-color;
+  	background-color: $tiagsssss-color;
   	figure{
 		.imgcontainer{
 			.mejs-container {
-  				background-color: $brand-color;
+  				background-color: $tiagsssss-color;
 			    position: absolute;
 			    bottom: 0%;
 			    height: 100%!important;
 				font-family: $font-family-sans-serif!important;
 			    .mejs-controls{
-			    	background-color: $brand-color;
+			    	background-color: $tiagsssss-color;
 
 					.mejs-time {
 					    display: none!important;
@@ -76,7 +76,7 @@ div.gallery{
 							background-color: $white;
 			    		}
 						.mejs-time-loaded {
-						    background: $brand-color;
+						    background: $tiagsssss-color;
 						}
 			    	}
 			    }
@@ -232,7 +232,7 @@ div.thumbnail{
     border-style: none;
     border-width: 0;
     background-color: transparent!important;
-	text-shadow: 1px 1px $brand-color;
+	text-shadow: 1px 1px $tiagsssss-color;
 	&:hover{
 		opacity: 1;
 	}
@@ -246,7 +246,7 @@ div.thumbnail{
 	    border-style: none;
 	    border-width: 0;
 	    background-color: transparent!important;
-		text-shadow: 1px 1px $brand-color;
+		text-shadow: 1px 1px $tiagsssss-color;
 
 	}
 }
@@ -265,7 +265,7 @@ button.remove{
     border-style: none;
     border-width: 0;
     background-color: transparent!important;
-	text-shadow: 1px 1px $brand-color;
+	text-shadow: 1px 1px $tiagsssss-color;
 	&:hover{
 		opacity: 1;
 	}
@@ -284,7 +284,7 @@ button.saveorder{
 	border-color: transparent;
     border-style: none;
     border-width: 0;
-	text-shadow: 1px 1px $brand-color;
+	text-shadow: 1px 1px $tiagsssss-color;
     background-color: transparent!important;
 	&:hover{
 		opacity: 1;
@@ -301,7 +301,7 @@ a.delete{
 	font-style: italic;
 	font-size: 16px;
 	font-weight: 600;
-	text-shadow: 1px 1px $brand-color;
+	text-shadow: 1px 1px $tiagsssss-color;
 	&:hover{
 		opacity: 1;
 		text-decoration: none;

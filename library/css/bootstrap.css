@@ -2,7 +2,7 @@
  * google-material-color v1.2.6
  * https://github.com/danlevan/google-material-color
  */
-body.none-white-bg {
+body.background-night-mode {
   color: #fff; }
 
 :root {
@@ -5344,10 +5344,10 @@ a.text-dark:hover, a.text-dark:focus {
 .invisible {
   visibility: hidden !important; }
 
-.brand-color {
+.tiagsssss-color {
   background-color: #ff0000; }
 
-.brand-color-heading {
+.tiagsssss-color-heading {
   color: #aeff2b; }
 
 .dark {
@@ -5362,10 +5362,10 @@ a.text-dark:hover, a.text-dark:focus {
 .indigo-heading {
   color: #fffb2b; }
 
-.brand-color {
+.tiagsssss-color {
   background-color: #ff0000; }
 
-.brand-color-heading {
+.tiagsssss-color-heading {
   color: #3c00f5; }
 
 .blue {
@@ -6554,21 +6554,21 @@ audio {
 .plyr--audio .plyr__control.plyr__tab-focus, .plyr--audio .plyr__control:hover, .plyr--audio .plyr__control[aria-expanded='true'] {
   background: transparent; }
 
-.none-white-bg .plyr--audio .plyr__controls {
+.background-night-mode .plyr--audio .plyr__controls {
   color: #fff; }
-  .none-white-bg .plyr--audio .plyr__controls.plyr__tab-focus, .none-white-bg .plyr--audio .plyr__controls:hover, .none-white-bg .plyr--audio .plyr__controls[aria-expanded='true'] {
+  .background-night-mode .plyr--audio .plyr__controls.plyr__tab-focus, .background-night-mode .plyr--audio .plyr__controls:hover, .background-night-mode .plyr--audio .plyr__controls[aria-expanded='true'] {
     background: none !important;
     color: #fff; }
-.none-white-bg .plyr--audio .plyr__controls {
+.background-night-mode .plyr--audio .plyr__controls {
   color: #fff; }
-.none-white-bg .plyr--audio .plyr__tooltip {
+.background-night-mode .plyr--audio .plyr__tooltip {
   background: transparent;
   color: #fff;
   font-size: 16px;
   font-weight: 400; }
-  .none-white-bg .plyr--audio .plyr__tooltip::before {
+  .background-night-mode .plyr--audio .plyr__tooltip::before {
     border-top: var(--plyr-tooltip-arrow-size, 4px) solid #fff; }
-.none-white-bg .plyr--full-ui input[type='range'] {
+.background-night-mode .plyr--full-ui input[type='range'] {
   color: #fff; }
 
 .plyr__progress {
@@ -6657,53 +6657,53 @@ audio {
 
   .home #site-header {
     background: transparent; } }
-.header-ligh #site-header h1 a {
+.background-day-mode #site-header h1 a {
   color: #000;
   transition: all 1s ease-out; }
   @media screen and (prefers-reduced-motion: reduce) {
-    .header-ligh #site-header h1 a {
+    .background-day-mode #site-header h1 a {
       transition: none; } }
-  .header-ligh #site-header h1 a:hover {
+  .background-day-mode #site-header h1 a:hover {
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
-      .header-ligh #site-header h1 a:hover {
+      .background-day-mode #site-header h1 a:hover {
         transition: none; } }
 @media (max-width: 768px) {
-  .header-ligh #site-header .slicknav_menu .slicknav_btn .slicknav_menutxt {
+  .background-day-mode #site-header .slicknav_menu .slicknav_btn .slicknav_menutxt {
     color: #000; }
-  .header-ligh #site-header .slicknav_menu .slicknav_nav ul li a {
+  .background-day-mode #site-header .slicknav_menu .slicknav_nav ul li a {
     color: #000; }
-  .header-ligh #site-header .slicknav_menu .slicknav_nav .slicknav_row:hover {
+  .background-day-mode #site-header .slicknav_menu .slicknav_nav .slicknav_row:hover {
     color: #000; }
-  .header-ligh #site-header .slicknav_menu * {
+  .background-day-mode #site-header .slicknav_menu * {
     box-sizing: border-box; } }
-.header-ligh #site-header #topbar ul li a,
-.header-ligh #site-header .slicknav_nav ul li a {
+.background-day-mode #site-header #topbar ul li a,
+.background-day-mode #site-header .slicknav_nav ul li a {
   color: #000;
   /*border-bottom: 2px solid $gray-dark;*/ }
-  .header-ligh #site-header #topbar ul li a:hover::before, .header-ligh #site-header #topbar ul li a:hover::after,
-  .header-ligh #site-header .slicknav_nav ul li a:hover::before,
-  .header-ligh #site-header .slicknav_nav ul li a:hover::after {
+  .background-day-mode #site-header #topbar ul li a:hover::before, .background-day-mode #site-header #topbar ul li a:hover::after,
+  .background-day-mode #site-header .slicknav_nav ul li a:hover::before,
+  .background-day-mode #site-header .slicknav_nav ul li a:hover::after {
     opacity: 1;
     -webkit-transform: translateX(0px);
     -moz-transform: translateX(0px);
     transform: translateX(0px); }
-  .header-ligh #site-header #topbar ul li a:focus::before, .header-ligh #site-header #topbar ul li a:focus::after,
-  .header-ligh #site-header .slicknav_nav ul li a:focus::before,
-  .header-ligh #site-header .slicknav_nav ul li a:focus::after {
+  .background-day-mode #site-header #topbar ul li a:focus::before, .background-day-mode #site-header #topbar ul li a:focus::after,
+  .background-day-mode #site-header .slicknav_nav ul li a:focus::before,
+  .background-day-mode #site-header .slicknav_nav ul li a:focus::after {
     opacity: 1;
     -webkit-transform: translateX(0px);
     -moz-transform: translateX(0px);
     transform: translateX(0px); }
 
-.none-white-bg #site-header h1 a,
-.none-white-bg-header #site-header h1 a {
+.background-night-mode #site-header h1 a,
+.background-night-mode-header #site-header h1 a {
   color: white; }
-.none-white-bg #site-header #topbar ul li a,
-.none-white-bg-header #site-header #topbar ul li a {
+.background-night-mode #site-header #topbar ul li a,
+.background-night-mode-header #site-header #topbar ul li a {
   color: #fff; }
-.none-white-bg #site-header .slicknav_nav ul li a,
-.none-white-bg-header #site-header .slicknav_nav ul li a {
+.background-night-mode #site-header .slicknav_nav ul li a,
+.background-night-mode-header #site-header .slicknav_nav ul li a {
   color: #fff;
   /*border-bottom: 2px solid $white;*/ }
 
@@ -6728,9 +6728,9 @@ ul.thumb-container {
   .year-separator .separator-wrapper {
     /*border-top: 2px solid $gray-dark;*/ }
 
-.none-white-bg .year-separator {
+.background-night-mode .year-separator {
   color: #fff; }
-  .none-white-bg .year-separator div {
+  .background-night-mode .year-separator div {
     /*border-top: 2px solid $white;*/ }
 
 .yarpp-related-header {
@@ -7163,20 +7163,20 @@ li.log-thumb.post-group figure {
   .front-hyper .archive-navigation {
     margin-top: 20px; }
 
-.header-ligh .archive-navigation .nav-previous a, .header-ligh .archive-navigation .nav-next a, .header-ligh .archive-navigation .more-sets a {
+.background-day-mode .archive-navigation .nav-previous a, .background-day-mode .archive-navigation .nav-next a, .background-day-mode .archive-navigation .more-sets a {
   color: #000;
   border-bottom: 2px solid #000;
   transition: all 1s ease-out; }
   @media screen and (prefers-reduced-motion: reduce) {
-    .header-ligh .archive-navigation .nav-previous a, .header-ligh .archive-navigation .nav-next a, .header-ligh .archive-navigation .more-sets a {
+    .background-day-mode .archive-navigation .nav-previous a, .background-day-mode .archive-navigation .nav-next a, .background-day-mode .archive-navigation .more-sets a {
       transition: none; } }
-  .header-ligh .archive-navigation .nav-previous a:hover, .header-ligh .archive-navigation .nav-next a:hover, .header-ligh .archive-navigation .more-sets a:hover {
+  .background-day-mode .archive-navigation .nav-previous a:hover, .background-day-mode .archive-navigation .nav-next a:hover, .background-day-mode .archive-navigation .more-sets a:hover {
     color: #fff;
     background-color: #000;
     border-bottom: 2px solid transparent;
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
-      .header-ligh .archive-navigation .nav-previous a:hover, .header-ligh .archive-navigation .nav-next a:hover, .header-ligh .archive-navigation .more-sets a:hover {
+      .background-day-mode .archive-navigation .nav-previous a:hover, .background-day-mode .archive-navigation .nav-next a:hover, .background-day-mode .archive-navigation .more-sets a:hover {
         transition: none; } }
 
 .lime .archive-navigation .nav-previous a, .lime .archive-navigation .nav-next a, .lime .archive-navigation .more-sets a {
@@ -7535,38 +7535,38 @@ address {
               .single-content footer ul li a:hover {
                 transition: none; } }
 
-.none-white-bg .single-content .page-header p.meta {
+.background-night-mode .single-content .page-header p.meta {
   color: #fff; }
-  .none-white-bg .single-content .page-header p.meta a {
+  .background-night-mode .single-content .page-header p.meta a {
     color: #fff; }
-.none-white-bg .single-content section.post-content {
+.background-night-mode .single-content section.post-content {
   margin-bottom: 40px; }
-  .none-white-bg .single-content section.post-content p a {
+  .background-night-mode .single-content section.post-content p a {
     color: #fffb2b;
     border-bottom: 1px solid transparent;
     text-decoration: underline;
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
-      .none-white-bg .single-content section.post-content p a {
+      .background-night-mode .single-content section.post-content p a {
         transition: none; } }
-    .none-white-bg .single-content section.post-content p a:hover {
+    .background-night-mode .single-content section.post-content p a:hover {
       text-decoration: none; }
-.none-white-bg .single-content footer p.footer-meta a {
+.background-night-mode .single-content footer p.footer-meta a {
   color: #fff; }
 
-.brand-color .single-content footer ul li a {
+.tiagsssss-color .single-content footer ul li a {
   color: #ff0000;
   background-color: #fff;
   transition: all 1s ease-out; }
   @media screen and (prefers-reduced-motion: reduce) {
-    .brand-color .single-content footer ul li a {
+    .tiagsssss-color .single-content footer ul li a {
       transition: none; } }
-  .brand-color .single-content footer ul li a:hover {
+  .tiagsssss-color .single-content footer ul li a:hover {
     color: #fff;
     background-color: #ff0000;
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
-      .brand-color .single-content footer ul li a:hover {
+      .tiagsssss-color .single-content footer ul li a:hover {
         transition: none; } }
 
 .dark .single-content section.post-content {
@@ -7599,19 +7599,19 @@ address {
       .dark .single-content footer ul li a:hover {
         transition: none; } }
 
-.brand-color .single-content footer ul li a {
+.tiagsssss-color .single-content footer ul li a {
   color: #ff0000;
   background-color: #fff;
   transition: all 1s ease-out; }
   @media screen and (prefers-reduced-motion: reduce) {
-    .brand-color .single-content footer ul li a {
+    .tiagsssss-color .single-content footer ul li a {
       transition: none; } }
-  .brand-color .single-content footer ul li a:hover {
+  .tiagsssss-color .single-content footer ul li a:hover {
     color: #fff;
     background-color: #ff0000;
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
-      .brand-color .single-content footer ul li a:hover {
+      .tiagsssss-color .single-content footer ul li a:hover {
         transition: none; } }
 
 .indigo .single-content footer ul li a {
@@ -7700,10 +7700,10 @@ address {
         .single-navigation .nav-previous span a:hover, .single-navigation .nav-next span a:hover {
           transition: none; } }
 
-.none-white-bg .single-navigation .nav-previous span a, .none-white-bg .single-navigation .nav-next span a {
+.background-night-mode .single-navigation .nav-previous span a, .background-night-mode .single-navigation .nav-next span a {
   color: #fff;
   /*border-bottom: 2px solid $white;*/ }
-  .none-white-bg .single-navigation .nav-previous span a:hover, .none-white-bg .single-navigation .nav-next span a:hover {
+  .background-night-mode .single-navigation .nav-previous span a:hover, .background-night-mode .single-navigation .nav-next span a:hover {
     /*border-bottom: 2px solid transparent;*/ }
 
 .mfp-bg {
@@ -8146,13 +8146,13 @@ img.mfp-img {
 .mfp-arrow-left:after, .mfp-arrow-right:after {
   display: none; }
 
-.brand-color .mfp-fade.mfp-bg {
+.tiagsssss-color .mfp-fade.mfp-bg {
   background: #ff0000; }
 
 .indigo .mfp-fade.mfp-bg {
   background: #5C6BC0; }
 
-.brand-color .mfp-fade.mfp-bg {
+.tiagsssss-color .mfp-fade.mfp-bg {
   background: #ff0000; }
 
 .blue .mfp-fade.mfp-bg {
@@ -8177,24 +8177,24 @@ img.mfp-img {
   .mfp-arrow:hover {
     opacity: 0.7; }
 
-.header-ligh .mfp-arrow-left:before, .header-ligh .mfp-arrow-left .mfp-b {
+.background-day-mode .mfp-arrow-left:before, .background-day-mode .mfp-arrow-left .mfp-b {
   border-right: 27px solid #000; }
-.header-ligh .mfp-arrow-right:before, .header-ligh .mfp-arrow-right .mfp-b {
+.background-day-mode .mfp-arrow-right:before, .background-day-mode .mfp-arrow-right .mfp-b {
   border-left: 27px solid #000; }
-.header-ligh .mfp-wrap .mfp-content .mfp-image-holder .mfp-close, .header-ligh .mfp-wrap .mfp-content .mfp-iframe-holder .mfp-close {
+.background-day-mode .mfp-wrap .mfp-content .mfp-image-holder .mfp-close, .background-day-mode .mfp-wrap .mfp-content .mfp-iframe-holder .mfp-close {
   color: #000; }
-.header-ligh .mfp-wrap .mfp-content .mfp-title {
+.background-day-mode .mfp-wrap .mfp-content .mfp-title {
   color: #000;
   display: none; }
-.header-ligh .mfp-wrap .mfp-content .mfp-counter {
+.background-day-mode .mfp-wrap .mfp-content .mfp-counter {
   color: #000; }
-.header-ligh .mfp-wrap .mfp-preloader {
+.background-day-mode .mfp-wrap .mfp-preloader {
   color: #000; }
-.header-ligh .mfp-figure:after {
+.background-day-mode .mfp-figure:after {
   background: #000; }
-.header-ligh .mfp-close {
+.background-day-mode .mfp-close {
   color: #000; }
-.header-ligh .mfp-close-btn-in .mfp-close {
+.background-day-mode .mfp-close-btn-in .mfp-close {
   color: #000; }
 
 img.mfp-img {
@@ -8206,7 +8206,7 @@ img.mfp-img {
   padding-bottom: 0px; }
   #social-block h3 {
     color: #ff0000;
-    /*border-bottom: 2px solid $brand-color;*/
+    /*border-bottom: 2px solid $tiagsssss-color;*/
     margin-bottom: 15px;
     font-size: 18px;
     font-style: italic;
