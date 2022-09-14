@@ -155,6 +155,12 @@ li.item-post {
         .kgvid_wrapper_inline {
             display: contents;
         }
+        .video-js {
+            background-color: transparent;
+        }
+        .vjs-no-js {
+            background-color: transparent;
+        }
         video {
           //position: fixed;
           // top: 50%;
