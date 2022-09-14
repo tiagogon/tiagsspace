@@ -6809,6 +6809,11 @@ li.item-post {
           @media screen and (prefers-reduced-motion: reduce) {
             li.item-post figure a .imgcontainer img {
               transition: none; } }
+        li.item-post figure a .imgcontainer .kgvid_wrapper_inline_left {
+          float: left;
+          margin: 0; }
+        li.item-post figure a .imgcontainer .kgvid_wrapper_inline {
+          display: contents; }
         li.item-post figure a .imgcontainer video {
           transform: translateX(0%) translateY(0%);
           background-size: cover;

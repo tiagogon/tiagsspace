@@ -371,7 +371,7 @@ Index of posts for Home and Archives
                                           // Use of shortcode via PHP https://developer.wordpress.org/reference/functions/do_shortcode/
                                           // Parameters
 
-                                          echo do_shortcode( '[KGVID id="'.$video_thumbnail_id.'" muted="true" controls="false" loop="true" autoplay="true" pauseothervideos="false" poster="'.$video_poster.'"]' );
+                                          echo do_shortcode( '[KGVID id="'.$video_thumbnail_id.'" muted="true" controls="false" loop="true" autoplay="true" pauseothervideos="false" pixel_ratio="true" schema="false" poster="'.$video_poster.'"]' );
 
                                         } else { ?>
 
