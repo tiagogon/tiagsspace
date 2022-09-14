@@ -6818,6 +6818,8 @@ li.item-post {
           background-color: transparent; }
         li.item-post figure a .imgcontainer .vjs-no-js {
           background-color: transparent; }
+        li.item-post figure a .imgcontainer .vjs-poster {
+          background-color: transparent; }
         li.item-post figure a .imgcontainer video {
           transform: translateX(0%) translateY(0%);
           background-size: cover;
