@@ -202,38 +202,38 @@ Index of posts for Home and Archives
                             // Imgcontainer calculations -- intrinsic ratio
 
                                 // Get Video
-                                $video_array = array();
-                                $video_array = get_field('video_thumbnail');
+                                $video_thumbnail_id = "";
+                                $video_thumbnail_id = get_field('video_thumbnail');
 
                                 //get animated image
                                 $animated_thumbnail_array = array();
                                 $animated_thumbnail_array = get_field('animated_thumbnail');
 
-                                if ($video_array) {
+                                if ($video_thumbnail_id) {
 
                                     // THERE IS A BUG: on related posts get_filed retrives ID insteas of the Arrat. THis is a work around. if it's array and if it nos (it will be a ID)
-                                    if (is_array($video_array)) {
+                                    if (is_array($video_thumbnail_id)) {
 
-                                        $intrinsic_ratio = $video_array['height'] * 100 / $video_array['width'];
+                                        $intrinsic_ratio = $video_thumbnail_id['height'] * 100 / $video_thumbnail_id['width'];
                                         $video_poster = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full')[0];
-                                        $video_mp4 = $video_array['url'];
-                                        $video_webmvp8 = str_replace(".mp4","-vp8.webm",$video_array['url']);
-                                        $video_webmvp9 = str_replace(".mp4","-vp9.webm",$video_array['url']);
+                                        // $video_mp4 = $video_thumbnail_id['url'];
+                                        // $video_webmvp8 = str_replace(".mp4","-vp8.webm",$video_thumbnail_id['url']);
+                                        // $video_webmvp9 = str_replace(".mp4","-vp9.webm",$video_thumbnail_id['url']);
 
                                     // Else, it must be an ID:
                                     } else {
 
                                         // Make sure is a number inteiro
-                                        $video_array = (int)$video_array;
+                                        $video_thumbnail_id = (int)$video_thumbnail_id;
                                         // https://codex.wordpress.org/Function_Reference/wp_get_attachment_metadata
-                                        $video_attachment_metadata = wp_get_attachment_metadata($video_array);
+                                        $video_attachment_metadata = wp_get_attachment_metadata($video_thumbnail_id);
 
                                         //Final variables
                                         $intrinsic_ratio = $video_attachment_metadata['height'] * 100 / $video_attachment_metadata['width'];
                                         $video_poster = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full')[0];
-                                        $video_mp4 = wp_get_attachment_url( $video_array );
-                                        $video_webmvp8 = str_replace(".mp4","-vp8.webm",$video_mp4);
-                                        $video_webmvp9 = str_replace(".mp4","-vp9.webm",$video_mp4);
+                                        // $video_mp4 = wp_get_attachment_url( $video_thumbnail_id );
+                                        // $video_webmvp8 = str_replace(".mp4","-vp8.webm",$video_mp4);
+                                        // $video_webmvp9 = str_replace(".mp4","-vp9.webm",$video_mp4);
                                     }
 
 
@@ -336,7 +336,7 @@ Index of posts for Home and Archives
 
                         // Thumbnail image source code
 
-                            if ($animated_thumbnail_array and $video_array == array()) {
+                            if ($animated_thumbnail_array and $video_thumbnail_id == array()) {
 
 
                                 $source = 'src="'.$animated_thumbnail_array['url'].'" style="width: 100%;"';
@@ -364,21 +364,20 @@ Index of posts for Home and Archives
                                     <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
 
                                         <?php // IF IS VIDEO -- via: https://codepen.io/dudleystorey/pen/knqyK
-                                        if (!empty($video_array)) { ?>
+                                        if (!empty($video_thumbnail_id)) {
 
-                                            <video poster="<?php echo $video_poster; ?>" id="bgvid" playsinline autoplay muted loop>
-                                                <source src="<?php echo $video_webmvp8; ?>" type="video/webm">
-                                                <source src="<?php echo $video_webmvp9; ?>" type="video/webm">
-                                                <source src="<?php echo $video_mp4; ?>" type="video/mp4">
-                                            </video>
+                                          // Use videoplayer from VideoPack
+                                          // Use of videopack shortcode https://www.wordpressvideopack.com/docs/shortcode-reference/
+                                          // Use of shortcode via PHP https://developer.wordpress.org/reference/functions/do_shortcode/
+                                          // Parameters
 
-                                        <?php //IS not video
+                                          echo do_shortcode( '[KGVID id="'.$video_thumbnail_id.'" muted="true" controls="false" loop="true" autoplay="true" pauseothervideos="false" poster="'.$video_poster.'"]' );
+
                                         } else { ?>
 
-                                            <img <?php echo $source; ?> alt="<?php the_title(); ?>" />
+                                          <img <?php echo $source; ?> alt="<?php the_title(); ?>" />
 
                                         <?php } ?>
-
 
                                     </div>
 

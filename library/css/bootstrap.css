@@ -6810,13 +6810,6 @@ li.item-post {
             li.item-post figure a .imgcontainer img {
               transition: none; } }
         li.item-post figure a .imgcontainer video {
-          top: 50%;
-          left: 50%;
-          min-width: 100%;
-          min-height: 100%;
-          width: auto;
-          height: auto;
-          z-index: -100;
           transform: translateX(0%) translateY(0%);
           background-size: cover;
           max-width: 100%;
