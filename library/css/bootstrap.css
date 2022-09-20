@@ -5348,12 +5348,12 @@ a.text-dark:hover, a.text-dark:focus {
   visibility: hidden !important; }
 
 body {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.8; }
   body em {
     font-style: normal;
     font-family: "lackitalic", sans-serif;
-    font-size: 17px; }
+    font-size: 18px; }
 
 body.background-night-mode {
   color: #fff; }
@@ -6733,7 +6733,7 @@ ul.thumb-container {
 
 .year-separator {
   text-align: left;
-  font-size: 15px;
+  font-size: 16px;
   margin: 15px 0 0; }
   .year-separator .separator-wrapper {
     /*border-top: 2px solid $gray-dark;*/ }
@@ -6879,13 +6879,13 @@ li.item-post {
           margin: 0; }
         li.item-post figure a figcaption p.meta-info {
           color: #000;
-          font-size: 15px;
+          font-size: 16px;
           margin: 0;
           padding-bottom: 18px;
           text-align: center; }
         li.item-post figure a figcaption p {
           color: #000;
-          font-size: 15px;
+          font-size: 16px;
           margin: 0;
           margin-bottom: 6px; }
       li.item-post figure a figcaption.hide-figcaption {
