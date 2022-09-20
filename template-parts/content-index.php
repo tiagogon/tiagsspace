@@ -19,9 +19,7 @@ Index of posts for Home and Archives
                 // if (is_post_type_archive( "hyper" )) {
                 //     $grid_base = 'col-48 col-sm-24 col-md-16 col-lg-16';
                 // }
-                if (is_post_type_archive( "films" )) {
-                    $grid_base = 'col-48 col-sm-48 col-md-32 col-lg-32';
-                }
+
 
                 // Is sugested posts loop
                 $is_sugested_posts = 0;
@@ -121,7 +119,7 @@ Index of posts for Home and Archives
                         // Item sizer for masory
                         if ($count == 1 ) {
                             // echo '<div class="item-sizer '.$grid.'"></div>';
-                            echo '<div class="item-sizer col-8"></div>';
+                            echo '<div class="item-sizer col-1"></div>';
                         }
 
                         // HTML - Open Log Posts container
@@ -170,7 +168,7 @@ Index of posts for Home and Archives
 
                         if ($count == 1) {
                             // echo '<div class="item-sizer '.$grid_base.'"></div>';
-                            echo '<div class="item-sizer col-8"></div>';
+                            echo '<div class="item-sizer col-1"></div>';
 
                         }
 

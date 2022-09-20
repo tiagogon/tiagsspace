@@ -458,6 +458,13 @@ li.item-post {
   padding: 0px!important;
   box-shadow: none!important;
   border: none!important;
+  box-shadow: 8px 8px 8px #fff!important;
+  transition: box-shadow 5s ease-in-out!important;
+
+  img {
+    max-width: 240px;
+  }
+
 }
 li.log-thumb {
   figure {
