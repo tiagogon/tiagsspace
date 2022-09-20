@@ -1062,29 +1062,29 @@ function color_background_parameters ($parameter) {
 
 								$background_color_class = 'header-white';
 
-			// Is Log branch BLWWW
-				if ((has_term( 'blwww', 'log-branch'  ) && is_singular('log'))
-										OR is_tax( 'log-branch', 'blwww') ) {
-
-						$background_color_class = 'lime';
-			}
-			// Is Log branch hrzn
-				elseif ((has_term( 'hrzn', 'log-branch'  ) && is_singular('log'))
-										OR is_tax( 'log-branch', 'hrzn') ) {
-
-						$background_color_class = 'yellow';
-			}
-			// Is Log branch plnt
-				elseif ((has_term( 'plnt', 'log-branch'  ) && is_singular('log'))
-										OR is_tax( 'log-branch', 'plnt') ) {
-
-						$background_color_class = 'sky';
-			}
-			// Other Log Branches
-			else {
-				$background_color_class = 'header-white';
-
-			}
+			// // Is Log branch BLWWW
+			// 	if ((has_term( 'blwww', 'log-branch'  ) && is_singular('log'))
+			// 							OR is_tax( 'log-branch', 'blwww') ) {
+			//
+			// 			$background_color_class = 'lime';
+			// }
+			// // Is Log branch hrzn
+			// 	elseif ((has_term( 'hrzn', 'log-branch'  ) && is_singular('log'))
+			// 							OR is_tax( 'log-branch', 'hrzn') ) {
+			//
+			// 			$background_color_class = 'yellow';
+			// }
+			// // Is Log branch plnt
+			// 	elseif ((has_term( 'plnt', 'log-branch'  ) && is_singular('log'))
+			// 							OR is_tax( 'log-branch', 'plnt') ) {
+			//
+			// 			$background_color_class = 'sky';
+			// }
+			// // Other Log Branches
+			// else {
+			// 	$background_color_class = 'header-white';
+			//
+			// }
 
 	// Is Films single
 	} elseif ((is_singular( 'films' ) )) {
