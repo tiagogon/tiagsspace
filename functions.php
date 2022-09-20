@@ -157,7 +157,7 @@ add_filter( 'wp_title', 'wp_bootstrap_wp_title', 10, 2 );
 // Register Custom Post Type Film
 function custom_post_type_films() {
   $labels = array(
-    'name'                => _x( 'Films Section', 'Post Type General Name', 'text_domain' ),
+    'name'                => _x( 'Films', 'Post Type General Name', 'text_domain' ),
     'singular_name'       => _x( 'Film', 'Post Type Singular Name', 'text_domain' ),
     'menu_name'           => __( 'Films', 'text_domain' ),
     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
@@ -1006,8 +1006,7 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
 
 // post content wrap styles
 function content_wrap() {
-    echo "col-48 offset-0 col-sm-40 offset-sm-4 col-md-32 offset-md-8 col-lg-32 offset-lg-4";
-
+    echo "col-48 offset-0 col-sm-40 offset-sm-4 col-md-32 offset-md-8 col-lg-27 offset-lg-9";
 }
 
 //add this to your functions.php

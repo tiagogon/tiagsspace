@@ -101,11 +101,11 @@ if (is_singular() && !is_page()) {
                 <?php if ($obj->labels->name == "Posts") {
                     echo "";
                 } else {
-                    echo 'Part of <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.'.';
+                    echo '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.', ';
                 } ?>
 
-                Published on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('d/m/Y'); ?></time>.
-                
+                <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('M j, Y'); //the_time('d/m/Y'); ?></time>. 
+
                 <?php echo $taxonomies_string.' ';
                 // Edit link
                 if( is_user_logged_in() ) {
