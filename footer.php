@@ -232,15 +232,17 @@
 		// Suport Log hover image preview
 		// -- https://github.com/zpalffy/preview-image-jquery ?>
 		<script src="<?php bloginfo('template_url'); ?>/library/js/preview-image-jquery-master/preview-image.js" crossorigin="anonymous"></script>
+
 		<script type="text/javascript">
 			$.previewImage({
+
 			   'xOffset': 30,  // x-offset from cursor
 			   'yOffset': -300,  // y-offset from cursor
 			   'fadeIn': 700, // delay in ms. to display the preview
 			   'css': {        // the following css will be used when rendering the preview image.
 			      'padding': '0px',
 				  'box-shadow': '',
-					'z-index': '100000'
+					'z-index': '10000'
 			   }
 			});
 		</script>
