@@ -6080,7 +6080,10 @@ li.films-thumb figure:hover figcaption, li.wide-thumb figure:hover figcaption {
         transition: none; } }
 
 #preview-image-plugin-overlay {
-  z-index: 10000; }
+  z-index: 10000 !important;
+  padding: 0px !important;
+  box-shadow: none !important;
+  border: none !important; }
 
 li.log-thumb figure {
   background-color: #fff;
