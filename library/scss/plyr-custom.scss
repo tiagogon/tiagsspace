@@ -30,7 +30,7 @@ audio{
 }
 
 // Audio control
-.background-day-mode-mode{
+.background-day-mode{
     .plyr--audio .plyr__control {
         color: $gray-darker;
         &.plyr__tab-focus,
@@ -40,7 +40,7 @@ audio{
             color: $gray-darker;
         }
     }
-    @mixin plyr-tab-focus($color: $plyr-tab-focus-default-color) {
+    @mixin plyr-tab-focus($color: $gray-darker) {
         box-shadow: none;
         outline: 0;
     }
@@ -62,7 +62,6 @@ audio{
     .plyr--full-ui input[type='range'] {
 
         color: $gray-darker;
-
     width: 98%;
     }
 }
@@ -87,10 +86,10 @@ audio{
             color: $white;
         }
     }
-    // @mixin plyr-tab-focus($color: $plyr-tab-focus-default-color) {
-    //     box-shadow: none;
-    //     outline: 0;
-    // }
+    @mixin plyr-tab-focus($color: $plyr-tab-focus-default-color) {
+        box-shadow: none;
+        outline: 0;
+    }
 
     .plyr--audio {
         .plyr__controls {

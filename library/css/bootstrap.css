@@ -5575,19 +5575,19 @@ audio {
   box-shadow: none;
   line-height: 1; }
 
-.background-day-mode-mode .plyr--audio .plyr__control {
+.background-day-mode .plyr--audio .plyr__control {
   color: #000; }
-  .background-day-mode-mode .plyr--audio .plyr__control.plyr__tab-focus, .background-day-mode-mode .plyr--audio .plyr__control:hover, .background-day-mode-mode .plyr--audio .plyr__control[aria-expanded='true'] {
+  .background-day-mode .plyr--audio .plyr__control.plyr__tab-focus, .background-day-mode .plyr--audio .plyr__control:hover, .background-day-mode .plyr--audio .plyr__control[aria-expanded='true'] {
     background: none !important;
     color: #000; }
-.background-day-mode-mode .plyr--audio .plyr__controls {
+.background-day-mode .plyr--audio .plyr__controls {
   color: #000; }
-.background-day-mode-mode .plyr--audio .plyr__tooltip {
+.background-day-mode .plyr--audio .plyr__tooltip {
   background: transparent;
   color: #000;
   font-size: 16px;
   font-weight: 400; }
-.background-day-mode-mode .plyr--full-ui input[type='range'] {
+.background-day-mode .plyr--full-ui input[type='range'] {
   color: #000;
   width: 98%; }
 
