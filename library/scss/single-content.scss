@@ -7,7 +7,7 @@
 
 
 .container-video {
-    margin-bottom: 20px;
+    margin-bottom: $grid-gutter-width*1.5;
     padding-right: 0px;
     padding-left: 0px;
 }
@@ -27,17 +27,16 @@
 }
 
 .single-content{
-  margin-bottom: 20px;
+  margin-bottom: $grid-gutter-width*1.5;
   .page-header{
     h1.single-title{
       margin-top: 0;
-      margin-bottom: 20px;
       font-size: $font-size-heading;
 
 
     }
     p.meta{
-      margin-bottom: 20px;
+      margin-bottom: $font-size-heading;
       //text-transform: lowercase;
       font-size: 12px;
 
@@ -56,11 +55,10 @@
     ol, ul, dl {
         padding: $grid-gutter-width;
     }
-    margin-bottom: 40px;
+    margin-bottom: $grid-gutter-width;
   }
   footer{
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: $grid-gutter-width;
     p.footer-meta{
       margin-bottom: 0px;
       font-size: $font-size-heading;
@@ -73,7 +71,7 @@
       }
     }
     ul{
-      margin-bottom: 40px;
+      margin-bottom: $grid-gutter-width;
       li{
         display: inline-block;
         margin: 0 5px 7px 0px;
@@ -124,7 +122,7 @@
           }
         }
       }
-      margin-bottom: 40px;
+      margin-bottom: $grid-gutter-width;
     }
     footer{
       p.footer-meta{
@@ -172,7 +170,7 @@
           }
         }
       }
-      margin-bottom: 40px;
+      margin-bottom: $grid-gutter-width;
     }
     footer{
       ul{
@@ -338,7 +336,7 @@
     text-align: right;
   }
   .nav-previous,.nav-next,{
-    margin-bottom: 40px;
+    margin-bottom: $grid-gutter-width;
     span{
       a{
         font-family: $headings-font-family;

@@ -7205,7 +7205,7 @@ li.log-thumb.post-group figure {
     background-color: #aeff2b; }
 
 .container-gallery {
-  padding-bottom: 10px; }
+  padding-bottom: 45px; }
 
 div.gallery {
   margin-bottom: 0; }
@@ -7296,12 +7296,10 @@ div.gallery-horizontal .swiper-slide {
 
 .container-fluid {
   overflow: visible; }
-  .container-fluid div.no-pad {
-    margin-bottom: 30px; }
-    .container-fluid div.no-pad div.thumbnail figure img {
-      -webkit-transition: all 1s;
-      /* Safari */
-      transition: all 1s; }
+  .container-fluid div.no-pad div.thumbnail figure img {
+    -webkit-transition: all 1s;
+    /* Safari */
+    transition: all 1s; }
 
 div.thumbnail figure img.intense--loading {
   background: red;
@@ -7454,7 +7452,7 @@ address {
   text-align: right; }
 
 .container-video {
-  margin-bottom: 20px;
+  margin-bottom: 45px;
   padding-right: 0px;
   padding-left: 0px; }
 
@@ -7468,31 +7466,29 @@ address {
   padding: 0.2em .3em .3em; }
 
 .single-content {
-  margin-bottom: 20px; }
+  margin-bottom: 45px; }
   .single-content .page-header h1.single-title {
     margin-top: 0;
-    margin-bottom: 20px;
     font-size: 23px; }
   .single-content .page-header p.meta {
-    margin-bottom: 20px;
+    margin-bottom: 23px;
     font-size: 12px;
     display: none; }
   .single-content section.post-content {
-    margin-bottom: 40px; }
+    margin-bottom: 30px; }
     .single-content section.post-content p a {
       color: #ff0000; }
     .single-content section.post-content ol, .single-content section.post-content ul, .single-content section.post-content dl {
       padding: 30px; }
   .single-content footer {
-    margin-top: 40px;
-    margin-bottom: 40px; }
+    margin-top: 30px; }
     .single-content footer p.footer-meta {
       margin-bottom: 0px;
       font-size: 23px;
       font-family: "lackitalic", sans-serif;
       line-height: 1.1em; }
     .single-content footer ul {
-      margin-bottom: 40px; }
+      margin-bottom: 30px; }
       .single-content footer ul li {
         display: inline-block;
         margin: 0 5px 7px 0px;
@@ -7520,7 +7516,7 @@ address {
   .background-night-mode .single-content .page-header p.meta a {
     color: #fff; }
 .background-night-mode .single-content section.post-content {
-  margin-bottom: 40px; }
+  margin-bottom: 30px; }
   .background-night-mode .single-content section.post-content p a {
     color: #fffb2b;
     border-bottom: 1px solid transparent;
@@ -7549,7 +7545,7 @@ address {
         transition: none; } }
 
 .dark .single-content section.post-content {
-  margin-bottom: 40px; }
+  margin-bottom: 30px; }
   .dark .single-content section.post-content p a {
     color: #ff0000;
     border-bottom: 1px solid transparent;
@@ -7659,7 +7655,7 @@ address {
 .single-navigation nav.nav-previous {
   text-align: right; }
 .single-navigation .nav-previous, .single-navigation .nav-next {
-  margin-bottom: 40px; }
+  margin-bottom: 30px; }
   .single-navigation .nav-previous span a, .single-navigation .nav-next span a {
     font-family: "lackitalic", sans-serif;
     font-size: 23px;

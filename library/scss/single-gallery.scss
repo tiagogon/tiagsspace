@@ -3,7 +3,7 @@
 // --------------------------------------------------
 
 .container-gallery{
-	padding-bottom: 10px;
+	padding-bottom: $grid-gutter-width*1.5;
 }
 
 // .single-hyper{
@@ -32,14 +32,14 @@ div.gallery{
 			figcaption {
 			  display: block;
 			  text-align: center;
-			   
+
 			  padding-top: 8px;
 			  font-size: 14px;
 			  max-width: 650px;
 			  margin-left: auto;
 			  margin-right: auto;
 			  margin-bottom: -2px;
-   			  
+
 			}
 		}
   }
@@ -160,7 +160,7 @@ div.gallery-horizontal{
 .container-fluid {
 	overflow: visible;
 	div.no-pad{
-		margin-bottom: 30px;
+		// margin-bottom: 30px;
 		div.thumbnail{
 	  		figure {
 	    		// 1 line bug
@@ -225,9 +225,9 @@ div.thumbnail{
     z-index: 1;
 	padding: 5px;
 	color: white;
-	 
+
 	font-size: 16px;
-	
+
 	border-color: transparent;
     border-style: none;
     border-width: 0;
@@ -239,9 +239,9 @@ div.thumbnail{
 	button{
 
 		color: white;
-		 
+
 		font-size: 16px;
-		
+
 		border-color: transparent;
 	    border-style: none;
 	    border-width: 0;
@@ -258,9 +258,9 @@ button.remove{
     z-index: 1;
 	padding: 5px;
 	color: white;
-	 
+
 	font-size: 16px;
-	
+
 	border-color: transparent;
     border-style: none;
     border-width: 0;
@@ -278,9 +278,9 @@ button.saveorder{
     z-index: 1;
 	padding: 5px;
 	color: white;
-	 
+
 	font-size: 16px;
-	
+
 	border-color: transparent;
     border-style: none;
     border-width: 0;
@@ -298,9 +298,9 @@ a.delete{
 	right: 0;
 	padding: 5px;
 	color: white;
-	 
+
 	font-size: 16px;
-	
+
 	text-shadow: 1px 1px $tiagsssss-color;
 	&:hover{
 		opacity: 1;
