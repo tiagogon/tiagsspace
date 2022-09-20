@@ -92,7 +92,7 @@ if (is_singular() && !is_page()) {
 
             if( is_singular( 'log' )) {
 
-                $logs_branch = "'s branch ".taxonomy_list($post->ID,'log-branch','','',', ', ' & ', 'link');
+                $logs_branch = "/".taxonomy_list($post->ID,'log-branch','','',', ', ' & ', 'link');
             }
 
             ?>
@@ -101,10 +101,10 @@ if (is_singular() && !is_page()) {
                 <?php if ($obj->labels->name == "Posts") {
                     echo "Published ";
                 } else {
-                    echo 'Published under <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.', ';
+                    echo 'Published under <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.' ';
                 } ?>
 
-                on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('M j, Y'); //the_time('d/m/Y'); ?></time>.
+                on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('F j, Y'); //the_time('d/m/Y'); ?></time>.
 
                 <?php echo $taxonomies_string.' ';
                 // Edit link
