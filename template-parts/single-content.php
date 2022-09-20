@@ -104,7 +104,7 @@ if (is_singular() && !is_page()) {
                     echo 'Published under <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.' ';
                 } ?>
 
-                on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('F j, Y'); //the_time('d/m/Y'); ?></time>.
+                on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('F j, Y'); //the_time('d/m/Y'); ?></time>. 
 
                 <?php echo $taxonomies_string.' ';
                 // Edit link
