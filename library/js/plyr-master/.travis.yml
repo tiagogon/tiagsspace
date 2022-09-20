@@ -1,6 +1,15 @@
-language: node_js
-node_js: lts/*
+language: php
 
+php:
+    - '7.4'
+
+cache:
+  directories:
+  - $HOME/.composer/cache
+  
+before_install:
+    - phpenv config-rm xdebug.ini || echo "xdebug not available"
+    
 script:
-- npm run lint
-- npm run build
+    - composer require --dev friendsofredaxo/linter
+    - vendor/bin/rexlint

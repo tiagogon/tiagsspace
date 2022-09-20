@@ -2128,6 +2128,7 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 // Activate ajax on the frontend
 
 // define ajax url as a global variable on the frontend
+if ( is_user_logged_in() ) {
 	function example_ajax_enqueue() {
 		// Enqueue javascript on the frontend.
 		wp_enqueue_script(
@@ -2143,6 +2144,7 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 		);
 	}
 	add_action( 'wp_enqueue_scripts', 'example_ajax_enqueue' );
+}
 
 // ----------------------
 //

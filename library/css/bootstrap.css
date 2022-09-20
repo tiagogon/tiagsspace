@@ -6542,7 +6542,9 @@ audio {
   width: 100%; }
 
 .plyr__time {
-  font-size: 16px; }
+  font-size: 16px;
+  padding-left: 16px;
+  }
 
 .plyr__tooltip {
   box-shadow: none;
