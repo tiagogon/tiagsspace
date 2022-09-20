@@ -8,6 +8,11 @@
   font-weight: normal;
   font-style: normal; }
 @font-face {
+  font-family: 'lackregular';
+  src: url("../fonts/lack/Lack-Regular.woff2") format("woff2"), url("../fonts/lack/Lack-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
   font-family: 'Sporting_Grotesque_Regular';
   src: url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.eot");
   src: url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.eot?#iefix") format("embedded-opentype"), url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.woff") format("woff"), url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.woff2") format("woff2"), url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.ttf") format("truetype"), url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.svg#svgFontName") format("svg");

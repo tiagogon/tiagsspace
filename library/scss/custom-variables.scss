@@ -65,13 +65,13 @@ $brand-primary:         #000;
 //     font-weight: normal;
 //     font-style: normal;
 // }
-// @font-face {
-//     font-family: 'lackregular';
-//     src: url('../fonts/lack/Lack-Regular.woff2') format('woff2'),
-//          url('../fonts/lack/Lack-Regular.woff') format('woff');
-//     font-weight: normal;
-//     font-style: normal;
-// }
+@font-face {
+    font-family: 'lackregular';
+    src: url('../fonts/lack/Lack-Regular.woff2') format('woff2'),
+         url('../fonts/lack/Lack-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
 // // Karrik
 // @font-face {
