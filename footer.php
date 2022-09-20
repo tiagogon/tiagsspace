@@ -231,7 +231,8 @@
 		<?php
 		// Suport Log hover image preview
 		// -- https://github.com/zpalffy/preview-image-jquery ?>
-		<script src="<?php bloginfo('template_url'); ?>/library/js/preview-image-jquery-master/preview-image.js" crossorigin="anonymous"></script>
+		
+		<script src="<?php bloginfo('template_url'); ?>/library/js/preview-image-jquery-master/preview-image.js"></script>
 
 		<script type="text/javascript">
 			$.previewImage({

@@ -1,8 +1,8 @@
-// Overiding Plyr JS original css
-
-
-// GENERAL Audio overide
-
+// // Overiding Plyr JS original css
+//
+//
+// // GENERAL Audio overide
+//
 $plyr-tab-focus-default-color: none !default;
 $plyr-color-main: transparent !default;
 $plyr-audio-control-bg-hover: $plyr-tab-focus-default-color !default;
@@ -30,7 +30,7 @@ audio{
 }
 
 // Audio control
-.header-white{
+.background-day-mode-mode{
     .plyr--audio .plyr__control {
         color: $gray-darker;
         &.plyr__tab-focus,
@@ -55,13 +55,15 @@ audio{
             font-size: 16px;
             font-weight: $font-weight-normal;
             &::before {
-                border-top: $plyr-tooltip-arrow-size solid $gray-darker;
+              //  border-top: $plyr-tooltip-arrow-size solid $gray-darker;
             }
         }
     }
     .plyr--full-ui input[type='range'] {
 
         color: $gray-darker;
+
+    width: 98%;
     }
 }
 
@@ -85,10 +87,10 @@ audio{
             color: $white;
         }
     }
-    @mixin plyr-tab-focus($color: $plyr-tab-focus-default-color) {
-        box-shadow: none;
-        outline: 0;
-    }
+    // @mixin plyr-tab-focus($color: $plyr-tab-focus-default-color) {
+    //     box-shadow: none;
+    //     outline: 0;
+    // }
 
     .plyr--audio {
         .plyr__controls {
@@ -99,19 +101,20 @@ audio{
             color: $white;
             font-size: 16px;
             font-weight: $font-weight-normal;
-            &::before {
-                border-top: $plyr-tooltip-arrow-size solid $white;
-            }
+            // &::before {
+            //     border-top: $plyr-tooltip-arrow-size solid $white;
+            // }
         }
     }
 
     .plyr--full-ui input[type='range'] {
         color: $white;
+        width: 98%;
     }
 }
 
 .plyr__progress {
-    margin-right: var(--plyr-range-thumb-height,20px);
+  //  margin-right: var(--plyr-range-thumb-height,20px);
     width: 100%;
 }
 

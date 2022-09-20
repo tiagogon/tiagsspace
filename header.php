@@ -22,6 +22,8 @@
 
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
 
+			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/plyr-master/assets/vendor/plyr/dist/plyr.css">
+
 		<?php wp_head(); ?>
 
 		<?php // ----- SCRIPTS ----- ?>

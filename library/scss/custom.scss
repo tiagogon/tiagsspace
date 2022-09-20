@@ -55,8 +55,9 @@
 @import "custom-thumbnails.scss";
 
 // Support to JS library
-@import "../js/plyr-master/src/sass/plyr.scss";
-@import "plyr-custom.scss";
+// @import "../js/plyr-master/assets/vendor/plyr/src/sass/plyr.scss";
+//@import "../js/plyr-master/assets/vendor/plyr/src/sass/plyr.scss";
+@import "plyr-custom.scss"; 
 
 // Custom features
 @import "front-header-slider";

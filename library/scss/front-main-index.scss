@@ -452,6 +452,10 @@ li.item-post {
 
 
 // LOG
+
+#preview-image-plugin-overlay{
+  z-index: 10000;
+}
 li.log-thumb {
   figure {
       background-color: $white;
