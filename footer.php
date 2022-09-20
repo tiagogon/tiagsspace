@@ -241,7 +241,6 @@
 			      'padding': '0px',
 				  'box-shadow': '',
 					'z-index': '100000'
-
 			   }
 			});
 		</script>
