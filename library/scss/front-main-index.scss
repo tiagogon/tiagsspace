@@ -35,7 +35,9 @@ ul.thumb-container{
 // Year Separator
 .year-separator{
   text-align: left;
-  font-size: $font-size-p;
+  font-size: $font-size-heading;
+  font-family: $headings-font-family;
+  line-height: 1em;
   margin: ($grid-gutter-width / 2) 0 0;
 
 
@@ -216,7 +218,7 @@ li.item-post {
 
         .series{
           color: $white;
-          font-size: $font-size-meta-info;
+          font-size: $font-size-p;
 
           /**/
           margin: 0px 0 6px 0;
@@ -506,7 +508,7 @@ li.log-thumb.post-group {
         padding-right: 0;
         padding-bottom: 0;
         .series{
-          font-size: $font-size-meta-info;
+          font-size: $font-size-p;
           margin: 0px 0 6px 0;
           color: $tiagsssss-color;
           margin-bottom: 18px;

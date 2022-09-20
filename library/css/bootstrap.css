@@ -6733,7 +6733,9 @@ ul.thumb-container {
 
 .year-separator {
   text-align: left;
-  font-size: 16px;
+  font-size: 23px;
+  font-family: "lackitalic", sans-serif;
+  line-height: 1em;
   margin: 15px 0 0; }
   .year-separator .separator-wrapper {
     /*border-top: 2px solid $gray-dark;*/ }
@@ -6869,7 +6871,7 @@ li.item-post {
             bottom: 7%; } }
         li.item-post figure a figcaption .series {
           color: #fff;
-          font-size: 14px;
+          font-size: 16px;
           /**/
           margin: 0px 0 6px 0; }
         li.item-post figure a figcaption h2 {
@@ -7103,7 +7105,7 @@ li.log-thumb.post-group figure {
     padding-right: 0;
     padding-bottom: 0; }
     li.log-thumb.post-group figure figcaption .series {
-      font-size: 14px;
+      font-size: 16px;
       margin: 0px 0 6px 0;
       color: #ff0000;
       margin-bottom: 18px; }

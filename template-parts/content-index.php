@@ -129,7 +129,7 @@ Index of posts for Home and Archives
                             <li id="post-group-<?php echo $count; ?>" class="loadpost post-group <?php echo $grid; ?> <?php echo $post_type; ?>-thumb item item<?php echo $count; ?> item-post" <?php post_class('clearfix'); ?> role="article">
                                 <figure>
                                     <figcaption class="<?php echo $hide_figcaption;?>">
-                                        <p class="series">log</p>
+                                        <p class="series">Log</p>
                         <?php }
 
                         // HTML - Log post title and link ?>
