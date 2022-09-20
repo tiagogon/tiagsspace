@@ -2,9 +2,93 @@
  * google-material-color v1.2.6
  * https://github.com/danlevan/google-material-color
  */
-body.background-night-mode {
-  color: #fff; }
-
+@font-face {
+  font-family: 'lackitalic';
+  src: url("../fonts/lack/lack-italic-webfont.woff2") format("woff2"), url("../fonts/lack/lack-italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'lack_lineitalic';
+  src: url("../fonts/lack/lack-line-italic-webfont.woff2") format("woff2"), url("../fonts/lack/lack-line-italic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'lack_lineregular';
+  src: url("../fonts/lack/lack-line-regular-webfont.woff2") format("woff2"), url("../fonts/lack/lack-line-regular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'lackregular';
+  src: url("../fonts/lack/Lack-Regular.woff2") format("woff2"), url("../fonts/lack/Lack-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Karrik';
+  src: url("../fonts/karrik/WOFF2/Karrik-Regular.woff2") format("woff2"), url("../fonts/karrik/WOFF/Karrik-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Karrikitalic';
+  src: url("../fonts/karrik/WOFF2/Karrik-Italic.woff2") format("woff2"), url("../fonts/karrik/WOFF/Karrik-Italic.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'cantiquenormal';
+  src: url("../fonts/cantique/Cantique-Normal.woff2") format("woff2"), url("../fonts/cantique/Cantique-Normal.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Mess_Light';
+  src: url("../fonts/mess/Mess-Light_web.eot");
+  src: url("../fonts/mess/Mess-Light_web.eot?#iefix") format("embedded-opentype"), url("../fonts/mess/Mess-Light_web.woff") format("woff"), url("../fonts/mess/Mess-Light_web.woff2") format("woff2"), url("../fonts/mess/Mess-Light_web.ttf") format("truetype"), url("../fonts/mess/Mess-Light_web.svg#svgFontName") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Sporting_Grotesque_Regular';
+  src: url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.eot");
+  src: url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.eot?#iefix") format("embedded-opentype"), url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.woff") format("woff"), url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.woff2") format("woff2"), url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.ttf") format("truetype"), url("../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.svg#svgFontName") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Sporting_Grotesque_Bold';
+  src: url("../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.eot");
+  src: url("../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.eot?#iefix") format("embedded-opentype"), url("../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.woff") format("woff"), url("../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.woff2") format("woff2"), url("../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.ttf") format("truetype"), url("../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.svg#svgFontName") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Minipax-Bold';
+  src: url("../fonts/Minipax/Minipax-Bold.eot");
+  src: url("../fonts/Minipax/Minipax-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/Minipax/Minipax-Bold.woff") format("woff"), url("../fonts/Minipax/Minipax-Bold.woff2") format("woff2"), url("../fonts/Minipax/Minipax-Bold.ttf") format("truetype"), url("../fonts/Minipax/Minipax-Bold.svg#svgFontName") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Minipax-Medium';
+  src: url("../fonts/Minipax/Minipax-Medium.eot");
+  src: url("../fonts/Minipax/Minipax-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/Minipax/Minipax-Medium.woff") format("woff"), url("../fonts/Minipax/Minipax-Medium.woff2") format("woff2"), url("../fonts/Minipax/Minipax-Medium.ttf") format("truetype"), url("../fonts/Minipax/Minipax-Medium.svg#svgFontName") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Minipax-Regular';
+  src: url("../fonts/Minipax/Minipax-Regular.eot");
+  src: url("../fonts/Minipax/Minipax-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Minipax/Minipax-Regular.woff") format("woff"), url("../fonts/Minipax/Minipax-Regular.woff2") format("woff2"), url("../fonts/Minipax/Minipax-Regular.ttf") format("truetype"), url("../fonts/Minipax/Minipax-Regular.svg#svgFontName") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Minipax-SemiBold';
+  src: url("../fonts/Minipax/Minipax-SemiBold.eot");
+  src: url("../fonts/Minipax/Minipax-SemiBold.eot?#iefix") format("embedded-opentype"), url("../fonts/Minipax/Minipax-SemiBold.woff") format("woff"), url("../fonts/Minipax/Minipax-SemiBold.woff2") format("woff2"), url("../fonts/Minipax/Minipax-SemiBold.ttf") format("truetype"), url("../fonts/Minipax/Minipax-SemiBold.svg#svgFontName") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Basteleur-Bold';
+  src: url("../fonts/basteleur/Basteleur-Bold.woff2") format("woff2"), url("../fonts/basteleur/Basteleur-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: 'Basteleur-Moonlight';
+  src: url("../fonts/basteleur/Basteleur-Moonlight.woff2") format("woff2"), url("../fonts/basteleur/Basteleur-Moonlight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
 :root {
   --blue: #3c00f5;
   --indigo: #5C6BC0;
@@ -26,13 +110,13 @@ body.background-night-mode {
   --warning: #fffb2b;
   --danger: #ff0000;
   --light: #f8f9fa;
-  --dark: #111111;
+  --dark: #000;
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-  --font-family-sans-serif: "Nunito Sans", sans-serif;
+  --font-family-sans-serif: "Sporting_Grotesque_Regular", sans-serif;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
 
 *,
@@ -55,7 +139,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
   margin: 0;
-  font-family: "Nunito Sans", sans-serif;
+  font-family: "Sporting_Grotesque_Regular", sans-serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -81,7 +165,6 @@ p {
 
 abbr[title],
 abbr[data-original-title] {
-  text-decoration: underline;
   text-decoration: underline dotted;
   cursor: help;
   border-bottom: 0; }
@@ -104,7 +187,7 @@ ul ol {
   margin-bottom: 0; }
 
 dt {
-  font-weight: 600; }
+  font-weight: 400; }
 
 dd {
   margin-bottom: .5rem;
@@ -112,9 +195,6 @@ dd {
 
 blockquote {
   margin: 0 0 1rem; }
-
-dfn {
-  font-style: italic; }
 
 b,
 strong {
@@ -300,8 +380,8 @@ template {
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   margin-bottom: 0.5rem;
-  font-family: inherit;
-  font-weight: 600;
+  font-family: "lackitalic", sans-serif;
+  font-weight: 400;
   line-height: 1.2;
   color: inherit; }
 
@@ -377,8 +457,7 @@ mark,
     margin-right: 0.5rem; }
 
 .initialism {
-  font-size: 90%;
-  text-transform: uppercase; }
+  font-size: 90%; }
 
 .blockquote {
   margin-bottom: 1rem;
@@ -3001,7 +3080,7 @@ button.bg-light:focus {
   background-color: #dae0e5 !important; }
 
 .bg-dark {
-  background-color: #111111 !important; }
+  background-color: #000 !important; }
 
 a.bg-dark:hover, a.bg-dark:focus,
 button.bg-dark:hover,
@@ -3066,7 +3145,7 @@ button.bg-dark:focus {
   border-color: #f8f9fa !important; }
 
 .border-dark {
-  border-color: #111111 !important; }
+  border-color: #000 !important; }
 
 .border-white {
   border-color: #fff !important; }
@@ -5263,7 +5342,7 @@ button.bg-dark:focus {
   font-weight: 400 !important; }
 
 .font-weight-bold {
-  font-weight: 600 !important; }
+  font-weight: 400 !important; }
 
 .font-italic {
   font-style: italic !important; }
@@ -5314,7 +5393,7 @@ a.text-light:hover, a.text-light:focus {
   color: #dae0e5 !important; }
 
 .text-dark {
-  color: #111111 !important; }
+  color: #000 !important; }
 
 a.text-dark:hover, a.text-dark:focus {
   color: black !important; }
@@ -5344,6 +5423,17 @@ a.text-dark:hover, a.text-dark:focus {
 .invisible {
   visibility: hidden !important; }
 
+body {
+  font-size: 17px;
+  line-height: 1.6; }
+  body em {
+    font-style: normal;
+    font-family: "lackitalic", sans-serif;
+    font-size: 19px; }
+
+body.background-night-mode {
+  color: #fff; }
+
 .tiagsssss-color {
   background-color: #ff0000; }
 
@@ -5351,7 +5441,7 @@ a.text-dark:hover, a.text-dark:focus {
   color: #aeff2b; }
 
 .dark {
-  background-color: #111111; }
+  background-color: #000; }
 
 .dark-heading {
   color: #ff0000; }
@@ -6521,7 +6611,7 @@ a.plyr__control {
   color: #000; }
 
 .plyr {
-  font-family: "Nunito Sans", sans-serif;
+  font-family: "Sporting_Grotesque_Regular", sans-serif;
   width: 100%; }
 
 audio {
@@ -6601,7 +6691,8 @@ audio {
   padding-bottom: 30px;
   position: fixed;
   z-index: 1000;
-  top: 0px; }
+  top: 0px;
+  font-family: "lackitalic", sans-serif; }
   #site-header .slicknav_menutxt {
     display: none; }
   #site-header .slicknav_nav.slicknav_hidden {
@@ -6623,10 +6714,7 @@ audio {
           outline: none;
           color: #fff;
           text-decoration: none;
-          text-transform: uppercase;
           font-size: 18px;
-          font-weight: 600;
-          font-style: italic;
           margin-left: 13px;
           /*border: 2px solid transparent;*/
           padding: 2px 7px 0px 7px;
@@ -6721,10 +6809,8 @@ ul.thumb-container {
 
 .year-separator {
   text-align: left;
-  font-size: 18px;
-  margin: 15px 0 0;
-  font-style: italic;
-  font-weight: 600; }
+  font-size: 17px;
+  margin: 15px 0 0; }
   .year-separator .separator-wrapper {
     /*border-top: 2px solid $gray-dark;*/ }
 
@@ -6739,12 +6825,10 @@ ul.thumb-container {
   padding-top: 30px; }
   .yarpp-related-header h3 {
     color: #fff;
-    font-size: 18px;
-    font-style: italic;
+    font-size: 23px;
     line-height: 1.3;
     background-color: transparent;
     display: inline-block;
-    text-transform: uppercase;
     margin: 0; }
 
 .yarpp-related {
@@ -6861,27 +6945,23 @@ li.item-post {
             bottom: 7%; } }
         li.item-post figure a figcaption .series {
           color: #fff;
-          font-size: 12px;
-          font-style: italic;
-          /*text-transform: uppercase;*/
+          font-size: 14px;
+          /**/
           margin: 0px 0 6px 0; }
         li.item-post figure a figcaption h2 {
           color: #fff;
-          font-size: 18px;
-          font-style: italic;
-          text-transform: uppercase;
+          font-size: 23px;
           line-height: 1;
           margin: 0; }
         li.item-post figure a figcaption p.meta-info {
           color: #000;
-          font-size: 11px;
-          text-transform: uppercase;
+          font-size: 17px;
           margin: 0;
           padding-bottom: 18px;
           text-align: center; }
         li.item-post figure a figcaption p {
           color: #000;
-          font-size: 13px;
+          font-size: 17px;
           margin: 0;
           margin-bottom: 6px; }
       li.item-post figure a figcaption.hide-figcaption {
@@ -7099,24 +7179,19 @@ li.log-thumb.post-group figure {
     padding-right: 0;
     padding-bottom: 0; }
     li.log-thumb.post-group figure figcaption .series {
-      font-size: 12px;
-      font-style: italic;
+      font-size: 14px;
       margin: 0px 0 6px 0;
       color: #ff0000;
-      margin-bottom: 18px;
-      text-transform: uppercase;
-      font-weight: 600; }
+      margin-bottom: 18px; }
     li.log-thumb.post-group figure figcaption a {
       padding: 0; }
       li.log-thumb.post-group figure figcaption a h2 {
         color: #ff0000;
-        font-size: 18px;
-        font-style: italic;
-        text-transform: uppercase;
         line-height: 1;
         margin: 0;
         color: #ff0000;
-        line-height: 2; }
+        line-height: 2;
+        font-size: 23px; }
         @media (min-width: 576px) {
           li.log-thumb.post-group figure figcaption a h2 .branch {
             display: none; } }
@@ -7154,12 +7229,10 @@ li.log-thumb.post-group figure {
   .archive-navigation .nav-previous {
     float: right; }
   .archive-navigation .nav-previous a, .archive-navigation .nav-next a, .archive-navigation .more-sets a {
-    text-transform: uppercase;
     color: #fff;
-    font-size: 18px;
-    font-style: italic;
-    line-height: 1.3;
-    font-weight: 600; }
+    font-family: "lackitalic", sans-serif;
+    font-size: 23px;
+    line-height: 1.3; }
 
 .front-hyper {
   margin-bottom: 20px;
@@ -7226,14 +7299,12 @@ div.gallery {
       div.gallery div.thumbnail figure figcaption {
         display: block;
         text-align: center;
-        font-style: italic;
         padding-top: 8px;
         font-size: 14px;
         max-width: 650px;
         margin-left: auto;
         margin-right: auto;
-        margin-bottom: -2px;
-        font-weight: 600; }
+        margin-bottom: -2px; }
   div.gallery div.thumbnail.media-audio {
     background-color: #ff0000; }
     div.gallery div.thumbnail.media-audio figure .imgcontainer .mejs-container {
@@ -7241,7 +7312,7 @@ div.gallery {
       position: absolute;
       bottom: 0%;
       height: 100% !important;
-      font-family: "Nunito Sans", sans-serif !important; }
+      font-family: "Sporting_Grotesque_Regular", sans-serif !important; }
       div.gallery div.thumbnail.media-audio figure .imgcontainer .mejs-container .mejs-controls {
         background-color: #ff0000; }
         div.gallery div.thumbnail.media-audio figure .imgcontainer .mejs-container .mejs-controls .mejs-time {
@@ -7342,9 +7413,7 @@ div.thumbnail figure img.intense--loading {
   z-index: 1;
   padding: 5px;
   color: white;
-  font-style: italic;
   font-size: 16px;
-  font-weight: 600;
   border-color: transparent;
   border-style: none;
   border-width: 0;
@@ -7354,9 +7423,7 @@ div.thumbnail figure img.intense--loading {
     opacity: 1; }
   .itemPosition button {
     color: white;
-    font-style: italic;
     font-size: 16px;
-    font-weight: 600;
     border-color: transparent;
     border-style: none;
     border-width: 0;
@@ -7371,9 +7438,7 @@ button.remove {
   z-index: 1;
   padding: 5px;
   color: white;
-  font-style: italic;
   font-size: 16px;
-  font-weight: 600;
   border-color: transparent;
   border-style: none;
   border-width: 0;
@@ -7389,9 +7454,7 @@ button.saveorder {
   z-index: 1;
   padding: 5px;
   color: white;
-  font-style: italic;
   font-size: 16px;
-  font-weight: 600;
   border-color: transparent;
   border-style: none;
   border-width: 0;
@@ -7407,9 +7470,7 @@ a.delete {
   right: 0;
   padding: 5px;
   color: white;
-  font-style: italic;
   font-size: 16px;
-  font-weight: 600;
   text-shadow: 1px 1px #ff0000; }
   a.delete:hover {
     opacity: 1;
@@ -7487,14 +7548,10 @@ address {
   .single-content .page-header h1.single-title {
     margin-top: 0;
     margin-bottom: 20px;
-    font-size: 18px;
-    font-style: italic;
-    text-transform: uppercase; }
+    font-size: 23px; }
   .single-content .page-header p.meta {
     margin-bottom: 20px;
-    text-transform: lowercase;
     font-size: 12px;
-    font-weight: 600;
     display: none; }
   .single-content section.post-content {
     margin-bottom: 40px; }
@@ -7507,12 +7564,8 @@ address {
     margin-bottom: 40px; }
     .single-content footer p.footer-meta {
       margin-bottom: 0px;
-      font-style: italic;
-      text-transform: uppercase;
-      font-size: 12px;
-      font-weight: 600; }
-      .single-content footer p.footer-meta a:hover {
-        text-decoration: underline; }
+      font-size: 23px;
+      font-family: "lackitalic", sans-serif; }
     .single-content footer ul {
       margin-bottom: 40px; }
       .single-content footer ul li {
@@ -7525,8 +7578,6 @@ address {
           padding: 3px 5px 2px;
           font-style: normal;
           font-size: 11px;
-          font-weight: 600;
-          text-transform: uppercase;
           transition: all 1s ease-out; }
           @media screen and (prefers-reduced-motion: reduce) {
             .single-content footer ul li a {
@@ -7548,7 +7599,6 @@ address {
   .background-night-mode .single-content section.post-content p a {
     color: #fffb2b;
     border-bottom: 1px solid transparent;
-    text-decoration: underline;
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
       .background-night-mode .single-content section.post-content p a {
@@ -7589,7 +7639,7 @@ address {
         .dark .single-content section.post-content p a:hover {
           transition: none; } }
 .dark .single-content footer ul li a {
-  color: #111111;
+  color: #000;
   background-color: #fff;
   transition: all 1s ease-out; }
   @media screen and (prefers-reduced-motion: reduce) {
@@ -7597,7 +7647,7 @@ address {
       transition: none; } }
   .dark .single-content footer ul li a:hover {
     color: #fff;
-    background-color: #111111;
+    background-color: #000;
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
       .dark .single-content footer ul li a:hover {
@@ -7686,10 +7736,8 @@ address {
 .single-navigation .nav-previous, .single-navigation .nav-next {
   margin-bottom: 40px; }
   .single-navigation .nav-previous span a, .single-navigation .nav-next span a {
-    text-transform: uppercase;
-    font-size: 18px;
-    font-style: italic;
-    font-weight: 600;
+    font-family: "lackitalic", sans-serif;
+    font-size: 23px;
     line-height: 1.3;
     background-color: transparent;
     /*border-bottom: 2px solid $gray-dark;*/
@@ -8116,16 +8164,12 @@ img.mfp-img {
     color: #fff;
     font-size: 14px;
     line-height: 18px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600; }
+    letter-spacing: 1px; }
   .mfp-wrap .mfp-content .mfp-counter {
     color: #fff;
     font-size: 14px;
     line-height: 26px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600; }
+    letter-spacing: 1px; }
 .mfp-wrap .mfp-preloader {
   color: #fff; }
   .mfp-wrap .mfp-preloader span {
@@ -8213,14 +8257,11 @@ img.mfp-img {
     /*border-bottom: 2px solid $tiagsssss-color;*/
     margin-bottom: 15px;
     font-size: 18px;
-    font-style: italic;
-    text-transform: uppercase;
     line-height: 1.3;
     background-color: transparent;
     display: inline-block; }
   #social-block p {
-    color: #ff0000;
-    font-style: italic; }
+    color: #ff0000; }
     #social-block p a {
       color: #ff0000; }
   #social-block ul {
@@ -8236,10 +8277,7 @@ img.mfp-img {
         position: relative;
         outline: none;
         color: #ff0000;
-        text-transform: uppercase;
         font-size: 18px;
-        font-weight: 600;
-        font-style: italic;
         margin-right: 13px;
         line-height: 1.3;
         margin: 0px; }
@@ -8259,16 +8297,13 @@ img.mfp-img {
         border-image: initial;
         font-size: 16px;
         margin-bottom: 10px;
-        text-align: center;
-        font-weight: 600; }
+        text-align: center; }
         @media (min-width: 576px) {
           #social-block .email-form form input.input-field {
             margin-bottom: 0px; } }
       #social-block .email-form form input.input-field::placeholder {
         color: #ff0000;
-        font-style: italic;
-        font-size: 16px;
-        font-weight: 600; }
+        font-size: 16px; }
       #social-block .email-form form input.input-button {
         background: #ff0000;
         color: #fff;
@@ -8277,10 +8312,8 @@ img.mfp-img {
         border-style: inset;
         border-color: #fff;
         border-image: initial;
-        font-style: italic;
         font-size: 16px;
-        border-radius: 0px;
-        font-weight: 600; }
+        border-radius: 0px; }
     #social-block .email-form p {
       font-size: 12px; }
 
@@ -8292,8 +8325,7 @@ img.mfp-img {
     margin-bottom: 30px; }
     #footer-block .attribution p {
       color: #ff0000;
-      font-size: 16px;
-      font-weight: 600; }
+      font-size: 16px; }
       #footer-block .attribution p a {
         color: #ff0000; }
 
@@ -8327,19 +8359,18 @@ img.mfp-img {
 .video-js.video-skin-trouble {
   font-size: 1rem;
   color: #fff;
-  font-family: "Nunito Sans", sans-serif; }
+  font-family: "Sporting_Grotesque_Regular", sans-serif; }
   .video-js.video-skin-trouble .vjs-error .vjs-error-display .vjs-modal-dialog-content {
-    font-family: "Nunito Sans", sans-serif;
-    font-size: 16px;
-    text-transform: uppercase; }
+    font-family: "Sporting_Grotesque_Regular", sans-serif;
+    font-size: 16px; }
   .video-js.video-skin-trouble .vjs-error .vjs-error-display:before {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Sporting_Grotesque_Regular", sans-serif;
     text-shadow: 0 0 1em #000;
     top: 20%; }
   .video-js.video-skin-trouble .vjs-menu .vjs-menu-content {
-    font-family: "Nunito Sans", sans-serif; }
+    font-family: "Sporting_Grotesque_Regular", sans-serif; }
   .video-js.video-skin-trouble .vjs-no-js {
-    font-family: "Nunito Sans", sans-serif; }
+    font-family: "Sporting_Grotesque_Regular", sans-serif; }
   .video-js.video-skin-trouble .vjs-big-play-button {
     width: 128px;
     height: 128px;
@@ -8391,7 +8422,7 @@ img.mfp-img {
     .video-js.video-skin-trouble .vjs-volume-level:before {
       display: none; }
   .video-js.video-skin-trouble .vjs-progress-control:hover .vjs-mouse-display:after {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Sporting_Grotesque_Regular", sans-serif;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
@@ -8399,7 +8430,7 @@ img.mfp-img {
     color: #fff;
     font-size: 16px; }
   .video-js.video-skin-trouble .vjs-progress-control:hover .vjs-play-progress:after {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Sporting_Grotesque_Regular", sans-serif;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
@@ -8407,7 +8438,7 @@ img.mfp-img {
     color: #fff;
     font-size: 16px; }
   .video-js.video-skin-trouble .vjs-progress-control:hover .vjs-time-tooltip {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Sporting_Grotesque_Regular", sans-serif;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
@@ -9386,7 +9417,6 @@ $color_2: #fff;
   padding-right: 10px;
   padding-left: 20px;
   font-size: 75%;
-  text-transform: uppercase;
   background: var(--mm-color-background);
   opacity: 1;
   transition: opacity 0.4s ease; }
@@ -9623,8 +9653,6 @@ $color_2: #fff;
     align-items: center;
     justify-content: center;
     padding-right: 6px; }
-  .mm-navbar__breadcrumbs > a {
-    text-decoration: underline; }
   .mm-navbar__breadcrumbs:not(:last-child) {
     padding-right: 0; }
   .mm-btn:not(.mm-hidden) + .mm-navbar__breadcrumbs {
@@ -10151,7 +10179,9 @@ input.mm-check {
 
 .mm-menu {
   padding-top: 60px;
-  background-color: #3c00f5; }
+  background-color: #3c00f5;
+  font-family: "lackitalic", sans-serif;
+  font-size: 23px; }
   .mm-menu .mm-navbars_top .mm-navbar {
     background-color: #3c00f5;
     border: none; }
@@ -10159,10 +10189,6 @@ input.mm-check {
       outline: none;
       color: #fff;
       text-decoration: none;
-      text-transform: uppercase;
-      font-size: 18px;
-      font-weight: 600;
-      font-style: italic;
       margin-left: 13px;
       margin-left: 0px;
       padding-right: 36px; }
@@ -10175,10 +10201,6 @@ input.mm-check {
         outline: none;
         color: #fff;
         text-decoration: none;
-        text-transform: uppercase;
-        font-size: 18px;
-        font-weight: 600;
-        font-style: italic;
         line-height: 1.3; }
         .mm-menu .mm-panels .mm-panel ul li a.active {
           text-shadow: 2px 2px #ff0000; }
@@ -10198,10 +10220,6 @@ input.mm-check {
           outline: none;
           color: #fff;
           text-decoration: none;
-          text-transform: uppercase;
-          font-size: 18px;
-          font-weight: 600;
-          font-style: italic;
           margin-left: 13px;
           margin-left: 0px;
           padding-right: 0px; }

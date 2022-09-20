@@ -7,6 +7,7 @@
   position: fixed;
   z-index: 1000;
   top: 0px;
+  font-family: $headings-font-family;
 
   // .slicknav_menu {
   .slicknav_menutxt {
@@ -29,10 +30,10 @@
           outline: none;
           color: $white;
           text-decoration: none;
-          text-transform: uppercase;
+
           font-size: 18px;
-          font-weight: 600;
-          font-style: italic;
+
+
           margin-left: 13px;
           /*border: 2px solid transparent;*/
           padding: 2px 7px 0px 7px;
@@ -159,7 +160,7 @@
           }
         }
       }
-    
+
   }
 }
 

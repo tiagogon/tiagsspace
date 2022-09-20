@@ -22,25 +22,6 @@
 
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
 
-		<?php // ----- FONTS ----- ?>
-			<link rel="preconnect" href="https://fonts.googleapis.com">
-			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-			<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
-
-			<!-- <style type="text/css">
-			@font-face{ font-family: "calyces-regular-webfont";
-				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/calyces-regular-webfont.woff") format("woff"); }
-			@font-face{ font-family: "serifbabe-regular-webfont";
-				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/serifbabe-regular-webfont.woff") format("woff"); }
-			@font-face{ font-family: "SerifbabeAlpha-Regular";
-				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/SerifbabeAlpha-Regular-2.woff2") format("woff"); }
-			@font-face{ font-family: "Keroine-IntenseLegere";
-				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/Keroine-IntenseLegere.woff") format("woff"); }
-			@font-face{ font-family: "Keroine-DouxExtreme";
-				src: url("<?php bloginfo('template_url'); ?>/library/fonts/charlotterohde/Keroine-DouxExtreme.woff") format("woff"); }
-			</style> -->
-
-
 		<?php wp_head(); ?>
 
 		<?php // ----- SCRIPTS ----- ?>
@@ -192,28 +173,28 @@
 
 				// // If is custom post archive or singular
 				// if (is_singular( 'hyper' ) OR is_post_type_archive('hyper')) {
-				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'hyper').'"><span style="font-style: italic;">hyper</a></span>';
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'hyper').'"><span style=" ">hyper</a></span>';
 				// }
 				// if (is_singular( 'log' ) OR is_post_type_archive('log')) {
-				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'log').'"><span style="font-style: italic;">log</a></span>';
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'log').'"><span style=" ">log</a></span>';
 				// }
 				// if (is_singular( 'emulsion' ) OR is_post_type_archive('emulsion')) {
-				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'emulsion').'"><span style="font-style: italic;">emulsion</a></span>';
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'emulsion').'"><span style=" ">emulsion</a></span>';
 				// }
 				// if (is_singular( 'dusk' ) OR is_post_type_archive('dusk')) {
-				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'dusk').'"><span style="font-style: italic;">dusk</a></span>';
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'dusk').'"><span style=" ">dusk</a></span>';
 				// }
 				// if (is_singular( 'films' ) OR is_post_type_archive('films')) {
-				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'films').'"><span style="font-style: italic;">films</a></span>';
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'films').'"><span style=" ">films</a></span>';
 				// }
 				//
 				// // If is a Log Branch
 				// if (is_tax( 'log-branch' )) {
 				// 	$term =	$wp_query->queried_object;
 				//
-				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'log').'"><span style="font-style: italic;">log</a></span>';
+				// 	$section_name = ' _ <a href="'.get_post_type_archive_link( 'log').'"><span style=" ">log</a></span>';
 				// 	// removed from php:
-				// 	// //<span style="font-style: italic;">'.$term->name.'</span>
+				// 	// //<span style=" ">'.$term->name.'</span>
 				// }
 
 			?>

@@ -101,10 +101,10 @@ if ($background_image) {
 
                 //prefix
                 if ($post_type == "hyper") {
-                    $prefix = "H";
+                    $prefix = "/H";
                 }
                 if ($post_type == "4k-lento") {
-                    $prefix = "4KL";
+                    $prefix = "/4KL";
                 }
 
                 // final sring
@@ -113,19 +113,19 @@ if ($background_image) {
             	?>
 
     	        <nav class="nav-next col-24">
-    	            <span><?php next_post_link('%link', '< '.$next_string); ?></span>
+    	            <span><?php next_post_link('%link', ''.$next_string); ?></span>
     	        </nav>
     	        <nav class="nav-previous col-24">
-    	        	<span><?php previous_post_link('%link', $previous_string.' >'); ?></span>
+    	        	<span><?php previous_post_link('%link', $previous_string.''); ?></span>
     	        </nav>
 
             <?php } else { ?>
 
     	        <nav class="nav-next col-24">
-    	            <span><?php next_post_link('%link', '< Future'); ?></span>
+    	            <span><?php next_post_link('%link', '/Future'); ?></span>
     	        </nav>
     	        <nav class="nav-previous col-24">
-    	        	<span><?php previous_post_link('%link', 'Past >'); ?></span>
+    	        	<span><?php previous_post_link('%link', '/Past'); ?></span>
     	        </nav>
 
             <?php } ?>
@@ -140,7 +140,7 @@ if ($background_image) {
     <div class="container-fluid side-padding yarpp-related-header">
         <div class="row justify-content-between">
             <nav class="nav-next col-24">
-                <h3>random-reveal</h3>
+                <h3>Random/Reveal</h3>
             </nav>
         </div>
     </div>

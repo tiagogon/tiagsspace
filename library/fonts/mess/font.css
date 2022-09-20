@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Mess_Light';
+    src:    url('Mess-Light_web.eot');
+    src:    url('Mess-Light_web.eot?#iefix') format('embedded-opentype'),
+            url('Mess-Light_web.woff') format('woff'),
+            url('Mess-Light_web.woff2') format('woff2'),
+            url('Mess-Light_web.ttf') format('truetype'),
+            url('Mess-Light_web.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

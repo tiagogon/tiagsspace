@@ -26,7 +26,7 @@ $red-light: 	      #ffb5be; // blue ligh when mouse is houver
 $tiagsssss-color: 			    $red; // PINK OLD COLOR: #fe0000; //background-night-mode
 $tiagsssss-color-darker: 	    $red-darker; // Old pink version #d00000; // shadow
 $tiagsssss-color-darker-darker: $red-light; // old pink version #8c0000; // shadow & houver
-$dark: 					   #111111; //background-night-mode
+$dark: 					   #000; //background-night-mode
 $indigo: 				   $palette-Indigo-400; //background-night-mode
 $deep-purple: 			   #3c00f5; // HYPER SERIES COLOR
 $lime: 					   #aeff2b;
@@ -39,22 +39,187 @@ $sky:                      #8ed0ff;
 $brand-primary:         #000;
 
 
-// stylelint-disable value-keyword-case
-$font-family-sans-serif: "Nunito Sans", sans-serif;
+// ---- Load font-style ----
 
+// lack
+@font-face {
+    font-family: 'lackitalic';
+    src: url('../fonts/lack/lack-italic-webfont.woff2') format('woff2'),
+         url('../fonts/lack/lack-italic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'lack_lineitalic';
+    src: url('../fonts/lack/lack-line-italic-webfont.woff2') format('woff2'),
+         url('../fonts/lack/lack-line-italic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'lack_lineregular';
+    src: url('../fonts/lack/lack-line-regular-webfont.woff2') format('woff2'),
+         url('../fonts/lack/lack-line-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'lackregular';
+    src: url('../fonts/lack/Lack-Regular.woff2') format('woff2'),
+         url('../fonts/lack/Lack-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+// Karrik
+@font-face {
+    font-family: 'Karrik';
+    src: url('../fonts/karrik/WOFF2/Karrik-Regular.woff2') format('woff2'),
+         url('../fonts/karrik/WOFF/Karrik-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Karrikitalic';
+    src: url('../fonts/karrik/WOFF2/Karrik-Italic.woff2') format('woff2'),
+         url('../fonts/karrik/WOFF/Karrik-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+//Cantique
+@font-face {
+    font-family: 'cantiquenormal';
+    src: url('../fonts/cantique/Cantique-Normal.woff2') format('woff2'),
+         url('../fonts/cantique/Cantique-Normal.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+// Mess
+@font-face {
+    font-family: 'Mess_Light';
+    src:    url('../fonts/mess/Mess-Light_web.eot');
+    src:    url('../fonts/mess/Mess-Light_web.eot?#iefix') format('embedded-opentype'),
+            url('../fonts/mess/Mess-Light_web.woff') format('woff'),
+            url('../fonts/mess/Mess-Light_web.woff2') format('woff2'),
+            url('../fonts/mess/Mess-Light_web.ttf') format('truetype'),
+            url('../fonts/mess/Mess-Light_web.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+// Sporting Grotesque
+@font-face {
+    font-family: 'Sporting_Grotesque_Regular';
+    src:    url('../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.eot');
+    src:    url('../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.eot?#iefix') format('embedded-opentype'),
+            url('../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.woff') format('woff'),
+            url('../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.woff2') format('woff2'),
+            url('../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.ttf') format('truetype'),
+            url('../fonts/Sporting-Grotesque/Regular/Sporting_Grotesque-Regular_web.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Sporting_Grotesque_Bold';
+    src:    url('../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.eot');
+    src:    url('../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.eot?#iefix') format('embedded-opentype'),
+            url('../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.woff') format('woff'),
+            url('../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.woff2') format('woff2'),
+            url('../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.ttf') format('truetype'),
+            url('../fonts/Sporting-Grotesque/Bold/Sporting_Grotesque-Bold_web.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+// Minipax
+@font-face {
+    font-family: 'Minipax-Bold';
+    src:    url('../fonts/Minipax/Minipax-Bold.eot');
+    src:    url('../fonts/Minipax/Minipax-Bold.eot?#iefix') format('embedded-opentype'),
+            url('../fonts/Minipax/Minipax-Bold.woff') format('woff'),
+            url('../fonts/Minipax/Minipax-Bold.woff2') format('woff2'),
+            url('../fonts/Minipax/Minipax-Bold.ttf') format('truetype'),
+            url('../fonts/Minipax/Minipax-Bold.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Minipax-Medium';
+    src:    url('../fonts/Minipax/Minipax-Medium.eot');
+    src:    url('../fonts/Minipax/Minipax-Medium.eot?#iefix') format('embedded-opentype'),
+            url('../fonts/Minipax/Minipax-Medium.woff') format('woff'),
+            url('../fonts/Minipax/Minipax-Medium.woff2') format('woff2'),
+            url('../fonts/Minipax/Minipax-Medium.ttf') format('truetype'),
+            url('../fonts/Minipax/Minipax-Medium.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Minipax-Regular';
+    src:    url('../fonts/Minipax/Minipax-Regular.eot');
+    src:    url('../fonts/Minipax/Minipax-Regular.eot?#iefix') format('embedded-opentype'),
+            url('../fonts/Minipax/Minipax-Regular.woff') format('woff'),
+            url('../fonts/Minipax/Minipax-Regular.woff2') format('woff2'),
+            url('../fonts/Minipax/Minipax-Regular.ttf') format('truetype'),
+            url('../fonts/Minipax/Minipax-Regular.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Minipax-SemiBold';
+    src:    url('../fonts/Minipax/Minipax-SemiBold.eot');
+    src:    url('../fonts/Minipax/Minipax-SemiBold.eot?#iefix') format('embedded-opentype'),
+            url('../fonts/Minipax/Minipax-SemiBold.woff') format('woff'),
+            url('../fonts/Minipax/Minipax-SemiBold.woff2') format('woff2'),
+            url('../fonts/Minipax/Minipax-SemiBold.ttf') format('truetype'),
+            url('../fonts/Minipax/Minipax-SemiBold.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+//Basteleur
+@font-face {
+    font-family: 'Basteleur-Bold';
+    src: url('../fonts/basteleur/Basteleur-Bold.woff2') format('woff2'),
+         url('../fonts/basteleur/Basteleur-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Basteleur-Moonlight';
+    src: url('../fonts/basteleur/Basteleur-Moonlight.woff2') format('woff2'),
+         url('../fonts/basteleur/Basteleur-Moonlight.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+//$font-family-sans-serif: "Nunito Sans", sans-serif;
+$headings-font-family: "lackitalic", sans-serif;//"lackitalic", sans-serif;
+$font-family-sans-serif: "Sporting_Grotesque_Regular", sans-serif;//"lackregular or Sporting_Grotesque_Regular or Minipax-Regular", sans-serif;
+
+// Font Size
+$font-size-p:           17px;
+$font-size-heading:           23px;
+$font-size-meta-info:           14px;
 
 // Font weight
 $font-weight-light:           400;
 $font-weight-normal:          400;
-$font-weight-bold:            600;
-$headings-font-weight:        600;
+$font-weight-bold:            400;
+$headings-font-weight:        400;
+
+
 
 // font colors
 $body-color:                #000;
 
-body.background-night-mode{
-  color: $white;
-}
 
 // Links
 $link-color:                #000;

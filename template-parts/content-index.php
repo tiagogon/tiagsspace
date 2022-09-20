@@ -538,10 +538,10 @@ Index of posts for Home and Archives
         <div class="container-fluid pagination-container">
             <div class="row justify-content-between">
                 <nav class="archive-navigation col-24">
-                    <span class="nav-next"><?php previous_posts_link( '< Future' ); ?></span>
+                    <span class="nav-next"><?php previous_posts_link( '/Future' ); ?></span>
                 </nav>
                 <nav class="archive-navigation col-24">
-                    <span class="nav-previous"><?php next_posts_link( 'Past >' ); ?></span>
+                    <span class="nav-previous"><?php next_posts_link( '/Past' ); ?></span>
                 </nav>
             </div>
 

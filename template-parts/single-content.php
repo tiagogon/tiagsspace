@@ -72,7 +72,7 @@ if (is_singular() && !is_page()) {
     if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
 
         foreach ( $terms as $term ) {
-            $taxonomies_string = $taxonomies_string.'<a href="' . esc_url( get_term_link( $term ) ) . '">#' . str_replace(" ","",$term->name) . '</a> ';
+            $taxonomies_string = $taxonomies_string.'<a href="' . esc_url( get_term_link( $term ) ) . '">/' . str_replace(" ","",$term->name) . '</a> ';
         }
 
         // $taxonomies_string = $taxonomies_string.get_edit_post_link('#edit', ' ', ''); // Edit post link for loged in users
@@ -82,7 +82,6 @@ if (is_singular() && !is_page()) {
 
   ?>
     <footer>
-
             <?php
 
             $post_type = get_post_type( $post->ID );
@@ -102,21 +101,20 @@ if (is_singular() && !is_page()) {
                 <?php if ($obj->labels->name == "Posts") {
                     echo "";
                 } else {
-                    echo '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.'.';
+                    echo 'Part of <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.'.';
                 } ?>
 
                 Published on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('d/m/Y'); ?></time>.
-            </p>
-            <p class= "footer-meta">
+                
                 <?php echo $taxonomies_string.' ';
                 // Edit link
                 if( is_user_logged_in() ) {
 
                     // Delete post button
-                    echo ' <a href="'.get_delete_post_link( $id).'">#trash</a> ';
+                    echo ' <a href="'.get_delete_post_link( $id).'">/Trash</a> ';
 
                     // Edit post
-                    edit_post_link('#edit', '', '');
+                    edit_post_link('/Edit', '', '');
 
                 }?>
             </p>

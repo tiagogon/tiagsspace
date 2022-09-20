@@ -28,7 +28,7 @@ p {
 }
 a, a:link, a:active, a:visited, a:hover {
 	color: inherit;
-	text-decoration: underline;
+	
 }
 
 nav:not(.mm-menu) {
