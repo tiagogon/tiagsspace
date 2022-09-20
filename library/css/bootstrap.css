@@ -7489,7 +7489,8 @@ address {
     .single-content footer p.footer-meta {
       margin-bottom: 0px;
       font-size: 23px;
-      font-family: "lackitalic", sans-serif; }
+      font-family: "lackitalic", sans-serif;
+      line-height: 1.2em; }
     .single-content footer ul {
       margin-bottom: 40px; }
       .single-content footer ul li {
