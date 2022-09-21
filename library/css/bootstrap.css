@@ -5799,7 +5799,7 @@ li.item-post {
   li.item-post figure {
     text-align: center;
     background-color: #fff;
-    box-shadow: 4px 4px 2px #3d2510;
+    box-shadow: 3px 3px 7px #3d2510;
     transition: box-shadow 5s ease-in-out; }
     li.item-post figure a {
       outline: none;
@@ -5913,7 +5913,7 @@ li.item-post {
       li.item-post figure {
         transition: none; } }
     li.item-post figure:hover {
-      box-shadow: 4px 4px 2px #e28a3c;
+      box-shadow: 3px 3px 7px #e28a3c;
       transition: box-shadow 1s ease-in-out; }
       li.item-post figure:hover a .imgcontainer img {
         -webkit-filter: blur(2px) contrast(0.9) brightness(0.8);

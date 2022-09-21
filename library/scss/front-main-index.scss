@@ -236,7 +236,7 @@ li.item-post {
           opacity: 0;
       }
     }
-    box-shadow: 4px 4px 2px $tiagsssss-color-darker;
+    box-shadow: 3px 3px 7px $tiagsssss-color-darker;
     //@include transition(background-color 1s ease);
     @include transition(box-shadow 5s ease-in-out);
 
@@ -281,7 +281,7 @@ li.item-post {
               }
           }
       }
-      box-shadow: 4px 4px 2px $tiagsssss-color-darker-darker;
+      box-shadow: 3px 3px 7px  $tiagsssss-color-darker-darker;
       @include transition(box-shadow 1s ease-in-out);
       @media (max-width: map-get($grid-breakpoints, sm)) {
         box-shadow: none;
