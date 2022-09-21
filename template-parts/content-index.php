@@ -144,91 +144,7 @@ Index of posts for Home and Archives
                         // Get the number of collumns porportional to Area
                         $grid_array = $grid_array_prop_to_area;
 
-                    // Debug
-                    // echo $image_thumb_ratio;
-                    // print_r ($grid_array_area1x1_prc);
-
                     $grid = 'col-'.$grid_array[0].' col-sm-'.$grid_array[1].' col-md-'.$grid_array[2].' col-lg-'.$grid_array[3].'';
-
-
-
-                    // Grouping Log posts on the front and taxonomies archives
-
-                    /*
-                    if ($post_type == "loog" && (is_front_page() OR is_tag() OR is_tax() )  ) {
-
-
-                        // Get next post_types and Year
-                        if (!empty( $post_id_before )){
-                            $next_post_type = get_post_type( $post_id_before );
-                            $next_post_year = get_the_time( "Y", $post_id_before );
-                        }
-
-
-                        // HTML - Year Separator
-                        // Print Year Separator if the
-                        if ($year == get_the_time("Y") OR $count == 1) {
-                            $year = get_the_time("Y");
-                        // Year is diferent
-                        } else {
-                            $year = get_the_time("Y");?>
-                                        </figcaption>
-                                </figure>
-                            </li>
-                            <li class="loadpost year-separator item col-48  item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper"><?php echo $year; ?></div>
-                            </li>
-                        <?php }
-
-                        // Item sizer for masory
-                        if ($count == 1 ) {
-                            // echo '<div class="item-sizer '.$grid.'"></div>';
-                            echo '<div class="item-sizer '.$grid_sizer.'"></div>';
-                        }
-
-                        // HTML - Open Log Posts container
-                        if ($count == 1 OR !($next_post_type == "log") OR !($next_post_year == $year)) { ?>
-                            <li id="post-group-<?php echo $count; ?>" class="loadpost post-group <?php echo $grid; ?> <?php echo $post_type; ?>-thumb item item<?php echo $count; ?> item-post" <?php post_class('clearfix'); ?> role="article">
-                                <figure>
-                                    <figcaption class="<?php echo $hide_figcaption;?>">
-                                        <p class="series">Log</p>
-                        <?php }
-
-                        // HTML - Log post title and link ?>
-
-
-                        <a  href="<?php echo get_permalink(); ?>"
-                            data-preview-image="<?php echo wp_get_attachment_image_url(get_post_thumbnail_id($post->ID), 'thumbnail'); ?>">
-                            <h2><?php echo taxonomy_list_w_numbers($post->ID,'log-branch','',' ',', ', ' & ', 'no-link');?><span class="branch"> <?php the_title();?></span></h2>
-                        </a>
-
-                        <?php
-                        // HTML - Close Log Posts container
-                        // If is last post of the page
-                        if ($wp_query->current_post +1 == $wp_query->post_count) { ?>
-
-                                        </figcaption>
-                                </figure>
-                            </li>
-
-                        <?php }
-
-                    }
-                    else { */ // Uncoment end of else } around line470
-
-
-                        // If the Post before was log, close log group
-
-                        // HTML - Close Log Posts container
-                        /*
-                        if ( !($next_post_type == "log") ){ ?>
-
-                                        </figcaption>
-                                </figure>
-                            </li>
-
-                        <?php }
-                        */
 
 
                         // Item Sizer for masonry
@@ -438,6 +354,11 @@ Index of posts for Home and Archives
                                             <h2>
                                                 <?php echo "4KL".sprintf("%02d", number_of_the_post($post->ID))." ";?><?php the_title(); ?>
                                             </h2>
+                                        <?php }elseif (
+                                            $post_type == "log") {?>
+                                            <h2>
+                                                <?php echo taxonomy_list_w_numbers($post->ID,'log-branch','',' ',', ', ' & ', 'no-link');?><span class="branch"> <?php the_title(); ?>
+                                            </h2>
                                         <?php } else { ?>
                                             <h2>
                                                 <?php the_title();?>
@@ -451,23 +372,7 @@ Index of posts for Home and Archives
                             </figure>
 
                             <?php
-                          } /* else {  ?>
-                                <figure>
-                                    <a href="<?php echo get_permalink(); ?>">
-
-                                        <figcaption  class="<?php echo $hide_figcaption;?>">
-
-                                            <p class="series"><?php echo $obj->labels->name;?></p>
-
-                                            <h2><span class="branch"><?php echo taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'no-link');?></span><?php the_title(); ?></h2>
-
-                                        </figcaption>
-
-                                    </a>
-
-                                </figure>
-                            <?php }
-                            */ ?>
+                          } ?>
 
                         </li>
 
@@ -479,10 +384,6 @@ Index of posts for Home and Archives
                 endwhile; ?>
 
             </ul>
-
-
-
-
 
             <?php else : ?>
 
