@@ -1107,7 +1107,7 @@ function color_background_parameters ($parameter) {
 
 	// Mapping color class to HEX code and font mode
 	if ($background_color_class=="tiagsssss-color") {
-			$background_color_code = "#ff0000";
+			$background_color_code = "#3d2510";
 			$background_day_night_mode = 'background-night-mode';
 	} elseif ($background_color_class=="header-white") {
 			$background_color_code = "#ffffff";
