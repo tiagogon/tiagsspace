@@ -234,7 +234,7 @@ Index of posts for Home and Archives
 
                             ?>
 
-                            <li class="item loadpost year-separator <?php echo $grid_year_separato; ?> item-post" <?php post_class('clearfix'); ?> >
+                            <li class="item loadpost year-separator <?php echo $grid_year_separator; ?> item-post" <?php post_class('clearfix'); ?> >
                                 <div class="separator-wrapper"><?php echo $year; ?></div>
                             </li>
 
