@@ -1,17 +1,18 @@
 // colors
-$white:      		   #fff; //#F5F5F5; // Light Grey
-$dark: 					   #000; //background-night-mode
-$deep-purple: 		 #3c00f5; // HYPER SERIES COLOR
+$white:      		   #fff;
+$dark: 					   #000;
+$deep-purple: 		 #3c00f5;
 $blue: 			       #3c00f5;
 $red: 			       #ff0000;
 $lime: 					   #aeff2b;
-$yellow: 				   #fffb2b; // $palette-Deep-Purple-50; //;
+$yellow: 				   #fffb2b;
 $yellow-light: 	   #fffc52;
 
 //Terra pallet
 $sky:              #adc8d9;
 $earth:            #d9a86c;
 $ocker:            #8c5626;
+$blue-earth: 			 #00349E;
 
 // Colors tones
 $blue-darker:     #23008e;
@@ -25,9 +26,9 @@ $ocker-light: 	  #e28a3c;
 $tiagsssss-color: 			            $ocker;
 $tiagsssss-color-darker: 	          $ocker-darker;
 $tiagsssss-color-darker-darker:     $ocker-light;
-$tiagsssss-color-menu:              $sky;
+$tiagsssss-color-menu:              $blue-earth;
 $tiagsssss-color-menu-contrast:     $ocker;
-$tiagsssss-color-menu-font:         $dark;
+$tiagsssss-color-menu-font:         $white;
 
 
 // ---- Load font-style ----

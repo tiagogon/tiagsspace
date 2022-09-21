@@ -1047,12 +1047,12 @@ function color_background_parameters ($parameter) {
 	// Is Dusk single
 	} elseif (is_singular( 'dusk' )) {
 
-			$background_color_class = 'header-white';
+			$background_color_class = 'sky';
 
 	// Is Emulsion single
 	} elseif (is_singular( 'emulsion' )) {
 
-			$background_color_class = 'header-white';
+			$background_color_class = 'earth';
 
   // Is Log
 	} elseif (is_singular( 'log' )

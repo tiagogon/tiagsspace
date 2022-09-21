@@ -1,5 +1,5 @@
 // Import files that will override bootstrap variables-custom
-@import "google-color-palette.scss";
+//@import "google-color-palette.scss";
 @import "custom-variables.scss";
 
 // Require All
@@ -57,7 +57,7 @@
 // Support to JS library
 // @import "../js/plyr-master/assets/vendor/plyr/src/sass/plyr.scss";
 //@import "../js/plyr-master/assets/vendor/plyr/src/sass/plyr.scss";
-@import "plyr-custom.scss"; 
+@import "plyr-custom.scss";
 
 // Custom features
 @import "front-header-slider";

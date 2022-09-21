@@ -1,7 +1,3 @@
-/**
- * google-material-color v1.2.6
- * https://github.com/danlevan/google-material-color
- */
 @font-face {
   font-family: 'lackitalic';
   src: url("../fonts/lack/lack-italic-webfont.woff2") format("woff2"), url("../fonts/lack/lack-italic-webfont.woff") format("woff");
@@ -9137,27 +9133,27 @@ input.mm-check {
 
 .mm-menu {
   padding-top: 60px;
-  background-color: #adc8d9;
+  background-color: #00349E;
   font-family: "lackitalic", sans-serif;
   font-size: 23px; }
   .mm-menu .mm-navbars_top .mm-navbar {
-    background-color: #adc8d9;
+    background-color: #00349E;
     border: none; }
     .mm-menu .mm-navbars_top .mm-navbar a {
       outline: none;
-      color: #000;
+      color: #fff;
       text-decoration: none;
       margin-left: 13px;
       margin-left: 0px;
       padding-right: 36px; }
   .mm-menu .mm-panels .mm-panel {
-    background-color: #adc8d9;
-    border-color: #000; }
+    background-color: #00349E;
+    border-color: #fff; }
     .mm-menu .mm-panels .mm-panel ul li {
       margin: 20px 19px; }
       .mm-menu .mm-panels .mm-panel ul li a {
         outline: none;
-        color: #000;
+        color: #fff;
         text-decoration: none;
         line-height: 1.3; }
         .mm-menu .mm-panels .mm-panel ul li a.active {
@@ -9176,7 +9172,7 @@ input.mm-check {
           transform: translateX(0px); }
         .mm-menu .mm-panels .mm-panel ul li a .mm-counter {
           outline: none;
-          color: #000;
+          color: #fff;
           text-decoration: none;
           margin-left: 13px;
           margin-left: 0px;
@@ -9195,7 +9191,7 @@ input.mm-check {
   color: white; }
 
 .mm-btn:before, .mm-btn:after {
-  border-color: #000; }
+  border-color: #fff; }
 
 .mm-listitem__btn {
   border-color: white;
