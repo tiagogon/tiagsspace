@@ -60,7 +60,7 @@ Index of posts for Home and Archives
                     // grid on archive
                     $grid_sizer = 'col-2 col-sm-2 col-md-2 col-lg-1';
 
-                    $grid_year_separator = 'col-48 ';
+                    $grid_year_separator = 'col-48 col-sm-24';
 
                     // Default umber of collumns
                     $grid_array = array(48, 12, 12, 8);
@@ -119,13 +119,17 @@ Index of posts for Home and Archives
                         // Increase 1, keep or decrease 1 the collumns
                         if (get_field('column_size_increment')) {
                           $increment = get_field('column_size_increment');
+                          //$grid_array_prop_to_area[0] = $grid_array_prop_to_area[0] + $increment;
+                          $grid_array_prop_to_area[1] = $grid_array_prop_to_area[1] + $increment;
+                          $grid_array_prop_to_area[2] = $grid_array_prop_to_area[2] + $increment;
                           $grid_array_prop_to_area[3] = $grid_array_prop_to_area[3] + $increment;
                         } else {
                           $random_increment = rand(-1, 1);
+                          //$grid_array_prop_to_area[0] = $grid_array_prop_to_area[0] + $random_increment;
+                          $grid_array_prop_to_area[1] = $grid_array_prop_to_area[1] + $random_increment;
+                          $grid_array_prop_to_area[2] = $grid_array_prop_to_area[2] + $random_increment;
                           $grid_array_prop_to_area[3] = $grid_array_prop_to_area[3] + $random_increment;
                         }
-
-
 
                         // Cap to max of number of collumn and minimun to havoid sizer-bug
                         if ($grid_array_prop_to_area[0] < 48) { $grid_array_prop_to_area[0] = 48;}
@@ -248,7 +252,7 @@ Index of posts for Home and Archives
                             ?>
 
                             <li class="item loadpost year-separator <?php echo $grid_year_separator; ?> item-post" <?php post_class('clearfix'); ?> >
-                                <div class="separator-wrapper"><?php echo $year; ?></div>
+                                <div class="separator-wrapper text-sm-left text-md-center"><?php echo $year; ?></div>
                             </li>
 
                         <?php }
