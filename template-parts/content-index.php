@@ -13,15 +13,7 @@ Index of posts for Home and Archives
                 class="loadcontainer clearfix row">
 
                 <?php
-                // grid on archive
-                $grid_base = 'col-48 col-sm-24 col-md-16 col-lg-16';
 
-                // if (is_post_type_archive( "hyper" )) {
-                //     $grid_base = 'col-48 col-sm-24 col-md-16 col-lg-16';
-                // }
-                if (is_post_type_archive( "films" )) {
-                    $grid_base = 'col-48 col-sm-48 col-md-32 col-lg-32';
-                }
 
                 // Is sugested posts loop
                 $is_sugested_posts = 0;
@@ -53,47 +45,100 @@ Index of posts for Home and Archives
                     $next_post = "";
                     $next_post_type = "";
                     $next_post_year = "";
-                    $hide_figcaption = "";
+                    $hide_figcaption = "hide-figcaption";
 
-                    if ($post_type == "4k-lento"){
-                        $hide_figcaption = "hide-figcaption";
+                    if ($post_type == "films"){
+                        //$hide_figcaption = "";
                     }
 
 
-                    // Diferent Grid size for this item -- Ex: FILMS
+                    // GRID Mansonary
 
-                        //reset
-                        $grid_multiplayer = 0;
+                    // NOTES
+                    // The values for the number of collumns need to be always a multiple of 2. E.g. 2,4,6,8, etc...
 
-                        if ($post_type == "films" && !is_post_type_archive( "films" )) {
-                            $grid_multiplayer = 2;
-                        }
+                    // grid on archive
+                    $grid_sizer = 'col-2 col-sm-2 col-md-2 col-lg-1';
 
-                        // If its sugested posts
-                        if ($is_sugested_posts == 1) {
-                            $grid_multiplayer = 0;
-                        }
+                    $grid_year_separator = 'col-48 col-sm-12 col-md-12 col-lg-4';
 
-                        // If defined on post edit
-                        if ( get_field('thumbnail_size')) {
-                            $grid_multiplayer = get_field('thumbnail_size');
-                        }
+                    // Default umber of collumns
+                    $grid_array = array(48, 12, 12, 8);
 
-                        //reset
-                        $grid = $grid_base;
+                    if ($post_type == "films" ) {
+                        $grid_array = array(48, 12, 12, 12);
+                    }
+                    if ($post_type == "dusk" or $post_type == "emulsion") {
+                        $grid_array = array(48, 12, 12, 10);
+                    }
+                    if ($post_type == "hyper") {
+                        $grid_array = array(48, 12, 18, 8);
+                    }
+                    if ($post_type == "4k-lento" ) {
+                        $grid_array = array(48, 12, 12, 6);
+                    }
+                    if ($post_type == "log" ) {
+                        $grid_array = array(48, 24, 16, 5);
+                    }
 
-                        if ($grid_multiplayer == 2) {
-                            $grid = 'col-48 col-sm-48 col-md-32 col-lg-32';
-                        }
+                        //
+                        // Get coolumns size in proportion to image area
+                        //
+                        //collumns size in percentage of width
+                        $grid_array_width_prc[0] = $grid_array[0] * 100/48;
+                        $grid_array_width_prc[1] = $grid_array[1] * 100/48;
+                        $grid_array_width_prc[2] = $grid_array[2] * 100/48;
+                        $grid_array_width_prc[3] = $grid_array[3] * 100/48;
 
-                        if ($grid_multiplayer == 3) {
-                            $grid = 'col-48 col-sm-48 col-md-48 col-lg-48';
-                        }
+                        //Area for 1x1 thumbnail percentage
+                        $grid_array_area1x1_prc[0] = $grid_array_width_prc[0] * $grid_array_width_prc[0];
+                        $grid_array_area1x1_prc[1] = $grid_array_width_prc[1] * $grid_array_width_prc[1];
+                        $grid_array_area1x1_prc[2] = $grid_array_width_prc[2] * $grid_array_width_prc[2];
+                        $grid_array_area1x1_prc[3] = $grid_array_width_prc[3] * $grid_array_width_prc[3];
+
+                        // Get thumbanisl width and heigh
+                        $image_thumb_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), false);
+
+                        // Image thumbnail ratio -- with/height
+                        $image_thumb_ratio = $image_thumb_attributes[1] / $image_thumb_attributes[2] ;
+
+                        //collumns size proportional to image area in percentage of width
+                        $grid_array_width_prop_to_area_prc[0] = sqrt($grid_array_area1x1_prc[0] * $image_thumb_ratio);
+                        $grid_array_width_prop_to_area_prc[1] = sqrt($grid_array_area1x1_prc[1] * $image_thumb_ratio);
+                        $grid_array_width_prop_to_area_prc[2] = sqrt($grid_array_area1x1_prc[2] * $image_thumb_ratio);
+                        $grid_array_width_prop_to_area_prc[3] = sqrt($grid_array_area1x1_prc[3] * $image_thumb_ratio);
+
+                        // Number of collumns proportional to area of images
+                        $grid_array_prop_to_area[0] = round(
+                                                        ($grid_array_width_prop_to_area_prc[0] / (100/48)) /2
+                                                      )*2;
+                          if ($grid_array_prop_to_area[0] < 48) { $grid_array_prop_to_area[0] = 48;}
+                          if ($grid_array_prop_to_area[0] > 48) { $grid_array_prop_to_area[0] = 48;}
+                        $grid_array_prop_to_area[1] = round(($grid_array_width_prop_to_area_prc[1] / (100/48))/2)*2;
+                          if ($grid_array_prop_to_area[1] < 2) { $grid_array_prop_to_area[1] = 2;}
+                          if ($grid_array_prop_to_area[1] > 48) { $grid_array_prop_to_area[1] = 48;}
+                        $grid_array_prop_to_area[2] = round(($grid_array_width_prop_to_area_prc[2] / (100/48))/2)*2;
+                          if ($grid_array_prop_to_area[2] < 2) { $grid_array_prop_to_area[2] = 2;}
+                          if ($grid_array_prop_to_area[2] > 48) { $grid_array_prop_to_area[2] = 48;}
+                        $grid_array_prop_to_area[3] = round($grid_array_width_prop_to_area_prc[3] / (100/48));
+                          if ($grid_array_prop_to_area[3] < 1) { $grid_array_prop_to_area[3] = 1;}
+                          if ($grid_array_prop_to_area[3] > 48) { $grid_array_prop_to_area[3] = 48;}
+
+                        // Get the number of collumns porportional to Area
+                        $grid_array = $grid_array_prop_to_area;
+
+                    // Debug
+                    // echo $image_thumb_ratio;
+                    // print_r ($grid_array_area1x1_prc);
+
+                    $grid = 'col-'.$grid_array[0].' col-sm-'.$grid_array[1].' col-md-'.$grid_array[2].' col-lg-'.$grid_array[3].'';
 
 
 
                     // Grouping Log posts on the front and taxonomies archives
-                    if ($post_type == "log" && (is_front_page() OR is_tag() OR is_tax() )  ) {
+
+                    /*
+                    if ($post_type == "loog" && (is_front_page() OR is_tag() OR is_tax() )  ) {
 
 
                         // Get next post_types and Year
@@ -121,7 +166,7 @@ Index of posts for Home and Archives
                         // Item sizer for masory
                         if ($count == 1 ) {
                             // echo '<div class="item-sizer '.$grid.'"></div>';
-                            echo '<div class="item-sizer col-8"></div>';
+                            echo '<div class="item-sizer '.$grid_sizer.'"></div>';
                         }
 
                         // HTML - Open Log Posts container
@@ -151,12 +196,14 @@ Index of posts for Home and Archives
 
                         <?php }
 
-                    } else { // ... do output for other postypes */
+                    }
+                    else { */ // Uncoment end of else } around line470
 
 
                         // If the Post before was log, close log group
 
                         // HTML - Close Log Posts container
+                        /*
                         if ( !($next_post_type == "log") ){ ?>
 
                                         </figcaption>
@@ -164,13 +211,14 @@ Index of posts for Home and Archives
                             </li>
 
                         <?php }
+                        */
 
 
                         // Item Sizer for masonry
 
                         if ($count == 1) {
-                            // echo '<div class="item-sizer '.$grid_base.'"></div>';
-                            echo '<div class="item-sizer col-8"></div>';
+                            // echo '<div class="item-sizer '.$grid.'"></div>';
+                            echo '<div class="item-sizer '.$grid_sizer.'"></div>';
 
                         }
 
@@ -186,7 +234,7 @@ Index of posts for Home and Archives
 
                             ?>
 
-                            <li class="item loadpost year-separator col-48 item-post" <?php post_class('clearfix'); ?> >
+                            <li class="item loadpost year-separator <?php echo $grid_year_separato; ?> item-post" <?php post_class('clearfix'); ?> >
                                 <div class="separator-wrapper"><?php echo $year; ?></div>
                             </li>
 
@@ -196,7 +244,7 @@ Index of posts for Home and Archives
                         $obj = get_post_type_object( $post_type );
 
                         // Get Image info
-                        if ( has_post_thumbnail() and (!($post_type == "log")) ) {
+                        if ( has_post_thumbnail() and (!($post_type == "looog")) ) {
 
 
                             // Imgcontainer calculations -- intrinsic ratio
@@ -306,31 +354,10 @@ Index of posts for Home and Archives
                         // --- Sizes ---
                         //Container or Full width?
 
-                            $size_lg = (100 / 3)."vw";
-                            $size_md = (100 / 3)."vw";
-                            $size_sm = (100 / 2)."vw";
-                            $size_xs = (100 / 1)."vw";
-
-                            if ($grid_multiplayer == 2) {
-                                $size_lg = ((100 / 3)*2)."vw";
-                                $size_md = ((100 / 3)*2)."vw";
-                                $size_sm = (100 / 1)."vw";
-                                $size_xs = (100 / 1)."vw";
-                            }
-
-                            if ($grid_multiplayer == 3) {
-                                $size_lg = (100 / 1)."vw";
-                                $size_md = (100 / 1)."vw";
-                                $size_sm = (100 / 1)."vw";
-                                $size_xs = (100 / 1)."vw";
-                            }
-
-                            if (is_post_type_archive( "films" )) {
-                                $size_lg = (100 / 2)."vw";
-                                $size_md = (100 / 2)."vw";
-                                $size_sm = (100 / 2)."vw";
-                                $size_xs = (100 / 1)."vw";
-                            }
+                            $size_lg = $grid_array_width_prc[3]."vw";
+                            $size_md = $grid_array_width_prc[2]."vw";
+                            $size_sm = $grid_array_width_prc[1]."vw";
+                            $size_xs = $grid_array_width_prc[0]."vw";
 
                             $image_sizes = "(min-width: 1280px) ".$size_lg.",(min-width: 1302px) ".$size_md.",(min-width: 808px) ".$size_sm.",".$size_xs;
 
@@ -355,7 +382,7 @@ Index of posts for Home and Archives
                             item<?php echo $count; ?>
                             item-post" <?php post_class('clearfix'); ?> role="article">
 
-                            <?php if (!($post_type == "log")) { ?>
+                            <?php if (!($post_type == "looog")) { ?>
 
                             <figure>
 
@@ -384,74 +411,6 @@ Index of posts for Home and Archives
 
                                     <figcaption  class="<?php echo $hide_figcaption;?>">
 
-                                        <?php
-                                        // Is series archive
-                                        /* if( is_post_type_archive() ) {
-
-                                            if ($post_type == "hyper") {
-                                                $series_number = number_of_the_post($post->ID);?>
-
-                                                    <p class="series">hyper#<?php echo $series_number;?><?php //the_time('Y'); ?></p>
-
-                                            <?php } elseif ($post_type == "emulsion") { ?>
-
-                                                <p class="series"><?php the_time('M d'); ?></p>
-
-                                            <?php } elseif ($post_type == "dusk") { ?>
-
-
-                                                <p class="series"><?php the_time('M d'); ?></p>
-
-                                            <?php } elseif ($post_type == "films") { ?>
-
-
-                                                <p class="series"><?php echo taxonomy_list($post->ID,'from', '', '', ', ', ' & ', ''); if (get_field('film_length')) { echo " // ".get_field('film_length')."′"; } ?></p>
-
-                                            <?php } else { ?>
-
-
-                                                <div class="series"><?php if (!($post_type == "post")) { echo $obj->labels->name;}?></div>
-
-                                            <?php }
-
-                                        // Is HOME or taxonomies
-                                        } else {
-
-                                            if ($post_type == "hyper") {
-                                                $series_number = number_of_the_post($post->ID);?>
-
-                                                    <p class="series">hyper#<?php echo $series_number;?></p>
-
-                                            <?php } elseif ($post_type == "emulsion") { ?>
-
-                                                <p class="series">emulsion</p>
-
-                                            <?php } elseif ($post_type == "dusk") { ?>
-
-
-                                                <p class="series">dusk</p>
-
-                                            <?php } elseif ($post_type == "films") { ?>
-
-
-                                                <p class="series"><?php
-                                                    if (get_field('film_length')) {
-                                                        echo get_field('film_length')."′"." // ";
-                                                    }
-                                                    echo taxonomy_list($post->ID,'from', '', '', ', ', ' & ', '');
-                                                    ?></p>
-
-                                            <?php } elseif ($post_type == "post") { ?>
-
-                                                <div class="series">undefined</div>
-
-                                            <?php } else { ?>
-
-                                                <div class="series"><?php echo $obj->labels->name;?></div>
-
-                                            <?php }  ?>
-                                        <?php }*/ ?>
-
 
                                         <?php if ( $post_type == "hyper") {?>
                                             <h2>
@@ -475,7 +434,7 @@ Index of posts for Home and Archives
                             </figure>
 
                             <?php
-                            } else {  ?>
+                          } /* else {  ?>
                                 <figure>
                                     <a href="<?php echo get_permalink(); ?>">
 
@@ -490,11 +449,12 @@ Index of posts for Home and Archives
                                     </a>
 
                                 </figure>
-                            <?php } ?>
+                            <?php }
+                            */ ?>
 
                         </li>
 
-                    <?php } // Else
+                    <?php // } // Else Comente from old log blocks
 
                     // Send this post type for the next loop iteration
                     $post_id_before = $post->ID;

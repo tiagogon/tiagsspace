@@ -1095,7 +1095,7 @@ function color_background_parameters ($parameter) {
 
 	  $background_color_class = 'dark';
 
-	} elseif ( is_singular( ) && $selected_color==0) {
+	} elseif ( is_singular( )) {
 
 					$background_color_class = 'header-white';
 
