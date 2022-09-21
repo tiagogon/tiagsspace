@@ -116,9 +116,16 @@ Index of posts for Home and Archives
                         $grid_array_prop_to_area[2] = round(($grid_array_width_prop_to_area_prc[2] / (100/48))/2)*2;
                         $grid_array_prop_to_area[3] = round($grid_array_width_prop_to_area_prc[3] / (100/48));
 
-                        // Random increase 1, keep or decrease 1 the collumns
-                        $random_increment = rand(-1, 1);
-                        $grid_array_prop_to_area[3] = $grid_array_prop_to_area[3] + $random_increment;
+                        // Increase 1, keep or decrease 1 the collumns
+                        if (get_field('column_size_increment')) {
+                          $increment = get_field('column_size_increment');
+                          $grid_array_prop_to_area[3] = $grid_array_prop_to_area[3] + $increment;
+                        } else {
+                          $random_increment = rand(-1, 1);
+                          $grid_array_prop_to_area[3] = $grid_array_prop_to_area[3] + $random_increment;
+                        }
+
+
 
                         // Cap to max of number of collumn and minimun to havoid sizer-bug
                         if ($grid_array_prop_to_area[0] < 48) { $grid_array_prop_to_area[0] = 48;}
