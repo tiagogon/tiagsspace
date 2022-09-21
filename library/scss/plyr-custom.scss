@@ -9,7 +9,7 @@ $plyr-audio-control-bg-hover: $plyr-tab-focus-default-color !default;
 
 .plyr--audio .plyr__controls {
     background: transparent;
-    color: $gray-darker;
+    color: $dark;
 }
 
 .plyr {
@@ -32,36 +32,36 @@ audio{
 // Audio control
 .background-day-mode{
     .plyr--audio .plyr__control {
-        color: $gray-darker;
+        color: $dark;
         &.plyr__tab-focus,
         &:hover,
         &[aria-expanded='true'] {
             background: none!important;
-            color: $gray-darker;
+            color: $dark;
         }
     }
-    @mixin plyr-tab-focus($color: $gray-darker) {
+    @mixin plyr-tab-focus($color: $dark) {
         box-shadow: none;
         outline: 0;
     }
 
     .plyr--audio {
         .plyr__controls {
-            color: $gray-darker;
+            color: $dark;
         }
         .plyr__tooltip {
             background: transparent;
-            color: $gray-darker;
+            color: $dark;
             font-size: 16px;
             font-weight: $font-weight-normal;
             &::before {
-              //  border-top: $plyr-tooltip-arrow-size solid $gray-darker;
+              //  border-top: $plyr-tooltip-arrow-size solid $dark;
             }
         }
     }
     .plyr--full-ui input[type='range'] {
 
-        color: $gray-darker;
+        color: $dark;
     width: 98%;
     }
 }

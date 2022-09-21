@@ -45,7 +45,7 @@ ul.thumb-container{
   //   margin: 60px 0 20px!important;
   // }
   .separator-wrapper{
-    /*border-top: 2px solid $gray-dark;*/
+    /*border-top: 2px solid $dark;*/
     // @media (max-width: map-get($grid-breakpoints, sm)) {
     //   padding-left: 20px;
     // }
@@ -233,7 +233,7 @@ li.item-post {
           margin: 0;
         }
         p.meta-info{
-          color: $gray-darker;
+          color: $dark;
           font-size: $font-size-p;
 
           margin: 0;
@@ -241,7 +241,7 @@ li.item-post {
           text-align: center;
         }
         p{
-          color: $gray-darker;
+          color: $dark;
           font-size: $font-size-p;
           margin: 0;
           margin-bottom: 6px;
@@ -611,13 +611,13 @@ li.log-thumb.post-group {
   .archive-navigation{
     .nav-previous,.nav-next,.more-sets{
       a{
-        color: $gray-dark;
-        border-bottom: 2px solid $gray-dark;
+        color: $dark;
+        border-bottom: 2px solid $dark;
 
         @include transition(all 1s ease-out);
         &:hover{
           color: $white;
-          background-color: $gray-dark;
+          background-color: $dark;
           border-bottom: 2px solid transparent;
           @include transition(all 1s ease-out);
         }

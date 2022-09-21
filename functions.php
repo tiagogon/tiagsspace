@@ -1124,9 +1124,6 @@ function color_background_parameters ($parameter) {
 	} elseif ($background_color_class=="yellow") {
 			$background_color_code = "#fffb2b";
 			$background_day_night_mode = 'background-day-mode';
-	} elseif ($background_color_class=="indigo") {
-			$background_color_code = "#5C6BC0"; // Google colors $palette-Indigo-400
-			$background_day_night_mode = 'background-night-mode';
 	} elseif ($background_color_class=="lime") {
 			$background_color_code = "#aeff2b";
 			$background_day_night_mode = 'background-day-mode';

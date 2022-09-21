@@ -150,41 +150,41 @@
 // In case is a light bacground (white, blue, yellow and lime)
 .background-day-mode{
   .mfp-arrow-left:before, .mfp-arrow-left .mfp-b {
-    border-right: 27px solid $gray-dark;
+    border-right: 27px solid $dark;
   }
   .mfp-arrow-right:before, .mfp-arrow-right .mfp-b {
-    border-left: 27px solid $gray-dark;
+    border-left: 27px solid $dark;
   }
 
   .mfp-wrap {
     .mfp-content {
       .mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
-          color: $gray-dark;
+          color: $dark;
       }
       .mfp-title{
-        color: $gray-dark;
+        color: $dark;
         display: none; // deactivate
       }
       .mfp-counter{
-        color: $gray-dark;
+        color: $dark;
       }
     }
     .mfp-preloader{
-      color: $gray-dark;
+      color: $dark;
     }
   }
   .mfp-figure {
     &:after {
-      background: $gray-dark;
+      background: $dark;
     }
 
   }
   .mfp-close {
-    color: $gray-dark;
+    color: $dark;
   }
   .mfp-close-btn-in {
     .mfp-close {
-      color: $gray-dark;
+      color: $dark;
     }
   }
 }

@@ -8,16 +8,16 @@
 
 .mm-menu {
     padding-top: 60px;
-    background-color: $blue;
+    background-color: $tiagsssss-color-menu;
     font-family: $headings-font-family;
     font-size: $font-size-heading;
     .mm-navbars_top{
         .mm-navbar{
-            background-color: $blue;
+            background-color: $tiagsssss-color-menu;
             border: none;
             a{
                 outline: none;
-                color: $white;
+                color: $tiagsssss-color-menu-font;
                 text-decoration: none;
                 margin-left: 13px;
                 margin-left: 0px;
@@ -27,14 +27,14 @@
     }
     .mm-panels{
         .mm-panel{
-            background-color: $blue;
-            border-color: $white;
+            background-color: $tiagsssss-color-menu;
+            border-color: $tiagsssss-color-menu-font;
             ul {
               li{
                   margin: 20px 19px;
                 a {
                   outline: none;
-                  color: $white;
+                  color: $tiagsssss-color-menu-font;
                   text-decoration: none;
                   line-height: 1.3;
                   &.active{
@@ -59,7 +59,7 @@
                   }
                  .mm-counter{
                      outline: none;
-                     color: $white;
+                     color: $tiagsssss-color-menu-font;
                      text-decoration: none;
                      margin-left: 13px;
                      margin-left: 0px;
@@ -97,7 +97,7 @@
 
 // Arrow style
 .mm-btn:before, .mm-btn:after {
-    border-color: $white;
+    border-color: $tiagsssss-color-menu-font;
 }
 
 // Border style

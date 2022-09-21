@@ -95,7 +95,7 @@
   #site-header {
     h1 {
       a {
-        color: $gray-dark;
+        color: $dark;
         @include transition(all 1s ease-out);
         &:hover {
           @include transition(all 1s ease-out);
@@ -108,19 +108,19 @@
       .slicknav_menu {
         .slicknav_btn {
           .slicknav_menutxt {
-            color: $gray-dark;
+            color: $dark;
           }
         }
         .slicknav_nav {
           ul {
             li {
               a {
-                color: $gray-dark;
+                color: $dark;
               }
             }
           }
           .slicknav_row:hover {
-            color: $gray-dark;
+            color: $dark;
           }
           a:hover {}
           .slicknav_txtnode {}
@@ -136,8 +136,8 @@
         ul {
           li {
             a {
-              color: $gray-dark;
-              /*border-bottom: 2px solid $gray-dark;*/
+              color: $dark;
+              /*border-bottom: 2px solid $dark;*/
               &:hover {
                 &::before,
                 &::after {

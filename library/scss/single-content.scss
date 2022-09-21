@@ -79,7 +79,7 @@
         line-height: 1;
         a{
           color: $white;
-          background-color: $gray-dark;
+          background-color: $dark;
           padding: 3px 5px 2px;
           font-style: normal;
           font-size: 11px;
@@ -87,7 +87,7 @@
 
           @include transition(all 1s ease-out);
           &:hover{
-            color: $gray-dark;
+            color: $dark;
             background-color: $white;
             @include transition(all 1s ease-out);
           }
@@ -258,10 +258,10 @@
         li{
           a{
             color: $lime;
-            background-color: $gray-dark;
+            background-color: $dark;
             @include transition(all 1s ease-out);
             &:hover{
-              color: $gray-dark;
+              color: $dark;
               background-color: $lime;
               @include transition(all 1s ease-out);
             }
@@ -278,10 +278,10 @@
         li{
           a{
             color: $yellow;
-            background-color: $gray-dark;
+            background-color: $dark;
             @include transition(all 1s ease-out);
             &:hover{
-              color: $gray-dark;
+              color: $dark;
               background-color: $yellow;
               @include transition(all 1s ease-out);
             }
@@ -344,7 +344,7 @@
         font-size: $font-size-heading;
         line-height: 1.3;
         background-color: transparent;
-        /*border-bottom: 2px solid $gray-dark;*/
+        /*border-bottom: 2px solid $dark;*/
         @include transition(all 1s ease-out);
         &:hover{
           /*border-bottom: 2px solid transparent;*/
