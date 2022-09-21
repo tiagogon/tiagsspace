@@ -1040,7 +1040,7 @@ function color_background_parameters ($parameter) {
 	//$background_color_class = "tiagsssss-color";
 
 	// Is Hyper
-	if (is_singular( 'hyper' ) OR is_post_type_archive('hyper')) {
+	if (is_singular( 'hyper' )) {
 
 								$background_color_class = 'earth';
 
