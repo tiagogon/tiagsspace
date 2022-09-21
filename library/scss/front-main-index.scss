@@ -296,7 +296,7 @@ li.item-post {
               }
           }
       }
-      box-shadow: 8px 8px 12px $tiagsssss-color-darker;
+      box-shadow: 8px 8px 12px $tiagsssss-color-darker-darker; 
       @include transition(box-shadow 1s ease-in-out);
       @media (max-width: map-get($grid-breakpoints, sm)) {
         box-shadow: none;

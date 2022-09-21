@@ -1,28 +1,33 @@
-// Brand Colors and tones
-$blue: 			      #3c00f5;
-$blue-darker:     #23008e;
-$blue-light: 	    #dfd4ff;
-$red: 			      #ff0000;
-$red-darker:      #990012;
-$red-light: 	    #ffb5be;
-
-// Other colors
+// colors
 $white:      		   #fff; //#F5F5F5; // Light Grey
 $dark: 					   #000; //background-night-mode
 $deep-purple: 		 #3c00f5; // HYPER SERIES COLOR
+$blue: 			       #3c00f5;
+$red: 			       #ff0000;
 $lime: 					   #aeff2b;
 $yellow: 				   #fffb2b; // $palette-Deep-Purple-50; //;
 $yellow-light: 	   #fffc52;
-$earth:            #ffb951;
-$sky:              #8ed0ff;
+
+//Terra pallet
+$sky:              #adc8d9;
+$earth:            #d9a86c;
+$ocker:            #8c5626;
+
+// Colors tones
+$blue-darker:     #23008e;
+$blue-light: 	    #dfd4ff;
+$red-darker:      #990012;
+$red-light: 	    #ffb5be;
+$ocker-darker:    #3d2510;
+$ocker-light: 	  #e28a3c;
 
 // Index and Nav Colors
-$tiagsssss-color: 			            $blue;
-$tiagsssss-color-darker: 	          $blue-darker;
-$tiagsssss-color-darker-darker:     $blue-light;
-$tiagsssss-color-menu:              $red;
-$tiagsssss-color-menu-contrast:     $blue;
-$tiagsssss-color-menu-font:         $white;
+$tiagsssss-color: 			            $ocker;
+$tiagsssss-color-darker: 	          $ocker-darker;
+$tiagsssss-color-darker-darker:     $ocker-light;
+$tiagsssss-color-menu:              $sky;
+$tiagsssss-color-menu-contrast:     $ocker;
+$tiagsssss-color-menu-font:         $dark;
 
 
 // ---- Load font-style ----
