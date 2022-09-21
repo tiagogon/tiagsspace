@@ -225,7 +225,7 @@
 						    // }
 						 ?>
 
-						<li><a href="#my-menu" >+</a></li>
+						<li><a href="#my-menu" >±</a></li>
 					</ul>
 				</div>
 			</div>
