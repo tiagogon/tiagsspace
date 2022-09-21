@@ -1128,7 +1128,7 @@ function color_background_parameters ($parameter) {
 			$background_color_code = "#aeff2b";
 			$background_day_night_mode = 'background-day-mode';
 	} elseif ($background_color_class=="earth") {
-			$background_color_code = "#ffb951";
+			$background_color_code = "#d9a86c";
 			$background_day_night_mode = 'background-day-mode';
 	} elseif ($background_color_class=="sky") {
 			$background_color_code = "#8ed0ff";
