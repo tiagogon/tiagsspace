@@ -112,17 +112,23 @@ Index of posts for Home and Archives
                         $grid_array_prop_to_area[0] = round(
                                                         ($grid_array_width_prop_to_area_prc[0] / (100/48)) /2
                                                       )*2;
-                          if ($grid_array_prop_to_area[0] < 48) { $grid_array_prop_to_area[0] = 48;}
-                          if ($grid_array_prop_to_area[0] > 48) { $grid_array_prop_to_area[0] = 48;}
                         $grid_array_prop_to_area[1] = round(($grid_array_width_prop_to_area_prc[1] / (100/48))/2)*2;
-                          if ($grid_array_prop_to_area[1] < 2) { $grid_array_prop_to_area[1] = 2;}
-                          if ($grid_array_prop_to_area[1] > 48) { $grid_array_prop_to_area[1] = 48;}
                         $grid_array_prop_to_area[2] = round(($grid_array_width_prop_to_area_prc[2] / (100/48))/2)*2;
-                          if ($grid_array_prop_to_area[2] < 2) { $grid_array_prop_to_area[2] = 2;}
-                          if ($grid_array_prop_to_area[2] > 48) { $grid_array_prop_to_area[2] = 48;}
                         $grid_array_prop_to_area[3] = round($grid_array_width_prop_to_area_prc[3] / (100/48));
-                          if ($grid_array_prop_to_area[3] < 1) { $grid_array_prop_to_area[3] = 1;}
-                          if ($grid_array_prop_to_area[3] > 48) { $grid_array_prop_to_area[3] = 48;}
+
+                        // Random increase 1, keep or decrease 1 the collumns
+                        $random_increment = rand(-1, 1);
+                        $grid_array_prop_to_area[3] = $grid_array_prop_to_area[3] + $random_increment;
+
+                        // Cap to max of number of collumn and minimun to havoid sizer-bug
+                        if ($grid_array_prop_to_area[0] < 48) { $grid_array_prop_to_area[0] = 48;}
+                        if ($grid_array_prop_to_area[0] > 48) { $grid_array_prop_to_area[0] = 48;}
+                        if ($grid_array_prop_to_area[1] < 2) { $grid_array_prop_to_area[1] = 2;}
+                        if ($grid_array_prop_to_area[1] > 48) { $grid_array_prop_to_area[1] = 48;}
+                        if ($grid_array_prop_to_area[2] < 2) { $grid_array_prop_to_area[2] = 2;}
+                        if ($grid_array_prop_to_area[2] > 48) { $grid_array_prop_to_area[2] = 48;}
+                        if ($grid_array_prop_to_area[3] < 1) { $grid_array_prop_to_area[3] = 1;}
+                        if ($grid_array_prop_to_area[3] > 48) { $grid_array_prop_to_area[3] = 48;}
 
                         // Get the number of collumns porportional to Area
                         $grid_array = $grid_array_prop_to_area;
