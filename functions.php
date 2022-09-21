@@ -1042,7 +1042,7 @@ function color_background_parameters ($parameter) {
 	// Is Hyper
 	if (is_singular( 'hyper' ) OR is_post_type_archive('hyper')) {
 
-								$background_color_class = 'tiagsssss-color';
+								$background_color_class = 'earth';
 
 	// Is Dusk single
 	} elseif (is_singular( 'dusk' )) {
