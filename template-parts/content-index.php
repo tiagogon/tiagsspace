@@ -60,7 +60,7 @@ Index of posts for Home and Archives
                     // grid on archive
                     $grid_sizer = 'col-2 col-sm-2 col-md-2 col-lg-1';
 
-                    $grid_year_separator = 'col-48 col-sm-24';
+                    $grid_year_separator = 'col-48 col-sm-8 col-md-6';
 
                     // Default umber of collumns
                     $grid_array = array(48, 12, 12, 8);
