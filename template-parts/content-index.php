@@ -478,11 +478,13 @@ Index of posts for Home and Archives
 
     <?php  // --- Infinite Scrool
 
-    //if (is_tax( 'medium', 'photography') ) { ?>
+    if (!is_single() ) { ?>
 
         <!-- OLD <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script> -->
 
         <script type="text/javascript"  src="<?php bloginfo('template_url'); ?>/library/js/infinite-scroll/infinite-scroll.pkgd.min.js"></script>
+        <script type="text/javascript"  src="https://tiags.space/wp-content/plugins/video-embed-thumbnail-generator/video-js/v7/video.min.js?x33528"></script>
+
         <script type="text/javascript">
 
             // get Masonry instance
@@ -518,12 +520,24 @@ Index of posts for Home and Archives
                 $container.off( 'load.infiniteScroll', onPageLoad );
               }
             }
+            $container.on( 'append.infiniteScroll', function( event, body, path, items, response ) {
+              //DEbug
+              console.log(`Appended ${items.length} items on ${path}`);
 
-            $container.on( 'append.infiniteScroll', function(){
-              picturefill();
-              videojs('video-js');
+                picturefill();
+
+                // VIDEO ISSUE -- Code
+
+                //VideoJS trigers
+                videojs(document.querySelector('.video-js'));
+
+                // Videopack functions
+                jQuery(document).ready(kgvid_document_ready());
+                jQuery(window).on("load", kgvid_window_load);
+
             });
+
         </script>
 
         <?php
-    //} ?>
+    } ?>

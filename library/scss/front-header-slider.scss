@@ -91,7 +91,7 @@
   }
 }
 
-.background-day-mode {
+.background-w-light-color {
   #site-header {
     h1 {
       a {
@@ -137,7 +137,9 @@
           li {
             a {
               color: $dark;
-              /*border-bottom: 2px solid $dark;*/
+              @media (prefers-color-scheme: dark) {
+                color: $white;
+              }
               &:hover {
                 &::before,
                 &::after {
@@ -165,8 +167,8 @@
 }
 
 // Make it white for color backgrounds
-.background-night-mode,
-.background-night-mode-header {
+.background-w-dark-color,
+.background-w-dark-color-header {
   #site-header {
     h1 {
       a {

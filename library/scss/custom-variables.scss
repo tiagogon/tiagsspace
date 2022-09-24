@@ -1,12 +1,12 @@
 // colors
 $white:      		        #fff;
 $dark: 					        #000;
-$dark-lighten-vibe: 			      #16161a; //new *
+$dark-lighten-vibe: 		#16161a; //new *
 $grey-light:            #eaeaea; //new
 $grey-light-warm:       #deddd9; //new
 $grey-light-warm-vibe:  #e1d0d0; //new
 $grey-light-cold:       #e6e6eb; //new *
-$grey-light-cold-vibe:  #d1d6e7; //new
+$grey-light-cold-vibe:  #e2e6f6; //new
 
 $deep-purple: 		 #3c00f5;
 $blue: 			       #3c00f5;
@@ -25,7 +25,7 @@ $blue-earth: 			 #00349E;
 
 // Index and Menu Colors
 // Light Mode (default):
-$tiagsssss-color: 			                 $dark-lighten-vibe;
+$tiagsssss-color: 			                 $grey-light-cold-vibe;
 $tiagsssss-color-darken: 	               darken($tiagsssss-color,80%);
 $tiagsssss-color-lighten:                lighten($tiagsssss-color,100%);
 $tiagsssss-color-menu:                   $dark-lighten-vibe;
@@ -33,8 +33,8 @@ $tiagsssss-color-menu-contrast:          $grey-light-cold;
 $tiagsssss-color-menu-font:              $white;
 //Dark Mode
 $tiagsssss-color-darkmode: 			         $dark-lighten-vibe;
-$tiagsssss-color-darkmode-darken: 	     darken($tiagsssss-color,80%);
-$tiagsssss-color-darkmode-lighten:       lighten($tiagsssss-color,100%);
+$tiagsssss-color-darkmode-darken: 	     darken($tiagsssss-color-darkmode,80%);
+$tiagsssss-color-darkmode-lighten:       lighten($tiagsssss-color-darkmode,100%);
 $tiagsssss-color-darkmode-menu:          $grey-light-cold;
 $tiagsssss-color-darkmode-menu-contrast: $grey-light-cold;
 $tiagsssss-color-darkmode-menu-font:     $grey-light-cold;

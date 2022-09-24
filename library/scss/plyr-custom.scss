@@ -30,7 +30,7 @@ audio{
 }
 
 // Audio control
-.background-day-mode{
+.background-w-light-color{
     .plyr--audio .plyr__control {
         color: $dark;
         &.plyr__tab-focus,
@@ -75,8 +75,8 @@ audio{
     }
 }
 
-// Overide with background-night-mode // E.g.: Blue or dark grey
-.background-night-mode{
+// Overide with background-w-dark-color // E.g.: Blue or dark grey
+.background-w-dark-color{
     .plyr--audio .plyr__controls {
         color: $white;
         &.plyr__tab-focus,

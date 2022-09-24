@@ -1037,30 +1037,16 @@ function color_background_parameters ($parameter) {
 
 	global $post;
 
-	//$background_color_class = "tiagsssss-color";
-
-	// Is Hyper
 	if (is_singular( 'hyper' )) {
-
 								$background_color_class = 'earth';
-
-	// Is Dusk single
 	} elseif (is_singular( 'dusk' )) {
-
 			$background_color_class = 'sky';
-
-	// Is Emulsion single
 	} elseif (is_singular( 'emulsion' )) {
-
 			$background_color_class = 'earth';
-
-  // Is Log
-	} elseif (is_singular( 'log' )
+	} elseif (  is_singular( 'log' )
 							OR is_post_type_archive('log')
 							OR is_tax('log-branch')) {
-
-								$background_color_class = 'header-white';
-
+								$background_color_class = 'white';
 			// // Is Log branch BLWWW
 			// 	if ((has_term( 'blwww', 'log-branch'  ) && is_singular('log'))
 			// 							OR is_tax( 'log-branch', 'blwww') ) {
@@ -1081,71 +1067,48 @@ function color_background_parameters ($parameter) {
 			// }
 			// // Other Log Branches
 			// else {
-			// 	$background_color_class = 'header-white';
+			// 	$background_color_class = 'white';
 			//
 			// }
-
-	// Is Films single
 	} elseif ((is_singular( 'films' ) )) {
-
 		$background_color_class = 'dark';
-
-	// If 4K lento
   } elseif (is_singular( '4k-lento' )) {
-
-	  $background_color_class = 'dark';
-
+	  $background_color_class = 'tiagsssss-color';
 	} elseif ( is_singular( )) {
-
-					$background_color_class = 'header-white';
-
+					$background_color_class = 'white';
 	} else {
-		// Default color background parameters
 		$background_color_class = "tiagsssss-color";
 	}
 
-
 	// Mapping color class to HEX code and font mode
 	if ($background_color_class=="tiagsssss-color") {
-			$background_color_code = "#8c5626";
-			$background_day_night_mode = 'background-night-mode';
-	} elseif ($background_color_class=="header-white") {
-			$background_color_code = "#ffffff";
-			$background_day_night_mode = 'background-day-mode';
+			$background_day_night_mode = 'background-w-light-color';
+	} elseif ($background_color_class=="white") {
+			$background_day_night_mode = 'background-w-light-color';
+	} elseif ($background_color_class=="white") {
+			$background_day_night_mode = 'background-w-light-color';
 	} elseif ($background_color_class=="dark") {
-			$background_color_code = "#111111";
-			$background_day_night_mode = 'background-night-mode';
-	} elseif ($background_color_class=="deep-purple") { // old HYPER SERIES COLOR
-			$background_color_code = "#3c00f5";
-			$background_day_night_mode = 'background-night-mode';
+			$background_day_night_mode = 'background-w-dark-color';
+	} elseif ($background_color_class=="deep-purple") {
+			$background_day_night_mode = 'background-w-dark-color';
 	} elseif ($background_color_class=="blue") {
-			$background_color_code = "#3c00f5";
-			$background_day_night_mode = 'background-day-mode';
+			$background_day_night_mode = 'background-w-light-color';
 	} elseif ($background_color_class=="yellow") {
-			$background_color_code = "#fffb2b";
-			$background_day_night_mode = 'background-day-mode';
+			$background_day_night_mode = 'background-w-light-color';
 	} elseif ($background_color_class=="lime") {
-			$background_color_code = "#aeff2b";
-			$background_day_night_mode = 'background-day-mode';
+			$background_day_night_mode = 'background-w-light-color';
 	} elseif ($background_color_class=="earth") {
-			$background_color_code = "#d9a86c";
-			$background_day_night_mode = 'background-day-mode';
+			$background_day_night_mode = 'background-w-light-color';
 	} elseif ($background_color_class=="sky") {
-			$background_color_code = "#8ed0ff";
-			$background_day_night_mode = 'background-day-mode';
+			$background_day_night_mode = 'background-w-light-color';
 	}
 
 	// Return logic
 	if ($parameter == "background_color_class") {
 		return $background_color_class;
-	}
-	elseif ($parameter == "background_color_code") {
-		return $background_color_code;
-	}
-	elseif ($parameter == "background_day_night_mode") {
+	} elseif ($parameter == "background_day_night_mode") {
 		return $background_day_night_mode;
 	}
-
 }
 
 
@@ -1167,12 +1130,13 @@ add_filter( 'body_class', 'add_color_class' );
 
 
 // add HTML theme color tags - special for safary mobile
-function add_my_theme_color_tags() {
-
-	 echo '   <meta name="msapplication-TileColor" content="'.color_background_parameters('background_color_code').'">
-            <meta name="theme-color" content="'.color_background_parameters('background_color_code').'">';
-}
-add_action( 'wp_head', 'add_my_theme_color_tags' ); //front end
+				// -- Removed because safari gets it from the body bacground color
+				// function add_my_theme_color_tags() {
+				//
+				// 	 echo '   <meta name="msapplication-TileColor" content="'.color_background_parameters('background_color_code').'">
+				//             <meta name="theme-color" content="'.color_background_parameters('background_color_code').'">';
+				// }
+				// add_action( 'wp_head', 'add_my_theme_color_tags' ); //front end
 
 
 // --------

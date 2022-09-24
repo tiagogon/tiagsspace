@@ -8,14 +8,20 @@ body{
 		font-size: $font-size-p+2;
 	}
 }
-body.background-night-mode{
+body.background-w-dark-color{
   color: $white;
 }
 
 // Background colors
 .tiagsssss-color{
 	background-color: $tiagsssss-color;
+  @media (prefers-color-scheme: dark) {
+    background-color: $tiagsssss-color-darkmode;
+  }
 }
+
+
+
 .tiagsssss-color-heading{
 	color: $lime;
 }
@@ -34,9 +40,6 @@ background-color: $indigo;
 	color: $yellow;
 }
 
-.tiagsssss-color{
-	background-color: $tiagsssss-color;
-}
 .tiagsssss-color-heading{
 	color: $blue;
 }
