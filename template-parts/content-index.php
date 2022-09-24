@@ -479,8 +479,10 @@ Index of posts for Home and Archives
     <?php  // --- Infinite Scrool
 
     //if (is_tax( 'medium', 'photography') ) { ?>
-        <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
 
+        <!-- OLD <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script> -->
+
+        <script type="text/javascript"  src="<?php bloginfo('template_url'); ?>/library/js/infinite-scroll/infinite-scroll.pkgd.min.js"></script>
         <script type="text/javascript">
 
             // get Masonry instance
@@ -519,6 +521,9 @@ Index of posts for Home and Archives
 
             $container.on( 'append.infiniteScroll', function(){
               picturefill();
+              videojs('video-js');
             });
-        </script><?php
+        </script>
+
+        <?php
     //} ?>
