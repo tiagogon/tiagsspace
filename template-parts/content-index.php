@@ -478,7 +478,7 @@ Index of posts for Home and Archives
 
     <?php  // --- Infinite Scrool
 
-    if (!is_single() ) { ?>
+    if (is_single( 'disablleeeeeeee' ) ) { ?>
 
         <!-- OLD <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script> -->
 
