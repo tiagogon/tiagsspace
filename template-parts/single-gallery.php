@@ -609,10 +609,10 @@ if (!get_field('deactivate_gallery')) {
                                     Schema="'.$video_schema.'"';
 
 
-                        // add item-sizer for Masonry responsive calculations
+                        // add masonry-item-sizer for Masonry responsive calculations
                         if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false) { ?>
 
-                            <div class="item-sizer <?php //echo $class_thumbnail_without_factor;?> col-4"></div>
+                            <div class="masonry-item-sizer <?php //echo $class_thumbnail_without_factor;?> col-4"></div>
 
                         <?php }?>
 
@@ -824,7 +824,7 @@ if (!get_field('deactivate_gallery')) {
                   // set itemSelector so .grid-sizer is not used in layout
                   itemSelector: '.item',
                   // use element for option
-                  columnWidth: '.item-sizer',
+                  columnWidth: '.masonry-item-sizer',
                   percentPosition: true,
                   transitionDuration: '0.6s',
                   gutter: 0,

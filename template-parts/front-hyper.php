@@ -13,7 +13,7 @@ $block_type = 'hyper';
 
         <div id="main" role="main" >
 
-            <ul id="thumb-container" class="clearfix row no-pad">
+            <ul id="masonry-container" class="clearfix row no-pad">
 
                 <?php
 
