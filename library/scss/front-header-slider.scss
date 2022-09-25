@@ -130,16 +130,12 @@
         }
       }
     }
-
       #topbar,
       .slicknav_nav {
         ul {
           li {
             a {
               color: $dark;
-              @media (prefers-color-scheme: dark) {
-                color: $white;
-              }
               &:hover {
                 &::before,
                 &::after {
@@ -162,7 +158,24 @@
           }
         }
       }
+  }
+}
 
+.tiagsssss-color {
+  #site-header {
+    #topbar,
+    .slicknav_nav {
+      ul {
+        li {
+          a {
+            color: $dark;
+            @media (prefers-color-scheme: dark) {
+            color: $white;
+            }
+          }
+        }
+      }
+    }
   }
 }
 

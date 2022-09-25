@@ -5397,7 +5397,8 @@ body.background-w-dark-color {
   color: #6610f2; }
 
 .earth {
-  background-color: #d9a86c; }
+  background-color: #00349E;
+  }
 
 .sky {
   background-color: #adc8d9; }
@@ -5712,10 +5713,6 @@ audio {
 .background-w-light-color #site-header #topbar ul li a,
 .background-w-light-color #site-header .slicknav_nav ul li a {
   color: #000; }
-  @media (prefers-color-scheme: dark) {
-    .background-w-light-color #site-header #topbar ul li a,
-    .background-w-light-color #site-header .slicknav_nav ul li a {
-      color: #fff; } }
   .background-w-light-color #site-header #topbar ul li a:hover::before, .background-w-light-color #site-header #topbar ul li a:hover::after,
   .background-w-light-color #site-header .slicknav_nav ul li a:hover::before,
   .background-w-light-color #site-header .slicknav_nav ul li a:hover::after {
@@ -5730,6 +5727,14 @@ audio {
     -webkit-transform: translateX(0px);
     -moz-transform: translateX(0px);
     transform: translateX(0px); }
+
+.tiagsssss-color #site-header #topbar ul li a,
+.tiagsssss-color #site-header .slicknav_nav ul li a {
+  color: #000; }
+  @media (prefers-color-scheme: dark) {
+    .tiagsssss-color #site-header #topbar ul li a,
+    .tiagsssss-color #site-header .slicknav_nav ul li a {
+      color: #fff; } }
 
 .background-w-dark-color #site-header h1 a,
 .background-w-dark-color-header #site-header h1 a {

@@ -1117,7 +1117,7 @@ function color_background_parameters ($parameter) {
 function add_color_class( $classes ) {
     global $post;
 
-		$classes = array();
+		//$classes = array(); // It was causing the wordpress classes (home, archive, ssingle, etc) to disapear
 		$classes[] = color_background_parameters('background_color_class');
 		$classes[] = color_background_parameters('background_day_night_mode');
 
