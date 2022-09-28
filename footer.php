@@ -97,28 +97,28 @@
 		 					   ">All</a>
 					   </li>
 					   <li>
-						   <a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">blwww</a>
+						   <a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">BLWWWW</a>
 					   </li>
 
 					   <li>
-						   <a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " belongs";} ?>">hrzn</a>
+						   <a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " belongs";} ?>">HRZN</a>
 					   </li>
 
 					   <li>
 						   <span>Discontinued</span>
 						   <ul>
 							   <li>
-								   <a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " belongs";} ?>">frntr</a>
+								   <a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " belongs";} ?>">FRNTR</a>
 							   </li>
 							   <li>
-								   <a href="<?php echo get_term_link( 'plnt', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnt')) { echo "active";} if ((is_single() and has_term( 'plnt', 'log-branch' ))) { echo " belongs";} ?>">plnt</a>
+								   <a href="<?php echo get_term_link( 'plnt', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnt')) { echo "active";} if ((is_single() and has_term( 'plnt', 'log-branch' ))) { echo " belongs";} ?>">PLNT</a>
 							   </li>
 							   <li>
-								   <a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " belongs";} ?>">sdwlk</a>
+								   <a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " belongs";} ?>">SDWLK</a>
 							   </li>
 
 							   <li>
-								   <a href="<?php echo get_term_link( 'rchv', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','rchv') or (is_single() and has_term( 'rchv', 'log-branch' ))) { echo "active";} ?>">rchv</a>
+								   <a href="<?php echo get_term_link( 'rchv', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','rchv') or (is_single() and has_term( 'rchv', 'log-branch' ))) { echo "active";} ?>">RCHV</a>
 							   </li>
 						   </ul>
 					   </li>
