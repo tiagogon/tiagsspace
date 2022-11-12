@@ -5855,6 +5855,8 @@ li.masonry-item {
           display: block;
           max-width: 100.2%;
           width: 100.2%;
+          max-height: 100.2%;
+          height: 100.2%;
           margin: 0px;
           -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
@@ -5888,6 +5890,8 @@ li.masonry-item {
           background-size: cover;
           max-width: 100.2%;
           width: 100.2%;
+          max-height: 100.2%;
+          height: 100.2%;
           -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -o-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
