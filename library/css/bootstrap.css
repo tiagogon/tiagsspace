@@ -5351,8 +5351,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 body {
   font-size: 16px;
-  line-height: 1.7;
-  }
+  line-height: 1.7; }
   body em {
     font-style: normal;
     font-family: "Sporting_Grotesque_Regular", sans-serif;
@@ -5922,10 +5921,9 @@ li.masonry-item {
             bottom: 7%; } }
         li.masonry-item figure a figcaption h2 {
           color: #fff;
-          font-size: 16px;
+          font-size: 21px;
           line-height: 1;
-          margin: 0;
-          }
+          margin: 0; }
       li.masonry-item figure a figcaption.hide-figcaption {
         opacity: 0; }
     @media (prefers-color-scheme: dark) {

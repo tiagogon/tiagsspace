@@ -1073,9 +1073,9 @@ function color_background_parameters ($parameter) {
 	} elseif ((is_singular( 'films' ) )) {
 		$background_color_class = 'dark';
   } elseif (is_singular( '4k-lento' )) {
-	  $background_color_class = 'tiagsssss-color';
+	  $background_color_class = 'dark';
 	} elseif ( is_singular( )) {
-					$background_color_class = 'white';
+		$background_color_class = 'white';
 	} else {
 		$background_color_class = "tiagsssss-color";
 	}
