@@ -130,8 +130,8 @@ li.masonry-item {
           outline: none;
           border: none;
           display: block;
-          max-width: 100%;
-          width: 100%;
+          max-width: 100.1%; // remove masonry 1 px bug around images
+          width: 100.1%; // remove masonry 1 px bug around images
           margin: 0px;
             // Blur efect
             -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);

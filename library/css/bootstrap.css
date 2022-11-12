@@ -5853,8 +5853,8 @@ li.masonry-item {
           outline: none;
           border: none;
           display: block;
-          max-width: 100%;
-          width: 100%;
+          max-width: 100.1%;
+          width: 100.1%;
           margin: 0px;
           -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
