@@ -8,13 +8,6 @@ $grey-light-warm-vibe:  #e1d0d0; //new
 $grey-light-cold:       #e6e6eb; //new *
 $grey-light-cold-vibe:  #e2e6f6; //new
 
-$deep-purple: 		 #3c00f5;
-$blue: 			       #3c00f5;
-$red: 			       #ff0000;
-$lime: 					   #aeff2b;
-$yellow: 				   #fffb2b;
-$yellow-light: 	   #fffc52;
-
 //Terra pallet
 $sky:              #adc8d9;
 $sky-stormy:       #b2cde0; //new
@@ -22,6 +15,17 @@ $earth:            #d9a86c;
 $ocker:            #8c5626;
 $ocker-dark:       #5d3614; //new
 $blue-earth: 			 #00349E;
+
+//Theme colors -- need to be defined at variables-classes.cscc
+$deep-purple: 		 #3c00f5;
+//$blue: 			       #3c00f5;
+$blue: 			       $blue-earth;
+$red: 			       #ff0000;
+$lime: 					   #aeff2b;
+$yellow: 				   #fffb2b;
+$yellow-light: 	   #fffc52;
+
+
 
 // Index and Menu Colors
 // Light Mode (default):

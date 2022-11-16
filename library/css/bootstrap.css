@@ -16,7 +16,7 @@
   font-weight: normal;
   font-style: normal; }
 :root {
-  --blue: #3c00f5;
+  --blue: #00349E;
   --indigo: #6610f2;
   --purple: #6f42c1;
   --pink: #e83e8c;
@@ -29,7 +29,7 @@
   --white: #fff;
   --gray: #6c757d;
   --dark: #343a40;
-  --primary: #3c00f5;
+  --primary: #00349E;
   --secondary: #6c757d;
   --success: #28a745;
   --info: #17a2b8;
@@ -2950,12 +2950,12 @@ mark,
   vertical-align: text-top !important; }
 
 .bg-primary {
-  background-color: #3c00f5 !important; }
+  background-color: #00349E !important; }
 
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {
-  background-color: #3000c2 !important; }
+  background-color: #00236b !important; }
 
 .bg-secondary {
   background-color: #6c757d !important; }
@@ -3050,7 +3050,7 @@ button.bg-dark:focus {
   border-left: 0 !important; }
 
 .border-primary {
-  border-color: #3c00f5 !important; }
+  border-color: #00349E !important; }
 
 .border-secondary {
   border-color: #6c757d !important; }
@@ -5277,10 +5277,10 @@ button.bg-dark:focus {
   color: #fff !important; }
 
 .text-primary {
-  color: #3c00f5 !important; }
+  color: #00349E !important; }
 
 a.text-primary:hover, a.text-primary:focus {
-  color: #3000c2 !important; }
+  color: #00236b !important; }
 
 .text-secondary {
   color: #6c757d !important; }
@@ -5382,10 +5382,10 @@ body.background-w-dark-color {
   color: #fffb2b; }
 
 .tiagsssss-color-heading {
-  color: #3c00f5; }
+  color: #00349E; }
 
 .blue {
-  background-color: #3c00f5; }
+  background-color: #00349E; }
 
 .blue-heading {
   color: #e2e6f6; }
@@ -5853,8 +5853,8 @@ li.masonry-item {
           outline: none;
           border: none;
           display: block;
-          max-width: 100.2%;
-          width: 100.2%;
+          max-width: 100.3%;
+          width: 100.3%;
           margin: 0px;
           -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
@@ -5886,10 +5886,10 @@ li.masonry-item {
         li.masonry-item figure a .imgcontainer video {
           transform: translateX(0%) translateY(0%);
           background-size: cover;
-          max-width: 100.2%;
-          width: 100.2%;
-          max-height: 100.2%;
-          height: 100.2%;
+          max-width: 100.3%;
+          width: 100.3%;
+          max-height: 100.3%;
+          height: 100.3%;
           -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -o-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
@@ -6285,7 +6285,7 @@ a.delete {
     width: 32px;
     cursor: pointer;
     margin-left: 20px;
-    background-color: #3c00f5;
+    background-color: #00349E;
     background-repeat: no-repeat;
     background-size: 32px 64px;
     background-position: 50% 0;
@@ -6297,7 +6297,7 @@ a.delete {
     width: 32px;
     cursor: pointer;
     margin-left: 20px;
-    background-color: #3c00f5;
+    background-color: #00349E;
     background-repeat: no-repeat;
     background-size: 32px 64px;
     background-position: 50% -32px; }
@@ -6308,7 +6308,7 @@ address {
   position: relative;
   top: -20px;
   height: 20px;
-  background: #3c00f5;
+  background: #00349E;
   text-align: right; }
 
 .container-video {
@@ -6466,7 +6466,7 @@ address {
         transition: none; } }
 
 .blue .single-content footer ul li a {
-  color: #3c00f5;
+  color: #00349E;
   background-color: #fff;
   transition: all 1s ease-out; }
   @media screen and (prefers-reduced-motion: reduce) {
@@ -6474,7 +6474,7 @@ address {
       transition: none; } }
   .blue .single-content footer ul li a:hover {
     color: #fff;
-    background-color: #3c00f5;
+    background-color: #00349E;
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
       .blue .single-content footer ul li a:hover {
@@ -6986,7 +6986,7 @@ img.mfp-img {
   background: #e2e6f6; }
 
 .blue .mfp-fade.mfp-bg {
-  background: #3c00f5; }
+  background: #00349E; }
 
 .lime .mfp-fade.mfp-bg {
   background: #aeff2b; }

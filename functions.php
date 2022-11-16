@@ -1038,7 +1038,7 @@ function color_background_parameters ($parameter) {
 	global $post;
 
 	if (is_singular( 'hyper' )) {
-								$background_color_class = 'earth';
+								$background_color_class = 'blue';
 	} elseif (is_singular( 'dusk' )) {
 			$background_color_class = 'sky';
 	} elseif (is_singular( 'emulsion' )) {
@@ -1092,7 +1092,7 @@ function color_background_parameters ($parameter) {
 	} elseif ($background_color_class=="deep-purple") {
 			$background_day_night_mode = 'background-w-dark-color';
 	} elseif ($background_color_class=="blue") {
-			$background_day_night_mode = 'background-w-light-color';
+			$background_day_night_mode = 'background-w-dark-color';
 	} elseif ($background_color_class=="yellow") {
 			$background_day_night_mode = 'background-w-light-color';
 	} elseif ($background_color_class=="lime") {

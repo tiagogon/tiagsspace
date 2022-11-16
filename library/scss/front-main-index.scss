@@ -130,8 +130,8 @@ li.masonry-item {
           outline: none;
           border: none;
           display: block;
-          max-width: 100.2%; // remove masonry 1 px bug around images
-          width: 100.2%; // remove masonry 1 px bug around images
+          max-width: 100.3%; // remove masonry 1 px bug around images
+          width: 100.3%; // remove masonry 1 px bug around images
           margin: 0px;
             // Blur efect
             -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
@@ -173,10 +173,10 @@ li.masonry-item {
         video {
           transform: translateX(0%) translateY(0%);
           background-size: cover;
-          max-width: 100.2%; // remove masonry 1 px bug around images
-          width: 100.2%; // remove masonry 1 px bug around images
-          max-height: 100.2%; // remove masonry 1 px bug around images
-          height: 100.2%; // remove masonry 1 px bug around images
+          max-width: 100.3%; // remove masonry 1 px bug around images
+          width: 100.3%; // remove masonry 1 px bug around images
+          max-height: 100.3%; // remove masonry 1 px bug around images
+          height: 100.3%; // remove masonry 1 px bug around images
           -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -o-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
