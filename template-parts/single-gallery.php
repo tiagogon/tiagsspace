@@ -563,13 +563,18 @@ if (!get_field('deactivate_gallery')) {
                             // VIDEO
                             } elseif ( $attachmen->post_mime_type == "video/mpeg" OR $attachmen->post_mime_type == "video/mp4" OR $attachmen->post_mime_type == "video/quicktime" ) {
 
-                            	$video_metadata = wp_get_attachment_metadata( $attachmen->ID );
+                              // --- Videopacl bug does not make this work:
+                              // $video_metadata = wp_get_attachment_metadata( $attachmen->ID );
+                            	// $intrinsic_ratio = $video_metadata['height'] * 100 / $video_metadata['width'];
 
-                            	$intrinsic_ratio = $video_metadata['height'] * 100 / $video_metadata['width'];
+                              // Get Heigh and width from featured thumbnail instead of video proprieties
+                              $attachmen_thumb_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($attachmen->ID), false);
+                              $intrinsic_ratio = $attachmen_thumb_attributes[2] * 100 / $attachmen_thumb_attributes[1];
 
                             }else {
 
                                 $intrinsic_ratio = $attachmen_thumb_attributes[2] * 100 / $attachmen_thumb_attributes[1];
+
                             }
 
 
