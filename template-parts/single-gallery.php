@@ -635,7 +635,7 @@ if (!get_field('deactivate_gallery')) {
 
                                 <?php
                                 // Edit atachment media -- hide and delete
-                                if (is_user_logged_in() && is_preview()) {
+                                if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
                                     $gallery_id = get_the_ID();
                                     gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                                 }
@@ -667,7 +667,7 @@ if (!get_field('deactivate_gallery')) {
 
                                 <?php
                                 // Edit atachment media -- hide and delete
-                                if (is_user_logged_in() && is_preview()) {
+                                if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
                                     $gallery_id = get_the_ID();
                                     gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                                 }
@@ -711,7 +711,7 @@ if (!get_field('deactivate_gallery')) {
 
                                 <?php
                                 // Edit atachment media -- hide and delete
-                                if (is_user_logged_in() && is_preview()) {
+                                if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
                                     $gallery_id = get_the_ID();
                                     gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                                 }
@@ -912,6 +912,7 @@ if (!get_field('deactivate_gallery')) {
 
             $animation_frequency = 135; // in Beats per minute
             $animation_frequency = get_field('animation_bpm');
+            $animation_number_of_attachment_shown = get_field('animation_number_of_attachment_shown');
             $animation_period = 1 / ( $animation_frequency / 60000 ); // miliseconds
         ?>
 
@@ -933,11 +934,19 @@ if (!get_field('deactivate_gallery')) {
                 // clearInterval(myVar<?php the_ID(); ?>);
 
             </script>
+            <?php if ($animation_number_of_attachment_shown) {
+              echo "<style>#gallery-".get_the_ID()." .item {display: none }</style>";
+              $i = 1;
+              while ( $i<= $animation_number_of_attachment_shown ) {
+                echo "<style>#gallery-".get_the_ID()." :nth-child(".$i.") {display: block }</style> ";
+                $i++;
+              }
+            } ?>
 
         <?php }
 
         // When previeweing posts
-        if (is_user_logged_in() && is_preview()) {
+        if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
 
             // Manual order images ?>
             <script src="<?php bloginfo('template_url'); ?>/library/js/Sortable-master/Sortable.js"></script>
