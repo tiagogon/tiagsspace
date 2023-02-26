@@ -5676,6 +5676,8 @@ audio {
           margin-bottom: 10.5px;
           text-align: right;
           font-size: 31.5px; }
+          #collapseMenu .row .menu-group ul li .active {
+            text-decoration: underline; }
 
 [aria-expanded="false"] .hide {
   display: none; }

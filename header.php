@@ -122,6 +122,9 @@
 						if (is_post_type_archive('4k-lento')) {
 							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / 4K Lento</hi>';
 						}
+						if (is_post_type_archive('films')) {
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Films</hi>';
+						}
 						if (is_post_type_archive('emulsion')) {
 							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Emulsion</hi>';
 						}
@@ -206,16 +209,16 @@
 				<div class="<?php echo $menu_groups_class; ?>" >
 					<ul>
 						<li>
-							<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " belongs";} ?>">Hyper</a>
+							<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " active";} ?>">Hyper</a>
 						</li>
 					 <li>
-						 <a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if (is_singular( 'films' ) OR is_post_type_archive('films')) { echo "active";} if (is_singular( 'films' )) { echo "active";} if (is_singular( 'films' )) { echo " belongs";} ?>">Films</a>
+						 <a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if ( is_post_type_archive('Films')) { echo "active";} if (is_singular( 'films' ) ) { echo " active";} ?>">Films</a>
 					 </li>
  						<li>
-						<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " belongs";} ?>">4K Lento</a></li>
+						<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " active";} ?>">4K Lento</a></li>
  						<li>
 					   <li>
-						   <a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " belongs";} ?>">Dusk</a>
+						   <a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " active";} ?>">Dusk</a>
 					   </li>
 					</ul>
 				</div>
@@ -225,35 +228,35 @@
 						<li>
 							<a href="<?php echo get_post_type_archive_link( 'log'); ?>"  class="<?php
 						 if (is_singular( 'log' ) OR is_post_type_archive('log') or is_tax('log-branch'))
-								{ echo " belongs";}
+								{ echo " active";}
 						 if (is_post_type_archive('emulsion'))
 								{ echo "active";}  ?>
 								">Log</a>
 						</li>
 
 						<li>
-							<a href="<?php echo get_term_link( 'still', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','still')) { echo "active";} if ((is_single() and has_term( 'still', 'log-branch' ))) { echo " belongs";} ?>">/ Still</a>
+							<a href="<?php echo get_term_link( 'still', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','still')) { echo "active";} if ((is_single() and has_term( 'still', 'log-branch' ))) { echo " active";} ?>">/ Still</a>
 						</li>
 
 						<li>
-							<a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " belongs";} ?>">/ BLW</a>
+							<a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " active";} ?>">/ BLW</a>
 						</li>
 
 						<li>
-							<a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " belongs";} ?>">/ HRZN</a>
+							<a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " active";} ?>">/ HRZN</a>
 						</li>
 
 						<li>
 							<a data-toggle="collapse" href="#collapseDiscontinuedLogBranchs" role="button" aria-expanded="false" aria-controls="collapseDiscontinuedLogBranchs">/ [&dagger;]</a>
 							<ul class="collapse" id="collapseDiscontinuedLogBranchs">
 								<li>
-									<a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " belongs";} ?>">/ FRNTR</a>
+									<a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " active";} ?>">/ FRNTR</a>
 								</li>
 								<li>
-									<a href="<?php echo get_term_link( 'plnt', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnt')) { echo "active";} if ((is_single() and has_term( 'plnt', 'log-branch' ))) { echo " belongs";} ?>">/ PLNT</a>
+									<a href="<?php echo get_term_link( 'plnt', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnt')) { echo "active";} if ((is_single() and has_term( 'plnt', 'log-branch' ))) { echo " active";} ?>">/ PLNT</a>
 								</li>
 								<li>
-									<a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " belongs";} ?>">/ SDWLK</a>
+									<a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " active";} ?>">/ SDWLK</a>
 								</li>
 
 								<li>
@@ -330,10 +333,10 @@
 							<a data-toggle="collapse" href="#collapseArchivedSeries" role="button" aria-expanded="false" aria-controls="collapseArchivedSeries">Dc'd</a>
 							<ul class="collapse" id="collapseArchivedSeries">
 								<li>
-									<a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " belongs";} ?>">&dagger; Emulsion </a>
+									<a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " active";} ?>">&dagger; Emulsion </a>
 								</li>
 								<li>
-									<a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " belongs";} ?>">&dagger; City</a>
+									<a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " active";} ?>">&dagger; City</a>
 								</li>
 							</ul>
 						</li>

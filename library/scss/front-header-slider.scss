@@ -22,6 +22,9 @@
           margin-bottom: $font-size-heading/2;
           text-align: right;
           font-size: $font-size-heading*1.5;
+          .active{
+            text-decoration: underline;
+          }
           li{
             //margin-right: $grid-gutter-width;
           }
