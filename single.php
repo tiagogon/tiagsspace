@@ -101,10 +101,10 @@ if ($background_image) {
 
                 //prefix
                 if ($post_type == "hyper") {
-                    $prefix = "/H";
+                    $prefix = "H";
                 }
                 if ($post_type == "4k-lento") {
-                    $prefix = "/4KL";
+                    $prefix = "4KL";
                 }
 
                 // final sring
@@ -122,10 +122,10 @@ if ($background_image) {
             <?php } else { ?>
 
     	        <nav class="nav-next col-24">
-    	            <span><?php next_post_link('%link', '/Future'); ?></span>
+    	            <span><?php next_post_link('%link', 'Future'); ?></span>
     	        </nav>
     	        <nav class="nav-previous col-24">
-    	        	<span><?php previous_post_link('%link', '/Past'); ?></span>
+    	        	<span><?php previous_post_link('%link', 'Past'); ?></span>
     	        </nav>
 
             <?php } ?>

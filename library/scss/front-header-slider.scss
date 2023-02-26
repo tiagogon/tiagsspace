@@ -1,8 +1,50 @@
 //
 // Front Header and Slider
 // --------------------------------------------------
+#collapseMenu{
+  position: fixed;
+  z-index: 999;
+  background-color:
+  inherit;
+  overflow: hidden;
+  list-style: none;
+  .row{
+    padding-top: 73px;
+    height: 100vh;
+    overflow:scroll;
+      .menu-group{
+      padding-bottom: $grid-gutter-width*2;
+      margin-bottom: auto;
+      ul{
+        list-style: none;
+        li{
+          margin-left: none;
+          margin-bottom: $font-size-heading/2;
+          text-align: right;
+          font-size: $font-size-heading*1.5;
+          li{
+            //margin-right: $grid-gutter-width;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Display Hide and reveal
+[aria-expanded="false"]{
+  .hide{
+    display: none;
+  }
+}
+[aria-expanded="true"]{
+  .reveal{
+    display: none;
+  }
+}
+
 #site-header {
-  padding-top: 20px;
+  padding-top: $grid-gutter-width;
   padding-bottom: $grid-gutter-width;
   position: fixed;
   z-index: 1000;
@@ -16,46 +58,46 @@
   .slicknav_nav.slicknav_hidden {
     display: block!important;
   }
+  .topbar-left{
+    float: left;
+    h1,a{
+      font-size: $font-size-heading;
+    }
+  }
   #topbar,
   .slicknav_nav {
     float: right;
-    ul {
+    a {
       text-align: right;
       margin: 0;
-      li {
-        display: inline-block;
-        a {
-          position: relative;
-          display: inline-block;
-          outline: none;
-          color: $white;
-          text-decoration: none;
+      position: relative;
+      display: inline-block;
+      outline: none;
+      color: $white;
+      text-decoration: none;
 
-          font-size: $font-size-heading;
+      font-size: $font-size-heading;
 
 
-          margin-left: 13px;
-          /*border: 2px solid transparent;*/
-          padding: 2px 7px 0px 7px;
-          line-height: 1.3;
-          &:hover {
-            &::before,
-            &::after {
-              opacity: 1;
-              -webkit-transform: translateX(0px);
-              -moz-transform: translateX(0px);
-              transform: translateX(0px);
-            }
-          }
-          &:focus {
-            &::before,
-            &::after {
-              opacity: 1;
-              -webkit-transform: translateX(0px);
-              -moz-transform: translateX(0px);
-              transform: translateX(0px);
-            }
-          }
+      margin-left: 13px;
+      /*border: 2px solid transparent;*/
+      line-height: 1.3;
+      &:hover {
+        &::before,
+        &::after {
+          opacity: 1;
+          -webkit-transform: translateX(0px);
+          -moz-transform: translateX(0px);
+          transform: translateX(0px);
+        }
+      }
+      &:focus {
+        &::before,
+        &::after {
+          opacity: 1;
+          -webkit-transform: translateX(0px);
+          -moz-transform: translateX(0px);
+          transform: translateX(0px);
         }
       }
     }
@@ -112,13 +154,9 @@
           }
         }
         .slicknav_nav {
-          ul {
-            li {
               a {
                 color: $dark;
               }
-            }
-          }
           .slicknav_row:hover {
             color: $dark;
           }
@@ -130,11 +168,9 @@
         }
       }
     }
-      #topbar,
+      #topbar,.topbar-left,
       .slicknav_nav {
-        ul {
-          li {
-            a {
+            a,h1 {
               color: $dark;
               &:hover {
                 &::before,
@@ -155,26 +191,20 @@
                 }
               }
             }
-          }
-        }
       }
   }
 }
 
 .tiagsssss-color {
   #site-header {
-    #topbar,
-    .slicknav_nav {
-      ul {
-        li {
-          a {
+    #topbar,.topbar-left,
+    .slicknav_nav,{
+          a,h1 {
             color: $dark;
             @media (prefers-color-scheme: dark) {
             color: $white;
             }
           }
-        }
-      }
     }
   }
 }
@@ -182,30 +212,8 @@
 // Make it white for color backgrounds
 .background-w-dark-color,
 .background-w-dark-color-header {
-  #site-header {
-    h1 {
-      a {
-        color: white;
-      }
-    }
-    #topbar {
-      ul {
-        li {
-          a {
-            color: $white;
-          }
-        }
-      }
-    }
-    .slicknav_nav {
-      ul {
-        li {
-          a {
-            color: $white;
-            /*border-bottom: 2px solid $white;*/
-          }
-        }
-      }
-    }
+  a,h1{
+    color: $white;
+
   }
 }
