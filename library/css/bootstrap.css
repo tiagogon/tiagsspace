@@ -5795,6 +5795,12 @@ audio {
     .tiagsssss-color #site-header .slicknav_nav h1 {
       color: #fff; } }
 
+.tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1 {
+  color: #000; }
+  @media (prefers-color-scheme: dark) {
+    .tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1 {
+      color: #fff; } }
+
 .background-w-dark-color a, .background-w-dark-color h1,
 .background-w-dark-color-header a,
 .background-w-dark-color-header h1 {

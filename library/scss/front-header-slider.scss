@@ -1,6 +1,9 @@
 //
 // Front Header and Slider
 // --------------------------------------------------
+
+
+
 #collapseMenu{
   position: fixed;
   z-index: 999;
@@ -8,6 +11,7 @@
   inherit;
   overflow: hidden;
   list-style: none;
+
   .row{
     padding-top: 73px;
     height: 100vh;
@@ -208,6 +212,16 @@
             color: $white;
             }
           }
+    }
+  }
+}
+.tiagsssss-color {
+  #collapseMenu {
+    a,h1 {
+      color: $dark;
+      @media (prefers-color-scheme: dark) {
+      color: $white;
+      }
     }
   }
 }
