@@ -5384,7 +5384,7 @@ body.background-w-dark-color {
   background-color: #e2e6f6; }
   @media (prefers-color-scheme: dark) {
     .tiagsssss-color {
-      background-color: #16161a; } }
+      background-color: #1b1b22; } }
 
 .tiagsssss-color-heading {
   color: #aeff2b; }
@@ -5837,7 +5837,7 @@ audio {
   padding-top: 20px; }
   @media (prefers-color-scheme: dark) {
     .yarpp-related-header {
-      background-color: #16161a; } }
+      background-color: #1b1b22; } }
   .yarpp-related-header h3 {
     color: #000;
     font-size: 21px;
@@ -5857,7 +5857,7 @@ audio {
       padding-bottom: 10px; } }
   @media (prefers-color-scheme: dark) {
     .yarpp-related {
-      background-color: #16161a; } }
+      background-color: #1b1b22; } }
   .yarpp-related .year-separator {
     display: none !important; }
   .yarpp-related .archive-navigation {
@@ -5899,7 +5899,7 @@ li.masonry-item {
         transition: background-color 1s ease-in-out; }
         @media (prefers-color-scheme: dark) {
           li.masonry-item figure a .imgcontainer {
-            background-color: #16161a; } }
+            background-color: #1b1b22; } }
         @media screen and (prefers-reduced-motion: reduce) {
           li.masonry-item figure a .imgcontainer {
             transition: none; } }
