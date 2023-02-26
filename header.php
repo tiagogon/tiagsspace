@@ -111,7 +111,7 @@
 						$header_left_title = '';
 
 						// Defautl header title
-						$header_left_title = "<h1>".$Webpage_name."</hi>";
+						$header_left_title = "<h1>".$Webpage_name_main."</hi>";
 
 						// Post types archive pages
 						if (is_singular()) {
