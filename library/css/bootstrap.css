@@ -5661,7 +5661,8 @@ audio {
   z-index: 999;
   background-color: inherit;
   overflow: hidden;
-  list-style: none; }
+  list-style: none;
+  font-family: "Sporting_Grotesque_Bold", sans-serif; }
   #collapseMenu .row {
     padding-top: 73px;
     height: 100vh;
@@ -5675,7 +5676,7 @@ audio {
           margin-left: none;
           margin-bottom: 10.5px;
           text-align: right;
-          font-size: 31.5px; }
+          font-size: 28px; }
           #collapseMenu .row .menu-group ul li .active {
             text-decoration: underline; }
 
@@ -5691,7 +5692,7 @@ audio {
   position: fixed;
   z-index: 1000;
   top: 0px;
-  font-family: "Sporting_Grotesque_Regular", sans-serif; }
+  font-family: "Sporting_Grotesque_Bold", sans-serif; }
   #site-header .slicknav_menutxt {
     display: none; }
   #site-header .slicknav_nav.slicknav_hidden {
@@ -5699,7 +5700,7 @@ audio {
   #site-header .topbar-left {
     float: left; }
     #site-header .topbar-left h1, #site-header .topbar-left a {
-      font-size: 21px; }
+      font-size: 23px; }
   #site-header #topbar,
   #site-header .slicknav_nav {
     float: right; }
@@ -5711,7 +5712,7 @@ audio {
       display: inline-block;
       outline: none;
       color: #fff;
-      font-size: 21px;
+      font-size: 23px;
       margin-left: 13px;
       /*border: 2px solid transparent;*/
       line-height: 1.3; }
@@ -5822,7 +5823,8 @@ audio {
 
 .year-separator {
   font-size: 21px;
-  font-family: "Sporting_Grotesque_Regular", sans-serif; }
+  font-family: 'Sporting_Grotesque_Bold';
+  }
   @media (prefers-color-scheme: dark) {
     .year-separator {
       color: #fff; } }
@@ -6340,7 +6342,9 @@ address {
   .single-content .page-header h1.single-title {
     margin-top: 0;
     margin-bottom: 20px;
-    font-size: 21px; }
+    font-size: 21px;
+    font-family: 'Sporting_Grotesque_Bold';
+    }
   .single-content .page-header p.meta {
     margin-bottom: 21px;
     font-size: 12px;
@@ -6528,12 +6532,13 @@ address {
 .single-navigation .nav-previous, .single-navigation .nav-next {
   margin-bottom: 20px; }
   .single-navigation .nav-previous span a, .single-navigation .nav-next span a {
-    font-family: "Sporting_Grotesque_Regular", sans-serif;
-    font-size: 21px;
+    font-family: "Sporting_Grotesque_bold", sans-serif;
+    font-size: 23px;
     line-height: 1.3;
     background-color: transparent;
     /*border-bottom: 2px solid $dark;*/
-    transition: all 1s ease-out; }
+    transition: all 1s ease-out;
+    }
     @media screen and (prefers-reduced-motion: reduce) {
       .single-navigation .nav-previous span a, .single-navigation .nav-next span a {
         transition: none; } }
