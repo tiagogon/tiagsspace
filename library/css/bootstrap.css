@@ -5960,6 +5960,9 @@ li.masonry-item {
     font-family: "Sporting_Grotesque_Bold", sans-serif;
     font-size: 21px;
     line-height: 1.3; }
+    @media (prefers-color-scheme: dark) {
+      .archive-navigation .nav-previous a, .archive-navigation .nav-next a, .archive-navigation .more-sets a {
+        color: #fff; } }
 
 .background-w-dark-color .archive-navigation .nav-previous a, .background-w-dark-color .archive-navigation .nav-next a, .background-w-dark-color .archive-navigation .more-sets a {
   color: #fff; }
