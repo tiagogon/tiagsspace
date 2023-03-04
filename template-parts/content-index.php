@@ -58,7 +58,7 @@ Index of posts for Home and Archives
               // grid on archive
               $grid_sizer = 'col-2 col-sm-2 col-md-2 col-lg-1';
 
-              $grid_year_separator = 'col-48 col-sm-8 col-md-6';
+              $grid_year_separator = 'col-48';
 
               // Default umber of collumns
               $grid_array = array(48, 12, 12, 8);
@@ -157,13 +157,13 @@ Index of posts for Home and Archives
                       $year = get_the_time("Y");
 
                   // Year is diferent
-                } elseif ($count != 1) {
+                  } else { //if ($count != 1) {
 
                       $year = get_the_time("Y");
 
                       ?>
 
-                      <li class="masonry-item year-separator <?php echo $grid_year_separator; ?> " <?php post_class('clearfix'); ?> >
+                      <li class="masonry-item year-separator <?php echo $grid_year_separator; //$grid; // ?> " <?php post_class('clearfix'); ?> >
                           <div class="separator-wrapper text-sm-left text-md-center"><?php echo $year; ?></div>
                       </li>
 
