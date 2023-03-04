@@ -164,7 +164,7 @@ Index of posts for Home and Archives
                       ?>
 
                       <li class="masonry-item year-separator <?php echo $grid_year_separator; //$grid; // ?> " <?php post_class('clearfix'); ?> >
-                          <div class="separator-wrapper text-sm-left text-md-center"><?php echo $year; ?></div>
+                          <div class="separator-wrapper text-left"><?php echo $year; ?></div>
                       </li>
 
                   <?php }
@@ -305,21 +305,27 @@ Index of posts for Home and Archives
                   <li id="post-<?php the_ID(); ?>" class="masonry-item <?php echo $grid; ?> <?php echo $post_type; ?>-item <?php if ($intrinsic_ratio >= 56.25) { /* 16:9 percentage ratio (9/16*100)*/ echo "wide-ratio"; }  ?> item-numb-<?php echo $count; ?> " <?php post_class('clearfix'); ?> role="article">
 
                       <?php // post title Logic
-                        $post_title = "";
-                        if ( $post_type == "hyper") {
-                                $post_title = " / Hyper / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
-                        }elseif (
-                            $post_type == "4k-lento") {
-                                $post_title = " / 4K Lento / ".get_the_title($post->ID); //.sprintf("%02d", number_of_the_post($post->ID))."
-                        }elseif (
-                            $post_type == "films") {
-                                $post_title = " / Film / ".get_the_title($post->ID);
-                        }elseif (
-                            $post_type == "log") {
-                                $post_title = " / Log / ".taxonomy_list($post->ID,'log-branch','',' ',', ', ' & ', 'no-link')." / ".get_the_title($post->ID);
-                        } else {
-                                $post_title = " / ".get_the_title($post->ID);
-                        }
+                      $post_title = "";
+                      if ( $post_type == "hyper") {
+                          $post_title = " / Hyper / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
+                          if (is_post_type_archive('hyper')) {
+                            $post_title = " / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
+                          }
+                      }elseif ( $post_type == "4k-lento") {
+                          $post_title = " / 4K Lento / ".get_the_title($post->ID); //.sprintf("%02d", number_of_the_post($post->ID))."
+                          if (is_post_type_archive('4k-lento')) {
+                            $post_title = " / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
+                          }
+                      }elseif ( $post_type == "films") {
+                          $post_title = " / Film / ".get_the_title($post->ID);
+                          if (is_post_type_archive('films')) {
+                            $post_title = " / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
+                          }
+                      }elseif ( $post_type == "log") {
+                          $post_title = " / Log / ".taxonomy_list($post->ID,'log-branch','',' ',', ', ' & ', 'no-link')." / ".get_the_title($post->ID);
+                      } else {
+                              $post_title = " / ".get_the_title($post->ID);
+                      }
                       ?>
 
                       <figure onMouseOver="showText('<?php echo $post_title; ?>')" onMouseOut="hide();">

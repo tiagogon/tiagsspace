@@ -116,62 +116,62 @@
 						$header_left_title = '';
 
 						// Defautl header title
-						$header_left_title = '<h1>'.$Webpage_name_main.'<span id="over-text"></span></hi>';
+						$header_left_title = '<h1>'.$Webpage_name_main.'<span id="over-text"></span></h1>';
 
 						// Post types archive pages
 						if (is_singular()) {
 							$header_left_title = '<a href="'.home_url().'">S</a>';
 						}
 						if (is_post_type_archive('hyper')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Hyper</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Hyper<span id="over-text"></span></h1>';
 						}
 						if (is_post_type_archive('4k-lento')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / 4K Lento</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / 4K Lento<span id="over-text"></span></h1>';
 						}
 						if (is_post_type_archive('films')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Films</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Film<span id="over-text"></span></h1>';
 						}
 						if (is_post_type_archive('emulsion')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Emulsion</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Emulsion<<span id="over-text"></span>/h1>';
 						}
 						if (is_post_type_archive('dusk')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dusk</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dusk<span id="over-text"></span></h1>';
 						}
 						if (is_post_type_archive('cityburns')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / City</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / City<span id="over-text"></span></h1>';
 						}
 						if (is_post_type_archive('log')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Log</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Log</h1>';
 						}
 
 						// Taxonamies
 						if (is_tax( 'log-branch' )) {
 							$term =	$wp_query->queried_object;
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / <a href="'.get_post_type_archive_link('log').'">Log</a> / '.$term->name.'</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / <a href="'.get_post_type_archive_link('log').'">Log</a> / '.$term->name.'</h1>';
 							// removed from php:
 							// //<span style=" ">'.$term->name.'</span>
 						}
 						if (is_tax( 'medium' )) {
 							$term =	$wp_query->queried_object;
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Medium / '.$term->name.'</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Medium / '.$term->name.'<span id="over-text"></span></h1>';
 							// removed from php:
 							// //<span style=" ">'.$term->name.'</span>
 						}
 						if (is_tax( 'from' )) {
 							$term =	$wp_query->queried_object;
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dating  / '.$term->name.'</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dating  / '.$term->name.'<span id="over-text"></span></h1>';
 							// removed from php:
 							// //<span style=" ">'.$term->name.'</span>
 						}
 						if (is_tax( 'places' )) {
 							$term =	$wp_query->queried_object;
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / '.$term->name.'</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Place / '.$term->name.'<span id="over-text"></span></h1>';
 							// removed from php:
 							// //<span style=" ">'.$term->name.'</span>
 						}
 						if (is_tag() ) {
 							$tag = get_queried_object();
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Tag / '.$tag->name.'</hi>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Tag / '.$tag->name.'</h1>';
 							// removed from php:
 							// //<span style=" ">'.$term->name.'</span>
 						}

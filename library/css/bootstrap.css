@@ -5253,8 +5253,7 @@ button.bg-dark:focus {
     text-align: right !important; }
 
   .text-md-center {
-    text-align: leaft !important;
-    } }
+    text-align: center !important; } }
 @media (min-width: 992px) {
   .text-lg-left {
     text-align: left !important; }
@@ -5372,7 +5371,8 @@ a.text-dark:hover, a.text-dark:focus {
 
 body {
   font-size: 16px;
-  line-height: 1.7; }
+  line-height: 1.7;
+  min-height: 100vh; }
   body em {
     font-style: normal;
     font-family: "Sporting_Grotesque_Regular", sans-serif;

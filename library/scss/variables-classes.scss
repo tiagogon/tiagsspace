@@ -2,6 +2,7 @@
 body{
   font-size: $font-size-p;
   line-height: 1.7;
+  min-height: 100vh;
 	em {
     font-style: normal;
 		font-family: $font-family-headings;
