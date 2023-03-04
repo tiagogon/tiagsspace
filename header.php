@@ -93,25 +93,30 @@
 
 	<body <?php body_class();?> >
 
-
 		<header id="site-header" class="header-front-page container-fluid side-padding Fixed" role="banner">
 		<div class="row ">
 
-
 			<div id="topbar-parent" class="col-48">
-
-
 
 				<div class="topbar-left">
 
+					<script>
+						function showText(text){
+						    document.getElementById("over-text").innerHTML=text;
+						}
+						function hide(){
+						    document.getElementById("over-text").innerHTML="";
+						}
+					</script>
+
 					<?php // Get name of the section for mobile
 
-						$Webpage_name_main = "Tiags' Space";
-						$Webpage_name = '<span class="d-inline d-sm-none">S</span><span class="d-none d-sm-inline">'.$Webpage_name_main.'</span>';
+						$Webpage_name_main = "Space ";
+						$Webpage_name = '<span class="d-inline d-sm-none">S </span><span class="d-none d-sm-inline">'.$Webpage_name_main.'</span>';
 						$header_left_title = '';
 
 						// Defautl header title
-						$header_left_title = "<h1>".$Webpage_name_main."</hi>";
+						$header_left_title = '<h1>'.$Webpage_name_main.'<span id="over-text"></span></hi>';
 
 						// Post types archive pages
 						if (is_singular()) {
@@ -207,13 +212,13 @@
 					$menu_groups_class = "col-sm-24 col-md-16 col-xl-9 menu-group";
 				?>
 
-				<div class="<?php echo $menu_groups_class; ?>" >
+				<div class="offset-xl-3 <?php echo $menu_groups_class; ?>" >
 					<ul>
 						<li>
 							<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " active";} ?>">Hyper</a>
 						</li>
 					 <li>
-						 <a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if ( is_post_type_archive('Films')) { echo "active";} if (is_singular( 'films' ) ) { echo " active";} ?>">Films</a>
+						 <a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if ( is_post_type_archive('Films')) { echo "active";} if (is_singular( 'films' ) ) { echo " active";} ?>">Film</a>
 					 </li>
  						<li>
 						<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " active";} ?>">4K Lento</a></li>
@@ -234,34 +239,18 @@
 								{ echo "active";}  ?>
 								">Log</a>
 						</li>
-
 						<li>
-							<a href="<?php echo get_term_link( 'still', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','still')) { echo "active";} if ((is_single() and has_term( 'still', 'log-branch' ))) { echo " active";} ?>">/ Still</a>
-						</li>
-
-						<li>
-							<a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " active";} ?>">/ BLW</a>
-						</li>
-
-						<li>
-							<a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " active";} ?>">/ HRZN</a>
-						</li>
-
-						<li>
-							<a data-toggle="collapse" href="#collapseDiscontinuedLogBranchs" role="button" aria-expanded="false" aria-controls="collapseDiscontinuedLogBranchs">/ [&dagger;]</a>
-							<ul class="collapse" id="collapseDiscontinuedLogBranchs">
+							<ul>
 								<li>
-									<a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " active";} ?>">/ FRNTR</a>
-								</li>
-								<li>
-									<a href="<?php echo get_term_link( 'plnt', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnt')) { echo "active";} if ((is_single() and has_term( 'plnt', 'log-branch' ))) { echo " active";} ?>">/ PLNT</a>
-								</li>
-								<li>
-									<a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " active";} ?>">/ SDWLK</a>
+									<a href="<?php echo get_term_link( 'still', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','still')) { echo "active";} if ((is_single() and has_term( 'still', 'log-branch' ))) { echo " active";} ?>">Still</a>
 								</li>
 
 								<li>
-									<a href="<?php echo get_term_link( 'rchv', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','rchv') or (is_single() and has_term( 'rchv', 'log-branch' ))) { echo "active";} ?>">/ RCHV</a>
+									<a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " active";} ?>">Blow</a>
+								</li>
+
+								<li>
+									<a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " active";} ?>">Horizon</a>
 								</li>
 							</ul>
 						</li>
@@ -271,24 +260,7 @@
 				<div class="<?php echo $menu_groups_class; ?>" >
 					<ul>
 						<li>
-							<a data-toggle="collapse" href="#collapseMedium" role="button" aria-expanded="false" aria-controls="collapseMedium">Medium</a>
-							<?php
-							$args = array(
-								'taxonomy'     => 'medium',
-								'orderby'      => 'name',
-								'hide_empty'   => 1,
-								'title_li'     => '',
-								'hierarchical' => 1,
-								'walker'       => null,
-							);
-							?>
-							<ul class="collapse" id="collapseMedium">
-								<?php wp_list_categories( $args ); ?>
-							</ul>
-						</li>
-
-						<li>
-							<a data-toggle="collapse" href="#collapseDating" role="button" aria-expanded="false" aria-controls="collapseDating">Dating</a>
+							<a data-toggle="collapse" href="#collapseDating" role="button" aria-expanded="false" aria-controls="collapseDating">Time</a>
 							<?php
 							$args = array(
 								'taxonomy'     => 'from',
@@ -306,7 +278,7 @@
 						</li>
 
 						<li>
-							<a data-toggle="collapse" href="#collapsePlaces" role="button" aria-expanded="false" aria-controls="collapsePlaces">Places</a>
+							<a data-toggle="collapse" href="#collapsePlaces" role="button" aria-expanded="false" aria-controls="collapsePlaces">Place</a>
 
 							<?php
 							$args = array(
@@ -322,6 +294,24 @@
 								<?php wp_list_categories( $args ); ?>
 							</ul>
 						</li>
+
+						<li>
+							<a data-toggle="collapse" href="#collapseMedium" role="button" aria-expanded="false" aria-controls="collapseMedium">Medium</a>
+							<?php
+							$args = array(
+								'taxonomy'     => 'medium',
+								'orderby'      => 'name',
+								'hide_empty'   => 1,
+								'title_li'     => '',
+								'hierarchical' => 1,
+								'walker'       => null,
+							);
+							?>
+							<ul class="collapse" id="collapseMedium">
+								<?php wp_list_categories( $args ); ?>
+							</ul>
+						</li>
+
 					</ul>
 				</div>
 
@@ -331,13 +321,35 @@
 							<a href="https://tiags.tumblr.com/" target="_blank">About</a>
 						</li>
 						<li>
-							<a data-toggle="collapse" href="#collapseArchivedSeries" role="button" aria-expanded="false" aria-controls="collapseArchivedSeries">Dc'd</a>
-							<ul class="collapse" id="collapseArchivedSeries">
+							<a data-toggle="collapse" href="#collapsePast" role="button" aria-expanded="false" aria-controls="collapsePast">Past</a>
+							<ul class="collapse" id="collapsePast">
 								<li>
-									<a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " active";} ?>">&dagger; Emulsion </a>
+									<a data-toggle="collapse" href="#collapsePastFromLog" role="button" aria-expanded="false" aria-controls="collapsePastFromLog">Log</a>
+									<ul class="collapse" id="collapsePastFromLog">
+										<li>
+											<a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " active";} ?>">FRNTR</a>
+										</li>
+										<li>
+											<a href="<?php echo get_term_link( 'plnt', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnt')) { echo "active";} if ((is_single() and has_term( 'plnt', 'log-branch' ))) { echo " active";} ?>">PLNT</a>
+										</li>
+										<li>
+											<a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " active";} ?>">SDWLK</a>
+										</li>
+										<li>
+											<a href="<?php echo get_term_link( 'rchv', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','rchv') or (is_single() and has_term( 'rchv', 'log-branch' ))) { echo "active";} ?>">RCHV</a>
+										</li>
+									</ul>
 								</li>
 								<li>
-									<a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " active";} ?>">&dagger; City</a>
+									<a data-toggle="collapse" href="#collapsePastFromSeries" role="button" aria-expanded="false" aria-controls="collapsePastFromSeries">Series</a>
+									<ul class="collapse" id="collapsePastFromSeries">
+										<li>
+											<a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " active";} ?>">Emulsion</a>
+										</li>
+										<li>
+											<a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " active";} ?>">City</a>
+										</li>
+									</ul>
 								</li>
 							</ul>
 						</li>

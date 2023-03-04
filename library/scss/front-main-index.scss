@@ -28,7 +28,7 @@
 // Year Separator
 .year-separator{
   font-size: $font-size-heading;
-  font-family: $headings-font-family;
+  font-family: $font-family-headings;
   @media (prefers-color-scheme: dark) {
     color: $white;
   }
@@ -133,19 +133,6 @@ li.masonry-item {
           max-width: 100.3%; // remove masonry 1 px bug around images
           width: 100.3%; // remove masonry 1 px bug around images
           margin: 0px;
-            // Blur efect
-            -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
-            -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
-            -o-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
-            -ms-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
-            filter: url(#blur);
-            filter: blur(0px) contrast(1) brightness(1) grayscale(0);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
-            transition: 0.5s filter ease-in-out;
-            -webkit-transition: 0.5s -webkit-filter ease-in-out;
-            -moz-transition: 0.5s -moz-filter ease-in-out;
-            -ms-transition: 0.5s -ms-filter ease-in-out;
-            -o-transition: 0.5s -o-filter ease-in-out;
-            @include transition(filter 0.5s ease-in-out);
         }
         .kgvid_wrapper_inline_left {
             float: left;
@@ -191,105 +178,6 @@ li.masonry-item {
           @include transition(filter 0.5s ease-in-out);
         }
       }
-      figcaption{
-        padding-left: ($grid-gutter-width/2);
-        padding-right: ($grid-gutter-width/2);
-        padding-bottom: 30px;
-        position: absolute;
-        bottom: 15%;
-        @include transition(bottom 1s ease-in-out);
-        left: 0;
-        width: 100%;
-        background-color: transparent;
-        @media (max-width: map-get($grid-breakpoints, sm)) {
-          bottom: 7%;
-        }
-        h2{
-          color: $white;
-          // overflow: hidden; //it hides acentos
-          font-size: $font-size-heading;
-
-
-          line-height: 1;
-          margin: 0;
-        }
-      }
-      figcaption.hide-figcaption{
-          opacity: 0;
-      }
-    }
-    box-shadow: 3px 3px 7px $tiagsssss-color-darken;
-    @media (prefers-color-scheme: dark) {
-      box-shadow: 3px 3px 7px $tiagsssss-color-darkmode-darken;
-    }
-    //@include transition(background-color 1s ease);
-    @include transition(box-shadow 5s ease-in-out);
-
-    &:hover{
-        a{
-          .imgcontainer{
-
-              img{
-                      -webkit-filter: blur(2px) contrast(0.9) brightness(0.8);
-                      -moz-filter: blur(2px) contrast(0.9) brightness(0.8);
-                      -o-filter: blur(2px) contrast(0.9) brightness(0.8);
-                      -ms-filter: blur(2px) contrast(0.9) brightness(0.8);
-                      filter: url(#blur);
-                      filter: blur(2px) contrast(0.9) brightness(0.8);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='2');
-                      transition: 0.5s filter ease-in-out;
-                      -webkit-transition: 0.5s -webkit-filter ease-in-out;
-                      -moz-transition: 0.5s -moz-filter ease-in-out;
-                      -ms-transition: 0.5s -ms-filter ease-in-out;
-                      -o-transition: 0.5s -o-filter ease-in-out;
-                      @include transition(filter 0.5s ease-in-out);
-
-              }
-              video {
-                    -webkit-filter: blur(2px) contrast(0.9) brightness(0.8);
-                    -moz-filter: blur(2px) contrast(0.9) brightness(0.8);
-                    -o-filter: blur(2px) contrast(0.9) brightness(0.8);
-                    -ms-filter: blur(2px) contrast(0.9) brightness(0.8);
-                    filter: url(#blur);
-                    filter: blur(2px) contrast(0.9) brightness(0.8);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='2');
-                    transition: 0.5s filter ease-in-out;
-                    -webkit-transition: 0.5s -webkit-filter ease-in-out;
-                    -moz-transition: 0.5s -moz-filter ease-in-out;
-                    -ms-transition: 0.5s -ms-filter ease-in-out;
-                    -o-transition: 0.5s -o-filter ease-in-out;
-                    @include transition(filter 0.5s ease-in-out);
-
-
-              }
-          }
-      }
-      box-shadow: 3px 3px 7px  $tiagsssss-color-lighten;
-      @media (prefers-color-scheme: dark) {
-        box-shadow: 3px 3px 7px $tiagsssss-color-darkmode-lighten;
-      }
-      @include transition(box-shadow 1s ease-in-out);
-      @media (max-width: map-get($grid-breakpoints, sm)) {
-        box-shadow: none;
-      }
-      figcaption{
-        bottom: 40%;
-        @include transition(bottom 1s ease-in-out);
-        .series{
-          color: $white;
-          @include transition(color 1s ease-in-out);
-        }
-        h2{
-          color: $white;
-          @include transition(color 1s ease-in-out);
-        }
-      }
-      figcaption.hide-figcaption{
-          opacity: 1;
-          -webkit-transition: opacity 1s ease-in-out;
-            -moz-transition: opacity 1s ease-in-out;
-            -ms-transition: opacity 1s ease-in-out;
-            -o-transition: opacity 1s ease-in-out;
-            transition: opacity 1s ease-in-out;
-      }
     }
   }
 }
@@ -310,11 +198,22 @@ li.masonry-item {
     }
   .nav-previous,.nav-next,.more-sets{
     a{
-      color: $white;
-      font-family: $headings-font-family;
+      color: $black;
+      font-family: $font-family-menu;
       font-size: $font-size-heading;
       line-height: 1.3;
 
+    }
+  }
+}
+
+.background-w-dark-color{
+  .archive-navigation{
+    .nav-previous,.nav-next,.more-sets{
+      a{
+        color: $white;
+
+      }
     }
   }
 }

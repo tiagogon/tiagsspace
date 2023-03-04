@@ -64,19 +64,17 @@ Index of posts for Home and Archives
               $grid_array = array(48, 12, 12, 8);
 
               if ($post_type == "films" ) {
-                  $grid_array = array(48, 14, 14, 12);
+                  $grid_array = array(48, 14, 14, 16);
+
               }
-              if ($post_type == "dusk" or $post_type == "emulsion") {
-                  $grid_array = array(48, 12, 12, 10);
-              }
-              if ($post_type == "hyper") {
-                  $grid_array = array(48, 12, 18, 8);
+              if ($post_type == "hyper" or $post_type == "dusk" or $post_type == "emulsion") {
+                  $grid_array = array(48, 12, 18, 13);
               }
               if ($post_type == "4k-lento" ) {
-                  $grid_array = array(48, 12, 12, 6);
+                  $grid_array = array(48, 12, 12, 9);
               }
               if ($post_type == "log" ) {
-                  $grid_array = array(48, 24, 16, 5);
+                  $grid_array = array(48, 24, 16, 7);
               }
 
                   //
@@ -306,7 +304,25 @@ Index of posts for Home and Archives
 
                   <li id="post-<?php the_ID(); ?>" class="masonry-item <?php echo $grid; ?> <?php echo $post_type; ?>-item <?php if ($intrinsic_ratio >= 56.25) { /* 16:9 percentage ratio (9/16*100)*/ echo "wide-ratio"; }  ?> item-numb-<?php echo $count; ?> " <?php post_class('clearfix'); ?> role="article">
 
-                      <figure>
+                      <?php // post title Logic
+                        $post_title = "";
+                        if ( $post_type == "hyper") {
+                                $post_title = "/ Hyper / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
+                        }elseif (
+                            $post_type == "4k-lento") {
+                                $post_title = "/ 4K Lento / ".get_the_title($post->ID); //.sprintf("%02d", number_of_the_post($post->ID))."
+                        }elseif (
+                            $post_type == "films") {
+                                $post_title = "/ Film / ".get_the_title($post->ID);
+                        }elseif (
+                            $post_type == "log") {
+                                $post_title = "/ Log / ".taxonomy_list($post->ID,'log-branch','',' ',', ', ' & ', 'no-link')." / ".get_the_title($post->ID);
+                        } else {
+                                $post_title = "/ ".get_the_title($post->ID);
+                        }
+                      ?>
+
+                      <figure onMouseOver="showText('<?php echo $post_title; ?>')" onMouseOut="hide();">
 
                           <a href="<?php echo get_permalink(); ?>">
 
@@ -329,34 +345,6 @@ Index of posts for Home and Archives
                                   <?php } ?>
 
                               </div>
-
-
-                              <figcaption  class="<?php echo $hide_figcaption;?>">
-
-
-                                  <?php if ( $post_type == "hyper") {?>
-                                      <h2>
-                                          <?php echo "H".sprintf("%02d", number_of_the_post($post->ID))." ";?><?php the_title(); ?>
-                                      </h2>
-                                  <?php }elseif (
-                                      $post_type == "4k-lento") {?>
-                                      <h2>
-                                          <?php echo "4KL".sprintf("%02d", number_of_the_post($post->ID))." ";?><?php the_title(); ?>
-                                      </h2>
-                                  <?php }elseif (
-                                      $post_type == "log") {?>
-                                      <h2>
-                                          <?php echo taxonomy_list_w_numbers($post->ID,'log-branch','',' ',', ', ' & ', 'no-link');?><span class="branch"> <?php the_title(); ?>
-                                      </h2>
-                                  <?php } else { ?>
-                                      <h2>
-                                          <?php the_title();?>
-                                      </h2>
-                                  <?php  } ?>
-
-
-
-                              </figcaption>
                           </a>
                       </figure>
 

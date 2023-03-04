@@ -1,12 +1,16 @@
 // colors
 $white:      		        #fff;
 $dark: 					        #000;
-$dark-lighten-vibe: 		#1b1b22; // #16161a; //new * used on home dark mode
-$grey-light:            #eaeaea; //new
-$grey-light-warm:       #deddd9; //new
-$grey-light-warm-vibe:  #e1d0d0; //new
-$grey-light-cold:       #e6e6eb; //new * used on home ligh mode
-$grey-light-cold-vibe:  #e2e6f6; //new
+
+$grey-light:            #eaeaea;
+$grey-light-warm:       #deddd9;
+$grey-light-warm-vibe:  #e1d0d0;
+$grey-light-cold:       #e6e6eb;
+
+$grey-light-cold-vibe:  rgba(227,229,242,1); // #e3e5f2;
+$grey-light-cold-vibe-contrast:  rgba(242,239,227,1); // #f2efe3;
+$dark-lighten-vibe: 		rgba(22,22,27,1);
+$dark-lighten-vibe-contrast: 		rgba(29,26,23,1);
 
 //Terra pallet
 $sky:              #adc8d9;
@@ -25,23 +29,11 @@ $lime: 					   #aeff2b;
 $yellow: 				   #fffb2b;
 $yellow-light: 	   #fffc52;
 
-
-
-// Index and Menu Colors
-// Light Mode (default):
-$tiagsssss-color: 			                 $grey-light-cold-vibe;
-$tiagsssss-color-darken: 	               darken($tiagsssss-color,80%);
-$tiagsssss-color-lighten:                lighten($tiagsssss-color,100%);
-$tiagsssss-color-menu:                   $dark-lighten-vibe;
-$tiagsssss-color-menu-contrast:          $grey-light-cold;
-$tiagsssss-color-menu-font:              $white;
-//Dark Mode
-$tiagsssss-color-darkmode: 			         $dark-lighten-vibe;
-$tiagsssss-color-darkmode-darken: 	     darken($tiagsssss-color-darkmode,80%);
-$tiagsssss-color-darkmode-lighten:       lighten($tiagsssss-color-darkmode,100%);
-$tiagsssss-color-darkmode-menu:          $grey-light-cold;
-$tiagsssss-color-darkmode-menu-contrast: $grey-light-cold;
-$tiagsssss-color-darkmode-menu-font:     $grey-light-cold;
+// Main Page Index colors and gradients
+$tiagsssss-color: 			            $grey-light-cold-vibe;
+$tiagsssss-color-gradient: 			    linear-gradient(0deg, $grey-light-cold-vibe-contrast 0%, $grey-light-cold-vibe 100%);
+$tiagsssss-color-darkmode: 			    $dark-lighten-vibe;
+$tiagsssss-color-darkmode-gradient: linear-gradient(0deg, $dark-lighten-vibe-contrast 0%, $dark-lighten-vibe 100%);
 
 
 // ---- Load font-style ----
@@ -208,14 +200,15 @@ $tiagsssss-color-darkmode-menu-font:     $grey-light-cold;
 
 
 //$font-family-sans-serif: "Nunito Sans", sans-serif;
-$menu-font-family: "Sporting_Grotesque_Bold", sans-serif;//"lackitalic", sans-serif;
-$headings-font-family: "Sporting_Grotesque_Regular", sans-serif;//"lackitalic", sans-serif;
+$font-family-menu: "Sporting_Grotesque_Bold", sans-serif;//"lackitalic", sans-serif;
+$font-family-headings: "Sporting_Grotesque_Regular", sans-serif;//"lackitalic", sans-serif;
 $font-family-sans-serif: "Sporting_Grotesque_Regular", sans-serif;//"lackregular or Sporting_Grotesque_Regular or Minipax-Regular", sans-serif;
 
 // Font Size
 $font-size-p:           16px;
-$font-size-heading:           21px;
-$font-size-meta-info:           14px;
+$font-size-heading:     21px;
+$font-size-nav:         23px;
+$font-size-menu:        28px;
 
 // Font weight
 $font-weight-light:           400;
