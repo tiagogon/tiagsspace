@@ -307,18 +307,18 @@ Index of posts for Home and Archives
                       <?php // post title Logic
                         $post_title = "";
                         if ( $post_type == "hyper") {
-                                $post_title = "/ Hyper / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
+                                $post_title = " / Hyper / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
                         }elseif (
                             $post_type == "4k-lento") {
-                                $post_title = "/ 4K Lento / ".get_the_title($post->ID); //.sprintf("%02d", number_of_the_post($post->ID))."
+                                $post_title = " / 4K Lento / ".get_the_title($post->ID); //.sprintf("%02d", number_of_the_post($post->ID))."
                         }elseif (
                             $post_type == "films") {
-                                $post_title = "/ Film / ".get_the_title($post->ID);
+                                $post_title = " / Film / ".get_the_title($post->ID);
                         }elseif (
                             $post_type == "log") {
-                                $post_title = "/ Log / ".taxonomy_list($post->ID,'log-branch','',' ',', ', ' & ', 'no-link')." / ".get_the_title($post->ID);
+                                $post_title = " / Log / ".taxonomy_list($post->ID,'log-branch','',' ',', ', ' & ', 'no-link')." / ".get_the_title($post->ID);
                         } else {
-                                $post_title = "/ ".get_the_title($post->ID);
+                                $post_title = " / ".get_the_title($post->ID);
                         }
                       ?>
 

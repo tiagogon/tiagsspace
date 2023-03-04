@@ -111,7 +111,7 @@
 
 					<?php // Get name of the section for mobile
 
-						$Webpage_name_main = "Space ";
+						$Webpage_name_main = "Space";
 						$Webpage_name = '<span class="d-inline d-sm-none">S </span><span class="d-none d-sm-inline">'.$Webpage_name_main.'</span>';
 						$header_left_title = '';
 
