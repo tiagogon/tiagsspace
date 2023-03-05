@@ -61,20 +61,20 @@ Index of posts for Home and Archives
               $grid_year_separator = 'col-48';
 
               // Default umber of collumns
-              $grid_array = array(20, 12, 12, 8);
+              $grid_array = array(22, 12, 12, 8);
 
               if ($post_type == "films" ) {
                   $grid_array = array(48, 14, 14, 19);
 
               }
               if ($post_type == "hyper" or $post_type == "dusk" or $post_type == "emulsion") {
-                  $grid_array = array(20, 12, 18, 14);
+                  $grid_array = array(22, 12, 18, 14);
               }
               if ($post_type == "4k-lento" ) {
-                  $grid_array = array(15, 12, 12, 9);
+                  $grid_array = array(18, 12, 12, 9);
               }
               if ($post_type == "log" ) {
-                  $grid_array = array(15, 24, 12, 8);
+                  $grid_array = array(18, 24, 12, 8);
               }
 
                   //
