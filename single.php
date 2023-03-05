@@ -113,10 +113,12 @@ if ($background_image) {
             	?>
 
     	        <nav class="nav-next col-24">
-    	            <span><?php next_post_link('%link', ''.$next_string); ?></span>
+    	            <!-- <span><?php next_post_link('%link', ''.$next_string); ?></span> -->
+    	            <span><?php next_post_link('%link'); ?></span>
     	        </nav>
     	        <nav class="nav-previous col-24">
-    	        	<span><?php previous_post_link('%link', $previous_string.''); ?></span>
+    	        	<!-- <span><?php previous_post_link('%link', $previous_string.''); ?></span> -->
+    	        	<span><?php previous_post_link('%link'); ?></span>
     	        </nav>
 
             <?php } else { ?>

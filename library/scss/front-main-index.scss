@@ -66,13 +66,15 @@
 }
 
 .yarpp-related{
-  background-color: $tiagsssss-color;
+  background: $tiagsssss-color;
+  background: $tiagsssss-color-gradient;
   padding-bottom: $grid-gutter-width;
     @media (max-width: map-get($grid-breakpoints, sm)) {
       padding-bottom: ($grid-gutter-width / 2);
     }
     @media (prefers-color-scheme: dark) {
-          background-color: $tiagsssss-color-darkmode;
+          background: $tiagsssss-color-darkmode;
+          background: $tiagsssss-color-darkmode-gradient;
     }
   .year-separator{
     display: none!important;
@@ -108,6 +110,7 @@ li.masonry-item {
   figure {
     text-align: center;
     background-color: $white;
+    margin: 0 0 0 0;
     a{
       outline: none;
       border: none;

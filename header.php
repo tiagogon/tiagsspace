@@ -94,11 +94,10 @@
 	<body <?php body_class();?> >
 
 		<header id="site-header" class="header-front-page container-fluid side-padding Fixed" role="banner">
-		<div class="row ">
 
-			<div id="topbar-parent" class="col-48">
+			<div class="row">
 
-				<div class="topbar-left">
+				<div class="topbar-left col-28">
 
 					<script>
 						function showText(text){
@@ -111,16 +110,17 @@
 
 					<?php // Get name of the section for mobile
 
-						$Webpage_name_main = "Space";
-						$Webpage_name = '<span class="d-inline d-sm-none">S </span><span class="d-none d-sm-inline">'.$Webpage_name_main.'</span>';
+						$siteName = "Space";
+						$siteNameShort = "S";
+						$Webpage_name = '<span class="d-inline d-sm-none">S</span><span class="d-none d-sm-inline">'.$siteName.'</span>';
 						$header_left_title = '';
 
 						// Defautl header title
-						$header_left_title = '<h1>'.$Webpage_name_main.'<span id="over-text"></span></h1>';
+						$header_left_title = '<h1><a href="'.home_url().'">'.$siteName.'<a href="'.home_url().'"><span id="over-text"></span></h1>';
 
 						// Post types archive pages
 						if (is_singular()) {
-							$header_left_title = '<a href="'.home_url().'">S</a>';
+							$header_left_title = '<h1>linear-gradient(0deg, #311e87 0%, #099d01 100%)'.$siteNameShort.'</a><span id="over-text"></span></h1>';
 						}
 						if (is_post_type_archive('hyper')) {
 							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Hyper<span id="over-text"></span></h1>';
@@ -183,7 +183,7 @@
 
 
 
-				<div id="topbar">
+				<div id="topbar" class="col-20">
 						<a data-toggle="collapse" href="#collapseMenu" role="button" aria-expanded="false" aria-controls="collapseMenu">
 							<span class="reveal">
 								<?php if (is_singular()) {
@@ -197,7 +197,6 @@
 				</div>
 			</div>
 
-		</div>
 
 		</header> <!-- end header -->
 
