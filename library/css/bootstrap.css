@@ -6219,6 +6219,9 @@ address {
   background: #00349E;
   text-align: right; }
 
+@media (max-width: 576px) {
+  .post-block {
+    min-height: 90vh; } }
 .container-video {
   margin-bottom: 30px;
   padding-right: 0px;
@@ -6242,8 +6245,7 @@ address {
   font-size: 12px;
   display: none; }
 .single-content section.post-content {
-  margin-bottom: 20px;
-  }
+  margin-bottom: 20px; }
   .single-content section.post-content p a {
     color: #e3e5f2; }
   .single-content section.post-content ol, .single-content section.post-content ul, .single-content section.post-content dl {
@@ -6285,8 +6287,7 @@ address {
   .background-w-dark-color .single-content .page-header p.meta a {
     color: #fff; }
 .background-w-dark-color .single-content section.post-content {
-  margin-bottom: 20px;
-  }
+  margin-bottom: 20px; }
   .background-w-dark-color .single-content section.post-content p a {
     color: #fffb2b;
     border-bottom: 1px solid transparent;

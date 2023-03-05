@@ -1,6 +1,6 @@
  <?php get_header(); ?>
 
-<div class="single-wrapper first-block"
+<div class="single-wrapper first-block post-block"
 <?php
 // Background Image for 4k Lento et all
 $background_image = get_field('background_image');

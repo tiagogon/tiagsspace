@@ -203,7 +203,7 @@ add_action( 'init', 'custom_post_type_films', 0 );
 // Register Custom Post Type EMULSION
 function custom_post_type_emulsion() {
   $labels = array(
-    'name'                => _x( 'Emulsion Series', 'Post Type General Name', 'text_domain' ),
+    'name'                => _x( 'Emulsion', 'Post Type General Name', 'text_domain' ),
     'singular_name'       => _x( 'Emulsion', 'Post Type Singular Name', 'text_domain' ),
     'menu_name'           => __( 'Emulsion', 'text_domain' ),
     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
@@ -249,7 +249,7 @@ add_action( 'init', 'custom_post_type_emulsion', 0 );
 // Register Custom Post Type DUSK
 function custom_post_type_dusk() {
   $labels = array(
-    'name'                => _x( 'Dusk Series', 'Post Type General Name', 'text_domain' ),
+    'name'                => _x( 'Dusk', 'Post Type General Name', 'text_domain' ),
     'singular_name'       => _x( 'Dusk', 'Post Type Singular Name', 'text_domain' ),
     'menu_name'           => __( 'Dusk', 'text_domain' ),
     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),

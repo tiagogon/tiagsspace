@@ -5,6 +5,14 @@
 //
 // --------------------------------------------------
 
+// Enable mobile focus on content
+@media (max-width: map-get($grid-breakpoints, sm)) {
+  .post-block{
+    min-height: 90vh;
+  }
+}
+
+
 
 .container-video {
     margin-bottom: $grid-gutter-width*1.5;
