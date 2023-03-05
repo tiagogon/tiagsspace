@@ -120,7 +120,7 @@
 
 						// Post types archive pages
 						if (is_singular()) {
-							$header_left_title = '<h1>linear-gradient(0deg, #311e87 0%, #099d01 100%)'.$siteNameShort.'</a><span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$siteNameShort.'</a><span id="over-text"></span></h1>';
 						}
 						if (is_post_type_archive('hyper')) {
 							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Hyper<span id="over-text"></span></h1>';

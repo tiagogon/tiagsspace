@@ -124,10 +124,10 @@ if ($background_image) {
             <?php } else { ?>
 
     	        <nav class="nav-next col-24">
-    	            <span><?php next_post_link('%link', 'Future'); ?></span>
+    	            <span><?php next_post_link('%link'); ?></span>
     	        </nav>
     	        <nav class="nav-previous col-24">
-    	        	<span><?php previous_post_link('%link', 'Past'); ?></span>
+    	        	<span><?php previous_post_link('%link'); ?></span>
     	        </nav>
 
             <?php } ?>
