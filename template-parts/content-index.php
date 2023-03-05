@@ -61,20 +61,20 @@ Index of posts for Home and Archives
               $grid_year_separator = 'col-48';
 
               // Default umber of collumns
-              $grid_array = array(48, 12, 12, 8);
+              $grid_array = array(20, 12, 12, 8);
 
               if ($post_type == "films" ) {
                   $grid_array = array(48, 14, 14, 19);
 
               }
               if ($post_type == "hyper" or $post_type == "dusk" or $post_type == "emulsion") {
-                  $grid_array = array(48, 12, 18, 14);
+                  $grid_array = array(20, 12, 18, 14);
               }
               if ($post_type == "4k-lento" ) {
-                  $grid_array = array(48, 12, 12, 9);
+                  $grid_array = array(15, 12, 12, 9);
               }
               if ($post_type == "log" ) {
-                  $grid_array = array(48, 24, 12, 8);
+                  $grid_array = array(15, 24, 12, 8);
               }
 
                   //
@@ -128,7 +128,7 @@ Index of posts for Home and Archives
                   }
 
                   // Cap to max of number of collumn and minimun to havoid sizer-bug
-                  if ($grid_array_prop_to_area[0] < 48) { $grid_array_prop_to_area[0] = 48;}
+                  if ($grid_array_prop_to_area[0] < 2) { $grid_array_prop_to_area[0] = 2;}
                   if ($grid_array_prop_to_area[0] > 48) { $grid_array_prop_to_area[0] = 48;}
                   if ($grid_array_prop_to_area[1] < 2) { $grid_array_prop_to_area[1] = 2;}
                   if ($grid_array_prop_to_area[1] > 48) { $grid_array_prop_to_area[1] = 48;}
