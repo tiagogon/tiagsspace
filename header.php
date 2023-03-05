@@ -116,29 +116,29 @@
 						$header_left_title = '';
 
 						// Defautl header title
-						$header_left_title = '<h1><a href="'.home_url().'">'.$siteName.'<a href="'.home_url().'"><span id="over-text"></span></h1>';
+						$header_left_title = '<h1><a href="'.home_url().'">'.$siteName.'<a href="'.home_url().'"><span id="over-text" class="d-none d-sm-block"></span></h1>';
 
 						// Post types archive pages
 						if (is_singular()) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$siteNameShort.'</a><span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$siteNameShort.'</a><span id="over-text" class="d-none d-sm-block"></span></h1>';
 						}
 						if (is_post_type_archive('hyper')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Hyper<span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Hyper<span id="over-text" class="d-none d-sm-block"></span></h1>';
 						}
 						if (is_post_type_archive('4k-lento')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / 4K Lento<span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / 4K Lento<span id="over-text" class="d-none d-sm-block"></span></h1>';
 						}
 						if (is_post_type_archive('films')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Film<span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Film<span id="over-text" class="d-none d-sm-block"></span></h1>';
 						}
 						if (is_post_type_archive('emulsion')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Emulsion<<span id="over-text"></span>/h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Emulsion<span id="over-text" class="d-none d-sm-block"></span>/h1>';
 						}
 						if (is_post_type_archive('dusk')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dusk<span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dusk<span id="over-text" class="d-none d-sm-block"></span></h1>';
 						}
 						if (is_post_type_archive('cityburns')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / City<span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / City<span id="over-text" class="d-none d-sm-block"></span></h1>';
 						}
 						if (is_post_type_archive('log')) {
 							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Log</h1>';
@@ -153,19 +153,19 @@
 						}
 						if (is_tax( 'medium' )) {
 							$term =	$wp_query->queried_object;
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Medium / '.$term->name.'<span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Medium / '.$term->name.'<span id="over-text" class="d-none d-sm-block"></span></h1>';
 							// removed from php:
 							// //<span style=" ">'.$term->name.'</span>
 						}
 						if (is_tax( 'from' )) {
 							$term =	$wp_query->queried_object;
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dating  / '.$term->name.'<span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dating  / '.$term->name.'<span id="over-text" class="d-none d-sm-block"></span></h1>';
 							// removed from php:
 							// //<span style=" ">'.$term->name.'</span>
 						}
 						if (is_tax( 'places' )) {
 							$term =	$wp_query->queried_object;
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Place / '.$term->name.'<span id="over-text"></span></h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Place / '.$term->name.'<span id="over-text" class="d-none d-sm-block"></span></h1>';
 							// removed from php:
 							// //<span style=" ">'.$term->name.'</span>
 						}
