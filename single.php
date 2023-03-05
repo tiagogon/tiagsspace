@@ -85,8 +85,7 @@ if ($background_image) {
 	</article>
 
 
-
-    <div class="single-navigation container-fluid side-padding">
+    <div class="single-navigation container-fluid side-padding d-none d-sm-block">
         <div class="row justify-content-between">
 
             <?php // PAGINATION links

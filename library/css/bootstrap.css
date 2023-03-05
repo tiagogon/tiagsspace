@@ -6242,13 +6242,15 @@ address {
   font-size: 12px;
   display: none; }
 .single-content section.post-content {
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  }
   .single-content section.post-content p a {
     color: #e3e5f2; }
   .single-content section.post-content ol, .single-content section.post-content ul, .single-content section.post-content dl {
     padding: 20px; }
 .single-content footer {
-  margin-top: 20px; }
+  margin-top: 20px;
+  margin-bottom: 20px; }
   .single-content footer p.footer-meta {
     margin-bottom: 0px;
     font-size: 21px;
@@ -6283,7 +6285,8 @@ address {
   .background-w-dark-color .single-content .page-header p.meta a {
     color: #fff; }
 .background-w-dark-color .single-content section.post-content {
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  }
   .background-w-dark-color .single-content section.post-content p a {
     color: #fffb2b;
     border-bottom: 1px solid transparent;

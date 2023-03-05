@@ -4,10 +4,14 @@ Single // log Archive pages >> Content
 */
 ?>
 
-<section class="post-content clearfix" itemprop="articleBody">
-    <?php the_content(); ?>
+<?php if ( get_the_content() ) { ?>
 
-</section> <!-- end article section -->
+  <section class="post-content clearfix" itemprop="articleBody">
+      <?php the_content(); ?>
+  </section> <!-- end article section -->
+
+<?php } ?>
+
 
 <?php // get variables
 
@@ -17,7 +21,7 @@ Single // log Archive pages >> Content
   $year = get_the_time("Y");
 
   $logs_branch = "";
-  $logs_branch = " / ".taxonomy_list($post->ID,'log-branch','','',', ', ' & ', 'link');
+  $logs_branch = "".taxonomy_list($post->ID,'log-branch',' / ','',', ', ' & ', 'link');
 
 ?>
 
