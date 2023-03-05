@@ -11,18 +11,15 @@ Single // log Archive pages >> Content
 
 <?php // get variables
 
-$post_type = get_post_type( $post->ID );
+  $post_type = get_post_type( $post->ID );
+  $obj = get_post_type_object( $post_type );
 
-$obj = get_post_type_object( $post_type );
-$year = get_the_time("Y");
-$logs_branch = "";
+  $year = get_the_time("Y");
 
-if( is_singular( 'log' )) {
+  $logs_branch = "";
+  $logs_branch = " / ".taxonomy_list($post->ID,'log-branch','','',', ', ' & ', 'link');
 
-    $logs_branch = " / ".taxonomy_list($post->ID,'log-branch','','',', ', ' & ', 'link');
-}
-
- ?>
+?>
 
 <header>
 
@@ -30,14 +27,7 @@ if( is_singular( 'log' )) {
         <h1 class="single-title" itemprop="headline">
             <?php //echo taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'link');?>
             <?php // Title with or without link
-            if (is_single()|| is_page()) {
 
-                // Hyper series number
-                // if (is_singular('hyper')) {
-                //
-                //     echo 'H'.sprintf("%02d", number_of_the_post($post->ID)).' ';
-                //
-                // }
                 if (is_singular('4k-lento')) {
 
                     echo '4KL'.sprintf("%02d", number_of_the_post($post->ID)).' ';
@@ -52,14 +42,8 @@ if( is_singular( 'log' )) {
                 <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('Ymd');  //the_time('d/m/Y'); ?></time>
                 <?php
 
-                echo ' <a data-toggle="collapse" href="#collapsePostFooter" role="button" aria-expanded="false" aria-controls="collapsePostFooter">±</a>';
-
-            }else{ ?>
-
-                <a href="<?php echo get_permalink(); ?>" rel="bookmark">
-                    <?php the_title();?>
-                </a>
-            <?php }?>
+                echo ' <a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">±</a>';
+                ?>
 
         </h1>
     </div>
@@ -67,76 +51,73 @@ if( is_singular( 'log' )) {
 </header> <!-- end article header -->
 
 <?php
-// FOOTER
-if (is_singular() && !is_page()) {
 
-    // Get taxonamies string
-    $taxonomies_string = '';
+  // Get taxonamies string
+  $taxonomies_string = '';
 
-    // $taxonomies = array(
-    //   //'from',
-    //   //'places',
-    //   'medium',
-    //   'post_tag'
-    //   //'category',
-    //   //'log-branch'
-    // );
-    // // Error documented here:https://stackoverflow.com/questions/64174023/php-notice-array-to-string-conversion-in-taxonomy-php-on-line-3442-and-category
+  // $taxonomies = array(
+  //   //'from',
+  //   //'places',
+  //   'medium',
+  //   'post_tag'
+  //   //'category',
+  //   //'log-branch'
+  // );
+  // // Error documented here:https://stackoverflow.com/questions/64174023/php-notice-array-to-string-conversion-in-taxonomy-php-on-line-3442-and-category
 
-    $taxonomies = 'medium';
+  $taxonomies = 'medium';
 
-    $args = array(  'orderby' => 'name',
-                  'order' => 'ASC',
-                  'fields' => 'all');
+  $args = array(  'orderby' => 'name',
+                'order' => 'ASC',
+                'fields' => 'all');
 
-    $terms = get_the_terms($post->ID, $taxonomies, $args);
+  $terms = get_the_terms($post->ID, $taxonomies, $args);
 
-    if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
+  if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
 
-        foreach ( $terms as $term ) {
-            $taxonomies_string = $taxonomies_string.'#<a href="'. esc_url( get_term_link( $term ) ) . '">' . str_replace(" ","",$term->name) . '</a> ';
-        }
+      foreach ( $terms as $term ) {
+          $taxonomies_string = $taxonomies_string.'#<a href="'. esc_url( get_term_link( $term ) ) . '">' . str_replace(" ","",$term->name) . '</a> ';
+      }
 
-    }
+  }
 
 
-  ?>
-    <footer class="collapse" id="collapsePostFooter">
-            <?php
+?>
+  <footer class="collapse" id="collapsePostFooter<?php echo $post->ID; ?>">
+          <?php
 
 
 
-            ?>
-            <p class= "footer-meta">
-                <?php
-                /* // Old Footer
-                  if ($obj->labels->name == "Posts") {
-                      echo "Published ";
-                  } else {
-                      echo 'Published under <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.' ';
-                  } ?>
+          ?>
+          <p class= "footer-meta">
+              <?php
+              /* // Old Footer
+                if ($obj->labels->name == "Posts") {
+                    echo "Published ";
+                } else {
+                    echo 'Published under <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.' ';
+                } ?>
 
-                  on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('F j, Y');  //the_time('d/m/Y'); ?></time><?php echo ". ";
+                on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('F j, Y');  //the_time('d/m/Y'); ?></time><?php echo ". ";
 
-                  echo taxonomy_list($post->ID,'places', '', ', ', ', ', ' & ', 'link');
-                  echo taxonomy_list($post->ID,'from', '', '. ', ', ', ' & ', 'link');
-               */
+                echo taxonomy_list($post->ID,'places', '', ', ', ', ', ' & ', 'link');
+                echo taxonomy_list($post->ID,'from', '', '. ', ', ', ' & ', 'link');
+             */
 
-              echo taxonomy_list($post->ID,'from', ' #', ' ', ' #', ' #', 'link');
-              echo taxonomy_list($post->ID,'places', '#', ' ', ' #', ' #', 'link');
-              echo ' '.$taxonomies_string.'';
+            echo taxonomy_list($post->ID,'from', ' #', ' ', ' #', ' #', 'link');
+            echo taxonomy_list($post->ID,'places', '#', ' ', ' #', ' #', 'link');
+            echo ' '.$taxonomies_string.'';
 
-              // Edit post links
-              if( is_user_logged_in() ) {
+            // Edit post links
+            if( is_user_logged_in() ) {
 
-                  // Delete post button
-                  echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
+                // Delete post button
+                echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
 
-                  // Edit post
-                  edit_post_link('#Edit', '', '');
+                // Edit post
+                edit_post_link('#Edit', '', '');
 
-              }?>
-            </p>
+            }?>
+          </p>
 
-    </footer> <!-- end article footer -->
-<?php } ?>
+  </footer> <!-- end article footer -->
