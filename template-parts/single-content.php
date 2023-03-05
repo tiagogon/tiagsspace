@@ -28,21 +28,21 @@ Single // log Archive pages >> Content
             <?php //echo taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'link');?>
             <?php // Title with or without link
 
-                if (is_singular('4k-lento')) {
-
-                    echo '4KL'.sprintf("%02d", number_of_the_post($post->ID)).' ';
-
+                if (is_singular('')) {
+                  echo get_the_title();
+                }else {
+                  echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
                 }
 
-                echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
+                if (is_singular('4k-lento')) {
+                    echo '4KL'.sprintf("%02d", number_of_the_post($post->ID)).' ';
+                }
 
-                echo ' | <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>  '.$logs_branch.' ';
+                echo ' | <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>  '.$logs_branch.' '; ?>
 
-                ?>
                 <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('Ymd');  //the_time('d/m/Y'); ?></time>
-                <?php
 
-                echo ' <a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">±</a>';
+                <?php echo ' <a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">±</a>';
                 ?>
 
         </h1>
