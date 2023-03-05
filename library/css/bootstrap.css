@@ -5678,8 +5678,7 @@ audio {
         #collapseMenu .row .menu-group ul li {
           margin-left: none;
           margin-bottom: 10.5px;
-          font-size: 23px;
-          }
+          font-size: 23px; }
           #collapseMenu .row .menu-group ul li .active {
             text-decoration: underline; }
           #collapseMenu .row .menu-group ul li li {
@@ -6234,52 +6233,50 @@ address {
   border-radius: 0px;
   padding: 0.2em .3em .3em; }
 
-.single-content {
-  margin-bottom: 30px; }
-  .single-content .page-header h1.single-title {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 21px; }
-  .single-content .page-header p.meta {
-    margin-bottom: 21px;
-    font-size: 12px;
-    display: none; }
-  .single-content section.post-content {
+.single-content .page-header h1.single-title {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 21px; }
+.single-content .page-header p.meta {
+  margin-bottom: 21px;
+  font-size: 12px;
+  display: none; }
+.single-content section.post-content {
+  margin-bottom: 20px; }
+  .single-content section.post-content p a {
+    color: #e3e5f2; }
+  .single-content section.post-content ol, .single-content section.post-content ul, .single-content section.post-content dl {
+    padding: 20px; }
+.single-content footer {
+  margin-top: 20px; }
+  .single-content footer p.footer-meta {
+    margin-bottom: 0px;
+    font-size: 21px;
+    font-family: "Sporting_Grotesque_Bold", sans-serif;
+    line-height: 1.3em; }
+  .single-content footer ul {
     margin-bottom: 20px; }
-    .single-content section.post-content p a {
-      color: #e3e5f2; }
-    .single-content section.post-content ol, .single-content section.post-content ul, .single-content section.post-content dl {
-      padding: 20px; }
-  .single-content footer {
-    margin-top: 20px; }
-    .single-content footer p.footer-meta {
-      margin-bottom: 0px;
-      font-size: 21px;
-      font-family: "Sporting_Grotesque_Bold", sans-serif;
-      line-height: 1.3em; }
-    .single-content footer ul {
-      margin-bottom: 20px; }
-      .single-content footer ul li {
-        display: inline-block;
-        margin: 0 5px 7px 0px;
-        line-height: 1; }
-        .single-content footer ul li a {
-          color: #fff;
-          background-color: #000;
-          padding: 3px 5px 2px;
-          font-style: normal;
-          font-size: 11px;
+    .single-content footer ul li {
+      display: inline-block;
+      margin: 0 5px 7px 0px;
+      line-height: 1; }
+      .single-content footer ul li a {
+        color: #fff;
+        background-color: #000;
+        padding: 3px 5px 2px;
+        font-style: normal;
+        font-size: 11px;
+        transition: all 1s ease-out; }
+        @media screen and (prefers-reduced-motion: reduce) {
+          .single-content footer ul li a {
+            transition: none; } }
+        .single-content footer ul li a:hover {
+          color: #000;
+          background-color: #fff;
           transition: all 1s ease-out; }
           @media screen and (prefers-reduced-motion: reduce) {
-            .single-content footer ul li a {
+            .single-content footer ul li a:hover {
               transition: none; } }
-          .single-content footer ul li a:hover {
-            color: #000;
-            background-color: #fff;
-            transition: all 1s ease-out; }
-            @media screen and (prefers-reduced-motion: reduce) {
-              .single-content footer ul li a:hover {
-                transition: none; } }
 
 .background-w-dark-color .single-content .page-header p.meta {
   color: #fff; }

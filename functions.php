@@ -157,7 +157,7 @@ add_filter( 'wp_title', 'wp_bootstrap_wp_title', 10, 2 );
 // Register Custom Post Type Film
 function custom_post_type_films() {
   $labels = array(
-    'name'                => _x( 'Films', 'Post Type General Name', 'text_domain' ),
+    'name'                => _x( 'Film', 'Post Type General Name', 'text_domain' ),
     'singular_name'       => _x( 'Film', 'Post Type Singular Name', 'text_domain' ),
     'menu_name'           => __( 'Films', 'text_domain' ),
     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
@@ -294,7 +294,7 @@ add_action( 'init', 'custom_post_type_dusk', 0 );
 // Register Custom Post Type HYPER
 function custom_post_type_hyper() {
   $labels = array(
-    'name'                => _x( 'Hyper Series', 'Post Type General Name', 'text_domain' ),
+    'name'                => _x( 'Hyper', 'Post Type General Name', 'text_domain' ),
     'singular_name'       => _x( 'Hyper', 'Post Type Singular Name', 'text_domain' ),
     'menu_name'           => __( 'Hyper', 'text_domain' ),
     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
