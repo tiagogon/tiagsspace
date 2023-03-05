@@ -34,7 +34,7 @@ Single // log Archive pages >> Content
 
                 }
 
-                the_title();
+                echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
 
                 echo ' | <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>  '.$logs_branch.' ';
 
