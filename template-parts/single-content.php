@@ -112,7 +112,7 @@ Single // log Archive pages >> Content
             if( is_user_logged_in() ) {
 
                 // Delete post button
-                echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
+                // echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
 
                 // Edit post
                 edit_post_link('#Edit', '', '');
