@@ -204,7 +204,7 @@
 
 		<div id="collapseMenu" class="collapse container-fluid index-block">
 
-			<div class="row d-flex align-items-center justify-content-end">
+			<div class="row d-flex align-items-start justify-content-end">
 
 				<?php
 					// define the size of the menu grid
