@@ -21,7 +21,7 @@ Single // log Archive pages >> Content
   $year = get_the_time("Y");
 
   $logs_branch = "";
-  $logs_branch = "".taxonomy_list($post->ID,'log-branch',' / ','',', ', ' & ', 'link');
+  $logs_branch = "".taxonomy_list($post->ID,'log-branch',' ',' /',', ', ' & ', 'link');
 
 ?>
 
@@ -29,26 +29,27 @@ Single // log Archive pages >> Content
 
     <div class="page-header">
         <h1 class="single-title" itemprop="headline">
-            <?php //echo taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'link');?>
-            <?php // Title with or without link
+           <?php
+           if (!is_post_type_archive() AND !is_tax( 'log-branch' )) {
+             echo '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a> /  ';
+           }
+           if (!is_tax( 'log-branch' ) ) {
+             echo $logs_branch.' ';
+             //echo taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'link');
+           }
 
-                if (is_singular('')) {
-                  echo get_the_title();
-                }else {
-                  echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
-                }
+           // if (is_singular('4k-lento')) {
+           //     echo '4KL'.sprintf("%02d", number_of_the_post($post->ID)).' ';
+           // }
 
-                if (is_singular('4k-lento')) {
-                    echo '4KL'.sprintf("%02d", number_of_the_post($post->ID)).' ';
-                }
+          if (is_singular('')) {
+            echo get_the_title();
+          }else {
+            echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
+          }
 
-                echo ' | <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>  '.$logs_branch.' '; ?>
-
-                <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('ymd');  //the_time('d/m/Y'); ?></time><?php
-
-                echo str_repeat('&nbsp;', 1).'<a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">±</a>';
-                ?>
-
+          echo str_repeat('&nbsp;', 1).'<a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">±</a>';
+          ?>
         </h1>
     </div>
 
@@ -87,41 +88,37 @@ Single // log Archive pages >> Content
 
 
 ?>
-  <footer class="collapse" id="collapsePostFooter<?php echo $post->ID; ?>">
-          <?php
+<footer class="collapse" id="collapsePostFooter<?php echo $post->ID; ?>">
+  <p class= "footer-meta">
+    [<time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('Ymd');  //the_time('d/m/Y'); ?></time>]
+      <?php
+      /* // Old Footer
+        if ($obj->labels->name == "Posts") {
+            echo "Published ";
+        } else {
+            echo 'Published under <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.' ';
+        } ?>
 
+        on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('F j, Y');  //the_time('d/m/Y'); ?></time><?php echo ". ";
 
+        echo taxonomy_list($post->ID,'places', '', ', ', ', ', ' & ', 'link');
+        echo taxonomy_list($post->ID,'from', '', '. ', ', ', ' & ', 'link');
+     */
 
-          ?>
-          <p class= "footer-meta">
-              <?php
-              /* // Old Footer
-                if ($obj->labels->name == "Posts") {
-                    echo "Published ";
-                } else {
-                    echo 'Published under <a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a>'.$logs_branch.' ';
-                } ?>
+    echo taxonomy_list($post->ID,'from', ' #', ' ', ' #', ' #', 'link');
+    echo taxonomy_list($post->ID,'places', '#', ' ', ' #', ' #', 'link');
+    echo ' '.$taxonomies_string.'';
 
-                on <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('F j, Y');  //the_time('d/m/Y'); ?></time><?php echo ". ";
+    // Edit post links
+    if( is_user_logged_in() ) {
 
-                echo taxonomy_list($post->ID,'places', '', ', ', ', ', ' & ', 'link');
-                echo taxonomy_list($post->ID,'from', '', '. ', ', ', ' & ', 'link');
-             */
+        // Delete post button
+        // echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
 
-            echo taxonomy_list($post->ID,'from', ' #', ' ', ' #', ' #', 'link');
-            echo taxonomy_list($post->ID,'places', '#', ' ', ' #', ' #', 'link');
-            echo ' '.$taxonomies_string.'';
+        // Edit post
+        edit_post_link('#Edit', '', '');
 
-            // Edit post links
-            if( is_user_logged_in() ) {
+    }?>
+  </p>
 
-                // Delete post button
-                // echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
-
-                // Edit post
-                edit_post_link('#Edit', '', '');
-
-            }?>
-          </p>
-
-  </footer> <!-- end article footer -->
+</footer> <!-- end article footer -->

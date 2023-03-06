@@ -61,7 +61,7 @@ Index of posts for Home and Archives
               $grid_year_separator = 'col-48';
 
               // Default umber of collumns
-              $grid_array = array(18, 12, 12, 8);
+              $grid_array = array(20, 12, 12, 8);
 
               if ($post_type == "films" ) {
                   $grid_array = array(48, 14, 14, 19);

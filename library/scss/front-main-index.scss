@@ -186,13 +186,12 @@ li.masonry-item {
 }
 
 .archive-navigation{
-    //margin-bottom: 60px;
-    height: 60px;
-    @media (min-width: map-get($grid-breakpoints, sm)) {
+    margin-bottom: $grid-gutter-width;
+    //height: 60px;
+    //@media (min-width: map-get($grid-breakpoints, sm)) {
       padding-left: $grid-gutter-width;
       padding-right: $grid-gutter-width;
-
-    }
+    //}
     .nav-next {
 
     }

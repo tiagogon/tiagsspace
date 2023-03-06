@@ -5671,8 +5671,7 @@ audio {
     height: 100vh;
     overflow: scroll; }
     #collapseMenu .row .menu-group {
-      padding-bottom: 40px;
-      margin-bottom: auto; }
+      padding-bottom: 40px; }
       #collapseMenu .row .menu-group ul {
         list-style: none; }
         #collapseMenu .row .menu-group ul li {
@@ -5953,11 +5952,9 @@ li.masonry-item {
               transition: none; } }
 
 .archive-navigation {
-  height: 60px; }
-  @media (min-width: 576px) {
-    .archive-navigation {
-      padding-left: 20px;
-      padding-right: 20px; } }
+  margin-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px; }
   .archive-navigation .nav-previous {
     float: right; }
   .archive-navigation .nav-previous a, .archive-navigation .nav-next a, .archive-navigation .more-sets a {
