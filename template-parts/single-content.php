@@ -48,7 +48,7 @@ Single // log Archive pages >> Content
             echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
           }
 
-          echo str_repeat('&nbsp;', 1).'<a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">±</a>';
+          echo str_repeat('&nbsp;', 1).'<a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">+</a>';
           ?>
         </h1>
     </div>
@@ -80,9 +80,11 @@ Single // log Archive pages >> Content
 
   if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
 
-      foreach ( $terms as $term ) {
-          $taxonomies_string = $taxonomies_string.'#<a href="'. esc_url( get_term_link( $term ) ) . '">' . str_replace(" ","",$term->name) . '</a> ';
-      }
+    $taxonomies_string = ' • ';
+
+    foreach ( $terms as $term ) {
+        $taxonomies_string = $taxonomies_string.'<a href="'. esc_url( get_term_link( $term ) ) . '">' . str_replace(" ","",$term->name) . '</a> ';
+    }
 
   }
 
@@ -90,7 +92,7 @@ Single // log Archive pages >> Content
 ?>
 <footer class="collapse" id="collapsePostFooter<?php echo $post->ID; ?>">
   <p class= "footer-meta">
-    [<time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('Ymd');  //the_time('d/m/Y'); ?></time>]
+    <time itemprop="datePublished" datetime="<?php the_time( 'c' ); ?>" content="<?php the_time( 'c' ); ?>"><?php the_time('Ymd');  //the_time('d/m/Y'); ?></time>
       <?php
       /* // Old Footer
         if ($obj->labels->name == "Posts") {
@@ -105,9 +107,10 @@ Single // log Archive pages >> Content
         echo taxonomy_list($post->ID,'from', '', '. ', ', ', ' & ', 'link');
      */
 
-    echo taxonomy_list($post->ID,'from', ' #', ' ', ' #', ' #', 'link');
-    echo taxonomy_list($post->ID,'places', '#', ' ', ' #', ' #', 'link');
-    echo ' '.$taxonomies_string.'';
+    echo taxonomy_list($post->ID,'from', ' • ', ' ', ' ', ' ', 'link');
+    echo taxonomy_list($post->ID,'places', ' • ', ' ', ' ', ' ', 'link');
+    echo $taxonomies_string;
+
 
     // Edit post links
     if( is_user_logged_in() ) {
@@ -116,7 +119,7 @@ Single // log Archive pages >> Content
         // echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
 
         // Edit post
-        edit_post_link('#Edit', '', '');
+        edit_post_link('Edit', '', '');
 
     }?>
   </p>
