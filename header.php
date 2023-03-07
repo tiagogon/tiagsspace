@@ -205,16 +205,20 @@
 
 				<?php
 					// define the size of the menu grid
-					$menu_groups_class = "col-sm-24 col-md-16 col-xl-9 menu-group";
+					$menu_groups_class = "col-sm-24 col-md-16 col-xl-8 menu-group";
 				?>
 
-				<div class="offset-xl-3 <?php echo $menu_groups_class; ?>" >
+				<div class="<?php echo $menu_groups_class; ?>" >
 					<ul>
-						<!-- <?php if (is_singular()) { ?>
+						<?php if (is_singular()) { ?>
 							<li>
 								<a href="<?php echo home_url(); ?>" class="">Space</a>
 							</li>
-						<?php } ?> -->
+						<?php } ?>
+					</ul>
+				</div>
+				<div class="<?php echo $menu_groups_class; ?>" >
+					<ul>
 						<li>
 							<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " active";} ?>">Hyper</a>
 						</li>
