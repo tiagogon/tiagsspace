@@ -60,32 +60,28 @@ Single // log Archive pages >> Content
   // Get taxonamies string
   $taxonomies_string = '';
 
-  // $taxonomies = array(
-  //   //'from',
-  //   //'places',
-  //   'medium',
-  //   'post_tag'
-  //   //'category',
-  //   //'log-branch'
-  // );
-  // // Error documented here:https://stackoverflow.com/questions/64174023/php-notice-array-to-string-conversion-in-taxonomy-php-on-line-3442-and-category
-
   $taxonomies = 'medium';
-
   $args = array(  'orderby' => 'name',
                 'order' => 'ASC',
                 'fields' => 'all');
-
   $terms = get_the_terms($post->ID, $taxonomies, $args);
-
   if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
-
-    $taxonomies_string = ' • ';
-
+    $taxonomies_string = $taxonomies_string.' • ';
     foreach ( $terms as $term ) {
         $taxonomies_string = $taxonomies_string.'<a href="'. esc_url( get_term_link( $term ) ) . '">' . str_replace(" "," ",$term->name) . '</a> ';
     }
+  }
 
+  $taxonomies = 'tags';
+  $args = array(  'orderby' => 'name',
+                'order' => 'ASC',
+                'fields' => 'all');
+  $terms = get_the_tags($post->ID, $args);
+  if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
+    $taxonomies_string = $taxonomies_string.' • ';
+    foreach ( $terms as $term ) {
+        $taxonomies_string = $taxonomies_string.'<a href="'. esc_url( get_term_link( $term ) ) . '">' . str_replace(" "," ",$term->name) . '</a> ';
+    }
   }
 
 
