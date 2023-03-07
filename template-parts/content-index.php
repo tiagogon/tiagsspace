@@ -304,28 +304,56 @@ Index of posts for Home and Archives
 
                   <li id="post-<?php the_ID(); ?>" class="masonry-item <?php echo $grid; ?> <?php echo $post_type; ?>-item <?php if ($intrinsic_ratio >= 56.25) { /* 16:9 percentage ratio (9/16*100)*/ echo "wide-ratio"; }  ?> item-numb-<?php echo $count; ?> " <?php post_class('clearfix'); ?> role="article">
 
-                      <?php // post title Logic
+                      <?php
+
+                      // get Strings -- post type name and log branches
+                        // Post type name string
+                        $post_type_name_string = "";
+                        $post_type = get_post_type( $post->ID );
+                        $obj = get_post_type_object( $post_type );
+                        $post_type_name_string = $obj->labels->name;
+
+                        // Log Branches next_string
+                        $log_branches_string = "";
+                        $log_branches_string = taxonomy_list($post->ID,'log-branch','',' ',', ', ' & ', 'no-link');
+
+                      // Declare empety virable
                       $post_title = "";
-                      if ( $post_type == "hyper") {
-                          $post_title = " / Hyper / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
-                          if (is_post_type_archive('hyper')) {
-                            $post_title = " / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
-                          }
-                      }elseif ( $post_type == "4k-lento") {
-                          $post_title = " / 4K Lento / ".get_the_title($post->ID); //.sprintf("%02d", number_of_the_post($post->ID))."
-                          if (is_post_type_archive('4k-lento')) {
-                            $post_title = " / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
-                          }
-                      }elseif ( $post_type == "films") {
-                          $post_title = " / Film / ".get_the_title($post->ID);
-                          if (is_post_type_archive('films')) {
-                            $post_title = " / ".get_the_title($post->ID); // sprintf("%02d", number_of_the_post($post->ID))
-                          }
-                      }elseif ( $post_type == "log") {
-                          $post_title = " / Log / ".taxonomy_list($post->ID,'log-branch','',' ',', ', ' & ', 'no-link')." / ".get_the_title($post->ID);
-                      } else {
-                              $post_title = " / ".get_the_title($post->ID);
+
+                      // Tiags Space root
+                      $post_title_space_root = " > Space";
+
+                      // Post type root
+                      $post_title_type_archive_root = "";
+                      $post_title_type_archive_root = " / ".$post_type_name_string;
+
+                      // Log Branch root
+                      $post_title_logBranch_root = "";
+                      if (!$log_branches_string== "") {
+                        $post_title_logBranch_root = " / ".$log_branches_string;
                       }
+
+                      // post title root prefix
+                      $post_title_prefix = " / ";
+
+                      // Build title to display per view
+                      if (is_tax() and !is_tax( 'log-branch' )  ) {
+                        $post_title = $post_title_space_root.$post_title_type_archive_root.$post_title_logBranch_root.$post_title_prefix.get_the_title($post->ID);
+                      } elseif (is_post_type_archive('hyper')
+                      OR is_post_type_archive('4k-lento')
+                      OR is_post_type_archive('films')
+                      OR is_post_type_archive('dusk')
+                      OR is_post_type_archive('emulsion')
+                      OR is_post_type_archive('cityburns'))
+                      {
+                          $post_title = $post_title_prefix.get_the_title($post->ID);
+                      } elseif (is_single()) {
+                        $post_title = $post_title_space_root.$post_title_type_archive_root.$post_title_logBranch_root.$post_title_prefix.get_the_title($post->ID);
+                      } else {
+                        $post_title = $post_title_type_archive_root.$post_title_logBranch_root.$post_title_prefix.get_the_title($post->ID);
+                      }
+
+
                       ?>
 
                       <figure onMouseOver="showText('<?php echo $post_title; ?>')" onMouseOut="hide();">

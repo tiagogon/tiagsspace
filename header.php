@@ -97,7 +97,7 @@
 
 			<div class="row">
 
-				<div class="topbar-left col-28">
+				<div class="topbar-left col-32">
 
 					<script>
 						function showText(text){
@@ -183,7 +183,7 @@
 
 
 
-				<div id="topbar" class="col-20">
+				<div id="topbar" class="col-16">
 						<a data-toggle="collapse" href="#collapseMenu" role="button" aria-expanded="false" aria-controls="collapseMenu">
 							<span class="reveal">
 								<?php if (is_singular()) {
