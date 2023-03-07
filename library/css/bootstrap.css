@@ -5913,10 +5913,8 @@ li.masonry-item {
       li.masonry-item figure a .imgcontainer {
         margin-bottom: 30px;
         margin-bottom: 0px;
-        background: aliceblue;
-        transition: background-color 1s ease-in-out;
-        z-index: 100000;
-        }
+        background: #e3e5f2;
+        transition: background-color 1s ease-in-out; }
         @media (prefers-color-scheme: dark) {
           li.masonry-item figure a .imgcontainer {
             background-color: #16161b; } }
@@ -5934,12 +5932,9 @@ li.masonry-item {
           float: left;
           margin: 0; }
         li.masonry-item figure a .imgcontainer .kgvid_wrapper_inline {
-          display: contents;
-          z-index: 1;
-          }
+          display: contents; }
         li.masonry-item figure a .imgcontainer .video-js {
-          background-color: transparent;
-          }
+          background-color: transparent; }
         li.masonry-item figure a .imgcontainer .vjs-no-js {
           background-color: transparent; }
         li.masonry-item figure a .imgcontainer .vjs-poster {

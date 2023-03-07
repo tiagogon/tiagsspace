@@ -500,14 +500,12 @@ Index of posts for Home and Archives
 
     <?php  // --- Infinite Scrool
 
-    if (is_tax( 'm', 'disable' )) { ?>
-
-        <!-- OLD <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script> -->
+    if (is_tax( 'medium', 'photographyDISABLED' )) { ?>
 
         <script type="text/javascript"  src="<?php bloginfo('template_url'); ?>/library/js/infinite-scroll/infinite-scroll.pkgd.min.js"></script>
-        <script type="text/javascript"  src="https://tiags.space/wp-content/plugins/video-embed-thumbnail-generator/video-js/v7/video.min.js?x33528"></script>
 
         <script type="text/javascript">
+          console.log(`Loaded`); // blatiags
 
             // get Masonry instance
             var msnry = $('#masonry-container').data('masonry');
@@ -547,6 +545,10 @@ Index of posts for Home and Archives
               console.log(`Appended ${items.length} items on ${path}`);
 
                 picturefill();
+
+                picturefill({
+  reevaluate: true
+});
 
                 // VIDEO ISSUE -- Code
 
