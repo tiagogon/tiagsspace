@@ -6256,7 +6256,7 @@ address {
 .single-content section.post-content {
   margin-bottom: 20px; }
   .single-content section.post-content p a {
-    color: #e3e5f2; }
+    text-decoration: underline; }
   .single-content section.post-content ol, .single-content section.post-content ul, .single-content section.post-content dl {
     padding: 20px; }
 .single-content footer {
