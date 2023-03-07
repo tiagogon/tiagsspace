@@ -131,7 +131,7 @@
 							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Film<span id="over-text" class="d-none d-sm-inline"></span></h1>';
 						}
 						if (is_post_type_archive('emulsion')) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Emulsion<span id="over-text" class="d-none d-sm-inline"></span>/h1>';
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Emulsion<span id="over-text" class="d-none d-sm-inline"></span></h1>';
 						}
 						if (is_post_type_archive('dusk')) {
 							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dusk<span id="over-text" class="d-none d-sm-inline"></span></h1>';
