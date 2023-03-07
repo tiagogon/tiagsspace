@@ -5721,6 +5721,18 @@ audio {
       margin-left: 13px;
       /*border: 2px solid transparent;*/
       line-height: 1.3; }
+      #site-header #topbar a .long,
+      #site-header .slicknav_nav a .long {
+        display: none; }
+      #site-header #topbar a .short,
+      #site-header .slicknav_nav a .short {
+        display: inline; }
+      #site-header #topbar a:hover .short,
+      #site-header .slicknav_nav a:hover .short {
+        display: none; }
+      #site-header #topbar a:hover .long,
+      #site-header .slicknav_nav a:hover .long {
+        display: inline; }
       #site-header #topbar a:hover::before, #site-header #topbar a:hover::after,
       #site-header .slicknav_nav a:hover::before,
       #site-header .slicknav_nav a:hover::after {

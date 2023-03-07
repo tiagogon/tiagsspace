@@ -111,7 +111,6 @@
 					<?php // Get name of the section for mobile
 
 						$siteName = "Space";
-						$siteNameShort = "S";
 						$Webpage_name = '<span class="d-inline d-sm-none">S</span><span class="d-none d-sm-inline">'.$siteName.'</span>';
 						$header_left_title = '';
 
@@ -120,7 +119,7 @@
 
 						// Post types archive pages
 						if (is_singular()) {
-							$header_left_title = '<h1><a href="'.home_url().'">'.$siteNameShort.'</a><span id="over-text" class="d-none d-sm-inline"></span></h1>';
+							$header_left_title = '<h1><span id="over-text" class="d-none d-sm-inline"></span></h1>';
 						}
 						if (is_post_type_archive('hyper')) {
 							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Hyper<span id="over-text" class="d-none d-sm-inline"></span></h1>';
@@ -181,13 +180,11 @@
 
 				</div>
 
-
-
 				<div id="topbar" class="col-16">
 						<a data-toggle="collapse" href="#collapseMenu" role="button" aria-expanded="false" aria-controls="collapseMenu">
 							<span class="reveal">
 								<?php if (is_singular()) {
-									echo "R";
+									echo '<span class="short">R</span><span class="long">Reveal</span>';
 								}else {
 									echo "Reveal";
 								} ?>
@@ -195,8 +192,8 @@
 							<span class="hide">Hide</span>
 						</a>
 				</div>
-			</div>
 
+			</div> <!-- row -->
 
 		</header> <!-- end header -->
 
@@ -213,6 +210,11 @@
 
 				<div class="offset-xl-3 <?php echo $menu_groups_class; ?>" >
 					<ul>
+						<!-- <?php if (is_singular()) { ?>
+							<li>
+								<a href="<?php echo home_url(); ?>" class="">Space</a>
+							</li>
+						<?php } ?> -->
 						<li>
 							<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " active";} ?>">Hyper</a>
 						</li>

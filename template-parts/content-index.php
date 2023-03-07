@@ -346,8 +346,8 @@ Index of posts for Home and Archives
                       OR is_post_type_archive('emulsion')
                       OR is_post_type_archive('cityburns'))
                       {
-                          $post_title = $post_title_prefix.get_the_title($post->ID);
-                      } elseif (is_single()) {
+                        $post_title = $post_title_prefix.get_the_title($post->ID);
+                      } elseif (is_singular()) {
                         $post_title = $post_title_space_root.$post_title_type_archive_root.$post_title_logBranch_root.$post_title_prefix.get_the_title($post->ID);
                       } else {
                         $post_title = $post_title_type_archive_root.$post_title_logBranch_root.$post_title_prefix.get_the_title($post->ID);
