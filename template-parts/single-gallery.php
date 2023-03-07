@@ -469,38 +469,51 @@ if (!get_field('deactivate_gallery')) {
                         // --- SRC calculation ---
                             // Original image File
     	                    $attachmen_thumb_attributes = wp_get_attachment_image_src($attachmen->ID, false);
-    	                    $attachmen_thumb_srcset = $attachmen_thumb_attributes[0]." ".$attachmen_thumb_attributes[1]."w";
+                          if ($attachmen_thumb_attributes) {
+                            $attachmen_thumb_srcset = $attachmen_thumb_attributes[0]." ".$attachmen_thumb_attributes[1]."w";
+                          }
+
 
                             // IF diferent sizes exist
 
                             // thumbnail
                             $attachmen_thumb_thumbnail_srcset ="";
                             $attachmen_thumb_thumbnail_attributes = wp_get_attachment_image_src($attachmen->ID, "thumbnail");
-                            if ($attachmen_thumb_thumbnail_attributes[3]) {
-                                $attachmen_thumb_thumbnail_srcset = $attachmen_thumb_thumbnail_attributes[0]." ".$attachmen_thumb_thumbnail_attributes[1]."w, ";
+                            if ($attachmen_thumb_thumbnail_attributes) {
+                              if ($attachmen_thumb_thumbnail_attributes[3]) {
+                                  $attachmen_thumb_thumbnail_srcset = $attachmen_thumb_thumbnail_attributes[0]." ".$attachmen_thumb_thumbnail_attributes[1]."w, ";
+                              }
                             }
+
 
                             // small
                             $attachmen_thumb_small_srcset ="";
                             $attachmen_thumb_small_attributes = wp_get_attachment_image_src($attachmen->ID, "small");
-                            if ($attachmen_thumb_small_attributes[3]) {
-                                $attachmen_thumb_small_srcset = $attachmen_thumb_small_attributes[0]." ".$attachmen_thumb_small_attributes[1]."w, ";
+                            if ($attachmen_thumb_small_attributes) {
+                              if ($attachmen_thumb_small_attributes[3]) {
+                                  $attachmen_thumb_small_srcset = $attachmen_thumb_small_attributes[0]." ".$attachmen_thumb_small_attributes[1]."w, ";
+                              }
                             }
+
 
                             // medium
                             $attachmen_thumb_medium_srcset ="";
                             $attachmen_thumb_medium_attributes = wp_get_attachment_image_src($attachmen->ID, "medium");
-                            if ($attachmen_thumb_medium_attributes[3]) {
-                                $attachmen_thumb_medium_srcset = $attachmen_thumb_medium_attributes[0]." ".$attachmen_thumb_medium_attributes[1]."w, ";
+                            if ($attachmen_thumb_medium_attributes) {
+                              if ($attachmen_thumb_medium_attributes[3]) {
+                                  $attachmen_thumb_medium_srcset = $attachmen_thumb_medium_attributes[0]." ".$attachmen_thumb_medium_attributes[1]."w, ";
+                              }
                             }
+
 
                             // large
                             $attachmen_thumb_large_srcset ="";
                             $attachmen_thumb_large_attributes = wp_get_attachment_image_src($attachmen->ID, "large");
-                            if ($attachmen_thumb_large_attributes[3]) {
-                                $attachmen_thumb_large_srcset = $attachmen_thumb_large_attributes[0]." ".$attachmen_thumb_large_attributes[1]."w, ";
+                            if ($attachmen_thumb_large_attributes) {
+                              if ($attachmen_thumb_large_attributes[3]) {
+                                  $attachmen_thumb_large_srcset = $attachmen_thumb_large_attributes[0]." ".$attachmen_thumb_large_attributes[1]."w, ";
+                              }
                             }
-
 
                             // FINAL SRCSET
                             $attachmen_srcset = $attachmen_thumb_thumbnail_srcset.
