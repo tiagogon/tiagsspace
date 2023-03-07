@@ -356,9 +356,9 @@ Index of posts for Home and Archives
 
                       ?>
 
-                      <figure onMouseOver="showText('<?php echo $post_title; ?>')" onMouseOut="hide();" onclick="location.href='<?php echo get_permalink(); //onclick enables click on video in IOS ?>';">
+                      <figure onMouseOver="showText('<?php echo $post_title; ?>')" onMouseOut="hide();">
 
-                          <a href="<?php echo get_permalink(); ?>" >
+                          <a href="<?php echo get_permalink(); ?>" onclick="location.href='<?php echo get_permalink(); //onclick enables click on video in IOS ?>';">
 
                               <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
 
