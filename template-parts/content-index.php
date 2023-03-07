@@ -546,10 +546,6 @@ Index of posts for Home and Archives
 
                 picturefill();
 
-                picturefill({
-  reevaluate: true
-});
-
                 // VIDEO ISSUE -- Code
 
                 //VideoJS trigers
