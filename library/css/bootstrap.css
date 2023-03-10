@@ -5708,7 +5708,9 @@ audio {
   #site-header #topbar,
   #site-header .slicknav_nav {
     float: right;
-    text-align: right; }
+    text-align: right;
+    vertical-align: bottom;
+    }
     #site-header #topbar a,
     #site-header .slicknav_nav a {
       text-align: right;

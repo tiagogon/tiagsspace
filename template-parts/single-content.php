@@ -115,6 +115,7 @@ Single // log Archive pages >> Content
         // echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
 
         // Edit post
+        echo ' • ';
         edit_post_link('Edit', '', '');
 
     }?>
