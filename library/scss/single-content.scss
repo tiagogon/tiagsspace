@@ -41,15 +41,16 @@
       margin-top: 0;
       margin-bottom: $grid-gutter-width;
       font-size: $font-size-heading;
-
-
+      color: $dark;
+      a {
+        color: $dark;
+      }
     }
     p.meta{
       margin-bottom: $font-size-heading;
       //text-transform: lowercase;
       font-size: 12px;
-
-    display: none;
+      display: none;
 
     }
 
@@ -57,24 +58,36 @@
   section.post-content{
     p{
         // text-align: justify;
+          color: $dark;
+
       a{
         // color: $tiagsssss-color;
         text-decoration: underline;
+          color: $dark;
+
       }
     }
     ol, ul, dl {
         padding: $grid-gutter-width;
+
+          color: $dark;
+
     }
     margin-bottom: $grid-gutter-width;
+
   }
   footer{
     margin-top: $grid-gutter-width;
     margin-bottom: $grid-gutter-width;
+
+      color: $dark;
     p.footer-meta{
       margin-bottom: 0px;
       font-size: $font-size-heading;
       font-family: $font-family-headings;
       line-height: 1.3em;
+
+        color: $dark;
       a{
         &:hover{
 
@@ -87,8 +100,13 @@
         display: inline-block;
         margin: 0 5px 7px 0px;
         line-height: 1;
+
+          color: $dark;
+
         a{
-          color: $white;
+
+            color: $dark;
+
           background-color: $dark;
           padding: 3px 5px 2px;
           font-style: normal;
@@ -98,6 +116,7 @@
           @include transition(all 1s ease-out);
           &:hover{
             color: $dark;
+
             background-color: $white;
             @include transition(all 1s ease-out);
           }
@@ -107,11 +126,87 @@
   }
 }
 
-// Content on NONE Ligh Background
+.white-darkmode{
+  .single-content{
+    //margin-bottom: $grid-gutter-width*1.5;
+    .page-header{
+      h1.single-title{
+        @media (prefers-color-scheme: dark) {
+            color: $white;
+        }
+        a {
+          @media (prefers-color-scheme: dark) {
+              color: $white;
+          }
+        }
+      }
+      p.meta{
+      }
+    }
+    section.post-content{
+      p{
+            @media (prefers-color-scheme: dark) {
+                color: $white;
+            }
+        a{
+            @media (prefers-color-scheme: dark) {
+                color: $white;
+            }
+        }
+      }
+      ol, ul, dl {
+            @media (prefers-color-scheme: dark) {
+                color: $white;
+            }
+      }
+
+    }
+    footer{
+
+        @media (prefers-color-scheme: dark) {
+            color: $white;
+        }
+      p.footer-meta{
+
+          @media (prefers-color-scheme: dark) {
+              color: $white;
+          }
+        a{
+          &:hover{
+
+          }
+        }
+      }
+      ul{
+        li{
+            @media (prefers-color-scheme: dark) {
+                color: $white;
+            }
+          a{
+              @media (prefers-color-scheme: dark) {
+                  color: $white;
+              }
+            &:hover{
+              @media (prefers-color-scheme: dark) {
+                  color: $white;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Content dark Background
 .background-w-dark-color{
   .single-content{
     .page-header{
       h1.single-title{
+        color: $white;
+        a {
+          color: $white;
+        }
 
       }
       p.meta{
@@ -123,8 +218,9 @@
     }
     section.post-content{
       p{
+        color: $white;
         a{
-          color: $yellow;
+          color: $white;
           border-bottom: 1px solid transparent;
 
           @include transition(all 1s ease-out);
@@ -137,6 +233,7 @@
     }
     footer{
       p.footer-meta{
+        color: $white;
         a{
           color: $white;
         }
@@ -169,7 +266,7 @@
           @media (prefers-color-scheme: dark) {
               color: $white;
           }
-          border-bottom: 1px solid transparent;
+
 
           @include transition(all 1s ease-out);
           &:hover{
@@ -218,11 +315,9 @@
     section.post-content{
       p{
         a{
-          color: $tiagsssss-color;
-          border-bottom: 1px solid transparent;
+          color: $white;
           @include transition(all 1s ease-out);
           &:hover{
-            border-bottom: 1px solid $tiagsssss-color;
             @include transition(all 1s ease-out);
           }
         }
@@ -400,10 +495,8 @@
         font-size: $font-size-heading;
         line-height: 1.3;
         background-color: transparent;
-        /*border-bottom: 2px solid $dark;*/
         @include transition(all 1s ease-out);
         &:hover{
-          /*border-bottom: 2px solid transparent;*/
           @include transition(all 1s ease-out);
         }
       }
@@ -416,9 +509,7 @@
       span{
         a{
           color: $white;
-          /*border-bottom: 2px solid $white;*/
           &:hover{
-            /*border-bottom: 2px solid transparent;*/
           }
         }
       }

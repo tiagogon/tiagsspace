@@ -16,11 +16,7 @@ body.background-w-dark-color{
   color: $white;
 }
 
-a {
-  @media (prefers-color-scheme: dark) {
-      color: $white;
-  }
-}
+
 // Background colors
 .tiagsssss-color{
 	background: $tiagsssss-color;
