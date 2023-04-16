@@ -145,6 +145,52 @@
   }
 }
 
+// Content white responsive to dark mode
+.white-darkmode{
+  .single-content{
+    .page-header{
+      h1.single-title{
+
+      }
+      p.meta{
+        @media (prefers-color-scheme: dark) {
+            color: $white;
+        }
+        a{
+          @media (prefers-color-scheme: dark) {
+              color: $white;
+          }
+        }
+      }
+    }
+    section.post-content{
+      p{
+        a{
+          @media (prefers-color-scheme: dark) {
+              color: $white;
+          }
+          border-bottom: 1px solid transparent;
+
+          @include transition(all 1s ease-out);
+          &:hover{
+            text-decoration: none;
+          }
+        }
+      }
+      margin-bottom: $grid-gutter-width;
+    }
+    footer{
+      p.footer-meta{
+        a{
+          @media (prefers-color-scheme: dark) {
+              color: $white;
+          }
+        }
+      }
+    }
+  }
+}
+
 
 // Tags matching colors and Single Navigation links
 .tiagsssss-color{

@@ -5377,9 +5377,16 @@ body {
     font-style: normal;
     font-family: "Sporting_Grotesque_Bold", sans-serif;
     font-size: 18px; }
+  @media (prefers-color-scheme: dark) {
+    body {
+      color: #fff; } }
 
 body.background-w-dark-color {
   color: #fff; }
+
+@media (prefers-color-scheme: dark) {
+  a {
+    color: #fff; } }
 
 .tiagsssss-color {
   background: #e3e5f2;
@@ -5391,6 +5398,15 @@ body.background-w-dark-color {
 
 .tiagsssss-color-heading {
   color: #aeff2b; }
+
+.white {
+  background: #fff; }
+
+.white-darkmode {
+  background: #fff; }
+  @media (prefers-color-scheme: dark) {
+    .white-darkmode {
+      background: #000; } }
 
 .dark {
   background-color: #000; }
@@ -5708,9 +5724,7 @@ audio {
   #site-header #topbar,
   #site-header .slicknav_nav {
     float: right;
-    text-align: right;
-    vertical-align: bottom;
-    }
+    text-align: right; }
     #site-header #topbar a,
     #site-header .slicknav_nav a {
       text-align: right;
@@ -5806,18 +5820,22 @@ audio {
 
 .tiagsssss-color #site-header #topbar a, .tiagsssss-color #site-header #topbar h1, .tiagsssss-color #site-header .topbar-left a, .tiagsssss-color #site-header .topbar-left h1,
 .tiagsssss-color #site-header .slicknav_nav a,
-.tiagsssss-color #site-header .slicknav_nav h1 {
+.tiagsssss-color #site-header .slicknav_nav h1, .white-darkmode #site-header #topbar a, .white-darkmode #site-header #topbar h1, .white-darkmode #site-header .topbar-left a, .white-darkmode #site-header .topbar-left h1,
+.white-darkmode #site-header .slicknav_nav a,
+.white-darkmode #site-header .slicknav_nav h1 {
   color: #000; }
   @media (prefers-color-scheme: dark) {
     .tiagsssss-color #site-header #topbar a, .tiagsssss-color #site-header #topbar h1, .tiagsssss-color #site-header .topbar-left a, .tiagsssss-color #site-header .topbar-left h1,
     .tiagsssss-color #site-header .slicknav_nav a,
-    .tiagsssss-color #site-header .slicknav_nav h1 {
+    .tiagsssss-color #site-header .slicknav_nav h1, .white-darkmode #site-header #topbar a, .white-darkmode #site-header #topbar h1, .white-darkmode #site-header .topbar-left a, .white-darkmode #site-header .topbar-left h1,
+    .white-darkmode #site-header .slicknav_nav a,
+    .white-darkmode #site-header .slicknav_nav h1 {
       color: #fff; } }
 
-.tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1 {
+.tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1, .white-darkmode #collapseMenu a, .white-darkmode #collapseMenu h1 {
   color: #000; }
   @media (prefers-color-scheme: dark) {
-    .tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1 {
+    .tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1, .white-darkmode #collapseMenu a, .white-darkmode #collapseMenu h1 {
       color: #fff; } }
 
 .background-w-dark-color a, .background-w-dark-color h1,
@@ -6310,6 +6328,29 @@ address {
       text-decoration: none; }
 .background-w-dark-color .single-content footer p.footer-meta a {
   color: #fff; }
+
+@media (prefers-color-scheme: dark) {
+  .white-darkmode .single-content .page-header p.meta {
+    color: #fff; } }
+@media (prefers-color-scheme: dark) {
+  .white-darkmode .single-content .page-header p.meta a {
+    color: #fff; } }
+.white-darkmode .single-content section.post-content {
+  margin-bottom: 20px; }
+  .white-darkmode .single-content section.post-content p a {
+    border-bottom: 1px solid transparent;
+    transition: all 1s ease-out; }
+    @media (prefers-color-scheme: dark) {
+      .white-darkmode .single-content section.post-content p a {
+        color: #fff; } }
+    @media screen and (prefers-reduced-motion: reduce) {
+      .white-darkmode .single-content section.post-content p a {
+        transition: none; } }
+    .white-darkmode .single-content section.post-content p a:hover {
+      text-decoration: none; }
+@media (prefers-color-scheme: dark) {
+  .white-darkmode .single-content footer p.footer-meta a {
+    color: #fff; } }
 
 .tiagsssss-color .single-content footer ul li a {
   color: #e3e5f2;
