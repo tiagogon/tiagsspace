@@ -19,11 +19,14 @@ body.background-w-dark-color{
 
 // Background colors
 .tiagsssss-color{
-	background: $tiagsssss-color-hex; //used for single color fallback on ios
+	background-color: $tiagsssss-color;
 	background: $tiagsssss-color-gradient;
   @media (prefers-color-scheme: dark) {
-    background: $tiagsssss-color-darkmode-hex; //used for single color fallback on ios
+    background-color: $tiagsssss-color-darkmode;
     background: $tiagsssss-color-darkmode-gradient;
+    @media (max-width: map-get($grid-breakpoints, sm)) {
+      background: $tiagsssss-color-darkmode;  //used for single color fallback on ios
+    }
   }
 }
 
