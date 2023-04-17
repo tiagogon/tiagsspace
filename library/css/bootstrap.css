@@ -5387,6 +5387,9 @@ body.background-w-dark-color {
 .tiagsssss-color {
   background-color: #E3E5F2;
   background: linear-gradient(0deg, #F2EFE3 0%, #E3E5F2 100%); }
+  @media (max-width: 576px) {
+    .tiagsssss-color {
+      background: #E3E5F2; } }
   @media (prefers-color-scheme: dark) {
     .tiagsssss-color {
       background-color: #16161b;

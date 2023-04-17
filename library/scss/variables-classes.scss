@@ -21,11 +21,14 @@ body.background-w-dark-color{
 .tiagsssss-color{
 	background-color: $tiagsssss-color;
 	background: $tiagsssss-color-gradient;
+  @media (max-width: map-get($grid-breakpoints, sm)) {
+    background: $tiagsssss-color;  //IOS status bar color breaks with gradients
+  }
   @media (prefers-color-scheme: dark) {
     background-color: $tiagsssss-color-darkmode;
     background: $tiagsssss-color-darkmode-gradient;
     @media (max-width: map-get($grid-breakpoints, sm)) {
-      background: $tiagsssss-color-darkmode;  //used for single color fallback on ios
+      background: $tiagsssss-color-darkmode;  //IOS status bar color breaks with gradients
     }
   }
 }
