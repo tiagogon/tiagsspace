@@ -8,10 +8,13 @@ $grey-light-warm:       #deddd9;
 $grey-light-warm-vibe:  #e1d0d0;
 $grey-light-cold:       #e6e6eb;
 
-$grey-light-cold-vibe:  rgba(227,229,242,1); // #e3e5f2;
-$grey-light-cold-vibe-contrast:  rgba(242,239,227,1); // #f2efe3;
-$dark-lighten-vibe: 		rgba(22,22,27,1);
-$dark-lighten-vibe-contrast: 		rgba(29,26,23,1);
+$grey-light-cold-vibe-hex:        #e3e5f2; //used for single color fallback on ios
+$grey-light-cold-vibe:            rgba(227,229,242,1);
+$grey-light-cold-vibe-contrast:   rgba(242,239,227,1);
+
+$dark-lighten-vibe-hex: 	 	      #16161B; //used for single color fallback on ios
+$dark-lighten-vibe: 		          rgba(22,22,27,1);
+$dark-lighten-vibe-contrast: 		  rgba(29,26,23,1);
 
 //Terra pallet
 $sky:              #adc8d9;
@@ -32,8 +35,10 @@ $yellow-light: 	   #fffc52;
 
 // Main Page Index colors and gradients
 $tiagsssss-color: 			            $grey-light-cold-vibe;
+$tiagsssss-color-hex: 			        $grey-light-cold-vibe-hex;
 $tiagsssss-color-gradient: 			    linear-gradient(0deg, $grey-light-cold-vibe-contrast 0%, $grey-light-cold-vibe 100%);
 $tiagsssss-color-darkmode: 			    $dark-lighten-vibe;
+$tiagsssss-color-darkmode-hex: 			$dark-lighten-vibe-hex;
 $tiagsssss-color-darkmode-gradient: linear-gradient(0deg, $dark-lighten-vibe-contrast 0%, $dark-lighten-vibe 100%);
 
 

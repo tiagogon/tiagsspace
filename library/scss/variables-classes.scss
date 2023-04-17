@@ -19,10 +19,10 @@ body.background-w-dark-color{
 
 // Background colors
 .tiagsssss-color{
-	background: $tiagsssss-color;
+	background: $tiagsssss-color-hex; //used for single color fallback on ios
 	background: $tiagsssss-color-gradient;
   @media (prefers-color-scheme: dark) {
-    background: $tiagsssss-color-darkmode;
+    background: $tiagsssss-color-darkmode-hex; //used for single color fallback on ios
     background: $tiagsssss-color-darkmode-gradient;
   }
 }
