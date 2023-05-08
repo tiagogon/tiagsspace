@@ -126,7 +126,7 @@
   }
 }
 
-.white-darkmode{
+.tiagsssss-color, .white-darkmode{
   .single-content{
     //margin-bottom: $grid-gutter-width*1.5;
     .page-header{
@@ -513,6 +513,18 @@
           }
         }
       }
+    }
+  }
+}
+
+// links pages
+.page-template-page-links-php{
+  #site-header{
+    display: none;
+  }
+  .single-content{
+    .page-header{
+      display: none;
     }
   }
 }

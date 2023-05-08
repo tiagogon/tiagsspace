@@ -1051,6 +1051,8 @@ function color_background_parameters ($parameter) {
 		$background_color_class = 'dark';
   } elseif (is_singular( '4k-lento' )) {
 	  $background_color_class = 'dark';
+	} elseif ( is_page_template( 'page-links.php' ) ) {
+		$background_color_class = 'tiagsssss-color';
 	} elseif ( is_singular( )) {
 		$background_color_class = 'white';
 	} else {

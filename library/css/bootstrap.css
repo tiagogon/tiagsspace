@@ -6323,34 +6323,34 @@ address {
               transition: none; } }
 
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content .page-header h1.single-title {
+  .tiagsssss-color .single-content .page-header h1.single-title, .white-darkmode .single-content .page-header h1.single-title {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content .page-header h1.single-title a {
+  .tiagsssss-color .single-content .page-header h1.single-title a, .white-darkmode .single-content .page-header h1.single-title a {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content section.post-content p {
+  .tiagsssss-color .single-content section.post-content p, .white-darkmode .single-content section.post-content p {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content section.post-content p a {
+  .tiagsssss-color .single-content section.post-content p a, .white-darkmode .single-content section.post-content p a {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content section.post-content ol, .white-darkmode .single-content section.post-content ul, .white-darkmode .single-content section.post-content dl {
+  .tiagsssss-color .single-content section.post-content ol, .tiagsssss-color .single-content section.post-content ul, .tiagsssss-color .single-content section.post-content dl, .white-darkmode .single-content section.post-content ol, .white-darkmode .single-content section.post-content ul, .white-darkmode .single-content section.post-content dl {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content footer {
+  .tiagsssss-color .single-content footer, .white-darkmode .single-content footer {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content footer p.footer-meta {
+  .tiagsssss-color .single-content footer p.footer-meta, .white-darkmode .single-content footer p.footer-meta {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content footer ul li {
+  .tiagsssss-color .single-content footer ul li, .white-darkmode .single-content footer ul li {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content footer ul li a {
+  .tiagsssss-color .single-content footer ul li a, .white-darkmode .single-content footer ul li a {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content footer ul li a:hover {
+  .tiagsssss-color .single-content footer ul li a:hover, .white-darkmode .single-content footer ul li a:hover {
     color: #fff; } }
 
 .background-w-dark-color .single-content .page-header h1.single-title {
@@ -6543,6 +6543,11 @@ address {
 
 .background-w-dark-color .single-navigation .nav-previous span a, .background-w-dark-color .single-navigation .nav-next span a {
   color: #fff; }
+
+.page-template-page-links-php #site-header {
+  display: none; }
+.page-template-page-links-php .single-content .page-header {
+  display: none; }
 
 .mfp-bg {
   top: 0;
