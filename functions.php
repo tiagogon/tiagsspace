@@ -1052,7 +1052,7 @@ function color_background_parameters ($parameter) {
   } elseif (is_singular( '4k-lento' )) {
 	  $background_color_class = 'dark';
 	} elseif ( is_page_template( 'page-links.php' ) ) {
-		$background_color_class = 'tiagsssss-color';
+		$background_color_class = 'white-darkmode';
 	} elseif ( is_singular( )) {
 		$background_color_class = 'white';
 	} else {
@@ -2399,25 +2399,18 @@ function count_media_files_in_published_post_type($post_type) {
 }
 
 // The Shortcode https://codex.wordpress.org/Shortcode_API
-// [last_post_link post-type="post" sticky=0]
+// [last_post_link post-type="post]
 function last_post_link_function( $atts ) {
 	$attributes = shortcode_atts( array(
 		'post-type' => 'post',
 		'sticky' => 0,
 	), $atts );
 
-	// Sticky post
-	$sticky = $attributes['sticky'];
-	$sticky_query = "";
-	if ($sticky == 1) {
-		$sticky_query = get_option( 'sticky_posts' );
-	}
 
 	//query
 	$args = array(
 		'post_type' => $attributes['post-type'],
-		'posts_per_page' => 1,
-		'post__in' => $sticky_query
+		'posts_per_page' => 1
 		);
 	$the_query = new WP_Query( $args );
 
@@ -2433,6 +2426,7 @@ function last_post_link_function( $atts ) {
 	/* Restore original Post Data */
 	wp_reset_postdata();
 
+	// Debug
 	// return "post-type = {$query}";
 }
 add_shortcode( 'last_post_link', 'last_post_link_function' );
