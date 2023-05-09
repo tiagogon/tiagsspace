@@ -6329,10 +6329,10 @@ address {
   .tiagsssss-color .single-content .page-header h1.single-title a, .white-darkmode .single-content .page-header h1.single-title a {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content section.post-content p, .white-darkmode .single-content section.post-content p {
+  .tiagsssss-color .single-content section.post-content h1, .tiagsssss-color .single-content section.post-content h2, .tiagsssss-color .single-content section.post-content h3, .tiagsssss-color .single-content section.post-content h4, .tiagsssss-color .single-content section.post-content h5, .tiagsssss-color .single-content section.post-content p, .white-darkmode .single-content section.post-content h1, .white-darkmode .single-content section.post-content h2, .white-darkmode .single-content section.post-content h3, .white-darkmode .single-content section.post-content h4, .white-darkmode .single-content section.post-content h5, .white-darkmode .single-content section.post-content p {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content section.post-content p a, .white-darkmode .single-content section.post-content p a {
+  .tiagsssss-color .single-content section.post-content h1 a, .tiagsssss-color .single-content section.post-content h2 a, .tiagsssss-color .single-content section.post-content h3 a, .tiagsssss-color .single-content section.post-content h4 a, .tiagsssss-color .single-content section.post-content h5 a, .tiagsssss-color .single-content section.post-content p a, .white-darkmode .single-content section.post-content h1 a, .white-darkmode .single-content section.post-content h2 a, .white-darkmode .single-content section.post-content h3 a, .white-darkmode .single-content section.post-content h4 a, .white-darkmode .single-content section.post-content h5 a, .white-darkmode .single-content section.post-content p a {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
   .tiagsssss-color .single-content section.post-content ol, .tiagsssss-color .single-content section.post-content ul, .tiagsssss-color .single-content section.post-content dl, .white-darkmode .single-content section.post-content ol, .white-darkmode .single-content section.post-content ul, .white-darkmode .single-content section.post-content dl {

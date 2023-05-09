@@ -2398,5 +2398,44 @@ function count_media_files_in_published_post_type($post_type) {
 
 }
 
+// The Shortcode https://codex.wordpress.org/Shortcode_API
+// [last_post_link post-type="post" sticky=0]
+function last_post_link_function( $atts ) {
+	$attributes = shortcode_atts( array(
+		'post-type' => 'post',
+		'sticky' => 0,
+	), $atts );
+
+	// Sticky post
+	$sticky = $attributes['sticky'];
+	$sticky_query = "";
+	if ($sticky == 1) {
+		$sticky_query = get_option( 'sticky_posts' );
+	}
+
+	//query
+	$args = array(
+		'post_type' => $attributes['post-type'],
+		'posts_per_page' => 1,
+		'post__in' => $sticky_query
+		);
+	$the_query = new WP_Query( $args );
+
+	// The Loop
+	if ( $the_query->have_posts() ) {
+		while ( $the_query->have_posts() ) {
+			$the_query->the_post();
+			return '<a href="'.get_permalink().'">' . get_the_title() . '</a>';
+		}
+	} else {
+	// no posts found
+	}
+	/* Restore original Post Data */
+	wp_reset_postdata();
+
+	// return "post-type = {$query}";
+}
+add_shortcode( 'last_post_link', 'last_post_link_function' );
+
 
 // END -- don't add any space after php close ?>
