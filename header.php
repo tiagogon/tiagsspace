@@ -20,7 +20,8 @@
 
 			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
 
-			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.min.css">
+			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.css">
+
 
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/plyr-master/assets/vendor/plyr/dist/plyr.css">
 
@@ -34,7 +35,6 @@
 					document.createElement( "picture" );
 				</script>
 				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/picturefill/picturefill.min.js" async></script>
-				<?php /*<script src="//cdnjs.cloudflare.com/ajax/libs/picturefill/2.3.1/picturefill.min.js"  async></script>*/ ?>
 
 
 
@@ -59,7 +59,7 @@
 				<script src="<?php bloginfo('template_url'); ?>/library/js/fresh_url/fresh_url.min.js" async></script>
 
 			<?php // Slider Swiper ?>
-		  		<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper.jquery.min.js"></script>
+		  		<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.js"></script>
 
 			<?php // Bootstrap Scripts ?>
 					<script src="<?php bloginfo('template_url'); ?>/library/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

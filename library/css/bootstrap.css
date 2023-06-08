@@ -6050,38 +6050,55 @@ div.gallery {
   div.gallery div.thumbnail.media-video .kgvid_wrapper {
     margin: 0; }
 
-.container-gallery.swiper-container {
+.container-gallery.swiper-container.horizontal-gallery-style-,
+.container-gallery.swiper-container.horizontal-gallery-style-classic {
   padding-left: 20px;
   padding-right: 0px;
   padding-bottom: 0;
   margin-bottom: 40px; }
-  @media (min-width: 576px) {
-    .container-gallery.swiper-container {
-      padding-left: 40px;
-      padding-right: 20px; } }
-
-div.gallery-horizontal div.thumbnail {
-  margin-bottom: 0;
-  margin-right: 20px; }
-  div.gallery-horizontal div.thumbnail figure {
-    display: inline-block; }
-    div.gallery-horizontal div.thumbnail figure img {
-      max-height: 65vh; }
-      @media all and (orientation: landscape) {
-        div.gallery-horizontal div.thumbnail figure img {
-          max-height: 100%;
-          max-width: 100%;
-          /* Small devices (tablets, 768px and up) */
-          /* Medium devices (desktops, 992px and up) */
-          /* Large devices (large desktops, 1200px and up) */ } }
+  .container-gallery.swiper-container.horizontal-gallery-style- div.gallery-horizontal div.thumbnail,
+  .container-gallery.swiper-container.horizontal-gallery-style-classic div.gallery-horizontal div.thumbnail {
+    margin-bottom: 0;
+    margin-right: 20px; }
+    .container-gallery.swiper-container.horizontal-gallery-style- div.gallery-horizontal div.thumbnail figure,
+    .container-gallery.swiper-container.horizontal-gallery-style-classic div.gallery-horizontal div.thumbnail figure {
+      display: inline-block; }
+      .container-gallery.swiper-container.horizontal-gallery-style- div.gallery-horizontal div.thumbnail figure img,
+      .container-gallery.swiper-container.horizontal-gallery-style-classic div.gallery-horizontal div.thumbnail figure img {
+        max-height: 65vh; }
+        @media all and (orientation: landscape) {
+          .container-gallery.swiper-container.horizontal-gallery-style- div.gallery-horizontal div.thumbnail figure img,
+          .container-gallery.swiper-container.horizontal-gallery-style-classic div.gallery-horizontal div.thumbnail figure img {
+            max-height: 100%;
+            max-width: 100%;
+            /* Small devices (tablets, 768px and up) */
+            /* Medium devices (desktops, 992px and up) */
+            /* Large devices (large desktops, 1200px and up) */ } }
   @media all and (orientation: landscape) and (min-width: 576px) {
-    div.gallery-horizontal div.thumbnail figure img {
+    .container-gallery.swiper-container.horizontal-gallery-style- div.gallery-horizontal div.thumbnail figure img,
+    .container-gallery.swiper-container.horizontal-gallery-style-classic div.gallery-horizontal div.thumbnail figure img {
       max-height: 85vh; } }
   @media all and (orientation: landscape) and (min-width: 768px) {
-    div.gallery-horizontal div.thumbnail figure img {
+    .container-gallery.swiper-container.horizontal-gallery-style- div.gallery-horizontal div.thumbnail figure img,
+    .container-gallery.swiper-container.horizontal-gallery-style-classic div.gallery-horizontal div.thumbnail figure img {
       max-height: 80vh; } }
-div.gallery-horizontal .swiper-slide {
-  width: initial; }
+  .container-gallery.swiper-container.horizontal-gallery-style- div.gallery-horizontal .swiper-slide,
+  .container-gallery.swiper-container.horizontal-gallery-style-classic div.gallery-horizontal .swiper-slide {
+    width: initial; }
+
+.container-gallery.swiper-container.horizontal-gallery-style-still {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0;
+  margin-bottom: 40px; }
+  .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail {
+    margin-bottom: 0; }
+    .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail figure {
+      display: inline-block; }
+      .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail figure img {
+        width: 100vw; }
+  .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal .swiper-slide {
+    width: initial; }
 
 .swiper-scrollbar {
   position: relative;

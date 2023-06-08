@@ -96,57 +96,81 @@ div.gallery{
 }
 
 
-.container-gallery.swiper-container{
+.container-gallery.swiper-container.horizontal-gallery-style-,
+.container-gallery.swiper-container.horizontal-gallery-style-classic{
 	padding-left: 20px;
 	padding-right: 0px;
 	padding-bottom: 0;
 	margin-bottom: 40px;
-	@media (min-width: map-get($grid-breakpoints, sm)) {
-	    padding-left: 40px;
-	    padding-right: 20px;
+	div.gallery-horizontal{
+	  div.thumbnail{
+	  		margin-bottom: 0;
+	  		margin-right: 20px;
+			figure{
+				display: inline-block;
+					img{
+						max-height: 65vh;
+						//max-width: 80vw;
+
+						// Horizontal devices
+						@media all and (orientation:landscape) {
+							max-height: 100%;
+							max-width: 100%;
+							/* Small devices (tablets, 768px and up) */
+							@media (min-width: map-get($grid-breakpoints, sm)) {
+								max-height: 85vh;
+							}
+
+							/* Medium devices (desktops, 992px and up) */
+							@media (min-width: map-get($grid-breakpoints, md)) {
+								max-height: 80vh;
+							}
+
+							/* Large devices (large desktops, 1200px and up) */
+							@media (min-width: map-get($grid-breakpoints, lg)) {
+								//max-height: 75vh;
+							}
+						}
+					}
+
+				figcaption {
+				}
+			}
+	  }
+	  .swiper-slide {
+			width: initial;
+	  }
 	}
 }
 
-div.gallery-horizontal{
-  div.thumbnail{
-  		margin-bottom: 0;
-  		margin-right: 20px;
-		figure{
-			display: inline-block;
-				img{
-					max-height: 65vh;
-					//max-width: 80vw;
-
-					// Horizontal devices
-					@media all and (orientation:landscape) {
-						max-height: 100%;
-						max-width: 100%;
-						/* Small devices (tablets, 768px and up) */
-						@media (min-width: map-get($grid-breakpoints, sm)) {
-							max-height: 85vh;
-						}
-
-						/* Medium devices (desktops, 992px and up) */
-						@media (min-width: map-get($grid-breakpoints, md)) {
-							max-height: 80vh;
-						}
-
-						/* Large devices (large desktops, 1200px and up) */
-						@media (min-width: map-get($grid-breakpoints, lg)) {
-							//max-height: 75vh;
-						}
+.container-gallery.swiper-container.horizontal-gallery-style-still{
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-bottom: 0;
+	margin-bottom: 40px;
+	div.gallery-horizontal{
+	  div.thumbnail{
+	  		margin-bottom: 0;
+	  		//margin-right: 1px;
+			figure{
+				display: inline-block;
+					img{
+						width: 100vw;
 					}
+
+				figcaption {
 				}
-
-			figcaption {
 			}
-		}
-  }
-  .swiper-slide {
-	width: initial;
+	  }
+	  .swiper-slide {
+		width: initial;
 
-  }
+	  }
+	}
 }
+
+
+
 .swiper-scrollbar{
 	position: relative;
     left: 0%;

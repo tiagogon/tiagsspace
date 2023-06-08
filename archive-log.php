@@ -7,8 +7,14 @@
 			<article id="post-<?php the_ID(); ?>" <?php post_class('clearfix'); ?> role="article">
 
 				<?PHP // Gallery
-				get_template_part( 'template-parts/single', 'gallery' );
+				if (!get_field('horizontal_gallery')) {
+					get_template_part( 'template-parts/single', 'gallery' );
+				} else {
+					get_template_part( 'template-parts/single', 'gallery-horizontal' );
+				}
 				?>
+
+
 
 				<div class="container single-content">
 			    	<div class="clearfix row">

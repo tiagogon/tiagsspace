@@ -91,8 +91,11 @@ if (!get_field('deactivate_gallery')) {
             // }
 
         ?>
+        <?php
+        // Swipper style
+        $horizontal_gallery_style = "horizontal-gallery-style-".get_field( 'horizontal_gallery_style' ); ?>
 
-        <div class="<?php echo $class_container; ?> container-gallery swiper-container">
+        <div class="<?php echo $class_container; ?> container-gallery swiper swiper-container swiper-container-<?php the_ID(); ?> <?php echo $horizontal_gallery_style; ?>">
 
             <div id="gallery-<?php the_ID(); ?>" class="gallery gallery-horizontal swiper-wrapper" itemscope itemtype="http://schema.org/ImageGallery">
 
@@ -281,71 +284,154 @@ if (!get_field('deactivate_gallery')) {
 
 
 
+        <!-- Slider main container -->
+
+        <?php if (get_field('horizontal_gallery_style') == 'classic' or get_field('horizontal_gallery_style') == ''): ?>
+
+          <script type="text/javascript">
+
+            var swiper<?php the_ID(); ?> = new Swiper('.swiper-container-<?php the_ID(); ?>', {
+                  freeMode: {
+                    enabled: true,
+                    sticky: true,
+                  },
+
+                  speed: 800,
+
+                  grabCursor: true,
+
+                  mousewheel: {
+                    //invert: true,
+                    forceToAxis: true,
+                  },
+
+                  keyboard: {
+                    enabled: true,
+                    onlyInViewport: false,
+                  },
+
+                  scrollbar: {
+                   el: '.swiper-scrollbar',
+                   draggable: true,
+                   hide: false,
+                 },
+
+                 slidesPerView: 'auto',
+                 spaceBetween: 0,
+
+                //updateTranslate: true,
+
+            });
+
+          </script>
+
+        <?php endif; ?>
+
+
+        <?php if (get_field('horizontal_gallery_style') == 'still'): ?>
+
+          <script type="text/javascript">
+
+            var swiper<?php the_ID(); ?> = new Swiper('.swiper-container-<?php the_ID(); ?>', {
+              keyboard: {
+                enabled: true,
+                onlyInViewport: false,
+              },
+
+             //slidesPerView: 'auto',
+             spaceBetween: 0,
+
+             effect: "fade",
+             fadeEffect: {
+              crossFade: true
+             },
+
+             loop: true,
+
+             autoplay: {
+               delay: <?php
+                    if (get_field('still_duration')) {
+                        echo get_field('still_duration');
+                   } else {
+                     echo "3000";
+                   }
+                ?>, // defaul is 3000ms = 4 heart beats
+               disableOnInteraction: false,
+             },
+
+            });
+
+          </script>
+
+        <?php endif; ?>
+
+
+
             <script>
 
-                    // ADD gallery ID in the end if you want to use in LOG
-                    var mySwiper = new Swiper ('.swiper-container', {
-
-                        freeMode: true,
-
-                        grabCursor: true,
-
-                        mousewheelControl: true,
-                        mousewheelForceToAxis: true,
-                        mousewheelInvert: true,
-
-                        keyboardControl: true,
-
-
-                        //setWrapperSize: true,
-                        preloadImages: true,
-                        observer:true,
-                        observeParents: true,
-                        updateTranslate: true,
-
-                        //scrollbar: '.swiper-scrollbar',
-                        scrollbarHide: false,
-                        scrollbarDraggable: true,
-
-                        slidesPerView: 'auto',
-                        spaceBetween: 0,
-                        //centeredSlides: true,
-
-                        // AutoPlay
-                        //autoplay: 3000,
-                        //autoplayDisableOnInteraction: true,
-                        speed: 1500,
-                        mousewheelSensitivity: 2,
-
-                        updateTranslate: true,
-
-                    });
-
-
-                    mySwiper.once('slideChangeStart', function () {
-                        console.log('slide change start');
-                        mySwiper.update();
-                        mySwiper.updateContainerSize()
-                        mySwiper.onResize();
-                    });
-
-                    mySwiper.once('sliderMove', function () {
-                        console.log('slide move');
-                        mySwiper.update();
-                        mySwiper.updateContainerSize()
-                        mySwiper.onResize();
-                    });
-
-                    mySwiper.once('scroll', function () {
-                        console.log('slide scroll');
-                        mySwiper.update();
-                        mySwiper.updateContainerSize()
-                        mySwiper.onResize();
-                    });
-
-                    document.addEventListener("DOMContentLoaded", function(event) {
-                        console.log("DOM fully loaded and parsed");
-                    });
+                    // // ADD gallery ID in the end if you want to use in LOG
+                    // var mySwiper = new Swiper ('.swiper-container', {
+                    //
+                    //     freeMode: true,
+                    //
+                    //     grabCursor: true,
+                    //
+                    //     mousewheelControl: true,
+                    //     mousewheelForceToAxis: true,
+                    //     mousewheelInvert: true,
+                    //
+                    //     keyboardControl: true,
+                    //
+                    //
+                    //     //setWrapperSize: true,
+                    //     preloadImages: true,
+                    //     observer:true,
+                    //     observeParents: true,
+                    //     updateTranslate: true,
+                    //
+                    //     //scrollbar: '.swiper-scrollbar',
+                    //     scrollbarHide: false,
+                    //     scrollbarDraggable: true,
+                    //
+                    //     slidesPerView: 'auto',
+                    //     spaceBetween: 0,
+                    //     //centeredSlides: true,
+                    //
+                    //     // AutoPlay
+                    //     //autoplay: 3000,
+                    //     //autoplayDisableOnInteraction: true,
+                    //     speed: 1500,
+                    //     mousewheelSensitivity: 2,
+                    //
+                    //     updateTranslate: true,
+                    //
+                    // });
+                    //
+                    //
+                    // mySwiper.once('slideChangeStart', function () {
+                    //     console.log('slide change start');
+                    //     mySwiper.update();
+                    //     mySwiper.updateContainerSize()
+                    //     mySwiper.onResize();
+                    // });
+                    //
+                    // mySwiper.once('sliderMove', function () {
+                    //     console.log('slide move');
+                    //     mySwiper.update();
+                    //     mySwiper.updateContainerSize()
+                    //     mySwiper.onResize();
+                    // });
+                    //
+                    // mySwiper.once('scroll', function () {
+                    //     console.log('slide scroll');
+                    //     mySwiper.update();
+                    //     mySwiper.updateContainerSize()
+                    //     mySwiper.onResize();
+                    // });
+                    //
+                    // document.addEventListener("DOMContentLoaded", function(event) {
+                    //     console.log("DOM fully loaded and parsed");
+                    // });
 
             </script>
 
