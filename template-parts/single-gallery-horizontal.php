@@ -338,6 +338,10 @@ if (!get_field('deactivate_gallery')) {
                 onlyInViewport: false,
               },
 
+              navigation: {
+                nextEl: '.swiper-slide'
+              },
+
              //slidesPerView: 'auto',
              spaceBetween: 0,
 
@@ -364,76 +368,6 @@ if (!get_field('deactivate_gallery')) {
           </script>
 
         <?php endif; ?>
-
-
-
-            <script>
-
-                    // // ADD gallery ID in the end if you want to use in LOG
-                    // var mySwiper = new Swiper ('.swiper-container', {
-                    //
-                    //     freeMode: true,
-                    //
-                    //     grabCursor: true,
-                    //
-                    //     mousewheelControl: true,
-                    //     mousewheelForceToAxis: true,
-                    //     mousewheelInvert: true,
-                    //
-                    //     keyboardControl: true,
-                    //
-                    //
-                    //     //setWrapperSize: true,
-                    //     preloadImages: true,
-                    //     observer:true,
-                    //     observeParents: true,
-                    //     updateTranslate: true,
-                    //
-                    //     //scrollbar: '.swiper-scrollbar',
-                    //     scrollbarHide: false,
-                    //     scrollbarDraggable: true,
-                    //
-                    //     slidesPerView: 'auto',
-                    //     spaceBetween: 0,
-                    //     //centeredSlides: true,
-                    //
-                    //     // AutoPlay
-                    //     //autoplay: 3000,
-                    //     //autoplayDisableOnInteraction: true,
-                    //     speed: 1500,
-                    //     mousewheelSensitivity: 2,
-                    //
-                    //     updateTranslate: true,
-                    //
-                    // });
-                    //
-                    //
-                    // mySwiper.once('slideChangeStart', function () {
-                    //     console.log('slide change start');
-                    //     mySwiper.update();
-                    //     mySwiper.updateContainerSize()
-                    //     mySwiper.onResize();
-                    // });
-                    //
-                    // mySwiper.once('sliderMove', function () {
-                    //     console.log('slide move');
-                    //     mySwiper.update();
-                    //     mySwiper.updateContainerSize()
-                    //     mySwiper.onResize();
-                    // });
-                    //
-                    // mySwiper.once('scroll', function () {
-                    //     console.log('slide scroll');
-                    //     mySwiper.update();
-                    //     mySwiper.updateContainerSize()
-                    //     mySwiper.onResize();
-                    // });
-                    //
-                    // document.addEventListener("DOMContentLoaded", function(event) {
-                    //     console.log("DOM fully loaded and parsed");
-                    // });
-
-            </script>
 
 
     <?php } // if there are images
