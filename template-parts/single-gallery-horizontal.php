@@ -213,7 +213,7 @@ if (!get_field('deactivate_gallery')) {
 
                         ?>
 
-                        <div class="thumbnail item swiper-slide" >
+                        <div class="thumbnail item swiper-slide swiper-slide-<?php the_ID(); ?>" >
 
                             <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" >
 
@@ -339,7 +339,7 @@ if (!get_field('deactivate_gallery')) {
               },
 
               navigation: {
-                nextEl: '.swiper-slide'
+                nextEl: '.swiper-slide-<?php the_ID(); ?>'
               },
 
              //slidesPerView: 'auto',
