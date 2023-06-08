@@ -357,7 +357,7 @@ if (!get_field('deactivate_gallery')) {
                     if (get_field('still_duration')) {
                         echo get_field('still_duration')+rand(-1000, 1000);
                    } else {
-                     echo 2000+rand(-200, 200);
+                     echo 1800+rand(-100, 100);
                    }
                 ?>, // defaul is 3000ms = 4 heart beats
                disableOnInteraction: false,
