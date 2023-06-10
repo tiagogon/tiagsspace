@@ -453,7 +453,7 @@ Index of posts for Home and Archives
           columnWidth: '.masonry-item-sizer',
           percentPosition: true,
           transitionDuration: '0.6s',
-          gutter: 0,
+          gutter: 40px,
           percentPosition: true,
         })
     </script>
