@@ -157,7 +157,8 @@ Index of posts for Home and Archives
                       $year = get_the_time("Y");
 
                   // Year is diferent
-                  } else { //if ($count != 1) {
+                } elseif (!is_paged()) {
+
 
                       $year = get_the_time("Y");
 
