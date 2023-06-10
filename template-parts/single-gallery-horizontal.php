@@ -376,7 +376,7 @@ if (!get_field('deactivate_gallery')) {
               // Options for the IntersectionObserver
               const options<?php the_ID(); ?> = {
                 root: null, // use the viewport as the root
-                threshold: 1 // trigger when 50% of the target is visible
+                threshold: 0.8 // trigger when 50% of the target is visible
               };
 
               // Callback function to handle the intersection
@@ -446,7 +446,7 @@ if (!get_field('deactivate_gallery')) {
               // Options for the IntersectionObserver
               const options<?php the_ID(); ?> = {
                 root: null, // use the viewport as the root
-                threshold: 1 // trigger when 50% of the target is visible
+                threshold: 0.8 // trigger when 50% of the target is visible
               };
 
               // Callback function to handle the intersection
