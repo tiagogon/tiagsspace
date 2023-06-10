@@ -348,12 +348,12 @@ if (!get_field('deactivate_gallery')) {
              fadeEffect: {
               crossFade: false
              },
-             speed: 600, //needs to be >1
+             speed: 200, //needs to be >1
              loop: true,
              autoplay: {
                delay: <?php
                     if (get_field('still_duration')) {
-                        echo get_field('still_duration')+rand(-1000, 1000);
+                        echo get_field('still_duration')+rand(-100, 100);
                    } else {
                      echo 1800+rand(-100, 100);
                    }
@@ -375,7 +375,7 @@ if (!get_field('deactivate_gallery')) {
               // Options for the IntersectionObserver
               const options<?php the_ID(); ?> = {
                 root: null, // use the viewport as the root
-                threshold: 0.6 // trigger when 50% of the target is visible
+                threshold: 0.5 // trigger when 50% of the target is visible
               };
 
               // Callback function to handle the intersection
@@ -445,7 +445,7 @@ if (!get_field('deactivate_gallery')) {
               // Options for the IntersectionObserver
               const options<?php the_ID(); ?> = {
                 root: null, // use the viewport as the root
-                threshold: 0.6 // trigger when 50% of the target is visible
+                threshold: 0.5 // trigger when 50% of the target is visible
               };
 
               // Callback function to handle the intersection
