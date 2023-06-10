@@ -229,7 +229,7 @@ if (!get_field('deactivate_gallery')) {
                                 <?php } ?>
 
                             </figure>
-
+                        <div class="swiper-lazy-preloader"></div>
                         </div>
 
 	                    <?php
