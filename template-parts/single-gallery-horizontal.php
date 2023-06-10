@@ -218,7 +218,7 @@ if (!get_field('deactivate_gallery')) {
                             <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" >
 
 	                            <img    <?php echo $source; ?>
-                                      loading="lazy" 
+                                      loading="lazy"
                                       alt="<?php echo $image_alt; ?>"
                                         class=""/>
 
@@ -384,6 +384,7 @@ if (!get_field('deactivate_gallery')) {
 
              spaceBetween: 0,
              lazy: true,
+             lazyPreloadPrevNext: 1,
 
              loop: true,
              speed: 1200,
