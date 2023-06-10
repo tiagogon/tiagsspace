@@ -6091,7 +6091,7 @@ div.gallery {
   padding-left: 0px;
   padding-right: 0px;
   padding-bottom: 0;
-  margin-bottom: 40px; }
+  margin-bottom: 20px; }
   .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail,
   .container-gallery.swiper-container.horizontal-gallery-style-insta div.gallery-horizontal div.thumbnail {
     margin-bottom: 0; }
@@ -6344,6 +6344,11 @@ address {
             .single-content footer ul li a:hover {
               transition: none; } }
 
+.post-type-archive-log .single-content .page-header h1.single-title, .tax-log-branch .single-content .page-header h1.single-title {
+  font-size: 16px; }
+.post-type-archive-log .single-content footer p.footer-meta, .tax-log-branch .single-content footer p.footer-meta {
+  font-size: 16px; }
+
 @media (prefers-color-scheme: dark) {
   .tiagsssss-color .single-content .page-header h1.single-title, .white-darkmode .single-content .page-header h1.single-title {
     color: #fff; } }
@@ -6542,7 +6547,8 @@ address {
         transition: none; } }
 
 .post-type-archive-log .single-content, .tax-log-branch .single-content {
-  margin-bottom: 100px; }
+  margin-bottom: 40px;
+  }
 
 .single-navigation nav.nav-previous {
   text-align: right; }
