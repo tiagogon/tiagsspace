@@ -527,7 +527,7 @@ Index of posts for Home and Archives
             $container.on( 'load.infiniteScroll', onPageLoad );
 
             function onPageLoad() {
-              if ( infScroll.loadCount == 3 ) {
+              if ( infScroll.loadCount == 4 ) {
                 // after 2nd page loaded
                 // disable loading on scroll
                 $container.infiniteScroll( 'option', {
