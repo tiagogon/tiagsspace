@@ -417,7 +417,10 @@ mark,
   display: flex;
   flex-wrap: wrap;
   margin-right: -10px;
-  margin-left: -10px; }
+  margin-left: -10px;
+  /* float: left; */
+  text-align: left;
+  }
 
 .no-gutters {
   margin-right: 0;
@@ -5919,7 +5922,9 @@ audio {
 
 li.masonry-item {
   display: block;
-  padding-bottom: 20px; }
+  padding-bottom: 20px;
+  float: left;
+  }
   li.masonry-item figure {
     text-align: center;
     margin: 0 0 0 0; }

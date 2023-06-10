@@ -451,9 +451,9 @@ Index of posts for Home and Archives
           itemSelector: '.masonry-item',
           // use element for option
           columnWidth: '.masonry-item-sizer',
-          percentPosition: true,
+          //percentPosition: true,
           transitionDuration: '0.6s',
-          gutter: 40px,
+          gutter: 0,
           percentPosition: true,
         })
     </script>
