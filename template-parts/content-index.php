@@ -428,7 +428,7 @@ Index of posts for Home and Archives
                     <span class="nav-next"><?php previous_posts_link( 'Future' ); ?></span>
                 </nav>
                 <nav class="archive-navigation col-24">
-                    <span class="nav-previous"><?php next_posts_link( 'Past' ); ?></span>
+                    <span class="nav-previous"><?php next_posts_link( 'More' ); ?></span>
                 </nav>
             </div>
 
