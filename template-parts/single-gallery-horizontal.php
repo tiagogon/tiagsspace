@@ -348,7 +348,7 @@ if (!get_field('deactivate_gallery')) {
              fadeEffect: {
               crossFade: false
              },
-             speed: 200, //needs to be >1
+             speed: 100, //needs to be >1
              loop: true,
              autoplay: {
                delay: <?php
