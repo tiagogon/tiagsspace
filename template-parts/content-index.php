@@ -548,6 +548,12 @@ Index of posts for Home and Archives
               });
             });
 
+            // jQuery VIDEO fix
+            // https://github.com/metafizzy/infinite-scroll/issues/926
+            $container.on( 'append.infiniteScroll', function( event, response, path, items ) {
+              $(items).find('video').each((i, video) => video.play())
+            });
+
 
             /// Safari not loading images and videos - my try solution
 
