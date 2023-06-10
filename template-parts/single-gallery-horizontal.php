@@ -218,7 +218,8 @@ if (!get_field('deactivate_gallery')) {
                             <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" >
 
 	                            <img    <?php echo $source; ?>
-	                                    alt="<?php echo $image_alt; ?>"
+                                      loading="lazy" 
+                                      alt="<?php echo $image_alt; ?>"
                                         class=""/>
 
                                 <?php //Caption
