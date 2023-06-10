@@ -342,6 +342,7 @@ if (!get_field('deactivate_gallery')) {
                 nextEl: '.swiper-slide-<?php the_ID(); ?>'
               },
              slidesPerView: 'auto',
+             lazy: true,
              spaceBetween: 0,
              effect: "fade",
              fadeEffect: {
@@ -371,23 +372,17 @@ if (!get_field('deactivate_gallery')) {
           <script type="text/javascript">
 
             var swiper<?php the_ID(); ?> = new Swiper('.swiper-container-<?php the_ID(); ?>', {
+
               keyboard: {
                 enabled: true,
                 onlyInViewport: false,
               },
-
               navigation: {
                 nextEl: '.swiper-slide-<?php the_ID(); ?>'
               },
 
              spaceBetween: 0,
-
-
-            //  pagination: {
-            //   el: ".swiper-pagination",
-            //   clickable: true,
-            //   type: "fraction",
-            // },
+             lazy: true,
 
              loop: true,
              speed: 1200,
