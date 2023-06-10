@@ -518,27 +518,27 @@ Index of posts for Home and Archives
               button: '.view-more-button',
             });
 
-            // // -- Scroll 2 pages, then load with button -- https://infinite-scroll.com/extras.html#scroll-2-pages-then-load-with-button
-            // var $viewMoreButton = $('.view-more-button');
-            //
-            // // get Infinite Scroll instance
-            // var infScroll = $container.data('infiniteScroll');
-            //
-            // $container.on( 'load.infiniteScroll', onPageLoad );
-            //
-            // function onPageLoad() {
-            //   if ( infScroll.loadCount == 2 ) {
-            //     // after 2nd page loaded
-            //     // disable loading on scroll
-            //     $container.infiniteScroll( 'option', {
-            //       loadOnScroll: false,
-            //     });
-            //     // show button
-            //     $viewMoreButton.show();
-            //     // remove event listener
-            //     $container.off( 'load.infiniteScroll', onPageLoad );
-            //   }
-            // }
+            // -- Scroll 2 pages, then load with button -- https://infinite-scroll.com/extras.html#scroll-2-pages-then-load-with-button
+            var $viewMoreButton = $('.view-more-button');
+
+            // get Infinite Scroll instance
+            var infScroll = $container.data('infiniteScroll');
+
+            $container.on( 'load.infiniteScroll', onPageLoad );
+
+            function onPageLoad() {
+              if ( infScroll.loadCount == 3 ) {
+                // after 2nd page loaded
+                // disable loading on scroll
+                $container.infiniteScroll( 'option', {
+                  loadOnScroll: false,
+                });
+                // show button
+                $viewMoreButton.show();
+                // remove event listener
+                $container.off( 'load.infiniteScroll', onPageLoad );
+              }
+            }
 
             // Safari not loading srset issue
             // https://github.com/metafizzy/infinite-scroll/issues/770
@@ -553,25 +553,6 @@ Index of posts for Home and Archives
             $container.on( 'append.infiniteScroll', function( event, response, path, items ) {
               $(items).find('video').each((i, video) => video.play())
             });
-
-
-            /// Safari not loading images and videos - my try solution
-
-            $container.on( 'append.infiniteScroll', function( event, body, path, items, response ) {
-              //DEbug
-              console.log(`Appended ${items.length} items on ${path}`);
-
-              // VIDEO ISSUE -- Code
-
-              //VideoJS trigers
-              videojs(document.querySelector('.video-js'));
-
-              // Videopack functions
-              jQuery(document).ready(kgvid_document_ready());
-              jQuery(window).on("load", kgvid_window_load);
-
-            });
-
 
 
         </script>
