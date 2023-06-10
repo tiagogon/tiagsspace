@@ -341,6 +341,7 @@ if (!get_field('deactivate_gallery')) {
               navigation: {
                 nextEl: '.swiper-slide-<?php the_ID(); ?>'
               },
+              grabCursor: true,
              slidesPerView: 'auto',
              lazy: true,
              spaceBetween: 0,
@@ -412,6 +413,8 @@ if (!get_field('deactivate_gallery')) {
               navigation: {
                 nextEl: '.swiper-slide-<?php the_ID(); ?>'
               },
+
+              grabCursor: true,
 
              spaceBetween: 0,
              lazy: true,
