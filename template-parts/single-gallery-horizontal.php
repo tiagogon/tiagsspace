@@ -272,7 +272,8 @@ if (!get_field('deactivate_gallery')) {
             </div>
 
             <!-- Add Scrollbar -->
-            <?php /*<div class="swiper-scrollbar"></div>*/?>
+
+        <div class="swiper-pagination"></div>
 
         </div>
 
@@ -337,20 +338,59 @@ if (!get_field('deactivate_gallery')) {
                 enabled: true,
                 onlyInViewport: false,
               },
+              navigation: {
+                nextEl: '.swiper-slide-<?php the_ID(); ?>'
+              },
+             slidesPerView: 'auto',
+             spaceBetween: 0,
+             effect: "fade",
+             fadeEffect: {
+              crossFade: false
+             },
+             speed: 600, //needs to be >1
+             loop: true,
+             autoplay: {
+               delay: <?php
+                    if (get_field('still_duration')) {
+                        echo get_field('still_duration')+rand(-1000, 1000);
+                   } else {
+                     echo 1800+rand(-100, 100);
+                   }
+                ?>, // defaul is 3000ms = 4 heart beats
+               disableOnInteraction: false,
+             },
+
+            });
+
+          </script>
+
+        <?php endif; ?>
+
+        <?php if (get_field('horizontal_gallery_style') == 'insta'): ?>
+
+          <script type="text/javascript">
+
+            var swiper<?php the_ID(); ?> = new Swiper('.swiper-container-<?php the_ID(); ?>', {
+              keyboard: {
+                enabled: true,
+                onlyInViewport: false,
+              },
 
               navigation: {
                 nextEl: '.swiper-slide-<?php the_ID(); ?>'
               },
 
-             //slidesPerView: 'auto',
              spaceBetween: 0,
 
-             effect: "fade",
-             fadeEffect: {
-              crossFade: true
-             },
+
+            //  pagination: {
+            //   el: ".swiper-pagination",
+            //   clickable: true,
+            //   type: "fraction",
+            // },
 
              loop: true,
+             speed: 1200,
 
              autoplay: {
                delay: <?php
@@ -368,6 +408,7 @@ if (!get_field('deactivate_gallery')) {
           </script>
 
         <?php endif; ?>
+
 
 
     <?php } // if there are images

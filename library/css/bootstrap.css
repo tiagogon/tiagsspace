@@ -6086,18 +6086,23 @@ div.gallery {
   .container-gallery.swiper-container.horizontal-gallery-style-classic div.gallery-horizontal .swiper-slide {
     width: initial; }
 
-.container-gallery.swiper-container.horizontal-gallery-style-still {
+.container-gallery.swiper-container.horizontal-gallery-style-still,
+.container-gallery.swiper-container.horizontal-gallery-style-insta {
   padding-left: 0px;
   padding-right: 0px;
   padding-bottom: 0;
   margin-bottom: 40px; }
-  .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail {
+  .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail,
+  .container-gallery.swiper-container.horizontal-gallery-style-insta div.gallery-horizontal div.thumbnail {
     margin-bottom: 0; }
-    .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail figure {
+    .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail figure,
+    .container-gallery.swiper-container.horizontal-gallery-style-insta div.gallery-horizontal div.thumbnail figure {
       display: inline-block; }
-      .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail figure img {
+      .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal div.thumbnail figure img,
+      .container-gallery.swiper-container.horizontal-gallery-style-insta div.gallery-horizontal div.thumbnail figure img {
         width: 100vw; }
-  .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal .swiper-slide {
+  .container-gallery.swiper-container.horizontal-gallery-style-still div.gallery-horizontal .swiper-slide,
+  .container-gallery.swiper-container.horizontal-gallery-style-insta div.gallery-horizontal .swiper-slide {
     width: initial; }
 
 .swiper-scrollbar {
