@@ -74,7 +74,7 @@ Index of posts for Home and Archives
                   $grid_array = array(18, 12, 12, 9);
               }
               if ($post_type == "log" ) {
-                  $grid_array = array(16, 18, 12, 8);
+                  $grid_array = array(12, 12, 8, 6);
               }
 
                   //
