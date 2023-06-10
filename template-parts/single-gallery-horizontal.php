@@ -364,6 +364,38 @@ if (!get_field('deactivate_gallery')) {
 
             });
 
+            // Triger Autoplay just when on the onlyInViewport
+            // Via chat GTP :D
+
+              //Stop autoplay
+              swiper<?php the_ID(); ?>.autoplay.stop();
+
+              // Select the target element with class 'class-x'
+              const targetElement<?php the_ID(); ?> = document.querySelector('.swiper-container-<?php the_ID(); ?>');
+
+              // Options for the IntersectionObserver
+              const options<?php the_ID(); ?> = {
+                root: null, // use the viewport as the root
+                threshold: 1 // trigger when 50% of the target is visible
+              };
+
+              // Callback function to handle the intersection
+              const callback<?php the_ID(); ?> = (entries, observer) => {
+                entries.forEach(entry => {
+                  if (entry.isIntersecting) {
+                    swiper<?php the_ID(); ?>.autoplay.start(); // Trigger the method when the element enters the viewport
+                  } else {
+                    swiper<?php the_ID(); ?>.autoplay.stop(); // Trigger the method when the element leaves the viewport
+                  }
+                });
+              };
+
+              // Create the IntersectionObserver instance
+              const observer<?php the_ID(); ?> = new IntersectionObserver(callback<?php the_ID(); ?>, options<?php the_ID(); ?>);
+
+              // Start observing the target element
+              observer<?php the_ID(); ?>.observe(targetElement<?php the_ID(); ?>);
+
           </script>
 
         <?php endif; ?>
@@ -401,6 +433,38 @@ if (!get_field('deactivate_gallery')) {
              },
 
             });
+
+            // Triger Autoplay just when on the onlyInViewport
+            // Via chat GTP :D
+
+              //Stop autoplay
+              swiper<?php the_ID(); ?>.autoplay.stop();
+
+              // Select the target element with class 'class-x'
+              const targetElement<?php the_ID(); ?> = document.querySelector('.swiper-container-<?php the_ID(); ?>');
+
+              // Options for the IntersectionObserver
+              const options<?php the_ID(); ?> = {
+                root: null, // use the viewport as the root
+                threshold: 1 // trigger when 50% of the target is visible
+              };
+
+              // Callback function to handle the intersection
+              const callback<?php the_ID(); ?> = (entries, observer) => {
+                entries.forEach(entry => {
+                  if (entry.isIntersecting) {
+                    swiper<?php the_ID(); ?>.autoplay.start(); // Trigger the method when the element enters the viewport
+                  } else {
+                    swiper<?php the_ID(); ?>.autoplay.stop(); // Trigger the method when the element leaves the viewport
+                  }
+                });
+              };
+
+              // Create the IntersectionObserver instance
+              const observer<?php the_ID(); ?> = new IntersectionObserver(callback<?php the_ID(); ?>, options<?php the_ID(); ?>);
+
+              // Start observing the target element
+              observer<?php the_ID(); ?>.observe(targetElement<?php the_ID(); ?>);
 
           </script>
 
