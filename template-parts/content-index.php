@@ -497,12 +497,6 @@ Index of posts for Home and Archives
     <?php } ?>
 
 
-
-
-    <?php  // --- Infinite Scrool
-
-    //if (is_tax( 'medium', 'photography' )) { ?>
-
         <script type="text/javascript"  src="<?php bloginfo('template_url'); ?>/library/js/infinite-scroll/infinite-scroll.pkgd.min.js"></script>
 
         <script type="text/javascript">
@@ -557,6 +551,3 @@ Index of posts for Home and Archives
 
 
         </script>
-
-        <?php
-    // } // end if ?>

@@ -66,6 +66,55 @@
 		<?php endif; ?>
 	</div>
 
-	<?php //get_template_part( 'template-parts/archive', 'header' ); ?>
+	<script type="text/javascript"  src="<?php bloginfo('template_url'); ?>/library/js/infinite-scroll/infinite-scroll.pkgd.min.js"></script>
+
+	<script type="text/javascript">
+
+			let $container = $('.archive-wrapper').infiniteScroll({
+			  // options...
+				path: 'page/{{#}}/',
+				append: '.type-log',
+				//outlayer: msnry,
+				history: false,
+			  button: '.view-more-button',
+			});
+
+			let $viewMoreButton = $('.view-more-button');
+
+			// get Infinite Scroll instance
+			let infScroll = $container.data('infiniteScroll');
+
+			$container.on( 'load.infiniteScroll', onPageLoad );
+
+			function onPageLoad() {
+			  if ( infScroll.loadCount == 2 ) {
+			    // after 2nd page loaded
+			    // disable loading on scroll
+			    $container.infiniteScroll( 'option', {
+			      loadOnScroll: false,
+			    });
+			    // show button
+			    $viewMoreButton.show();
+			    // remove event listener
+			    $container.off( 'load.infiniteScroll', onPageLoad );
+			  }
+			}
+
+			// Safari not loading srset issue
+			// https://github.com/metafizzy/infinite-scroll/issues/770
+			$container.on( 'append.infiniteScroll', function( event, response, path, items ) {
+				$( items ).find('img[srcset]').each( function( i, img ) {
+					img.outerHTML = img.outerHTML;
+				});
+			});
+
+			// jQuery VIDEO fix
+			// https://github.com/metafizzy/infinite-scroll/issues/926
+			$container.on( 'append.infiniteScroll', function( event, response, path, items ) {
+				$(items).find('video').each((i, video) => video.play())
+			});
+
+
+	</script>
 
 <?php get_footer(); ?>
