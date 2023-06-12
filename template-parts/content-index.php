@@ -425,7 +425,7 @@ Index of posts for Home and Archives
         <div class="container-fluid pagination-container">
             <div class="row justify-content-between">
                 <nav class="archive-navigation col-24">
-                    <span class="nav-next"><?php previous_posts_link( 'Future' ); ?></span>
+                    <span class="nav-next"><?php previous_posts_link( 'Previous' ); ?></span>
                 </nav>
                 <nav class="archive-navigation col-24">
                     <span class="nav-previous"><?php next_posts_link( 'More' ); ?></span>
@@ -522,7 +522,7 @@ Index of posts for Home and Archives
             $container.on( 'load.infiniteScroll', onPageLoad );
 
             function onPageLoad() {
-              if ( infScroll.loadCount == 4 ) {
+              if ( infScroll.loadCount == 5 ) {
                 // after 2nd page loaded
                 // disable loading on scroll
                 $container.infiniteScroll( 'option', {

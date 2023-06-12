@@ -89,19 +89,20 @@
 
 			$container.on( 'load.infiniteScroll', onPageLoad );
 
-			function onPageLoad() {
-			  if ( infScroll.loadCount == 5 ) {
-			    // after 2nd page loaded
-			    // disable loading on scroll
-			    $container.infiniteScroll( 'option', {
-			      loadOnScroll: false,
-			    });
-			    // show button
-			    $viewMoreButton.show();
-			    // remove event listener
-			    $container.off( 'load.infiniteScroll', onPageLoad );
-			  }
-			}
+			// // Use More button agter X number of loads - 5
+			// function onPageLoad() {
+			//   if ( infScroll.loadCount == 5 ) {
+			//     // after 2nd page loaded
+			//     // disable loading on scroll
+			//     $container.infiniteScroll( 'option', {
+			//       loadOnScroll: false,
+			//     });
+			//     // show button
+			//     $viewMoreButton.show();
+			//     // remove event listener
+			//     $container.off( 'load.infiniteScroll', onPageLoad );
+			//   }
+			// }
 
 			// Safari not loading srset issue
 			// https://github.com/metafizzy/infinite-scroll/issues/770
