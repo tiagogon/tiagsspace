@@ -48,7 +48,7 @@
 
 			<div class="container-fluid pagination-container">
 							<nav class="archive-navigation col-xs-48">
-									<span class="nav-next"><?php previous_posts_link( 'Future' ); ?></span> <span class="nav-previous"><?php next_posts_link( 'Past' ); ?></span>
+									<span class="nav-next"><?php previous_posts_link( 'Previous' ); ?></span> <span class="nav-previous"><?php next_posts_link( 'More' ); ?></span>
 							</nav>
 			</div>
 	<?php } ?>
@@ -90,7 +90,7 @@
 			$container.on( 'load.infiniteScroll', onPageLoad );
 
 			function onPageLoad() {
-			  if ( infScroll.loadCount == 2 ) {
+			  if ( infScroll.loadCount == 5 ) {
 			    // after 2nd page loaded
 			    // disable loading on scroll
 			    $container.infiniteScroll( 'option', {
