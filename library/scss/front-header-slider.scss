@@ -20,6 +20,9 @@
       // margin-bottom: auto;
       ul{
         list-style: none;
+        li:first-child {
+          margin-top: $grid-gutter-width/2;;
+        }
         li{
           margin-left: none;
           margin-bottom: $font-size-heading/2;

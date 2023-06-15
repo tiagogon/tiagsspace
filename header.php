@@ -97,7 +97,7 @@
 
 			<div class="row">
 
-				<div class="topbar-left col-32">
+				<div class="topbar-left col-32 multi-collapse show">
 
 					<script>
 						function showText(text){
@@ -180,8 +180,8 @@
 
 				</div>
 
-				<div id="topbar" class="col-16">
-						<a data-toggle="collapse" href="#collapseMenu" role="button" aria-expanded="false" aria-controls="collapseMenu">
+				<div id="topbar" class="col-16 ml-auto">
+						<a data-toggle="collapse" data-target=".multi-collapse" href="#collapseMenu" role="button" aria-expanded="false" aria-controls="collapseMenu">
 							<span class="reveal">
 								<?php if (is_singular()) {
 									echo '<span class="short">R</span><span class="long">Reveal</span>';
@@ -199,22 +199,22 @@
 
 
 
-		<div id="collapseMenu" class="collapse container-fluid index-block">
+		<div id="collapseMenu" class="collapse container-fluid index-block multi-collapse">
 
-			<div class="row d-flex align-items-start justify-content-end">
+			<div class="row d-flex justify-content-start">
 
 				<?php
 					// define the size of the menu grid
-					$menu_groups_class = "col-sm-24 col-md-16 col-xl-8 menu-group";
+					$menu_groups_class = "col-sm-24 col-md-16 col-xl-9 menu-group";
 				?>
 
 				<div class="<?php echo $menu_groups_class; ?>" >
 					<ul>
-						<?php if (is_singular()) { ?>
+						<?php //if (is_singular()) { ?>
 							<li>
 								<a href="<?php echo home_url(); ?>" class="">Space</a>
 							</li>
-						<?php } ?>
+						<?php //} ?>
 					</ul>
 				</div>
 				<div class="<?php echo $menu_groups_class; ?>" >
@@ -222,43 +222,54 @@
 						<li>
 							<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " active";} ?>">Hyper</a>
 						</li>
-					 <li>
+					 <!-- <li>
 						 <a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if ( is_post_type_archive('Films')) { echo "active";} if (is_singular( 'films' ) ) { echo " active";} ?>">Film</a>
-					 </li>
- 						<li>
-						<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " active";} ?>">4K Lento</a></li>
- 						<li>
+					 </li> -->
 					   <li>
 						   <a href="<?php echo get_post_type_archive_link( 'dusk'); ?>" class="<?php if ( is_post_type_archive('dusk')) { echo "active";} if (is_singular( 'dusk' )) { echo " active";} ?>">Dusk</a>
 					   </li>
+						 <li>
+							 <a data-toggle="collapse" href="#collapselog-branch" role="button" aria-expanded="false" aria-controls="collapsePlaces">Log</a>
+						 </li>
+						 <li>
+							 <ul class="collapse" id="collapselog-branch">
+							 <li>
+								 <a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if ( is_post_type_archive('log')) { echo "active";} if (is_singular( 'log' )) { echo " active";} ?>">All</a>
+							 </li>
+								 <?php
+								 // Get the list of terms in the custom taxonomy
+								 $terms = get_terms(array(
+										 'taxonomy' => 'log-branch',
+										 'hide_empty' => true,
+								 ));
+								 // Loop through each term
+								 foreach ($terms as $term) {
+										 // Get the custom field value for the term
+										 $custom_field_value = get_field('is_archived', $term);
+
+										 // Check if the custom field value is true or false
+										 if (!$custom_field_value==true) {
+												 // Display the term
+												 echo '<li><a href="' . get_term_link($term) . '">' . $term->name . '</a></li>';
+										 }
+								 }
+								 ?>
+							 </ul>
+						 </li>
 					</ul>
 				</div>
 
 				<div class="<?php echo $menu_groups_class; ?>" >
 					<ul>
 						<li>
-							<a href="<?php echo get_post_type_archive_link( 'log'); ?>"  class="<?php
-						 if (is_singular( 'log' ) OR is_post_type_archive('log') or is_tax('log-branch'))
-								{ echo " active";}
-						 if (is_post_type_archive('emulsion'))
-								{ echo "active";}  ?>
-								">Log</a>
-						</li>
+ 							<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " active";} ?>">4K Lento</a>
+							<li>
+								<a href="https://soundcloud.com/tiagsssss"  target="_blank">Soundcloud</a>
+							</li>
+							<li>
+								<a href="https://podcasts.apple.com/ca/podcast/4k-lento/id1445312236" target="_blank">Podcast</a>
+							</li>
 						<li>
-							<ul>
-								<li>
-									<a href="<?php echo get_term_link( 'still', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','still')) { echo "active";} if ((is_single() and has_term( 'still', 'log-branch' ))) { echo " active";} ?>">Still</a>
-								</li>
-
-								<li>
-									<a href="<?php echo get_term_link( 'blwww', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','blwww')) { echo "active";} if ((is_single() and has_term( 'blwww', 'log-branch' ))) { echo " active";} ?>">Blow</a>
-								</li>
-
-								<li>
-									<a href="<?php echo get_term_link( 'hrzn', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','hrzn')) { echo "active";} if ((is_single() and has_term( 'hrzn', 'log-branch' ))) { echo " active";} ?>">Horizon</a>
-								</li>
-							</ul>
-						</li>
 					</ul>
 				</div>
 
@@ -316,35 +327,9 @@
 								<?php wp_list_categories( $args ); ?>
 							</ul>
 						</li>
-
-					</ul>
-				</div>
-
-				<div class="<?php echo $menu_groups_class; ?>" >
-					<ul>
 						<li>
-							<a href="https://tiags.tumblr.com/" target="_blank">About</a>
-						</li>
-						<li>
-							<a data-toggle="collapse" href="#collapsePast" role="button" aria-expanded="false" aria-controls="collapsePast">Past</a>
+							<a data-toggle="collapse" href="#collapsePast" role="button" aria-expanded="false" aria-controls="collapsePast">Final</a>
 							<ul class="collapse" id="collapsePast">
-								<li>
-									<a data-toggle="collapse" href="#collapsePastFromLog" role="button" aria-expanded="false" aria-controls="collapsePastFromLog">Log</a>
-									<ul class="collapse" id="collapsePastFromLog">
-										<li>
-											<a href="<?php echo get_term_link( 'frntr', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','frntr')) { echo "active";} if ((is_single() and has_term( 'frntr', 'log-branch' ))) { echo " active";} ?>">FRNTR</a>
-										</li>
-										<li>
-											<a href="<?php echo get_term_link( 'plnt', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','plnt')) { echo "active";} if ((is_single() and has_term( 'plnt', 'log-branch' ))) { echo " active";} ?>">PLNT</a>
-										</li>
-										<li>
-											<a href="<?php echo get_term_link( 'sdwlk', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','sdwlk')) { echo "active";} if ((is_single() and has_term( 'sdwlk', 'log-branch' ))) { echo " active";} ?>">SDWLK</a>
-										</li>
-										<li>
-											<a href="<?php echo get_term_link( 'rchv', 'log-branch'); ?>" class="<?php if (is_tax('log-branch','rchv') or (is_single() and has_term( 'rchv', 'log-branch' ))) { echo "active";} ?>">RCHV</a>
-										</li>
-									</ul>
-								</li>
 								<li>
 									<a data-toggle="collapse" href="#collapsePastFromSeries" role="button" aria-expanded="false" aria-controls="collapsePastFromSeries">Series</a>
 									<ul class="collapse" id="collapsePastFromSeries">
@@ -356,28 +341,60 @@
 										</li>
 									</ul>
 								</li>
+								<li>
+									<a data-toggle="collapse" href="#collapsePastFromLog" role="button" aria-expanded="false" aria-controls="collapsePastFromLog">Log</a>
+									<ul class="collapse" id="collapsePastFromLog">
+										<?php
+										// Get the list of terms in the custom taxonomy
+										$terms = get_terms(array(
+												'taxonomy' => 'log-branch',
+												'hide_empty' => true,
+										));
+										// Loop through each term
+										foreach ($terms as $term) {
+												// Get the custom field value for the term
+												$custom_field_value = get_field('is_archived', $term);
+
+												// Check if the custom field value is true or false
+												if ($custom_field_value==true) {
+														// Display the term
+														echo '<li><a href="' . get_term_link($term) . '">' . $term->name . '</a></li>';
+												}
+										}
+										?>
+									</ul>
+								</li>
 							</ul>
 						</li>
-						<li>
-							<a href="mailto:mail@tiags.space" target="_blank">Contact</a>
-						</li>
+
 					</ul>
 				</div>
 
 				<div class="<?php echo $menu_groups_class; ?>" >
 					<ul>
+					<li>
+						<a href="mailto:mail@tiags.space" target="_blank">Email</a>
+					</li>
 						<li>
 							<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
 						</li>
-						<li>
+						<!-- <li>
 							<a href="https://vimeo.com/tiags" target="_blank">Vimeo</a>
-						</li>
+						</li> -->
 						<li>
-							<a href="https://soundcloud.com/tiagsssss"  target="_blank">Soundcloud</a>
+							<a data-toggle="collapse" href="#collapseReference" role="button" aria-expanded="false" aria-controls="collapsePast">Lists</a>
+							<ul class="collapse" id="collapseReference">
+								<li>
+									<a href="https://goodreads.com/tiags" target="_blank">Reads</a>
+								</li>
+								<li>
+									<a href="https://letterboxd.com/tiagsssss/" target="_blank">Films</a>
+								</li>
+								<li>
+									<a href="https://tiags.tumblr.com/" target="_blank">Misc.</a>
+								</li>
+							</ul>
 						</li>
- 						<li>
- 							<a href="https://podcasts.apple.com/ca/podcast/4k-lento/id1445312236" target="_blank">Podcast</a>
- 						</li>
 						<!-- <li>
 							<a href="https://tiagssssspace.tumblr.com/"  target="_blank">Tumblr</a>
 						</li>
