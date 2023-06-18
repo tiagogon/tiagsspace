@@ -152,23 +152,23 @@ Index of posts for Home and Archives
                   }
 
                   // Print Year Separator if the
-                  if ($year == get_the_time("Y")) {
+                  if ($year == get_the_time("Y") or $count == 1) {
 
                       $year = get_the_time("Y");
 
                   // Year is diferent
-                } elseif (!is_paged()) {
+                  } else {
 
 
-                      $year = get_the_time("Y");
+                        $year = get_the_time("Y");
 
-                      ?>
+                        ?>
 
-                      <li class="masonry-item year-separator <?php echo $grid_year_separator; //$grid; // ?> " <?php post_class('clearfix'); ?> >
-                          <div class="separator-wrapper text-left"><?php echo $year; ?></div>
-                      </li>
+                        <li class="masonry-item year-separator <?php echo $grid_year_separator; //$grid; // ?> " <?php post_class('clearfix'); ?> >
+                            <div class="separator-wrapper text-left"><?php echo $year; ?></div>
+                        </li>
 
-                  <?php }
+                    <?php }
 
                   // Get Custom Post Info
                   $obj = get_post_type_object( $post_type );

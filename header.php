@@ -249,8 +249,20 @@
 
 										 // Check if the custom field value is true or false
 										 if (!$custom_field_value==true) {
-												 // Display the term
-												 echo '<li><a href="' . get_term_link($term) . '">' . $term->name . '</a></li>';
+
+											 // elmentclass
+											 $elmentclass = "";
+											 if ( is_tax( 'log-branch', $term) ) {
+												 $elmentclass = "active";
+												 ?>
+												 	<script type="text/javascript">
+												 		$('#collapselog-branch').collapse()
+												 	</script>
+												 <?php
+											 }
+
+											 // Display the term
+											 echo '<li><a href="' . get_term_link($term) . '" class="' . $elmentclass . '">' . $term->name . '</a></li>';
 										 }
 								 }
 								 ?>
