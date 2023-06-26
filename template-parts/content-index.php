@@ -496,6 +496,7 @@ Index of posts for Home and Archives
 
     <?php } ?>
 
+    <?php if (is_singular() == false ) { ?>
 
         <script type="text/javascript"  src="<?php bloginfo('template_url'); ?>/library/js/infinite-scroll/infinite-scroll.pkgd.min.js"></script>
 
@@ -549,5 +550,5 @@ Index of posts for Home and Archives
               $(items).find('video').each((i, video) => video.play())
             });
 
-
         </script>
+    <?php } ?>

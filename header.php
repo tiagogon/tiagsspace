@@ -387,32 +387,35 @@
 					<li>
 						<a href="mailto:mail@tiags.space" target="_blank">Email</a>
 					</li>
-						<li>
-							<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
-						</li>
-						<!-- <li>
-							<a href="https://vimeo.com/tiags" target="_blank">Vimeo</a>
-						</li> -->
-						<li>
-							<a data-toggle="collapse" href="#collapseReference" role="button" aria-expanded="false" aria-controls="collapsePast">Lists</a>
-							<ul class="collapse" id="collapseReference">
-								<li>
-									<a href="https://goodreads.com/tiags" target="_blank">Reads</a>
-								</li>
-								<li>
-									<a href="https://letterboxd.com/tiagsssss/" target="_blank">Films</a>
-								</li>
-								<li>
-									<a href="https://tiags.tumblr.com/" target="_blank">Misc.</a>
-								</li>
-							</ul>
-						</li>
-						<!-- <li>
-							<a href="https://tiagssssspace.tumblr.com/"  target="_blank">Tumblr</a>
-						</li>
-						<li>
-							<a href="https://twitter.com/tiagsssss" target="_blank">Twitter</a>
-						</li> -->
+					<li>
+						<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
+					</li>
+					<li>
+						<a href="https://ra.co/dj/tiagsssss" target="_blank">Resident</a>
+					</li>
+					<!-- <li>
+						<a href="https://vimeo.com/tiags" target="_blank">Vimeo</a>
+					</li> -->
+					<li>
+						<a data-toggle="collapse" href="#collapseReference" role="button" aria-expanded="false" aria-controls="collapsePast">Lists</a>
+						<ul class="collapse" id="collapseReference">
+							<li>
+								<a href="https://goodreads.com/tiags" target="_blank">Goodeads</a>
+							</li>
+							<li>
+								<a href="https://letterboxd.com/tiagsssss/" target="_blank">Letterboxd</a>
+							</li>
+							<li>
+								<a href="https://tiags.tumblr.com/" target="_blank">Misc.</a>
+							</li>
+						</ul>
+					</li>
+					<!-- <li>
+						<a href="https://tiagssssspace.tumblr.com/"  target="_blank">Tumblr</a>
+					</li>
+					<li>
+						<a href="https://twitter.com/tiagsssss" target="_blank">Twitter</a>
+					</li> -->
 					</ul>
 				</div>
 
