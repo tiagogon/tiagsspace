@@ -391,7 +391,7 @@
 						<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
 					</li>
 					<li>
-						<a href="https://ra.co/dj/tiagsssss" target="_blank">Resident</a>
+						<a href="https://ra.co/dj/tiagsssss" target="_blank">RA</a>
 					</li>
 					<!-- <li>
 						<a href="https://vimeo.com/tiags" target="_blank">Vimeo</a>
@@ -400,7 +400,7 @@
 						<a data-toggle="collapse" href="#collapseReference" role="button" aria-expanded="false" aria-controls="collapsePast">Lists</a>
 						<ul class="collapse" id="collapseReference">
 							<li>
-								<a href="https://goodreads.com/tiags" target="_blank">Goodeads</a>
+								<a href="https://goodreads.com/tiags" target="_blank">Goodreads</a>
 							</li>
 							<li>
 								<a href="https://letterboxd.com/tiagsssss/" target="_blank">Letterboxd</a>
