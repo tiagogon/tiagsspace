@@ -6351,6 +6351,9 @@ address {
     font-size: 16px; }
   .post-type-archive-log .single-content footer p.footer-meta, .tax-log-branch .single-content footer p.footer-meta {
     font-size: 16px; } }
+.background-w-dark-color .single-navigation .nav-previous span a, .background-w-dark-color .single-navigation .nav-next span a {
+  color: #fff; }
+
 @media (prefers-color-scheme: dark) {
   .tiagsssss-color .single-content .page-header h1.single-title, .white-darkmode .single-content .page-header h1.single-title {
     color: #fff; } }
@@ -6380,6 +6383,9 @@ address {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
   .tiagsssss-color .single-content footer ul li a:hover, .white-darkmode .single-content footer ul li a:hover {
+    color: #fff; } }
+@media (prefers-color-scheme: dark) {
+  .tiagsssss-color .single-navigation .nav-previous span a, .tiagsssss-color .single-navigation .nav-next span a, .white-darkmode .single-navigation .nav-previous span a, .white-darkmode .single-navigation .nav-next span a {
     color: #fff; } }
 
 .background-w-dark-color .single-content .page-header h1.single-title {
@@ -6572,9 +6578,6 @@ address {
       @media screen and (prefers-reduced-motion: reduce) {
         .single-navigation .nav-previous span a:hover, .single-navigation .nav-next span a:hover {
           transition: none; } }
-
-.background-w-dark-color .single-navigation .nav-previous span a, .background-w-dark-color .single-navigation .nav-next span a {
-  color: #fff; }
 
 .page-template-page-links-php #site-header {
   display: none; }
