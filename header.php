@@ -340,7 +340,7 @@
 							</ul>
 						</li>
 						<li>
-							<a data-toggle="collapse" href="#collapsePast" role="button" aria-expanded="false" aria-controls="collapsePast">Final</a>
+							<a data-toggle="collapse" href="#collapsePast" role="button" aria-expanded="false" aria-controls="collapsePast">Closed</a>
 							<ul class="collapse" id="collapsePast">
 								<li>
 									<a data-toggle="collapse" href="#collapsePastFromSeries" role="button" aria-expanded="false" aria-controls="collapsePastFromSeries">Series</a>
