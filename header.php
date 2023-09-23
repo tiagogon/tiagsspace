@@ -346,9 +346,6 @@
 									<a data-toggle="collapse" href="#collapsePastFromSeries" role="button" aria-expanded="false" aria-controls="collapsePastFromSeries">Series</a>
 									<ul class="collapse" id="collapsePastFromSeries">
 										<li>
-											<a href="<?php echo get_post_type_archive_link( 'emulsion'); ?>" class="<?php if (is_post_type_archive('emulsion')) { echo "active";} if (is_singular( 'emulsion' )) { echo " active";} ?>">Emulsion</a>
-										</li>
-										<li>
 											<a href="<?php echo get_post_type_archive_link( 'cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active";} if (is_singular( 'cityburns' )) { echo " active";} ?>">City</a>
 										</li>
 									</ul>
@@ -363,7 +360,9 @@
 												'hide_empty' => true,
 										));
 										// Loop through each term
+										$i = 0;
 										foreach ($terms as $term) {
+											$i = $i+1;
 												// Get the custom field value for the term
 												$custom_field_value = get_field('is_archived', $term);
 
@@ -372,6 +371,9 @@
 														// Display the term
 														echo '<li><a href="' . get_term_link($term) . '">' . $term->name . '</a></li>';
 												}
+										}
+										if ($i == 0) {
+											echo '<li>None</li>';
 										}
 										?>
 									</ul>

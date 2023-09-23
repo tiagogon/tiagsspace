@@ -200,49 +200,49 @@ add_action( 'init', 'custom_post_type_films', 0 );
 
 
 
-// Register Custom Post Type EMULSION
-function custom_post_type_emulsion() {
-  $labels = array(
-    'name'                => _x( 'Emulsion', 'Post Type General Name', 'text_domain' ),
-    'singular_name'       => _x( 'Emulsion', 'Post Type Singular Name', 'text_domain' ),
-    'menu_name'           => __( 'Emulsion', 'text_domain' ),
-    'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
-    'all_items'           => __( 'All Emulsion Posts', 'text_domain' ),
-    'view_item'           => __( 'View Emulsion Post', 'text_domain' ),
-    'add_new_item'        => __( 'Add New Emulsion Post', 'text_domain' ),
-    'add_new'             => __( 'Add New Emulsion Post', 'text_domain' ),
-    'edit_item'           => __( 'Edit Emulsion Post', 'text_domain' ),
-    'update_item'         => __( 'Update Emulsion Post', 'text_domain' ),
-    'search_items'        => __( 'Search Emulsion Post', 'text_domain' ),
-    'not_found'           => __( 'Not found', 'text_domain' ),
-    'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
-  );
-  $args = array(
-    'label'               => __( 'emulsion', 'text_domain' ),
-    'description'         => __( 'Suspension of solid particles', 'text_domain' ),
-    'labels'              => $labels,
-    'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'trackbacks', 'revisions', 'custom-fields', ),
-    'taxonomies'          => array( 'category', 'post_tag' ),
-    'hierarchical'        => false,
-    'public'              => true,
-    'show_ui'             => true,
-	'show_in_rest'        => true,
-    'show_in_menu'        => true,
-    'show_in_nav_menus'   => true,
-    'show_in_admin_bar'   => true,
-    'menu_position'       => 4,
-    'menu_icon'           => 'dashicons-camera',
-    'can_export'          => true,
-    'has_archive'         => true,
-    'exclude_from_search' => false,
-    'publicly_queryable'  => true,
-    'capability_type'     => 'post',
-    'yarpp_support'       => true,
-  );
-  register_post_type( 'emulsion', $args );
-}
-// Hook into the 'init' action
-add_action( 'init', 'custom_post_type_emulsion', 0 );
+// // Register Custom Post Type EMULSION
+// function custom_post_type_emulsion() {
+//   $labels = array(
+//     'name'                => _x( 'Emulsion', 'Post Type General Name', 'text_domain' ),
+//     'singular_name'       => _x( 'Emulsion', 'Post Type Singular Name', 'text_domain' ),
+//     'menu_name'           => __( 'Emulsion', 'text_domain' ),
+//     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
+//     'all_items'           => __( 'All Emulsion Posts', 'text_domain' ),
+//     'view_item'           => __( 'View Emulsion Post', 'text_domain' ),
+//     'add_new_item'        => __( 'Add New Emulsion Post', 'text_domain' ),
+//     'add_new'             => __( 'Add New Emulsion Post', 'text_domain' ),
+//     'edit_item'           => __( 'Edit Emulsion Post', 'text_domain' ),
+//     'update_item'         => __( 'Update Emulsion Post', 'text_domain' ),
+//     'search_items'        => __( 'Search Emulsion Post', 'text_domain' ),
+//     'not_found'           => __( 'Not found', 'text_domain' ),
+//     'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
+//   );
+//   $args = array(
+//     'label'               => __( 'emulsion', 'text_domain' ),
+//     'description'         => __( 'Suspension of solid particles', 'text_domain' ),
+//     'labels'              => $labels,
+//     'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'trackbacks', 'revisions', 'custom-fields', ),
+//     'taxonomies'          => array( 'category', 'post_tag' ),
+//     'hierarchical'        => false,
+//     'public'              => true,
+//     'show_ui'             => true,
+// 	'show_in_rest'        => true,
+//     'show_in_menu'        => true,
+//     'show_in_nav_menus'   => true,
+//     'show_in_admin_bar'   => true,
+//     'menu_position'       => 4,
+//     'menu_icon'           => 'dashicons-camera',
+//     'can_export'          => true,
+//     'has_archive'         => true,
+//     'exclude_from_search' => false,
+//     'publicly_queryable'  => true,
+//     'capability_type'     => 'post',
+//     'yarpp_support'       => true,
+//   );
+//   register_post_type( 'emulsion', $args );
+// }
+// // Hook into the 'init' action
+// add_action( 'init', 'custom_post_type_emulsion', 0 );
 
 
 
@@ -1040,7 +1040,8 @@ function color_background_parameters ($parameter) {
 	if (is_singular( 'hyper' )) {
 								$background_color_class = 'blue';
 	} elseif (is_singular( 'dusk' )) {
-			$background_color_class = 'sky';
+			// $background_color_class = 'sky';
+			$background_color_class = 'white-darkmode';
 	} elseif (is_singular( 'emulsion' )) {
 			$background_color_class = 'earth';
 	} elseif (  is_singular( 'log' )
