@@ -1038,7 +1038,8 @@ function color_background_parameters ($parameter) {
 	global $post;
 
 	if (is_singular( 'hyper' )) {
-								$background_color_class = 'blue';
+			//$background_color_class = 'blue';
+			$background_color_class = 'white-darkmode';
 	} elseif (is_singular( 'dusk' )) {
 			// $background_color_class = 'sky';
 			$background_color_class = 'white-darkmode';
