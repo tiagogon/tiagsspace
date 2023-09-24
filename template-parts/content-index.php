@@ -56,7 +56,7 @@ Index of posts for Home and Archives
               // The values for the number of collumns need to be always a multiple of 2. E.g. 2,4,6,8, etc...
 
               // grid on archive
-              $grid_sizer = 'col-2 col-sm-2 col-md-2 col-lg-1';
+              $grid_sizer = 'col-1 col-sm-1 col-md-1 col-lg-1';
 
               $grid_year_separator = 'col-48';
 
@@ -148,6 +148,7 @@ Index of posts for Home and Archives
                   if ($count == 1) {
                       // echo '<div class="masonry-item-sizer '.$grid.'"></div>';
                       echo '<div class="masonry-item-sizer '.$grid_sizer.'"></div>';
+                      //echo '<div class="masonry-gutter-sizer '.$grid_sizer.'"></div>';
 
                   }
 
@@ -451,10 +452,11 @@ Index of posts for Home and Archives
           itemSelector: '.masonry-item',
           // use element for option
           columnWidth: '.masonry-item-sizer',
-          //percentPosition: true,
-          transitionDuration: '0.6s',
-          gutter: 0,
           percentPosition: true,
+          transitionDuration: '0.6s',
+          //gutter: '.masonry-gutter-sizer',
+          percentPosition: true,
+          stagger: 30
         })
     </script>
     <?php

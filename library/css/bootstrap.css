@@ -5908,7 +5908,8 @@ audio {
 
 .masonry-item-sizer {
   height: 0px;
-  position: absolute; }
+  position: absolute;
+  padding: 0; }
 
 @media (max-width: 576px) {
   .side-padding, .container {
