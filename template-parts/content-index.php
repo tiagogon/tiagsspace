@@ -64,7 +64,7 @@ Index of posts for Home and Archives
               $grid_array = array(20, 12, 12, 8);
 
               if ($post_type == "films" ) {
-                  $grid_array = array(48, 14, 14, 19);
+                  $grid_array = array(48, 14, 14, 14);
 
               }
               if ($post_type == "hyper" or $post_type == "dusk" or $post_type == "emulsion") {
