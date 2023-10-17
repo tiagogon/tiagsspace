@@ -49,6 +49,7 @@ if (!get_field('deactivate_gallery')) {
         $spacement = '';
         $deactivat_masonry = false;
         $there_is_video = '';
+        $there_is_3d = '';
         $light_box = 'none';
 
 
@@ -467,6 +468,10 @@ if (!get_field('deactivate_gallery')) {
 
 
                         // --- SRC calculation ---
+
+                        // If not a 3D atachement
+                        if ($attachmen->post_mime_type != "application/octet-stream") {
+
                             // Original image File
     	                    $attachmen_thumb_attributes = wp_get_attachment_image_src($attachmen->ID, false);
                           if ($attachmen_thumb_attributes) {
@@ -556,6 +561,8 @@ if (!get_field('deactivate_gallery')) {
                                 $source = 'src="'.$attachmen_thumb_attributes[0].'"';
                             }
 
+                          } // Close: If not 3D
+
                         // --- AlT ---
                             $alt = get_post_meta($attachmen->ID, '_wp_attachment_image_alt', true);
                             $caption = $attachmen->post_excerpt;
@@ -571,8 +578,8 @@ if (!get_field('deactivate_gallery')) {
 
                         // INTRINSTIC RATIO
 
-                            // AUDIO
-                            if ( $attachmen->post_mime_type == "audio/wav" OR $attachmen->post_mime_type == "audio/mpeg" ) {
+                            // AUDIO or 3D
+                            if ( $attachmen->post_mime_type == "audio/wav" OR $attachmen->post_mime_type == "audio/mpeg") {
 
                                 // TO CODE
                                 // $intrinsic_ratio of audio container
@@ -587,6 +594,10 @@ if (!get_field('deactivate_gallery')) {
                               // Get Heigh and width from featured thumbnail instead of video proprieties
                               $attachmen_thumb_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($attachmen->ID), false);
                               $intrinsic_ratio = $attachmen_thumb_attributes[2] * 100 / $attachmen_thumb_attributes[1];
+
+                            // 3D
+                            } elseif ( $attachmen->post_mime_type == "application/octet-stream" ) {
+                              $intrinsic_ratio = 1*100/1;
 
                             }else {
 
@@ -678,7 +689,9 @@ if (!get_field('deactivate_gallery')) {
                             </div><?php
 
                         // VIDEO
-                        } elseif ( $attachmen->post_mime_type == "video/mpeg" OR $attachmen->post_mime_type == "video/mp4" OR $attachmen->post_mime_type == "video/quicktime" ) { ?>
+                        } elseif ( $attachmen->post_mime_type == "video/mpeg" OR $attachmen->post_mime_type == "video/mp4" OR $attachmen->post_mime_type == "video/quicktime" ) {
+
+                            ?>
 
                             <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
@@ -691,7 +704,7 @@ if (!get_field('deactivate_gallery')) {
                                 ?>
 
                                 <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/VideoObject" style="<?php atachement_custom_margin($attachmen->ID); ?>">
-                                    <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>100%; height: 0; overflow: hidden; max-width: 100%;">
+                                    <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
 
                                             <?php
 
@@ -710,6 +723,48 @@ if (!get_field('deactivate_gallery')) {
                                             // To activate scripts on the bootom
                                             $there_is_video = true;
                                              ?>
+                                    </div>
+                                </figure>
+                            </div><?php
+
+                        // 3D render
+                        } elseif ( $attachmen->post_mime_type == "application/octet-stream" ) {
+                          ?>
+
+                          <div class="thumbnail item <?php echo $class_thumbnail;?> media-3d 3d-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
+
+                              <?php
+                              // Edit atachment media -- hide and delete
+                              if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
+                                  $gallery_id = get_the_ID();
+                                  gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
+                              }
+                              ?>
+
+                              <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/VisualArtwork" style="<?php atachement_custom_margin($attachmen->ID); ?>">
+                                  <!-- <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;"> -->
+                                  <div class="imgcontainer" style="position: relative; height: auto; overflow: hidden; max-width: 100%;">
+
+                                    <model-viewer src="<?php echo wp_get_attachment_url($attachmen->ID); ?>" ar ar-modes="webxr scene-viewer quick-look"
+                                    poster="poster.webp"
+                                    camera-controls
+                                    ar-placement="wall"
+                                    X_disable-zoom
+                                    interaction-prompt="none"
+                                    auto-rotate-delay="1000"
+                                    rotation-per-second="-120%"
+
+                                    shadow-intensity="1"
+                                    exposure="0.94"
+                                    camera-orbit="-93.26deg 75.00deg 4m"
+                                    auto-rotate
+
+                                    >
+                            				</model-viewer>
+
+                                    <?php
+                                    $there_is_3d = true; ?>
+
                                     </div>
                                 </figure>
                             </div><?php
@@ -917,6 +972,11 @@ if (!get_field('deactivate_gallery')) {
                 // var video = document.querySelector('video');
                 // enableInlineVideo(video);
             </script><?php
+        }
+        // 3d
+        if ($there_is_3d == true) { ?>
+            <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+            <?php
         }
 
 

@@ -5402,14 +5402,14 @@ body.background-w-dark-color {
   color: #aeff2b; }
 
 .white {
-  background: #303030;
-  }
+  background: #fff; }
 
 .white-darkmode {
   background: #fff; }
   @media (prefers-color-scheme: dark) {
     .white-darkmode {
-      background: #000; } }
+      background: #000;
+      } }
 
 .dark {
   background-color: #000; }
@@ -6022,6 +6022,11 @@ div.gallery {
       margin: 0; }
       div.gallery div.thumbnail figure .imgcontainer img {
         max-width: 100%; }
+      div.gallery div.thumbnail figure .imgcontainer model-viewer {
+        width: auto;
+        height: 150vw;
+        max-height: 70vh;
+        }
       div.gallery div.thumbnail figure figcaption {
         display: block;
         text-align: center;

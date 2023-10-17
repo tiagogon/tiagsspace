@@ -27,6 +27,11 @@ div.gallery{
 				img{
 					max-width: 100%;
 				}
+				model-viewer {
+				    width: auto;
+				    height: 150vw;
+				    max-height: 70vh;
+				}
 
 			}
 			figcaption {

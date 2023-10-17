@@ -24,16 +24,7 @@ Template Name: 3D
 
 
 			<div id="canvas-container" class="container-fuild single-content">
-				<model-viewer src="https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls poster="poster.webp" shadow-intensity="1" exposure="0.94" auto-rotate>
-				    <div class="progress-bar hide" slot="progress-bar">
-				        <div class="update-bar"></div>
-				    </div>
-				    <button slot="ar-button" id="ar-button">
-				        View in your space
-				    </button>
-				    <div id="ar-prompt">
-				        <img src="https://modelviewer.dev/shared-assets/icons/hand.png">
-				    </div>
+				<model-viewer src="http://localhost:8888/tiagsspace/wp-content/uploads/2023/10/testGLB.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls poster="poster.webp" shadow-intensity="1" exposure="0.94" auto-rotate>
 				</model-viewer>
 
 			</div>
