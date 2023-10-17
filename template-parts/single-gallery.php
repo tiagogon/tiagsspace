@@ -760,6 +760,7 @@ if (!get_field('deactivate_gallery')) {
                                     auto-rotate
 
                                     >
+                                      <div class="progress-bar hide" slot="progress-bar">
                             				</model-viewer>
 
                                     <?php
