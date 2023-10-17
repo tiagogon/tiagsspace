@@ -746,7 +746,7 @@ if (!get_field('deactivate_gallery')) {
                                   <div class="imgcontainer" style="position: relative; height: auto; overflow: hidden; max-width: 100%;">
 
                                     <model-viewer src="<?php echo wp_get_attachment_url($attachmen->ID); ?>" ar ar-modes="webxr scene-viewer quick-look"
-                                    poster="poster.webp"
+
                                     camera-controls
                                     ar-placement="wall"
                                     X_disable-zoom
@@ -760,7 +760,9 @@ if (!get_field('deactivate_gallery')) {
                                     auto-rotate
 
                                     >
-                                      <div class="progress-bar hide" slot="progress-bar">
+                                    <div class="progress-bar hide" slot="progress-bar">
+                                        <div class="update-bar"></div>
+                                    </div>
                             				</model-viewer>
 
                                     <?php
