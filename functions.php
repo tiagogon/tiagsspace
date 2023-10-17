@@ -53,6 +53,16 @@ add_filter( 'big_image_size_threshold', '__return_false' );
 
 
 
+// Allow wordpress to upload 3D file formats as atthacmenets - Source Chat GTP
+function custom_upload_mimes($existing_mimes) {
+    // Add GLTF/GLB and OBJ to the list of allowed file types
+    $existing_mimes['gltf'] = 'model/gltf';
+    $existing_mimes['glb'] = 'model/gltf-binary';
+    $existing_mimes['obj'] = 'application/octet-stream';
+    return $existing_mimes;
+}
+add_filter('upload_mimes', 'custom_upload_mimes');
+
 /************* SEARCH FORM LAYOUT *****************/
 
 /****************** password protected post form *****/

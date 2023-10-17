@@ -5402,7 +5402,8 @@ body.background-w-dark-color {
   color: #aeff2b; }
 
 .white {
-  background: #fff; }
+  background: #303030;
+  }
 
 .white-darkmode {
   background: #fff; }
