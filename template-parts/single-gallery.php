@@ -975,7 +975,7 @@ if (!get_field('deactivate_gallery')) {
         }
         // 3d
         if ($there_is_3d == true) { ?>
-            <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+            <script type="module" src="<?php bloginfo('template_url'); ?>/library/js/model-viewer/model-viewer.min.js"></script>
             <?php
         }
 
