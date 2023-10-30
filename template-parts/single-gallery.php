@@ -729,6 +729,7 @@ if (!get_field('deactivate_gallery')) {
 
                         // 3D render
                         } elseif ( $attachmen->post_mime_type == "application/octet-stream" ) {
+                          $there_is_3d = true;
                           ?>
 
                           <div class="thumbnail item <?php echo $class_thumbnail;?> media-3d 3d-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
@@ -745,25 +746,45 @@ if (!get_field('deactivate_gallery')) {
                                   <!-- <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;"> -->
                                   <div class="imgcontainer" style="position: relative; height: auto; overflow: hidden; max-width: 100%;">
 
-                                    <model-viewer src="<?php echo wp_get_attachment_url($attachmen->ID); ?>" ar ar-modes="webxr scene-viewer quick-look"
-
-                                    camera-controls
-                                    ar-placement="wall"
-                                    X_disable-zoom
-                                    interaction-prompt="none"
-                                    auto-rotate-delay="1000"
-                                    rotation-per-second="-120%"
-
-                                    shadow-intensity="1"
-                                    exposure="0.94"
-                                    camera-orbit="-93.26deg 75.00deg 4m"
-                                    auto-rotate
-
+                                    <model-viewer id="aID<?php echo $attachmen->ID;?>" src="<?php echo wp_get_attachment_url($attachmen->ID); ?>" ar ar-modes="webxr scene-viewer quick-look"
+                                        camera-controls
+                                        interaction-prompt="none"
+                                        auto-rotate-delay="1000"
+                                        rotation-per-second="-120%"
+                                        shadow-intensity="2"
+                                        exposure="0.9"
+                                        camera-orbit="-93.26deg 75.00deg 2m"
+                                        auto-rotate
                                     >
                             				</model-viewer>
+                                    <script>
+                                      // get the model
+                                      const modelViewer = document.querySelector('#aID<?php echo $attachmen->ID;?>');
 
-                                    <?php
-                                    $there_is_3d = true; ?>
+                                      // Rotate effect
+                                      // const orbitCycle = [
+                                      //   '45deg 55deg 4m',
+                                      //   '-60deg 110deg 2m',
+                                      //   modelViewer.cameraOrbit
+                                      // ];
+                                      //
+                                      // setInterval(() => {
+                                      //   const currentOrbitIndex = orbitCycle.indexOf(modelViewer.cameraOrbit);
+                                      //   modelViewer.cameraOrbit =
+                                      //       orbitCycle[(currentOrbitIndex + 1) % orbitCycle.length];
+                                      // }, 3000);
+
+                                      modelViewer.addEventListener('load', () => {
+                                        // Get the model's materials
+                                        const materials = modelViewer.model.materials;
+                                        // Loop through the materials and set the occlusion texture strength to 0
+                                        for (const material of materials) {
+                                          material.occlusionTexture.setTexture(null);
+                                          //material.pbrMetallicRoughness.setBaseColorFactor('#ff0000'); //Works!
+                                        }
+                                        // modelViewer.update(); // works without
+                                      });
+                                    </script>
 
                                     </div>
                                 </figure>
