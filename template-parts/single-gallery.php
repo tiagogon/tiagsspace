@@ -752,7 +752,7 @@ if (!get_field('deactivate_gallery')) {
                                         auto-rotate-delay="1000"
                                         rotation-per-second="-120%"
                                         shadow-intensity="2"
-                                        exposure="0.9"
+                                        exposure="1"
                                         camera-orbit="-93.26deg 75.00deg 2m"
                                         auto-rotate
                                     >
