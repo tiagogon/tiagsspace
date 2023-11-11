@@ -226,6 +226,11 @@
           }
         }
       }
+      a{
+        @media (prefers-color-scheme: dark) {
+            color: $white;
+        }
+      }
       ul{
         li{
             @media (prefers-color-scheme: dark) {
