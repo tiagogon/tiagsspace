@@ -129,8 +129,8 @@ Single // log Archive pages >> Content
 
 
         if ($attachments) {
-            echo '<a id="download-all-attachments" href="#" download-all>Download</a>';
-            echo '<div style="display: none;" id="download-links">';
+            echo '<a id="download-all-attachments-'.$post->ID.'" href="#" download-all-'.$post->ID.'>Download</a>';
+            echo '<div style="display: none;" id="download-links-'.$post->ID.'">';
 
             foreach ($attachments as $attachment) {
                 $file_url = wp_get_attachment_url($attachment->ID);
@@ -141,9 +141,9 @@ Single // log Archive pages >> Content
             echo '</div>';
         }?>
         <script>
-        document.getElementById('download-all-attachments').addEventListener('click', function(e) {
+        document.getElementById('download-all-attachments<?php echo "-".$post->ID; ?>').addEventListener('click', function(e) {
             e.preventDefault();
-            document.getElementById('download-links').style.display = 'block';
+            document.getElementById('download-links<?php echo "-".$post->ID; ?>').style.display = 'block';
         });
         </script>
         <?php
