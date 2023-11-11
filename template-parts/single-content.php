@@ -118,7 +118,47 @@ Single // log Archive pages >> Content
         echo ' • ';
         edit_post_link('Edit', '', '');
 
+        echo ' • ';
+
+        //Download attachements
+        $attachments = get_posts(array(
+            'post_type' => 'attachment',
+            'numberposts' => -1,
+            'post_parent' => $post->ID
+        ));
+
+
+        if ($attachments) {
+            echo '<a id="download-all-attachments" href="#" download-all>Download</a>';
+            echo '<div style="display: none;" id="download-links">';
+
+            foreach ($attachments as $attachment) {
+                $file_url = wp_get_attachment_url($attachment->ID);
+                $file_name = get_the_title() . ' - ' . $attachment->post_title;
+                echo '</br><a href="' . esc_url($file_url) . '" download="' . sanitize_file_name($file_name) . '">' . $attachment->post_title . '</a>';
+            }
+
+            echo '</div>';
+        }?>
+        <script>
+        document.getElementById('download-all-attachments').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('download-links').style.display = 'block';
+        });
+        </script>
+        <?php
+
     }?>
+
+    <?php
+
+
+
+?>
+
+
+
+
   </p>
 
 </footer> <!-- end article footer -->
