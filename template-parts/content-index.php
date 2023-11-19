@@ -153,7 +153,7 @@ Index of posts for Home and Archives
                   }
 
                   // Print Year Separator if the
-                  if ($year == get_the_time("Y") or $count == 1) {
+                  if ($year == get_the_time("Y") or ($count == 1 and is_front_page() && is_home())) {
 
                       $year = get_the_time("Y");
 
