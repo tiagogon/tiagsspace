@@ -35,7 +35,7 @@ if ($background_image) {
 		}
 
     // if Gallery is Activated
-    if (!get_field('deactivate_gallery')) {
+    if (get_field('deactivate_gallery') == false) {
   		// Gallery
   		if (get_field('horizontal_gallery')) {
         echo "get_field('horizontal_gallery')";
