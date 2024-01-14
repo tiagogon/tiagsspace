@@ -35,12 +35,12 @@ if ($background_image) {
 		}
 
 		// Gallery
-		if (!get_field('horizontal_gallery')) {
-			get_template_part( 'template-parts/single', 'gallery' );
+		if (get_field('horizontal_gallery')) {
+      get_template_part( 'template-parts/single', 'gallery-horizontal' );
 		} else {
-			get_template_part( 'template-parts/single', 'gallery-horizontal' );
+			get_template_part( 'template-parts/single', 'gallery' );
 		}
-    
+
 		?>
 
 		<?PHP // Map
