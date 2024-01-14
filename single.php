@@ -34,12 +34,15 @@ if ($background_image) {
 			get_template_part( 'template-parts/single', 'video' );
 		}
 
-		// Gallery
-		if (get_field('horizontal_gallery')) {
-      get_template_part( 'template-parts/single', 'gallery-horizontal' );
-		} else {
-			get_template_part( 'template-parts/single', 'gallery' );
-		}
+    // if Gallery is Activated
+    if (!get_field('deactivate_gallery')) {
+  		// Gallery
+  		if (get_field('horizontal_gallery')) {
+        get_template_part( 'template-parts/single', 'gallery-horizontal' );
+  		} else {
+  			get_template_part( 'template-parts/single', 'gallery' );
+  		}
+    } // if gallery is not deactivated
 
 		?>
 

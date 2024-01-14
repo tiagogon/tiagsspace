@@ -4,8 +4,7 @@ Gallery template for single pages
 */
 
 
-// if Gallery is Activated
-if (!get_field('deactivate_gallery')) {
+
 
     // get images atached to the post
     $args = array(
@@ -476,7 +475,7 @@ if (!get_field('deactivate_gallery')) {
 
     <?php } // if there are images
 
-} // if gallery is not deactivated
+
 
 
 
