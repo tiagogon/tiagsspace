@@ -14,7 +14,7 @@ if (!get_field('deactivate_gallery')) {
         'order'             => 'ASC',
         'post_mime_type'    => 'image', // Make sure it doesn't pull other resources, like videos
         'post_parent'       => $post->ID, // Important part - ensures the associated images are loaded
-        'post_status'       => null,
+        //'post_status'       => null,
         'post_type'         => 'attachment'
     );
     $images = get_children( $args );

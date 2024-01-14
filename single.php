@@ -40,6 +40,7 @@ if ($background_image) {
 		} else {
 			get_template_part( 'template-parts/single', 'gallery-horizontal' );
 		}
+    
 		?>
 
 		<?PHP // Map

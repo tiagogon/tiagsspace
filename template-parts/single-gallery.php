@@ -3,7 +3,6 @@
 Gallery template for single pages
 */
 
-
 // if Gallery is Activated
 if (!get_field('deactivate_gallery')) {
 
