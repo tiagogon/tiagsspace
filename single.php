@@ -38,6 +38,7 @@ if ($background_image) {
     if (!get_field('deactivate_gallery')) {
   		// Gallery
   		if (get_field('horizontal_gallery')) {
+        echo "get_field('horizontal_gallery')";
         get_template_part( 'template-parts/single', 'gallery-horizontal' );
   		} else {
   			get_template_part( 'template-parts/single', 'gallery' );

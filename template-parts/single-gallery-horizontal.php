@@ -21,6 +21,8 @@ Gallery template for single pages
     // if there are images atached to the post
     if($images){
 
+        echo "if(images)";
+
 		// --- Extra contente // Videos ---
 	    // --------------------------------
 
