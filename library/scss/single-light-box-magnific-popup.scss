@@ -13,7 +13,12 @@
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     transition: all 0.5s ease;
-    background: $white;
+    background-color: $tiagsssss-color;
+  	background: $tiagsssss-color-gradient;
+    @media (prefers-color-scheme: dark) {
+      background-color: $tiagsssss-color-darkmode;
+      background: $tiagsssss-color-darkmode-gradient;
+    }
     &.mfp-ready {
       opacity: 0.95;
     }
@@ -36,17 +41,17 @@
       color: $white;
       font-size: 14px;
       line-height: 18px;
-      
+
       letter-spacing: 1px;
-      
+
     }
     .mfp-counter{
       color: $white;
       font-size: 14px;
       line-height: 26px;
-      
+
       letter-spacing: 1px;
-      
+
     }
   }
   .mfp-preloader{
@@ -167,10 +172,16 @@
       }
       .mfp-counter{
         color: $dark;
+        @media (prefers-color-scheme: dark) {
+          color: $white;
+        }
       }
     }
     .mfp-preloader{
       color: $dark;
+      @media (prefers-color-scheme: dark) {
+        color: $white;
+      }
     }
   }
   .mfp-figure {

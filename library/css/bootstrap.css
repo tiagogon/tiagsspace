@@ -6981,7 +6981,12 @@ img.mfp-img {
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   transition: all 0.5s ease;
-  background: #fff; }
+  background-color: #E3E5F2;
+  background: linear-gradient(0deg, #F2EFE3 0%, #E3E5F2 100%); }
+  @media (prefers-color-scheme: dark) {
+    .mfp-fade.mfp-bg {
+      background-color: #16161b;
+      background: linear-gradient(0deg, #1d1a17 0%, #16161b 100%); } }
   .mfp-fade.mfp-bg.mfp-ready {
     opacity: 0.95; }
   .mfp-fade.mfp-bg.mfp-removing {
@@ -7070,8 +7075,14 @@ img.mfp-img {
   display: none; }
 .background-w-light-color .mfp-wrap .mfp-content .mfp-counter {
   color: #000; }
+  @media (prefers-color-scheme: dark) {
+    .background-w-light-color .mfp-wrap .mfp-content .mfp-counter {
+      color: #fff; } }
 .background-w-light-color .mfp-wrap .mfp-preloader {
   color: #000; }
+  @media (prefers-color-scheme: dark) {
+    .background-w-light-color .mfp-wrap .mfp-preloader {
+      color: #fff; } }
 .background-w-light-color .mfp-figure:after {
   background: #000; }
 .background-w-light-color .mfp-close {
