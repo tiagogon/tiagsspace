@@ -793,7 +793,7 @@ if (have_rows('extra_content')) {
                         <div class="thumbnail item
                           <?php echo $class_thumbnail;?>
                           attachmen-<?php echo $count_item;?>
-                          <?php if($item_max_heigh=!""){echo "max-heigh-90vh";} ?>"
+                          <?php if($item_max_heigh!=""){echo "max-heigh-90vh";} ?>"
                             attachmentId="<?php echo $attachmen->ID;?>"
                             attachmentOrder="<?php echo $attachmen->menu_order;?>"  attachment_field_diferent_size_on_gallery="<?php
                                 if (get_field('diferent_size_on_gallery',$attachmen->ID)) {

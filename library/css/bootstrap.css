@@ -6024,7 +6024,8 @@ div.gallery {
       div.gallery div.thumbnail figure .imgcontainer img {
         max-width: 100%; }
       div.gallery div.thumbnail figure .imgcontainer img.max-heigh-90vh-left {
-        max-height: 90vh; }
+        max-height: 90vh;
+        float: left; }
       div.gallery div.thumbnail figure .imgcontainer img.max-heigh-90vh-right {
         max-height: 90vh;
         float: right; }
