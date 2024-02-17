@@ -45,6 +45,7 @@ if (have_rows('extra_content')) {
     // --------------------------------
 
     // Define Variables
+    $item_max_heigh = '';
     $spacement = '';
     $deactivat_masonry = false;
     $there_is_video = '';
@@ -247,6 +248,7 @@ if (have_rows('extra_content')) {
 
         // Container or Full width
         $class_container = get_field('container');
+        $item_max_heigh = esc_html ( get_field('item_max_heigh'));
 
         // Number of columns
         // Get the number of columns or set 1 as default
@@ -299,11 +301,7 @@ if (have_rows('extra_content')) {
         $row = 'row row-inverted'; // add margin on the sides
     }
 
-    // Max Height for the Img
-    $max_height = '';
-    if ($number_of_columns_lg == 1) {
-        $max_height = 'max-height';
-    }
+
 
 
 
@@ -792,7 +790,10 @@ if (have_rows('extra_content')) {
                     // IMAGE
                     } else { ?>
 
-                        <div class="thumbnail item <?php echo $class_thumbnail;?> attachmen-<?php echo $count_item;?>"
+                        <div class="thumbnail item
+                          <?php echo $class_thumbnail;?>
+                          attachmen-<?php echo $count_item;?>
+                          <?php if($item_max_heigh=!""){echo "max-heigh-90vh";} ?>"
                             attachmentId="<?php echo $attachmen->ID;?>"
                             attachmentOrder="<?php echo $attachmen->menu_order;?>"  attachment_field_diferent_size_on_gallery="<?php
                                 if (get_field('diferent_size_on_gallery',$attachmen->ID)) {
@@ -824,7 +825,8 @@ if (have_rows('extra_content')) {
                                     <?php }?>
                                         <img    <?php echo $source; ?>
                                                 alt="<?php echo $attachmen_alt; ?>"
-                                                class=" <?php echo $max_height; ?>        <?php echo $intense; ?>"
+                                                class="<?php echo $intense; ?>
+                                                <?php echo esc_html ( get_field('item_max_heigh') );?> "
                                                 itemprop="http://schema.org/image"
                                                 data-image="
                                                 <?php

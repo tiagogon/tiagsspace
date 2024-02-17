@@ -6010,6 +6010,8 @@ li.masonry-item {
 
 div.gallery {
   margin-bottom: 0; }
+  div.gallery div.max-heigh-90vh {
+    max-height: 90vh; }
   div.gallery div.thumbnail {
     float: left;
     -webkit-box-sizing: border-box;
@@ -6021,6 +6023,11 @@ div.gallery {
       margin: 0; }
       div.gallery div.thumbnail figure .imgcontainer img {
         max-width: 100%; }
+      div.gallery div.thumbnail figure .imgcontainer img.max-heigh-90vh-left {
+        max-height: 90vh; }
+      div.gallery div.thumbnail figure .imgcontainer img.max-heigh-90vh-right {
+        max-height: 90vh;
+        float: right; }
       div.gallery div.thumbnail figure .imgcontainer model-viewer {
         width: auto;
         height: 150vw;
