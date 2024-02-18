@@ -156,7 +156,7 @@ Index of posts for Home and Archives
                   if (
                           $year == get_the_time("Y") // Is current year, or previouse year
                           //or ($count == 1 and !(is_paged()) and is_home())
-                          or $count == 1 
+                          or $count == 1
                   ) {
 
                       $year = get_the_time("Y");
@@ -529,7 +529,7 @@ Index of posts for Home and Archives
             $container.on( 'load.infiniteScroll', onPageLoad );
 
             function onPageLoad() {
-              if ( infScroll.loadCount == 5 ) {
+              if ( infScroll.loadCount == 15 ) {
                 // after 2nd page loaded
                 // disable loading on scroll
                 $container.infiniteScroll( 'option', {
