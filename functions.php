@@ -1751,220 +1751,220 @@ function index_next_post_type($current_post_id) {
 
 
 // Newsletter HOOK
-add_action('trouble_email_hook', 'build_email_and_send_1');
+//add_action('trouble_email_hook', 'build_email_and_send_1');
 
-// Newsletter function
-function build_email_and_send_1() {
-
-    // Total amount of days this month
-    $number_of_day_this_month = date("t");
-    $day_of_the_month = date("j");
-
-    // Numeric representation of a month, without leading zeros
-    $numeric_representation_of_month = date("n");
-
-
-    // If is the last day of the month
-    if (($day_of_the_month == $number_of_day_this_month) AND ($numeric_representation_of_month % 2 == 0)) {
-
-        global $post;
-
-        $posts_content = "";
-
-        // POSTs
-        $args = array(
-            'posts_per_page'    => -1,
-            'post_type'         => 'post',
-            'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-        );
-        $posts = get_posts( $args );
-
-        if ($posts) {
-            $posts_content = $posts_content." ";
-            foreach ( $posts as $post ) {
-
-                if (get_field('send_on_trouble_letter',$post->ID) == true) {
-
-                    $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-
-                    $post_content = '
-                        <a href="'.get_permalink($post->ID).'" target="_blank">
-                        <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%"/>
-                        </a>
-                        <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-
-                    $posts_content = $posts_content.$post_content;
-
-                }
-            }
-        $posts_content = $posts_content."<br /><hr />";
-        }
-
-        // FILMs
-        $args = array(
-            'posts_per_page'    => -1,
-            'post_type'         => 'films',
-            'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-        );
-        $posts = get_posts( $args );
-
-        if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>FILMS</em></strong></span><br/>';
-            foreach ( $posts as $post ) {
-
-                if (get_field('send_on_trouble_letter',$post->ID) == true) {
-
-                    $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-
-                    $post_content = '
-                        <a href="'.get_permalink($post->ID).'" target="_blank">
-                        <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
-                        </a>
-                        <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-
-                    $posts_content = $posts_content.$post_content;
-
-                }
-            }
-        $posts_content = $posts_content."<br /><hr />";
-        }
-
-        // EMULSION
-        $args = array(
-            'posts_per_page'    => -1,
-            'post_type'         => 'emulsion',
-            'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-        );
-        $posts = get_posts( $args );
-
-        if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>EMULSION</em></strong></span><br/>';
-            foreach ( $posts as $post ) {
-
-                if (get_field('send_on_trouble_letter',$post->ID) == true) {
-
-                    $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-
-                    $post_content = '
-                        <a href="'.get_permalink($post->ID).'" target="_blank">
-                        <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
-                        </a>
-                        <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-
-                    $posts_content = $posts_content.$post_content;
-
-                }
-            }
-        $posts_content = $posts_content."<br /><hr />";
-        }
-
-        // DUSK
-        $args = array(
-            'posts_per_page'    => -1,
-            'post_type'         => 'dusk',
-            'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-        );
-        $posts = get_posts( $args );
-
-        if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>DUSK</em></strong></span><br/>';
-            foreach ( $posts as $post ) {
-
-                if (get_field('send_on_trouble_letter',$post->ID) == true) {
-
-                    $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-
-                    $post_content = '
-                        <a href="'.get_permalink($post->ID).'" target="_blank">
-                        <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
-                        </a>
-                        <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-
-                    $posts_content = $posts_content.$post_content;
-
-                }
-            }
-        $posts_content = $posts_content."<br /><hr />";
-        }
-
-        // HYPER
-        $args = array(
-            'posts_per_page'    => -1,
-            'post_type'         => 'hyper',
-            'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-        );
-        $posts = get_posts( $args );
-
-        if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><em><strong>HYPER SERIES</strong></em></span><br/>';
-            foreach ( $posts as $post ) {
-
-                if (get_field('send_on_trouble_letter',$post->ID) == true) {
-
-                    $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-
-                    $post_content = '
-                        <a href="'.get_permalink($post->ID).'" target="_blank">
-                        <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
-                        </a>
-                        <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-
-                    $posts_content = $posts_content.$post_content;
-
-                }
-            }
-        $posts_content = $posts_content."<br /><hr />";
-        }
-
-        // LOG
-        $args = array(
-            'posts_per_page'    => -1,
-            'post_type'         => 'log',
-            'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-        );
-        $posts = get_posts( $args );
-
-        if ($posts) {
-            $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>LOG</em></strong></span></br></br>';
-
-            $posts_content = $posts_content.'<strong><em><a href="https://trouble.place/log/" style="color:#3c00f5!important; text-decoration: none;">'.count($posts).' NEW ENTRIES</a></em></strong></br></br>';
-
-            $posts_content = $posts_content."</br><hr />";
-        }
-
-
-        $posts_content = $posts_content."</br></br>";
-
-
-
-        // Month name
-        $month_name = "".date("M", strtotime('-32 days'))." & ".date("M")."";
-        $year_numb = date('Y');
-
-
-        // Combine Variables
-        $to[]           = 'beamer-2383360638cc0beb42be76b60ce4d17510528977@tinyletter.com';
-        $subject        = 'Tiags Newsletter';
-        $message        = '
-            <div style="text-align: center;">
-				<span style="font-size: small;">
-					<strong>
-					<em style="color:#3c00f5!important; text-decoration: none;"><a href="https://trouble.place" style="color:#3c00f5!important; text-decoration: none;">TIAGS.SPACE</a> // NEWSLETTER // '.strtoupper($month_name).' '.strtoupper($year_numb).'</em>
-					</strong>
-				</span>
-			</div>
-
-            <div style="text-align: center;"><br />
-            <br />'.$posts_content.'</div>';
-
-        $headers        = array('From:tiago <letter@tiags.space>');
-
-        // Send Email
-        wp_mail( $to, $subject, $message, $headers );
-
-    } // If is the last day of the month
-
-}
+// // Newsletter function
+// function build_email_and_send_1() {
+//
+//     // Total amount of days this month
+//     $number_of_day_this_month = date("t");
+//     $day_of_the_month = date("j");
+//
+//     // Numeric representation of a month, without leading zeros
+//     $numeric_representation_of_month = date("n");
+//
+//
+//     // If is the last day of the month
+//     if (($day_of_the_month == $number_of_day_this_month) AND ($numeric_representation_of_month % 2 == 0)) {
+//
+//         global $post;
+//
+//         $posts_content = "";
+//
+//         // POSTs
+//         $args = array(
+//             'posts_per_page'    => -1,
+//             'post_type'         => 'post',
+//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
+//         );
+//         $posts = get_posts( $args );
+//
+//         if ($posts) {
+//             $posts_content = $posts_content." ";
+//             foreach ( $posts as $post ) {
+//
+//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
+//
+//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
+//
+//                     $post_content = '
+//                         <a href="'.get_permalink($post->ID).'" target="_blank">
+//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%"/>
+//                         </a>
+//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
+//
+//                     $posts_content = $posts_content.$post_content;
+//
+//                 }
+//             }
+//         $posts_content = $posts_content."<br /><hr />";
+//         }
+//
+//         // FILMs
+//         $args = array(
+//             'posts_per_page'    => -1,
+//             'post_type'         => 'films',
+//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
+//         );
+//         $posts = get_posts( $args );
+//
+//         if ($posts) {
+//             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>FILMS</em></strong></span><br/>';
+//             foreach ( $posts as $post ) {
+//
+//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
+//
+//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
+//
+//                     $post_content = '
+//                         <a href="'.get_permalink($post->ID).'" target="_blank">
+//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
+//                         </a>
+//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
+//
+//                     $posts_content = $posts_content.$post_content;
+//
+//                 }
+//             }
+//         $posts_content = $posts_content."<br /><hr />";
+//         }
+//
+//         // EMULSION
+//         $args = array(
+//             'posts_per_page'    => -1,
+//             'post_type'         => 'emulsion',
+//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
+//         );
+//         $posts = get_posts( $args );
+//
+//         if ($posts) {
+//             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>EMULSION</em></strong></span><br/>';
+//             foreach ( $posts as $post ) {
+//
+//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
+//
+//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
+//
+//                     $post_content = '
+//                         <a href="'.get_permalink($post->ID).'" target="_blank">
+//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
+//                         </a>
+//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
+//
+//                     $posts_content = $posts_content.$post_content;
+//
+//                 }
+//             }
+//         $posts_content = $posts_content."<br /><hr />";
+//         }
+//
+//         // DUSK
+//         $args = array(
+//             'posts_per_page'    => -1,
+//             'post_type'         => 'dusk',
+//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
+//         );
+//         $posts = get_posts( $args );
+//
+//         if ($posts) {
+//             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>DUSK</em></strong></span><br/>';
+//             foreach ( $posts as $post ) {
+//
+//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
+//
+//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
+//
+//                     $post_content = '
+//                         <a href="'.get_permalink($post->ID).'" target="_blank">
+//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
+//                         </a>
+//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
+//
+//                     $posts_content = $posts_content.$post_content;
+//
+//                 }
+//             }
+//         $posts_content = $posts_content."<br /><hr />";
+//         }
+//
+//         // HYPER
+//         $args = array(
+//             'posts_per_page'    => -1,
+//             'post_type'         => 'hyper',
+//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
+//         );
+//         $posts = get_posts( $args );
+//
+//         if ($posts) {
+//             $posts_content = $posts_content.'</br><span style="font-size: small;"><em><strong>HYPER SERIES</strong></em></span><br/>';
+//             foreach ( $posts as $post ) {
+//
+//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
+//
+//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
+//
+//                     $post_content = '
+//                         <a href="'.get_permalink($post->ID).'" target="_blank">
+//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
+//                         </a>
+//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
+//
+//                     $posts_content = $posts_content.$post_content;
+//
+//                 }
+//             }
+//         $posts_content = $posts_content."<br /><hr />";
+//         }
+//
+//         // LOG
+//         $args = array(
+//             'posts_per_page'    => -1,
+//             'post_type'         => 'log',
+//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
+//         );
+//         $posts = get_posts( $args );
+//
+//         if ($posts) {
+//             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>LOG</em></strong></span></br></br>';
+//
+//             $posts_content = $posts_content.'<strong><em><a href="https://trouble.place/log/" style="color:#3c00f5!important; text-decoration: none;">'.count($posts).' NEW ENTRIES</a></em></strong></br></br>';
+//
+//             $posts_content = $posts_content."</br><hr />";
+//         }
+//
+//
+//         $posts_content = $posts_content."</br></br>";
+//
+//
+//
+//         // Month name
+//         $month_name = "".date("M", strtotime('-32 days'))." & ".date("M")."";
+//         $year_numb = date('Y');
+//
+//
+//         // Combine Variables
+//         $to[]           = 'beamer-2383360638cc0beb42be76b60ce4d17510528977@tinyletter.com';
+//         $subject        = 'Tiags Newsletter';
+//         $message        = '
+//             <div style="text-align: center;">
+// 				<span style="font-size: small;">
+// 					<strong>
+// 					<em style="color:#3c00f5!important; text-decoration: none;"><a href="https://trouble.place" style="color:#3c00f5!important; text-decoration: none;">TIAGS.SPACE</a> // NEWSLETTER // '.strtoupper($month_name).' '.strtoupper($year_numb).'</em>
+// 					</strong>
+// 				</span>
+// 			</div>
+//
+//             <div style="text-align: center;"><br />
+//             <br />'.$posts_content.'</div>';
+//
+//         $headers        = array('From:tiago <letter@tiags.space>');
+//
+//         // Send Email
+//         wp_mail( $to, $subject, $message, $headers );
+//
+//     } // If is the last day of the month
+//
+// }
 
 
 
