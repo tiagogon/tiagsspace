@@ -1639,7 +1639,7 @@ function seo_image($image) {
 
         $args = array(
             'numberposts' => '1',
-            'post_type' => 'cityburns',
+            'post_type' => '4k-lento',
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
