@@ -1531,31 +1531,31 @@ function romanic_number($integer, $upcase = true)
 // ---------------- // -------------------------------- // ----------------
 // ---------------- // -------------------------------- // ----------------
 
-// Change Title
-function custom_seo_title( $site_title ) {
-    global $post;
-    if (is_singular('log')) {
-
-        // With log branch on the title->
-        $site_title = taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'link').$site_title;
-
-    } elseif (is_singular('hyper')) {
-
-        $site_title = $site_title.' // Hyper Series #'.number_of_the_post($post->ID);
-
-    } elseif (is_singular('films')) {
-
-        $site_title = $site_title;
-
-    } else {
-
-        // ADD CAPITALIZATION
-        // $site_title = strtoupper($site_title);
-
-    }
-    return $site_title;
-}
-add_filter( 'wpseo_title', 'custom_seo_title', 10, 1 );
+// // Change Title
+// function custom_seo_title( $site_title ) {
+//     global $post;
+//     if (is_singular('log')) {
+//
+//         // With log branch on the title->
+//         $site_title = taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'link').$site_title;
+//
+//     } elseif (is_singular('hyper')) {
+//
+//         $site_title = $site_title.' // Hyper Series #'.number_of_the_post($post->ID);
+//
+//     } elseif (is_singular('films')) {
+//
+//         $site_title = $site_title;
+//
+//     } else {
+//
+//         // ADD CAPITALIZATION
+//         // $site_title = strtoupper($site_title);
+//
+//     }
+//     return $site_title;
+// }
+// add_filter( 'wpseo_title', 'custom_seo_title', 10, 1 );
 
 
 // Change SEO image to smaller size - compatible with whatsapp
