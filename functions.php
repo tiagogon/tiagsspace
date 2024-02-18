@@ -1682,10 +1682,15 @@ function seo_image($image) {
         $last_id = $last['0']['ID'];
    }
 
+	 // Get URL from last post ID
+	 $thumbnail_id = get_post_thumbnail_id( $last_id );
+	 $thumbnail_url = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
+	 $image = $thumbnail_url[0];
 
    // Return Final image
    return $image;
 }
+
 add_filter('wpseo_opengraph_image', 'seo_image');
 add_filter('wpseo_twitter_image', 'seo_image');
 // ISSUES with images? try this one: https://github.com/Yoast/wordpress-seo/issues/1060
