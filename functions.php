@@ -1578,10 +1578,6 @@ function seo_image($image) {
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-
-				$thumbnail_id = get_post_thumbnail_id( $last_id );
-    		$thumbnail_url = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
-        $image = $thumbnail_url[0];
    }
 
    if( is_post_type_archive( 'log' )) {
@@ -1593,10 +1589,6 @@ function seo_image($image) {
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-
-				$thumbnail_id = get_post_thumbnail_id( $last_id );
-    		$thumbnail_url = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
-        $image = $thumbnail_url[0];
    }
 
    if( is_post_type_archive( 'dusk' )) {
@@ -1608,8 +1600,6 @@ function seo_image($image) {
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-
-        $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
    }
 
    if( is_post_type_archive( 'emulsion' )) {
@@ -1621,8 +1611,6 @@ function seo_image($image) {
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-
-        $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
    }
 
    if( is_post_type_archive( 'films' )) {
@@ -1634,8 +1622,6 @@ function seo_image($image) {
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-
-        $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
    }
 
    if( is_post_type_archive( 'cityburns' )) {
@@ -1647,8 +1633,17 @@ function seo_image($image) {
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
+   }
 
-        $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
+   if( is_post_type_archive( '4k-lento' )) {
+
+        $args = array(
+            'numberposts' => '1',
+            'post_type' => 'cityburns',
+            'post_status' => 'publish'
+        );
+        $last = wp_get_recent_posts( $args );
+        $last_id = $last['0']['ID'];
    }
 
    if( is_tax( ) ) {
@@ -1663,7 +1658,7 @@ function seo_image($image) {
         $args = array(
             'numberposts' => '1',
             'post_status' => 'publish',
-            'post_type' => array('post','dusk','films','log','emulsion','hyper','cityburns'),
+            'post_type' => array('post','dusk','films','log','emulsion','hyper','cityburns','4k-lento'),
             'tax_query' => array(
                 array(
                     'taxonomy' => $taxonomy,
@@ -1674,8 +1669,6 @@ function seo_image($image) {
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-
-        $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
    }
 
    if( is_home() ) {
@@ -1687,9 +1680,8 @@ function seo_image($image) {
         );
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
-
-        $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
    }
+
 
    // Return Final image
    return $image;
