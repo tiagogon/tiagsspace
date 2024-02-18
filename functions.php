@@ -1581,7 +1581,6 @@ function seo_image($image) {
 
 				$thumbnail_id = get_post_thumbnail_id( $last_id );
     		$thumbnail_url = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
-
         $image = $thumbnail_url[0];
    }
 
@@ -1595,7 +1594,9 @@ function seo_image($image) {
         $last = wp_get_recent_posts( $args );
         $last_id = $last['0']['ID'];
 
-        $image = wp_get_attachment_url( get_post_thumbnail_id($last_id) );
+				$thumbnail_id = get_post_thumbnail_id( $last_id );
+    		$thumbnail_url = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
+        $image = $thumbnail_url[0];
    }
 
    if( is_post_type_archive( 'dusk' )) {
