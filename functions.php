@@ -1580,6 +1580,7 @@ function seo_image($image) {
         $last_id = $last['0']['ID'];
 
         $image = wp_get_attachment_image_src( get_post_thumbnail_id($last_id), 'medium' );
+				$image = $image[0];
    }
 
    if( is_post_type_archive( 'log' )) {
