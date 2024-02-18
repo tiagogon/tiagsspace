@@ -3,6 +3,10 @@ body{
   font-size: $font-size-p;
   line-height: 1.7;
   min-height: 100vh;
+  a:hover {
+    color: none;
+    text-decoration: none;
+  }
 	em {
     font-style: normal;
 		font-family: $font-family-headings;

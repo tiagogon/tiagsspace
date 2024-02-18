@@ -5373,6 +5373,9 @@ body {
   font-size: 16px;
   line-height: 1.7;
   min-height: 100vh; }
+  body a:hover {
+    color: none;
+    text-decoration: none; }
   body em {
     font-style: normal;
     font-family: "Sporting_Grotesque_Bold", sans-serif;

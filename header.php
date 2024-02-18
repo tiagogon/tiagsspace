@@ -233,9 +233,9 @@
 						 </li>
 						 <li>
 							 <ul class="collapse" id="collapselog-branch">
-							 <li>
+								 <?php /*<li>
 								 <a href="<?php echo get_post_type_archive_link( 'log'); ?>" class="<?php if ( is_post_type_archive('log')) { echo "active";} if (is_singular( 'log' )) { echo " active";} ?>">All</a>
-							 </li>
+							 </li> */?>
 								 <?php
 								 // Get the list of terms in the custom taxonomy
 								 $terms = get_terms(array(
