@@ -71,7 +71,7 @@ Index of posts for Home and Archives
                   $grid_array = array(16, 12, 12, 10);
               }
               if ($post_type == "4k-lento" ) {
-                  $grid_array = array(16, 12, 10, 6);
+                  $grid_array = array(16, 12, 12, 8);
               }
               if ($post_type == "log" ) {
                   $grid_array = array(12, 12, 8, 6);
