@@ -396,11 +396,11 @@
 						<a href="https://tiagssssspace.tumblr.com/" target="_blank">Tumblr</a>
 					</li>
 					<li>
+						<a href="https://vimeo.com/tiags" target="_blank">Vimeo</a>
+					</li>
+					<li>
 						<a href="https://ra.co/dj/tiagsssss" target="_blank">RA</a>
 					</li>
-					<!-- <li>
-						<a href="https://vimeo.com/tiags" target="_blank">Vimeo</a>
-					</li> -->
 					<li>
 						<a data-toggle="collapse" href="#collapseReference" role="button" aria-expanded="false" aria-controls="collapsePast">Lists</a>
 						<ul class="collapse" id="collapseReference">
