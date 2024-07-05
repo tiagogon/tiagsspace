@@ -393,7 +393,7 @@
 						<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
 					</li>
 					<li>
-						<a href="https://www.instagram.com/tiagsssss/" target="_blank">Tumblr</a>
+						<a href="https://tiagssssspace.tumblr.com/" target="_blank">Tumblr</a>
 					</li>
 					<li>
 						<a href="https://ra.co/dj/tiagsssss" target="_blank">RA</a>
@@ -411,7 +411,7 @@
 								<a href="https://letterboxd.com/tiagsssss/" target="_blank">Letterboxd</a>
 							</li>
 							<li>
-								<a href="https://tiags.tumblr.com/" target="_blank">Misc.</a>
+								<a href="https://tiags.tumblr.com/" target="_blank">Tumblr II</a>
 							</li>
 						</ul>
 					</li>
