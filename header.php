@@ -393,6 +393,9 @@
 						<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
 					</li>
 					<li>
+						<a href="https://www.instagram.com/tiagsssss/" target="_blank">Tumblr</a>
+					</li>
+					<li>
 						<a href="https://ra.co/dj/tiagsssss" target="_blank">RA</a>
 					</li>
 					<!-- <li>
