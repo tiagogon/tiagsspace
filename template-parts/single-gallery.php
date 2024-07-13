@@ -59,7 +59,7 @@ if (have_rows('extra_content')) {
         if ( is_singular( 'dusk' )) {
             $class_container        = 'container-fluid';
             $number_of_columns_xs   = 1;
-            $number_of_columns_sm   = 2;
+            $number_of_columns_sm   = 3;
             $number_of_columns_md   = 3;
             $number_of_columns_lg   = 3;
             $no_space               = 'no-pad';
