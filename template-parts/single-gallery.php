@@ -1083,12 +1083,13 @@ if (have_rows('extra_content')) {
 
                 // This does the ajax request to change the menu_order value on the wp_db
                 $.ajax({
-                    url: example_ajax_obj.ajaxurl,
+                    url: example_ajax_obj.ajaxurl + '?t=' + new Date().getTime(), // Adds a timestamp to the request
                     data: {
                         'action': 'gallery_media_order_change_request',
                         'attachmentId' : attachmentId,
                         'attachmentOrder' : attachmentOrder
                     },
+                    cache: false,  // Disable caching explicitly
                     success:function(data) {
                         // This outputs the result of the ajax request
                         console.log(data);
