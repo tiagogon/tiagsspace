@@ -1102,7 +1102,16 @@ if (have_rows('extra_content')) {
             }); // loop ends
 
             // Reload pages
-            location.reload();
+               ///location.reload();
+
+               // THis solves the issue of some images not being order, the last ones of the gallerie. this was happening because the page was reloaded to fast and the api calles aborted 
+               let reloadTimeout;
+                function debounceReload() {
+                    clearTimeout(reloadTimeout);
+                    reloadTimeout = setTimeout(function() {
+                        location.reload();
+                    }, 1000); // 1 second delay
+                }
 
         }
 
@@ -1111,12 +1120,13 @@ if (have_rows('extra_content')) {
 
                 // This does the ajax request to change the menu_order value on the wp_db
                 $.ajax({
-                    url: example_ajax_obj.ajaxurl,
+                    url: example_ajax_obj.ajaxurl + '?t=' + new Date().getTime(), // Adds a timestamp to the request
                     data: {
                         'action': 'change_attachment_field_diferent_size_on_gallery',
                         'attachmentID' : attachmentID,
                         'changeSize' : changeSize
                     },
+                    cache: false,  // Disable caching explicitly
                     success:function(data) {
                         // This outputs the result of the ajax request
                         console.log(data);
