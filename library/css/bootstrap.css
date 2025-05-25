@@ -5776,6 +5776,19 @@ audio {
   #site-header .header-other-pages-title {
     display: none !important; }
 
+#lower-header {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  position: fixed;
+  z-index: 1000;
+  bottom: 0px;
+  font-family: "Sporting_Grotesque_Bold", sans-serif; }
+  #lower-header .topbar-left {
+    float: left; }
+    #lower-header .topbar-left h1, #lower-header .topbar-left a {
+      font-size: 21px;
+      font-family: "Sporting_Grotesque_Bold", sans-serif; }
+
 @media (max-width: 768px) {
   #site-header {
     background-color: transparent; }

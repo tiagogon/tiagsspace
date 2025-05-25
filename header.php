@@ -197,8 +197,6 @@
 
 		</header> <!-- end header -->
 
-
-
 		<div id="collapseMenu" class="collapse container-fluid index-block multi-collapse">
 
 			<div class="row d-flex justify-content-start">
@@ -432,3 +430,17 @@
 
 			</div>
 		</div>
+
+		<div id="lower-header" class="lower-header-front-page container-fluid side-padding Fixed" role="banner">
+
+			<div class="row">
+
+				<div class="topbar-left col-32 multi-collapse show">
+
+					<h1><span id="over-text" class="d-none d-sm-inline">2025</span></h1>
+					
+				</div>
+
+			</div> <!-- row -->
+
+		</div>	<!-- end lower header -->

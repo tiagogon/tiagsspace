@@ -23,8 +23,8 @@ Index of posts for Home and Archives
           // set up the counter variable as 0
           $count = 0;
 
-          //current year
-          $year = date("Y");
+          // current year
+          // $year = date("Y");
 
           if (have_posts()) : while (have_posts()) : the_post();
 
@@ -58,7 +58,7 @@ Index of posts for Home and Archives
               // grid on archive
               $grid_sizer = 'col-1 col-sm-1 col-md-1 col-lg-1';
 
-              $grid_year_separator = 'col-48';
+              //-disabled-// $grid_year_separator = 'col-48';
 
               // Default umber of collumns
               $grid_array = array(20, 12, 12, 8);
@@ -153,27 +153,28 @@ Index of posts for Home and Archives
                   }
 
                   // Print Year Separator if the
-                  if (
-                          $year == get_the_time("Y") // Is current year, or previouse year
-                          //or ($count == 1 and !(is_paged()) and is_home())
-                          or $count == 1
-                  ) {
-
-                      $year = get_the_time("Y");
-
-                  // Year is diferent
-                  } else {
-
+                    /* if (
+                            $year == get_the_time("Y") // Is current year, or previouse year
+                            //or ($count == 1 and !(is_paged()) and is_home())
+                            or $count == 1
+                    ) {
 
                         $year = get_the_time("Y");
 
-                        ?>
+                    // Year is diferent
+                    } else {
 
-                        <li class="masonry-item year-separator <?php echo $grid_year_separator; //$grid; // ?> " <?php post_class('clearfix'); ?> >
-                            <div class="separator-wrapper text-left"><?php echo $year; ?></div>
-                        </li>
 
-                    <?php }
+                            $year = get_the_time("Y");
+
+                            ?>
+
+                            <li class="masonry-item year-separator <?php echo $grid_year_separator; //$grid; // ?> " <?php post_class('clearfix'); ?> >
+                                <div class="separator-wrapper text-left"><?php echo $year; ?></div>
+                            </li>
+
+                        <?php }
+                        */
 
                   // Get Custom Post Info
                   $obj = get_post_type_object( $post_type );

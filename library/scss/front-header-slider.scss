@@ -52,7 +52,8 @@
   }
 }
 
-#site-header {
+
+#site-header{
   padding-top: $grid-gutter-width;
   padding-bottom: $grid-gutter-width;
   position: fixed;
@@ -126,13 +127,28 @@
     display: none!important;
   }
 
-
-
-
   //Display Size
   @media (min-width: map-get($grid-breakpoints, md)) {
 
 
+  }
+}
+
+#lower-header {
+  padding-top: $grid-gutter-width;
+  padding-bottom: $grid-gutter-width;
+  position: fixed;
+  z-index: 1000;
+  bottom: 0px;
+  font-family: $font-family-menu;
+
+
+  .topbar-left{
+    float: left;
+    h1,a{
+      font-size: $font-size-nav;
+      font-family: $font-family-menu;
+    }
   }
 }
 
