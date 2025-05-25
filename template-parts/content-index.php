@@ -363,7 +363,7 @@ Index of posts for Home and Archives
 
                       ?>
 
-                      <figure onMouseOver="showText('<?php echo $post_title; ?>')" onMouseOut="hide();">
+                      <figure onMouseOver="showText('<?php echo $post_title; ?>'); showYear('<?php echo get_the_date('Y-m'); ?>')" onMouseOut="hide(); hideYear();">
 
                           <a href="<?php echo get_permalink(); ?>">
 

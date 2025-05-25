@@ -1567,6 +1567,7 @@ return 'medium';
 
 // Change SEO image -- Hoked by Twitter and Facebook image filter
 function seo_image($image) {
+    $last_id = '';
 
     // Is Post Type archive
     if( is_post_type_archive( 'hyper' )) {

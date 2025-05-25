@@ -141,15 +141,24 @@
   z-index: 1000;
   bottom: 0px;
   font-family: $font-family-menu;
-
-
-  .topbar-left{
+  .row {
+    .left-side {
     float: left;
     h1,a{
       font-size: $font-size-nav;
       font-family: $font-family-menu;
     }
   }
+  .right-side {
+    float: right;
+    text-align: right;
+    h1,a{
+      font-size: $font-size-nav;
+      font-family: $font-family-menu;
+    }
+  }
+  }
+  
 }
 
 // Mobile

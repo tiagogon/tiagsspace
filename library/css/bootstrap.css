@@ -5783,9 +5783,15 @@ audio {
   z-index: 1000;
   bottom: 0px;
   font-family: "Sporting_Grotesque_Bold", sans-serif; }
-  #lower-header .topbar-left {
+  #lower-header .row .left-side {
     float: left; }
-    #lower-header .topbar-left h1, #lower-header .topbar-left a {
+    #lower-header .row .left-side h1, #lower-header .row .left-side a {
+      font-size: 21px;
+      font-family: "Sporting_Grotesque_Bold", sans-serif; }
+  #lower-header .row .right-side {
+    float: right;
+    text-align: right; }
+    #lower-header .row .right-side h1, #lower-header .row .right-side a {
       font-size: 21px;
       font-family: "Sporting_Grotesque_Bold", sans-serif; }
 
