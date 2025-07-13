@@ -186,7 +186,7 @@
 								<?php if (is_singular()) {
 									echo '<span class="short">R</span><span class="long">Reveal</span>';
 								}else {
-									echo "Reveall";
+									echo "Revealll";
 								} ?>
 							</span>
 							<span class="hide">Hide</span>
