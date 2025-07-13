@@ -8,8 +8,6 @@
 
 <html <?php language_attributes(); ?> class="no-js"><!--<![endif]-->
 
-			<?php // ----- test deployment v6 ----- ?>
-
 	<head>
 		<?php // ----- META ----- ?>
 		<meta charset="utf-8">
@@ -186,7 +184,7 @@
 						<a data-toggle="collapse" data-target=".multi-collapse" href="#collapseMenu" role="button" aria-expanded="false" aria-controls="collapseMenu">
 							<span class="reveal">
 								<?php if (is_singular()) {
-									echo '<span class="short">R</span><span class="long">Reveal</span>';
+									echo '<span class="short">R</span><span class="long">Reveall</span>';
 								}else {
 									echo "Reveal";
 								} ?>
