@@ -8,7 +8,7 @@
 
 <html <?php language_attributes(); ?> class="no-js"><!--<![endif]-->
 
-			<?php // ----- test deployment v5 ----- ?>
+			<?php // ----- test deployment v6 ----- ?>
 
 	<head>
 		<?php // ----- META ----- ?>
