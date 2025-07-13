@@ -8,6 +8,8 @@
 
 <html <?php language_attributes(); ?> class="no-js"><!--<![endif]-->
 
+			<?php // ----- test deployment v1 ----- ?>
+
 	<head>
 		<?php // ----- META ----- ?>
 		<meta charset="utf-8">
