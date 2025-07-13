@@ -184,9 +184,9 @@
 						<a data-toggle="collapse" data-target=".multi-collapse" href="#collapseMenu" role="button" aria-expanded="false" aria-controls="collapseMenu">
 							<span class="reveal">
 								<?php if (is_singular()) {
-									echo '<span class="short">R</span><span class="long">Reveall</span>';
+									echo '<span class="short">R</span><span class="long">Reveal</span>';
 								}else {
-									echo "Reveal";
+									echo "Reveall";
 								} ?>
 							</span>
 							<span class="hide">Hide</span>
