@@ -16,8 +16,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 		<?php // ----- CSS ----- ?>
-		<?php // ----- CSS test ----- ?>
-
 
 			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
 
