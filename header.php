@@ -17,13 +17,8 @@
 
 		<?php // ----- CSS ----- ?>
 
-
-
 			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
-
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.css">
-
-
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/plyr-master/assets/vendor/plyr/dist/plyr.css">
 
 		<?php wp_head(); ?>
@@ -423,12 +418,6 @@
 					</ul>
 				</div>
 
-
-
-
-
-
-
 			</div>
 		</div>
 
@@ -453,8 +442,6 @@
 				</div>
 
 				<div class="right-side col-16">
-
-					
 
 				</div>
 
