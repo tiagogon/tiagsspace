@@ -17,6 +17,8 @@
 
 		<?php // ----- CSS ----- ?>
 
+
+
 			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
 
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.css">
