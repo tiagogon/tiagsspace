@@ -597,34 +597,41 @@ Index of posts for Home and Archives
               $(items).find('video').each((i, video) => video.play())
             });
 
-            $container.on('append.infiniteScroll', function(event, response, path, items) {
-            items.forEach(function(item) {
-                // ✅ Fix Safari srcset bug
-                item.querySelectorAll('img[srcset]').forEach(img => {
-                img.outerHTML = img.outerHTML;
-                });
+         $container.on('append.infiniteScroll', function(event, response, path, items) {
+  items.forEach(function(item) {
+    // Fix for Safari srcset bug
+    item.querySelectorAll('img[srcset]').forEach(img => {
+      img.outerHTML = img.outerHTML;
+    });
 
-                // ✅ Fix autoplay + muted requirement (for both video and audio)
-                item.querySelectorAll('.plyr').forEach(el => {
-                el.setAttribute('preload', 'auto');
-                el.setAttribute('playsinline', '');
-                
-                if (el.hasAttribute('autoplay')) {
-                    el.muted = true; // required for autoplay
-                }
+    // Handle each .plyr element (audio or video)
+    item.querySelectorAll('.plyr').forEach(el => {
+      // Set required attributes BEFORE Plyr init
+      el.setAttribute('preload', 'auto');
+      el.setAttribute('playsinline', '');
 
-                // Initialize Plyr for this element
-                new Plyr(el);
+      const isVideo = el.tagName.toLowerCase() === 'video' || el.tagName.toLowerCase() === 'audio';
 
-                // Try to autoplay if requested
-                if (el.hasAttribute('autoplay')) {
-                    el.play().catch(e => {
-                    console.warn('Autoplay failed on dynamic item:', e);
-                    });
-                }
-                });
+      if (el.hasAttribute('autoplay') && isVideo) {
+        el.muted = true; // Required for autoplay without user interaction
+      }
+
+      // Wait for browser to fully parse the media before initializing Plyr
+      el.addEventListener('loadedmetadata', () => {
+        const player = new Plyr(el);
+
+        if (el.hasAttribute('autoplay')) {
+          const playPromise = el.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.warn('Autoplay failed:', error);
             });
-            });
+          }
+        }
+      }, { once: true });
+    });
+  });
+});
 
         </script>
     <?php } ?>
