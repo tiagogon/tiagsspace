@@ -597,28 +597,33 @@ Index of posts for Home and Archives
               $(items).find('video').each((i, video) => video.play())
             });
 
-            // Plyr setup for new videos
             $container.on('append.infiniteScroll', function(event, response, path, items) {
-                // Fix for Safari srcset bug
-                items.forEach(function(item) {
-                    item.querySelectorAll('img[srcset]').forEach(img => {
-                    img.outerHTML = img.outerHTML;
-                    });
+            items.forEach(function(item) {
+                // ✅ Fix Safari srcset bug
+                item.querySelectorAll('img[srcset]').forEach(img => {
+                img.outerHTML = img.outerHTML;
                 });
 
-                // Fix for autoplay on new videos
-                items.forEach(function(item) {
-                    item.querySelectorAll('video').forEach(video => {
-                    video.play();
-                    });
-                });
+                // ✅ Fix autoplay + muted requirement (for both video and audio)
+                item.querySelectorAll('.plyr').forEach(el => {
+                el.setAttribute('preload', 'auto');
+                el.setAttribute('playsinline', '');
+                
+                if (el.hasAttribute('autoplay')) {
+                    el.muted = true; // required for autoplay
+                }
 
-                // ✅ Proper Plyr init
-                items.forEach(function(item) {
-                    item.querySelectorAll('.plyr').forEach(el => {
-                    new Plyr(el);
+                // Initialize Plyr for this element
+                new Plyr(el);
+
+                // Try to autoplay if requested
+                if (el.hasAttribute('autoplay')) {
+                    el.play().catch(e => {
+                    console.warn('Autoplay failed on dynamic item:', e);
                     });
+                }
                 });
+            });
             });
 
         </script>
