@@ -12,8 +12,8 @@
 
 			const players = Array.from(document.querySelectorAll('audio')).map(p => new Plyr(p));
 			document.addEventListener('DOMContentLoaded', () => {
-                                            Plyr.setup('.plyr');
-                                        });
+				Plyr.setup('.plyr');
+			});
 		</script>
 
 	</body>
