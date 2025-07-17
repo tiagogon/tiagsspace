@@ -408,6 +408,7 @@ Index of posts for Home and Archives
                                     <video 
                                         class="plyr" 
                                         playsinline 
+                                        preload="auto"
                                         autoplay 
                                         muted 
                                         loop 
