@@ -11,6 +11,9 @@
 			//const players = Plyr.setup('audio'); //can be audioTag, .someClass, #someID
 
 			const players = Array.from(document.querySelectorAll('audio')).map(p => new Plyr(p));
+			document.addEventListener('DOMContentLoaded', () => {
+                                            Plyr.setup('.plyr');
+                                        });
 		</script>
 
 	</body>

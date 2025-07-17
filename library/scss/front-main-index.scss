@@ -140,7 +140,12 @@ li.masonry-item {
             float: left;
             margin: 0;
         }
+        // PLYR video with better performance
+        .plyr__controls, .plyr__control--overlaid {
+            display: none;
+        }
 
+        // Video JS with video pack plugin
         .kgvid_wrapper_inline {
             display: contents;
         }

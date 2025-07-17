@@ -5977,6 +5977,8 @@ li.masonry-item {
         li.masonry-item figure a .imgcontainer .kgvid_wrapper_inline_left {
           float: left;
           margin: 0; }
+        li.masonry-item figure a .imgcontainer .plyr__controls, li.masonry-item figure a .imgcontainer .plyr__control--overlaid {
+          display: none; }
         li.masonry-item figure a .imgcontainer .kgvid_wrapper_inline {
           display: contents; }
         li.masonry-item figure a .imgcontainer .video-js {

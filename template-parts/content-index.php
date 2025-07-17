@@ -372,12 +372,51 @@ Index of posts for Home and Archives
                                   <?php // IF IS VIDEO -- via: https://codepen.io/dudleystorey/pen/knqyK
                                   if (!empty($video_thumbnail_id)) {
 
-                                    // Use videoplayer from VideoPack
-                                    // Use of videopack shortcode https://www.wordpressvideopack.com/docs/shortcode-reference/
-                                    // Use of shortcode via PHP https://developer.wordpress.org/reference/functions/do_shortcode/
-                                    // Parameters
+                                    // // Use videoplayer from VideoPack
+                                    // // Use of videopack shortcode https://www.wordpressvideopack.com/docs/shortcode-reference/
+                                    // // Use of shortcode via PHP https://developer.wordpress.org/reference/functions/do_shortcode/
+                                    // // Parameters
 
-                                    echo do_shortcode( '[KGVID id="'.$video_thumbnail_id.'" muted="true" controls="false" loop="true" autoplay="true" pauseothervideos="false" pixel_ratio="true" playsinline playsinline="true"  schema="false" poster="'.$video_poster.'"]' );
+                                    // echo do_shortcode( '[KGVID id="'.$video_thumbnail_id.'" muted="true" controls="false" loop="true" autoplay="true" pauseothervideos="false" pixel_ratio="true" playsinline playsinline="true"  schema="false" poster="'.$video_poster.'"]' );
+
+                                    
+                                    // Get the video attachment ID
+                                    $video_id = $video_thumbnail_id; // or whatever your variable is
+
+                                    // Get video sources (MP4, WebM, etc.) using Videopack metadata
+                                    $video_formats = get_post_meta($video_id, 'kgflash_video', true);
+                                    $poster_url = $video_poster ?: get_the_post_thumbnail_url($video_id, 'full');
+
+                                    // Build source tags
+                                    $sources = '';
+                                    if (!empty($video_formats) && is_array($video_formats)) {
+                                        foreach ($video_formats as $format => $url) {
+                                            if ($url) {
+                                                $sources .= '<source src="' . esc_url($url) . '" type="video/' . esc_attr($format) . '">' . "\n";
+                                            }
+                                        }
+                                    }
+
+                                    // Fallback if no formats found (fallback to the original file URL)
+                                    if (empty($sources)) {
+                                        $fallback_url = wp_get_attachment_url($video_id);
+                                        $sources .= '<source src="' . esc_url($fallback_url) . '" type="video/mp4">' . "\n";
+                                    }
+
+                                    // Output the Plyr-compatible <video> tag
+                                    ?>
+                                    <video 
+                                        class="plyr" 
+                                        playsinline 
+                                        autoplay 
+                                        muted 
+                                        loop 
+                                        poster="<?php echo esc_url($poster_url); ?>"
+                                        controls>
+                                        <?php echo $sources; ?>
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <?php
 
                                   } else { ?>
 
@@ -555,6 +594,30 @@ Index of posts for Home and Archives
             // https://github.com/metafizzy/infinite-scroll/issues/926
             $container.on( 'append.infiniteScroll', function( event, response, path, items ) {
               $(items).find('video').each((i, video) => video.play())
+            });
+
+            // Plyr setup for new videos
+            $container.on('append.infiniteScroll', function(event, response, path, items) {
+                // Fix for Safari srcset bug
+                items.forEach(function(item) {
+                    item.querySelectorAll('img[srcset]').forEach(img => {
+                    img.outerHTML = img.outerHTML;
+                    });
+                });
+
+                // Fix for autoplay on new videos
+                items.forEach(function(item) {
+                    item.querySelectorAll('video').forEach(video => {
+                    video.play();
+                    });
+                });
+
+                // ✅ Proper Plyr init
+                items.forEach(function(item) {
+                    item.querySelectorAll('.plyr').forEach(el => {
+                    new Plyr(el);
+                    });
+                });
             });
 
         </script>
