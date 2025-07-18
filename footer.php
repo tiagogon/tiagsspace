@@ -9,51 +9,53 @@
 		<script src="<?php bloginfo('template_url'); ?>/library/js/plyr-master/src/js/plyr.js"></script>
 		
 		<script>
-			
-		function initializePlyrElements(scope = document) {
-			scope.querySelectorAll('.plyr').forEach(media => {
-				// Prevent double-init
-				if (media.dataset.plyrInitialized === 'true') return;
+			function initializePlyrElements(scope = document) {
+				scope.querySelectorAll('.plyr').forEach(media => {
+					// Prevent double init
+					if (media.dataset.plyrInitialized === 'true') return;
 
-				// Set required attributes before initializing
-				media.setAttribute('preload', 'auto');
-				media.setAttribute('playsinline', '');
+					// Set necessary attributes
+					media.setAttribute('preload', 'auto');
+					media.setAttribute('playsinline', '');
 
-				if (media.hasAttribute('autoplay')) {
-				media.muted = true; // Required for autoplay to work
-				}
+					// For autoplay support in Chrome: muted must be set via JS
+					if (media.hasAttribute('autoplay')) {
+						media.muted = true;
+					}
 
-				// Initialize Plyr
-				const player = new Plyr(media);
-				media.dataset.plyrInitialized = 'true';
+					// Init Plyr
+					const player = new Plyr(media);
+					media.dataset.plyrInitialized = 'true';
 
-				// Attempt to autoplay if requested
-				if (media.hasAttribute('autoplay')) {
-				media.addEventListener('loadedmetadata', () => {
-					media.play().catch(err => {
-					console.warn('Autoplay failed:', err);
-					});
-				}, { once: true });
-				}
-			});
+					// Attempt autoplay after media is ready
+					if (media.hasAttribute('autoplay')) {
+						media.addEventListener('loadeddata', () => {
+							media.play().catch(err => {
+								console.warn('Autoplay failed:', err);
+							});
+						}, { once: true });
+					}
+				});
 			}
 
-			// Run on DOM ready
 			document.addEventListener('DOMContentLoaded', () => {
-			initializePlyrElements();
+				initializePlyrElements();
 			});
 
-			$container.on('append.infiniteScroll', function(event, response, path, items) {
-				items.forEach(item => {
-				// Fix for Safari bug (srcset)
-				item.querySelectorAll('img[srcset]').forEach(img => {
-					img.outerHTML = img.outerHTML;
-				});
+			// Infinite Scroll support
+			if (typeof $container !== 'undefined') {
+				$container.on('append.infiniteScroll', function(event, response, path, items) {
+					items.forEach(item => {
+						// Safari bug fix for srcset
+						item.querySelectorAll('img[srcset]').forEach(img => {
+							img.outerHTML = img.outerHTML;
+						});
 
-				// Init Plyr on newly added media
-				initializePlyrElements(item);
+						// Init Plyr for new elements
+						initializePlyrElements(item);
+					});
 				});
-			});
+			}
 		</script>
 
 	</body>
