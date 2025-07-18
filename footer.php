@@ -6,7 +6,7 @@
 		<?php
 		// Audio (and video) Player support
 		// -- CSS on header ?>
-		<script src="<?php bloginfo('template_url'); ?>/library/js/plyr-master/assets/vendor/plyr/dist/plyr.min.js" ></script>
+		<script src="<?php bloginfo('template_url'); ?>/library/js/plyr-master/src/js/plyr.js"></script>
 		
 		<script>
 			
@@ -41,6 +41,18 @@
 			// Run on DOM ready
 			document.addEventListener('DOMContentLoaded', () => {
 			initializePlyrElements();
+			});
+
+			$container.on('append.infiniteScroll', function(event, response, path, items) {
+				items.forEach(item => {
+				// Fix for Safari bug (srcset)
+				item.querySelectorAll('img[srcset]').forEach(img => {
+					img.outerHTML = img.outerHTML;
+				});
+
+				// Init Plyr on newly added media
+				initializePlyrElements(item);
+				});
 			});
 		</script>
 

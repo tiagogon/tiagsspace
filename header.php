@@ -19,7 +19,8 @@
 
 			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.css">
-			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/plyr-master/assets/vendor/plyr/dist/plyr.css">
+			<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+			<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 
 		<?php wp_head(); ?>
 
