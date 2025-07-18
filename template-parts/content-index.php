@@ -406,14 +406,13 @@ Index of posts for Home and Archives
                                     // Output the Plyr-compatible <video> tag
                                     ?>
                                     <video 
-                                        class="plyr" 
-                                        playsinline 
+                                         class="plyr"
+                                        autoplay
+                                        muted
+                                        playsinline
                                         preload="auto"
-                                        autoplay 
-                                        muted 
-                                        loop 
-                                        poster="<?php echo esc_url($poster_url); ?>"
-                                        controls>
+                                        loop
+                                        poster="<?php echo esc_url($poster_url); ?>">
                                         <?php echo $sources; ?>
                                         Your browser does not support the video tag.
                                     </video>
@@ -597,17 +596,14 @@ Index of posts for Home and Archives
               $(items).find('video').each((i, video) => video.play())
             });
 
-$container.on('append.infiniteScroll', function(event, response, path, items) {
-  items.forEach(item => {
-    // Fix for Safari bug (srcset)
-    item.querySelectorAll('img[srcset]').forEach(img => {
-      img.outerHTML = img.outerHTML;
-    });
-
-    // Init Plyr on newly added media
-    initializePlyrElements(item);
-  });
-});
+            $container.on('append.infiniteScroll', function(event, response, path, items) {
+            items.forEach(item => {
+                // Fix for Safari bug (srcset)
+                item.querySelectorAll('img[srcset]').forEach(img => {
+                img.outerHTML = img.outerHTML;
+                });
+            });
+            });
 
         </script>
     <?php } ?>
