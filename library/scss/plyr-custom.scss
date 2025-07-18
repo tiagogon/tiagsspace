@@ -29,6 +29,11 @@ audio{
     line-height: 1;
 }
 
+// Front page thumbanisl video play as background
+video.plyr-thumbnail-front {
+  pointer-events: none;
+}
+
 // Audio control
 .background-w-light-color{
     .plyr--audio .plyr__control {

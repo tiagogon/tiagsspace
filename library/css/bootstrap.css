@@ -5621,6 +5621,9 @@ audio {
   box-shadow: none;
   line-height: 1; }
 
+video.plyr-thumbnail-front {
+  pointer-events: none; }
+
 .background-w-light-color .plyr--audio .plyr__control {
   color: #000; }
   .background-w-light-color .plyr--audio .plyr__control.plyr__tab-focus, .background-w-light-color .plyr--audio .plyr__control:hover, .background-w-light-color .plyr--audio .plyr__control[aria-expanded='true'] {
