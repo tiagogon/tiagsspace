@@ -709,7 +709,7 @@ function medium_taxonomy() {
     'hierarchical'               => true,
     'rewrite'                    => array(
                                     'hierarchical' => true,
-                                    'slug' => 'm'),
+                                    'slug' => 'medium'),
     'public'                     => true,
     'show_ui'                    => true,
     'show_admin_column'          => true,
