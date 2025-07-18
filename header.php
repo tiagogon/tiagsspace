@@ -19,8 +19,7 @@
 
 			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
 			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.css">
-			<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-			<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/plyr-master/plyr.css" />
 
 		<?php wp_head(); ?>
 
@@ -32,8 +31,6 @@
 					document.createElement( "picture" );
 				</script>
 				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/picturefill/picturefill.min.js" async></script>
-
-
 
 			<?php // Modernizer ?>
 				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/modernizr/modernizr.min.js"></script>
@@ -51,21 +48,14 @@
 			<?php // Classie ?>
 				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/classie/classie.min.js"></script>
 				<?php /* <script src="//cdnjs.cloudflare.com/ajax/libs/classie/1.0.1/classie.min.js"></script> */ ?>
+			
+			<?php // Plyr ?>
+				<script src="<?php bloginfo('template_url'); ?>/library/js/plyr-master/plyr.polyfilled.js"></script>
 
-			<?php // Clean Analitics URL campaings ?>
-				<script src="<?php bloginfo('template_url'); ?>/library/js/fresh_url/fresh_url.min.js" async></script>
-
-			<?php // Slider Swiper ?>
-		  		<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.js"></script>
 
 			<?php // Bootstrap Scripts ?>
 					<script src="<?php bloginfo('template_url'); ?>/library/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
-
-
-
-		  	<?php // Play video on iphone wihtout fullscreen ?>
-		  		<!-- <script src="<?php bloginfo('template_url'); ?>/library/js/iphone-inline-video-master/dist/iphone-inline-video.min.js"></script> -->
+					
 
 		<!-- end of wordpress head -->
 		<!-- IE8 fallback moved below head to work properly. Added respond as well. Tested to work. -->
