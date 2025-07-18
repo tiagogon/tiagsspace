@@ -9,30 +9,40 @@
 		<script src="<?php bloginfo('template_url'); ?>/library/js/plyr-master/assets/vendor/plyr/dist/plyr.min.js" ></script>
 		
 		<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Select all audio and video elements with the .plyr class
-    document.querySelectorAll('.plyr').forEach(media => {
-      // Set recommended attributes to ensure compatibility and autoplay behavior
-      media.setAttribute('preload', 'auto');
-      media.setAttribute('playsinline', '');
-      
-      // If autoplay is desired, set it and ensure muted is enabled
-      if (media.hasAttribute('autoplay')) {
-        media.muted = true;
-      }
+			
+		function initializePlyrElements(scope = document) {
+			scope.querySelectorAll('.plyr').forEach(media => {
+				// Prevent double-init
+				if (media.dataset.plyrInitialized === 'true') return;
 
-      // Initialize Plyr
-      new Plyr(media);
+				// Set required attributes before initializing
+				media.setAttribute('preload', 'auto');
+				media.setAttribute('playsinline', '');
 
-      // Attempt autoplay if requested
-      if (media.hasAttribute('autoplay')) {
-        media.play().catch(e => {
-          console.warn('Autoplay failed:', e);
-        });
-      }
-    });
-  });
-</script>
+				if (media.hasAttribute('autoplay')) {
+				media.muted = true; // Required for autoplay to work
+				}
+
+				// Initialize Plyr
+				const player = new Plyr(media);
+				media.dataset.plyrInitialized = 'true';
+
+				// Attempt to autoplay if requested
+				if (media.hasAttribute('autoplay')) {
+				media.addEventListener('loadedmetadata', () => {
+					media.play().catch(err => {
+					console.warn('Autoplay failed:', err);
+					});
+				}, { once: true });
+				}
+			});
+			}
+
+			// Run on DOM ready
+			document.addEventListener('DOMContentLoaded', () => {
+			initializePlyrElements();
+			});
+		</script>
 
 	</body>
 

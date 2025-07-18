@@ -597,39 +597,15 @@ Index of posts for Home and Archives
               $(items).find('video').each((i, video) => video.play())
             });
 
-         $container.on('append.infiniteScroll', function(event, response, path, items) {
-  items.forEach(function(item) {
-    // Fix for Safari srcset bug
+$container.on('append.infiniteScroll', function(event, response, path, items) {
+  items.forEach(item => {
+    // Fix for Safari bug (srcset)
     item.querySelectorAll('img[srcset]').forEach(img => {
       img.outerHTML = img.outerHTML;
     });
 
-    // Handle each .plyr element (audio or video)
-    item.querySelectorAll('.plyr').forEach(el => {
-      // Set required attributes BEFORE Plyr init
-      el.setAttribute('preload', 'auto');
-      el.setAttribute('playsinline', '');
-
-      const isVideo = el.tagName.toLowerCase() === 'video' || el.tagName.toLowerCase() === 'audio';
-
-      if (el.hasAttribute('autoplay') && isVideo) {
-        el.muted = true; // Required for autoplay without user interaction
-      }
-
-      // Wait for browser to fully parse the media before initializing Plyr
-      el.addEventListener('loadedmetadata', () => {
-        const player = new Plyr(el);
-
-        if (el.hasAttribute('autoplay')) {
-          const playPromise = el.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(error => {
-              console.warn('Autoplay failed:', error);
-            });
-          }
-        }
-      }, { once: true });
-    });
+    // Init Plyr on newly added media
+    initializePlyrElements(item);
   });
 });
 
