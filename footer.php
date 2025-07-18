@@ -9,53 +9,41 @@
 		<script src="<?php bloginfo('template_url'); ?>/library/js/plyr-master/src/js/plyr.js"></script>
 		
 		<script>
-			function initializePlyrElements(scope = document) {
-				scope.querySelectorAll('.plyr').forEach(media => {
-					// Prevent double init
-					if (media.dataset.plyrInitialized === 'true') return;
+		function initializePlyrElements(scope = document) {
+			scope.querySelectorAll('.plyr').forEach(media => {
+			if (media.dataset.plyrInitialized === 'true') return;
 
-					// Set necessary attributes
-					media.setAttribute('preload', 'auto');
-					media.setAttribute('playsinline', '');
+			media.setAttribute('preload', 'auto');
+			media.setAttribute('playsinline', '');
+			media.setAttribute('muted', '');      // HTML attribute
+			media.muted = true;                   // JavaScript property
 
-					// For autoplay support in Chrome: muted must be set via JS
-					if (media.hasAttribute('autoplay')) {
-						media.muted = true;
-					}
+			const player = new Plyr(media);
+			media.dataset.plyrInitialized = 'true';
 
-					// Init Plyr
-					const player = new Plyr(media);
-					media.dataset.plyrInitialized = 'true';
-
-					// Attempt autoplay after media is ready
-					if (media.hasAttribute('autoplay')) {
-						media.addEventListener('loadeddata', () => {
-							media.play().catch(err => {
-								console.warn('Autoplay failed:', err);
-							});
-						}, { once: true });
-					}
+			media.addEventListener('loadeddata', () => {
+				media.play().catch(err => {
+				console.warn('Autoplay failed:', err);
 				});
-			}
-
-			document.addEventListener('DOMContentLoaded', () => {
-				initializePlyrElements();
+			}, { once: true });
 			});
+		}
 
-			// Infinite Scroll support
-			if (typeof $container !== 'undefined') {
-				$container.on('append.infiniteScroll', function(event, response, path, items) {
-					items.forEach(item => {
-						// Safari bug fix for srcset
-						item.querySelectorAll('img[srcset]').forEach(img => {
-							img.outerHTML = img.outerHTML;
-						});
+		document.addEventListener('DOMContentLoaded', () => {
+			initializePlyrElements();
+		});
 
-						// Init Plyr for new elements
-						initializePlyrElements(item);
-					});
+		if (typeof $container !== 'undefined') {
+			$container.on('append.infiniteScroll', function(event, response, path, items) {
+			items.forEach(item => {
+				item.querySelectorAll('img[srcset]').forEach(img => {
+				img.outerHTML = img.outerHTML; // Safari fix
 				});
-			}
+
+				initializePlyrElements(item);
+			});
+			});
+		}
 		</script>
 
 	</body>
