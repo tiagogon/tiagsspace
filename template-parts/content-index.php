@@ -491,17 +491,20 @@ Index of posts for Home and Archives
         // })
 
 
-        $('#masonry-container').masonry({
-          // set itemSelector so .grid-sizer is not used in layout
-          itemSelector: '.masonry-item',
-          // use element for option
-          columnWidth: '.masonry-item-sizer',
-          percentPosition: true,
-          transitionDuration: '0.6s',
-          //gutter: '.masonry-gutter-sizer',
-          percentPosition: true,
-          stagger: 30
-        })
+        jQuery(document).ready(function($) {
+        var $grid = $('#masonry-container');
+        if ($grid.length && typeof $grid.masonry === 'function') {
+            $grid.masonry({
+            itemSelector: '.masonry-item',
+            columnWidth: '.masonry-item-sizer',
+            percentPosition: true,
+            transitionDuration: '0.6s',
+            stagger: 30
+            });
+        } else {
+            console.warn('Masonry not available');
+        }
+        });
     </script>
     <?php
 
@@ -605,48 +608,5 @@ Index of posts for Home and Archives
             });
             });
         </script>
-        <script>
-            // Initialize Plyr elements with thumbnails on front page or recomended 
-			function initializePlyrElementsThumnails(scope = document) {
-				scope.querySelectorAll('.plyr-thumbnail-front').forEach(media => {
-				if (media.dataset.plyrInitialized === 'true') return;
-
-				// Hard-set autoplay conditions for Chrome
-				media.setAttribute('preload', 'auto');
-				media.setAttribute('playsinline', '');
-				media.setAttribute('muted', '');
-				media.muted = true; // JavaScript-mandated muted
-				media.autoplay = true; // Ensure it's active
-				media.loop = true;
-
-				new Plyr(media, {
-					controls: [], // No controls at all
-				});
-				media.dataset.plyrInitialized = 'true';
-
-				// Play after ready
-				media.addEventListener('loadeddata', () => {
-					media.play().catch(err => {
-					console.warn('Autoplay failed (direct load):', err);
-					});
-				}, { once: true });
-				});
-			}
-
-			document.addEventListener('DOMContentLoaded', () => {
-				initializePlyrElementsThumnails();
-			});
-
-			// Infinite Plyr elements on infinite Scroll loading
-			if (typeof $container !== 'undefined') {
-				$container.on('append.infiniteScroll', function(event, response, path, items) {
-				items.forEach(item => {
-					item.querySelectorAll('img[srcset]').forEach(img => {
-					img.outerHTML = img.outerHTML;
-					});
-					initializePlyrElementsThumnails(item);
-				});
-				});
-			}
-		</script>
+        
     <?php } ?>

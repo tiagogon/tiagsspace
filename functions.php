@@ -29,38 +29,40 @@ add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 
 // Enqueue CSS and Scripts
 function tiagsspace_enqueue_assets() {
-    $template_dir = get_template_directory_uri();
+    $uri = get_template_directory_uri();
 
     // ----- CSS -----
-    wp_enqueue_style('bootstrap', $template_dir . '/library/css/bootstrap.css', [], null);
-    wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], null);
-
-    // jQuery (your local version)
-    wp_deregister_script('jquery'); // prevent default WP jQuery
-    wp_register_script('jquery', $template_dir . '/library/js/jquery/jquery.min.js', [], null, true);
-    wp_enqueue_script('jquery');
+    wp_enqueue_style('bootstrap', $uri . '/library/css/bootstrap.css', [], null);
+    wp_enqueue_style('plyr', $uri . '/library/js/plyr/plyr.css', [], null);
 
     // ----- JS -----
-    // Picturefill (async not directly supported — use custom loader if needed)
-    wp_enqueue_script('picturefill', $template_dir . '/library/js/picturefill/picturefill.min.js', [], null, true);
 
-    // Modernizr (should load in head — we load manually below)
-    wp_register_script('modernizr', $template_dir . '/library/js/modernizr/modernizr.min.js', [], null, false);
+    // Use local jQuery and load it in the <head> so it's available early
+    wp_deregister_script('jquery');
+    wp_register_script('jquery', $uri . '/library/js/jquery/jquery.min.js', [], null, false);
+    wp_enqueue_script('jquery');
+
+    // Modernizr (must be in the <head>)
+    wp_register_script('modernizr', $uri . '/library/js/modernizr/modernizr.min.js', [], null, false);
     wp_enqueue_script('modernizr');
 
-    // Masonry
-    wp_enqueue_script('masonry', $template_dir . '/library/js/masonry/masonry.pkgd.min.js', ['jquery'], null, true);
+    // Picturefill (can go in footer)
+    wp_enqueue_script('picturefill', $uri . '/library/js/picturefill/picturefill.min.js', [], null, true);
+
+    // Masonry (depends on jQuery)
+    wp_enqueue_script('masonry', $uri . '/library/js/masonry/masonry.pkgd.min.js', ['jquery'], null, true);
 
     // Classie
-    wp_enqueue_script('classie', $template_dir . '/library/js/classie/classie.min.js', [], null, true);
+    wp_enqueue_script('classie', $uri . '/library/js/classie/classie.min.js', [], null, true);
 
     // Plyr
-    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.min.js', [], null, true);
+    wp_enqueue_script('plyr', $uri . '/library/js/plyr/plyr.min.js', [], null, true);
 
-    // Bootstrap
-    wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], null, true);
+    // Bootstrap (depends on jQuery)
+    wp_enqueue_script('bootstrap', $uri . '/library/js/bootstrap.min.js', ['jquery'], null, true);
 }
 add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
+
 
 /************* THUMBNAIL SIZE OPTIONS *************/
 add_theme_support( 'post-thumbnails' );
