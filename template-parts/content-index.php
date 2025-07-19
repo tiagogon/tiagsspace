@@ -609,7 +609,7 @@ Index of posts for Home and Archives
                     
                 });
 
-                // Infinite scroll integration
+                // play videos on append infinite scroll
                 if (typeof $container !== 'undefined') {
                     $container.on('append.infiniteScroll', function(event, response, path, items) {
                         items.forEach(item => {
