@@ -26,7 +26,7 @@ function wp_bootstrap_custom_admin_footer() {
 // adding it to the admin area
 add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 
-
+// Enqueue CSS and Scripts<
 function tiagsspace_enqueue_assets() {
     $template_dir = get_template_directory_uri();
 

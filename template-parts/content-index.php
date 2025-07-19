@@ -492,20 +492,20 @@ Index of posts for Home and Archives
 
 
         jQuery(document).ready(function($) {
-        var $grid = $('#masonry-container');
-        if ($grid.length && typeof $grid.masonry === 'function') {
-            $grid.masonry({
-            itemSelector: '.masonry-item',
-            columnWidth: '.masonry-item-sizer',
-            percentPosition: true,
-            transitionDuration: '0.6s',
-            stagger: 30
-            });
-        } else {
-            console.warn('Masonry not available');
-        }
+            var $grid = $('#masonry-container');
+            if ($grid.length && typeof $grid.masonry === 'function') {
+                $grid.masonry({
+                itemSelector: '.masonry-item',
+                columnWidth: '.masonry-item-sizer',
+                percentPosition: true,
+                transitionDuration: '0.6s',
+                stagger: 30
+                });
+            } else {
+                console.warn('Masonry not available');
+            }
         });
-    </script>
+        </script>
     <?php
 
     // Play videos just on the view port and fix of iOS
@@ -550,62 +550,80 @@ Index of posts for Home and Archives
         <script type="text/javascript"  src="<?php bloginfo('template_url'); ?>/library/js/infinite-scroll/infinite-scroll.pkgd.min.js"></script>
 
         <script type="text/javascript">
+             jQuery(document).ready(function($) {
+                // get Masonry instance
+                var msnry = $('#masonry-container').data('masonry');
 
-            // get Masonry instance
-            var msnry = $('#masonry-container').data('masonry');
-
-            var $container = $('.loadcontainer').infiniteScroll({
-              // options
-              path: 'page/{{#}}/',
-              append: '.masonry-item',
-              outlayer: msnry,
-              history: false,
-              button: '.view-more-button',
-            });
-
-            // -- Scroll 2 pages, then load with button -- https://infinite-scroll.com/extras.html#scroll-2-pages-then-load-with-button
-            var $viewMoreButton = $('.view-more-button');
-
-            // get Infinite Scroll instance
-            var infScroll = $container.data('infiniteScroll');
-
-            $container.on( 'load.infiniteScroll', onPageLoad );
-
-            function onPageLoad() {
-              if ( infScroll.loadCount == 15 ) {
-                // after 2nd page loaded
-                // disable loading on scroll
-                $container.infiniteScroll( 'option', {
-                  loadOnScroll: false,
+                var $container = $('.loadcontainer').infiniteScroll({
+                    // options
+                    path: 'page/{{#}}/',
+                    append: '.masonry-item',
+                    outlayer: msnry,
+                    history: false,
+                    button: '.view-more-button',
                 });
-                // show button
-                $viewMoreButton.show();
-                // remove event listener
-                $container.off( 'load.infiniteScroll', onPageLoad );
-              }
-            }
 
-            // Safari not loading srset issue
-            // https://github.com/metafizzy/infinite-scroll/issues/770
-            $container.on( 'append.infiniteScroll', function( event, response, path, items ) {
-              $( items ).find('img[srcset]').each( function( i, img ) {
-                img.outerHTML = img.outerHTML;
-              });
-            });
+                // -- Scroll 2 pages, then load with button -- https://infinite-scroll.com/extras.html#scroll-2-pages-then-load-with-button
+                var $viewMoreButton = $('.view-more-button');
 
-            // jQuery VIDEO fix
-            // https://github.com/metafizzy/infinite-scroll/issues/926
-            $container.on( 'append.infiniteScroll', function( event, response, path, items ) {
-              $(items).find('video').each((i, video) => video.play())
-            });
+                // get Infinite Scroll instance
+                var infScroll = $container.data('infiniteScroll');
 
-            $container.on('append.infiniteScroll', function(event, response, path, items) {
-            items.forEach(item => {
-                // Fix for Safari bug (srcset)
-                item.querySelectorAll('img[srcset]').forEach(img => {
-                img.outerHTML = img.outerHTML;
+                $container.on( 'load.infiniteScroll', onPageLoad );
+
+                function onPageLoad() {
+                    if ( infScroll.loadCount == 15 ) {
+                    // after 2nd page loaded
+                    // disable loading on scroll
+                    $container.infiniteScroll( 'option', {
+                        loadOnScroll: false,
+                    });
+                    // show button
+                    $viewMoreButton.show();
+                    // remove event listener
+                    $container.off( 'load.infiniteScroll', onPageLoad );
+                    }
+                }
+
+                // Safari not loading srset issue
+                // https://github.com/metafizzy/infinite-scroll/issues/770
+                $container.on( 'append.infiniteScroll', function( event, response, path, items ) {
+                    $( items ).find('img[srcset]').each( function( i, img ) {
+                    img.outerHTML = img.outerHTML;
+                    });
                 });
-            });
+
+                // jQuery VIDEO fix
+                // https://github.com/metafizzy/infinite-scroll/issues/926
+                $container.on( 'append.infiniteScroll', function( event, response, path, items ) {
+                    $(items).find('video').each((i, video) => video.play())
+                });
+
+                $container.on('append.infiniteScroll', function(event, response, path, items) {
+                    items.forEach(item => {
+                        // Fix for Safari bug (srcset)
+                        item.querySelectorAll('img[srcset]').forEach(img => {
+                        img.outerHTML = img.outerHTML;
+                        });
+                    });
+                    
+                });
+
+                // Infinite scroll integration
+                if (typeof $container !== 'undefined') {
+                    $container.on('append.infiniteScroll', function(event, response, path, items) {
+                        items.forEach(item => {
+                            // Fix for Safari srcset bug
+                            item.querySelectorAll('img[srcset]').forEach(img => {
+                                img.outerHTML = img.outerHTML;
+                            });
+
+                            // ✅ Pass actual DOM element
+                            initializePlyrElementsThumnails(item);
+                        });
+                    });
+                }
+                
             });
         </script>
         
