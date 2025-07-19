@@ -56,7 +56,7 @@ function tiagsspace_enqueue_assets() {
     wp_enqueue_script('classie', $template_dir . '/library/js/classie/classie.min.js', [], null, true);
 
     // Plyr
-    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/dist/plyr.min.js', [], null, true);
+    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.min.js', [], null, true);
 
     // Bootstrap
     wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], null, true);
