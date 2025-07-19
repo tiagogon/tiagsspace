@@ -63,9 +63,6 @@ function tiagsspace_enqueue_assets() {
 }
 add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
 
-
-
-
 /************* THUMBNAIL SIZE OPTIONS *************/
 add_theme_support( 'post-thumbnails' );
 
