@@ -29,7 +29,40 @@ add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 
 // Enqueue CSS and Scripts
 
-	// it workds and this how it should be!! To convert soon!
+function tiagsspace_enqueue_assets() {
+    $template_dir = get_template_directory_uri();
+
+    // ----- CSS -----
+    wp_enqueue_style('bootstrap', $template_dir . '/library/css/bootstrap.css', [], null);
+    wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/dist/plyr.css', [], null);
+
+    // ----- JS -----
+    // Picturefill (async not directly supported — use custom loader if needed)
+    wp_enqueue_script('picturefill', $template_dir . '/library/js/picturefill/picturefill.min.js', [], null, true);
+
+    // Modernizr (should load in head — we load manually below)
+    wp_register_script('modernizr', $template_dir . '/library/js/modernizr/modernizr.min.js', [], null, false);
+    wp_enqueue_script('modernizr');
+
+    // jQuery (your local version)
+    wp_deregister_script('jquery'); // prevent default WP jQuery
+    wp_register_script('jquery', $template_dir . '/library/js/jquery/jquery.min.js', [], null, true);
+    wp_enqueue_script('jquery');
+
+    // Masonry
+    wp_enqueue_script('masonry', $template_dir . '/library/js/masonry/masonry.pkgd.min.js', ['jquery'], null, true);
+
+    // Classie
+    wp_enqueue_script('classie', $template_dir . '/library/js/classie/classie.min.js', [], null, true);
+
+    // Plyr
+    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/dist/plyr.min.js', [], null, true);
+
+    // Bootstrap
+    wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], null, true);
+}
+add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
+
 
 
 
@@ -80,50 +113,7 @@ function custom_password_form() {
 	return $o;
 }
 
-// --- Bottraps STYLE ---
-// enqueue styles
-    // if( !function_exists("theme_styles") ) {
-    //     function theme_styles() {
-    //         // This is the compiled css file from LESS - this means you compile the LESS file locally and put it in the appropriate directory if you want to make any changes to the master bootstrap.css.
-    //         wp_register_style( 'bootstrap', get_template_directory_uri() . '/library/css/bootstrap.css', array(), '1.0', 'all' );
-    //         wp_enqueue_style( 'bootstrap' );
-
-    //         // style.css -- For child themes -- deactivated by me
-    //             // wp_register_style( 'wpbs-style', get_stylesheet_directory_uri() . '/style.css', array(), '1.0', 'all' );
-    //             //wp_enqueue_style( 'wpbs-style' );
-    //     }
-    // }
-    // add_action( 'wp_enqueue_scripts', 'theme_styles' );
-
-// enqueue javascript
-    // removed by me!
-    // if( !function_exists( "theme_js" ) ) {
-    //   function theme_js(){
-
-    //     wp_register_script( 'bootstrap',
-    //       get_template_directory_uri() . '/library/js/bootstrap.min.js',
-    //       array('jquery'),
-    //       '1.2' );
-
-    //     wp_register_script( 'wpbs-scripts',
-    //       get_template_directory_uri() . '/library/js/scripts.js',
-    //       array('jquery'),
-    //       '1.2' );
-
-    //     wp_register_script(  'modernizr',
-    //       get_template_directory_uri() . '/library/js/modernizr.full.min.js',
-    //       array('jquery'),
-    //       '1.2' );
-
-    //     wp_enqueue_script('bootstrap');
-    //     wp_enqueue_script('wpbs-scripts');
-    //     wp_enqueue_script('modernizr');
-
-    //   }
-    // }
-    // add_action( 'wp_enqueue_scripts', 'theme_js' );
-
-// Get <head> <title> to behave like other themes
+/************* CUSTOM WP TITLE *****************/
 function wp_bootstrap_wp_title( $title, $sep ) {
   global $paged, $page;
 

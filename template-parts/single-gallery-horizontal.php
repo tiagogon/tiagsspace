@@ -96,6 +96,7 @@ Gallery template for single pages
         $horizontal_gallery_style = "horizontal-gallery-style-".get_field( 'horizontal_gallery_style' ); ?>
 
        <?php // Slider Swiper ?>
+      <link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.css">
       <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.js"></script>
 
         <div class="<?php echo $class_container; ?> container-gallery swiper swiper-container swiper-container-<?php the_ID(); ?> <?php echo $horizontal_gallery_style; ?>">
