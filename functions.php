@@ -34,7 +34,7 @@ function tiagsspace_enqueue_assets() {
 
     // ----- CSS -----
     wp_enqueue_style('bootstrap', $template_dir . '/library/css/bootstrap.css', [], null);
-    wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/dist/plyr.css', [], null);
+    wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], null);
 
     // ----- JS -----
     // Picturefill (async not directly supported — use custom loader if needed)
