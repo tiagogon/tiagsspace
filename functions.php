@@ -27,39 +27,38 @@ function wp_bootstrap_custom_admin_footer() {
 add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 
 
-// Enqueue CSS and Scripts
 function tiagsspace_enqueue_assets() {
-    $uri = get_template_directory_uri();
+    $template_dir = get_template_directory_uri();
 
     // ----- CSS -----
-    wp_enqueue_style('bootstrap', $uri . '/library/css/bootstrap.css', [], null);
-    wp_enqueue_style('plyr', $uri . '/library/js/plyr/plyr.css', [], null);
+    wp_enqueue_style('bootstrap', $template_dir . '/library/css/bootstrap.css', [], null);
+    wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], null);
+
+    // ----- jQuery -----
+    // Only deregister jQuery if you absolutely must load a custom version (not recommended).
+    // wp_deregister_script('jquery');
+    // wp_register_script('jquery', $template_dir . '/library/js/jquery/jquery.min.js', [], null, false);
+    // wp_enqueue_script('jquery');
 
     // ----- JS -----
+    // Modernizr (must be in header)
+    wp_enqueue_script('modernizr', $template_dir . '/library/js/modernizr/modernizr.min.js', [], null, false);
 
-    // Use local jQuery and load it in the <head> so it's available early
-    wp_deregister_script('jquery');
-    wp_register_script('jquery', $uri . '/library/js/jquery/jquery.min.js', [], null, false);
-    wp_enqueue_script('jquery');
-
-    // Modernizr (must be in the <head>)
-    wp_register_script('modernizr', $uri . '/library/js/modernizr/modernizr.min.js', [], null, false);
-    wp_enqueue_script('modernizr');
-
-    // Picturefill (can go in footer)
-    wp_enqueue_script('picturefill', $uri . '/library/js/picturefill/picturefill.min.js', [], null, true);
-
-    // Masonry (depends on jQuery)
-    wp_enqueue_script('masonry', $uri . '/library/js/masonry/masonry.pkgd.min.js', ['jquery'], null, true);
+    // Picturefill
+    wp_enqueue_script('picturefill', $template_dir . '/library/js/picturefill/picturefill.min.js', [], null, true);
 
     // Classie
-    wp_enqueue_script('classie', $uri . '/library/js/classie/classie.min.js', [], null, true);
+    wp_enqueue_script('classie', $template_dir . '/library/js/classie/classie.min.js', [], null, true);
 
     // Plyr
-    wp_enqueue_script('plyr', $uri . '/library/js/plyr/plyr.min.js', [], null, true);
+    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.min.js', [], null, true);
 
-    // Bootstrap (depends on jQuery)
-    wp_enqueue_script('bootstrap', $uri . '/library/js/bootstrap.min.js', ['jquery'], null, true);
+    // Bootstrap
+    wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], null, true);
+
+    // WordPress built-in Masonry (important!)
+    wp_enqueue_script('masonry');
+
 }
 add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
 
