@@ -4,6 +4,7 @@ Template: Self-hosted video with Plyr + Videopack resolutions
 */
 
 $self_host_film_id = get_field('self_host_film');
+echo '<!-- Self-hosted film ID: ' . esc_html($self_host_film_id) . ' -->';
 
 
 // Get poster if defined
@@ -14,9 +15,18 @@ $poster_url = $poster ? esc_url($poster['url']) : '';
 $video_data = get_post_meta($self_host_film_id, '_video_press_data', true);
 $sources = [];
 
+echo '<pre>';
+var_dump( $video_data );
+echo '</pre>';
+
+echo '<pre>';
+var_dump( get_post_meta($self_host_film_id) );
+echo '</pre>';
+
+
 if (!empty($video_data['mp4']) && is_array($video_data['mp4'])) {
     echo '<!-- MP4 sources found for this video. -->';
-    
+
     foreach ($video_data['mp4'] as $quality => $url) {
         $sources[] = [
             'src'   => esc_url($url),
