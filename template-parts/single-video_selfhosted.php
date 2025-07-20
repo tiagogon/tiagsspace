@@ -6,41 +6,45 @@ Template: Self-hosted video with Plyr + Videopack resolutions
 $self_host_film_id = get_field('self_host_film');
 echo '<!-- Self-hosted film ID: ' . esc_html($self_host_film_id) . ' -->';
 
-
 // Get poster if defined
 $poster = get_field('video_poster');
 $poster_url = $poster ? esc_url($poster['url']) : '';
 
-// Get Videopack video sources
-$video_data = get_post_meta($self_host_film_id, '_video_press_data', true);
-$sources = [];
+// Start collecting sources
+$video_sources = [];
 
-echo '<pre>';
-var_dump( $video_data );
-echo '</pre>';
+// Add original video
+$original_url = wp_get_attachment_url($self_host_film_id);
+if ($original_url) {
+    $video_sources[] = [
+        'src'   => esc_url($original_url),
+        'label' => 'original',
+    ];
+}
 
-echo '<pre>';
-var_dump( get_post_meta($self_host_film_id) );
-echo '</pre>';
+// Add encoded versions (child attachments)
+$children = get_children([
+    'post_parent'    => $self_host_film_id,
+    'post_type'      => 'attachment',
+    'post_mime_type' => 'video',
+    'numberposts'    => -1,
+]);
 
+if (!empty($children)) {
+    foreach ($children as $child) {
+        $src = wp_get_attachment_url($child->ID);
+        $filename = basename($src);
 
-if (!empty($video_data['mp4']) && is_array($video_data['mp4'])) {
-    echo '<!-- MP4 sources found for this video. -->';
+        // Extract resolution from filename (e.g. video-720.mp4)
+        if (preg_match('/-(\d{3,4})\.mp4$/', $filename, $matches)) {
+            $label = $matches[1] . 'p';
+        } else {
+            $label = 'default';
+        }
 
-    foreach ($video_data['mp4'] as $quality => $url) {
-        $sources[] = [
-            'src'   => esc_url($url),
-            'label' => esc_attr($quality), // e.g. sd, hd, original
-        ];
-    }
-} else {
-    echo '<!-- No MP4 sources found for this video. -->';
-    // Fallback to single file
-    $url = wp_get_attachment_url($self_host_film_id);
-    if ($url) {
-        $sources[] = [
-            'src'   => esc_url($url),
-            'label' => 'default',
+        $video_sources[] = [
+            'src'   => esc_url($src),
+            'label' => esc_html($label),
         ];
     }
 }
@@ -48,21 +52,21 @@ if (!empty($video_data['mp4']) && is_array($video_data['mp4'])) {
 
 <div class="container-fluid container-video">
     <div class="embed-container">
-        <video
-            class="plyr selfhost-video"
-            playsinline
-            autoplay
-            muted
-            loop
-            controls
-            preload="auto"
-            <?php if ($poster_url): ?>poster="<?php echo $poster_url; ?>"<?php endif; ?>
-        >
-            <?php foreach ($sources as $source): ?>
-                <source src="<?php echo $source['src']; ?>" type="video/mp4" size="<?php echo esc_attr($source['label']); ?>">
-            <?php endforeach; ?>
-            Your browser does not support the video tag.
-        </video>
+        <?php if (!empty($video_sources)) : ?>
+            <video class="plyr selfhost-video" controls playsinline preload="auto" poster="<?php echo esc_url($poster_url); ?>">
+                <?php foreach ($video_sources as $source) : ?>
+                    <source src="<?php echo $source['src']; ?>" type="video/mp4"
+                        <?php
+                        // If it's a labeled resolution (e.g. 360p), provide `size`
+                        if (preg_match('/^(\d{3,4})p$/', $source['label'], $m)) {
+                            echo ' size="' . esc_attr($m[1]) . '"';
+                        }
+                        ?>
+                    >
+                <?php endforeach; ?>
+                Your browser does not support the video tag.
+            </video>
+        <?php endif; ?>
     </div>
 </div>
 
