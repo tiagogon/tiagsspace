@@ -5,10 +5,6 @@ Template: Self-hosted video with Plyr + Videopack resolutions
 
 $self_host_film_id = get_field('self_host_film');
 
-if (!$self_host_film_id) {
-    echo '<p>No video selected.</p>';
-    return;
-}
 
 // Get poster if defined
 $poster = get_field('video_poster');
@@ -18,20 +14,23 @@ $poster_url = $poster ? esc_url($poster['url']) : '';
 $video_data = get_post_meta($self_host_film_id, '_video_press_data', true);
 $sources = [];
 
-if (!empty($video_data['mp4'])) {
-    foreach ($video_data['mp4'] as $label => $src) {
+if (!empty($video_data['mp4']) && is_array($video_data['mp4'])) {
+    echo '<!-- MP4 sources found for this video. -->';
+    
+    foreach ($video_data['mp4'] as $quality => $url) {
         $sources[] = [
-            'label' => $label,
-            'src'   => esc_url($src),
+            'src'   => esc_url($url),
+            'label' => esc_attr($quality), // e.g. sd, hd, original
         ];
     }
 } else {
-    // Fallback: get original URL
-    $fallback_url = wp_get_attachment_url($self_host_film_id);
-    if ($fallback_url) {
+    echo '<!-- No MP4 sources found for this video. -->';
+    // Fallback to single file
+    $url = wp_get_attachment_url($self_host_film_id);
+    if ($url) {
         $sources[] = [
+            'src'   => esc_url($url),
             'label' => 'default',
-            'src'   => esc_url($fallback_url),
         ];
     }
 }
