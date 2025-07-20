@@ -31,18 +31,20 @@ if ($background_image) {
 		<?PHP
 		// Video
 		if (get_field('video_embed')) {
-			get_template_part( 'template-parts/single', 'video' );
+			get_template_part( 'template-parts/single', 'video_embed' );
+		}elseif (get_field('self_host_film')){
+			get_template_part( 'template-parts/single', 'video_selfhosted' );
 		}
 
-    // if Gallery is Activated
-    if (get_field('deactivate_gallery') == false) {
-  		// Gallery
-  		if (get_field('horizontal_gallery')) {
-        get_template_part( 'template-parts/single', 'gallery-horizontal' );
-  		} else {
-  			get_template_part( 'template-parts/single', 'gallery' );
-  		}
-    } // if gallery is not deactivated
+		// if Gallery is Activated
+		if (get_field('deactivate_gallery') == false) {
+			// Gallery
+			if (get_field('horizontal_gallery')) {
+			get_template_part( 'template-parts/single', 'gallery-horizontal' );
+			} else {
+				get_template_part( 'template-parts/single', 'gallery' );
+			}
+		} // if gallery is not deactivated
 
 		?>
 
