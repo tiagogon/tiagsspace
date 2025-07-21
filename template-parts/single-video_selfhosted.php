@@ -53,30 +53,27 @@ if (!empty($children)) {
 
 <div class="container-fluid container-video">
     <div class="embed-container">
-        <video class="film-player" controls crossorigin playsinline poster="<?php echo $poster; ?>">
             <?php if (!empty($video_sources)) : ?>
-                    <video class="plyr selfhost-video" controls playsinline preload="auto" poster="<?php echo $poster; ?>">
-                        <?php foreach ($video_sources as $source) : ?>
-                            <source src="<?php echo $source['src']; ?>" type="video/mp4"
-                                <?php
-                                // If it's a labeled resolution (e.g. 360p), provide `size`
-                                if (preg_match('/^(\d{3,4})p$/', $source['label'], $m)) {
-                                    echo ' size="' . esc_attr($m[1]) . '"';
-                                }
-                                ?>
-                            >
-                        <?php endforeach; ?>
-                        Your browser does not support the video tag.
-                    </video>
-                <?php endif; ?>
-
-            <!-- Caption files -->
-            <track kind="captions" label="English" srclang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
-                    default>
-            <track kind="captions" label="Français" srclang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
-            <!-- Fallback for browsers that don't support the <video> element -->
-            <a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" download>Download</a>
-        </video>
+                <video class="plyr film-player" controls crossorigin playsinline poster="<?php echo $poster; ?>>
+                    <?php foreach ($video_sources as $source) : ?>
+                        <source src="<?php echo $source['src']; ?>" type="video/mp4"
+                            <?php
+                            // If it's a labeled resolution (e.g. 360p), provide `size`
+                            if (preg_match('/^(\d{3,4})p$/', $source['label'], $m)) {
+                                echo ' size="' . esc_attr($m[1]) . '"';
+                            }
+                            ?>
+                        >
+                    <?php endforeach; ?>
+                    Your browser does not support the video tag.
+                    <!-- Caption files -->
+                    <track kind="captions" label="English" srclang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
+                            default>
+                    <track kind="captions" label="Français" srclang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
+                    <!-- Fallback for browsers that don't support the <video> element -->
+                    <a href="<?php echo esc_url($original_url); ?>" download>Download</a>
+                </video>
+            <?php endif; ?>
     </div>
 </div>
 
