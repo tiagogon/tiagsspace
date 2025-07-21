@@ -16,10 +16,12 @@ $video_sources = [];
 
 // Add original video
 $original_url = wp_get_attachment_url($self_host_film_id);
+$video_meta = wp_get_attachment_metadata($self_host_film_id);
+echo '<!-- Video Meta: ' . esc_html(print_r($video_meta, true)) . ' -->';
 if ($original_url) {
     $video_sources[] = [
         'src'   => esc_url($original_url),
-        'label' => '2160p',
+        'label' => intval($video_meta['height']) . 'p', // Use height as label
     ];
 }
 
