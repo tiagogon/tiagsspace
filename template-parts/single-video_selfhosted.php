@@ -53,7 +53,7 @@ if (!empty($children)) {
 
 <div class="container-fluid container-video">
     <div class="embed-container">
-        <video class="test-video" controls crossorigin playsinline poster="<?php echo $poster; ?>">
+        <video class="film-player" controls crossorigin playsinline poster="<?php echo $poster; ?>">
             <?php if (!empty($video_sources)) : ?>
                     <video class="plyr selfhost-video" controls playsinline preload="auto" poster="<?php echo $poster; ?>">
                         <?php foreach ($video_sources as $source) : ?>
@@ -83,6 +83,6 @@ if (!empty($children)) {
 
 <script>
      document.addEventListener('DOMContentLoaded', () => {
-         const player = new Plyr('.test-video');
+         const player = new Plyr('.film-player');
     });
 </script>
