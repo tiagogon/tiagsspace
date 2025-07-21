@@ -4,11 +4,12 @@ Template: Self-hosted video with Plyr + Videopack resolutions
 */
 
 $self_host_film_id = get_field('self_host_film');
-echo '<!-- Self-hosted film ID: ' . esc_html($self_host_film_id) . ' -->';
 
 // Get poster if defined
-$poster = get_field('video_poster');
-$poster_url = $poster ? esc_url($poster['url']) : '';
+$thumbnail_id = get_post_thumbnail_id(get_the_ID()); // or get_the_ID()
+$full_image_url = wp_get_attachment_url($thumbnail_id);
+
+$poster = $full_image_url ? esc_url($full_image_url) : '';
 
 // Start collecting sources
 $video_sources = [];
@@ -52,62 +53,36 @@ if (!empty($children)) {
 
 <div class="container-fluid container-video">
     <div class="embed-container">
-        <?php if (!empty($video_sources)) : ?>
-            <video class="plyr selfhost-video" controls playsinline preload="auto" poster="<?php echo esc_url($poster_url); ?>">
-                <?php foreach ($video_sources as $source) : ?>
-                    <source src="<?php echo $source['src']; ?>" type="video/mp4"
-                        <?php
-                        // If it's a labeled resolution (e.g. 360p), provide `size`
-                        if (preg_match('/^(\d{3,4})p$/', $source['label'], $m)) {
-                            echo ' size="' . esc_attr($m[1]) . '"';
-                        }
-                        ?>
-                    >
-                <?php endforeach; ?>
-                Your browser does not support the video tag.
-            </video>
-        <?php endif; ?>
+        <video class="test-video" controls crossorigin playsinline poster="<?php echo $poster; ?>">
+            <?php if (!empty($video_sources)) : ?>
+                    <video class="plyr selfhost-video" controls playsinline preload="auto" poster="<?php echo $poster; ?>">
+                        <?php foreach ($video_sources as $source) : ?>
+                            <source src="<?php echo $source['src']; ?>" type="video/mp4"
+                                <?php
+                                // If it's a labeled resolution (e.g. 360p), provide `size`
+                                if (preg_match('/^(\d{3,4})p$/', $source['label'], $m)) {
+                                    echo ' size="' . esc_attr($m[1]) . '"';
+                                }
+                                ?>
+                            >
+                        <?php endforeach; ?>
+                        Your browser does not support the video tag.
+                    </video>
+                <?php endif; ?>
+
+            <!-- Caption files -->
+            <track kind="captions" label="English" srclang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
+                    default>
+            <track kind="captions" label="Français" srclang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
+            <!-- Fallback for browsers that don't support the <video> element -->
+            <a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" download>Download</a>
+        </video>
     </div>
 </div>
 
-<style>
-    .embed-container {
-        position: relative;
-        padding-bottom: 56.25%;
-        height: 0;
-        overflow: hidden;
-        max-width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .embed-container video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-</style>
 
 <script>
-// document.addEventListener('DOMContentLoaded', function () {
-//     document.querySelectorAll('.selfhost-video').forEach(video => {
-//         if (video.dataset.plyrInitialized === 'true') return;
-
-//         const player = new Plyr(video, {
-//             controls: ['play', 'progress', 'mute', 'fullscreen'],
-//         });
-
-//         video.dataset.plyrInitialized = 'true';
-
-//         // Attempt autoplay if attribute present
-//         if (video.hasAttribute('autoplay')) {
-//             video.muted = true; // Required for autoplay in Chrome
-//             video.play().catch(err => {
-//                 console.warn('Autoplay failed (selfhost):', err);
-//             });
-//         }
-//     });
-// });
+     document.addEventListener('DOMContentLoaded', () => {
+         const player = new Plyr('.test-video');
+    });
 </script>
