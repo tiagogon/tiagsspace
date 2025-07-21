@@ -19,7 +19,7 @@ $original_url = wp_get_attachment_url($self_host_film_id);
 if ($original_url) {
     $video_sources[] = [
         'src'   => esc_url($original_url),
-        'label' => 'original',
+        'label' => '2160p',
     ];
 }
 
@@ -54,7 +54,7 @@ if (!empty($children)) {
 <div class="container-fluid container-video">
     <div class="embed-container">
             <?php if (!empty($video_sources)) : ?>
-                <video class="plyr film-player" controls crossorigin playsinline poster="<?php echo $poster; ?>>
+                <video class="plyr film-player" controls crossorigin playsinline poster="<?php echo $poster; ?>">
                     <?php foreach ($video_sources as $source) : ?>
                         <source src="<?php echo $source['src']; ?>" type="video/mp4"
                             <?php
