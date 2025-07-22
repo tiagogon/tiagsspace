@@ -51,12 +51,66 @@ if (!empty($children)) {
         ];
     }
 }
+
+// it does not seem to be picked up by the Plyr player, but it is needed for the HTML5 video tag
+$film_player_options_html_string = "crossorigin ";
+
+$film_player_options = get_field('film_player_options');
+if( $film_player_options ) {
+    foreach ($film_player_options as $film_player_option ) {
+        $film_player_options_html_string .= $film_player_option . " ";
+    }
+}
+
+$plyr_config = [
+    "autoplay" => "true",
+    "muted" => "true"
+];
+
+// Build the JSON string as usual
+$plyr_config = [
+    "muted" => "true"
+];
+
+
+// Build JSON string (add spaces if you like as before)
+$json = json_encode($plyr_config, JSON_HEX_APOS | JSON_HEX_QUOT);
+// Optional pretty formatting
+$json = preg_replace('/^{/', '{ ', $json);
+$json = preg_replace('/}$/', ' }', $json);
+$json = preg_replace('/:/', ': ', $json);
+
+// debugging output
+$json = '{
+  "title": "My Video",
+  "autoplay": true,
+  "controls": [
+    "play-large", "play", "progress", "current-time", "mute", "volume", "captions", "settings", "fullscreen"
+  ],
+  "settings": ["captions", "quality", "speed", "loop"],
+  "ratio": "16:9",
+  "keyboard": { "focused": true, "global": false },
+  "tooltips": { "controls": true, "seek": true },
+  "seekTime": 10,
+  "speed": { "selected": 1, "options": [0.5, 1, 1.5, 2] },
+  "quality": { "default": 1080},
+  "ads": { "enabled": false },
+  "previewThumbnails": { "enabled": false }
+}';
+
 ?>
+
+
 
 <div class="container-fluid container-video">
     <div class="embed-container">
             <?php if (!empty($video_sources)) : ?>
-                <video class="plyr film-player" controls crossorigin playsinline poster="<?php echo $poster; ?>">
+                <video class="plyr film-player" 
+                <?php echo $film_player_options_html_string; ?>     
+                
+                poster="<?php echo $poster; ?>" 
+                data-plyr-config='<?php echo $json; ?>'
+                >
                     <?php foreach ($video_sources as $source) : ?>
                         <source src="<?php echo $source['src']; ?>" type="video/mp4"
                             <?php
@@ -69,9 +123,9 @@ if (!empty($children)) {
                     <?php endforeach; ?>
                     Your browser does not support the video tag.
                     <!-- Caption files -->
-                    <track kind="captions" label="English" srclang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
+                    <!-- <track kind="captions" label="English" srclang="en" src=""
                             default>
-                    <track kind="captions" label="Français" srclang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
+                    <track kind="captions" label="Français" srclang="fr" src=""> -->
                     <!-- Fallback for browsers that don't support the <video> element -->
                     <a href="<?php echo esc_url($original_url); ?>" download>Download</a>
                 </video>
@@ -81,7 +135,8 @@ if (!empty($children)) {
 
 
 <script>
-     document.addEventListener('DOMContentLoaded', () => {
-         const player = new Plyr('.film-player');
+    document.addEventListener('DOMContentLoaded', () => {
+        const player = new Plyr('.film-player');
+        //player.muted = true; // or player.mute();
     });
 </script>
