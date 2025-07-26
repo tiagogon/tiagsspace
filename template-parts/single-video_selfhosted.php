@@ -69,7 +69,8 @@ $plyr_config = [
 
 // Build the JSON string as usual
 $plyr_config = [
-    "muted" => "true"
+    "muted" => "true",
+    "fullscreen" => "{ enabled: true, fallback: true, iosNative: true, container: null }"
 ];
 
 
@@ -136,7 +137,12 @@ $json = '{
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const player = new Plyr('.film-player');
+        const player = new Plyr('.film-player', {
+            //title: 'Example Title',
+            //autoplay: true,
+            //muted: true,
+            fullscreen: { enabled: true, fallback: true, iosNative: true, container: null }
+        });
         //player.muted = true; // or player.mute();
     });
 </script>
