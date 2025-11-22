@@ -97,9 +97,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 <div class="container-fluid container-video">
     <div class="embed-container">
             <?php if (!empty($video_sources)) : ?>
-                <video class="plyr film-player" 
+                <video class="plyr film-player" data-debug="1"
                 <?php echo $film_player_options_html_string; ?>     
-                
                 poster="<?php echo $poster; ?>" 
                 data-plyr-config='<?php echo esc_attr( $json ); ?>'
                 
@@ -154,6 +153,26 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
         };
 
         const playerEls = Array.from(document.querySelectorAll('.film-player'));
+
+        // Small debug helper: enable by adding `data-debug="1"` to the <video>
+        // element. We also set `el._debug = true` during initialization so other
+        // routines can check the flag cheaply.
+        function isDebugEnabled(videoEl) {
+            try {
+                if (!videoEl) return false;
+                if (videoEl._debug) return true;
+                const a = videoEl.getAttribute && videoEl.getAttribute('data-debug');
+                return a === '1' || a === 'true';
+            } catch (e) { return false; }
+        }
+
+        function debugLog(videoEl /* optional */, ...args) {
+            try {
+                // allow calling debugLog(player, ...) by passing player.elements.media
+                const v = videoEl && videoEl.elements ? (videoEl.elements.media || videoEl.elements.container && videoEl.elements.container.querySelector('video')) : videoEl;
+                if (isDebugEnabled(v)) console.debug('[plyr-adaptive]', ...args);
+            } catch (e) {}
+        }
         playerEls.forEach(el => {
             if (!el.plyr) {
                 try {
@@ -168,6 +187,9 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     // collect available sources once and keep them for later switches
                     try {
                         const videoEl = el;
+                        // honor data-debug attribute on the <video> so debug helpers
+                        // can be used throughout the script (e.g. debugLog(videoEl,...))
+                        try { el._debug = (videoEl.getAttribute && (videoEl.getAttribute('data-debug') === '1' || videoEl.getAttribute('data-debug') === 'true')); } catch (e) {}
                         const initialSourceEls = Array.from(videoEl.querySelectorAll('source'));
                         const available = initialSourceEls.map(s => ({
                             src: s.getAttribute('src') || s.src,
@@ -352,6 +374,9 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             const dpr = window.devicePixelRatio || 1;
             const neededHeightPx = Math.ceil(displayHeightCss * dpr);
 
+            // Debug: report sizes and computed need
+            try { debugLog(videoEl, 'adaptQualityForElement', { displayHeightCss, dpr, neededHeightPx, sizes }); } catch (e) {}
+
             // if the user manually selected a quality, don't override their choice
             // also respect flags set on the Plyr instance. These flags are set
             // when the user clicks a quality button (we set `_userSelectedQuality`)
@@ -373,6 +398,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     // Since this change originated from adaptive logic, make sure
                     // the UI shows the "Auto" option as active.
                     syncQualityButtons(player, 'auto');
+                    try { debugLog(videoEl, 'adaptive applied', { desired, current }); } catch (e) {}
                 }
             } catch (err) {
                 // if quality setter isn't available, don't break the user experience
@@ -389,6 +415,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             if (!player || !player.elements) return;
             const videoEl = player.elements.media || player.elements.container && player.elements.container.querySelector('video');
             if (!videoEl) return;
+
+            try { debugLog(player, 'changeQualityForPlayer:start', { desiredSize: desiredSize, options: options, currentTime: videoEl.currentTime, paused: videoEl.paused }); } catch (e) {}
 
             options = options || {};
             // prefer stored availableSources to allow switching back and forth
@@ -491,6 +519,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                             const p = player.play && typeof player.play === 'function' ? player.play() : videoEl.play && videoEl.play();
                             if (p && p.then) p.catch(() => {});
                         }
+                        try { debugLog(videoEl, 'finishRestore', { attempts: attempts, desiredTime: desiredTime, currentTime: videoEl.currentTime }); } catch (e) {}
                         // cleanup listeners we attached while trying to restore
                         try { videoEl.removeEventListener('loadedmetadata', onMeta); } catch (e) {}
                         try { videoEl.removeEventListener('canplay', onCanPlay); } catch (e) {}
@@ -525,7 +554,9 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     function trySetTime() {
                         attempts++;
                         try {
-                            if (canSeekTo(desiredTime) || attempts === 1) {
+                            const canSeek = canSeekTo(desiredTime);
+                            try { debugLog(videoEl, 'trySetTime', { attempts: attempts, canSeek: canSeek, desiredTime: desiredTime, currentTime: videoEl.currentTime }); } catch (e) {}
+                            if (canSeek || attempts === 1) {
                                 try { videoEl.currentTime = desiredTime; } catch (err) {}
                             }
                         } catch (err) {}
@@ -736,6 +767,53 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                 }
             }
 
+            // Additional safeguard: some browsers may not reliably fire 'waiting'
+            // when buffer ahead runs out, especially during continuous playback.
+            // To catch these cases we also monitor `timeupdate` and count
+            // consecutive occurrences where buffered-ahead is below threshold.
+            // When the low-buffer counter reaches a small threshold we trigger
+            // the same conservative one-step downgrade used by the waiting handler.
+            let lowBufferCount = 0;
+            const LOW_BUFFER_COUNT_THRESHOLD = 3; // number of consecutive checks
+
+            function onTimeUpdate() {
+                try {
+                    if (videoEl._userSelectedQuality) { lowBufferCount = 0; return; }
+                    if (videoEl._adaptiveEnabled === false || (player && player._adaptiveEnabled === false)) { lowBufferCount = 0; return; }
+
+                    let bufEnd = 0;
+                    try {
+                        if (videoEl.buffered && videoEl.buffered.length) bufEnd = videoEl.buffered.end(videoEl.buffered.length - 1);
+                    } catch (e) { bufEnd = 0; }
+                    const now = (videoEl.currentTime || 0);
+                    const bufferAhead = (bufEnd - now);
+
+                    if (bufferAhead <= MIN_BUFFER_AHEAD) {
+                        lowBufferCount++;
+                    } else {
+                        lowBufferCount = 0;
+                    }
+                    try { debugLog(player, 'onTimeUpdate', { bufferAhead: bufferAhead, lowBufferCount: lowBufferCount }); } catch (e) {}
+
+                    if (lowBufferCount >= LOW_BUFFER_COUNT_THRESHOLD) {
+                        // guard with cooldown and available qualities check
+                        try {
+                            const last = videoEl._lastAutoDowngrade || 0;
+                            if (Date.now() - last < COOLDOWN_MS) return;
+                            const avail = (videoEl._availableSources || []).map(s => Number(s.size)).filter(n => !!n).sort((a,b)=>a-b);
+                            if (!avail.length) return;
+                            const cur = Number(videoEl._currentQuality || player._currentQuality || (typeof player.quality !== 'undefined' ? player.quality : NaN));
+                            const current = Number.isFinite(cur) ? cur : avail[avail.length-1];
+                            const lower = avail.filter(s => s < current).pop();
+                            if (!lower) return;
+                            changeQualityForPlayer(player, lower, { keepAllSources: true, auto: true });
+                            videoEl._lastAutoDowngrade = Date.now();
+                            lowBufferCount = 0;
+                        } catch (e) {}
+                    }
+                } catch (e) { lowBufferCount = 0; }
+            }
+
             // Called when the element reports waiting/stalled. We start a timer and
             // only perform an automatic downgrade if the waiting condition persists
             // past BUFFER_STALL_MS and adaptive mode is still active.
@@ -758,6 +836,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 
                             const now = (videoEl.currentTime || 0);
                             const bufferAhead = (bufEnd - now);
+                            try { debugLog(player, 'onWaiting bufferAhead', { bufferAhead: bufferAhead, now: now, bufEnd: bufEnd }); } catch (e) {}
 
                             // If we have more than MIN_BUFFER_AHEAD seconds buffered ahead,
                             // prefer to wait for the download to catch up instead of
@@ -779,6 +858,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 
                             // perform a native switch but mark it as auto so flags remain adaptive
                             // (this avoids marking the switch as a user preference)
+                            try { debugLog(player, 'onWaiting downgrading', { current: current, lower: lower }); } catch (e) {}
                             changeQualityForPlayer(player, lower, { keepAllSources: true, auto: true });
                             videoEl._lastAutoDowngrade = Date.now();
                         } catch (e) {}
@@ -798,10 +878,13 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 
             videoEl.addEventListener('waiting', onWaiting);
             videoEl.addEventListener('stalled', onWaiting);
+            // Monitor timeupdate to detect sustained low-buffer states that
+            // might not emit a 'waiting' event in some browsers.
+            videoEl.addEventListener('timeupdate', onTimeUpdate);
             videoEl.addEventListener('playing', onPlaying);
             videoEl.addEventListener('canplay', onCanPlay);
             // cleanup when player is destroyed (best-effort)
-            try { player.on && player.on('destroy', () => { clearStallTimer(); videoEl.removeEventListener('waiting', onWaiting); videoEl.removeEventListener('stalled', onWaiting); videoEl.removeEventListener('playing', onPlaying); videoEl.removeEventListener('canplay', onCanPlay); }); } catch (e) {}
+            try { player.on && player.on('destroy', () => { clearStallTimer(); videoEl.removeEventListener('waiting', onWaiting); videoEl.removeEventListener('stalled', onWaiting); videoEl.removeEventListener('timeupdate', onTimeUpdate); videoEl.removeEventListener('playing', onPlaying); videoEl.removeEventListener('canplay', onCanPlay); }); } catch (e) {}
         }
 
         // start the adaptive quality wiring for film-player elements
