@@ -200,6 +200,54 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         el.plyr._availableSources = available;
                     } catch (ee) {}
 
+                    // Wrap the native play() (and Plyr.play if present) so any
+                    // returned promise rejection is logged. This ensures we
+                    // capture autoplay policy rejections even when Plyr triggers
+                    // playback internally.
+                    try {
+                        const videoEl = el;
+                        if (videoEl && videoEl.play && !videoEl._playWrapped) {
+                            try {
+                                const _origPlay = videoEl.play.bind(videoEl);
+                                videoEl.play = function () {
+                                    try {
+                                        const p = _origPlay();
+                                        if (p && p.then) p.then(() => {}).catch(err => {
+                                            try { debugLog(videoEl, 'play() rejected (wrapped)', err); } catch (e) {}
+                                            try { console.warn('[plyr-adaptive] play() rejected (wrapped)', err); } catch (e) {}
+                                        });
+                                        return p;
+                                    } catch (err) {
+                                        try { debugLog(videoEl, 'play() threw', err); } catch (e) {}
+                                        throw err;
+                                    }
+                                };
+                                videoEl._playWrapped = true;
+                            } catch (e) {}
+                        }
+
+                        // also wrap Plyr's play if present
+                        if (el.plyr && el.plyr.play && !el.plyr._playWrapped) {
+                            try {
+                                const _origPlyrPlay = el.plyr.play.bind(el.plyr);
+                                el.plyr.play = function () {
+                                    try {
+                                        const p = _origPlyrPlay();
+                                        if (p && p.then) p.then(() => {}).catch(err => {
+                                            try { debugLog(videoEl, 'plyr.play() rejected (wrapped)', err); } catch (e) {}
+                                            try { console.warn('[plyr-adaptive] plyr.play() rejected (wrapped)', err); } catch (e) {}
+                                        });
+                                        return p;
+                                    } catch (err) {
+                                        try { debugLog(videoEl, 'plyr.play() threw', err); } catch (e) {}
+                                        throw err;
+                                    }
+                                };
+                                el.plyr._playWrapped = true;
+                            } catch (e) {}
+                        }
+                    } catch (e) {}
+
                     // add an "Auto" option at the top of the quality menu (if Plyr rendered quality buttons)
                     try {
                         const setupQualityAutoOption = function (player) {
