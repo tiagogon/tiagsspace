@@ -129,6 +129,24 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Lightweight adaptive quality system for self-hosted videos
+        // ---------------------------------------------
+        // This script augments Plyr with:
+        //  - adaptive selection based on displayed element height × DPR
+        //  - a visible "Auto" quality option which re-enables adaptive mode
+        //  - robust native <video> source swaps to preserve playback position
+        //  - a conservative auto-downgrade when Auto stalls on slow networks
+        //
+        // Important runtime assumptions:
+        //  - The server supports range requests (206) so seeking can work.
+        //  - Sources include a `size` attribute (or parsable filename/label)
+        //    indicating vertical resolution (e.g. 2160, 1080, 720).
+        //  - Plyr is available globally and attaches instances to the element
+        //    via `el.plyr` or `Plyr.get(el)`.
+        //
+        // The rest of the code initializes players, collects available
+        // sources, and wires adaptive/manual switching. See individual
+        // functions for more detail.
         // Initialize Plyr for each element (if not already initialized)
         const plyrOptions = {
             // keep fullscreen options as before
@@ -200,7 +218,23 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             }
         });
 
-        // --- Adaptive quality logic ---
+    // --- Adaptive quality logic ---
+    //
+    // Overview:
+    // This block implements a light-weight "adaptive" quality system that
+    // chooses an appropriate video resolution based on the displayed
+    // element height and the devicePixelRatio (DPR). It coexists with
+    // Plyr's quality controls and provides:
+    //  - An "Auto" UI option (inserted into Plyr controls) which re-enables
+    //    adaptive behavior.
+    //  - Manual quality switching handled by performing native <video>
+    //    source swaps (preserving currentTime, playback state, muted, rate),
+    //    because relying on `player.source` proved unreliable across
+    //    different Plyr builds/versions.
+    //  - Flags stored on both the <video> element and the Plyr instance to
+    //    avoid adaptive logic overriding explicit user choices.
+    //  - A buffering monitor that steps down one quality when Auto stalls
+    //    for a short period to improve playback on slow networks.
         function debounce(fn, wait) {
             let t;
             return function () {
@@ -210,6 +244,10 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             };
         }
 
+        // Choose the best quality (height in pixels) from a sorted list.
+        // The algorithm picks the largest available size that is <= neededHeightPx.
+        // If none match (needed is smaller than the smallest), return the smallest
+        // available as a fallback.
         function chooseQuality(availableSizes, neededHeightPx) {
             for (let i = availableSizes.length - 1; i >= 0; i--) {
                 if (availableSizes[i] <= neededHeightPx) return availableSizes[i];
@@ -217,7 +255,12 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             return availableSizes[0] || null;
         }
 
-        // helper: sync UI active state for quality buttons (auto or numeric)
+    // helper: sync UI active state for quality buttons (auto or numeric)
+    //
+    // Plyr's controls are re-built by Plyr at times (when opening settings, etc.).
+    // We maintain a visual radio-like state by ensuring the proper button has
+    // the `is-active` class and aria attributes. This makes the custom "Auto"
+    // button show correctly and keeps the native Plyr buttons in sync.
         function syncQualityButtons(player, activeValue) {
             try {
                 if (!player || !player.elements || !player.elements.container) return;
@@ -238,7 +281,13 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             } catch (e) {}
         }
 
-        // restore all available <source> elements from the stored list
+    // restore all available <source> elements from the stored list
+    //
+    // When we perform native source swaps we sometimes remove existing
+    // <source> elements (to replace with a single source). This helper
+    // rebuilds the full set of <source> nodes from the cached
+    // `videoEl._availableSources` so future switches (and Plyr's UI) can
+    // see all alternatives again.
         function rebuildSourcesFromAvailable(videoEl) {
             try {
                 if (!videoEl || !videoEl._availableSources) return;
@@ -261,7 +310,16 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             } catch (e) {}
         }
 
-        function adaptQualityForElement(el) {
+    // Compute and apply an adaptive quality for the given video element.
+    // Steps:
+    //  - Gather available sizes from <source> tags or stored list.
+    //  - Compute displayed height * DPR to get the target pixel height.
+    //  - If the user explicitly selected a quality (or adaptive is disabled)
+    //    do nothing; otherwise pick and set Plyr's `quality`.
+    // Notes:
+    //  - We check both flags on the raw element (`el._userSelectedQuality`)
+    //    and the Plyr instance (`player._userSelectedQuality`) for robustness.
+    function adaptQualityForElement(el) {
             if (!el) return;
             const player = el.plyr || (window.Plyr && Plyr.get ? Plyr.get(el) : null);
             if (!player) return;
@@ -295,7 +353,9 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             const neededHeightPx = Math.ceil(displayHeightCss * dpr);
 
             // if the user manually selected a quality, don't override their choice
-            // also respect flags set on the Plyr instance
+            // also respect flags set on the Plyr instance. These flags are set
+            // when the user clicks a quality button (we set `_userSelectedQuality`)
+            // or when the adaptive logic explicitly disables itself.
             if (el._userSelectedQuality || el._adaptiveEnabled === false || (player && (player._userSelectedQuality || player._adaptiveEnabled === false))) return;
 
             const desired = chooseQuality(sizes, neededHeightPx);
@@ -304,11 +364,14 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             try {
                 const current = player.quality;
                 if (current !== desired) {
+                    // Set Plyr's quality (when supported). We also record the chosen
+                    // value on both the player and the element so other parts of the
+                    // code (buffer monitor, UI sync) can inspect it.
                     player.quality = desired;
-                    // record current quality and update UI to show manual/auto state
                     try { player._currentQuality = desired; } catch (e) {}
                     try { if (el) { el._currentQuality = desired; } } catch (e) {}
-                    // mark Auto as active because this change was done by adaptive handler
+                    // Since this change originated from adaptive logic, make sure
+                    // the UI shows the "Auto" option as active.
                     syncQualityButtons(player, 'auto');
                 }
             } catch (err) {
@@ -399,14 +462,28 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                 // update UI active state for the selected quality (if not auto)
                 try { if (!options.auto) syncQualityButtons(player, target.size || desiredSize); else syncQualityButtons(player, 'auto'); } catch (e) {}
 
+                // Handler run after the element emits loadedmetadata.
+                // The goal is to restore playback position and state after we
+                // swapped the underlying src/source. Seeking immediately after
+                // load() often fails because the browser hasn't populated
+                // `seekable` or `buffered` ranges yet. To improve reliability we:
+                //  - compute the desiredTime we want to restore to
+                //  - attempt to set `currentTime` immediately and then retry
+                //    periodically until the media indicates the time is seekable
+                //    or we've exhausted retry attempts
+                //  - listen to additional events (progress, canplaythrough,
+                //    canplay, seeked) to get more opportunities to seek
+                //  - make Auto-triggered switches more patient (longer retry window)
                 const onMeta = function () {
-                    // Attempt to restore time and playback state robustly.
+                    // desiredTime: clamp to duration when available
                     const desiredTime = Math.min(currentTime || 0, (videoEl.duration && isFinite(videoEl.duration)) ? videoEl.duration : currentTime || 0);
                     let attempts = 0;
-                    // allow longer attempts especially for Auto-driven switches
-                    const maxAttempts = options && options.auto ? 25 : 12;
-                    const retryDelay = 300; // ms
+                    // allow much longer attempts especially for Auto-driven switches
+                    // Auto: try for up to ~20s (maxAttempts * retryDelay)
+                    const maxAttempts = options && options.auto ? 80 : 24;
+                    const retryDelay = 250; // ms
 
+                    // Once we've successfully restored time and playback, cleanup
                     function finishRestore() {
                         try { videoEl.muted = wasMuted; } catch (e) {}
                         try { videoEl.playbackRate = playbackRate; } catch (e) {}
@@ -414,12 +491,16 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                             const p = player.play && typeof player.play === 'function' ? player.play() : videoEl.play && videoEl.play();
                             if (p && p.then) p.catch(() => {});
                         }
-                        // cleanup listeners
+                        // cleanup listeners we attached while trying to restore
                         try { videoEl.removeEventListener('loadedmetadata', onMeta); } catch (e) {}
                         try { videoEl.removeEventListener('canplay', onCanPlay); } catch (e) {}
                         try { videoEl.removeEventListener('seeked', onSeeked); } catch (e) {}
                     }
 
+                    // Helper to determine if seeking to `time` is likely to succeed.
+                    // We check `seekable` ranges first (most reliable). If unavailable,
+                    // fall back to checking `buffered` ranges as a hint the browser
+                    // has some bytes for the desired position.
                     function canSeekTo(time) {
                         try {
                             if (videoEl.seekable && videoEl.seekable.length) {
@@ -434,25 +515,42 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         return false;
                     }
 
+                    // Try to set currentTime, but only force it when it appears
+                    // seekable or on the very first attempt. Otherwise keep retrying
+                    // because setting currentTime too early can be ignored by the
+                    // browser and lead to an apparent "restart" at 0.
                     function trySetTime() {
                         attempts++;
                         try {
-                            // only set when it appears seekable or buffered, or keep trying
                             if (canSeekTo(desiredTime) || attempts === 1) {
                                 try { videoEl.currentTime = desiredTime; } catch (err) {}
                             }
                         } catch (err) {}
 
-                        // if seek succeeded (within small epsilon) we're done
+                        // If the currentTime is close enough to desiredTime we're done
                         const diff = Math.abs((videoEl.currentTime || 0) - desiredTime);
                         if (diff <= 0.5 || attempts >= maxAttempts) {
                             finishRestore();
                         } else {
+                            // schedule another attempt
                             setTimeout(trySetTime, retryDelay);
                         }
                     }
 
+                    // Additional opportunities to try seeking: progress/canplaythrough
+                    // indicate the browser has buffered more data and may allow seeks.
+                    const onProgress = function () {
+                        trySetTime();
+                    };
+                    const onCanPlayThrough = function () {
+                        trySetTime();
+                    };
+
+                    videoEl.addEventListener('progress', onProgress);
+                    videoEl.addEventListener('canplaythrough', onCanPlayThrough);
+
                     const onSeeked = function () {
+                        // If the element emits seeked, we're finished successfully.
                         finishRestore();
                     };
 
@@ -608,11 +706,18 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
         }
 
         // Monitor the media element for prolonged buffering stalls and step-down quality when in Auto
+        //
+        // Rationale:
+        // On slow networks an adaptive "Auto" decision may pick a source that later
+        // stalls the player. Rather than leaving the user stuck, we detect a short
+        // persistent stall and step down one quality level. We intentionally keep
+        // this conservative (one-step down + cooldown) to avoid flapping.
         function monitorBuffering(player) {
             if (!player || !player.elements) return;
             const videoEl = player.elements.media || player.elements.container && player.elements.container.querySelector('video');
             if (!videoEl) return;
 
+            // Tunable values (could be exposed via data-attributes later)
             const BUFFER_STALL_MS = 500; // how long waiting must persist before we act
             const COOLDOWN_MS = 2000; // minimum time between automatic downgrades
             let stallTimer = null;
@@ -624,6 +729,9 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                 }
             }
 
+            // Called when the element reports waiting/stalled. We start a timer and
+            // only perform an automatic downgrade if the waiting condition persists
+            // past BUFFER_STALL_MS and adaptive mode is still active.
             function onWaiting() {
                 try {
                     // only act when adaptive is enabled and the user hasn't picked a manual quality
@@ -633,7 +741,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     clearStallTimer();
                     stallTimer = setTimeout(() => {
                         try {
-                            // if readyState indicates not enough data (0-3), consider it stalled
+                            // If readyState >= 3 the browser already indicates it has
+                            // enough data to continue, so don't downgrade.
                             if ((videoEl.readyState || 0) >= 3) return; // enough data, no stall
 
                             const last = videoEl._lastAutoDowngrade || 0;
@@ -650,6 +759,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                             if (!lower) return; // already at lowest
 
                             // perform a native switch but mark it as auto so flags remain adaptive
+                            // (this avoids marking the switch as a user preference)
                             changeQualityForPlayer(player, lower, { keepAllSources: true, auto: true });
                             videoEl._lastAutoDowngrade = Date.now();
                         } catch (e) {}
@@ -658,10 +768,12 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             }
 
             function onPlaying() {
+                // clear pending stall timers when playback resumes
                 clearStallTimer();
             }
 
             function onCanPlay() {
+                // clear pending stall timers when browser reports canplay
                 clearStallTimer();
             }
 
