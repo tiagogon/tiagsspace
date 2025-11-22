@@ -544,7 +544,78 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     player.on('enterfullscreen', deb);
                     player.on('exitfullscreen', deb);
                 }
+
+                // also attach a buffering monitor to automatically step-down quality when in Auto
+                try {
+                    monitorBuffering(player);
+                } catch (e) {}
             });
+        }
+
+        // Monitor the media element for prolonged buffering stalls and step-down quality when in Auto
+        function monitorBuffering(player) {
+            if (!player || !player.elements) return;
+            const videoEl = player.elements.media || player.elements.container && player.elements.container.querySelector('video');
+            if (!videoEl) return;
+
+            const BUFFER_STALL_MS = 500; // how long waiting must persist before we act
+            const COOLDOWN_MS = 2000; // minimum time between automatic downgrades
+            let stallTimer = null;
+
+            function clearStallTimer() {
+                if (stallTimer) {
+                    clearTimeout(stallTimer);
+                    stallTimer = null;
+                }
+            }
+
+            function onWaiting() {
+                try {
+                    // only act when adaptive is enabled and the user hasn't picked a manual quality
+                    if (videoEl._userSelectedQuality) return;
+                    if (videoEl._adaptiveEnabled === false || (player && player._adaptiveEnabled === false)) return;
+
+                    clearStallTimer();
+                    stallTimer = setTimeout(() => {
+                        try {
+                            // if readyState indicates not enough data (0-3), consider it stalled
+                            if ((videoEl.readyState || 0) >= 3) return; // enough data, no stall
+
+                            const last = videoEl._lastAutoDowngrade || 0;
+                            if (Date.now() - last < COOLDOWN_MS) return; // respect cooldown
+
+                            const avail = (videoEl._availableSources || []).map(s => Number(s.size)).filter(n => !!n).sort((a,b)=>a-b);
+                            if (!avail.length) return;
+
+                            const cur = Number(videoEl._currentQuality || player._currentQuality || (typeof player.quality !== 'undefined' ? player.quality : NaN));
+                            // if we can't determine current, pick highest
+                            const current = Number.isFinite(cur) ? cur : avail[avail.length-1];
+                            // find the next lower available quality
+                            const lower = avail.filter(s => s < current).pop();
+                            if (!lower) return; // already at lowest
+
+                            // perform a native switch but mark it as auto so flags remain adaptive
+                            changeQualityForPlayer(player, lower, { keepAllSources: true, auto: true });
+                            videoEl._lastAutoDowngrade = Date.now();
+                        } catch (e) {}
+                    }, BUFFER_STALL_MS);
+                } catch (e) {}
+            }
+
+            function onPlaying() {
+                clearStallTimer();
+            }
+
+            function onCanPlay() {
+                clearStallTimer();
+            }
+
+            videoEl.addEventListener('waiting', onWaiting);
+            videoEl.addEventListener('stalled', onWaiting);
+            videoEl.addEventListener('playing', onPlaying);
+            videoEl.addEventListener('canplay', onCanPlay);
+            // cleanup when player is destroyed (best-effort)
+            try { player.on && player.on('destroy', () => { clearStallTimer(); videoEl.removeEventListener('waiting', onWaiting); videoEl.removeEventListener('stalled', onWaiting); videoEl.removeEventListener('playing', onPlaying); videoEl.removeEventListener('canplay', onCanPlay); }); } catch (e) {}
         }
 
         // start the adaptive quality wiring for film-player elements
