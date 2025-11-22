@@ -400,17 +400,55 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                 try { if (!options.auto) syncQualityButtons(player, target.size || desiredSize); else syncQualityButtons(player, 'auto'); } catch (e) {}
 
                 const onMeta = function () {
-                    // restore time and playback state
-                    try { videoEl.currentTime = Math.min(currentTime, videoEl.duration || currentTime); } catch (e) {}
-                    try { videoEl.muted = wasMuted; } catch (e) {}
-                    try { videoEl.playbackRate = playbackRate; } catch (e) {}
-                    if (wasPlaying) {
-                        const p = player.play && typeof player.play === 'function' ? player.play() : videoEl.play && videoEl.play();
-                        // ignore promise
-                        if (p && p.then) p.catch(() => {});
+                    // Attempt to restore time and playback state robustly.
+                    const desiredTime = Math.min(currentTime || 0, (videoEl.duration && isFinite(videoEl.duration)) ? videoEl.duration : currentTime || 0);
+                    let attempts = 0;
+                    const maxAttempts = 8;
+
+                    function finishRestore() {
+                        try { videoEl.muted = wasMuted; } catch (e) {}
+                        try { videoEl.playbackRate = playbackRate; } catch (e) {}
+                        if (wasPlaying) {
+                            const p = player.play && typeof player.play === 'function' ? player.play() : videoEl.play && videoEl.play();
+                            if (p && p.then) p.catch(() => {});
+                        }
+                        // cleanup listeners
+                        try { videoEl.removeEventListener('loadedmetadata', onMeta); } catch (e) {}
+                        try { videoEl.removeEventListener('canplay', onCanPlay); } catch (e) {}
+                        try { videoEl.removeEventListener('seeked', onSeeked); } catch (e) {}
                     }
-                    // cleanup
-                    videoEl.removeEventListener('loadedmetadata', onMeta);
+
+                    function trySetTime() {
+                        attempts++;
+                        try {
+                            // some browsers reject set when not ready — wrap in try
+                            videoEl.currentTime = desiredTime;
+                        } catch (err) {
+                            // ignore and retry
+                        }
+                        // if seek succeeded (within small epsilon) we're done
+                        const diff = Math.abs((videoEl.currentTime || 0) - desiredTime);
+                        if (diff <= 0.5 || attempts >= maxAttempts) {
+                            finishRestore();
+                        } else {
+                            setTimeout(trySetTime, 200);
+                        }
+                    }
+
+                    const onSeeked = function () {
+                        finishRestore();
+                    };
+
+                    const onCanPlay = function () {
+                        // ensure we try to set time once canplay occurs
+                        trySetTime();
+                    };
+
+                    videoEl.addEventListener('seeked', onSeeked);
+                    videoEl.addEventListener('canplay', onCanPlay);
+
+                    // first attempt immediately
+                    trySetTime();
                 };
 
                 videoEl.addEventListener('loadedmetadata', onMeta);
