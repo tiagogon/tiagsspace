@@ -5655,7 +5655,8 @@ figure {
       opacity: 0.98; }
     .plyr .plyr__control--overlaid:focus,
     .plyr .plyr__play-large:focus {
-      outline: none; }
+      outline: none;
+      box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.06); }
 
 .plyr__menu__container,
 .plyr__menu__list {

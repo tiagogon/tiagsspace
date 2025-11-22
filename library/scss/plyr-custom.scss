@@ -72,6 +72,7 @@ $plyr-audio-control-bg-hover: $plyr-tab-focus-default-color !default;
         // keyboard focus outline for accessibility (subtle)
         &:focus {
             outline: none;
+            box-shadow: 0 0 0 0px rgba(255,255,255,0.06);
         }
     }
 }
