@@ -817,6 +817,10 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         // also remove progress / canplaythrough handlers which were added earlier
                         try { videoEl.removeEventListener('progress', onProgress); } catch (e) {}
                         try { videoEl.removeEventListener('canplaythrough', onCanPlayThrough); } catch (e) {}
+                        // Ensure we always clear the restoring flag and remove the capture
+                        // play listener so subsequent user-initiated plays are allowed.
+                        try { videoEl._isRestoring = false; } catch (e) {}
+                        try { videoEl.removeEventListener('play', onPlayAttempt, true); } catch (e) {}
                     }
 
                     // Helper to determine if seeking to `time` is likely to succeed.
