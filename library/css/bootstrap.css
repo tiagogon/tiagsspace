@@ -5611,6 +5611,9 @@ figure {
   --plyr-control-background: $white;
   --plyr-color-main: $dark; }
 
+.plyr__spinner {
+  display: none !important; }
+
 .plyr {
   font-family: "Sporting_Grotesque_Regular", sans-serif;
   width: 100%; }
@@ -5652,8 +5655,7 @@ figure {
       opacity: 0.98; }
     .plyr .plyr__control--overlaid:focus,
     .plyr .plyr__play-large:focus {
-      outline: none;
-      box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.06); }
+      outline: none; }
 
 .plyr__menu__container,
 .plyr__menu__list {
