@@ -345,11 +345,13 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             const wasMuted = videoEl.muted;
             const playbackRate = videoEl.playbackRate || 1;
 
-            // mark adaptive disabled for now
-            videoEl._adaptiveEnabled = false;
-            if (player) {
-                player._adaptiveEnabled = false;
-                player._userSelectedQuality = true;
+            // mark adaptive disabled for now (unless this is an 'auto' triggered switch)
+            if (!options.auto) {
+                videoEl._adaptiveEnabled = false;
+                if (player) {
+                    player._adaptiveEnabled = false;
+                    player._userSelectedQuality = true;
+                }
             }
 
             // Replace the sources: set src to the target file and call load()
@@ -394,8 +396,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                 try { videoEl._currentQuality = target.size || desiredSize; } catch (e) {}
                 try { if (player) player._currentQuality = target.size || desiredSize; } catch (e) {}
 
-                // update UI active state for the selected quality
-                syncQualityButtons(player, target.size || desiredSize);
+                // update UI active state for the selected quality (if not auto)
+                try { if (!options.auto) syncQualityButtons(player, target.size || desiredSize); else syncQualityButtons(player, 'auto'); } catch (e) {}
 
                 const onMeta = function () {
                     // restore time and playback state
@@ -454,10 +456,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                 // restore all known source elements so Plyr and our adaptive logic can see them
                 try { rebuildSourcesFromAvailable(videoEl); } catch (e) {}
 
-                // compute desired by running adaptive logic; adaptQualityForElement will try to set player.quality
-                adaptQualityForElement(videoEl);
-
-                // as a fallback: compute desiredSize from available sources and call changeQualityForPlayer keeping all sources
+                // compute desiredSize from available sources and perform a native switch while keeping all sources
                 try {
                     const avail = (videoEl._availableSources || []).map(s => Number(s.size)).filter(n => !!n).sort((a,b)=>a-b);
                     if (avail.length) {
@@ -469,7 +468,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         const needed = Math.ceil((window.devicePixelRatio || 1) * (displayHeightCss || 0));
                         const desiredAuto = chooseQuality(avail, needed);
                         if (desiredAuto) {
-                            changeQualityForPlayer(player, desiredAuto, { keepAllSources: true });
+                            // perform the switch but mark it as 'auto' so flags aren't set to user-selected
+                            changeQualityForPlayer(player, desiredAuto, { keepAllSources: true, auto: true });
                         }
                     }
                 } catch (e) {}
