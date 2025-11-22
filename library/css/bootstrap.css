@@ -5608,8 +5608,98 @@ figure {
   color: #000; }
 
 .plyr {
+  --plyr-control-background: $white;
+  --plyr-color-main: $dark; }
+
+.plyr {
   font-family: "Sporting_Grotesque_Regular", sans-serif;
   width: 100%; }
+  .plyr .plyr__control--overlaid,
+  .plyr .plyr__play-large {
+    display: inline-flex !important;
+    background: transparent !important;
+    color: #fff !important;
+    width: 120px;
+    height: 120px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    z-index: 3;
+    transition: transform .18s ease, opacity .18s; }
+    .plyr .plyr__control--overlaid svg,
+    .plyr .plyr__play-large svg {
+      display: none !important; }
+    .plyr .plyr__control--overlaid::before,
+    .plyr .plyr__play-large::before {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-left: 56px solid #fff;
+      border-top: 34px solid transparent;
+      border-bottom: 34px solid transparent;
+      transform-origin: 50% 50%;
+      transition: transform .18s ease, opacity .18s ease;
+      will-change: transform; }
+    .plyr .plyr__control--overlaid:hover::before, .plyr .plyr__control--overlaid:focus::before,
+    .plyr .plyr__play-large:hover::before,
+    .plyr .plyr__play-large:focus::before {
+      transform: translateX(0px) scale(1.33);
+      opacity: 0.98; }
+    .plyr .plyr__control--overlaid:focus,
+    .plyr .plyr__play-large:focus {
+      outline: none;
+      box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.06); }
+
+.plyr__menu__container,
+.plyr__menu__list {
+  background: #000 !important;
+  color: #fff !important;
+  border-radius: 6px !important;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6) !important; }
+
+.plyr__menu__list li,
+.plyr__menu__list button,
+.plyr__menu__container .plyr__control {
+  color: #fff !important; }
+
+/* Remove the little speech-bubble arrow so the square looks clean. */
+.plyr__menu__container::before,
+.plyr__menu__container::after,
+.plyr__menu::before,
+.plyr__menu::after {
+  display: none !important; }
+
+/* If a menu item contains an icon or svg, ensure it contrasts */
+.plyr__menu__item svg,
+.plyr__menu__item i {
+  fill: currentColor !important;
+  color: currentColor !important; }
+
+.plyr__menu__value {
+  display: none !important; }
+
+.plyr__menu__container .plyr__control--back:after {
+  border-right-color: #fff !important;
+  border-right-color: #fff !important; }
+
+.plyr__menu,
+.plyr__menu__container,
+.plyr__menu__list {
+  border-radius: 0 !important;
+  overflow: visible; }
+
+/* Some Plyr builds add the speech-bubble arrow with pseudo-elements;
+   remove rounding there too so the whole box is square. */
+.plyr__menu__container::before,
+.plyr__menu__container::after,
+.plyr__menu::before,
+.plyr__menu::after {
+  border-radius: 0 !important; }
 
 audio {
   width: 100%; }
@@ -5656,11 +5746,24 @@ video.plyr-thumbnail-front {
   font-size: 16px;
   font-weight: 400; }
 .background-w-dark-color .plyr--full-ui input[type='range'] {
-  color: #fff;
-  width: 98%; }
+  color: #fff; }
 
 .plyr__progress {
-  width: 100%; }
+  /* let the progress area flex between controls instead of forcing width:100%
+       prevents it from overlapping other controls (like the running time) */
+  flex: 1 1 auto;
+  min-width: 0;
+  /* allow it to shrink inside flex containers */
+  margin: 0 calc(var(--plyr-control-spacing, 10px) / 2);
+  align-self: center; }
+
+/* ensure the time label doesn't get covered and keeps its intrinsic size */
+.plyr__time {
+  font-size: 16px;
+  flex: 0 0 auto;
+  margin-left: calc(var(--plyr-control-spacing, 10px) / 2);
+  white-space: nowrap;
+  z-index: 2; }
 
 .post-content .plyr--audio .plyr__controls {
   padding-left: 0;

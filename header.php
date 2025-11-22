@@ -413,29 +413,31 @@
 		</div>
 
 
-		<div id="lower-header" class="container-fluid side-padding Fixed d-none d-sm-inline" role="banner">
+		<?php if ( is_home() || is_paged() ) : ?>
+			<div id="lower-header" class="container-fluid side-padding Fixed d-none d-sm-inline" role="banner">
 
-			<div class="row">
+				<div class="row">
 
-				<div class="left-side col-32 multi-collapse show">
-					
-					<script>
-						function showYear(text){
-						    document.getElementById("over-text-year-published").innerHTML=text;
-						}
-						function hideYear(){
-						    document.getElementById("over-text-year-published").innerHTML="";
-						}
-					</script>
+					<div class="left-side col-32 multi-collapse show">
+						
+						<script>
+							function showYear(text){
+								document.getElementById("over-text-year-published").innerHTML=text;
+							}
+							function hideYear(){
+								document.getElementById("over-text-year-published").innerHTML="";
+							}
+						</script>
 
-					<h1><span id="over-text-year-published" class=""></span></h1>
+						<h1><span id="over-text-year-published" class=""></span></h1>
 
-				</div>
+					</div>
 
-				<div class="right-side col-16">
+					<div class="right-side col-16">
 
-				</div>
+					</div>
 
-			</div> <!-- row -->
+				</div> <!-- row -->
 
-		</div>	<!-- end lower header -->
+			</div>	<!-- end lower header -->
+		<?php endif; ?>

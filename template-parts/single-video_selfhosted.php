@@ -62,42 +62,33 @@ if( $film_player_options ) {
     }
 }
 
+
+// Build the Plyr config as a PHP array (no pre-built JSON strings)
 $plyr_config = [
-    "autoplay" => "true",
-    "muted" => "true"
+    // use the current WP post title for the player title
+    'title'    => get_the_title(),
+    //'autoplay' => true,
+    'controls' => [
+        'play-large', 'play', 'progress', 'current-time',
+        'mute', 'captions', 'settings', 'fullscreen'
+    ],
+    // only include settings you want users to see (omit 'speed')
+    'settings' => ['captions', 'quality'],
+    'ratio'    => '16:9',
+    'keyboard' => ['focused' => true, 'global' => false],
+    'tooltips' => ['controls' => false, 'seek' => false],
+    'seekTime' => 10,
+    'quality'  => ['default' => 1080],
+    'ads'      => ['enabled' => false],
+    'previewThumbnails' => ['enabled' => false],
+    // fullscreen can be a nested array; null will become JSON null
+    'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => true, 'container' => null],
 ];
 
-// Build the JSON string as usual
-$plyr_config = [
-    "muted" => "true",
-    "fullscreen" => "{ enabled: true, fallback: true, iosNative: true, container: null }"
-];
+// Encode once to JSON and escape for inclusion in an HTML attribute
+$json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+// echo into attribute with esc_attr to be safe
 
-
-// Build JSON string (add spaces if you like as before)
-$json = json_encode($plyr_config, JSON_HEX_APOS | JSON_HEX_QUOT);
-// Optional pretty formatting
-$json = preg_replace('/^{/', '{ ', $json);
-$json = preg_replace('/}$/', ' }', $json);
-$json = preg_replace('/:/', ': ', $json);
-
-// debugging output
-$json = '{
-  "title": "My Video",
-  "autoplay": true,
-  "controls": [
-    "play-large", "play", "progress", "current-time", "mute", "volume", "captions", "settings", "fullscreen"
-  ],
-  "settings": ["captions", "quality", "speed", "loop"],
-  "ratio": "16:9",
-  "keyboard": { "focused": true, "global": false },
-  "tooltips": { "controls": true, "seek": true },
-  "seekTime": 10,
-  "speed": { "selected": 1, "options": [0.5, 1, 1.5, 2] },
-  "quality": { "default": 1080},
-  "ads": { "enabled": false },
-  "previewThumbnails": { "enabled": false }
-}';
 
 ?>
 
@@ -110,7 +101,8 @@ $json = '{
                 <?php echo $film_player_options_html_string; ?>     
                 
                 poster="<?php echo $poster; ?>" 
-                data-plyr-config='<?php echo $json; ?>'
+                data-plyr-config='<?php echo esc_attr( $json ); ?>'
+                
                 >
                     <?php foreach ($video_sources as $source) : ?>
                         <source src="<?php echo $source['src']; ?>" type="video/mp4"
@@ -137,12 +129,425 @@ $json = '{
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const player = new Plyr('.film-player', {
-            //title: 'Example Title',
-            //autoplay: true,
-            //muted: true,
+        // Initialize Plyr for each element (if not already initialized)
+        const plyrOptions = {
+            // keep fullscreen options as before
             fullscreen: { enabled: true, fallback: true, iosNative: true, container: null }
+        };
+
+        const playerEls = Array.from(document.querySelectorAll('.film-player'));
+        playerEls.forEach(el => {
+            if (!el.plyr) {
+                try {
+                    el.plyr = new Plyr(el, plyrOptions);
+                    // mark adaptive enabled by default; user selection will disable it
+                    el._adaptiveEnabled = true;
+                    el._userSelectedQuality = false;
+                    // also attach flag to the Plyr instance for robustness
+                    el.plyr._adaptiveEnabled = true;
+                    el.plyr._userSelectedQuality = false;
+
+                    // collect available sources once and keep them for later switches
+                    try {
+                        const videoEl = el;
+                        const initialSourceEls = Array.from(videoEl.querySelectorAll('source'));
+                        const available = initialSourceEls.map(s => ({
+                            src: s.getAttribute('src') || s.src,
+                            type: s.getAttribute('type') || s.type || 'video/mp4',
+                            size: parseInt(s.getAttribute('size') || s.getAttribute('data-size') || (s.getAttribute('label')||'').match(/(\d{3,4})/)?.[1] || 0, 10)
+                        })).filter(s => s.src);
+                        videoEl._availableSources = available;
+                        el.plyr._availableSources = available;
+                    } catch (ee) {}
+
+                    // add an "Auto" option at the top of the quality menu (if Plyr rendered quality buttons)
+                    try {
+                        const setupQualityAutoOption = function (player) {
+                            if (!player || !player.elements || !player.elements.container) return;
+                            const container = player.elements.container;
+                            // find an existing quality button to get the parent element
+                            const firstBtn = container.querySelector('button[data-plyr="quality"]');
+                            if (!firstBtn) return;
+                            const parent = firstBtn.parentElement;
+                            if (!parent) return;
+                            // don't add twice
+                            if (parent.querySelector('button[data-value="auto"]')) return;
+                            const autoBtn = document.createElement('button');
+                            autoBtn.type = 'button';
+                            autoBtn.className = firstBtn.className;
+                            autoBtn.setAttribute('data-plyr', 'quality');
+                            autoBtn.setAttribute('value', 'auto');
+                            autoBtn.setAttribute('data-value', 'auto');
+                            autoBtn.textContent = 'Auto';
+                            parent.insertBefore(autoBtn, parent.firstChild);
+
+                            // make Auto active by default (visual cue)
+                            try {
+                                // remove is-active from other buttons
+                                Array.from(parent.querySelectorAll('button[data-plyr="quality"]')).forEach(b => b.classList.remove('is-active'));
+                                autoBtn.classList.add('is-active');
+                            } catch (e) {}
+                        };
+                        // run once after a small delay so Plyr has finished rendering controls
+                        setTimeout(() => setupQualityAutoOption(el.plyr), 120);
+                    } catch (ee) {
+                        // ignore
+                    }
+                } catch (e) {
+                    // ignore initialization errors
+                    // console.warn('Plyr init failed', e);
+                }
+            }
         });
-        //player.muted = true; // or player.mute();
+
+        // --- Adaptive quality logic ---
+        function debounce(fn, wait) {
+            let t;
+            return function () {
+                const args = arguments;
+                clearTimeout(t);
+                t = setTimeout(() => fn.apply(this, args), wait);
+            };
+        }
+
+        function chooseQuality(availableSizes, neededHeightPx) {
+            for (let i = availableSizes.length - 1; i >= 0; i--) {
+                if (availableSizes[i] <= neededHeightPx) return availableSizes[i];
+            }
+            return availableSizes[0] || null;
+        }
+
+        // helper: sync UI active state for quality buttons (auto or numeric)
+        function syncQualityButtons(player, activeValue) {
+            try {
+                if (!player || !player.elements || !player.elements.container) return;
+                const container = player.elements.container;
+                // find any quality button and use its parent as the scope
+                let anyBtn = container.querySelector('button[data-plyr="quality"]');
+                const parentEl = anyBtn ? anyBtn.parentElement : null;
+                const scope = parentEl || container;
+                const buttons = Array.from(scope.querySelectorAll('button[data-plyr="quality"]'));
+                buttons.forEach(b => {
+                    try { b.classList.remove('is-active'); } catch (e) {}
+                    // ensure the button has the role used by Plyr's CSS for radio items
+                    try { if (!b.hasAttribute('role')) b.setAttribute('role', 'menuitemradio'); } catch (e) {}
+                    const val = (b.getAttribute('value') || b.getAttribute('data-value') || '').toString();
+                    const isActive = (activeValue === 'auto' && val === 'auto') || (val !== 'auto' && Number(val) === Number(activeValue));
+                    try { if (isActive) { b.classList.add('is-active'); b.setAttribute('aria-checked', 'true'); } else { b.classList.remove('is-active'); b.setAttribute('aria-checked', 'false'); } } catch (e) {}
+                });
+            } catch (e) {}
+        }
+
+        // restore all available <source> elements from the stored list
+        function rebuildSourcesFromAvailable(videoEl) {
+            try {
+                if (!videoEl || !videoEl._availableSources) return;
+                const avail = Array.isArray(videoEl._availableSources) ? videoEl._availableSources : [];
+                // remove existing <source> nodes
+                try {
+                    const existing = Array.from(videoEl.querySelectorAll('source'));
+                    existing.forEach(s => s.parentNode && s.parentNode.removeChild(s));
+                } catch (e) {}
+                // append all available sources
+                avail.forEach(src => {
+                    try {
+                        const s = document.createElement('source');
+                        s.setAttribute('src', src.src);
+                        if (src.type) s.setAttribute('type', src.type);
+                        if (src.size) s.setAttribute('size', src.size);
+                        videoEl.appendChild(s);
+                    } catch (e) {}
+                });
+            } catch (e) {}
+        }
+
+        function adaptQualityForElement(el) {
+            if (!el) return;
+            const player = el.plyr || (window.Plyr && Plyr.get ? Plyr.get(el) : null);
+            if (!player) return;
+
+            const videoEl = player.elements && player.elements.media ? player.elements.media : el;
+            if (!videoEl) return;
+
+            const sourceEls = Array.from(videoEl.querySelectorAll('source[size]'));
+            let sizes = sourceEls.map(s => parseInt(s.getAttribute('size'), 10)).filter(n => !Number.isNaN(n));
+
+            if (sizes.length === 0) {
+                sizes = Array.from(videoEl.querySelectorAll('source')).map(s => {
+                    const ds = s.getAttribute('data-size') || s.getAttribute('data-label') || s.getAttribute('label') || '';
+                    const m = (ds + '').match(/(\d{3,4})/);
+                    return m ? parseInt(m[1], 10) : null;
+                }).filter(n => n);
+            }
+
+            if (sizes.length === 0) return; // nothing to do
+
+            sizes = sizes.sort((a, b) => a - b);
+
+            let displayHeightCss = videoEl.clientHeight || videoEl.getBoundingClientRect().height || 0;
+            if (!displayHeightCss) {
+                const rect = player.elements && player.elements.container && player.elements.container.getBoundingClientRect();
+                displayHeightCss = (rect && rect.height) || 0;
+            }
+            if (!displayHeightCss) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            const neededHeightPx = Math.ceil(displayHeightCss * dpr);
+
+            // if the user manually selected a quality, don't override their choice
+            // also respect flags set on the Plyr instance
+            if (el._userSelectedQuality || el._adaptiveEnabled === false || (player && (player._userSelectedQuality || player._adaptiveEnabled === false))) return;
+
+            const desired = chooseQuality(sizes, neededHeightPx);
+            if (!desired) return;
+
+            try {
+                const current = player.quality;
+                if (current !== desired) {
+                    player.quality = desired;
+                    // record current quality and update UI to show manual/auto state
+                    try { player._currentQuality = desired; } catch (e) {}
+                    try { if (el) { el._currentQuality = desired; } } catch (e) {}
+                    // mark Auto as active because this change was done by adaptive handler
+                    syncQualityButtons(player, 'auto');
+                }
+            } catch (err) {
+                // if quality setter isn't available, don't break the user experience
+                // Optionally we could reload sources here as a fallback
+                // console.warn('Could not set Plyr quality', err);
+            }
+        }
+
+        // Change the player's source to the chosen quality using the native <video> element.
+        // This approach replaces the src (or <source>) and uses the media 'loadedmetadata' event
+        // to restore currentTime and playback state. It avoids relying on player.source which
+        // can behave differently across Plyr builds.
+        function changeQualityForPlayer(player, desiredSize, options) {
+            if (!player || !player.elements) return;
+            const videoEl = player.elements.media || player.elements.container && player.elements.container.querySelector('video');
+            if (!videoEl) return;
+
+            options = options || {};
+            // prefer stored availableSources to allow switching back and forth
+            const sources = (videoEl._availableSources && Array.isArray(videoEl._availableSources) && videoEl._availableSources.slice())
+                || Array.from(videoEl.querySelectorAll('source')).map(s => ({
+                    src: s.getAttribute('src') || s.src,
+                    type: s.getAttribute('type') || s.type || 'video/mp4',
+                    size: parseInt(s.getAttribute('size') || s.getAttribute('data-size') || (s.getAttribute('label')||'').match(/(\d{3,4})/)?.[1] || 0, 10)
+                })).filter(s => s.src);
+
+            const target = sources.find(s => s.size === Number(desiredSize));
+            if (!target) return;
+
+            // preserve state
+            const wasPlaying = !videoEl.paused;
+            const currentTime = videoEl.currentTime || 0;
+            const wasMuted = videoEl.muted;
+            const playbackRate = videoEl.playbackRate || 1;
+
+            // mark adaptive disabled for now
+            videoEl._adaptiveEnabled = false;
+            if (player) {
+                player._adaptiveEnabled = false;
+                player._userSelectedQuality = true;
+            }
+
+            // Replace the sources: set src to the target file and call load()
+            try {
+                // Pause to avoid auto-reset issues
+                try { videoEl.pause(); } catch (e) {}
+
+                if (options.keepAllSources) {
+                    // rebuild full set of <source> elements from available list so future switches work
+                    try { rebuildSourcesFromAvailable(videoEl); } catch (e) {}
+                    // ensure target is present; if not, just set videoEl.src to target
+                    try {
+                        const found = Array.from(videoEl.querySelectorAll('source')).some(s => (s.getAttribute('src')||s.src) === target.src);
+                        if (!found) {
+                            const ns = document.createElement('source');
+                            ns.setAttribute('src', target.src);
+                            if (target.type) ns.setAttribute('type', target.type);
+                            if (target.size) ns.setAttribute('size', target.size);
+                            videoEl.appendChild(ns);
+                        }
+                    } catch (e) {}
+                } else {
+                    // remove other sources and only keep the chosen one
+                    try {
+                        const existing = Array.from(videoEl.querySelectorAll('source'));
+                        existing.forEach(s => s.parentNode && s.parentNode.removeChild(s));
+                    } catch (e) {}
+                    try {
+                        const newSource = document.createElement('source');
+                        newSource.setAttribute('src', target.src);
+                        if (target.type) newSource.setAttribute('type', target.type);
+                        if (target.size) newSource.setAttribute('size', target.size);
+                        videoEl.appendChild(newSource);
+                    } catch (e) {}
+                }
+
+                // set src and load
+                videoEl.src = target.src;
+                videoEl.load();
+
+                // record current quality on element/player
+                try { videoEl._currentQuality = target.size || desiredSize; } catch (e) {}
+                try { if (player) player._currentQuality = target.size || desiredSize; } catch (e) {}
+
+                // update UI active state for the selected quality
+                syncQualityButtons(player, target.size || desiredSize);
+
+                const onMeta = function () {
+                    // restore time and playback state
+                    try { videoEl.currentTime = Math.min(currentTime, videoEl.duration || currentTime); } catch (e) {}
+                    try { videoEl.muted = wasMuted; } catch (e) {}
+                    try { videoEl.playbackRate = playbackRate; } catch (e) {}
+                    if (wasPlaying) {
+                        const p = player.play && typeof player.play === 'function' ? player.play() : videoEl.play && videoEl.play();
+                        // ignore promise
+                        if (p && p.then) p.catch(() => {});
+                    }
+                    // cleanup
+                    videoEl.removeEventListener('loadedmetadata', onMeta);
+                };
+
+                videoEl.addEventListener('loadedmetadata', onMeta);
+            } catch (err) {
+                // fallback: nothing
+                // console.warn('changeQualityForPlayer native switch failed', err);
+            }
+        }
+
+        // Listen for clicks on the Plyr quality menu items and perform an actual source switch.
+        // Use the capture phase so we can intercept before Plyr's own handlers and stop them.
+        document.addEventListener('click', function (ev) {
+            const btn = ev.target.closest && ev.target.closest('[data-plyr="quality"]');
+            if (!btn) return;
+            // stop Plyr's internal handling so we can perform a robust native switch
+            try {
+                ev.preventDefault();
+            } catch (e) {}
+            try { ev.stopPropagation(); } catch (e) {}
+            try { ev.stopImmediatePropagation(); } catch (e) {}
+
+            // find the closest plyr container and its video element
+            const container = btn.closest && btn.closest('.plyr');
+            if (!container) return;
+            const videoEl = container.querySelector && (container.querySelector('video') || container.querySelector('audio'));
+            if (!videoEl) return;
+            const player = videoEl.plyr || (window.Plyr && Plyr.get ? Plyr.get(videoEl) : null);
+            if (!player) return;
+
+            const raw = (btn.getAttribute('value') || btn.value || btn.getAttribute('data-value') || '').toString();
+            if (!raw) return;
+
+            // handle the special 'auto' option
+            if (raw === 'auto') {
+                // clear user selection and re-enable adaptive behavior
+                videoEl._userSelectedQuality = false;
+                videoEl._adaptiveEnabled = true;
+                if (player) {
+                    player._userSelectedQuality = false;
+                    player._adaptiveEnabled = true;
+                }
+
+                // restore all known source elements so Plyr and our adaptive logic can see them
+                try { rebuildSourcesFromAvailable(videoEl); } catch (e) {}
+
+                // compute desired by running adaptive logic; adaptQualityForElement will try to set player.quality
+                adaptQualityForElement(videoEl);
+
+                // as a fallback: compute desiredSize from available sources and call changeQualityForPlayer keeping all sources
+                try {
+                    const avail = (videoEl._availableSources || []).map(s => Number(s.size)).filter(n => !!n).sort((a,b)=>a-b);
+                    if (avail.length) {
+                        let displayHeightCss = videoEl.clientHeight || videoEl.getBoundingClientRect().height || 0;
+                        if (!displayHeightCss) {
+                            const rect = player.elements && player.elements.container && player.elements.container.getBoundingClientRect();
+                            displayHeightCss = (rect && rect.height) || 0;
+                        }
+                        const needed = Math.ceil((window.devicePixelRatio || 1) * (displayHeightCss || 0));
+                        const desiredAuto = chooseQuality(avail, needed);
+                        if (desiredAuto) {
+                            changeQualityForPlayer(player, desiredAuto, { keepAllSources: true });
+                        }
+                    }
+                } catch (e) {}
+
+                // update UI active state to Auto
+                try { syncQualityButtons(player, 'auto'); } catch (e) {}
+
+                return;
+            }
+
+            const desired = parseInt(raw, 10);
+            if (Number.isNaN(desired)) return;
+
+            // mark user selection so adaptive logic won't overwrite
+            videoEl._userSelectedQuality = true;
+            videoEl._adaptiveEnabled = false;
+            if (player) {
+                player._userSelectedQuality = true;
+                player._adaptiveEnabled = false;
+            }
+
+            if (player) changeQualityForPlayer(player, desired);
+        }, true);
+
+        // When the user opens the settings menu, Plyr may rebuild the menu items.
+        // Intercept settings button opens and re-sync the radio state after the menu is rendered.
+        document.addEventListener('click', function (ev) {
+            const settingsBtn = ev.target.closest && ev.target.closest('[data-plyr="settings"]');
+            if (!settingsBtn) return;
+            const container = settingsBtn.closest && settingsBtn.closest('.plyr');
+            if (!container) return;
+            const videoEl = container.querySelector && (container.querySelector('video') || container.querySelector('audio'));
+            const player = videoEl && (videoEl.plyr || (window.Plyr && Plyr.get ? Plyr.get(videoEl) : null));
+            if (!player) return;
+            // wait a tick for Plyr to render the menu DOM, then sync the buttons
+            setTimeout(() => {
+                try {
+                    if (player._adaptiveEnabled && !player._userSelectedQuality) {
+                        syncQualityButtons(player, 'auto');
+                    } else {
+                        // prefer explicit currentQuality if recorded, otherwise fallback to player.quality
+                        const cur = player._currentQuality || (typeof player.quality !== 'undefined' ? player.quality : 'auto');
+                        syncQualityButtons(player, cur);
+                    }
+                } catch (e) {}
+            }, 60);
+        });
+
+        function wireUpAdaptiveQuality(selector) {
+            const els = Array.from(document.querySelectorAll(selector));
+            if (!els.length) return;
+
+            els.forEach(el => {
+                const run = () => adaptQualityForElement(el);
+                // run on player ready if possible
+                const player = el.plyr || (window.Plyr && Plyr.get ? Plyr.get(el) : null);
+                try {
+                    player && player.on && player.on('ready', run);
+                    player && player.on && player.on('loadedmetadata', run);
+                } catch (e) {}
+                // run now and after small delay to allow layout
+                run();
+                setTimeout(run, 200);
+
+                const deb = debounce(run, 150);
+                window.addEventListener('resize', deb);
+                document.addEventListener('fullscreenchange', deb);
+                document.addEventListener('webkitfullscreenchange', deb);
+                document.addEventListener('msfullscreenchange', deb);
+                document.addEventListener('mozfullscreenchange', deb);
+                if (player && player.on) {
+                    player.on('enterfullscreen', deb);
+                    player.on('exitfullscreen', deb);
+                }
+            });
+        }
+
+        // start the adaptive quality wiring for film-player elements
+        setTimeout(() => wireUpAdaptiveQuality('.film-player'), 150);
     });
 </script>

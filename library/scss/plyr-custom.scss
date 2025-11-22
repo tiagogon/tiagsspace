@@ -7,15 +7,129 @@ $plyr-tab-focus-default-color: none !default;
 $plyr-color-main: transparent !default;
 $plyr-audio-control-bg-hover: $plyr-tab-focus-default-color !default;
 
+
 .plyr--audio .plyr__controls {
     background: transparent;
     color: $dark;
 }
 
+// Change default plyr background
+.plyr {
+  --plyr-control-background: $white; 
+  --plyr-color-main: $dark;                      
+}
+
 .plyr {
     font-family: $font-family-sans-serif;
-    width: 100%;
+    width: 100%;   
+    // Simplified large white triangle play button
+    .plyr__control--overlaid,
+    .plyr__play-large {
+        display: inline-flex !important;
+        background: transparent !important; // keep overlay transparent
+        color: $white !important;
+        width: $grid-gutter-width * 6;
+        height: $grid-gutter-width * 6;
+        padding: 0;
+        align-items: center;
+        justify-content: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        z-index: 3;
+        transition: transform .18s ease, opacity .18s;
+
+        // hide the default SVG icon if present
+        svg { display: none !important; }
+
+        // create a CSS triangle (play icon)
+        &::before {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 56px solid $white; // main triangle size
+            border-top: 34px solid transparent;
+            border-bottom: 34px solid transparent;
+            transform-origin: 50% 50%;
+            transition: transform .18s ease, opacity .18s ease;
+            will-change: transform;
+        }
+
+        // hover / focus animation: slight slide + scale for a nice interaction
+        &:hover::before,
+        &:focus::before {
+            transform: translateX(0px) scale(1.33);
+            opacity: 0.98;
+        }
+
+        // keyboard focus outline for accessibility (subtle)
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 6px rgba(255,255,255,0.06);
+        }
+    }
 }
+
+// seettings menu fo quality settings of video and speed if enabled
+    // Plyr settings menu: dark background, white text
+    // Targets the settings/quality/speed popup box
+    //.plyr__menu,
+    .plyr__menu__container,
+    .plyr__menu__list {
+        background: $dark !important;
+        color: $white !important;
+        border-radius: 6px !important;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.6) !important;
+    }
+
+    .plyr__menu__list li,
+    .plyr__menu__list button,
+    .plyr__menu__container .plyr__control {
+        color: $white !important;
+    }
+
+    /* Remove the little speech-bubble arrow so the square looks clean. */
+    .plyr__menu__container::before,
+    .plyr__menu__container::after,
+    .plyr__menu::before,
+    .plyr__menu::after {
+        display: none !important;
+    }
+
+    /* If a menu item contains an icon or svg, ensure it contrasts */
+    .plyr__menu__item svg,
+    .plyr__menu__item i {
+        fill: currentColor !important;
+        color: currentColor !important;
+    }
+    .plyr__menu__value{
+        display: none!important;
+    }
+
+    .plyr__menu__container .plyr__control--back:after {
+        border-right-color: $white !important;
+        border-right-color: $white !important;
+    }
+
+// Remove rounded corners on Plyr settings menu (quality/speed)
+.plyr__menu,
+.plyr__menu__container,
+.plyr__menu__list {
+  border-radius: 0 !important;
+  overflow: visible; // allow the tail/arrow to remain visible
+}
+
+/* Some Plyr builds add the speech-bubble arrow with pseudo-elements;
+   remove rounding there too so the whole box is square. */
+.plyr__menu__container::before,
+.plyr__menu__container::after,
+.plyr__menu::before,
+.plyr__menu::after {
+  border-radius: 0 !important;
+}
+
 audio{
     width: 100%;
 }
@@ -59,9 +173,7 @@ video.plyr-thumbnail-front {
             color: $dark;
             font-size: 16px;
             font-weight: $font-weight-normal;
-            &::before {
-              //  border-top: $plyr-tooltip-arrow-size solid $dark;
-            }
+                        // tooltip arrow intentionally omitted
         }
     }
     .plyr--full-ui input[type='range'] {
@@ -113,13 +225,25 @@ video.plyr-thumbnail-front {
 
     .plyr--full-ui input[type='range'] {
         color: $white;
-        width: 98%;
     }
 }
 
 .plyr__progress {
-  //  margin-right: var(--plyr-range-thumb-height,20px);
-    width: 100%;
+    /* let the progress area flex between controls instead of forcing width:100%
+         prevents it from overlapping other controls (like the running time) */
+    flex: 1 1 auto;
+    min-width: 0; /* allow it to shrink inside flex containers */
+    margin: 0 calc(var(--plyr-control-spacing, 10px) / 2);
+    align-self: center;
+}
+
+/* ensure the time label doesn't get covered and keeps its intrinsic size */
+.plyr__time {
+    font-size: 16px;
+    flex: 0 0 auto;
+    margin-left: calc(var(--plyr-control-spacing, 10px) / 2);
+    white-space: nowrap;
+    z-index: 2;
 }
 
 
