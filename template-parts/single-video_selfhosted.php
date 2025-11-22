@@ -230,6 +230,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         };
                         // run once after a small delay so Plyr has finished rendering controls
                         setTimeout(() => setupQualityAutoOption(el.plyr), 120);
+                    // attach lightweight interaction logging to help debug user clicks vs. progress
+                    try { attachInteractionLogging(el.plyr); } catch (e) {}
                     } catch (ee) {
                         // ignore
                     }
@@ -332,6 +334,79 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             } catch (e) {}
         }
 
+        // Attach user interaction logging to a Plyr instance.
+        // Logs clicks on controls and detects when a user-initiated seek/click
+        // does not result in progress (no timeupdate/currentTime change)
+        function attachInteractionLogging(player) {
+            try {
+                if (!player || !player.elements) return;
+                const container = player.elements.container;
+                const videoEl = player.elements.media || container && container.querySelector('video');
+                if (!container || !videoEl) return;
+
+                container.addEventListener('click', function (ev) {
+                    try {
+                        const target = ev.target;
+                        const tag = (target && target.tagName) ? target.tagName.toLowerCase() : '';
+                        const classes = target && target.className ? ('' + target.className) : '';
+                        // Log any click inside the player container
+                        try { debugLog(videoEl, 'userClick', { tag: tag, classes: classes }); } catch (e) {}
+
+                        // Detect clicks on the progress/seeker area. Plyr markup uses
+                        // `.plyr__progress` for the wrapper and an <input type="range"> for the seek bar.
+                        const progressEl = target.closest && target.closest('.plyr__progress');
+                        const rangeEl = (target && target.closest) ? target.closest('input[type="range"]') : null;
+                        if (progressEl || rangeEl) {
+                            try { debugLog(videoEl, 'userClick:progress', { classes: classes }); } catch (e) {}
+                            // Monitor for progress: if currentTime or buffer increases within a short window
+                            const startTime = videoEl.currentTime || 0;
+                            let sawProgress = false;
+                            const startBufEnd = (videoEl.buffered && videoEl.buffered.length) ? videoEl.buffered.end(videoEl.buffered.length - 1) : 0;
+
+                            const onTempTime = function () {
+                                try {
+                                    const now = videoEl.currentTime || 0;
+                                    const bufEnd = (videoEl.buffered && videoEl.buffered.length) ? videoEl.buffered.end(videoEl.buffered.length - 1) : 0;
+                                    if (Math.abs(now - startTime) > 0.09 || (bufEnd - startBufEnd) > 0.05) {
+                                        sawProgress = true;
+                                        try { debugLog(videoEl, 'userClick:progress detected', { startTime: startTime, now: now, bufDiff: (bufEnd - startBufEnd) }); } catch (e) {}
+                                        cleanup();
+                                    }
+                                } catch (e) {}
+                            };
+
+                            const cleanup = function () {
+                                try { videoEl.removeEventListener('timeupdate', onTempTime); } catch (e) {}
+                                try { videoEl.removeEventListener('progress', onTempTime); } catch (e) {}
+                                try { clearTimeout(tmpTimer); } catch (e) {}
+                            };
+
+                            // After this timeout, if we haven't seen progress, log it
+                            const tmpTimer = setTimeout(() => {
+                                try {
+                                    if (!sawProgress) {
+                                        const now = videoEl.currentTime || 0;
+                                        const bufEnd = (videoEl.buffered && videoEl.buffered.length) ? videoEl.buffered.end(videoEl.buffered.length - 1) : 0;
+                                        try { console.warn('[plyr-adaptive] user click produced no progress', { startTime: startTime, now: now, bufferAhead: Math.max(0, bufEnd - now) }); } catch (e) {}
+                                        try { debugLog(videoEl, 'userClick:no-progress', { startTime: startTime, now: now, bufferAhead: Math.max(0, bufEnd - now) }); } catch (e) {}
+                                    }
+                                } catch (e) {}
+                                cleanup();
+                            }, 900);
+
+                            try { videoEl.addEventListener('timeupdate', onTempTime); } catch (e) {}
+                            try { videoEl.addEventListener('progress', onTempTime); } catch (e) {}
+                        }
+                        // Additionally log explicit clicks on the play control
+                        const playBtn = target.closest && target.closest('[data-plyr="play"]');
+                        if (playBtn || (target && (target.className || '').indexOf('plyr__control--play') !== -1)) {
+                            try { debugLog(videoEl, 'userClick:playbutton', { classes: classes }); } catch (e) {}
+                        }
+                    } catch (e) {}
+                }, true);
+            } catch (e) {}
+        }
+
     // Compute and apply an adaptive quality for the given video element.
     // Steps:
     //  - Gather available sizes from <source> tags or stored list.
@@ -383,10 +458,54 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             // or when the adaptive logic explicitly disables itself.
             if (el._userSelectedQuality || el._adaptiveEnabled === false || (player && (player._userSelectedQuality || player._adaptiveEnabled === false))) return;
 
+            // If we recently performed an automatic downgrade due to starvation,
+            // suppress adaptive changes for a short window. This avoids the
+            // adaptive handler immediately trying to re-upgrade the quality
+            // based on the element size and causing oscillation/hiccups.
+            try {
+                const lastAuto = (videoEl && (videoEl._lastAutoDowngrade || 0)) || (player && (player._lastAutoDowngrade || 0)) || 0;
+                const ADAPT_SUPPRESS_AFTER_AUTO_MS = 15000; // suppress adaptive adjustments for 15s after an auto-downgrade
+                if (lastAuto && (Date.now() - lastAuto) < ADAPT_SUPPRESS_AFTER_AUTO_MS) {
+                    try { debugLog(videoEl, 'adaptQualityForElement suppressed after recent auto downgrade', { lastAutoAge: Date.now() - lastAuto }); } catch (e) {}
+                    return;
+                }
+            } catch (e) {}
+
             const desired = chooseQuality(sizes, neededHeightPx);
             if (!desired) return;
 
             try {
+                // If we recently auto-downgraded due to starvation, avoid
+                // immediately increasing quality back to the element-size target.
+                // Strategy:
+                //  - Check when the last automatic downgrade happened (videoEl._lastAutoDowngrade)
+                //  - If a recent downgrade exists, only allow adaptive *upgrades*
+                //    when there is a sustained buffered headroom (stable buffer).
+                // This prevents flip-flopping where adaptive sees the large player
+                // size and immediately returns to a too-high quality.
+                try {
+                    const lastAuto = (videoEl && (videoEl._lastAutoDowngrade || 0)) || (player && (player._lastAutoDowngrade || 0)) || 0;
+                    const AUTO_UPGRADE_COOLDOWN_MS = 15000; // during this window require stable buffer before upscaling
+                    const AUTO_UPGRADE_STABLE_BUFFER_SEC = 3; // seconds of buffered content required to allow upgrade
+                    const recordedCur = Number(videoEl._currentQuality || player._currentQuality || (typeof player.quality !== 'undefined' ? player.quality : NaN));
+
+                    if (lastAuto && (Date.now() - lastAuto) < AUTO_UPGRADE_COOLDOWN_MS && Number.isFinite(recordedCur) && desired > recordedCur) {
+                        // compute buffer ahead now to see if we have sustained headroom
+                        let bufEnd = 0;
+                        try {
+                            if (videoEl.buffered && videoEl.buffered.length) bufEnd = videoEl.buffered.end(videoEl.buffered.length - 1);
+                        } catch (e) { bufEnd = 0; }
+                        const now = (videoEl.currentTime || 0);
+                        const bufferAhead = (bufEnd - now);
+
+                        if (bufferAhead < AUTO_UPGRADE_STABLE_BUFFER_SEC) {
+                            try { debugLog(videoEl, 'suppress upupgrade until stable buffer', { desired, recordedCur, lastAutoAge: Date.now() - lastAuto, bufferAhead }); } catch (e) {}
+                            // don't upgrade now — let the buffer grow or more downgrades occur
+                            return;
+                        }
+                    }
+                } catch (e) {}
+
                 const current = player.quality;
                 if (current !== desired) {
                     // Set Plyr's quality (when supported). We also record the chosen
@@ -436,6 +555,25 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             const wasMuted = videoEl.muted;
             const playbackRate = videoEl.playbackRate || 1;
 
+            // NOTE: keep logic minimal — avoid temporary muting workarounds here.
+
+            // Prevent external/play attempts from racing during the native
+            // source swap. Some browsers or integrations may trigger playback
+            // as soon as load() is called which can occur before we restore
+            // currentTime. To avoid a visible jump to 0 we temporarily block
+            // 'play' attempts and remember that a play was requested.
+            let playRequestedDuringRestore = false;
+            const onPlayAttempt = function () {
+                try {
+                    if (videoEl._isRestoring) {
+                        // immediately pause to prevent playback before we restore time
+                        try { videoEl.pause(); } catch (e) {}
+                        playRequestedDuringRestore = true;
+                    }
+                } catch (e) {}
+            };
+            try { videoEl._isRestoring = true; videoEl.addEventListener('play', onPlayAttempt, true); } catch (e) {}
+
             // mark adaptive disabled for now (unless this is an 'auto' triggered switch)
             if (!options.auto) {
                 videoEl._adaptiveEnabled = false;
@@ -447,7 +585,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 
             // Replace the sources: set src to the target file and call load()
             try {
-                // Pause to avoid auto-reset issues
+                // Pause to avoid auto-reset issues (also pause any racing play)
                 try { videoEl.pause(); } catch (e) {}
 
                 if (options.keepAllSources) {
@@ -481,6 +619,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 
                 // set src and load
                 videoEl.src = target.src;
+                // no temporary muting — leave mute state as-is and attempt play later
                 videoEl.load();
 
                 // record current quality on element/player
@@ -511,20 +650,90 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     const maxAttempts = options && options.auto ? 80 : 24;
                     const retryDelay = 250; // ms
 
-                    // Once we've successfully restored time and playback, cleanup
-                    function finishRestore() {
+                    // Once we've successfully restored time and playback, cleanup.
+                    // To avoid brief play-then-jump behaviour we resume playback only
+                    // when there's a small amount of buffered content ahead. If the
+                    // buffer is small we wait for 'progress'/'canplay'/'canplaythrough'
+                    // or a timeout before calling play. This prevents the UI from
+                    // showing a few seconds of play and then jumping to 0 repeatedly.
+                        function finishRestore() {
+                        // restore original mute state (this will unmute if we had
+                        // forced a temporary mute for autoplay)
                         try { videoEl.muted = wasMuted; } catch (e) {}
                         try { videoEl.playbackRate = playbackRate; } catch (e) {}
-                        if (wasPlaying) {
-                            const p = player.play && typeof player.play === 'function' ? player.play() : videoEl.play && videoEl.play();
-                            if (p && p.then) p.catch(() => {});
+
+                        // Helper: compute buffered ahead seconds
+                        function getBufferAhead() {
+                            try {
+                                if (videoEl.buffered && videoEl.buffered.length) {
+                                    const end = videoEl.buffered.end(videoEl.buffered.length - 1);
+                                    return Math.max(0, end - (videoEl.currentTime || 0));
+                                }
+                            } catch (e) {}
+                            return 0;
                         }
+
+                        // How much buffer ahead we require before resuming playback.
+                        // Keep this modest; we only need a short cushion to avoid
+                        // immediate rebuffering and visible jumps.
+                        const RESUME_BUFFER_SEC = 0.8;
+
+                        // Simplified resume logic: attempt a single programmatic play
+                        // when there's enough buffer ahead, otherwise watch for
+                        // progress/canplay and try once when buffer grows or after a timeout.
+                        let resumeCleanupTimer = null;
+
+                        function cleanupResumeWatchers() {
+                            try { videoEl.removeEventListener('progress', resumeOnBuffer); } catch (e) {}
+                            try { videoEl.removeEventListener('canplay', resumeOnBuffer); } catch (e) {}
+                            if (resumeCleanupTimer) { clearTimeout(resumeCleanupTimer); resumeCleanupTimer = null; }
+                            try { videoEl.removeEventListener('play', onPlayAttempt, true); } catch (e) {}
+                            try { videoEl._isRestoring = false; } catch (e) {}
+                        }
+
+                        function tryPlayOnce() {
+                            try {
+                                const p = player.play && typeof player.play === 'function' ? player.play() : (videoEl.play && videoEl.play());
+                                if (p && p.then) p.catch(() => {});
+                            } catch (e) {}
+                        }
+
+                        function resumeOnBuffer() {
+                            try {
+                                const bufferAhead = getBufferAhead();
+                                try { debugLog(videoEl, 'resumeOnBuffer', { bufferAhead: bufferAhead }); } catch (e) {}
+                                if (bufferAhead >= RESUME_BUFFER_SEC) {
+                                    tryPlayOnce();
+                                    cleanupResumeWatchers();
+                                }
+                            } catch (e) {}
+                        }
+
+                        if (wasPlaying) {
+                            try {
+                                const bufferAhead = getBufferAhead();
+                                try { debugLog(videoEl, 'finishRestore bufferAhead', { bufferAhead: bufferAhead }); } catch (e) {}
+                                if (bufferAhead >= RESUME_BUFFER_SEC) {
+                                    tryPlayOnce();
+                                } else {
+                                    // watch buffer growth and fallback to a timeout (5s)
+                                    resumeCleanupTimer = setTimeout(() => { tryPlayOnce(); cleanupResumeWatchers(); }, 5000);
+                                    try { videoEl.addEventListener('progress', resumeOnBuffer); } catch (e) {}
+                                    try { videoEl.addEventListener('canplay', resumeOnBuffer); } catch (e) {}
+                                }
+                            } catch (e) {
+                                // fallback: try to resume immediately
+                                tryPlayOnce();
+                            }
+                        }
+
                         try { debugLog(videoEl, 'finishRestore', { attempts: attempts, desiredTime: desiredTime, currentTime: videoEl.currentTime }); } catch (e) {}
+
                         // cleanup listeners we attached while trying to restore
                         try { videoEl.removeEventListener('loadedmetadata', onMeta); } catch (e) {}
                         try { videoEl.removeEventListener('canplay', onCanPlay); } catch (e) {}
                         try { videoEl.removeEventListener('seeked', onSeeked); } catch (e) {}
-                        // also remove progress / canplaythrough handlers which were added
+                        // also remove progress / canplaythrough handlers which were added earlier
                         try { videoEl.removeEventListener('progress', onProgress); } catch (e) {}
                         try { videoEl.removeEventListener('canplaythrough', onCanPlayThrough); } catch (e) {}
                     }
