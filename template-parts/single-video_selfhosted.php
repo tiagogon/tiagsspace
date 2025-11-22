@@ -464,7 +464,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             // based on the element size and causing oscillation/hiccups.
             try {
                 const lastAuto = (videoEl && (videoEl._lastAutoDowngrade || 0)) || (player && (player._lastAutoDowngrade || 0)) || 0;
-                const ADAPT_SUPPRESS_AFTER_AUTO_MS = 15000; // suppress adaptive adjustments for 15s after an auto-downgrade
+                const ADAPT_SUPPRESS_AFTER_AUTO_MS = 30000; // suppress adaptive adjustments for 30s after an auto-downgrade
                 if (lastAuto && (Date.now() - lastAuto) < ADAPT_SUPPRESS_AFTER_AUTO_MS) {
                     try { debugLog(videoEl, 'adaptQualityForElement suppressed after recent auto downgrade', { lastAutoAge: Date.now() - lastAuto }); } catch (e) {}
                     return;
@@ -676,7 +676,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         // How much buffer ahead we require before resuming playback.
                         // Keep this modest; we only need a short cushion to avoid
                         // immediate rebuffering and visible jumps.
-                        const RESUME_BUFFER_SEC = 0.8;
+                        const RESUME_BUFFER_SEC = 1;
 
                         // Simplified resume logic: attempt a single programmatic play
                         // when there's enough buffer ahead, otherwise watch for
@@ -961,12 +961,12 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             if (!videoEl) return;
 
             // Tunable values (could be exposed via data-attributes later)
-            const BUFFER_STALL_MS = 500; // how long waiting must persist before we act
-            const COOLDOWN_MS = 2000; // minimum time between automatic downgrades
+            const BUFFER_STALL_MS = 100; // how long waiting must persist before we act
+            const COOLDOWN_MS = 500; // minimum time between automatic downgrades
             // When determining if we should downgrade, check how many seconds are
             // buffered ahead of the currentTime. If less than this threshold we
             // consider the playback starved and will downgrade.
-            const MIN_BUFFER_AHEAD = 1.5; // seconds
+            const MIN_BUFFER_AHEAD = 0.9; // seconds
             let stallTimer = null;
 
             function clearStallTimer() {
@@ -983,7 +983,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             // When the low-buffer counter reaches a small threshold we trigger
             // the same conservative one-step downgrade used by the waiting handler.
             let lowBufferCount = 0;
-            const LOW_BUFFER_COUNT_THRESHOLD = 3; // number of consecutive checks
+            const LOW_BUFFER_COUNT_THRESHOLD = 1; // number of consecutive checks
 
             function onTimeUpdate() {
                 try {
