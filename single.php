@@ -24,72 +24,77 @@ if ($background_image) {
       background-size: cover;"';
 }?>>
 
-	<article    id="?p=<?php the_ID(); ?>"
-                <?php post_class( array('clearfix', '')); ?>
-                role="article" itemscope itemtype="http://schema.org/BlogPosting">
+<article    id="?p=<?php the_ID(); ?>"
+			<?php post_class( array('clearfix', '')); ?>
+			role="article" itemscope itemtype="http://schema.org/BlogPosting">
 
-		<?PHP
-		// Video
-		if (get_field('video_embed')) {
-			get_template_part( 'template-parts/single', 'video_embed' );
-		}elseif (get_field('self_host_film')){
-			get_template_part( 'template-parts/single', 'video_selfhosted' );
+	<?PHP
+	// Video
+	if (get_field('video_embed')) {
+		get_template_part( 'template-parts/single', 'video_embed' );
+	}elseif (get_field('self_host_film')){
+		get_template_part( 'template-parts/single', 'video_selfhosted' );
+	}
+
+	// if Gallery is Activated
+	if (get_field('deactivate_gallery') == false) {
+		// Gallery
+		if (get_field('horizontal_gallery')) {
+		get_template_part( 'template-parts/single', 'gallery-horizontal' );
+		} else {
+			get_template_part( 'template-parts/single', 'gallery' );
 		}
+	} // if gallery is not deactivated
 
-		// if Gallery is Activated
-		if (get_field('deactivate_gallery') == false) {
-			// Gallery
-			if (get_field('horizontal_gallery')) {
-			get_template_part( 'template-parts/single', 'gallery-horizontal' );
-			} else {
-				get_template_part( 'template-parts/single', 'gallery' );
-			}
-		} // if gallery is not deactivated
+	?>
 
-		?>
+	<?PHP // Map
+	if (is_singular( 'sidewalk' ) && get_field('location')) {
+		get_template_part( 'template-parts/single', 'map' );
+	}?>
 
-		<?PHP // Map
-		if (is_singular( 'sidewalk' ) && get_field('location')) {
-			get_template_part( 'template-parts/single', 'map' );
-		}?>
+	<div class="container single-content">
 
-		<div class="container single-content">
+		<div class="clearfix row">
 
-		    <div class="clearfix row">
+			<div id="main" class="<?php content_wrap() ?> clearfix" role="main">
 
-		        <div id="main" class="<?php content_wrap() ?> clearfix" role="main">
+				<?php if (have_posts()) : while (have_posts()) : the_post();?>
 
-		            <?php if (have_posts()) : while (have_posts()) : the_post();?>
+					<?PHP // Content
+					get_template_part( 'template-parts/single', 'content' );
+					?>
 
-						<?PHP // Content
-						get_template_part( 'template-parts/single', 'content' );
-						?>
+				<?php endwhile; ?>
 
-		            <?php endwhile; ?>
+				<?php else : ?>
 
-		            <?php else : ?>
+					<header>
+						<h1><?php _e("Not Found", "wpbootstrap"); ?></h1>
+					</header>
+					<section class="post_content">
+						<p><?php _e("Sorry, but the requested resource was not found on this site.", "wpbootstrap"); ?></p>
+					</section>
+					<footer>
+					</footer>
 
-		                <header>
-		                    <h1><?php _e("Not Found", "wpbootstrap"); ?></h1>
-		                </header>
-		                <section class="post_content">
-		                    <p><?php _e("Sorry, but the requested resource was not found on this site.", "wpbootstrap"); ?></p>
-		                </section>
-		                <footer>
-		                </footer>
+				<?php endif; ?>
 
-		            <?php endif; ?>
+			</div> <!-- end #main -->
 
-		        </div> <!-- end #main -->
+			<?php // get_sidebar(); // sidebar 1 ?>
 
-		        <?php // get_sidebar(); // sidebar 1 ?>
+		</div> <!-- end #content -->
 
-		    </div> <!-- end #content -->
+	</div> <!-- end #container -->
 
-		</div> <!-- end #container -->
+</article>
 
-	</article>
 
+<?php 
+
+// Do not show the next & previous posts & related posts if disabled in ACF - to share films and content for festival submissions
+if (! get_field('disable_previouse_next_&_related_posts')) { ?>
 
     <div class="single-navigation container-fluid side-padding d-none d-sm-block">
         <div class="row justify-content-between">
@@ -142,8 +147,7 @@ if ($background_image) {
 </div>
 
 <!-- Related Posts -->
-<!-- Does not work in Log Pages -->
-<?php //if (!($post_type == "log")) { ?>
+
     <div class="container-fluid side-padding yarpp-related-header">
         <div class="row justify-content-between">
             <nav class="nav-next col-24">
@@ -152,7 +156,7 @@ if ($background_image) {
         </div>
     </div>
     <?php  yarpp_related(); ?>
-<?php //} ?>
+<?php } ?>
 
 
 
