@@ -97,7 +97,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 <div class="container-fluid container-video">
     <div class="embed-container">
             <?php if (!empty($video_sources)) : ?>
-                <video class="plyr film-player" data-debug="1"
+                <video class="plyr film-player" data-debug="0"
                 <?php echo $film_player_options_html_string; ?>     
                 poster="<?php echo $poster; ?>" 
                 data-plyr-config='<?php echo esc_attr( $json ); ?>'
