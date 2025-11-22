@@ -403,7 +403,9 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     // Attempt to restore time and playback state robustly.
                     const desiredTime = Math.min(currentTime || 0, (videoEl.duration && isFinite(videoEl.duration)) ? videoEl.duration : currentTime || 0);
                     let attempts = 0;
-                    const maxAttempts = 8;
+                    // allow longer attempts especially for Auto-driven switches
+                    const maxAttempts = options && options.auto ? 25 : 12;
+                    const retryDelay = 300; // ms
 
                     function finishRestore() {
                         try { videoEl.muted = wasMuted; } catch (e) {}
@@ -418,20 +420,35 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         try { videoEl.removeEventListener('seeked', onSeeked); } catch (e) {}
                     }
 
+                    function canSeekTo(time) {
+                        try {
+                            if (videoEl.seekable && videoEl.seekable.length) {
+                                const end = videoEl.seekable.end(videoEl.seekable.length - 1);
+                                if (time <= end + 0.5) return true;
+                            }
+                            if (videoEl.buffered && videoEl.buffered.length) {
+                                const bufEnd = videoEl.buffered.end(videoEl.buffered.length - 1);
+                                if (time <= bufEnd + 0.5) return true;
+                            }
+                        } catch (e) {}
+                        return false;
+                    }
+
                     function trySetTime() {
                         attempts++;
                         try {
-                            // some browsers reject set when not ready — wrap in try
-                            videoEl.currentTime = desiredTime;
-                        } catch (err) {
-                            // ignore and retry
-                        }
+                            // only set when it appears seekable or buffered, or keep trying
+                            if (canSeekTo(desiredTime) || attempts === 1) {
+                                try { videoEl.currentTime = desiredTime; } catch (err) {}
+                            }
+                        } catch (err) {}
+
                         // if seek succeeded (within small epsilon) we're done
                         const diff = Math.abs((videoEl.currentTime || 0) - desiredTime);
                         if (diff <= 0.5 || attempts >= maxAttempts) {
                             finishRestore();
                         } else {
-                            setTimeout(trySetTime, 200);
+                            setTimeout(trySetTime, retryDelay);
                         }
                     }
 
