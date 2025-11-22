@@ -495,6 +495,9 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         try { videoEl.removeEventListener('loadedmetadata', onMeta); } catch (e) {}
                         try { videoEl.removeEventListener('canplay', onCanPlay); } catch (e) {}
                         try { videoEl.removeEventListener('seeked', onSeeked); } catch (e) {}
+                        // also remove progress / canplaythrough handlers which were added
+                        try { videoEl.removeEventListener('progress', onProgress); } catch (e) {}
+                        try { videoEl.removeEventListener('canplaythrough', onCanPlayThrough); } catch (e) {}
                     }
 
                     // Helper to determine if seeking to `time` is likely to succeed.
@@ -720,6 +723,10 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             // Tunable values (could be exposed via data-attributes later)
             const BUFFER_STALL_MS = 500; // how long waiting must persist before we act
             const COOLDOWN_MS = 2000; // minimum time between automatic downgrades
+            // When determining if we should downgrade, check how many seconds are
+            // buffered ahead of the currentTime. If less than this threshold we
+            // consider the playback starved and will downgrade.
+            const MIN_BUFFER_AHEAD = 1.5; // seconds
             let stallTimer = null;
 
             function clearStallTimer() {
@@ -741,9 +748,21 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     clearStallTimer();
                     stallTimer = setTimeout(() => {
                         try {
-                            // If readyState >= 3 the browser already indicates it has
-                            // enough data to continue, so don't downgrade.
-                            if ((videoEl.readyState || 0) >= 3) return; // enough data, no stall
+                            // Compute how many seconds are buffered ahead of the currentTime.
+                            let bufEnd = 0;
+                            try {
+                                if (videoEl.buffered && videoEl.buffered.length) {
+                                    bufEnd = videoEl.buffered.end(videoEl.buffered.length - 1);
+                                }
+                            } catch (e) { bufEnd = 0; }
+
+                            const now = (videoEl.currentTime || 0);
+                            const bufferAhead = (bufEnd - now);
+
+                            // If we have more than MIN_BUFFER_AHEAD seconds buffered ahead,
+                            // prefer to wait for the download to catch up instead of
+                            // immediately downgrading.
+                            if (bufferAhead > MIN_BUFFER_AHEAD) return;
 
                             const last = videoEl._lastAutoDowngrade || 0;
                             if (Date.now() - last < COOLDOWN_MS) return; // respect cooldown
