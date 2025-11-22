@@ -694,7 +694,10 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         function tryPlayOnce() {
                             try {
                                 const p = player.play && typeof player.play === 'function' ? player.play() : (videoEl.play && videoEl.play());
-                                if (p && p.then) p.catch(() => {});
+                                if (p && p.then) p.then(() => {}).catch(err => {
+                                    try { debugLog(videoEl, 'play() rejected', err); } catch (e) {}
+                                    try { console.warn('[plyr-adaptive] play() rejected', err); } catch (e) {}
+                                });
                             } catch (e) {}
                         }
 
@@ -726,6 +729,17 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                                 tryPlayOnce();
                             }
                         }
+                            
+                        // If a user attempted to play while we were restoring the
+                        // source (playRequestedDuringRestore was set by onPlayAttempt),
+                        // honor that request now by attempting to play once more.
+                        try {
+                            if (playRequestedDuringRestore) {
+                                try { debugLog(videoEl, 'honoring playRequestedDuringRestore'); } catch (e) {}
+                                tryPlayOnce();
+                                playRequestedDuringRestore = false;
+                            }
+                        } catch (e) {}
 
                         try { debugLog(videoEl, 'finishRestore', { attempts: attempts, desiredTime: desiredTime, currentTime: videoEl.currentTime }); } catch (e) {}
 
