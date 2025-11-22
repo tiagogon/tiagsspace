@@ -278,6 +278,25 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         };
                         // run once after a small delay so Plyr has finished rendering controls
                         setTimeout(() => setupQualityAutoOption(el.plyr), 120);
+                    // attach lightweight media event logging to capture MediaError and lifecycle events
+                    try {
+                        try {
+                            const videoEl = el;
+                            const mediaLog = function (name, info) {
+                                try { debugLog(videoEl, 'media:' + name, info); } catch (e) {}
+                                try { console.debug('[plyr-adaptive] media:' + name, info); } catch (e) {}
+                            };
+
+                            try { videoEl.addEventListener('play', () => mediaLog('play', { currentTime: videoEl.currentTime })); } catch (e) {}
+                            try { videoEl.addEventListener('playing', () => mediaLog('playing', { currentTime: videoEl.currentTime })); } catch (e) {}
+                            try { videoEl.addEventListener('pause', () => mediaLog('pause', { currentTime: videoEl.currentTime })); } catch (e) {}
+                            try { videoEl.addEventListener('loadedmetadata', () => mediaLog('loadedmetadata', { duration: videoEl.duration })); } catch (e) {}
+                            try { videoEl.addEventListener('canplay', () => mediaLog('canplay', { readyState: videoEl.readyState })); } catch (e) {}
+                            try { videoEl.addEventListener('waiting', () => mediaLog('waiting', { currentTime: videoEl.currentTime })); } catch (e) {}
+                            try { videoEl.addEventListener('error', () => { const err = videoEl.error || {}; mediaLog('error', { code: err.code, message: err && err.message ? err.message : String(err) }); console.warn('[plyr-adaptive] media error', err); }); } catch (e) {}
+                            try { mediaLog('init', { src: (videoEl.currentSrc || videoEl.src) }); } catch (e) {}
+                        } catch (e) {}
+                    } catch (ee) {}
                     // attach lightweight interaction logging to help debug user clicks vs. progress
                     try { attachInteractionLogging(el.plyr); } catch (e) {}
                     } catch (ee) {
