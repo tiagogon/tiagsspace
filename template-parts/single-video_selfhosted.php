@@ -283,8 +283,12 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         try {
                             const videoEl = el;
                             const mediaLog = function (name, info) {
-                                try { debugLog(videoEl, 'media:' + name, info); } catch (e) {}
-                                try { console.debug('[plyr-adaptive] media:' + name, info); } catch (e) {}
+                                try {
+                                    if (isDebugEnabled(videoEl)) {
+                                        try { debugLog(videoEl, 'media:' + name, info); } catch (e) {}
+                                        try { console.debug('[plyr-adaptive] media:' + name, info); } catch (e) {}
+                                    }
+                                } catch (e) {}
                             };
 
                             try { videoEl.addEventListener('play', () => mediaLog('play', { currentTime: videoEl.currentTime })); } catch (e) {}
@@ -516,8 +520,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             const dpr = window.devicePixelRatio || 1;
             const neededHeightPx = Math.ceil(displayHeightCss * dpr);
 
-            // Debug: report sizes and computed need
-            try { debugLog(videoEl, 'adaptQualityForElement', { displayHeightCss, dpr, neededHeightPx, sizes }); } catch (e) {}
+            // Debug: report sizes and computed need (guarded to avoid allocations when disabled)
+            try { if (isDebugEnabled(videoEl)) debugLog(videoEl, 'adaptQualityForElement', { displayHeightCss, dpr, neededHeightPx, sizes }); } catch (e) {}
 
             // if the user manually selected a quality, don't override their choice
             // also respect flags set on the Plyr instance. These flags are set
@@ -782,7 +786,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         if (wasPlaying) {
                             try {
                                 const bufferAhead = getBufferAhead();
-                                try { debugLog(videoEl, 'finishRestore bufferAhead', { bufferAhead: bufferAhead }); } catch (e) {}
+                                try { if (isDebugEnabled(videoEl)) debugLog(videoEl, 'finishRestore bufferAhead', { bufferAhead: bufferAhead }); } catch (e) {}
                                 if (bufferAhead >= RESUME_BUFFER_SEC) {
                                     tryPlayOnce();
                                 } else {
@@ -849,7 +853,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         attempts++;
                         try {
                             const canSeek = canSeekTo(desiredTime);
-                            try { debugLog(videoEl, 'trySetTime', { attempts: attempts, canSeek: canSeek, desiredTime: desiredTime, currentTime: videoEl.currentTime }); } catch (e) {}
+                            try { if (isDebugEnabled(videoEl)) debugLog(videoEl, 'trySetTime', { attempts: attempts, canSeek: canSeek, desiredTime: desiredTime, currentTime: videoEl.currentTime }); } catch (e) {}
                             if (canSeek || attempts === 1) {
                                 try { videoEl.currentTime = desiredTime; } catch (err) {}
                             }
@@ -1087,7 +1091,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     } else {
                         lowBufferCount = 0;
                     }
-                    try { debugLog(player, 'onTimeUpdate', { bufferAhead: bufferAhead, lowBufferCount: lowBufferCount }); } catch (e) {}
+                    try { if (isDebugEnabled(videoEl)) debugLog(player, 'onTimeUpdate', { bufferAhead: bufferAhead, lowBufferCount: lowBufferCount }); } catch (e) {}
 
                     if (lowBufferCount >= LOW_BUFFER_COUNT_THRESHOLD) {
                         // guard with cooldown and available qualities check
