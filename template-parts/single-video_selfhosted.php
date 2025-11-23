@@ -428,7 +428,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         const progressEl = target.closest && target.closest('.plyr__progress');
                         const rangeEl = (target && target.closest) ? target.closest('input[type="range"]') : null;
                         if (progressEl || rangeEl) {
-                            try { debugLog(videoEl, 'userClick:progress', { classes: classes }); } catch (e) {}
+                                    try { videoEl._suppressAutoAfterUserSeek = Date.now(); } catch (e) {}
+                                    try { debugLog(videoEl, 'userClick:progress', { classes: classes }); } catch (e) {}
                             // Monitor for progress: if currentTime or buffer increases within a short window
                             const startTime = videoEl.currentTime || 0;
                             let sawProgress = false;
@@ -440,6 +441,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                                     const bufEnd = (videoEl.buffered && videoEl.buffered.length) ? videoEl.buffered.end(videoEl.buffered.length - 1) : 0;
                                     if (Math.abs(now - startTime) > 0.09 || (bufEnd - startBufEnd) > 0.05) {
                                         sawProgress = true;
+                                        try { videoEl._suppressAutoAfterUserSeek = Date.now(); } catch (e) {}
                                         try { debugLog(videoEl, 'userClick:progress detected', { startTime: startTime, now: now, bufDiff: (bufEnd - startBufEnd) }); } catch (e) {}
                                         cleanup();
                                     }
@@ -458,6 +460,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                                     if (!sawProgress) {
                                         const now = videoEl.currentTime || 0;
                                         const bufEnd = (videoEl.buffered && videoEl.buffered.length) ? videoEl.buffered.end(videoEl.buffered.length - 1) : 0;
+                                        try { videoEl._suppressAutoAfterUserSeek = Date.now(); } catch (e) {}
                                         try { console.warn('[plyr-adaptive] user click produced no progress', { startTime: startTime, now: now, bufferAhead: Math.max(0, bufEnd - now) }); } catch (e) {}
                                         try { debugLog(videoEl, 'userClick:no-progress', { startTime: startTime, now: now, bufferAhead: Math.max(0, bufEnd - now) }); } catch (e) {}
                                     }
@@ -1052,6 +1055,12 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             // Tunable values (could be exposed via data-attributes later)
             const BUFFER_STALL_MS = 500; // how long waiting must persist before we act
             const COOLDOWN_MS = 2000; // minimum time between automatic downgrades
+            // When the user explicitly seeks far ahead we suppress automatic
+            // downgrades for a short grace period so the player has time to
+            // fetch the requested segments. This prevents the adaptive logic
+            // from immediately stepping the quality down while the seek is
+            // still completing.
+            const SEEK_SUPPRESS_MS = 8000; // ms to suppress auto-downgrade after user seek
             // When determining if we should downgrade, check how many seconds are
             // buffered ahead of the currentTime. If less than this threshold we
             // consider the playback starved and will downgrade.
@@ -1076,6 +1085,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 
             function onTimeUpdate() {
                 try {
+                    // Respect recent user-initiated seeks: don't auto-downgrade if within suppress window
+                    try { if (videoEl._suppressAutoAfterUserSeek && (Date.now() - videoEl._suppressAutoAfterUserSeek) < SEEK_SUPPRESS_MS) { if (isDebugEnabled(videoEl)) debugLog(player, 'onTimeUpdate: suppressed due to recent user seek', { age: Date.now() - videoEl._suppressAutoAfterUserSeek }); lowBufferCount = 0; return; } } catch (e) {}
                     if (videoEl._userSelectedQuality) { lowBufferCount = 0; return; }
                     if (videoEl._adaptiveEnabled === false || (player && player._adaptiveEnabled === false)) { lowBufferCount = 0; return; }
 
@@ -1117,6 +1128,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             // past BUFFER_STALL_MS and adaptive mode is still active.
             function onWaiting() {
                 try {
+                    // If the user recently sought, avoid aggressive auto-downgrade
+                    try { if (videoEl._suppressAutoAfterUserSeek && (Date.now() - videoEl._suppressAutoAfterUserSeek) < SEEK_SUPPRESS_MS) { try { debugLog(player, 'onWaiting: suppress downgrade due to recent user seek', { age: Date.now() - videoEl._suppressAutoAfterUserSeek }); } catch (e) {} return; } } catch (e) {}
                     // only act when adaptive is enabled and the user hasn't picked a manual quality
                     if (videoEl._userSelectedQuality) return;
                     if (videoEl._adaptiveEnabled === false || (player && player._adaptiveEnabled === false)) return;
@@ -1176,6 +1189,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 
             videoEl.addEventListener('waiting', onWaiting);
             videoEl.addEventListener('stalled', onWaiting);
+            // Mark suppress flag when a seek starts so we can avoid downgrading
+            try { videoEl.addEventListener('seeking', function() { try { videoEl._suppressAutoAfterUserSeek = Date.now(); } catch (e) {} }); } catch (e) {}
             // Monitor timeupdate to detect sustained low-buffer states that
             // might not emit a 'waiting' event in some browsers.
             videoEl.addEventListener('timeupdate', onTimeUpdate);
