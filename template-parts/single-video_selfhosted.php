@@ -1050,8 +1050,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             if (!videoEl) return;
 
             // Tunable values (could be exposed via data-attributes later)
-            const BUFFER_STALL_MS = 100; // how long waiting must persist before we act
-            const COOLDOWN_MS = 500; // minimum time between automatic downgrades
+            const BUFFER_STALL_MS = 500; // how long waiting must persist before we act
+            const COOLDOWN_MS = 2000; // minimum time between automatic downgrades
             // When determining if we should downgrade, check how many seconds are
             // buffered ahead of the currentTime. If less than this threshold we
             // consider the playback starved and will downgrade.
