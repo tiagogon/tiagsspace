@@ -535,7 +535,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             // based on the element size and causing oscillation/hiccups.
             try {
                 const lastAuto = (videoEl && (videoEl._lastAutoDowngrade || 0)) || (player && (player._lastAutoDowngrade || 0)) || 0;
-                const ADAPT_SUPPRESS_AFTER_AUTO_MS = 30000; // suppress adaptive adjustments for 30s after an auto-downgrade
+                const ADAPT_SUPPRESS_AFTER_AUTO_MS = 15000; // suppress adaptive adjustments for 30s after an auto-downgrade
                 if (lastAuto && (Date.now() - lastAuto) < ADAPT_SUPPRESS_AFTER_AUTO_MS) {
                     try { debugLog(videoEl, 'adaptQualityForElement suppressed after recent auto downgrade', { lastAutoAge: Date.now() - lastAuto }); } catch (e) {}
                     return;
@@ -556,7 +556,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                 // size and immediately returns to a too-high quality.
                 try {
                     const lastAuto = (videoEl && (videoEl._lastAutoDowngrade || 0)) || (player && (player._lastAutoDowngrade || 0)) || 0;
-                    const AUTO_UPGRADE_COOLDOWN_MS = 15000; // during this window require stable buffer before upscaling
+                    const AUTO_UPGRADE_COOLDOWN_MS = 5000; // during this window require stable buffer before upscaling
                     const AUTO_UPGRADE_STABLE_BUFFER_SEC = 3; // seconds of buffered content required to allow upgrade
                     const recordedCur = Number(videoEl._currentQuality || player._currentQuality || (typeof player.quality !== 'undefined' ? player.quality : NaN));
 
