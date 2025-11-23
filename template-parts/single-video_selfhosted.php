@@ -750,7 +750,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         // How much buffer ahead we require before resuming playback.
                         // Keep this modest; we only need a short cushion to avoid
                         // immediate rebuffering and visible jumps.
-                        const RESUME_BUFFER_SEC = 1;
+                        const RESUME_BUFFER_SEC = 1.2;
 
                         // Simplified resume logic: attempt a single programmatic play
                         // when there's enough buffer ahead, otherwise watch for
@@ -1054,7 +1054,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
 
             // Tunable values (could be exposed via data-attributes later)
             const BUFFER_STALL_MS = 800; // how long waiting must persist before we act
-            const COOLDOWN_MS = 2000; // minimum time between automatic downgrades
+            const COOLDOWN_MS = 3000; // minimum time between automatic downgrades
             // When the user explicitly seeks far ahead we suppress automatic
             // downgrades for a short grace period so the player has time to
             // fetch the requested segments. This prevents the adaptive logic
