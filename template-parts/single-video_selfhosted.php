@@ -1053,14 +1053,14 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
             if (!videoEl) return;
 
             // Tunable values (could be exposed via data-attributes later)
-            const BUFFER_STALL_MS = 500; // how long waiting must persist before we act
+            const BUFFER_STALL_MS = 800; // how long waiting must persist before we act
             const COOLDOWN_MS = 2000; // minimum time between automatic downgrades
             // When the user explicitly seeks far ahead we suppress automatic
             // downgrades for a short grace period so the player has time to
             // fetch the requested segments. This prevents the adaptive logic
             // from immediately stepping the quality down while the seek is
             // still completing.
-            const SEEK_SUPPRESS_MS = 8000; // ms to suppress auto-downgrade after user seek
+            const SEEK_SUPPRESS_MS = 10000; // ms to suppress auto-downgrade after user seek
             // When determining if we should downgrade, check how many seconds are
             // buffered ahead of the currentTime. If less than this threshold we
             // consider the playback starved and will downgrade.
