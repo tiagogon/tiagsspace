@@ -478,44 +478,36 @@ if (have_rows('extra_content')) {
 
                         // IF diferent sizes exist
 
-                        // thumbnail
-                        $attachmen_thumb_thumbnail_srcset ="";
-                        $attachmen_thumb_thumbnail_attributes = wp_get_attachment_image_src($attachmen->ID, "thumbnail");
-                        if ($attachmen_thumb_thumbnail_attributes) {
-                          if ($attachmen_thumb_thumbnail_attributes[3]) {
-                              $attachmen_thumb_thumbnail_srcset = $attachmen_thumb_thumbnail_attributes[0]." ".$attachmen_thumb_thumbnail_attributes[1]."w, ";
-                          }
-                        }
+                                                // thumbnail
+                                                $attachmen_thumb_thumbnail_srcset ="";
+                                                $attachmen_thumb_thumbnail_attributes = wp_get_attachment_image_src($attachmen->ID, "thumbnail");
+                                                if ($attachmen_thumb_thumbnail_attributes && !empty($attachmen_thumb_thumbnail_attributes[0]) && !empty($attachmen_thumb_thumbnail_attributes[1])) {
+                                                        $attachmen_thumb_thumbnail_srcset = $attachmen_thumb_thumbnail_attributes[0]." ".$attachmen_thumb_thumbnail_attributes[1]."w, ";
+                                                }
 
 
-                        // small
-                        $attachmen_thumb_small_srcset ="";
-                        $attachmen_thumb_small_attributes = wp_get_attachment_image_src($attachmen->ID, "small");
-                        if ($attachmen_thumb_small_attributes) {
-                          if ($attachmen_thumb_small_attributes[3]) {
-                              $attachmen_thumb_small_srcset = $attachmen_thumb_small_attributes[0]." ".$attachmen_thumb_small_attributes[1]."w, ";
-                          }
-                        }
+                                                // small
+                                                $attachmen_thumb_small_srcset ="";
+                                                $attachmen_thumb_small_attributes = wp_get_attachment_image_src($attachmen->ID, "small");
+                                                if ($attachmen_thumb_small_attributes && !empty($attachmen_thumb_small_attributes[0]) && !empty($attachmen_thumb_small_attributes[1])) {
+                                                        $attachmen_thumb_small_srcset = $attachmen_thumb_small_attributes[0]." ".$attachmen_thumb_small_attributes[1]."w, ";
+                                                }
 
 
-                        // medium
-                        $attachmen_thumb_medium_srcset ="";
-                        $attachmen_thumb_medium_attributes = wp_get_attachment_image_src($attachmen->ID, "medium");
-                        if ($attachmen_thumb_medium_attributes) {
-                          if ($attachmen_thumb_medium_attributes[3]) {
-                              $attachmen_thumb_medium_srcset = $attachmen_thumb_medium_attributes[0]." ".$attachmen_thumb_medium_attributes[1]."w, ";
-                          }
-                        }
+                                                // medium
+                                                $attachmen_thumb_medium_srcset ="";
+                                                $attachmen_thumb_medium_attributes = wp_get_attachment_image_src($attachmen->ID, "medium");
+                                                if ($attachmen_thumb_medium_attributes && !empty($attachmen_thumb_medium_attributes[0]) && !empty($attachmen_thumb_medium_attributes[1])) {
+                                                        $attachmen_thumb_medium_srcset = $attachmen_thumb_medium_attributes[0]." ".$attachmen_thumb_medium_attributes[1]."w, ";
+                                                }
 
 
-                        // large
-                        $attachmen_thumb_large_srcset ="";
-                        $attachmen_thumb_large_attributes = wp_get_attachment_image_src($attachmen->ID, "large");
-                        if ($attachmen_thumb_large_attributes) {
-                          if ($attachmen_thumb_large_attributes[3]) {
-                              $attachmen_thumb_large_srcset = $attachmen_thumb_large_attributes[0]." ".$attachmen_thumb_large_attributes[1]."w, ";
-                          }
-                        }
+                                                // large
+                                                $attachmen_thumb_large_srcset ="";
+                                                $attachmen_thumb_large_attributes = wp_get_attachment_image_src($attachmen->ID, "large");
+                                                if ($attachmen_thumb_large_attributes && !empty($attachmen_thumb_large_attributes[0]) && !empty($attachmen_thumb_large_attributes[1])) {
+                                                        $attachmen_thumb_large_srcset = $attachmen_thumb_large_attributes[0]." ".$attachmen_thumb_large_attributes[1]."w, ";
+                                                }
 
                         // FINAL SRCSET
                         $attachmen_srcset = $attachmen_thumb_thumbnail_srcset.
@@ -524,26 +516,38 @@ if (have_rows('extra_content')) {
                                         $attachmen_thumb_large_srcset.
                                         $attachmen_thumb_srcset;
                         // --- Sizes ---
-                        //Container or Full width?
+                        // Compute sizes based on actual bootstrap grid fractions so browsers pick correct sources
                         if ($class_container == 'container') {
                             $container_size_lg = 1200;
-                            // $container_size_md = 940;
-                            // $container_size_sm = 720;
+                            // Use grid numbers WITHOUT factor to represent actual column widths at breakpoints
+                            $lg_frac = isset($grid_number_lg_without_factor) ? ($grid_number_lg_without_factor / 48) : 1;
+                            $md_frac = isset($grid_number_md_without_factor) ? ($grid_number_md_without_factor / 48) : 1;
+                            $sm_frac = isset($grid_number_sm_without_factor) ? ($grid_number_sm_without_factor / 48) : 1;
+                            $xs_frac = isset($grid_number_xs_without_factor) ? ($grid_number_xs_without_factor / 48) : 1;
 
-                            $size_lg = ($container_size_lg / $number_of_columns_item_lg)."px";
-                            // $size_md = ($container_size_md / $number_of_columns_item_md)."px";
-                            // $size_sm = ($container_size_sm / $number_of_columns_item_sm)."px";
-                            $size_md = (100 / $number_of_columns_item_md)."vw";
-                            $size_sm = (100 / $number_of_columns_item_sm)."vw";
-                            $size_xs = (100 / $number_of_columns_item_xs)."vw";
+                            // Large breakpoint in px (container has fixed max width)
+                            $size_lg = ($container_size_lg * $lg_frac)."px";
+                            // For smaller breakpoints, vw reflects viewport fraction
+                            $size_md = (100 * $md_frac)."vw";
+                            $size_sm = (100 * $sm_frac)."vw";
+                            $size_xs = (100 * $xs_frac)."vw";
 
                             $attachmen_sizes = "(min-width: 1240px) ".$size_lg.",
-                                             ".$size_xs;
+                                                (min-width: 992px) ".$size_md.",
+                                                (min-width: 768px) ".$size_sm.",
+                                                 ".$size_xs;
                         } else {
-                            $size_lg = (100 / $number_of_columns_item_lg)."vw";
-                            $size_md = (100 / $number_of_columns_item_md)."vw";
-                            $size_sm = (100 / $number_of_columns_item_sm)."vw";
-                            $size_xs = (100 / $number_of_columns_item_xs)."vw";
+                            // container-fluid: widths are fractions of viewport
+                            // Prefer item grid numbers if available, else fallback to gallery grid numbers
+                            $lg_frac = isset($grid_number_lg) ? ($grid_number_lg / 48) : (isset($grid_number_lg_without_factor) ? ($grid_number_lg_without_factor / 48) : 1);
+                            $md_frac = isset($grid_number_md) ? ($grid_number_md / 48) : (isset($grid_number_md_without_factor) ? ($grid_number_md_without_factor / 48) : 1);
+                            $sm_frac = isset($grid_number_sm) ? ($grid_number_sm / 48) : (isset($grid_number_sm_without_factor) ? ($grid_number_sm_without_factor / 48) : 1);
+                            $xs_frac = isset($grid_number_xs) ? ($grid_number_xs / 48) : (isset($grid_number_xs_without_factor) ? ($grid_number_xs_without_factor / 48) : 1);
+
+                            $size_lg = (100 * $lg_frac)."vw";
+                            $size_md = (100 * $md_frac)."vw";
+                            $size_sm = (100 * $sm_frac)."vw";
+                            $size_xs = (100 * $xs_frac)."vw";
 
                             $attachmen_sizes = "(min-width: 992px) ".$size_lg.",
                                             (min-width: 768px) ".$size_md.",
