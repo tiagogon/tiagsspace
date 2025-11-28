@@ -2432,5 +2432,67 @@ function last_post_link_function( $atts ) {
 }
 add_shortcode( 'last_post_link', 'last_post_link_function' );
 
+/**
+ * Hide posts from listings when a specific ACF field is checked.
+ *
+ * Behaviour:
+ * - If the ACF true/false field is set (value '1'), the post remains public
+ *   but will NOT appear on: homepage index, any feed, or any archive
+ *   (including category/tag, custom taxonomy, author, date, and CPT archives).
+ * - Single post pages remain accessible.
+ *
+ * Configuration:
+ * - Uses an ACF true/false field with the meta key
+ *   'hide_post_from_main_page_archives_and_feed'.
+ *
+ * Notes on ACF storage:
+ * - ACF true/false stores '1' (string) when checked; when unchecked it may
+ *   store '0' or no meta row at all. We therefore include posts where the meta
+ *   does not exist OR where the value is not '1'.
+ */
+function tiagsspace_hide_posts_from_index_archives_feeds( $query ) {
+    // Only affect the main front-end query; never change admin or secondary queries.
+    if ( is_admin() || ! $query->is_main_query() ) {
+        return;
+    }
+
+    // Decide where to apply: home (posts index), any feed, any archive (tax, CPT, author, date, etc.)
+    $apply = $query->is_home() || $query->is_feed() || $query->is_archive();
+    if ( ! $apply ) {
+        return;
+    }
+
+    // Meta key for the ACF true/false field. Expect '1' (string) when checked.
+    $meta_key = 'hide_post_from_main_page_archives_and_feed';
+
+    // Merge with any existing meta_query so we don't clobber other constraints.
+    $existing_meta_query = $query->get( 'meta_query' );
+    if ( ! is_array( $existing_meta_query ) ) {
+        $existing_meta_query = array();
+    }
+
+    // Add an OR group that keeps posts NOT marked to hide:
+    // 1) posts without the meta key at all; OR
+    // 2) posts where the meta value is not '1'.
+    // The effect is that posts with value '1' are excluded from these listings.
+    $existing_meta_query[] = array(
+        'relation' => 'OR',
+        array(
+            'key'     => $meta_key,
+            'compare' => 'NOT EXISTS',
+        ),
+        array(
+            'key'     => $meta_key,
+            'value'   => '1',
+            'compare' => '!=',
+        ),
+    );
+
+    // Apply the augmented meta_query back onto the WP_Query instance.
+    $query->set( 'meta_query', $existing_meta_query );
+}
+// Hook into the query build phase so we can alter parameters before SQL runs.
+add_action( 'pre_get_posts', 'tiagsspace_hide_posts_from_index_archives_feeds' );
+
 
 // END -- don't add any space after php close ?>
