@@ -1673,7 +1673,7 @@ function seo_image($image) {
 	 // Get URL from last post ID
 	 $thumbnail_id = get_post_thumbnail_id( $last_id );
 	 $thumbnail_url = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
-	 $image = $thumbnail_url[0];
+	 $image = ($thumbnail_url && isset($thumbnail_url[0])) ? $thumbnail_url[0] : '';
 
    // Return Final image
    return $image;

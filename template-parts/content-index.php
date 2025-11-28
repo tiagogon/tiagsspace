@@ -96,7 +96,10 @@ Index of posts for Home and Archives
                   $image_thumb_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), false);
 
                   // Image thumbnail ratio -- with/height
-                  $image_thumb_ratio = $image_thumb_attributes[1] / $image_thumb_attributes[2] ;
+                  $image_thumb_ratio = 1; // Default ratio
+                  if ($image_thumb_attributes && isset($image_thumb_attributes[1]) && isset($image_thumb_attributes[2]) && $image_thumb_attributes[2] > 0) {
+                      $image_thumb_ratio = $image_thumb_attributes[1] / $image_thumb_attributes[2];
+                  }
 
                   //collumns size proportional to image area in percentage of width
                   $grid_array_width_prop_to_area_prc[0] = sqrt($grid_array_area1x1_prc[0] * $image_thumb_ratio);
