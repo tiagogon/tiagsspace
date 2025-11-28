@@ -26,6 +26,9 @@ function wp_bootstrap_custom_admin_footer() {
 // adding it to the admin area
 add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 
+// Let WordPress handle the document <title> tag in a modern way
+add_theme_support('title-tag');
+
 // Enqueue CSS and Scripts<
 // function tiagsspace_enqueue_assets() {
 //     $template_dir = get_template_directory_uri();
@@ -110,31 +113,7 @@ function custom_password_form() {
 	return $o;
 }
 
-/************* CUSTOM WP TITLE *****************/
-function wp_bootstrap_wp_title( $title, $sep ) {
-  global $paged, $page;
 
-  if ( is_feed() ) {
-    return $title;
-  }
-
-  // Add the site name.
-  $title .= get_bloginfo( 'name' );
-
-  // Add the site description for the home/front page.
-  $site_description = get_bloginfo( 'description', 'display' );
-  if ( $site_description && ( is_home() || is_front_page() ) ) {
-    $title = "$title $sep $site_description";
-  }
-
-  // Add a page number if necessary.
-  if ( $paged >= 2 || $page >= 2 ) {
-    $title = "$title $sep " . sprintf( __( 'Page %s', 'wpbootstrap' ), max( $paged, $page ) );
-  }
-
-  return $title;
-}
-add_filter( 'wp_title', 'wp_bootstrap_wp_title', 10, 2 );
 
 
 
@@ -741,36 +720,7 @@ function log_branch_taxonomy() {
 add_action( 'init', 'log_branch_taxonomy', 0 );
 
 
-    function film_genre_taxonomy() {
-      $labels = array(
-        'name'                       => _x( 'Film Genres', 'Taxonomy General Name', 'text_domain' ),
-        'singular_name'              => _x( 'Film Genre', 'Taxonomy Singular Name', 'text_domain' ),
-        'menu_name'                  => __( 'Film Genres', 'text_domain' ),
-        'all_items'                  => __( 'All Film Genres', 'text_domain' ),
-        'parent_item'                => __( 'Parent Film genre', 'text_domain' ),
-        'parent_item_colon'          => __( 'Parent Film Genres:', 'text_domain' ),
-        'new_item_name'              => __( 'New Film genre Name', 'text_domain' ),
-        'add_new_item'               => __( 'Add New Film genre', 'text_domain' ),
-        'edit_item'                  => __( 'Edit Film genre', 'text_domain' ),
-        'update_item'                => __( 'Update Film genre', 'text_domain' ),
-        'separate_items_with_commas' => __( 'Separate Film Genres with commas', 'text_domain' ),
-        'search_items'               => __( 'Search Film genre', 'text_domain' ),
-        'add_or_remove_items'        => __( 'Add or remove Film Genres', 'text_domain' ),
-        'choose_from_most_used'      => __( 'Choose from the most used Film Genres', 'text_domain' ),
-        'not_found'                  => __( 'Not Found', 'text_domain' ),
-      );
-      $args = array(
-        'labels'                     => $labels,
-        'hierarchical'               => false,
-        'public'                     => true,
-        'show_ui'                    => true,
-        'show_admin_column'          => true,
-        'show_in_nav_menus'          => true,
-        'show_tagcloud'              => true,
-      );
-      register_taxonomy( 'film_genre', array( 'films' ), $args );
-    }
-    add_action( 'init', 'film_genre_taxonomy', 0 );
+
 
 
 function year_from_taxonomy() {
@@ -1722,237 +1672,13 @@ function index_next_post_type($current_post_id) {
     );
     $inner_query = new WP_Query( $args );
 
-    // if($inner_query->have_posts()) :
-    //     while($inner_query->have_posts()) :
 
-    //         $id_loop_post = get_the_ID();
-
-    //         $next_post_type = get_post_type( $id_loop_post );
-
-    //     endwhile;
-    // endif;
-    // wp_reset_postdata();
-
-    return count($inner_query);
+    // WP_Query is not Countable; use post_count for matched posts
+    return (int) $inner_query->post_count;
 }
 
 
 
-// Newsletter HOOK
-//add_action('trouble_email_hook', 'build_email_and_send_1');
-
-// // Newsletter function
-// function build_email_and_send_1() {
-//
-//     // Total amount of days this month
-//     $number_of_day_this_month = date("t");
-//     $day_of_the_month = date("j");
-//
-//     // Numeric representation of a month, without leading zeros
-//     $numeric_representation_of_month = date("n");
-//
-//
-//     // If is the last day of the month
-//     if (($day_of_the_month == $number_of_day_this_month) AND ($numeric_representation_of_month % 2 == 0)) {
-//
-//         global $post;
-//
-//         $posts_content = "";
-//
-//         // POSTs
-//         $args = array(
-//             'posts_per_page'    => -1,
-//             'post_type'         => 'post',
-//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-//         );
-//         $posts = get_posts( $args );
-//
-//         if ($posts) {
-//             $posts_content = $posts_content." ";
-//             foreach ( $posts as $post ) {
-//
-//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
-//
-//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-//
-//                     $post_content = '
-//                         <a href="'.get_permalink($post->ID).'" target="_blank">
-//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%"/>
-//                         </a>
-//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-//
-//                     $posts_content = $posts_content.$post_content;
-//
-//                 }
-//             }
-//         $posts_content = $posts_content."<br /><hr />";
-//         }
-//
-//         // FILMs
-//         $args = array(
-//             'posts_per_page'    => -1,
-//             'post_type'         => 'films',
-//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-//         );
-//         $posts = get_posts( $args );
-//
-//         if ($posts) {
-//             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>FILMS</em></strong></span><br/>';
-//             foreach ( $posts as $post ) {
-//
-//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
-//
-//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-//
-//                     $post_content = '
-//                         <a href="'.get_permalink($post->ID).'" target="_blank">
-//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
-//                         </a>
-//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-//
-//                     $posts_content = $posts_content.$post_content;
-//
-//                 }
-//             }
-//         $posts_content = $posts_content."<br /><hr />";
-//         }
-//
-//         // EMULSION
-//         $args = array(
-//             'posts_per_page'    => -1,
-//             'post_type'         => 'emulsion',
-//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-//         );
-//         $posts = get_posts( $args );
-//
-//         if ($posts) {
-//             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>EMULSION</em></strong></span><br/>';
-//             foreach ( $posts as $post ) {
-//
-//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
-//
-//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-//
-//                     $post_content = '
-//                         <a href="'.get_permalink($post->ID).'" target="_blank">
-//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
-//                         </a>
-//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-//
-//                     $posts_content = $posts_content.$post_content;
-//
-//                 }
-//             }
-//         $posts_content = $posts_content."<br /><hr />";
-//         }
-//
-//         // DUSK
-//         $args = array(
-//             'posts_per_page'    => -1,
-//             'post_type'         => 'dusk',
-//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-//         );
-//         $posts = get_posts( $args );
-//
-//         if ($posts) {
-//             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>DUSK</em></strong></span><br/>';
-//             foreach ( $posts as $post ) {
-//
-//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
-//
-//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-//
-//                     $post_content = '
-//                         <a href="'.get_permalink($post->ID).'" target="_blank">
-//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
-//                         </a>
-//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-//
-//                     $posts_content = $posts_content.$post_content;
-//
-//                 }
-//             }
-//         $posts_content = $posts_content."<br /><hr />";
-//         }
-//
-//         // HYPER
-//         $args = array(
-//             'posts_per_page'    => -1,
-//             'post_type'         => 'hyper',
-//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-//         );
-//         $posts = get_posts( $args );
-//
-//         if ($posts) {
-//             $posts_content = $posts_content.'</br><span style="font-size: small;"><em><strong>HYPER SERIES</strong></em></span><br/>';
-//             foreach ( $posts as $post ) {
-//
-//                 if (get_field('send_on_trouble_letter',$post->ID) == true) {
-//
-//                     $image_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "small");
-//
-//                     $post_content = '
-//                         <a href="'.get_permalink($post->ID).'" target="_blank">
-//                         <img class="tl-email-image" src="'.$image_attributes[0].'" style="width: 76%!important; max-width: 640px!important; height:auto!important;" width="100%" />
-//                         </a>
-//                         <strong><em><a href="'.get_post_permalink($post->id).'" style="color:#3c00f5!important; text-decoration: none;">'.strtoupper(get_the_title( $post->id )).'</a></em></strong><br /></br>';
-//
-//                     $posts_content = $posts_content.$post_content;
-//
-//                 }
-//             }
-//         $posts_content = $posts_content."<br /><hr />";
-//         }
-//
-//         // LOG
-//         $args = array(
-//             'posts_per_page'    => -1,
-//             'post_type'         => 'log',
-//             'date_query'        => array('after' => date('Y-m-d', strtotime('-61 days')))
-//         );
-//         $posts = get_posts( $args );
-//
-//         if ($posts) {
-//             $posts_content = $posts_content.'</br><span style="font-size: small;"><strong><em>LOG</em></strong></span></br></br>';
-//
-//             $posts_content = $posts_content.'<strong><em><a href="https://trouble.place/log/" style="color:#3c00f5!important; text-decoration: none;">'.count($posts).' NEW ENTRIES</a></em></strong></br></br>';
-//
-//             $posts_content = $posts_content."</br><hr />";
-//         }
-//
-//
-//         $posts_content = $posts_content."</br></br>";
-//
-//
-//
-//         // Month name
-//         $month_name = "".date("M", strtotime('-32 days'))." & ".date("M")."";
-//         $year_numb = date('Y');
-//
-//
-//         // Combine Variables
-//         $to[]           = 'beamer-2383360638cc0beb42be76b60ce4d17510528977@tinyletter.com';
-//         $subject        = 'Tiags Newsletter';
-//         $message        = '
-//             <div style="text-align: center;">
-// 				<span style="font-size: small;">
-// 					<strong>
-// 					<em style="color:#3c00f5!important; text-decoration: none;"><a href="https://trouble.place" style="color:#3c00f5!important; text-decoration: none;">TIAGS.SPACE</a> // NEWSLETTER // '.strtoupper($month_name).' '.strtoupper($year_numb).'</em>
-// 					</strong>
-// 				</span>
-// 			</div>
-//
-//             <div style="text-align: center;"><br />
-//             <br />'.$posts_content.'</div>';
-//
-//         $headers        = array('From:tiago <letter@tiags.space>');
-//
-//         // Send Email
-//         wp_mail( $to, $subject, $message, $headers );
-//
-//     } // If is the last day of the month
-//
-// }
 
 
 
@@ -2456,8 +2182,19 @@ function tiagsspace_hide_posts_from_index_archives_feeds( $query ) {
         return;
     }
 
-    // Decide where to apply: home (posts index), any feed, any archive (tax, CPT, author, date, etc.)
-    $apply = $query->is_home() || $query->is_feed() || $query->is_archive();
+    // Decide where to apply:
+    // - home (posts index)
+    // - any feed
+    // - any archive (tax, CPT, author, date, etc.)
+    // - search results
+    // - REST API collection queries
+    $apply = (
+        $query->is_home() ||
+        $query->is_feed() ||
+        $query->is_archive() ||
+        $query->is_search() ||
+        ( defined('REST_REQUEST') && REST_REQUEST )
+    );
     if ( ! $apply ) {
         return;
     }
