@@ -308,7 +308,15 @@ Index of posts for Home and Archives
                           $source = 'src="'.$animated_thumbnail_array['url'].'" style="width: 100%;"';
 
                       } else {
-                          $source = 'srcset="'.$image_srcset.'" sizes="'.$image_sizes.'" ';
+                          // Use shared <picture> helper via functions.php on index
+                          // Keep computed $image_sizes for the fallback <img> sizes attribute
+                          $index_sizes_map = array(
+                              array('size' => 'large',     'media' => '(min-width: 1280px)'),
+                              array('size' => 'medium',    'media' => '(min-width: 1302px)'),
+                              array('size' => 'small',     'media' => '(min-width: 808px)'),
+                              array('size' => 'thumbnail', 'media' => '(min-width: 0px)'),
+                          );
+                          $fallback_sizes_attr = $image_sizes;
                       }
                   } ?>
 
@@ -421,9 +429,19 @@ Index of posts for Home and Archives
                                     </video>
                                     <?php
 
-                                  } else { ?>
+                                        } else { ?>
 
-                                    <img <?php echo $source; ?> alt="<?php the_title(); ?>" />
+                                            <?php
+                                            if (!empty($animated_thumbnail_array) && empty($video_thumbnail_id)) {
+                                                    // animated thumbnail path handled above via $source, keep simple <img>
+                                                    echo '<img src="'.esc_url($animated_thumbnail_array['url']).'" style="width:100%;" alt="'.esc_attr(get_the_title()).'" />';
+                                            } else {
+                                                    $thumb_id = get_post_thumbnail_id($post->ID);
+                                                    $img_class = '';
+                                                    $alt_text = esc_attr(get_the_title());
+                                                    echo tiagsspace_render_picture_from_attachment($thumb_id, $index_sizes_map, $fallback_sizes_attr, $img_class, $alt_text);
+                                            }
+                                            ?>
 
                                   <?php } ?>
 
