@@ -859,11 +859,15 @@ if (have_rows('extra_content')) {
                                         // Compose class list for <img> fallback
                                         $img_class = trim($intense . ' ' . esc_html(get_field('item_max_heigh')));
                                         $picture_html = tiagsspace_render_picture_from_attachment($attachmen->ID, $sizes_map, $fallback_sizes_attr, $img_class, $attachmen_alt);
+                                        // Ensure Intense Images uses the full-resolution image by setting data-image on the <img>
+                                        if ($light_box == 'intense-images' && !empty($attachmen_thumb_attributes[0])) {
+                                            $picture_html = str_replace('<img ', '<img data-image="'.$attachmen_thumb_attributes[0].'" ', $picture_html);
+                                        }
                                         echo $picture_html;
 
                                         // data-image for Intense Images Gallery
                                         ?>
-                                        <span style="display:none" itemprop="http://schema.org/image" data-image="<?php echo ($light_box == 'intense-images') ? $attachmen_thumb_attributes[0] : ''; ?>"></span>
+                                        <span style="display:none" itemprop="http://schema.org/image"></span>
 
                                     <?php
                                     // Image Link
