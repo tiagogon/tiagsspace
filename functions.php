@@ -29,41 +29,72 @@ add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
 // Let WordPress handle the document <title> tag in a modern way
 add_theme_support('title-tag');
 
-// Enqueue CSS and Scripts<
-// function tiagsspace_enqueue_assets() {
-//     $template_dir = get_template_directory_uri();
+// Enqueue CSS and Scripts
+function tiagsspace_enqueue_assets() {
+    $template_dir = get_template_directory_uri();
 
-//     // ----- CSS -----
-//     wp_enqueue_style('bootstrap', $template_dir . '/library/css/bootstrap.css', [], null);
-//     wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], null);
+    // ----- CSS ----- (order matters)
+    wp_enqueue_style('bootstrap', $template_dir . '/library/css/bootstrap.css', [], null);
+    wp_enqueue_style('swiper', $template_dir . '/library/js/swiper/swiper-bundle.min.css', [], null);
+    wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], null);
 
-//     // ----- jQuery -----
-//     // Only deregister jQuery if you absolutely must load a custom version (not recommended).
-//     wp_deregister_script('jquery');
-//     wp_register_script('jquery', $template_dir . '/library/js/jquery/jquery.min.js', [], null, true);
-//     wp_enqueue_script('jquery');
+    // ----- jQuery -----
+    // Use local jQuery to match existing theme expectations
+    wp_deregister_script('jquery');
+    wp_register_script('jquery', $template_dir . '/library/js/jquery/jquery.min.js', [], null, false); // header
+    wp_enqueue_script('jquery');
 
-//     // ----- JS -----
-//     // Modernizr (must be in header)
-//     wp_enqueue_script('modernizr', $template_dir . '/library/js/modernizr/modernizr.min.js', [], null, true);
+    // ----- JS -----
+    // Modernizr (must be in header)
+    wp_enqueue_script('modernizr', $template_dir . '/library/js/modernizr/modernizr.min.js', [], null, false);
 
-//     // Picturefill
-//     wp_enqueue_script('picturefill', $template_dir . '/library/js/picturefill/picturefill.min.js', [], null, true);
+    // Picturefill (polyfill) for legacy browsers that need it
+    wp_enqueue_script('picturefill', $template_dir . '/library/js/picturefill/picturefill.min.js', [], null, true);
+    // HTML5 shiv for <picture> element creation (before polyfill execution)
+    wp_add_inline_script('picturefill', 'document.createElement("picture");', 'before');
 
-//     // Classie
-//     wp_enqueue_script('classie', $template_dir . '/library/js/classie/classie.min.js', [], null, true);
+        // Classie removed: no longer needed; use classList/jQuery
 
-//     // Plyr
-//     wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.min.js', [], null, true);
+        // Header helpers to replace inline scripts
+        wp_enqueue_script('header-helpers', $template_dir . '/library/js/header-helpers.js', array('jquery'), null, true);
+    // Plyr
+    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.min.js', [], null, true);
 
-//     // Bootstrap
-//     wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], null, true);
+    // Bootstrap
+    wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], null, true);
 
-//     // WordPress built-in Masonry (important!)
-//     wp_enqueue_script('masonry');
+    // ImagesLoaded (ensures Masonry runs after images are loaded)
+    wp_enqueue_script('imagesloaded');
+    // Theme's Masonry package (load in header so inline init in template works)
+    wp_enqueue_script('masonry-pkgd', $template_dir . '/library/js/masonry/masonry.pkgd.min.js', ['jquery', 'imagesloaded'], null, false);
 
-// }
-// add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
+}
+add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
+
+// Helper: render responsive picture element from attachment ID
+function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $fallback_sizes_attr, $img_class = '', $img_alt = '') {
+    // $sizes_map is an ordered array of arrays: [ [ 'size' => 'large', 'media' => '(min-width: 992px)' ], ... ]
+    // $fallback_sizes_attr is the sizes attribute string for the <img> fallback.
+    $sources_html = '';
+    foreach ($sizes_map as $entry) {
+        $size = isset($entry['size']) ? $entry['size'] : null;
+        $media = isset($entry['media']) ? $entry['media'] : null;
+        if (!$size || !$media) { continue; }
+        $attrs = wp_get_attachment_image_src($attachment_id, $size);
+        if ($attrs && !empty($attrs[0])) {
+            $srcset = esc_url($attrs[0]) . ' ' . intval($attrs[1]) . 'w';
+            $sources_html .= '<source media="' . esc_attr($media) . '" srcset="' . esc_attr($srcset) . '">';
+        }
+    }
+
+    // Fallback to full size
+    $full = wp_get_attachment_image_src($attachment_id, false);
+    $fallback_src = $full ? esc_url($full[0]) : '';
+    $alt = $img_alt ? esc_attr($img_alt) : esc_attr(get_post_meta($attachment_id, '_wp_attachment_image_alt', true));
+    $class_attr = $img_class ? ' class="' . esc_attr($img_class) . '"' : '';
+
+    return '<picture>' . $sources_html . '<img src="' . $fallback_src . '" sizes="' . esc_attr($fallback_sizes_attr) . '"' . $class_attr . ' alt="' . $alt . '">' . '</picture>';
+}
 
 
 /************* THUMBNAIL SIZE OPTIONS *************/

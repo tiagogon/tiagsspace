@@ -1,3 +1,20 @@
+// Responsive images defaults
+picture,
+img {
+  max-width: 100%;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.imgcontainer picture,
+.imgcontainer img {
+  width: 100%;
+  height: auto;
+}
 // Import files that will override bootstrap variables-custom
 //@import "google-color-palette.scss";
 @import "custom-variables.scss";

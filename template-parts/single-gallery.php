@@ -827,17 +827,35 @@ if (have_rows('extra_content')) {
                                             class="magnific-popup-link" caption="<?php if ($caption) { echo " – <i>".$caption."</i>";} ?>"
                                     itemprop="contentUrl">
                                     <?php }?>
-                                        <img    <?php echo $source; ?>
-                                                alt="<?php echo $attachmen_alt; ?>"
-                                                class="<?php echo $intense; ?>
-                                                <?php echo esc_html ( get_field('item_max_heigh') );?> "
-                                                itemprop="http://schema.org/image"
-                                                data-image="
-                                                <?php
-                                                // data-image ofr Intense Images Gallery
-                                                if ($light_box == 'intense-images') {
-                                                    echo $attachmen_thumb_attributes[0];
-                                                } ?>"/>
+                                        <?php
+                                        // Build sizes map for picture sources (largest -> smallest)
+                                        $sizes_map = array();
+                                        if ($class_container == 'container') {
+                                            $sizes_map = array(
+                                                array('size' => 'large', 'media' => '(min-width: 1240px)'),
+                                                array('size' => 'medium', 'media' => '(min-width: 992px)'),
+                                                array('size' => 'small', 'media' => '(min-width: 768px)'),
+                                                array('size' => 'thumbnail', 'media' => '(min-width: 576px)'),
+                                            );
+                                            $fallback_sizes_attr = $attachmen_sizes; // already computed above
+                                        } else {
+                                            $sizes_map = array(
+                                                array('size' => 'large', 'media' => '(min-width: 992px)'),
+                                                array('size' => 'medium', 'media' => '(min-width: 768px)'),
+                                                array('size' => 'small', 'media' => '(min-width: 576px)'),
+                                                array('size' => 'thumbnail', 'media' => '(min-width: 0px)'),
+                                            );
+                                            $fallback_sizes_attr = $attachmen_sizes;
+                                        }
+
+                                        // Compose class list for <img> fallback
+                                        $img_class = trim($intense . ' ' . esc_html(get_field('item_max_heigh')));
+                                        $picture_html = tiagsspace_render_picture_from_attachment($attachmen->ID, $sizes_map, $fallback_sizes_attr, $img_class, $attachmen_alt);
+                                        echo $picture_html;
+
+                                        // data-image for Intense Images Gallery
+                                        ?>
+                                        <span style="display:none" itemprop="http://schema.org/image" data-image="<?php echo ($light_box == 'intense-images') ? $attachmen_thumb_attributes[0] : ''; ?>"></span>
 
                                     <?php
                                     // Image Link
@@ -913,28 +931,22 @@ if (have_rows('extra_content')) {
 
 <?php
     // --- Masonry ----
-    if ($number_of_columns_lg > 1 && $deactivat_masonry == false) { ?>
-        <script type="text/javascript">
-           // var $grid = $('#gallery-<?php the_ID(); ?>').masonry({
-           //      percentPosition: true,
-           //      itemSelector: ".item",
-           //      // slow transitions
-           //      transitionDuration: '0.4s',//speed of loading
-           //  });
-           //  $grid.masonry('layout');
-
-            $('#gallery-<?php the_ID(); ?>').masonry({
-              // set itemSelector so .grid-sizer is not used in layout
-              itemSelector: '.item',
-              // use element for option
-              columnWidth: '.masonry-item-sizer',
-              percentPosition: true,
-              transitionDuration: '0.6s',
-              gutter: 0,
-              percentPosition: true,
-            })
-        </script>
-    <?php }
+        if ($number_of_columns_lg > 1 && $deactivat_masonry == false) { ?>
+                <script type="text/javascript">
+                        (function($){
+                            var $grid = $('#gallery-<?php the_ID(); ?>');
+                            $grid.imagesLoaded(function(){
+                                $grid.masonry({
+                                    itemSelector: '.item',
+                                    columnWidth: '.masonry-item-sizer',
+                                    percentPosition: true,
+                                    transitionDuration: '0.6s',
+                                    gutter: 0
+                                });
+                            });
+                        })(jQuery);
+                </script>
+        <?php }
 
 
 

@@ -15,70 +15,16 @@
 		<title><?php wp_title( '|', true, 'right' ); ?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<?php // ----- CSS ----- ?>
-
-			<link rel="stylesheet" id="bootstrap-css" href="<?php bloginfo('template_url'); ?>/library/css/bootstrap.css" type="text/css" media="all">
-			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.css">
-			<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/plyr/plyr.css" />
 
 		<?php wp_head(); ?>
-
-		<?php // ----- SCRIPTS ----- ?>
-
-			<?php // picturefill ?>
-	      <script>
-					// Picture element HTML5 shiv
-					document.createElement( "picture" );
-				</script>
-				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/picturefill/picturefill.min.js" async></script>
-
-			<?php // Modernizer ?>
-				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/modernizr/modernizr.min.js"></script>
-				<?php /*<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>*/ ?>
-
-			<?php // Jquery Library ?>
-				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/jquery/jquery.min.js"></script>
-				<?php /*<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*/ ?>
-
-			<?php // Masonry ?>
-				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/masonry/masonry.pkgd.min.js"></script>
-				<?php /*<script src="//cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js">
-				masonry</script>*/ ?>
-
-			<?php // Classie ?>
-				<script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/classie/classie.min.js"></script>
-				<?php /* <script src="//cdnjs.cloudflare.com/ajax/libs/classie/1.0.1/classie.min.js"></script> */ ?>
-			
-			<?php // Plyr ?>
-				<script src="<?php bloginfo('template_url'); ?>/library/js/plyr/plyr.min.js"></script>
-
-
-			<?php // Bootstrap Scripts ?>
-					<script src="<?php bloginfo('template_url'); ?>/library/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 					
 
-		<!-- end of wordpress head -->
-		<!-- IE8 fallback moved below head to work properly. Added respond as well. Tested to work. -->
-			<!-- media-queries.js (fallback) -->
-		<!--[if lt IE 9]>
-			<script src="https://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
-		<![endiPosts Categorized: burns seriesf]-->
-
-		<!-- html5.js -->
-		<!--[if lt IE 9]>
-			<script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-
-			<!-- respond.js -->
-		<!--[if lt IE 9]>
-		          <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
-		<![endif]-->
-
-		<!-- jquery -->
 
 	</head>
 
 	<body <?php body_class();?> >
+
+		<?php if (function_exists('wp_body_open')) { wp_body_open(); } ?>
 
 		<header id="site-header" class="header-front-page container-fluid side-padding Fixed" role="banner">
 
@@ -86,14 +32,7 @@
 
 				<div class="topbar-left col-32 multi-collapse show">
 
-					<script>
-						function showText(text){
-						    document.getElementById("over-text").innerHTML=text;
-						}
-						function hide(){
-						    document.getElementById("over-text").innerHTML="";
-						}
-					</script>
+
 
 					<?php // Get name of the section for mobile
 
@@ -239,11 +178,6 @@
 											 $elmentclass = "";
 											 if ( is_tax( 'log-branch', $term) ) {
 												 $elmentclass = "active";
-												 ?>
-												 	<script type="text/javascript">
-												 		$('#collapselog-branch').collapse()
-												 	</script>
-												 <?php
 											 }
 
 											 // Display the term
@@ -420,14 +354,7 @@
 
 					<div class="left-side col-32 multi-collapse show">
 						
-						<script>
-							function showYear(text){
-								document.getElementById("over-text-year-published").innerHTML=text;
-							}
-							function hideYear(){
-								document.getElementById("over-text-year-published").innerHTML="";
-							}
-						</script>
+
 
 						<h1><span id="over-text-year-published" class=""></span></h1>
 
