@@ -3,13 +3,11 @@ img {
   max-width: 100%; }
 
 img {
-  width: 100%;
   height: auto;
   display: block; }
 
 .imgcontainer picture,
 .imgcontainer img {
-  width: 100%;
   height: auto; }
 
 @font-face {
