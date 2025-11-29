@@ -594,7 +594,11 @@ if (have_rows('extra_content')) {
 
                           // Get Heigh and width from featured thumbnail instead of video proprieties
                           $attachmen_thumb_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($attachmen->ID), false);
-                          $intrinsic_ratio = $attachmen_thumb_attributes[2] * 100 / $attachmen_thumb_attributes[1];
+                          if ($attachmen_thumb_attributes && isset($attachmen_thumb_attributes[1]) && isset($attachmen_thumb_attributes[2]) && $attachmen_thumb_attributes[1] > 0) {
+                              $intrinsic_ratio = $attachmen_thumb_attributes[2] * 100 / $attachmen_thumb_attributes[1];
+                          } else {
+                              $intrinsic_ratio = 100; // Default to square ratio
+                          }
 
                         // 3D
                         } elseif ( $attachmen->post_mime_type == "application/octet-stream" ) {
@@ -602,7 +606,11 @@ if (have_rows('extra_content')) {
 
                         }else {
 
-                            $intrinsic_ratio = $attachmen_thumb_attributes[2] * 100 / $attachmen_thumb_attributes[1];
+                            if ($attachmen_thumb_attributes && isset($attachmen_thumb_attributes[1]) && isset($attachmen_thumb_attributes[2]) && $attachmen_thumb_attributes[1] > 0) {
+                                $intrinsic_ratio = $attachmen_thumb_attributes[2] * 100 / $attachmen_thumb_attributes[1];
+                            } else {
+                                $intrinsic_ratio = 100; // Default to square ratio
+                            }
 
                         }
 

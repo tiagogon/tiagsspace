@@ -1628,7 +1628,9 @@ function seo_image($image) {
             )
         );
         $last = wp_get_recent_posts( $args );
-        $last_id = $last['0']['ID'];
+        if (!empty($last) && isset($last[0]['ID'])) {
+            $last_id = $last[0]['ID'];
+        }
    }
 
    if( is_home() ) {
@@ -1639,7 +1641,9 @@ function seo_image($image) {
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
-        $last_id = $last['0']['ID'];
+        if (!empty($last) && isset($last[0]['ID'])) {
+            $last_id = $last[0]['ID'];
+        }
    }
 
 	 // Get URL from last post ID
