@@ -69,6 +69,11 @@ function tiagsspace_enqueue_assets() {
     wp_enqueue_script('masonry-pkgd', $template_dir . '/library/js/masonry/masonry.pkgd.min.js', ['jquery', 'imagesloaded'], null, false);
 
 }
+
+// Theme supports
+add_action('after_setup_theme', function(){
+    add_theme_support('title-tag');
+});
 add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
 
 // Helper: render responsive picture element from attachment ID

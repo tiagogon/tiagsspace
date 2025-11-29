@@ -1,3 +1,17 @@
+picture,
+img {
+  max-width: 100%; }
+
+img {
+  width: 100%;
+  height: auto;
+  display: block; }
+
+.imgcontainer picture,
+.imgcontainer img {
+  width: 100%;
+  height: auto; }
+
 @font-face {
   font-family: 'lackitalic';
   src: url("../fonts/lack/lack-italic-webfont.woff2") format("woff2"), url("../fonts/lack/lack-italic-webfont.woff") format("woff");
