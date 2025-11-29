@@ -76,29 +76,39 @@ add_action('after_setup_theme', function(){
 });
 add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
 
-// Helper: render responsive picture element from attachment ID
+// Helper: render responsive image with full srcset so browser can pick optimal size
+// Uses <img> with srcset/sizes instead of <picture> for better resolution selection
 function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $fallback_sizes_attr, $img_class = '', $img_alt = '') {
-    // $sizes_map is an ordered array of arrays: [ [ 'size' => 'large', 'media' => '(min-width: 992px)' ], ... ]
-    // $fallback_sizes_attr is the sizes attribute string for the <img> fallback.
-    $sources_html = '';
-    foreach ($sizes_map as $entry) {
-        $size = isset($entry['size']) ? $entry['size'] : null;
-        $media = isset($entry['media']) ? $entry['media'] : null;
-        if (!$size || !$media) { continue; }
+    // Build a comprehensive srcset with all available image sizes
+    $srcset_parts = array();
+    
+    // Add all registered sizes to srcset (thumbnail, small, medium, large)
+    $all_sizes = array('thumbnail', 'small', 'medium', 'large');
+    foreach ($all_sizes as $size) {
         $attrs = wp_get_attachment_image_src($attachment_id, $size);
-        if ($attrs && !empty($attrs[0])) {
-            $srcset = esc_url($attrs[0]) . ' ' . intval($attrs[1]) . 'w';
-            $sources_html .= '<source media="' . esc_attr($media) . '" srcset="' . esc_attr($srcset) . '">';
+        if ($attrs && !empty($attrs[0]) && !empty($attrs[1])) {
+            $srcset_parts[] = esc_url($attrs[0]) . ' ' . intval($attrs[1]) . 'w';
         }
     }
-
-    // Fallback to full size
+    
+    // Add full-size image as final option
     $full = wp_get_attachment_image_src($attachment_id, false);
-    $fallback_src = $full ? esc_url($full[0]) : '';
+    if ($full && !empty($full[0]) && !empty($full[1])) {
+        $srcset_parts[] = esc_url($full[0]) . ' ' . intval($full[1]) . 'w';
+        $fallback_src = esc_url($full[0]);
+    } else {
+        $fallback_src = '';
+    }
+    
+    // Combine all srcset entries
+    $srcset_attr = implode(', ', $srcset_parts);
+    
+    // Build alt attribute
     $alt = $img_alt ? esc_attr($img_alt) : esc_attr(get_post_meta($attachment_id, '_wp_attachment_image_alt', true));
     $class_attr = $img_class ? ' class="' . esc_attr($img_class) . '"' : '';
-
-    return '<picture>' . $sources_html . '<img src="' . $fallback_src . '" sizes="' . esc_attr($fallback_sizes_attr) . '"' . $class_attr . ' alt="' . $alt . '">' . '</picture>';
+    
+    // Return simple <img> with full srcset - browser will choose optimal image based on sizes + DPR
+    return '<img src="' . $fallback_src . '" srcset="' . $srcset_attr . '" sizes="' . esc_attr($fallback_sizes_attr) . '"' . $class_attr . ' alt="' . $alt . '">';
 }
 
 
