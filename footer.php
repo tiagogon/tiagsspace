@@ -77,18 +77,6 @@
         $container.on('append.infiniteScroll', function(event, response, path, items) {
             const work = () => {
                 items.forEach(item => {
-                    // Hint browser to decode images off the main thread when possible
-                    item.querySelectorAll('img').forEach(img => {
-                        try { if ('decode' in img) img.decode().catch(() => {}); } catch(e) {}
-                        img.loading = img.loading || 'lazy';
-                    });
-
-                    // Fix for Safari srcset bug (avoid full outerHTML rewrite)
-                    item.querySelectorAll('img[srcset]').forEach(img => {
-                        const current = img.getAttribute('srcset');
-                        if (current) img.setAttribute('srcset', current);
-                    });
-
                     // Lazily initialize Plyr only when elements approach viewport
                     queueInitializePlyrOnIntersect(item);
                 });

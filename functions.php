@@ -81,6 +81,7 @@ add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
 function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $fallback_sizes_attr, $img_class = '', $img_alt = '') {
     // Build a comprehensive srcset with all available image sizes
     $srcset_parts = array();
+    $fallback_src = ''; // Will be set to smallest available size
     
     // Add all registered sizes to srcset (thumbnail, small, medium, large)
     $all_sizes = array('thumbnail', 'small', 'medium', 'large');
@@ -88,16 +89,21 @@ function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $
         $attrs = wp_get_attachment_image_src($attachment_id, $size);
         if ($attrs && !empty($attrs[0]) && !empty($attrs[1])) {
             $srcset_parts[] = esc_url($attrs[0]) . ' ' . intval($attrs[1]) . 'w';
+            // Set fallback_src to first available (smallest) size to avoid downloading full-size in Firefox
+            if (empty($fallback_src)) {
+                $fallback_src = esc_url($attrs[0]);
+            }
         }
     }
     
-    // Add full-size image as final option
+    // Add full-size image as final option in srcset
     $full = wp_get_attachment_image_src($attachment_id, false);
     if ($full && !empty($full[0]) && !empty($full[1])) {
         $srcset_parts[] = esc_url($full[0]) . ' ' . intval($full[1]) . 'w';
-        $fallback_src = esc_url($full[0]);
-    } else {
-        $fallback_src = '';
+        // Only use full as fallback if no other sizes exist
+        if (empty($fallback_src)) {
+            $fallback_src = esc_url($full[0]);
+        }
     }
     
     // Combine all srcset entries
@@ -107,7 +113,7 @@ function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $
     $alt = $img_alt ? esc_attr($img_alt) : esc_attr(get_post_meta($attachment_id, '_wp_attachment_image_alt', true));
     $class_attr = $img_class ? ' class="' . esc_attr($img_class) . '"' : '';
     
-    // Return simple <img> with full srcset - browser will choose optimal image based on sizes + DPR
+    // Return <img> with smallest size as src (fallback) and full srcset - browser will choose optimal image
     return '<img src="' . $fallback_src . '" srcset="' . $srcset_attr . '" sizes="' . esc_attr($fallback_sizes_attr) . '"' . $class_attr . ' alt="' . $alt . '">';
 }
 
