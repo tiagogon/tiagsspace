@@ -35,7 +35,7 @@ if (have_rows('extra_content')) {
 	endwhile;
 
         // GET VIMEO API SCRIPT from CDN?>
-        <script src="//f.vimeocdn.com/js/froogaloop2.min.js"></script>
+        <script src="https://f.vimeocdn.com/js/froogaloop2.min.js"></script>
 
     <?php }
 
