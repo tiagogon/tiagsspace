@@ -341,7 +341,7 @@
 
 
 		<?php if ( is_home() || is_paged() ) : ?>
-			<div id="lower-header" class="container-fluid side-padding Fixed d-none d-sm-inline" role="banner">
+			<div id="lower-header" class="left-side col-32 side-padding Fixed d-none d-sm-inline" role="banner">
 
 				<div class="row">
 
