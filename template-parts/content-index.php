@@ -582,6 +582,7 @@ Index of posts for Home and Archives
                     outlayer: msnry,
                     history: false,
                     button: '.view-more-button',
+                    scrollThreshold: 800, // Load earlier (distance from bottom in px)
                 });
 
                 // -- Scroll 2 pages, then load with button -- https://infinite-scroll.com/extras.html#scroll-2-pages-then-load-with-button
