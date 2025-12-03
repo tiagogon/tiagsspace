@@ -1042,9 +1042,18 @@ if (have_rows('extra_content')) {
                         if (!videoElement) return;
 
                         if (entry.isIntersecting) {
+                            // Prevent browser scroll-to-video on autoplay
+                            const scrollY = window.scrollY || window.pageYOffset;
+                            
                             // Video entered viewport - play if muted
                             if (videoElement.muted || videoElement.volume === 0) {
-                                videoElement.play().catch(function(err) {
+                                videoElement.play().then(function() {
+                                    // Restore scroll position immediately after play starts
+                                    window.scrollTo({
+                                        top: scrollY,
+                                        behavior: 'instant'
+                                    });
+                                }).catch(function(err) {
                                     console.log('Autoplay prevented:', err);
                                 });
                             }
@@ -1056,8 +1065,8 @@ if (have_rows('extra_content')) {
                         }
                     });
                 }, {
-                    threshold: 0.5, // Trigger when 50% of video is visible
-                    rootMargin: '0px' // No margin adjustment
+                    threshold: 0.1, // Trigger when just 10% visible - earlier detection, smoother experience
+                    rootMargin: '100px' // Start observing 100px before video enters viewport
                 });
 
                 // Wait for Video.js to initialize, then observe all video containers
