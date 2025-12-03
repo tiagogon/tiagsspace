@@ -1019,6 +1019,21 @@ if (have_rows('extra_content')) {
     // VIDEO
     if ($there_is_video == true) { ?>
         <script type="text/javascript">
+            // Prevent auto-scroll to video on page load
+            (function() {
+                var scrollY = window.scrollY || window.pageYOffset;
+                var scrollX = window.scrollX || window.pageXOffset;
+                
+                // Restore scroll position after video players initialize
+                setTimeout(function() {
+                    window.scrollTo(scrollX, scrollY);
+                }, 100);
+                
+                // Additional check after a slight delay for Video.js initialization
+                setTimeout(function() {
+                    window.scrollTo(scrollX, scrollY);
+                }, 500);
+            })();
             // var video = document.querySelector('video');
             // enableInlineVideo(video);
         </script><?php
