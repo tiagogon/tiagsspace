@@ -640,15 +640,19 @@ if (have_rows('extra_content')) {
                         }
 
                         // COMPILE VIDEO OPTIONS STRING
-
-                            $video_otions = '
-                                controls="'.$video_controls.'"
-                                mute="'.$video_mute.'"
-                                loop="'.$video_loop.'"
-                                autoplay="'.$video_autoplay.'"
-                                pauseothervideos="'.$video_pauseothervideos.'"
-                                preload="'.$video_preload.'"
-                                Schema="'.$video_schema.'"';
+                        // Disable autoplay initially - Intersection Observer will handle it
+                        $video_otions = '
+                            controls="'.$video_controls.'"
+                            mute="'.$video_mute.'"
+                            loop="'.$video_loop.'"
+                            autoplay="false"
+                            playsinline="true"
+                            pauseothervideos="'.$video_pauseothervideos.'"
+                            preload="'.$video_preload.'"
+                            Schema="'.$video_schema.'"';
+                        
+                        // Store original autoplay setting for Intersection Observer
+                        $should_autoplay = $video_autoplay;
 
 
                     // add masonry-item-sizer for Masonry responsive calculations
@@ -702,7 +706,7 @@ if (have_rows('extra_content')) {
 
                         ?>
 
-                        <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
+                        <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>" data-should-autoplay="<?php echo $should_autoplay; ?>" attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
                             <?php
                             // Edit atachment media -- hide and delete
@@ -1016,26 +1020,54 @@ if (have_rows('extra_content')) {
         </script><?php
     }
 
-    // VIDEO
+    // VIDEO - Intersection Observer for smart autoplay
     if ($there_is_video == true) { ?>
         <script type="text/javascript">
-            // Prevent auto-scroll to video on page load
             (function() {
-                var scrollY = window.scrollY || window.pageYOffset;
-                var scrollX = window.scrollX || window.pageXOffset;
-                
-                // Restore scroll position after video players initialize
+                // Intersection Observer for viewport-based autoplay
+                // Only plays videos when they're 50% visible, prevents scroll issues
+                if (!('IntersectionObserver' in window)) {
+                    return; // Graceful degradation for old browsers
+                }
+
+                const videoObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        const container = entry.target;
+                        const shouldAutoplay = container.getAttribute('data-should-autoplay') === 'true';
+                        
+                        if (!shouldAutoplay) return;
+
+                        // Find Video.js player or native video element
+                        const videoElement = container.querySelector('video');
+                        if (!videoElement) return;
+
+                        if (entry.isIntersecting) {
+                            // Video entered viewport - play if muted
+                            if (videoElement.muted || videoElement.volume === 0) {
+                                videoElement.play().catch(function(err) {
+                                    console.log('Autoplay prevented:', err);
+                                });
+                            }
+                        } else {
+                            // Video left viewport - pause to save resources
+                            if (!videoElement.paused) {
+                                videoElement.pause();
+                            }
+                        }
+                    });
+                }, {
+                    threshold: 0.5, // Trigger when 50% of video is visible
+                    rootMargin: '0px' // No margin adjustment
+                });
+
+                // Wait for Video.js to initialize, then observe all video containers
                 setTimeout(function() {
-                    window.scrollTo(scrollX, scrollY);
-                }, 100);
-                
-                // Additional check after a slight delay for Video.js initialization
-                setTimeout(function() {
-                    window.scrollTo(scrollX, scrollY);
-                }, 500);
+                    const videoContainers = document.querySelectorAll('.media-video[data-should-autoplay="true"]');
+                    videoContainers.forEach(function(container) {
+                        videoObserver.observe(container);
+                    });
+                }, 1000); // Give Video.js time to initialize
             })();
-            // var video = document.querySelector('video');
-            // enableInlineVideo(video);
         </script><?php
     }
     // 3d
