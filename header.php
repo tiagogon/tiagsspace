@@ -340,7 +340,7 @@
 		</div>
 
 
-		<?php if ( is_home() || is_paged() ) : ?>
+		<?php if ( is_home() || is_paged() || is_archive()  ) : ?>
 			<div id="lower-header" class="left-side col-32 side-padding Fixed d-none d-sm-inline" role="banner">
 
 				<div class="row">
