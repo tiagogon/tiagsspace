@@ -150,8 +150,8 @@ if (! get_field('disable_previouse_next_&_related_posts')) { ?>
 
     <div class="container-fluid side-padding yarpp-related-header">
         <div class="row justify-content-between">
-            <nav class="nav-next col-24">
-                <h3>Random/Reveal</h3>
+            <nav class="nav-next col-24">	
+                <h3>Re(ve)lations</h3>
             </nav>
         </div>
     </div>
