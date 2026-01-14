@@ -29,26 +29,74 @@ if ($original_url) {
 $children = get_children([
     'post_parent'    => $self_host_film_id,
     'post_type'      => 'attachment',
-    'post_mime_type' => 'video',
     'numberposts'    => -1,
 ]);
+
+// Separate video files from caption/subtitle files
+$caption_tracks = [];
 
 if (!empty($children)) {
     foreach ($children as $child) {
         $src = wp_get_attachment_url($child->ID);
         $filename = basename($src);
+        
+        // Check if it's a caption/subtitle file (VTT or SRT)
+        if (preg_match('/\.(vtt|srt)$/i', $filename)) {
+            // Extract language code from filename (e.g. video-en.vtt, video-fr_FR.vtt)
+            $lang_match = preg_match('/(?:captions?|subtitles?)?-?([a-z]{2}(?:_[A-Z]{2})?)\.(vtt|srt)$/i', $filename, $matches);
+            
+            if ($lang_match) {
+                $lang_code = $matches[1]; // e.g. 'en', 'fr_FR'
+                $file_type = strtolower($matches[2]); // 'vtt' or 'srt'
+                
+                // Convert language code to label
+                $lang_label = $lang_code;
+                $lang_map = [
+                    'en' => 'English',
+                    'fr' => 'Français',
+                    'de' => 'Deutsch',
+                    'es' => 'Español',
+                    'it' => 'Italiano',
+                    'pt' => 'Português',
+                    'pt_BR' => 'Português (Brasil)',
+                    'pt_PT' => 'Português (Portugal)',
+                    'nl' => 'Nederlands',
+                    'sv' => 'Svenska',
+                ];
+                
+                if (isset($lang_map[$lang_code])) {
+                    $lang_label = $lang_map[$lang_code];
+                }
+                
+                $caption_tracks[] = [
+                    'src'     => esc_url($src),
+                    'srclang' => esc_attr($lang_code),
+                    'label'   => esc_html($lang_label),
+                    'kind'    => 'captions',
+                ];
+            } else {
+                // Fallback for files named just "captions.vtt" or "subtitles.vtt"
+                $caption_tracks[] = [
+                    'src'     => esc_url($src),
+                    'srclang' => 'en',
+                    'label'   => esc_html(ucfirst(preg_replace('/\.[^.]*$/', '', $filename))),
+                    'kind'    => 'captions',
+                ];
+            }
+        } elseif (preg_match('/\.mp4$|\.webm$|\.ogv$/i', $filename)) {
+            // It's a video file - add to sources
+            // Extract resolution from filename (e.g. video-720.mp4)
+            if (preg_match('/-(\d{3,4})\.mp4$/i', $filename, $matches)) {
+                $label = $matches[1] . 'p';
+            } else {
+                $label = 'default';
+            }
 
-        // Extract resolution from filename (e.g. video-720.mp4)
-        if (preg_match('/-(\d{3,4})\.mp4$/', $filename, $matches)) {
-            $label = $matches[1] . 'p';
-        } else {
-            $label = 'default';
+            $video_sources[] = [
+                'src'   => esc_url($src),
+                'label' => esc_html($label),
+            ];
         }
-
-        $video_sources[] = [
-            'src'   => esc_url($src),
-            'label' => esc_html($label),
-        ];
     }
 }
 
@@ -113,11 +161,22 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                             ?>
                         >
                     <?php endforeach; ?>
+                    
+                    <?php // Output caption tracks if available ?>
+                    <?php if (!empty($caption_tracks)) : ?>
+                        <?php foreach ($caption_tracks as $index => $track) : ?>
+                            <track 
+                                kind="<?php echo $track['kind']; ?>" 
+                                src="<?php echo $track['src']; ?>" 
+                                srclang="<?php echo $track['srclang']; ?>" 
+                                label="<?php echo $track['label']; ?>"
+                                <?php echo ($index === 0) ? 'default' : ''; // Mark first track as default
+                                ?>
+                            >
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    
                     Your browser does not support the video tag.
-                    <!-- Caption files -->
-                    <!-- <track kind="captions" label="English" srclang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
-                            default>
-                    <track kind="captions" label="Français" srclang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt"> -->
                     <!-- Fallback for browsers that don't support the <video> element -->
                     <a href="<?php echo esc_url($original_url); ?>" download>Download</a>
                 </video>
