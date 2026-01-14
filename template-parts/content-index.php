@@ -216,7 +216,11 @@ Index of posts for Home and Archives
                                   $video_attachment_metadata = wp_get_attachment_metadata($video_thumbnail_id);
 
                                   //Final variables
-                                  $intrinsic_ratio = $video_attachment_metadata['height'] * 100 / $video_attachment_metadata['width'];
+                                  if ($video_attachment_metadata && isset($video_attachment_metadata['height']) && isset($video_attachment_metadata['width']) && $video_attachment_metadata['width'] > 0) {
+                                      $intrinsic_ratio = $video_attachment_metadata['height'] * 100 / $video_attachment_metadata['width'];
+                                  } else {
+                                      $intrinsic_ratio = 56.25; // Default 16:9 aspect ratio fallback
+                                  }
                                   $video_poster = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full')[0];
                                   // $video_mp4 = wp_get_attachment_url( $video_thumbnail_id );
                                   // $video_webmvp8 = str_replace(".mp4","-vp8.webm",$video_mp4);
@@ -231,12 +235,20 @@ Index of posts for Home and Archives
 
                                   $image_animate_thumb_attributes = wp_get_attachment_image_src($animated_thumbnail_array['ID'], 'full');
 
-                                  $intrinsic_ratio = $image_animate_thumb_attributes[2] * 100 / $image_animate_thumb_attributes[1];
+                                  if ($image_animate_thumb_attributes && isset($image_animate_thumb_attributes[1]) && isset($image_animate_thumb_attributes[2]) && $image_animate_thumb_attributes[1] > 0) {
+                                      $intrinsic_ratio = $image_animate_thumb_attributes[2] * 100 / $image_animate_thumb_attributes[1];
+                                  } else {
+                                      $intrinsic_ratio = 56.25; // Default 16:9 aspect ratio fallback
+                                  }
 
                               // If it's a normal thumbnail
                               }  else {
                                   $image_thumb_attributes = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
-                                  $intrinsic_ratio = $image_thumb_attributes[2] * 100 / $image_thumb_attributes[1];
+                                  if ($image_thumb_attributes && isset($image_thumb_attributes[1]) && isset($image_thumb_attributes[2]) && $image_thumb_attributes[1] > 0) {
+                                      $intrinsic_ratio = $image_thumb_attributes[2] * 100 / $image_thumb_attributes[1];
+                                  } else {
+                                      $intrinsic_ratio = 56.25; // Default 16:9 aspect ratio fallback
+                                  }
                               }
                           }
 
