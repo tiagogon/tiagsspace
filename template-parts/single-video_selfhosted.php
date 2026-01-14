@@ -32,6 +32,16 @@ $children = get_children([
     'numberposts'    => -1,
 ]);
 
+// Debug: Check if children are found
+echo '<!-- Children count: ' . count($children) . ' -->';
+foreach ($children as $child) {
+    echo '<!-- Child: ' . $child->ID . ' - ' . basename(wp_get_attachment_url($child->ID)) . ' -->';
+}
+
+// Also check post meta for caption data (video-embed-thumbnail-generator stores captions here)
+$video_meta_data = get_post_meta($self_host_film_id);
+echo '<!-- Video Meta Data: ' . esc_html(print_r($video_meta_data, true)) . ' -->';
+
 // Separate video files from caption/subtitle files
 $caption_tracks = [];
 
