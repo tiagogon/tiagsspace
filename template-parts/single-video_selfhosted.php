@@ -39,8 +39,39 @@ $kgvid_meta = get_post_meta($self_host_film_id, '_kgvid-meta', true);
 if ($kgvid_meta && isset($kgvid_meta['track']) && is_array($kgvid_meta['track'])) {
     foreach ($kgvid_meta['track'] as $track) {
         if (is_array($track) && isset($track['src'])) {
+            $track_src = esc_url($track['src']);
+            
+            // Try to convert SRT to WebVTT if the file is .srt
+            if (strtolower(pathinfo($track['src'], PATHINFO_EXTENSION)) === 'srt') {
+                // Attempt to read and convert the SRT file
+                $response = wp_remote_get($track['src'], [
+                    'timeout'    => 5,
+                    'sslverify'  => false,
+                ]);
+                
+                if (!is_wp_error($response)) {
+                    $srt_content = wp_remote_retrieve_body($response);
+                    if (!empty($srt_content)) {
+                        // Convert SRT to WebVTT: just prepend WEBVTT header
+                        // SRT format: 1\n00:00:00,000 --> 00:00:02,000\nSubtitle text\n
+                        // WebVTT format: WEBVTT\n\n00:00:00.000 --> 00:00:02.000\nSubtitle text\n
+                        $webvtt_content = 'WEBVTT' . "\n\n" . $srt_content;
+                        
+                        // Store in a transient cache to serve via a custom endpoint
+                        $cache_key = 'srt_webvtt_' . md5($track['src']);
+                        set_transient($cache_key, $webvtt_content, 24 * HOUR_IN_SECONDS);
+                        
+                        // Create URL to our custom endpoint
+                        $track_src = add_query_arg([
+                            'action'   => 'get_caption_webvtt',
+                            'cache_id' => md5($track['src']),
+                        ], admin_url('admin-ajax.php'));
+                    }
+                }
+            }
+            
             $caption_tracks[] = [
-                'src'     => esc_url($track['src']),
+                'src'     => $track_src,
                 'srclang' => esc_attr(strtolower($track['srclang'] ?? 'en')), // Ensure lowercase for Plyr
                 'label'   => esc_html($track['label'] ?? 'Captions'),
                 'kind'    => esc_attr($track['kind'] ?? 'captions'),
@@ -293,52 +324,6 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                                                         for (let i = 0; i < videoElement.textTracks.length; i++) {
                                                             const track = videoElement.textTracks[i];
                                                             console.log('[plyr-captions] Track ' + i + ' cues count:', track.cues ? track.cues.length : 'N/A');
-                                                            if (track.cues && track.cues.length > 0) {
-                                                                // Log first few cues as sample
-                                                                for (let j = 0; j < Math.min(2, track.cues.length); j++) {
-                                                                    const cue = track.cues[j];
-                                                                    console.log('[plyr-captions] Track ' + i + ', Cue ' + j + ':', {
-                                                                        startTime: cue.startTime,
-                                                                        endTime: cue.endTime,
-                                                                        text: cue.text.substring(0, 50) + (cue.text.length > 50 ? '...' : '')
-                                                                    });
-                                                                }
-                                                            } else {
-                                                                console.log('[plyr-captions] Track ' + i + ' has no cues loaded - trying to fetch and parse manually');
-                                                                
-                                                                // If cues aren't loaded, try fetching the file and parsing it
-                                                                const trackElement = trackEls[i];
-                                                                if (trackElement) {
-                                                                    const trackSrc = trackElement.getAttribute('src');
-                                                                    if (trackSrc) {
-                                                                        fetch(trackSrc)
-                                                                            .then(r => r.text())
-                                                                            .then(srtText => {
-                                                                                // Check if this is SRT format and convert to WebVTT if needed
-                                                                                if (!srtText.trim().startsWith('WEBVTT')) {
-                                                                                    console.log('[plyr-captions] Converting SRT to WebVTT format for track ' + i);
-                                                                                    // SRT to WebVTT conversion
-                                                                                    const webvttText = 'WEBVTT\n\n' + srtText.replace(/\r\n|\r/g, '\n');
-                                                                                    
-                                                                                    // Create a blob with WebVTT content
-                                                                                    const blob = new Blob([webvttText], { type: 'text/vtt' });
-                                                                                    const url = URL.createObjectURL(blob);
-                                                                                    
-                                                                                    // Update the track src to point to the converted WebVTT
-                                                                                    trackElement.src = url;
-                                                                                    videoElement.textContent = '';  // Force reload
-                                                                                    videoElement.load();
-                                                                                    console.log('[plyr-captions] Updated track ' + i + ' to WebVTT format');
-                                                                                } else {
-                                                                                    console.log('[plyr-captions] Track ' + i + ' is already WebVTT format');
-                                                                                }
-                                                                            })
-                                                                            .catch(err => {
-                                                                                console.log('[plyr-captions] Error fetching track ' + i + ':', err.message);
-                                                                            });
-                                                                    }
-                                                                }
-                                                            }
                                                         }
                                                     }
                                                 } catch (e) {
