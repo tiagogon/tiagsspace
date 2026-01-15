@@ -231,13 +231,61 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                                                 });
                                             }
                                         }
-                                        // In Plyr 3.7.8, captions are enabled via config and the element's default attribute
-                                        console.log('[plyr-captions] Checking Plyr config...');
-                                        // Trigger UI update to show captions in settings
+                                        
+                                        // Activate captions and set first track to showing
                                         if (videoElement && videoElement.textTracks && videoElement.textTracks.length > 0) {
-                                            // Set first track to show as active
-                                            videoElement.textTracks[0].mode = 'showing';
-                                            console.log('[plyr-captions] Activated first track');
+                                            // Enable all caption/subtitle tracks
+                                            for (let i = 0; i < videoElement.textTracks.length; i++) {
+                                                const track = videoElement.textTracks[i];
+                                                // Set captions/subtitles to showing, others to hidden
+                                                if (track.kind === 'captions' || track.kind === 'subtitles') {
+                                                    track.mode = 'showing';
+                                                    console.log('[plyr-captions] Set track ' + i + ' (' + track.label + ') to showing');
+                                                } else {
+                                                    track.mode = 'hidden';
+                                                }
+                                            }
+                                            
+                                            // Try to access Plyr's caption controls and trigger display
+                                            // Look for captions button in the controls
+                                            const captionsBtn = el.plyr.elements && el.plyr.elements.container && 
+                                                el.plyr.elements.container.querySelector('button[data-plyr="captions"]');
+                                            if (captionsBtn) {
+                                                console.log('[plyr-captions] Found captions button, marking as active');
+                                                // Simulate caption being enabled by adding is-active class
+                                                try { captionsBtn.classList.add('is-active'); } catch (e) {}
+                                                try { captionsBtn.setAttribute('aria-pressed', 'true'); } catch (e) {}
+                                            }
+                                            
+                                            // Dispatch a change event on the video element so Plyr knows tracks changed
+                                            try {
+                                                const event = new Event('loadedmetadata', { bubbles: true });
+                                                videoElement.dispatchEvent(event);
+                                                console.log('[plyr-captions] Dispatched loadedmetadata event');
+                                            } catch (e) {
+                                                console.log('[plyr-captions] Could not dispatch event:', e.message);
+                                            }
+                                            
+                                            // Check if caption display is being hidden by CSS
+                                            setTimeout(() => {
+                                                try {
+                                                    const captionDisplay = el.plyr.elements && el.plyr.elements.container && 
+                                                        el.plyr.elements.container.querySelector('.plyr__captions');
+                                                    if (captionDisplay) {
+                                                        const styles = window.getComputedStyle(captionDisplay);
+                                                        console.log('[plyr-captions] Caption display element found, computed styles:', {
+                                                            display: styles.display,
+                                                            visibility: styles.visibility,
+                                                            opacity: styles.opacity,
+                                                            height: styles.height
+                                                        });
+                                                    } else {
+                                                        console.log('[plyr-captions] No .plyr__captions element found in DOM');
+                                                    }
+                                                } catch (e) {
+                                                    console.log('[plyr-captions] Error checking caption display styles:', e.message);
+                                                }
+                                            }, 300);
                                         }
                                     } catch (e) {
                                         console.log('[plyr-captions] Error in ready handler:', e.message);
