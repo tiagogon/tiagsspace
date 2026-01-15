@@ -191,24 +191,44 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                         const videoEl = el;
                         const trackEls = Array.from(videoEl.querySelectorAll('track'));
                         if (trackEls.length > 0) {
-                            // Log that we found tracks
-                            console.log('[plyr-adaptive] Found ' + trackEls.length + ' track elements');
+                            console.log('[plyr-captions] Found ' + trackEls.length + ' track elements');
+                            trackEls.forEach((t, i) => {
+                                console.log('[plyr-captions] Track ' + i + ':', {
+                                    kind: t.getAttribute('kind'),
+                                    src: t.getAttribute('src'),
+                                    srclang: t.getAttribute('srclang'),
+                                    label: t.getAttribute('label'),
+                                    default: t.hasAttribute('default')
+                                });
+                                // Test if track file is accessible
+                                fetch(t.getAttribute('src'), {method: 'HEAD'})
+                                    .then(r => console.log('[plyr-captions] Track ' + i + ' file accessible:', r.status === 200))
+                                    .catch(e => console.log('[plyr-captions] Track ' + i + ' file ERROR:', e.message));
+                            });
+                            
                             // Plyr should auto-detect tracks, but we'll force a re-render of the captions menu
                             if (el.plyr && el.plyr.on) {
                                 el.plyr.on('ready', function() {
                                     try {
-                                        // Trigger caption button update
-                                        if (el.plyr.captions) {
-                                            console.log('[plyr-adaptive] Captions available:', el.plyr.captions.getCues ? 'YES' : 'NO');
+                                        console.log('[plyr-captions] Plyr ready event fired');
+                                        // Check captions state
+                                        console.log('[plyr-captions] Captions enabled:', el.plyr.captions && el.plyr.captions.enabled);
+                                        console.log('[plyr-captions] Caption tracks:', el.plyr.captions ? el.plyr.captions.getTracks() : 'N/A');
+                                        // Try to enable captions
+                                        if (el.plyr.captions && el.plyr.captions.enable) {
+                                            el.plyr.captions.enable(true);
+                                            console.log('[plyr-captions] Attempted to enable captions');
                                         }
                                     } catch (e) {
-                                        console.log('[plyr-adaptive] Error checking captions:', e);
+                                        console.log('[plyr-captions] Error in ready handler:', e);
                                     }
                                 });
                             }
+                        } else {
+                            console.log('[plyr-captions] NO track elements found in video');
                         }
                     } catch (ee) {
-                        console.log('[plyr-adaptive] Error registering tracks:', ee);
+                        console.log('[plyr-captions] Error registering tracks:', ee);
                     }
 
                     // collect available sources once and keep them for later switches
