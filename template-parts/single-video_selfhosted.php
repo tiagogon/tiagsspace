@@ -100,8 +100,9 @@ $plyr_config = [
     'ads'      => ['enabled' => false],
     'previewThumbnails' => ['enabled' => false],
     // fullscreen can be a nested array; null will become JSON null
-    // Use native iOS fullscreen - tracks should be passed automatically
-    'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => true, 'container' => null],
+    // iOS native fullscreen doesn't support HTML5 track elements
+    // Use Plyr's fullscreen for proper caption support across all platforms
+    'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => false, 'container' => null],
 ];
 
 // Encode once to JSON and escape for inclusion in an HTML attribute
@@ -165,9 +166,9 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
         // functions for more detail.
         // Initialize Plyr for each element (if not already initialized)
         const plyrOptions = {
-            // keep fullscreen options as before
-            fullscreen: { enabled: true, fallback: true, iosNative: true, container: null },
-            // Ensure captions work in native fullscreen
+            // Use Plyr's fullscreen for proper caption support (iOS native doesn't support tracks)
+            fullscreen: { enabled: true, fallback: true, iosNative: false, container: null },
+            // Ensure captions work in fullscreen
             captions: {
                 active: true,
                 language: 'auto',
