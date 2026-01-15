@@ -11,6 +11,9 @@ sidebars, comments, ect.
 // Get Bones Core Up & Running!
 require_once('library/bones.php');            // core functions (don't remove)
 
+// Custom Video Player Functions
+require_once('library/plyr-player.php');      // Plyr video player helper
+
 // Admin Functions (commented out by default)
 // require_once('library/admin.php');         // custom admin functions
 
@@ -58,7 +61,7 @@ function tiagsspace_enqueue_assets() {
         // Header helpers to replace inline scripts
         wp_enqueue_script('header-helpers', $template_dir . '/library/js/header-helpers.js', array('jquery'), null, true);
     // Plyr
-    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.min.js', [], null, true);
+    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.js', [], null, true);
 
     // Bootstrap
     wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], null, true);
