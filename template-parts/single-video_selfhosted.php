@@ -100,8 +100,8 @@ $plyr_config = [
     'ads'      => ['enabled' => false],
     'previewThumbnails' => ['enabled' => false],
     // fullscreen can be a nested array; null will become JSON null
-    // Use Plyr's fullscreen instead of native iOS to preserve captions
-    'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => false, 'container' => null],
+    // Use native iOS fullscreen - tracks should be passed automatically
+    'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => true, 'container' => null],
 ];
 
 // Encode once to JSON and escape for inclusion in an HTML attribute
@@ -120,7 +120,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                 <?php echo $film_player_options_html_string; ?>     
                 poster="<?php echo $poster; ?>" 
                 data-plyr-config='<?php echo esc_attr( $json ); ?>'
-                
+                webkit-playsinline
+                playsinline
                 >
                     <?php foreach ($video_sources as $source) : ?>
                         <source src="<?php echo $source['src']; ?>" type="video/mp4" size="<?php echo esc_attr($source['size']); ?>"<?php echo !empty($source['label']) ? ' label="' . esc_attr($source['label']) . '"' : ''; ?>>
@@ -165,7 +166,13 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
         // Initialize Plyr for each element (if not already initialized)
         const plyrOptions = {
             // keep fullscreen options as before
-            fullscreen: { enabled: true, fallback: true, iosNative: true, container: null }
+            fullscreen: { enabled: true, fallback: true, iosNative: true, container: null },
+            // Ensure captions work in native fullscreen
+            captions: {
+                active: true,
+                language: 'auto',
+                update: true
+            }
         };
 
         const playerEls = Array.from(document.querySelectorAll('.film-player'));
