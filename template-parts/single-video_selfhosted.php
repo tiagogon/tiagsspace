@@ -21,7 +21,8 @@ echo '<!-- Video Meta: ' . esc_html(print_r($video_meta, true)) . ' -->';
 if ($original_url) {
     $video_sources[] = [
         'src'   => esc_url($original_url),
-        'label' => intval($video_meta['height']) . 'p', // Use height as label
+        'label' => intval($video_meta['height']) . 'p',
+        'size'  => intval($video_meta['height']), // Plyr uses this for quality detection
     ];
 }
 
@@ -32,6 +33,20 @@ $children = get_children([
     'post_mime_type' => 'video',
     'numberposts'    => -1,
 ]);
+
+if ($children) {
+    foreach ($children as $child) {
+        $child_url = wp_get_attachment_url($child->ID);
+        $child_meta = wp_get_attachment_metadata($child->ID);
+        if ($child_url && $child_meta) {
+            $video_sources[] = [
+                'src'   => esc_url($child_url),
+                'label' => intval($child_meta['height']) . 'p',
+                'size'  => intval($child_meta['height']),
+            ];
+        }
+    }
+}
 
 // Get captions from KGVID plugin metadata
 $caption_tracks = [];
@@ -107,14 +122,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                 
                 >
                     <?php foreach ($video_sources as $source) : ?>
-                        <source src="<?php echo $source['src']; ?>" type="video/mp4"
-                            <?php
-                            // If it's a labeled resolution (e.g. 360p), provide `size`
-                            if (preg_match('/^(\d{3,4})p$/', $source['label'], $m)) {
-                                echo ' size="' . esc_attr($m[1]) . '"';
-                            }
-                            ?>
-                        >
+                        <source src="<?php echo $source['src']; ?>" type="video/mp4" size="<?php echo esc_attr($source['size']); ?>"<?php echo !empty($source['label']) ? ' label="' . esc_attr($source['label']) . '"' : ''; ?>>
                     <?php endforeach; ?>
                     
                     <?php // Output caption tracks if available ?>
