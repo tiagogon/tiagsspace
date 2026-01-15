@@ -130,7 +130,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     <?php // Output caption tracks if available ?>
                     <?php if (!empty($caption_tracks)) : ?>
                         <?php foreach ($caption_tracks as $index => $track) : ?>
-                            <track kind="<?php echo $track['kind']; ?>" src="<?php echo $track['src']; ?>" srclang="<?php echo $track['srclang']; ?>" label="<?php echo $track['label']; ?>"<?php echo ($index === 0) ? ' default' : ''; ?>>
+                            <track kind="<?php echo $track['kind']; ?>" src="<?php echo $track['src']; ?>" srclang="<?php echo $track['srclang']; ?>" label="<?php echo $track['label']; ?>"<?php echo ($index === 0) ? ' default' : ''; ?> crossorigin="anonymous">
                         <?php endforeach; ?>
                     <?php endif; ?>
                     
