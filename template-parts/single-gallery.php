@@ -470,6 +470,7 @@ if (have_rows('extra_content')) {
                     if ($attachmen->post_mime_type != "application/octet-stream") {
 
                         // Original image File
+	                    $attachmen_thumb_srcset = "";
 	                    $attachmen_thumb_attributes = wp_get_attachment_image_src($attachmen->ID, false);
                       if ($attachmen_thumb_attributes) {
                         $attachmen_thumb_srcset = $attachmen_thumb_attributes[0]." ".$attachmen_thumb_attributes[1]."w";

@@ -31,9 +31,9 @@ if ($background_image) {
 	<?PHP
 	// Video
 	if (get_field('video_embed')) {
-		get_template_part( 'template-parts/single', 'video_embed' );
+		get_template_part( 'template-parts/single', 'video-player' );
 	}elseif (get_field('self_host_film')){
-		get_template_part( 'template-parts/single', 'video_selfhosted' );
+		get_template_part( 'template-parts/single', 'video-player' );
 	}
 
 	// if Gallery is Activated
