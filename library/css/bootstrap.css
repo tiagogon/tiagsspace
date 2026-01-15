@@ -5801,6 +5801,11 @@ video.plyr-thumbnail-front {
 .thumbnail.media-audio .plyr--audio .plyr__controls .plyr__time {
   display: none; }
 
+.plyr__captions {
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.4; }
+
 #collapseMenu {
   position: fixed;
   z-index: 999;

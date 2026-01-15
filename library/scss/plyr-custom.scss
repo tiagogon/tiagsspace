@@ -293,3 +293,9 @@ video.plyr-thumbnail-front {
         }
     }
 }
+// Caption styling - match H1 font size
+.plyr__captions {
+    font-size: $h1-font-size;
+    font-weight: 600;
+    line-height: 1.4;
+}
