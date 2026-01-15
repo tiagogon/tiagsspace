@@ -39,40 +39,9 @@ $kgvid_meta = get_post_meta($self_host_film_id, '_kgvid-meta', true);
 if ($kgvid_meta && isset($kgvid_meta['track']) && is_array($kgvid_meta['track'])) {
     foreach ($kgvid_meta['track'] as $track) {
         if (is_array($track) && isset($track['src'])) {
-            $track_src = esc_url($track['src']);
-            
-            // Try to convert SRT to WebVTT if the file is .srt
-            if (strtolower(pathinfo($track['src'], PATHINFO_EXTENSION)) === 'srt') {
-                // Attempt to read and convert the SRT file
-                $response = wp_remote_get($track['src'], [
-                    'timeout'    => 5,
-                    'sslverify'  => false,
-                ]);
-                
-                if (!is_wp_error($response)) {
-                    $srt_content = wp_remote_retrieve_body($response);
-                    if (!empty($srt_content)) {
-                        // Convert SRT to WebVTT: just prepend WEBVTT header
-                        // SRT format: 1\n00:00:00,000 --> 00:00:02,000\nSubtitle text\n
-                        // WebVTT format: WEBVTT\n\n00:00:00.000 --> 00:00:02.000\nSubtitle text\n
-                        $webvtt_content = 'WEBVTT' . "\n\n" . $srt_content;
-                        
-                        // Store in a transient cache to serve via a custom endpoint
-                        $cache_key = 'srt_webvtt_' . md5($track['src']);
-                        set_transient($cache_key, $webvtt_content, 24 * HOUR_IN_SECONDS);
-                        
-                        // Create URL to our custom endpoint
-                        $track_src = add_query_arg([
-                            'action'   => 'get_caption_webvtt',
-                            'cache_id' => md5($track['src']),
-                        ], admin_url('admin-ajax.php'));
-                    }
-                }
-            }
-            
             $caption_tracks[] = [
-                'src'     => $track_src,
-                'srclang' => esc_attr(strtolower($track['srclang'] ?? 'en')), // Ensure lowercase for Plyr
+                'src'     => esc_url($track['src']),
+                'srclang' => esc_attr(strtolower($track['srclang'] ?? 'en')),
                 'label'   => esc_html($track['label'] ?? 'Captions'),
                 'kind'    => esc_attr($track['kind'] ?? 'captions'),
             ];
@@ -222,126 +191,8 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     el.plyr._adaptiveEnabled = true;
                     el.plyr._userSelectedQuality = false;
 
-                    // Ensure tracks are registered with Plyr
-                    try {
-                        const videoEl = el;
-                        const trackEls = Array.from(videoEl.querySelectorAll('track'));
-                        if (trackEls.length > 0) {
-                            console.log('[plyr-captions] Found ' + trackEls.length + ' track elements');
-                            trackEls.forEach((t, i) => {
-                                console.log('[plyr-captions] Track ' + i + ':', {
-                                    kind: t.getAttribute('kind'),
-                                    src: t.getAttribute('src'),
-                                    srclang: t.getAttribute('srclang'),
-                                    label: t.getAttribute('label'),
-                                    default: t.hasAttribute('default')
-                                });
-                                // Test if track file is accessible
-                                fetch(t.getAttribute('src'), {method: 'HEAD'})
-                                    .then(r => console.log('[plyr-captions] Track ' + i + ' file accessible:', r.status === 200))
-                                    .catch(e => console.log('[plyr-captions] Track ' + i + ' file ERROR:', e.message));
-                            });
-                            
-                            // Plyr should auto-detect tracks from the DOM
-                            if (el.plyr && el.plyr.on) {
-                                el.plyr.on('ready', function() {
-                                    try {
-                                        console.log('[plyr-captions] Plyr ready event fired');
-                                        // Plyr 3.7.8 doesn't have captions.getTracks(), but tracks should be auto-detected
-                                        // Check the text tracks directly via the video element
-                                        const videoElement = el.plyr.elements && el.plyr.elements.media || el;
-                                        if (videoElement && videoElement.textTracks) {
-                                            console.log('[plyr-captions] HTML5 TextTracks available:', videoElement.textTracks.length);
-                                            for (let i = 0; i < videoElement.textTracks.length; i++) {
-                                                const track = videoElement.textTracks[i];
-                                                console.log('[plyr-captions] TextTrack ' + i + ':', {
-                                                    kind: track.kind,
-                                                    label: track.label,
-                                                    language: track.language,
-                                                    mode: track.mode
-                                                });
-                                            }
-                                        }
-                                        
-                                        // Activate captions and set first track to showing
-                                        if (videoElement && videoElement.textTracks && videoElement.textTracks.length > 0) {
-                                            // Enable all caption/subtitle tracks
-                                            for (let i = 0; i < videoElement.textTracks.length; i++) {
-                                                const track = videoElement.textTracks[i];
-                                                // Set captions/subtitles to showing, others to hidden
-                                                if (track.kind === 'captions' || track.kind === 'subtitles') {
-                                                    track.mode = 'showing';
-                                                    console.log('[plyr-captions] Set track ' + i + ' (' + track.label + ') to showing');
-                                                } else {
-                                                    track.mode = 'hidden';
-                                                }
-                                            }
-                                            
-                                            // Try to access Plyr's caption controls and trigger display
-                                            // Look for captions button in the controls
-                                            const captionsBtn = el.plyr.elements && el.plyr.elements.container && 
-                                                el.plyr.elements.container.querySelector('button[data-plyr="captions"]');
-                                            if (captionsBtn) {
-                                                console.log('[plyr-captions] Found captions button, marking as active');
-                                                // Simulate caption being enabled by adding is-active class
-                                                try { captionsBtn.classList.add('is-active'); } catch (e) {}
-                                                try { captionsBtn.setAttribute('aria-pressed', 'true'); } catch (e) {}
-                                            }
-                                            
-                                            // Dispatch a change event on the video element so Plyr knows tracks changed
-                                            try {
-                                                const event = new Event('loadedmetadata', { bubbles: true });
-                                                videoElement.dispatchEvent(event);
-                                                console.log('[plyr-captions] Dispatched loadedmetadata event');
-                                            } catch (e) {
-                                                console.log('[plyr-captions] Could not dispatch event:', e.message);
-                                            }
-                                            
-                                            // Check if caption display is being hidden by CSS
-                                            setTimeout(() => {
-                                                try {
-                                                    const captionDisplay = el.plyr.elements && el.plyr.elements.container && 
-                                                        el.plyr.elements.container.querySelector('.plyr__captions');
-                                                    if (captionDisplay) {
-                                                        const styles = window.getComputedStyle(captionDisplay);
-                                                        console.log('[plyr-captions] Caption display element found, computed styles:', {
-                                                            display: styles.display,
-                                                            visibility: styles.visibility,
-                                                            opacity: styles.opacity,
-                                                            height: styles.height
-                                                        });
-                                                    } else {
-                                                        console.log('[plyr-captions] No .plyr__captions element found in DOM');
-                                                    }
-                                                } catch (e) {
-                                                    console.log('[plyr-captions] Error checking caption display styles:', e.message);
-                                                }
-                                                
-                                                // Check if TextTrack cues are loaded
-                                                try {
-                                                    if (videoElement && videoElement.textTracks) {
-                                                        console.log('[plyr-captions] Checking TextTrack cues...');
-                                                        for (let i = 0; i < videoElement.textTracks.length; i++) {
-                                                            const track = videoElement.textTracks[i];
-                                                            console.log('[plyr-captions] Track ' + i + ' cues count:', track.cues ? track.cues.length : 'N/A');
-                                                        }
-                                                    }
-                                                } catch (e) {
-                                                    console.log('[plyr-captions] Error checking cues:', e.message);
-                                                }
-                                            }, 300);
-                                        }
-                                    } catch (e) {
-                                        console.log('[plyr-captions] Error in ready handler:', e.message);
-                                    }
-                                });
-                            }
-                        } else {
-                            console.log('[plyr-captions] NO track elements found in video');
-                        }
-                    } catch (ee) {
-                        console.log('[plyr-captions] Error registering tracks:', ee);
-                    }
+                    // Plyr auto-detects track elements from the HTML5 video tag
+                    // No additional configuration needed
 
                     // collect available sources once and keep them for later switches
                     try {

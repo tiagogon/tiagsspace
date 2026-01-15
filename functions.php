@@ -2287,29 +2287,5 @@ function tiagsspace_exclude_hidden_adjacent_where( $where ) {
 add_filter( 'get_previous_post_where', 'tiagsspace_exclude_hidden_adjacent_where' );
 add_filter( 'get_next_post_where', 'tiagsspace_exclude_hidden_adjacent_where' );
 
-// AJAX handler to serve converted WebVTT captions
-add_action('wp_ajax_nopriv_get_caption_webvtt', 'tiagsspace_get_caption_webvtt');
-add_action('wp_ajax_get_caption_webvtt', 'tiagsspace_get_caption_webvtt');
-
-function tiagsspace_get_caption_webvtt() {
-    $cache_id = isset($_GET['cache_id']) ? sanitize_text_field($_GET['cache_id']) : '';
-    
-    if (empty($cache_id)) {
-        wp_die('Invalid request', 'Invalid request', ['response' => 400]);
-    }
-    
-    $cache_key = 'srt_webvtt_' . $cache_id;
-    $webvtt_content = get_transient($cache_key);
-    
-    if (empty($webvtt_content)) {
-        wp_die('Caption not found', 'Not found', ['response' => 404]);
-    }
-    
-    // Send WebVTT content with proper MIME type
-    header('Content-Type: text/vtt; charset=utf-8');
-    header('Cache-Control: public, max-age=86400');
-    echo $webvtt_content;
-    wp_die();
-}
 
 // END -- don't add any space after php close ?>
