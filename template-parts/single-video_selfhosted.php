@@ -71,7 +71,12 @@ $plyr_config = [
     ],
     // only include settings you want users to see (omit 'speed')
     'settings' => ['captions', 'quality'],
-    'captions' => ['active' => true, 'language' => 'auto'],
+    // Enable captions and set language - Plyr 3.7.8 will auto-detect tracks from <track> elements
+    'captions' => [
+        'active'   => true,
+        'language' => 'auto',
+        'update'   => true
+    ],
     'ratio'    => '16:9',
     'keyboard' => ['focused' => true, 'global' => false],
     'tooltips' => ['controls' => false, 'seek' => false],
@@ -206,21 +211,36 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                                     .catch(e => console.log('[plyr-captions] Track ' + i + ' file ERROR:', e.message));
                             });
                             
-                            // Plyr should auto-detect tracks, but we'll force a re-render of the captions menu
+                            // Plyr should auto-detect tracks from the DOM
                             if (el.plyr && el.plyr.on) {
                                 el.plyr.on('ready', function() {
                                     try {
                                         console.log('[plyr-captions] Plyr ready event fired');
-                                        // Check captions state
-                                        console.log('[plyr-captions] Captions enabled:', el.plyr.captions && el.plyr.captions.enabled);
-                                        console.log('[plyr-captions] Caption tracks:', el.plyr.captions ? el.plyr.captions.getTracks() : 'N/A');
-                                        // Try to enable captions
-                                        if (el.plyr.captions && el.plyr.captions.enable) {
-                                            el.plyr.captions.enable(true);
-                                            console.log('[plyr-captions] Attempted to enable captions');
+                                        // Plyr 3.7.8 doesn't have captions.getTracks(), but tracks should be auto-detected
+                                        // Check the text tracks directly via the video element
+                                        const videoElement = el.plyr.elements && el.plyr.elements.media || el;
+                                        if (videoElement && videoElement.textTracks) {
+                                            console.log('[plyr-captions] HTML5 TextTracks available:', videoElement.textTracks.length);
+                                            for (let i = 0; i < videoElement.textTracks.length; i++) {
+                                                const track = videoElement.textTracks[i];
+                                                console.log('[plyr-captions] TextTrack ' + i + ':', {
+                                                    kind: track.kind,
+                                                    label: track.label,
+                                                    language: track.language,
+                                                    mode: track.mode
+                                                });
+                                            }
+                                        }
+                                        // In Plyr 3.7.8, captions are enabled via config and the element's default attribute
+                                        console.log('[plyr-captions] Checking Plyr config...');
+                                        // Trigger UI update to show captions in settings
+                                        if (videoElement && videoElement.textTracks && videoElement.textTracks.length > 0) {
+                                            // Set first track to show as active
+                                            videoElement.textTracks[0].mode = 'showing';
+                                            console.log('[plyr-captions] Activated first track');
                                         }
                                     } catch (e) {
-                                        console.log('[plyr-captions] Error in ready handler:', e);
+                                        console.log('[plyr-captions] Error in ready handler:', e.message);
                                     }
                                 });
                             }
