@@ -13,9 +13,21 @@ $args = array(
     // 'post_mime_type'    => 'image', // Make sure it doesn't pull other resources, like videos
     'post_parent'       => $post->ID, // Important part - ensures the associated images are loaded
     'post_status'       => null,
-    'post_type'         => 'attachment'
+    'post_type'         => 'attachment',
+    'meta_query'        => array(
+        'relation' => 'OR',
+        array(
+            'key'     => 'remove_from_default_gallery',
+            'compare' => 'NOT EXISTS',
+        ),
+        array(
+            'key'     => 'remove_from_default_gallery',
+            'value'   => '1',
+            'compare' => '!=',
+        ),
+    ),
 );
-$attachmens = get_children( $args );
+$attachmens = get_posts( $args );
 
 
 if($attachmens){
@@ -329,9 +341,6 @@ if (have_rows('extra_content')) {
 
             // loop the atached images
             foreach($attachmens as $attachmen){
-
-            	//Check IF atachment is not to be removed
-            	if (!get_field('remove_from_default_gallery',$attachmen->ID)) {
 
                     $count_item++;
 
@@ -929,8 +938,6 @@ if (have_rows('extra_content')) {
 
                   	<?php } // end if
                   } ?>
-
-                <?php } // end IF image is not to be removed ?>
 
                 <?php wp_reset_postdata(); ?>
 
