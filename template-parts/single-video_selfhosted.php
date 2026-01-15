@@ -100,7 +100,8 @@ $plyr_config = [
     'ads'      => ['enabled' => false],
     'previewThumbnails' => ['enabled' => false],
     // fullscreen can be a nested array; null will become JSON null
-    'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => true, 'container' => null],
+    // Use Plyr's fullscreen instead of native iOS to preserve captions
+    'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => false, 'container' => null],
 ];
 
 // Encode once to JSON and escape for inclusion in an HTML attribute
