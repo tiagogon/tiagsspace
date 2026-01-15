@@ -71,6 +71,7 @@ $plyr_config = [
     ],
     // only include settings you want users to see (omit 'speed')
     'settings' => ['captions', 'quality'],
+    'captions' => ['active' => true, 'language' => 'auto'],
     'ratio'    => '16:9',
     'keyboard' => ['focused' => true, 'global' => false],
     'tooltips' => ['controls' => false, 'seek' => false],
@@ -184,6 +185,31 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     // also attach flag to the Plyr instance for robustness
                     el.plyr._adaptiveEnabled = true;
                     el.plyr._userSelectedQuality = false;
+
+                    // Ensure tracks are registered with Plyr
+                    try {
+                        const videoEl = el;
+                        const trackEls = Array.from(videoEl.querySelectorAll('track'));
+                        if (trackEls.length > 0) {
+                            // Log that we found tracks
+                            console.log('[plyr-adaptive] Found ' + trackEls.length + ' track elements');
+                            // Plyr should auto-detect tracks, but we'll force a re-render of the captions menu
+                            if (el.plyr && el.plyr.on) {
+                                el.plyr.on('ready', function() {
+                                    try {
+                                        // Trigger caption button update
+                                        if (el.plyr.captions) {
+                                            console.log('[plyr-adaptive] Captions available:', el.plyr.captions.getCues ? 'YES' : 'NO');
+                                        }
+                                    } catch (e) {
+                                        console.log('[plyr-adaptive] Error checking captions:', e);
+                                    }
+                                });
+                            }
+                        }
+                    } catch (ee) {
+                        console.log('[plyr-adaptive] Error registering tracks:', ee);
+                    }
 
                     // collect available sources once and keep them for later switches
                     try {
