@@ -41,7 +41,7 @@ if ($kgvid_meta && isset($kgvid_meta['track']) && is_array($kgvid_meta['track'])
         if (is_array($track) && isset($track['src'])) {
             $caption_tracks[] = [
                 'src'     => esc_url($track['src']),
-                'srclang' => esc_attr($track['srclang'] ?? 'en'),
+                'srclang' => esc_attr(strtolower($track['srclang'] ?? 'en')), // Ensure lowercase for Plyr
                 'label'   => esc_html($track['label'] ?? 'Captions'),
                 'kind'    => esc_attr($track['kind'] ?? 'captions'),
             ];
@@ -114,14 +114,7 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                     <?php // Output caption tracks if available ?>
                     <?php if (!empty($caption_tracks)) : ?>
                         <?php foreach ($caption_tracks as $index => $track) : ?>
-                            <track 
-                                kind="<?php echo $track['kind']; ?>" 
-                                src="<?php echo $track['src']; ?>" 
-                                srclang="<?php echo $track['srclang']; ?>" 
-                                label="<?php echo $track['label']; ?>"
-                                <?php echo ($index === 0) ? 'default' : ''; // Mark first track as default
-                                ?>
-                            >
+                            <track kind="<?php echo $track['kind']; ?>" src="<?php echo $track['src']; ?>" srclang="<?php echo $track['srclang']; ?>" label="<?php echo $track['label']; ?>"<?php echo ($index === 0) ? ' default' : ''; ?>>
                         <?php endforeach; ?>
                     <?php endif; ?>
                     
