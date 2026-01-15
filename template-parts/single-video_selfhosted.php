@@ -285,6 +285,65 @@ $json = wp_json_encode($plyr_config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNI
                                                 } catch (e) {
                                                     console.log('[plyr-captions] Error checking caption display styles:', e.message);
                                                 }
+                                                
+                                                // Check if TextTrack cues are loaded
+                                                try {
+                                                    if (videoElement && videoElement.textTracks) {
+                                                        console.log('[plyr-captions] Checking TextTrack cues...');
+                                                        for (let i = 0; i < videoElement.textTracks.length; i++) {
+                                                            const track = videoElement.textTracks[i];
+                                                            console.log('[plyr-captions] Track ' + i + ' cues count:', track.cues ? track.cues.length : 'N/A');
+                                                            if (track.cues && track.cues.length > 0) {
+                                                                // Log first few cues as sample
+                                                                for (let j = 0; j < Math.min(2, track.cues.length); j++) {
+                                                                    const cue = track.cues[j];
+                                                                    console.log('[plyr-captions] Track ' + i + ', Cue ' + j + ':', {
+                                                                        startTime: cue.startTime,
+                                                                        endTime: cue.endTime,
+                                                                        text: cue.text.substring(0, 50) + (cue.text.length > 50 ? '...' : '')
+                                                                    });
+                                                                }
+                                                            } else {
+                                                                console.log('[plyr-captions] Track ' + i + ' has no cues loaded - trying to fetch and parse manually');
+                                                                
+                                                                // If cues aren't loaded, try fetching the file and parsing it
+                                                                const trackElement = trackEls[i];
+                                                                if (trackElement) {
+                                                                    const trackSrc = trackElement.getAttribute('src');
+                                                                    if (trackSrc) {
+                                                                        fetch(trackSrc)
+                                                                            .then(r => r.text())
+                                                                            .then(srtText => {
+                                                                                // Check if this is SRT format and convert to WebVTT if needed
+                                                                                if (!srtText.trim().startsWith('WEBVTT')) {
+                                                                                    console.log('[plyr-captions] Converting SRT to WebVTT format for track ' + i);
+                                                                                    // SRT to WebVTT conversion
+                                                                                    const webvttText = 'WEBVTT\n\n' + srtText.replace(/\r\n|\r/g, '\n');
+                                                                                    
+                                                                                    // Create a blob with WebVTT content
+                                                                                    const blob = new Blob([webvttText], { type: 'text/vtt' });
+                                                                                    const url = URL.createObjectURL(blob);
+                                                                                    
+                                                                                    // Update the track src to point to the converted WebVTT
+                                                                                    trackElement.src = url;
+                                                                                    videoElement.textContent = '';  // Force reload
+                                                                                    videoElement.load();
+                                                                                    console.log('[plyr-captions] Updated track ' + i + ' to WebVTT format');
+                                                                                } else {
+                                                                                    console.log('[plyr-captions] Track ' + i + ' is already WebVTT format');
+                                                                                }
+                                                                            })
+                                                                            .catch(err => {
+                                                                                console.log('[plyr-captions] Error fetching track ' + i + ':', err.message);
+                                                                            });
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } catch (e) {
+                                                    console.log('[plyr-captions] Error checking cues:', e.message);
+                                                }
                                             }, 300);
                                         }
                                     } catch (e) {
