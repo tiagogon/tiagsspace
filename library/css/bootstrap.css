@@ -6441,7 +6441,8 @@ address {
     min-height: 75vh; } }
 .container-video {
   padding-right: 0px;
-  padding-left: 0px; }
+  padding-left: 0px;
+  padding-bottom: 20px; }
 
 .player .captions > span {
   font-size: 0.9em !important;
