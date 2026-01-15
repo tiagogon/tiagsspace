@@ -5802,9 +5802,15 @@ video.plyr-thumbnail-front {
   display: none; }
 
 .plyr__captions {
-  font-size: 2.5rem;
+  font-size: 30px;
   font-weight: 600;
   line-height: 1.4; }
+  @media (min-width: 768px) {
+    .plyr__captions {
+      font-size: 33px; } }
+  @media (min-width: 1200px) {
+    .plyr__captions {
+      font-size: 36px; } }
 
 #collapseMenu {
   position: fixed;

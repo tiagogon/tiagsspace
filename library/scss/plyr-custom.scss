@@ -293,9 +293,19 @@ video.plyr-thumbnail-front {
         }
     }
 }
-// Caption styling - match H1 font size
+// Caption styling - responsive sizing
 .plyr__captions {
-    font-size: $h1-font-size;
+    font-size: 30px; // Base size for mobile
     font-weight: 600;
     line-height: 1.4;
+    
+    // Tablet and up
+    @media (min-width: 768px) {
+        font-size: 33px;
+    }
+    
+    // Desktop and up
+    @media (min-width: 1200px) {
+        font-size: 36px;
+    }
 }
