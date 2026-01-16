@@ -134,6 +134,7 @@ if (!function_exists('render_plyr_video_player')) {
             'ads'      => ['enabled' => false],
             'previewThumbnails' => ['enabled' => false],
             'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => false, 'container' => null],
+            'pip'      => ['enabled' => false],
         ];
         
         // Apply Film Player Options
@@ -181,6 +182,7 @@ if (!function_exists('render_plyr_video_player')) {
             data-plyr-config='<?php echo esc_attr($json); ?>'
             webkit-playsinline
             playsinline
+            disablePictureInPicture
             <?php if (in_array('muted', $film_player_options)) : ?>muted<?php endif; ?>
             <?php if (in_array('autoplay', $film_player_options)) : ?>autoplay<?php endif; ?>
             <?php if (in_array('loop', $film_player_options)) : ?>loop<?php endif; ?>
@@ -289,6 +291,7 @@ if (!function_exists('render_plyr_external_video')) {
             'ads'      => ['enabled' => false],
             'previewThumbnails' => ['enabled' => false],
             'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => false, 'container' => null],
+            'pip'      => ['enabled' => false],
         ];
         
         // Apply Film Player Options
