@@ -133,7 +133,7 @@ if (!function_exists('render_plyr_video_player')) {
             'quality'  => ['default' => 1080],
             'ads'      => ['enabled' => false],
             'previewThumbnails' => ['enabled' => false],
-            'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => false, 'container' => null],
+            'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => true, 'container' => null],
             'pip'      => ['enabled' => false],
         ];
         
