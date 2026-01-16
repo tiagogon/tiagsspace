@@ -8,9 +8,12 @@ $plyr-color-main: transparent !default;
 $plyr-audio-control-bg-hover: $plyr-tab-focus-default-color !default;
 
 
-.plyr--audio .plyr__controls {
-    background: transparent;
-    color: $dark;
+
+
+.plyr--video {
+    .plyr__controls {
+        background: none;
+    }
 }
 
 // Change default plyr background

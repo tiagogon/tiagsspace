@@ -5615,9 +5615,8 @@ ol, ul, dl {
 figure {
   margin: 0; }
 
-.plyr--audio .plyr__controls {
-  background: transparent;
-  color: #000; }
+.plyr--video .plyr__controls {
+  background: none; }
 
 .plyr {
   --plyr-control-background: $white;
