@@ -5763,34 +5763,6 @@ video.plyr-thumbnail-front {
 .background-w-dark-color .plyr--full-ui input[type='range'] {
   color: #fff; }
 
-.plyr__progress {
-  /* let the progress area flex between controls instead of forcing width:100%
-       prevents it from overlapping other controls (like the running time) */
-  flex: 1 1 auto;
-  min-width: 0;
-  /* allow it to shrink inside flex containers */
-  margin: 0 calc(var(--plyr-control-spacing, 10px) / 2);
-  align-self: center; }
-
-/* ensure the time label doesn't get covered and keeps its intrinsic size */
-.plyr__time {
-  font-size: 16px;
-  flex: 0 0 auto;
-  margin-left: calc(var(--plyr-control-spacing, 10px) / 2);
-  white-space: nowrap;
-  z-index: 2; }
-
-.post-content .plyr--audio .plyr__controls {
-  padding-left: 0;
-  padding-right: 0; }
-  .post-content .plyr--audio .plyr__controls > .plyr__control:first-child,
-  .post-content .plyr--audio .plyr__controls > .plyr__control:first-child + [data-plyr='pause'] {
-    padding-left: 0; }
-  .post-content .plyr--audio .plyr__controls .plyr__volume {
-    display: none; }
-  .post-content .plyr--audio .plyr__controls .plyr__menu {
-    display: none; }
-
 .thumbnail.media-audio .plyr {
   position: absolute;
   bottom: 0; }
