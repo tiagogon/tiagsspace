@@ -298,24 +298,24 @@ video.plyr-thumbnail-front {
     font-size: 16px; // xs: mobile base
     font-weight: 600;
     line-height: 1.4;
-    bottom: 20px;
+    bottom: 0;
     
     // sm: Small devices (landscape phones, 576px and up)
     @include media-breakpoint-up(sm) {
         font-size: 20px;
-        bottom: 25px;
+        bottom: 10px;
     }
     
     // md: Medium devices (tablets, 768px and up)
     @include media-breakpoint-up(md) {
         font-size: 26px;
-        bottom: 30px;
+        bottom: 20px;
     }
     
     // lg: Large devices (desktops, 992px and up)
     @include media-breakpoint-up(lg) {
         font-size: 32px;
-        bottom: 35px;
+        bottom: 30px;
     }
     
     // xl: Extra large devices (large desktops, 1200px and up)
@@ -331,19 +331,19 @@ video.plyr-thumbnail-front {
     // sm: Small devices (landscape phones, 576px and up)
     @include media-breakpoint-up(sm) {
         font-size: 20px;
-        bottom: 25px;
+        bottom: 10px;
     }
     
     // md: Medium devices (tablets, 768px and up)
     @include media-breakpoint-up(md) {
         font-size: 26px;
-        bottom: 30px;
+        bottom: 20px;
     }
     
     // lg: Large devices (desktops, 992px and up)
     @include media-breakpoint-up(lg) {
         font-size: 32px;
-        bottom: 35px;
+        bottom: 30px;
     }
     
     // xl: Extra large devices (large desktops, 1200px and up)

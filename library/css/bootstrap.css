@@ -5777,19 +5777,19 @@ video.plyr-thumbnail-front {
   font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
-  bottom: 20px; }
+  bottom: 0; }
   @media (min-width: 576px) {
     .plyr__captions {
       font-size: 20px;
-      bottom: 25px; } }
+      bottom: 10px; } }
   @media (min-width: 768px) {
     .plyr__captions {
       font-size: 26px;
-      bottom: 30px; } }
+      bottom: 20px; } }
   @media (min-width: 992px) {
     .plyr__captions {
       font-size: 32px;
-      bottom: 35px; } }
+      bottom: 30px; } }
   @media (min-width: 1200px) {
     .plyr__captions {
       font-size: 38px;
@@ -5799,17 +5799,17 @@ video.plyr-thumbnail-front {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
     font-size: 20px;
-    bottom: 25px; } }
+    bottom: 10px; } }
 @media (min-width: 768px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
     font-size: 26px;
-    bottom: 30px; } }
+    bottom: 20px; } }
 @media (min-width: 992px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
     font-size: 32px;
-    bottom: 35px; } }
+    bottom: 30px; } }
 @media (min-width: 1200px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
