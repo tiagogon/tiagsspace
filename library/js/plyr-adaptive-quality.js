@@ -14,9 +14,20 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Detect iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    
     // Plyr configuration for self-hosted videos
+    // iOS: use native fullscreen for proper browser bar hiding + native captions
+    // Other browsers: use standard Fullscreen API with custom captions
     const plyrOptions = {
-        fullscreen: { enabled: true, fallback: true, iosNative: true, container: null },
+        fullscreen: { 
+            enabled: true, 
+            fallback: true, 
+            iosNative: isIOS, // Native only on iOS for true fullscreen
+            container: null 
+        },
         captions: {
             active: true,
             language: 'auto',
