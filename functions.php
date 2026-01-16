@@ -37,9 +37,9 @@ function tiagsspace_enqueue_assets() {
     $template_dir = get_template_directory_uri();
 
     // ----- CSS ----- (order matters)
-    wp_enqueue_style('bootstrap', $template_dir . '/library/css/bootstrap.css', [], null);
-    wp_enqueue_style('swiper', $template_dir . '/library/js/swiper/swiper-bundle.min.css', [], null);
     wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], null);
+    wp_enqueue_style('swiper', $template_dir . '/library/js/swiper/swiper-bundle.min.css', [], null);
+    wp_enqueue_style('bootstrap', $template_dir . '/library/css/bootstrap.css', [], null);
 
     // ----- jQuery -----
     // Use local jQuery to match existing theme expectations

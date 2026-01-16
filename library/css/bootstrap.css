@@ -5812,6 +5812,19 @@ video.plyr-thumbnail-front {
     .plyr__captions {
       font-size: 36px; } }
 
+@media (min-width: 768px) {
+  .plyr:fullscreen .plyr__captions,
+  .plyr--fullscreen-fallback .plyr__captions {
+    font-size: 33px; } }
+@media (min-width: 1024px) {
+  .plyr:fullscreen .plyr__captions,
+  .plyr--fullscreen-fallback .plyr__captions {
+    font-size: 36px; } }
+@media (min-width: 1200px) {
+  .plyr:fullscreen .plyr__captions,
+  .plyr--fullscreen-fallback .plyr__captions {
+    font-size: 40px; } }
+
 #collapseMenu {
   position: fixed;
   z-index: 999;

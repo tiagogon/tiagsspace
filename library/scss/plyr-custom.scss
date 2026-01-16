@@ -309,3 +309,19 @@ video.plyr-thumbnail-front {
         font-size: 36px;
     }
 }
+
+// Override fullscreen caption sizes as well
+.plyr:fullscreen .plyr__captions,
+.plyr--fullscreen-fallback .plyr__captions {
+    @media (min-width: 768px) {
+        font-size: 33px;
+    }
+    
+    @media (min-width: 1024px) {
+        font-size: 36px;
+    }
+    
+    @media (min-width: 1200px) {
+        font-size: 40px; // Even larger in fullscreen on big screens
+    }
+}
