@@ -16,7 +16,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Plyr configuration for self-hosted videos
     const plyrOptions = {
-        fullscreen: { enabled: true, fallback: true, iosNative: false, container: null },
+        fullscreen: { enabled: true, fallback: true, iosNative: true, container: null },
         captions: {
             active: true,
             language: 'auto',
