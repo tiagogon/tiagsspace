@@ -5804,7 +5804,8 @@ video.plyr-thumbnail-front {
 .plyr__captions {
   font-size: 30px;
   font-weight: 600;
-  line-height: 1.4; }
+  line-height: 1.4;
+  bottom: 40px; }
   @media (min-width: 768px) {
     .plyr__captions {
       font-size: 33px; } }
@@ -5815,15 +5816,18 @@ video.plyr-thumbnail-front {
 @media (min-width: 768px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 33px; } }
+    font-size: 33px;
+    bottom: 40px; } }
 @media (min-width: 1024px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 36px; } }
+    font-size: 36px;
+    bottom: 40px; } }
 @media (min-width: 1200px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 40px; } }
+    font-size: 40px;
+    bottom: 40px; } }
 
 .plyr__caption {
   line-height: 201%;

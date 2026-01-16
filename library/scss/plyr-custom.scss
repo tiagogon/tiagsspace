@@ -298,6 +298,7 @@ video.plyr-thumbnail-front {
     font-size: 30px; // Base size for mobile
     font-weight: 600;
     line-height: 1.4;
+      bottom: 40px;
     
     // Tablet and up
     @media (min-width: 768px) {
@@ -315,14 +316,17 @@ video.plyr-thumbnail-front {
 .plyr--fullscreen-fallback .plyr__captions {
     @media (min-width: 768px) {
         font-size: 33px;
+          bottom: 40px;
     }
     
     @media (min-width: 1024px) {
         font-size: 36px;
+          bottom: 40px;
     }
     
     @media (min-width: 1200px) {
         font-size: 40px; // Even larger in fullscreen on big screens
+          bottom: 40px;
     }
 
 }
