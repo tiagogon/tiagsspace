@@ -5774,35 +5774,46 @@ video.plyr-thumbnail-front {
   display: none; }
 
 .plyr__captions {
-  font-size: 30px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
   bottom: 40px; }
+  @media (min-width: 576px) {
+    .plyr__captions {
+      font-size: 20px; } }
   @media (min-width: 768px) {
     .plyr__captions {
-      font-size: 33px; } }
+      font-size: 26px; } }
+  @media (min-width: 992px) {
+    .plyr__captions {
+      font-size: 32px; } }
   @media (min-width: 1200px) {
     .plyr__captions {
-      font-size: 36px; } }
+      font-size: 38px; } }
 
+@media (min-width: 576px) {
+  .plyr:fullscreen .plyr__captions,
+  .plyr--fullscreen-fallback .plyr__captions {
+    font-size: 20px;
+    bottom: 40px; } }
 @media (min-width: 768px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 33px;
+    font-size: 26px;
     bottom: 40px; } }
-@media (min-width: 1024px) {
+@media (min-width: 992px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 36px;
+    font-size: 32px;
     bottom: 40px; } }
 @media (min-width: 1200px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 40px;
+    font-size: 38px;
     bottom: 40px; } }
 
 .plyr__caption {
-  line-height: 201%;
+  line-height: 200%;
   padding: .1em 0.5em; }
 
 #collapseMenu {

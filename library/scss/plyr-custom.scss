@@ -293,45 +293,64 @@ video.plyr-thumbnail-front {
         }
     }
 }
-// Caption styling - responsive sizing
+// Caption styling - responsive sizing (Bootstrap breakpoints)
 .plyr__captions {
-    font-size: 30px; // Base size for mobile
+    font-size: 16px; // xs: mobile base
     font-weight: 600;
     line-height: 1.4;
-      bottom: 40px;
+    bottom: 40px;
     
-    // Tablet and up
-    @media (min-width: 768px) {
-        font-size: 33px;
+    // sm: Small devices (landscape phones, 576px and up)
+    @include media-breakpoint-up(sm) {
+        font-size: 20px;
     }
     
-    // Desktop and up
-    @media (min-width: 1200px) {
-        font-size: 36px;
+    // md: Medium devices (tablets, 768px and up)
+    @include media-breakpoint-up(md) {
+        font-size: 26px;
+    }
+    
+    // lg: Large devices (desktops, 992px and up)
+    @include media-breakpoint-up(lg) {
+        font-size: 32px;
+    }
+    
+    // xl: Extra large devices (large desktops, 1200px and up)
+    @include media-breakpoint-up(xl) {
+        font-size: 38px;
     }
 }
 
 // Override fullscreen caption sizes as well
 .plyr:fullscreen .plyr__captions,
 .plyr--fullscreen-fallback .plyr__captions {
-    @media (min-width: 768px) {
-        font-size: 33px;
-          bottom: 40px;
+    // sm: Small devices (landscape phones, 576px and up)
+    @include media-breakpoint-up(sm) {
+        font-size: 20px;
+        bottom: 40px;
     }
     
-    @media (min-width: 1024px) {
-        font-size: 36px;
-          bottom: 40px;
+    // md: Medium devices (tablets, 768px and up)
+    @include media-breakpoint-up(md) {
+        font-size: 26px;
+        bottom: 40px;
     }
     
-    @media (min-width: 1200px) {
-        font-size: 40px; // Even larger in fullscreen on big screens
-          bottom: 40px;
+    // lg: Large devices (desktops, 992px and up)
+    @include media-breakpoint-up(lg) {
+        font-size: 32px;
+        bottom: 40px;
+    }
+    
+    // xl: Extra large devices (large desktops, 1200px and up)
+    @include media-breakpoint-up(xl) {
+        font-size: 38px;
+        bottom: 40px;
     }
 
 }
 .plyr__caption {
 
-    line-height: 201%;
+    line-height: 200%;
     padding: .1em 0.5em;
 }
