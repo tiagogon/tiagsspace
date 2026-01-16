@@ -5777,35 +5777,39 @@ video.plyr-thumbnail-front {
   font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
-  bottom: 40px; }
+  bottom: 20px; }
   @media (min-width: 576px) {
     .plyr__captions {
-      font-size: 20px; } }
+      font-size: 20px;
+      bottom: 25px; } }
   @media (min-width: 768px) {
     .plyr__captions {
-      font-size: 26px; } }
+      font-size: 26px;
+      bottom: 30px; } }
   @media (min-width: 992px) {
     .plyr__captions {
-      font-size: 32px; } }
+      font-size: 32px;
+      bottom: 35px; } }
   @media (min-width: 1200px) {
     .plyr__captions {
-      font-size: 38px; } }
+      font-size: 38px;
+      bottom: 40px; } }
 
 @media (min-width: 576px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
     font-size: 20px;
-    bottom: 40px; } }
+    bottom: 25px; } }
 @media (min-width: 768px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
     font-size: 26px;
-    bottom: 40px; } }
+    bottom: 30px; } }
 @media (min-width: 992px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
     font-size: 32px;
-    bottom: 40px; } }
+    bottom: 35px; } }
 @media (min-width: 1200px) {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
