@@ -324,8 +324,10 @@ video.plyr-thumbnail-front {
     @media (min-width: 1200px) {
         font-size: 40px; // Even larger in fullscreen on big screens
     }
-    .plyr__caption {
-        line-height: 201%;
-        padding: .1em 0.5em;
-    }
+
+}
+.plyr__caption {
+
+    line-height: 201%;
+    padding: .1em 0.5em;
 }
