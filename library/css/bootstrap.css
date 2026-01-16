@@ -5824,6 +5824,10 @@ video.plyr-thumbnail-front {
   .plyr:fullscreen .plyr__captions,
   .plyr--fullscreen-fallback .plyr__captions {
     font-size: 40px; } }
+.plyr:fullscreen .plyr__captions .plyr__caption,
+.plyr--fullscreen-fallback .plyr__captions .plyr__caption {
+  line-height: 201%;
+  padding: .1em 0.5em; }
 
 #collapseMenu {
   position: fixed;
