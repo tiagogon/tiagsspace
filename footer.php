@@ -46,10 +46,14 @@
         scope.querySelectorAll('.plyr-thumbnail-front').forEach(media => {
             if (media.dataset.plyrInitialized === 'true') return;
 
+            const seamlessLoop = media.dataset.loopMode === 'seamless';
+
             media.setAttribute('preload', 'auto');
             media.setAttribute('playsinline', '');
+            media.setAttribute('webkit-playsinline', '');
             media.setAttribute('muted', '');
             media.muted = true;
+            media.defaultMuted = true;
             media.autoplay = true;
             media.loop = true;
 
@@ -57,13 +61,49 @@
                 controls: [],
             });
 
-            media.dataset.plyrInitialized = 'true';
+            const tryPlay = () => {
+                if (media.paused) {
+                    media.play().catch(err => {
+                        if (window.console && console.debug) {
+                            console.debug('Thumb video autoplay blocked', err);
+                        }
+                    });
+                }
+            };
 
-            media.addEventListener('loadeddata', () => {
-                media.play().catch(err => {
-                    console.warn('Autoplay failed (direct load):', err);
-                });
-            }, { once: true });
+            const handleTimeUpdate = () => {
+                if (!seamlessLoop || !media.duration) {
+                    return;
+                }
+                const threshold = Math.max(media.duration - 0.08, 0);
+                if (media.currentTime >= threshold) {
+                    media.currentTime = 0.01;
+                    tryPlay();
+                }
+            };
+
+            media.addEventListener('loadeddata', tryPlay, { once: true });
+            media.addEventListener('canplay', tryPlay);
+            media.addEventListener('timeupdate', handleTimeUpdate);
+            media.addEventListener('ended', () => {
+                media.currentTime = 0.01;
+                tryPlay();
+            });
+
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            tryPlay();
+                        } else {
+                            media.pause();
+                        }
+                    });
+                }, { threshold: 0.15 });
+                observer.observe(media);
+            }
+
+            media.dataset.plyrInitialized = 'true';
         });
     }
 

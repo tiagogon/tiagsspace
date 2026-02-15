@@ -313,7 +313,7 @@ Index of posts for Home and Archives
 
                   // Thumbnail image source code
 
-                      if ($animated_thumbnail_array and $video_thumbnail_id == array()) {
+                      if (!empty($animated_thumbnail_array) && empty($video_thumbnail_id)) {
 
 
                           $source = 'src="'.$animated_thumbnail_array['url'].'" style="width: 100%;"';
@@ -394,51 +394,92 @@ Index of posts for Home and Archives
                                   <?php // IF IS VIDEO -- via: https://codepen.io/dudleystorey/pen/knqyK
                                   if (!empty($video_thumbnail_id)) {
 
-                                    // // Use videoplayer from VideoPack
-                                    // // Use of videopack shortcode https://www.wordpressvideopack.com/docs/shortcode-reference/
-                                    // // Use of shortcode via PHP https://developer.wordpress.org/reference/functions/do_shortcode/
-                                    // // Parameters
+                                    // Normalize ACF field return (array vs ID)
+                                    $video_attachment_id = 0;
+                                    $video_direct_url = '';
+                                    $video_mime_type = 'video/mp4';
 
-                                    // echo do_shortcode( '[KGVID id="'.$video_thumbnail_id.'" muted="true" controls="false" loop="true" autoplay="true" pauseothervideos="false" pixel_ratio="true" playsinline playsinline="true"  schema="false" poster="'.$video_poster.'"]' );
+                                    if (is_array($video_thumbnail_id)) {
+                                        if (!empty($video_thumbnail_id['ID'])) {
+                                            $video_attachment_id = (int) $video_thumbnail_id['ID'];
+                                        } elseif (!empty($video_thumbnail_id['id'])) {
+                                            $video_attachment_id = (int) $video_thumbnail_id['id'];
+                                        }
 
-                                    
-                                    // Get the video attachment ID
-                                    $video_id = $video_thumbnail_id; // or whatever your variable is
+                                        if (!empty($video_thumbnail_id['url'])) {
+                                            $video_direct_url = $video_thumbnail_id['url'];
+                                        }
+
+                                        if (!empty($video_thumbnail_id['mime_type'])) {
+                                            $video_mime_type = $video_thumbnail_id['mime_type'];
+                                        }
+                                    } else {
+                                        $video_attachment_id = (int) $video_thumbnail_id;
+                                    }
+
+                                    if (!$video_attachment_id && $video_direct_url) {
+                                        $maybe_attachment = attachment_url_to_postid($video_direct_url);
+                                        if ($maybe_attachment) {
+                                            $video_attachment_id = $maybe_attachment;
+                                        }
+                                    }
 
                                     // Get video sources (MP4, WebM, etc.) using Videopack metadata
-                                    $video_formats = get_post_meta($video_id, 'kgflash_video', true);
-                                    $poster_url = $video_poster ?: get_the_post_thumbnail_url($video_id, 'full');
+                                    $video_formats = $video_attachment_id ? get_post_meta($video_attachment_id, 'kgflash_video', true) : array();
+                                    $poster_url = !empty($video_poster) ? $video_poster : get_the_post_thumbnail_url($post->ID, 'full');
 
                                     // Build source tags
                                     $sources = '';
                                     if (!empty($video_formats) && is_array($video_formats)) {
-                                        foreach ($video_formats as $format => $url) {
-                                            if ($url) {
-                                                $sources .= '<source src="' . esc_url($url) . '" type="video/' . esc_attr($format) . '">' . "\n";
+                                        foreach ($video_formats as $format => $format_data) {
+                                            $format_url = '';
+                                            $format_mime = 'video/' . $format;
+
+                                            if (is_array($format_data)) {
+                                                if (!empty($format_data['url'])) {
+                                                    $format_url = $format_data['url'];
+                                                }
+                                                if (!empty($format_data['mime'])) {
+                                                    $format_mime = $format_data['mime'];
+                                                }
+                                            } else {
+                                                $format_url = $format_data;
+                                            }
+
+                                            if ($format_url) {
+                                                $sources .= '<source src="' . esc_url($format_url) . '" type="' . esc_attr($format_mime) . '">' . "\n";
                                             }
                                         }
                                     }
 
-                                    // Fallback if no formats found (fallback to the original file URL)
+                                    // Fallback if no Videopack formats found
                                     if (empty($sources)) {
-                                        $fallback_url = wp_get_attachment_url($video_id);
-                                        $sources .= '<source src="' . esc_url($fallback_url) . '" type="video/mp4">' . "\n";
+                                        $fallback_url = $video_direct_url ? $video_direct_url : ($video_attachment_id ? wp_get_attachment_url($video_attachment_id) : '');
+                                        if ($fallback_url) {
+                                            $sources .= '<source src="' . esc_url($fallback_url) . '" type="' . esc_attr($video_mime_type) . '">' . "\n";
+                                        }
                                     }
 
                                     // Output the Plyr-compatible <video> tag
+                                    if (!empty($sources)) {
                                     ?>
                                     <video 
                                          class="plyr-thumbnail-front"
                                         autoplay
                                         muted
                                         playsinline
+                                        webkit-playsinline
                                         preload="auto"
                                         loop
+                                        data-loop-mode="seamless"
                                         poster="<?php echo esc_url($poster_url); ?>">
                                         <?php echo $sources; ?>
                                         Your browser does not support the video tag.
                                     </video>
                                     <?php
+                                    } elseif ($poster_url) {
+                                        echo '<img src="' . esc_url($poster_url) . '" style="width:100%;" alt="' . esc_attr(get_the_title()) . '" />';
+                                    }
 
                                         } else { ?>
 
