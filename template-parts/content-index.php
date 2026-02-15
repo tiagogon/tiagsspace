@@ -49,7 +49,6 @@ Index of posts for Home and Archives
                   //$hide_figcaption = "";
               }
 
-
               // GRID Mansonary
 
               // NOTES
