@@ -9,11 +9,9 @@
 // Spacement betwene thumbnails == thumbnal and viewport limite
 // had this tag on container-fluid element
 .index-block, .container{
-  @media (max-width: map-get($grid-breakpoints, sm)) {
-      padding-left: 20px;
-      padding-right: 20px;
-  }
-  @media (min-width: map-get($grid-breakpoints, sm)) {
+  padding-left: $grid-gutter-width-mobile;
+  padding-right: $grid-gutter-width-mobile;
+  @media (min-width: map-get($grid-breakpoints, lg)) {
       padding-left: $grid-gutter-width;
       padding-right: $grid-gutter-width;
   }
@@ -43,12 +41,12 @@
 
 .yarpp-related-header{
     background-color: $tiagsssss-color;
-    padding-bottom: $grid-gutter-width;
-    padding-top: $grid-gutter-width;
-    // @media (max-width: map-get($grid-breakpoints, sm)) {
-    //     padding-bottom: ($grid-gutter-width / 2);
-    //     padding-top: ($grid-gutter-width / 2);
-    // }
+    padding-bottom: $grid-gutter-width-mobile;
+    padding-top: $grid-gutter-width-mobile;
+    @media (min-width: map-get($grid-breakpoints, lg)) {
+        padding-bottom: $grid-gutter-width;
+        padding-top: $grid-gutter-width;
+    }
     @media (prefers-color-scheme: dark) {
           background-color: $tiagsssss-color-darkmode;
     }
@@ -68,9 +66,9 @@
 .yarpp-related{
   background: $tiagsssss-color;
   background: $tiagsssss-color-gradient;
-  padding-bottom: $grid-gutter-width;
-    @media (max-width: map-get($grid-breakpoints, sm)) {
-      padding-bottom: ($grid-gutter-width / 2);
+  padding-bottom: $grid-gutter-width-mobile;
+    @media (min-width: map-get($grid-breakpoints, lg)) {
+      padding-bottom: $grid-gutter-width;
     }
     @media (prefers-color-scheme: dark) {
           background: $tiagsssss-color-darkmode;
@@ -93,11 +91,9 @@
 // Add same side spacement than betwene thumbnails
 // had this tag on container-fluid element
 .side-padding, .container{
-  @media (max-width: map-get($grid-breakpoints, sm)) {
-      padding-left: 20px;
-      padding-right: 20px;
-  }
-  @media (min-width: map-get($grid-breakpoints, sm)) {
+  padding-left: $grid-gutter-width-mobile;
+  padding-right: $grid-gutter-width-mobile;
+  @media (min-width: map-get($grid-breakpoints, lg)) {
       padding-left: $grid-gutter-width;
       padding-right: $grid-gutter-width;
   }
@@ -106,7 +102,10 @@
 // Genreal thumbnail
 li.masonry-item {
   display: block;
-  padding-bottom: $grid-gutter-width;
+  padding-bottom: $grid-gutter-width-mobile;
+  @media (min-width: map-get($grid-breakpoints, lg)) {
+    padding-bottom: $grid-gutter-width;
+  }
   figure {
     text-align: center;
     margin: 0 0 0 0;
@@ -191,12 +190,14 @@ li.masonry-item {
 }
 
 .archive-navigation{
-    margin-bottom: $grid-gutter-width;
-    //height: 60px;
-    //@media (min-width: map-get($grid-breakpoints, sm)) {
-      padding-left: $grid-gutter-width;
-      padding-right: $grid-gutter-width;
-    //}
+    margin-bottom: $grid-gutter-width-mobile;
+    padding-left: $grid-gutter-width-mobile;
+    padding-right: $grid-gutter-width-mobile;
+    @media (min-width: map-get($grid-breakpoints, lg)) {
+        margin-bottom: $grid-gutter-width;
+        padding-left: $grid-gutter-width;
+        padding-right: $grid-gutter-width;
+    }
     .nav-next {
 
     }

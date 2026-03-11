@@ -71,6 +71,24 @@ img {
 @import "custom-grid.scss";
 @import "custom-thumbnails.scss";
 
+// Responsive grid gutters: smaller gutters on phones & tablets (below lg)
+@media (max-width: map-get($grid-breakpoints, lg) - 1) {
+  .container,
+  .container-fluid {
+    padding-right: ($grid-gutter-width-mobile / 2);
+    padding-left: ($grid-gutter-width-mobile / 2);
+  }
+  .row {
+    margin-right: ($grid-gutter-width-mobile / -2);
+    margin-left: ($grid-gutter-width-mobile / -2);
+  }
+  .row > .col,
+  .row > [class*='col-'] {
+    padding-right: ($grid-gutter-width-mobile / 2);
+    padding-left: ($grid-gutter-width-mobile / 2);
+  }
+}
+
 // Support to JS library
 // @import "../js/plyr-master/assets/vendor/plyr/src/sass/plyr.scss";
 //@import "../js/plyr-master/assets/vendor/plyr/src/sass/plyr.scss";
