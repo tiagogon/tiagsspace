@@ -668,6 +668,7 @@ function places_taxonomy() {
     'show_admin_column'          => true,
     'show_in_nav_menus'          => true,
     'show_tagcloud'              => true,
+    'show_in_rest'               => true,
   );
   register_taxonomy( 'places', array( 'post', 'emulsion', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cityburns', '4k-lento'), $args );
 }
@@ -736,6 +737,7 @@ function medium_taxonomy() {
     'show_admin_column'          => true,
     'show_in_nav_menus'          => true,
     'show_tagcloud'              => true,
+    'show_in_rest'               => true,
   );
   register_taxonomy( 'medium', array( 'post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns', '4k-lento'  ), $args );
 
@@ -769,6 +771,7 @@ function log_branch_taxonomy() {
     'show_admin_column'          => true,
     'show_in_nav_menus'          => true,
     'show_tagcloud'              => true,
+    'show_in_rest'               => true,
   );
   register_taxonomy( 'log-branch', array( 'log' ), $args );
 }
@@ -806,6 +809,7 @@ function year_from_taxonomy() {
     'show_admin_column'          => true,
     'show_in_nav_menus'          => true,
     'show_tagcloud'              => true,
+    'show_in_rest'               => true,
   );
   register_taxonomy( 'from', array('post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns', '4k-lento' ), $args );
 }
