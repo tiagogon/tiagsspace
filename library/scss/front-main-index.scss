@@ -169,8 +169,9 @@ li.masonry-item {
           background-size: cover;
           max-width: 100.3%; // remove masonry 1 px bug around images
           width: 100.3%; // remove masonry 1 px bug around images
-          max-height: 100.3%; // remove masonry 1 px bug around images
-          height: 100.3%; // remove masonry 1 px bug around images
+          // max-height removed: 100% of a height:0 parent = 0, which collapses portrait
+          // video posters on resize. overflow:hidden on .imgcontainer clips it instead.
+          height: auto;
           -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -o-filter: blur(0px) contrast(1) brightness(1) grayscale(0);

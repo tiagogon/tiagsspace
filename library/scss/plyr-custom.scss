@@ -29,7 +29,8 @@ $plyr-audio-control-bg-hover: $plyr-tab-focus-default-color !default;
 
 .plyr {
     font-family: $font-family-sans-serif;
-    width: 100%;   
+    width: 100%;
+    min-width: 0; // override Plyr default min-width:200px so videos shrink with masonry columns
     // Simplified large white triangle play button
     .plyr__control--overlaid,
     .plyr__play-large {

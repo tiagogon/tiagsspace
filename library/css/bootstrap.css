@@ -5627,7 +5627,8 @@ figure {
 
 .plyr {
   font-family: "Sporting_Grotesque_Regular", sans-serif;
-  width: 100%; }
+  width: 100%;
+  min-width: 0; }
   .plyr .plyr__control--overlaid,
   .plyr .plyr__play-large {
     display: inline-flex !important;
@@ -6131,8 +6132,7 @@ li.masonry-item {
           background-size: cover;
           max-width: 100.3%;
           width: 100.3%;
-          max-height: 100.3%;
-          height: 100.3%;
+          height: auto;
           -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
           -o-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
