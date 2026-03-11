@@ -121,6 +121,7 @@ li.masonry-item {
       .imgcontainer{
         margin-bottom: 30px;
         margin-bottom: 0px;
+        overflow: hidden; // clip 100.3% image overflow so it doesn't eat into column gutters
         background: $tiagsssss-color;
         @media (prefers-color-scheme: dark) {
               background-color: $tiagsssss-color-darkmode;
@@ -131,8 +132,8 @@ li.masonry-item {
           outline: none;
           border: none;
           display: block;
-          max-width: 100.3%; // remove masonry 1 px bug around images
-          width: 100.3%; // remove masonry 1 px bug around images
+          max-width: 100%;
+          width: 100%;
           margin: 0px;
         }
         .kgvid_wrapper_inline_left {
@@ -166,8 +167,8 @@ li.masonry-item {
         video {
           transform: translateX(0%) translateY(0%);
           background-size: cover;
-          max-width: 100.3%; // remove masonry 1 px bug around images
-          width: 100.3%; // remove masonry 1 px bug around images
+          max-width: 100%;
+          width: 100%;
           // max-height removed: 100% of a height:0 parent = 0, which collapses portrait
           // video posters on resize. overflow:hidden on .imgcontainer clips it instead.
           height: auto;

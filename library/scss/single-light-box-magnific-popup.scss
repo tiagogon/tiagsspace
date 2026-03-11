@@ -205,5 +205,9 @@
 }
 
 img.mfp-img {
-    padding: 20px 0 40px;
+    padding: $grid-gutter-width-mobile 0 ($grid-gutter-width-mobile * 2);
+    @media (min-width: map-get($grid-breakpoints, lg)) {
+        padding: $grid-gutter-width 0 ($grid-gutter-width * 2);
+    }
+    padding-bottom: 40px;
 }
