@@ -567,12 +567,14 @@ Index of posts for Home and Archives
         jQuery(document).ready(function($) {
             var $grid = $('#masonry-container');
             if ($grid.length && typeof $grid.masonry === 'function') {
-                $grid.masonry({
-                itemSelector: '.masonry-item',
-                columnWidth: '.masonry-item-sizer',
-                percentPosition: true,
-                transitionDuration: '0.6s',
-                stagger: 30
+                $grid.imagesLoaded(function() {
+                    $grid.masonry({
+                        itemSelector: '.masonry-item',
+                        columnWidth: '.masonry-item-sizer',
+                        percentPosition: true,
+                        transitionDuration: '0.6s',
+                        stagger: 30
+                    });
                 });
             } else {
                 console.warn('Masonry not available');
