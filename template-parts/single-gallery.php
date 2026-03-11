@@ -6,12 +6,14 @@ Gallery template for single pages
 
 
 // get attachmens atached to the post
+// On preview pages $post is a revision; resolve to the parent post so attachments are found
+$gallery_post_id = wp_is_post_revision( $post->ID ) ? wp_get_post_parent_id( $post->ID ) : $post->ID;
 $args = array(
     'numberposts'       => -1, // Using -1 loads all posts
     'orderby'           => 'menu_order', // set in the page media manager
     'order'             => 'ASC',
     // 'post_mime_type'    => 'image', // Make sure it doesn't pull other resources, like videos
-    'post_parent'       => $post->ID, // Important part - ensures the associated images are loaded
+    'post_parent'       => $gallery_post_id, // Important part - ensures the associated images are loaded
     'post_status'       => null,
     'post_type'         => 'attachment',
     'meta_query'        => array(
