@@ -15,6 +15,19 @@ img {
   //width: 100%;
   height: auto;
 }
+
+// Intense Images fullscreen viewer fix:
+// Intense.js creates a <figure> with position:fixed and appends an <img> inside it,
+// setting width/height via JS attributes to make the image larger than the viewport
+// (enabling the mouse/touch panning effect). Our global "img { max-width: 100% }"
+// rule caps the image to the container width, preventing it from overflowing —
+// which breaks the panning on small viewports. This override removes that constraint
+// specifically for the Intense viewer.
+figure[style*="position: fixed"] img {
+  max-width: none;
+  height: auto;
+}
+
 // Import files that will override bootstrap variables-custom
 //@import "google-color-palette.scss";
 @import "custom-variables.scss";
