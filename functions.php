@@ -2297,4 +2297,34 @@ add_filter( 'get_previous_post_where', 'tiagsspace_exclude_hidden_adjacent_where
 add_filter( 'get_next_post_where', 'tiagsspace_exclude_hidden_adjacent_where' );
 
 
+/************* PURGE TABLE INDEX CACHE ON POST CHANGES *************/
+// When any post is published, unpublished, trashed or updated,
+// ask W3 Total Cache to flush the cached Table Index page.
+function tiagsspace_purge_table_index_cache( $new_status, $old_status, $post ) {
+    // Act on status changes (publish, unpublish, trash) OR updates to published posts
+    if ( $new_status !== 'publish' && $old_status !== 'publish' ) return;
+
+    // Find the page using the "Table Index" template
+    $pages = get_pages( array(
+        'meta_key'   => '_wp_page_template',
+        'meta_value' => 'page-table-index.php',
+        'number'     => 1,
+    ) );
+
+    if ( empty( $pages ) ) return;
+
+    $page_id = $pages[0]->ID;
+    $url = get_permalink( $page_id );
+
+    // W3 Total Cache: flush by URL
+    if ( function_exists( 'w3tc_flush_url' ) ) {
+        w3tc_flush_url( $url );
+    // Fallback: flush entire page cache
+    } elseif ( function_exists( 'w3tc_flush_posts' ) ) {
+        w3tc_flush_posts();
+    }
+}
+add_action( 'transition_post_status', 'tiagsspace_purge_table_index_cache', 10, 3 );
+
+
 // END -- don't add any space after php close ?>
