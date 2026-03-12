@@ -1,6 +1,7 @@
 ---
-description: Describe when these instructions should be loaded
-applyTo: **
+description: Global coding instructions for the tiagsspace WordPress theme
+paths:
+  - "**"
 ---
 Never edit the bootstrap.css file. All style editing needs to be done via .scss files.
 
