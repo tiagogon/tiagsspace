@@ -76,6 +76,8 @@ function tiagsspace_enqueue_assets() {
 // Theme supports
 add_action('after_setup_theme', function(){
     add_theme_support('title-tag');
+    add_theme_support('editor-styles');
+    add_editor_style('editor-style.css');
 });
 add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
 
