@@ -20,7 +20,7 @@
 			    	<div class="clearfix row">
 			    		<div class="<?php content_wrap() ?> clearfix" role="main">
 							<?PHP // Content
-						get_template_part( 'template-parts/entry', 'body' );
+						get_template_part( 'template-parts/entry', 'body' ); ?>
 						</div>
 					</div>
 				</div>

@@ -1812,7 +1812,7 @@ function gallery_media_order_change_request() {
 			$debug_result = $attachmentId + $attachmentOrder;
 
 			global $wpdb;
-			$wpdb->update( 'wp_posts', array( 'menu_order'=>$attachmentOrder),array('ID'=>$attachmentId));
+			$updated = $wpdb->update( 'wp_posts', array( 'menu_order'=>$attachmentOrder),array('ID'=>$attachmentId));
 
 			if ( false === $updated ) {
 			    echo "There was an error tring to move the attachmente ".$attachmentId." to the menu position number ".$attachmentOrder;
@@ -1868,8 +1868,10 @@ function change_attachment_field_diferent_size_on_gallery() {
 			}
 
 			// Update Database
+			$updated = false;
 			if (!empty($GridScaleDenominatorNew)) {
-				update_field(diferent_size_on_gallery, $GridScaleDenominatorNew, $attachmentId);
+				update_field('diferent_size_on_gallery', $GridScaleDenominatorNew, $attachmentId);
+				$updated = true;
 			}
 
 			// Output log message to the front end
@@ -1918,66 +1920,66 @@ function change_attachment_margin() {
 			if ($marginName == "margin") {
 				if ($incrementalValue== "clear") {
 					$margin = "";
-					update_field(attachment_margin, $margin, $attachmentId);
+					update_field('attachment_margin', $margin, $attachmentId);
 					$updated = true;
 				}else {
 					$margin = $margin + $incrementalValue;
-					update_field(attachment_margin, $margin, $attachmentId);
+					update_field('attachment_margin', $margin, $attachmentId);
 					$updated = true;
 				}
 			}
 			if ($marginName == "margin-top") {
 				if ($incrementalValue== "clear") {
 					$marginTop = "";
-					update_field(attachment_margin_top, $marginTop, $attachmentId);
+					update_field('attachment_margin_top', $marginTop, $attachmentId);
 					$updated = true;
 				}else {
 					$marginTop = $marginTop + $incrementalValue;
-					update_field(attachment_margin_top, $marginTop, $attachmentId);
+					update_field('attachment_margin_top', $marginTop, $attachmentId);
 					$updated = true;
 				}
 			}
 			if ($marginName == "margin-right") {
 				if ($incrementalValue== "clear") {
 					$marginRight = "";
-					update_field(attachment_margin_right, $marginRight, $attachmentId);
+					update_field('attachment_margin_right', $marginRight, $attachmentId);
 					$updated = true;
 				}else {
 					$marginRight = $marginRight + $incrementalValue;
-					update_field(attachment_margin_right, $marginRight, $attachmentId);
+					update_field('attachment_margin_right', $marginRight, $attachmentId);
 					$updated = true;
 				}
 			}
 			if ($marginName == "margin-bottom") {
 				if ($incrementalValue== "clear") {
 					$marginBottom = "";
-					update_field(attachment_margin_bottom, $marginBottom, $attachmentId);
+					update_field('attachment_margin_bottom', $marginBottom, $attachmentId);
 					$updated = true;
 				}else {
 					$marginBottom = $marginBottom + $incrementalValue;
-					update_field(attachment_margin_bottom, $marginBottom, $attachmentId);
+					update_field('attachment_margin_bottom', $marginBottom, $attachmentId);
 					$updated = true;
 				}
 			}
 			if ($marginName == "margin-left") {
 				if ($incrementalValue== "clear") {
 					$marginLeft = "";
-					update_field(attachment_margin_left, $marginLeft, $attachmentId);
+					update_field('attachment_margin_left', $marginLeft, $attachmentId);
 					$updated = true;
 				}else {
 					$marginLeft = $marginLeft + $incrementalValue;
-					update_field(attachment_margin_left, $marginLeft, $attachmentId);
+					update_field('attachment_margin_left', $marginLeft, $attachmentId);
 					$updated = true;
 				}
 			}
 			if ($marginName == "z-index") {
 				if ($incrementalValue== "clear") {
 					$zIndex = "";
-					update_field(attachment_z_index, $zIndex, $attachmentId);
+					update_field('attachment_z_index', $zIndex, $attachmentId);
 					$updated = true;
 				}else {
 					$zIndex = $zIndex + $incrementalValue;
-					update_field(attachment_z_index, $zIndex, $attachmentId);
+					update_field('attachment_z_index', $zIndex, $attachmentId);
 					$updated = true;
 				}
 			}
@@ -2258,10 +2260,10 @@ function tiagsspace_purge_table_index_cache( $new_status, $old_status, $post ) {
 
     // W3 Total Cache: flush by URL
     if ( function_exists( 'w3tc_flush_url' ) ) {
-        w3tc_flush_url( $url );
+        call_user_func( 'w3tc_flush_url', $url );
     // Fallback: flush entire page cache
     } elseif ( function_exists( 'w3tc_flush_posts' ) ) {
-        w3tc_flush_posts();
+        call_user_func( 'w3tc_flush_posts' );
     }
 }
 add_action( 'transition_post_status', 'tiagsspace_purge_table_index_cache', 10, 3 );

@@ -126,7 +126,7 @@
 					<ul>
 						<?php //if (is_singular()) { ?>
 							<li>
-								<a href="<?php echo home_url(); ?>" class="">Space</a>
+								<a href="<?php echo home_url(); ?>" class="">Tiags' Space</a>
 							</li>
 						<?php //} ?>
 					</ul>
@@ -134,8 +134,21 @@
 				<div class="<?php echo $menu_groups_class; ?>" >
 					<ul>
 						<li>
+						   <a href="<?php echo home_url(); ?>" class="<?php if ( is_home()) { echo "active";} ?>">Visual</a>
+					   </li>					   
+						<li>
+						   <a href="<?php echo get_permalink( get_page_by_path( 'index' ) ); ?>" class="<?php if ( is_page('index') ) { echo "active";} ?>">Index</a>
+					   </li>
+					</ul>
+				</div>
+				<div class="<?php echo $menu_groups_class; ?>" >
+					<ul>
+						<li>
 							<a href="<?php echo get_post_type_archive_link( 'hyper'); ?>" class="<?php if ( is_post_type_archive('hyper')) { echo "active";} if (is_singular( 'hyper' ) ) { echo " active";} ?>">Hyper</a>
-						</li>
+						</li>					   
+					   <li>
+						   <a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " active";} ?>">4K Lento</a>
+					   </li>
 					 <!-- <li>
 						 <a href="<?php echo get_post_type_archive_link( 'films'); ?>" class="<?php if ( is_post_type_archive('Films')) { echo "active";} if (is_singular( 'films' ) ) { echo " active";} ?>">Film</a>
 					 </li> -->
@@ -180,19 +193,6 @@
 					</ul>
 				</div>
 
-				<div class="<?php echo $menu_groups_class; ?>" >
-					<ul>
-						<li>
- 							<a href="<?php echo get_post_type_archive_link( '4k-lento'); ?>" class="<?php if ( is_post_type_archive('4k-lento')) { echo "active";} if (is_singular( '4k-lento' ) ) { echo " active";} ?>">4K Lento</a>
-							<li>
-								<a href="https://soundcloud.com/tiagsssss"  target="_blank">Soundcloud</a>
-							</li>
-							<li>
-								<a href="https://podcasts.apple.com/ca/podcast/4k-lento/id1445312236" target="_blank">Podcast</a>
-							</li>
-						<li>
-					</ul>
-				</div>
 
 				<div class="<?php echo $menu_groups_class; ?>" >
 					<ul>
@@ -300,6 +300,12 @@
 					</li>
 					<li>
 						<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
+					</li>
+					<li>
+						<a href="https://soundcloud.com/tiagsssss"  target="_blank">Soundcloud</a>
+					</li>
+					<li>
+						<a href="https://podcasts.apple.com/ca/podcast/4k-lento/id1445312236" target="_blank">Mixcast</a>
 					</li>
 					<li>
 						<a href="https://tiagssssspace.tumblr.com/" target="_blank">Tumblr</a>
