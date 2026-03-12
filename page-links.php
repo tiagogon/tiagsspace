@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Links
+Template Name: Links in Bio
 */
 ?>
 
