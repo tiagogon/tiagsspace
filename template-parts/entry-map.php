@@ -19,7 +19,7 @@ $location = get_field('location'); ?>
 
 <?php 
 // get google maps with private API ?>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXwsyR9pD0XobnqhdTcT6zneN1rVcc27I"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key="></script>
 
 
 <?php 
