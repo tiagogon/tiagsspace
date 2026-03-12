@@ -102,7 +102,7 @@ $total = $table_query->found_posts;
                 // Thumbnail URL for hover preview
                 $thumb_url = '';
                 if ( has_post_thumbnail( $post_id ) ) {
-                    $thumb = wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), 'thumbnail' );
+                    $thumb = wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), 'large' );
                     if ( $thumb ) $thumb_url = $thumb[0];
                 }
 
@@ -190,8 +190,29 @@ $total = $table_query->found_posts;
 
     document.addEventListener('mousemove', function(e) {
         if (!active) return;
-        preview.style.left = (e.clientX + 20) + 'px';
-        preview.style.top  = (e.clientY + 10) + 'px';
+
+        var vw = window.innerWidth;
+        var vh = window.innerHeight;
+        var offsetX = 20;
+        var offsetY = 10;
+
+        // Horizontal: cursor in left half → show right, cursor in right half → show left
+        if (e.clientX < vw / 2) {
+            preview.style.left = (e.clientX + offsetX) + 'px';
+            preview.style.right = 'auto';
+        } else {
+            preview.style.left = 'auto';
+            preview.style.right = (vw - e.clientX + offsetX) + 'px';
+        }
+
+        // Vertical: cursor in top half → show below, cursor in bottom half → show above
+        if (e.clientY < vh / 2) {
+            preview.style.top = (e.clientY + offsetY) + 'px';
+            preview.style.bottom = 'auto';
+        } else {
+            preview.style.top = 'auto';
+            preview.style.bottom = (vh - e.clientY + offsetY) + 'px';
+        }
     });
 })();
 </script>

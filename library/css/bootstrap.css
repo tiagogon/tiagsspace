@@ -7485,8 +7485,8 @@ img.mfp-img {
     opacity: 1; }
   .ti-hover-preview img {
     display: block;
-    max-width: 240px;
-    max-height: 320px;
+    max-width: 600px;
+    max-height: 600px;
     object-fit: contain;
     border-radius: 2px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); }
