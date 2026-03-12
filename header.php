@@ -40,6 +40,9 @@
 						if (is_singular()) {
 							$header_left_title = '<h1><a href="'.home_url().'">S</a><span id="over-text" class="d-none d-sm-inline"></span></h1>';
 						}
+						if (is_page('index')) {
+							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Index<span id="over-text" class="d-none d-sm-inline"></span></h1>';
+						}
 						if (is_post_type_archive('hyper')) {
 							$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Hyper<span id="over-text" class="d-none d-sm-inline"></span></h1>';
 						}
@@ -99,7 +102,7 @@
 				<div id="topbar" class="col-16 ml-auto">
 						<a data-toggle="collapse" data-target=".multi-collapse" href="#collapseMenu" role="button" aria-expanded="false" aria-controls="collapseMenu">
 							<span class="reveal">
-								<?php if (is_singular()) {
+								<?php if (is_singular() && !is_page('index')) {
 									echo '<span class="short">R</span><span class="long">Reveal</span>';
 								}else {
 									echo "Reveal";
