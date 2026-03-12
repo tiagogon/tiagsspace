@@ -94,17 +94,6 @@ if (have_rows('extra_content')) {
             $deactivat_masonry      = true;
         }
 
-        // Emulsion
-        elseif ( is_singular( 'emulsion' )) {
-            $class_container        = 'container';
-            $number_of_columns_xs   = 1;
-            $number_of_columns_sm   = 1;
-            $number_of_columns_md   = 1;
-            $number_of_columns_lg   = 1;
-            $no_space               = '';
-            $light_box              = 'magnific_popup';
-        }
-
         // City Burns
         elseif ( is_singular( 'cityburns' )) {
             $class_container        = 'container-fluid';

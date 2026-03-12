@@ -231,52 +231,6 @@ add_action( 'init', 'custom_post_type_films', 0 );
 
 
 
-// // Register Custom Post Type EMULSION
-// function custom_post_type_emulsion() {
-//   $labels = array(
-//     'name'                => _x( 'Emulsion', 'Post Type General Name', 'text_domain' ),
-//     'singular_name'       => _x( 'Emulsion', 'Post Type Singular Name', 'text_domain' ),
-//     'menu_name'           => __( 'Emulsion', 'text_domain' ),
-//     'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
-//     'all_items'           => __( 'All Emulsion Posts', 'text_domain' ),
-//     'view_item'           => __( 'View Emulsion Post', 'text_domain' ),
-//     'add_new_item'        => __( 'Add New Emulsion Post', 'text_domain' ),
-//     'add_new'             => __( 'Add New Emulsion Post', 'text_domain' ),
-//     'edit_item'           => __( 'Edit Emulsion Post', 'text_domain' ),
-//     'update_item'         => __( 'Update Emulsion Post', 'text_domain' ),
-//     'search_items'        => __( 'Search Emulsion Post', 'text_domain' ),
-//     'not_found'           => __( 'Not found', 'text_domain' ),
-//     'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
-//   );
-//   $args = array(
-//     'label'               => __( 'emulsion', 'text_domain' ),
-//     'description'         => __( 'Suspension of solid particles', 'text_domain' ),
-//     'labels'              => $labels,
-//     'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'trackbacks', 'revisions', 'custom-fields', ),
-//     'taxonomies'          => array( 'category', 'post_tag' ),
-//     'hierarchical'        => false,
-//     'public'              => true,
-//     'show_ui'             => true,
-// 	'show_in_rest'        => true,
-//     'show_in_menu'        => true,
-//     'show_in_nav_menus'   => true,
-//     'show_in_admin_bar'   => true,
-//     'menu_position'       => 4,
-//     'menu_icon'           => 'dashicons-camera',
-//     'can_export'          => true,
-//     'has_archive'         => true,
-//     'exclude_from_search' => false,
-//     'publicly_queryable'  => true,
-//     'capability_type'     => 'post',
-//     'yarpp_support'       => true,
-//   );
-//   register_post_type( 'emulsion', $args );
-// }
-// // Hook into the 'init' action
-// add_action( 'init', 'custom_post_type_emulsion', 0 );
-
-
-
 // Register Custom Post Type DUSK
 function custom_post_type_dusk() {
   $labels = array(
@@ -591,7 +545,7 @@ function tsm_convert_id_to_term_in_query($query) {
 function my_get_posts( $query ) {
 
     if ( is_home() && $query->is_main_query() )
-        $query->set( 'post_type', array( 'post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns', '4k-lento') );
+        $query->set( 'post_type', array( 'post', 'dusk', 'films', 'hyper', 'log', 'cityburns', '4k-lento') );
 
     return $query;
 }
@@ -599,7 +553,7 @@ add_filter( 'pre_get_posts', 'my_get_posts' );
 
 function myfeed_request($qv) {
     if (isset($qv['feed']) && !isset($qv['post_type']))
-        $qv['post_type'] = array('post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns', '4k-lento');
+        $qv['post_type'] = array('post', 'dusk', 'films', 'hyper', 'log', 'cityburns', '4k-lento');
     return $qv;
 }
 add_filter('request', 'myfeed_request');
@@ -618,7 +572,7 @@ function query_post_type($query) {
         if($post_type) {
             $post_type = $post_type;
         } else {
-            $post_type = array('post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns', '4k-lento'); // replace CPT to your custom post type
+            $post_type = array('post', 'dusk', 'films', 'hyper', 'log', 'cityburns', '4k-lento'); // replace CPT to your custom post type
         }
         $query->set('post_type',$post_type);
 
@@ -670,7 +624,7 @@ function places_taxonomy() {
     'show_tagcloud'              => true,
     'show_in_rest'               => true,
   );
-  register_taxonomy( 'places', array( 'post', 'emulsion', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cityburns', '4k-lento'), $args );
+  register_taxonomy( 'places', array( 'post', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cityburns', '4k-lento'), $args );
 }
 add_action( 'init', 'places_taxonomy', 0 );
 
@@ -739,7 +693,7 @@ function medium_taxonomy() {
     'show_tagcloud'              => true,
     'show_in_rest'               => true,
   );
-  register_taxonomy( 'medium', array( 'post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns', '4k-lento'  ), $args );
+  register_taxonomy( 'medium', array( 'post', 'dusk', 'hyper', 'log', 'films', 'cityburns', '4k-lento'  ), $args );
 
 }
 add_action( 'init', 'medium_taxonomy', 0 );
@@ -811,7 +765,7 @@ function year_from_taxonomy() {
     'show_tagcloud'              => true,
     'show_in_rest'               => true,
   );
-  register_taxonomy( 'from', array('post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns', '4k-lento' ), $args );
+  register_taxonomy( 'from', array('post', 'dusk', 'hyper', 'log', 'films', 'cityburns', '4k-lento' ), $args );
 }
 add_action( 'init', 'year_from_taxonomy', 0 );
 
@@ -848,7 +802,7 @@ add_action( 'restrict_manage_posts', 'kc_add_taxonomy_filters' );
 // Tag and Category archive queries default to querying only the post post type, to add your custom post type to those queries, you can use the pre_get_posts action:
 function wpa_cpt_tags( $query ) {
     if ( $query->is_tag() && $query->is_main_query() ) {
-        $query->set( 'post_type', array( 'post', 'dusk', 'hyper', 'emulsion', 'log', 'films', 'cityburns', '4k-lento' ) );
+        $query->set( 'post_type', array( 'post', 'dusk', 'hyper', 'log', 'films', 'cityburns', '4k-lento' ) );
     }
 }
 add_action( 'pre_get_posts', 'wpa_cpt_tags' );
@@ -1049,8 +1003,6 @@ function color_background_parameters ($parameter) {
 	} elseif (is_singular( 'dusk' )) {
 			// $background_color_class = 'sky';
 			$background_color_class = 'white-darkmode';
-	} elseif (is_singular( 'emulsion' )) {
-			$background_color_class = 'earth';
 	} elseif (  is_singular( 'log' )
 							OR is_post_type_archive('log')
 							OR is_tax('log-branch')) {
@@ -1331,8 +1283,7 @@ function wptuts_feedimgs($content) {
 
         // Output the "view more" depending on the post type
         if ($post_type == 'post' OR
-            $post_type == 'dusk' OR
-            $post_type == 'emulsion') {
+            $post_type == 'dusk') {
 
             $imageshtml = '<a href="'. get_permalink($post->ID) .'" class="webfeedsFeaturedVisual"><img src="'. wp_get_attachment_url( get_post_thumbnail_id($post->ID) ).'"/></a>
                     <p>view the '.$number_of_imgs.' images <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
@@ -1577,17 +1528,6 @@ function seo_image($image) {
         $last_id = $last['0']['ID'];
    }
 
-   if( is_post_type_archive( 'emulsion' )) {
-
-        $args = array(
-            'numberposts' => '1',
-            'post_type' => 'emulsion',
-            'post_status' => 'publish'
-        );
-        $last = wp_get_recent_posts( $args );
-        $last_id = $last['0']['ID'];
-   }
-
    if( is_post_type_archive( 'films' )) {
 
         $args = array(
@@ -1633,7 +1573,7 @@ function seo_image($image) {
         $args = array(
             'numberposts' => '1',
             'post_status' => 'publish',
-            'post_type' => array('post','dusk','films','log','emulsion','hyper','cityburns','4k-lento'),
+            'post_type' => array('post','dusk','films','log','hyper','cityburns','4k-lento'),
             'tax_query' => array(
                 array(
                     'taxonomy' => $taxonomy,
@@ -1652,7 +1592,7 @@ function seo_image($image) {
 
         $args = array(
             'numberposts' => '1',
-            'post_type' => array('post','dusk','films','emulsion','hyper','cityburns'),
+            'post_type' => array('post','dusk','films','hyper','cityburns'),
             'post_status' => 'publish'
         );
         $last = wp_get_recent_posts( $args );
@@ -1703,7 +1643,7 @@ function index_next_post_type($current_post_id) {
     //Get posts with the Serie of the current post
     $args = array(
         'posts_per_page' => 1,
-        'post_type' => array( 'post', 'dusk', 'emulsion', 'films', 'hyper', 'log', 'cityburns'),
+        'post_type' => array( 'post', 'dusk', 'films', 'hyper', 'log', 'cityburns'),
         'post_status' => array( 'publish' ),
         // 'date_query' => array(
         //     array(

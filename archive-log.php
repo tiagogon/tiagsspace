@@ -26,9 +26,6 @@
 				</div>
 
 
-				<section class="post">
-
-
 			</article>
 
 		<?php endwhile; ?>

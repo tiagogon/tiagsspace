@@ -14,11 +14,6 @@ Template Name: References
 			get_template_part( 'template-parts/entry', 'gallery' );
 			?>
 
-			<?PHP // Map
-			if (is_singular( 'sidewalk' ) && get_field('location')) {
-				get_template_part( 'template-parts/entry', 'map' );
-			}?>
-
 			<div class="container single-content">
 
 			    <div class="clearfix row">

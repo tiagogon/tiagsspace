@@ -66,7 +66,7 @@ Index of posts for Home and Archives
                   $grid_array = array(48, 14, 14, 14);
 
               }
-              if ($post_type == "hyper" or $post_type == "dusk" or $post_type == "emulsion") {
+              if ($post_type == "hyper" or $post_type == "dusk") {
                   $grid_array = array(16, 12, 12, 10);
               }
               if ($post_type == "4k-lento" ) {
@@ -372,7 +372,6 @@ Index of posts for Home and Archives
                       OR is_post_type_archive('4k-lento')
                       OR is_post_type_archive('films')
                       OR is_post_type_archive('dusk')
-                      OR is_post_type_archive('emulsion')
                       OR is_post_type_archive('cityburns'))
                       {
                         $post_title = $post_title_prefix.get_the_title($post->ID);
