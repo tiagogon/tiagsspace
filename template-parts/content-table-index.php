@@ -8,13 +8,19 @@
 // Post types to query
 $table_post_types = array( 'post', 'films', 'dusk', 'hyper', '4k-lento', 'log', 'cityburns' );
 
-// Query all posts
+// Query all posts (exclude hidden from archives)
 $table_query = new WP_Query( array(
     'post_type'      => $table_post_types,
     'posts_per_page' => -1,
     'post_status'    => 'publish',
     'orderby'        => 'date',
     'order'          => 'DESC',
+    'meta_query'     => array(
+        array(
+            'key'     => 'hide_post_from_main_page_archives_and_feed',
+            'compare' => 'NOT EXISTS',
+        ),
+    ),
 ) );
 
 $total = $table_query->found_posts;
