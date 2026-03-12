@@ -31,18 +31,18 @@ if ($background_image) {
 	<?PHP
 	// Video
 	if (get_field('video_embed')) {
-		get_template_part( 'template-parts/single', 'video-player' );
+		get_template_part( 'template-parts/entry', 'video-player' );
 	}elseif (get_field('self_host_film')){
-		get_template_part( 'template-parts/single', 'video-player' );
+		get_template_part( 'template-parts/entry', 'video-player' );
 	}
 
 	// if Gallery is Activated
 	if (get_field('deactivate_gallery') == false) {
 		// Gallery
 		if (get_field('horizontal_gallery')) {
-		get_template_part( 'template-parts/single', 'gallery-horizontal' );
+		get_template_part( 'template-parts/entry', 'gallery-horizontal' );
 		} else {
-			get_template_part( 'template-parts/single', 'gallery' );
+			get_template_part( 'template-parts/entry', 'gallery' );
 		}
 	} // if gallery is not deactivated
 
@@ -50,7 +50,7 @@ if ($background_image) {
 
 	<?PHP // Map
 	if (is_singular( 'sidewalk' ) && get_field('location')) {
-		get_template_part( 'template-parts/single', 'map' );
+		get_template_part( 'template-parts/entry', 'map' );
 	}?>
 
 	<div class="container single-content">
@@ -62,7 +62,7 @@ if ($background_image) {
 				<?php if (have_posts()) : while (have_posts()) : the_post();?>
 
 					<?PHP // Content
-					get_template_part( 'template-parts/single', 'content' );
+					get_template_part( 'template-parts/entry', 'body' );
 					?>
 
 				<?php endwhile; ?>

@@ -25,5 +25,5 @@ if ( is_array( $wp_query->posts ) ) {
 
 // Only render the grid if there are related posts to show
 if ( $wp_query->post_count > 0 ) {
-    get_template_part( 'template-parts/content', 'index' );
+    get_template_part( 'template-parts/archive', 'grid' );
 }

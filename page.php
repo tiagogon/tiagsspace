@@ -5,12 +5,12 @@
 		<article id="post-<?php the_ID(); ?>" <?php post_class('clearfix'); ?> role="article" itemscope itemtype="http://schema.org/BlogPosting">
 
 			<?PHP // Gallery
-			get_template_part( 'template-parts/single', 'gallery' );
+			get_template_part( 'template-parts/entry', 'gallery' );
 			?>
 
 			<?PHP // Map
 			if (is_singular( 'sidewalk' ) && get_field('location')) {
-				get_template_part( 'template-parts/single', 'map' );
+				get_template_part( 'template-parts/entry', 'map' );
 			}?>
 
 			<div class="container single-content">
@@ -22,7 +22,7 @@
 			            <?php if (have_posts()) : while (have_posts()) : the_post();?>
 
 							<?PHP // Content
-							get_template_part( 'template-parts/single', 'content' );
+							get_template_part( 'template-parts/entry', 'body' );
 							?>
 
 			            <?php endwhile; ?>

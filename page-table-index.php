@@ -21,7 +21,7 @@ Template Name: Table Index
 			endwhile; endif;
 
 			// Load the table
-			get_template_part( 'template-parts/content-table', 'index' );
+			get_template_part( 'template-parts/archive', 'table' );
 			?>
 
 		</article>

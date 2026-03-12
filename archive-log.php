@@ -8,9 +8,9 @@
 
 				<?PHP // Gallery
 				if (!get_field('horizontal_gallery')) {
-					get_template_part( 'template-parts/single', 'gallery' );
+					get_template_part( 'template-parts/entry', 'gallery' );
 				} else {
-					get_template_part( 'template-parts/single', 'gallery-horizontal' );
+					get_template_part( 'template-parts/entry', 'gallery-horizontal' );
 				}
 				?>
 
@@ -20,7 +20,7 @@
 			    	<div class="clearfix row">
 			    		<div class="<?php content_wrap() ?> clearfix" role="main">
 							<?PHP // Content
-							get_template_part( 'template-parts/single', 'content' );?>
+						get_template_part( 'template-parts/entry', 'body' );
 						</div>
 					</div>
 				</div>

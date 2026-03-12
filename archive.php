@@ -2,9 +2,7 @@
 
 	<div class="archive-wrapper">
 
-		<?php get_template_part( 'template-parts/content', 'index' ); ?>
-
-		<?php //get_template_part( 'template-parts/archive', 'header' ); ?>
+		<?php get_template_part( 'template-parts/archive', 'grid' ); ?>
 
 	</div>
 
