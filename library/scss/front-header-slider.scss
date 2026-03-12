@@ -267,3 +267,12 @@
 
   }
 }
+
+// Global link hover color for header and menu elements
+body #site-header #topbar a:hover,
+body #site-header .topbar-left a:hover,
+body #site-header .slicknav_nav a:hover,
+body #lower-header a:hover,
+body #collapseMenu a:hover {
+  color: $highlight-link;
+}

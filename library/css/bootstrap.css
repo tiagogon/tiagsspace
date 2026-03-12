@@ -5390,7 +5390,7 @@ body {
   line-height: 1.7;
   min-height: 100vh; }
   body a:hover {
-    color: none;
+    color: #3c00f5;
     text-decoration: none; }
   body em {
     font-style: normal;
@@ -5399,6 +5399,15 @@ body {
   @media (prefers-color-scheme: dark) {
     body {
       color: #fff; } }
+
+.single-content section.post-content p a:hover,
+.single-content section.post-content a:hover,
+.single-content .page-header h1.single-title a:hover,
+.single-content footer p.footer-meta a:hover,
+.single-content footer a:hover,
+.archive-navigation a:hover,
+.single-navigation a:hover {
+  color: #3c00f5; }
 
 body.background-w-dark-color {
   color: #fff; }
@@ -6026,6 +6035,13 @@ video.plyr-thumbnail-front {
 .background-w-dark-color-header a,
 .background-w-dark-color-header h1 {
   color: #fff; }
+
+body #site-header #topbar a:hover,
+body #site-header .topbar-left a:hover,
+body #site-header .slicknav_nav a:hover,
+body #lower-header a:hover,
+body #collapseMenu a:hover {
+  color: #3c00f5; }
 
 .first-block {
   padding-top: 56px; }
