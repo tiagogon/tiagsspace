@@ -7422,7 +7422,8 @@ img.mfp-img {
   table-layout: fixed;
   font-size: 21px;
   font-family: "Sporting_Grotesque_Bold", sans-serif;
-  line-height: 1.45; }
+  line-height: 1.45;
+  text-transform: uppercase; }
   .table-index th,
   .table-index td {
     padding: 6px 12px 6px 0;
