@@ -314,13 +314,13 @@
 						<a data-toggle="collapse" href="#collapseReference" role="button" aria-expanded="false" aria-controls="collapsePast">Lists</a>
 						<ul class="collapse" id="collapseReference">
 							<li>
-								<a href="https://goodreads.com/tiags" target="_blank">Goodreads</a>
+								<a href="https://goodreads.com/tiags" target="_blank">Reading</a>
 							</li>
 							<li>
-								<a href="https://letterboxd.com/tiagsssss/" target="_blank">Letterboxd</a>
+								<a href="https://letterboxd.com/tiagsssss/" target="_blank">Watching</a>
 							</li>
 							<li>
-								<a href="https://tiags.tumblr.com/" target="_blank">References</a>
+								<a href="https://tiags.tumblr.com/" target="_blank">Collecting</a>
 							</li>
 						</ul>
 					</li>
