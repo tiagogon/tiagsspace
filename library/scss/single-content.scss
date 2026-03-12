@@ -55,6 +55,46 @@
     }
 
   }
+
+  // Full-line clickable post title with hover thumbnail
+  .post-title-line {
+    position: relative;
+
+    .post-title-full-link {
+      display: block;
+      color: inherit;
+
+      &:hover, &:focus {
+        text-decoration: underline;
+      }
+    }
+
+    .post-collapse-toggle {
+      position: relative;
+      z-index: 2;
+    }
+
+    .post-title-thumb {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      max-height: 120px;
+      z-index: 10;
+      pointer-events: none;
+
+      img {
+        max-height: 120px;
+        width: auto;
+        height: auto;
+        display: block;
+      }
+    }
+
+    &:hover .post-title-thumb {
+      display: block;
+    }
+  }
   section.post-content{
     p{
         // text-align: justify;

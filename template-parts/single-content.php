@@ -21,36 +21,38 @@ Single // log Archive pages >> Content
   $year = get_the_time("Y");
 
   $logs_branch = "";
-  $logs_branch = "".taxonomy_list($post->ID,'log-branch',' ',' /',', ', ' & ', 'link');
+  $logs_branch = "".taxonomy_list($post->ID,'log-branch',' ',' /',', ', ' & ', 'no-link');
 
 ?>
 
 <header>
 
-    <div class="page-header">
+    <div class="page-header post-title-line">
         <h1 class="single-title" itemprop="headline">
            <?php
+           // Build plain-text breadcrumb prefix (no taxonomy archive links)
+           $title_prefix = '';
            if (!is_post_type_archive() AND !is_tax( 'log-branch' )) {
-             echo '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a> /  ';
+             $title_prefix .= $obj->labels->name.' /  ';
            }
            if (!is_tax( 'log-branch' ) ) {
-             echo $logs_branch.' ';
-             //echo taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'link');
+             $title_prefix .= $logs_branch.' ';
            }
 
-           // if (is_singular('4k-lento')) {
-           //     echo '4KL'.sprintf("%02d", number_of_the_post($post->ID)).' ';
-           // }
-
-          if (is_singular('')) {
-            echo get_the_title();
-          }else {
-            echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
+          if (is_singular()) {
+            echo $title_prefix.get_the_title();
+          } else {
+            echo '<a href="'.get_permalink().'" class="post-title-full-link">'.$title_prefix.get_the_title().'</a>';
           }
 
-          echo str_repeat('&nbsp;', 1).'<a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">+</a>';
+          echo '&nbsp;<a class="post-collapse-toggle" data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'" aria-label="Toggle post details">+</a>';
           ?>
         </h1>
+        <?php if (has_post_thumbnail()) : ?>
+        <div class="post-title-thumb">
+            <?php the_post_thumbnail( 'thumbnail' ); ?>
+        </div>
+        <?php endif; ?>
     </div>
 
 </header> <!-- end article header -->
