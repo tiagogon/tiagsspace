@@ -1,7 +1,6 @@
 ---
 description: Describe when these instructions should be loaded
-paths:
-. - ""
+applyTo: **
 ---
 Never edit the bootstrap.css file. All style editing needs to be done via .scss files.
 
