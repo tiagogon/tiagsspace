@@ -16,9 +16,15 @@ $table_query = new WP_Query( array(
     'orderby'        => 'date',
     'order'          => 'DESC',
     'meta_query'     => array(
+        'relation' => 'OR',
         array(
             'key'     => 'hide_post_from_main_page_archives_and_feed',
             'compare' => 'NOT EXISTS',
+        ),
+        array(
+            'key'     => 'hide_post_from_main_page_archives_and_feed',
+            'value'   => '1',
+            'compare' => '!=',
         ),
     ),
 ) );
