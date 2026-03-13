@@ -320,7 +320,7 @@ if (have_rows('extra_content')) {
     if ($light_box == 'magnific_popup') {
         $magnific_popup = "magnific_popup-gallery-".$post->ID;
         // Magnific Popup core JS file
-        ?><script src="<?php bloginfo('template_url'); ?>/library/js/Magnific-Popup/dist/jquery.magnific-popup.min.js"></script>
+        ?><script src="<?php bloginfo('template_url'); ?>/library/js/Magnific-Popup/jquery.magnific-popup.min.js"></script>
     <?php } ?>
 
     <div class="<?php echo $class_container; ?> <?php echo $spacement;?> container-gallery">
