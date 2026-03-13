@@ -299,7 +299,7 @@
 				<div class="<?php echo $menu_groups_class; ?>" >
 					<ul>
 					<li>
-						<a href="mailto:mail@tiags.space" target="_blank">_Mail</a>
+						<a href="mailto:mail@tiags.space" target="_blank">Email</a>
 					</li>
 					<li>
 						<a href="https://www.instagram.com/tiagsssss/" target="_blank">Instagram</a>
