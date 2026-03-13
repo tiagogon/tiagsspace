@@ -17,8 +17,10 @@ function taxonomy_list($post_id_of_the_tags,$custom_taxonomy, $tag_before, $tag_
     // Get Series terms
     $terms = get_the_terms( $this_id, $custom_taxonomy);
 
-	if ($terms) {
+	if ($terms && ! is_wp_error( $terms )) {
 		$count = count( $terms );
+	} else {
+		$count = 0;
 	}
 
 

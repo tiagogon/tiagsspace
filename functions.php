@@ -24,6 +24,7 @@ require_once('library/template-functions.php'); // Template helpers (taxonomy li
 require_once('library/seo-and-feed.php');       // Yoast OG/Twitter hooks, RSS feed customization
 require_once('library/gallery-functions.php');  // Gallery admin UI, AJAX handlers
 require_once('library/query-filters.php');      // Hide posts from archives, cache purge
+require_once('library/acf-fields.php');         // ACF field groups (registered via PHP)
 
 // Remove icon and number of coments on the top-nav-bar
 add_action('wp_before_admin_bar_render', function() { global $wp_admin_bar; $wp_admin_bar->remove_menu('comments'); });
