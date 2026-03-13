@@ -194,6 +194,10 @@ Index of posts for Home and Archives
                           //get animated image
                           $animated_thumbnail_array = array();
                           $animated_thumbnail_array = get_field('animated_thumbnail');
+                          // ACF may return a URL string instead of array — normalize to avoid PHP 8 fatal
+                          if (!is_array($animated_thumbnail_array)) {
+                              $animated_thumbnail_array = array();
+                          }
 
                           if ($video_thumbnail_id) {
 
