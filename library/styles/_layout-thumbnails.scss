@@ -1,0 +1,71 @@
+// --------------------------------------------------
+// Thumbnails & image defaults
+// --------------------------------------------------
+
+// Responsive image defaults
+picture,
+img {
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+  display: block;
+}
+
+.imgcontainer picture,
+.imgcontainer img {
+  height: auto;
+}
+
+// Intense Images fullscreen viewer fix:
+// Intense.js creates a <figure> with position:fixed and appends an <img> inside it,
+// setting width/height via JS attributes to make the image larger than the viewport
+// (enabling the mouse/touch panning effect). Our global "img { max-width: 100% }"
+// rule caps the image to the container width, preventing it from overflowing —
+// which breaks the panning on small viewports. This override removes that constraint
+// specifically for the Intense viewer.
+figure[style*="position: fixed"] img {
+  max-width: none;
+  height: auto;
+}
+
+
+// --------------------------------------------------
+// Thumbnail component
+// --------------------------------------------------
+
+.thumbnail {
+  display: block;
+  margin-bottom: $grid-gutter-width;
+  @include transition(all .2s ease-in-out);
+
+  > img,
+  a > img {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  .intense {
+  cursor: url("../js/intense-images/img/plus_cursor.png") 25 25, pointer;
+  }
+}
+
+@media (max-width: map-get($grid-breakpoints, sm)) {
+  .thumbnail {
+    margin-bottom: $grid-gutter-width/2;
+  }
+}
+
+
+// --------------------------------------------------
+// Reset list & figure tags
+// --------------------------------------------------
+ol, ul, dl {
+    padding: 0;
+    margin: 0;
+}
+figure {
+    margin: 0;
+}

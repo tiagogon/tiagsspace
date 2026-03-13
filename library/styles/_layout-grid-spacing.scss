@@ -1,0 +1,202 @@
+// --------------------------------------------------
+// Grid spacing utilities
+// --------------------------------------------------
+
+
+// --------------------------------------------------
+// Spacement 2px
+// --------------------------------------------------
+$spacement-2: 2px;
+.container.spacement-2{
+  padding-left: $grid-gutter-width + 20 - ($spacement-2 / 2);
+  padding-right: $grid-gutter-width + 20 - ($spacement-2 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-2;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-2 / 2);
+    padding-right: ($spacement-2 / 2);
+    margin-bottom: $spacement-2;
+  }
+}
+.container-fluid.spacement-2{
+  padding-left: $grid-gutter-width - ($spacement-2 / 2);
+  padding-right: $grid-gutter-width - ($spacement-2 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-2;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-2 / 2);
+    padding-right: ($spacement-2 / 2);
+    margin-bottom: $spacement-2;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+// --------------------------------------------------
+// Spacement 4px
+// --------------------------------------------------
+$spacement-4: 4px;
+.container.spacement-4{
+  padding-left: $grid-gutter-width + 20 - ($spacement-4 / 2);
+  padding-right: $grid-gutter-width + 20 - ($spacement-4 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-4;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-4 / 2);
+    padding-right: ($spacement-4 / 2);
+    margin-bottom: $spacement-4;
+  }
+}
+.container-fluid.spacement-4{
+  padding-left: $grid-gutter-width - ($spacement-4 / 2);
+  padding-right: $grid-gutter-width - ($spacement-4 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-4;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-4 / 2);
+    padding-right: ($spacement-4 / 2);
+    margin-bottom: $spacement-4;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+// --------------------------------------------------
+// Spacement 8px
+// --------------------------------------------------
+$spacement-8: 8px;
+.container.spacement-8{
+  padding-left: $grid-gutter-width + 20 - ($spacement-8 / 2);
+  padding-right: $grid-gutter-width + 20 - ($spacement-8 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-8;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-8 / 2);
+    padding-right: ($spacement-8 / 2);
+    margin-bottom: $spacement-8;
+  }
+}
+.container-fluid.spacement-8{
+  padding-left: $grid-gutter-width - ($spacement-8 / 2);
+  padding-right: $grid-gutter-width - ($spacement-8 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-8;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-8 / 2);
+    padding-right: ($spacement-8 / 2);
+    margin-bottom: $spacement-8;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+// --------------------------------------------------
+// Spacement 16px
+// --------------------------------------------------
+$spacement-16: 16px;
+.container.spacement-16{
+  padding-left: $grid-gutter-width + 20 - ($spacement-16 / 2);
+  padding-right: $grid-gutter-width + 20 - ($spacement-16 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-16;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-16 / 2);
+    padding-right: ($spacement-16 / 2);
+    margin-bottom: $spacement-16;
+  }
+}
+.container-fluid.spacement-16{
+  padding-left: $grid-gutter-width - ($spacement-16 / 2);
+  padding-right: $grid-gutter-width - ($spacement-16 / 2);
+  margin-bottom: $grid-gutter-width - $spacement-16;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-16 / 2);
+    padding-right: ($spacement-16 / 2);
+    margin-bottom: $spacement-16;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+// --------------------------------------------------
+// Spacement 20px
+// TODO: only this spacement works well on mobile — the others need mobile padding fixes
+// --------------------------------------------------
+$spacement-20: 20px;
+.container.spacement-20{
+  padding-left: 30px; // TODO: calculate from variables
+  padding-right: 30px;
+  @media (min-width: map-get($grid-breakpoints, sm)) {
+    padding-left: $grid-gutter-width + 20 - ($spacement-20 / 2);
+    padding-right: $grid-gutter-width + 20 - ($spacement-20 / 2);
+  }
+  margin-bottom: $grid-gutter-width - $spacement-20;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-20 / 2);
+    padding-right: ($spacement-20 / 2);
+    margin-bottom: $spacement-20;
+  }
+}
+.container-fluid.spacement-20{
+  padding-left: 10px; // TODO: calculate from variables
+  padding-right: 10px;
+  @media (min-width: map-get($grid-breakpoints, sm)) {
+    padding-left: $grid-gutter-width - ($spacement-20 / 2);
+    padding-right: $grid-gutter-width - ($spacement-20 / 2);
+    margin-bottom: $spacement-20;
+  }
+  margin-bottom: $grid-gutter-width - $spacement-20;
+  .row > [class*='col-'] {
+    padding-left: ($spacement-20 / 2);
+    padding-right: ($spacement-20 / 2);
+    margin-bottom: $spacement-20;
+  }
+  .row-inverted {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+// --------------------------------------------------
+// Row utilities
+// --------------------------------------------------
+
+// Remove padding between columns
+.row.no-pad {
+  margin-right:-15;
+  margin-left:-15;
+}
+.row.no-pad > [class*='col-'] {
+  padding-right:0;
+  padding-left:0;
+  margin-bottom: -1px;
+}
+
+// Invert container side padding inside a row
+.row-inverted {
+  margin-left: ($grid-gutter-width / 2);
+  margin-right: ($grid-gutter-width / 2);
+}
+
+
+// --------------------------------------------------
+// Responsive grid gutters
+// Smaller gutters on phones & tablets (below lg breakpoint)
+// --------------------------------------------------
+@media (max-width: map-get($grid-breakpoints, lg) - 1) {
+  .container,
+  .container-fluid {
+    padding-right: ($grid-gutter-width-mobile / 2);
+    padding-left: ($grid-gutter-width-mobile / 2);
+  }
+  .row {
+    margin-right: ($grid-gutter-width-mobile / -2);
+    margin-left: ($grid-gutter-width-mobile / -2);
+  }
+  .row > .col,
+  .row > [class*='col-'] {
+    padding-right: ($grid-gutter-width-mobile / 2);
+    padding-left: ($grid-gutter-width-mobile / 2);
+  }
+}

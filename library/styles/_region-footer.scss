@@ -1,0 +1,164 @@
+// --------------------------------------------------
+// Footer
+// --------------------------------------------------
+
+
+// --------------------------------------------------
+// Social block
+// --------------------------------------------------
+
+#social-block {
+  background: white;
+  padding-top: 60px;
+  padding-bottom: 0px;
+  h3 {
+    color: $tiagsssss-color;
+    margin-bottom: 15px;
+    font-size: 18px;
+    line-height: 1.3;
+    background-color: transparent;
+    display: inline-block;
+  }
+  p {
+    color: $tiagsssss-color;
+    a {
+      color: $tiagsssss-color;
+    }
+  }
+  ul {
+    padding: 0;
+    list-style: none;
+    display: block;
+    margin-bottom: 27px;
+    li {
+      display: inline-block;
+      margin-bottom: 14px;
+      margin-right: 16px;
+      a {
+        position: relative;
+        outline: none;
+        color: $tiagsssss-color;
+        font-size: 18px;
+        margin-right: 13px;
+        line-height: 1.3;
+        margin: 0px;
+      }
+    }
+  }
+  .email-form {
+    margin-bottom: 40px;
+    form {
+      margin-bottom: 10px;
+      input.input-field {
+        width: 240px;
+        max-width: 64%;
+        background: $white;
+        color: $tiagsssss-color;
+        padding: 8px 12px;
+        border-width: 0px;
+        border-style: inset;
+        border-color: $white;
+        border-image: initial;
+        font-size: 16px;
+        margin-bottom: 10px;
+        text-align: center;
+        @media (min-width: map-get($grid-breakpoints, sm)) {
+          margin-bottom: 0px;
+        }
+      }
+      input.input-field::placeholder {
+        color: $tiagsssss-color;
+        font-size: 16px;
+      }
+      input.input-button {
+        background: $tiagsssss-color;
+        color: $white;
+        padding: 8px 12px;
+        border-width: 0px;
+        border-style: inset;
+        border-color: $white;
+        border-image: initial;
+        font-size: 16px;
+        border-radius: 0px;
+      }
+    }
+    p {
+      font-size: 12px;
+    }
+  }
+}
+
+
+// --------------------------------------------------
+// Footer block
+// --------------------------------------------------
+
+#footer-block {
+  background: $white;
+  padding-top: 0px;
+  .attribution {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    p {
+      color: $tiagsssss-color;
+      font-size: 16px;
+      a {
+        color: $tiagsssss-color;
+      }
+    }
+  }
+}
+
+// --------------------------------------------------
+// Log pages: inverted footer colors
+// --------------------------------------------------
+
+.post-type-archive-log, .single-log, .tax-log-branch {
+    #social-block{
+      background: $tiagsssss-color;
+      h3 {
+        color: $white;
+      }
+      p{
+        color: $white;
+        a{
+          color: $white;
+        }
+      }
+      ul {
+        li {
+          a {
+            color: $white;
+          }
+        }
+      }
+      .email-form{
+        form{
+          input.input-field{
+            background: $white;
+            color: $tiagsssss-color;
+            border-color: $tiagsssss-color;
+          }
+          input.input-field::placeholder {
+            color: $tiagsssss-color;
+          }
+          input.input-button{
+            background: $white;
+            color: $tiagsssss-color;
+            border-color: $tiagsssss-color;
+          }
+        }
+      }
+    }
+    #footer-block{
+    	background: $tiagsssss-color;
+      .attribution{
+      	p{
+      	  color: $white;
+      		a{
+      		  color: $white;
+      		}
+      	}
+      }
+    }
+}

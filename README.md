@@ -17,7 +17,7 @@ This is the custom WordPress theme for [tiags.space](https://tiags.space).
 
 ## Development
 
-- SCSS files are located in the `library/scss` folder.
+- Style sources (SCSS) and compiled CSS are in the `library/styles` folder.
 - Customize templates in the `template-parts` directory.
 - JavaScript and PHP files are organized by feature.
 

@@ -1,0 +1,49 @@
+// --------------------------------------------------
+// Main — SCSS entry point for Tiags' Space theme
+// Compiled by Koala → main.css
+// --------------------------------------------------
+
+// ----- Foundations (variables, fonts) -----
+
+@import "foundations-fonts"; // must come before Bootstrap to override variables
+
+// ----- Bootstrap (selective) -----
+
+@import "../bootstrap/scss/functions";
+@import "../bootstrap/scss/variables";
+@import "../bootstrap/scss/mixins";
+
+@import "../bootstrap/scss/root";
+@import "../bootstrap/scss/reboot";
+@import "../bootstrap/scss/type";
+@import "../bootstrap/scss/grid";
+@import "../bootstrap/scss/transitions"; // needed for Bootstrap Collapse Component
+@import "../bootstrap/scss/utilities";
+
+// ----- Foundations (tokens) -----
+
+@import "foundations-tokens";
+
+// ----- Layout -----
+
+@import "layout-grid-spacing";
+@import "layout-thumbnails";
+
+// ----- Components (vendor + overrides) -----
+
+@import "component-plyr";
+@import "vendor-magnific-popup";
+@import "component-lightbox";
+@import "component-videojs";
+
+// ----- Regions (shared page areas) -----
+
+@import "region-header-nav";
+@import "region-archive-grid";
+@import "region-footer";
+
+// ----- Page-specific -----
+
+@import "page-single-gallery";
+@import "page-single-content";
+@import "page-table-index";

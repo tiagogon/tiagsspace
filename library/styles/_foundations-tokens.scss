@@ -1,0 +1,113 @@
+// --------------------------------------------------
+// Body defaults
+// --------------------------------------------------
+
+body {
+  font-size: $font-size-p;
+  line-height: 1.7;
+  min-height: 100vh;
+  a:hover {
+    color: $highlight-link;
+    text-decoration: none;
+  }
+  em {
+    font-style: normal;
+    font-family: $font-family-headings;
+    font-size: $font-size-p+2;
+  }
+  @media (prefers-color-scheme: dark) {
+    color: $white;
+  }
+}
+
+// Global link hover color — high specificity override
+// Covers post content, metadata, archive navigation, and single post areas
+.single-content section.post-content p a:hover,
+.single-content section.post-content a:hover,
+.single-content .page-header h1.single-title a:hover,
+.single-content footer p.footer-meta a:hover,
+.single-content footer a:hover,
+.archive-navigation a:hover,
+.single-navigation a:hover {
+  color: $highlight-link;
+}
+
+body.background-w-dark-color {
+  color: $white;
+}
+
+
+// --------------------------------------------------
+// Background color utility classes
+// --------------------------------------------------
+
+.tiagsssss-color {
+  background-color: $tiagsssss-color;
+  background: $tiagsssss-color-gradient;
+  @media (max-width: map-get($grid-breakpoints, sm)) {
+    background: $tiagsssss-color; // iOS status bar breaks with gradients
+  }
+  @media (prefers-color-scheme: dark) {
+    background-color: $tiagsssss-color-darkmode;
+    background: $tiagsssss-color-darkmode-gradient;
+    @media (max-width: map-get($grid-breakpoints, sm)) {
+      background: $tiagsssss-color-darkmode; // iOS status bar breaks with gradients
+    }
+  }
+}
+.tiagsssss-color-heading {
+  color: $blue;
+}
+
+.white {
+  background: $white;
+}
+
+.white-darkmode {
+  background: $white;
+  @media (prefers-color-scheme: dark) {
+    background: $white-darkmode;
+  }
+}
+
+.dark {
+  background-color: $dark;
+}
+.dark-heading {
+  color: $tiagsssss-color;
+}
+
+.indigo {
+  background-color: $indigo;
+}
+.indigo-heading {
+  color: $yellow;
+}
+
+.blue {
+  background-color: $blue;
+}
+.blue-heading {
+  color: $tiagsssss-color;
+}
+
+.lime {
+  background-color: $lime;
+}
+.lime-heading {
+  color: $lime;
+}
+
+.yellow {
+  background-color: $yellow;
+}
+.yellow-heading {
+  color: $indigo;
+}
+
+.earth {
+  background-color: $earth;
+}
+.sky {
+  background-color: $sky;
+}

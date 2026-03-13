@@ -8,8 +8,8 @@ just edit things like thumbnail sizes, header images,
 sidebars, comments, ect.
 */
 
-// Get Bones Core Up & Running!
-require_once('library/bones.php');            // core functions (don't remove)
+// Theme helper functions
+require_once('library/helpers.php');          // WP cleanup, pagination, content filters
 
 // Custom Video Player Functions
 require_once('library/plyr-player.php');      // Plyr video player helper
@@ -39,7 +39,7 @@ function tiagsspace_enqueue_assets() {
     // ----- CSS ----- (order matters)
     wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], null);
     wp_enqueue_style('swiper', $template_dir . '/library/js/swiper/swiper-bundle.min.css', [], null);
-    wp_enqueue_style('bootstrap', $template_dir . '/library/css/bootstrap.css', [], null);
+    wp_enqueue_style('theme-style', $template_dir . '/library/styles/main.min.css', [], null);
 
     // ----- jQuery -----
     // Use local jQuery to match existing theme expectations

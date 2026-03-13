@@ -3,8 +3,8 @@
 	// The mappings of source directory and output directory
 	"mappings": [
 		{	
-		"src": "library/less",
-		"dest": "library/css"
+		"src": "library/styles",
+		"dest": "library/styles"
 		}
 	],
 

@@ -1,0 +1,353 @@
+// --------------------------------------------------
+// Plyr player overrides
+// --------------------------------------------------
+
+
+// --------------------------------------------------
+// Default variables
+// --------------------------------------------------
+
+$plyr-tab-focus-default-color: none !default;
+$plyr-color-main: transparent !default;
+$plyr-audio-control-bg-hover: $plyr-tab-focus-default-color !default;
+
+
+// --------------------------------------------------
+// Video player
+// --------------------------------------------------
+
+
+.plyr--video {
+    .plyr__controls {
+        background: none;
+    }
+}
+
+// Change default plyr background
+.plyr {
+  --plyr-control-background: $white;
+  --plyr-color-main: $dark;
+}
+
+// Hide adaptive quality spinner
+.plyr__spinner {
+  display: none !important;
+}
+
+
+// --------------------------------------------------
+// Custom large play button
+// --------------------------------------------------
+
+.plyr {
+    font-family: $font-family-sans-serif;
+    width: 100%;
+    min-width: 0; // override Plyr default min-width:200px so videos shrink with masonry columns
+    // Simplified large white triangle play button
+    .plyr__control--overlaid,
+    .plyr__play-large {
+        display: inline-flex !important;
+        background: transparent !important; // keep overlay transparent
+        color: $white !important;
+        width: $grid-gutter-width * 6;
+        height: $grid-gutter-width * 6;
+        padding: 0;
+        align-items: center;
+        justify-content: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        z-index: 3;
+        transition: transform .18s ease, opacity .18s;
+
+        // hide the default SVG icon if present
+        svg { display: none !important; }
+
+        // create a CSS triangle (play icon)
+        &::before {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 56px solid $white; // main triangle size
+            border-top: 34px solid transparent;
+            border-bottom: 34px solid transparent;
+            transform-origin: 50% 50%;
+            transition: transform .18s ease, opacity .18s ease;
+            will-change: transform;
+        }
+
+        // hover / focus animation: slight slide + scale for a nice interaction
+        &:hover::before,
+        &:focus::before {
+            transform: translateX(0px) scale(1.33);
+            opacity: 0.98;
+        }
+
+        // keyboard focus outline for accessibility (subtle)
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 0px rgba(255,255,255,0.06);
+        }
+    }
+}
+
+// --------------------------------------------------
+// Settings menu (quality/speed)
+// --------------------------------------------------
+
+    .plyr__menu__container,
+    .plyr__menu__list {
+        background: $dark !important;
+        color: $white !important;
+        border-radius: 6px !important;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.6) !important;
+    }
+
+    .plyr__menu__list li,
+    .plyr__menu__list button,
+    .plyr__menu__container .plyr__control {
+        color: $white !important;
+    }
+
+    // Remove speech-bubble arrow for clean look
+    .plyr__menu__container::before,
+    .plyr__menu__container::after,
+    .plyr__menu::before,
+    .plyr__menu::after {
+        display: none !important;
+    }
+
+    // Ensure icons inherit color
+    .plyr__menu__item svg,
+    .plyr__menu__item i {
+        fill: currentColor !important;
+        color: currentColor !important;
+    }
+    .plyr__menu__value{
+        display: none!important;
+    }
+
+    .plyr__menu__container .plyr__control--back:after {
+        border-right-color: $white !important;
+        border-right-color: $white !important;
+    }
+
+// Remove rounded corners on settings menu
+.plyr__menu,
+.plyr__menu__container,
+.plyr__menu__list {
+  border-radius: 0 !important;
+  overflow: visible; // allow the tail/arrow to remain visible
+}
+
+// Remove rounding on pseudo-element arrows too
+.plyr__menu__container::before,
+.plyr__menu__container::after,
+.plyr__menu::before,
+.plyr__menu::after {
+  border-radius: 0 !important;
+}
+
+// --------------------------------------------------
+// General audio & tooltip
+// --------------------------------------------------
+
+audio {
+    width: 100%;
+}
+
+.plyr__time {
+    font-size: 16px;
+}
+
+.plyr__tooltip {
+    box-shadow: none;
+    line-height: 1;
+}
+
+// Front page thumbnail: video plays as background
+video.plyr-thumbnail-front {
+  pointer-events: none;
+}
+
+
+// --------------------------------------------------
+// Audio: light background
+// --------------------------------------------------
+
+.background-w-light-color {
+    .plyr--audio .plyr__control {
+        color: $dark;
+        &.plyr__tab-focus,
+        &:hover,
+        &[aria-expanded='true'] {
+            background: none!important;
+            color: $dark;
+        }
+    }
+    @mixin plyr-tab-focus($color: $dark) {
+        box-shadow: none;
+        outline: 0;
+    }
+
+    .plyr--audio {
+        .plyr__controls {
+            color: $dark;
+        }
+        .plyr__tooltip {
+            background: transparent;
+            color: $dark;
+            font-size: 16px;
+            font-weight: $font-weight-normal;
+                        // tooltip arrow intentionally omitted
+        }
+    }
+    .plyr--full-ui input[type='range'] {
+        color: $dark;
+        width: 98%;
+    }
+}
+
+
+// --------------------------------------------------
+// Audio: general control reset
+// --------------------------------------------------
+
+.plyr--audio .plyr__control {
+    &.plyr__tab-focus,
+    &:hover,
+    &[aria-expanded='true'] {
+        background: transparent;
+    }
+}
+
+
+// --------------------------------------------------
+// Audio: dark background (blue, dark grey)
+// --------------------------------------------------
+
+.background-w-dark-color {
+    .plyr--audio .plyr__controls {
+        color: $white;
+        &.plyr__tab-focus,
+        &:hover,
+        &[aria-expanded='true'] {
+            background: none!important;
+            color: $white;
+        }
+    }
+    @mixin plyr-tab-focus($color: $plyr-tab-focus-default-color) {
+        box-shadow: none;
+        outline: 0;
+    }
+
+    .plyr--audio {
+        .plyr__controls {
+            color: $white;
+        }
+        .plyr__tooltip {
+            background: transparent;
+            color: $white;
+            font-size: 16px;
+            font-weight: $font-weight-normal;
+        }
+    }
+
+    .plyr--full-ui input[type='range'] {
+        color: $white;
+    }
+}
+
+
+// --------------------------------------------------
+// Audio inside gallery thumbnails
+// --------------------------------------------------
+
+.thumbnail.media-audio {
+    .plyr {
+        position: absolute;
+        bottom: 0;
+    }
+    .plyr--audio .plyr__controls {
+        .plyr__volume {
+            display: none;
+        }
+        .plyr__menu {
+            display: none;
+        }
+        .plyr__time {
+            display: none;
+        }
+    }
+}
+
+
+// --------------------------------------------------
+// Caption styling — responsive sizing
+// --------------------------------------------------
+.plyr__captions {
+    font-size: 16px; // xs: mobile base
+    font-weight: 600;
+    line-height: 1.4;
+    bottom: 0;
+    
+    // sm: Small devices (landscape phones, 576px and up)
+    @include media-breakpoint-up(sm) {
+        font-size: 20px;
+        bottom: 10px;
+    }
+    
+    // md: Medium devices (tablets, 768px and up)
+    @include media-breakpoint-up(md) {
+        font-size: 26px;
+        bottom: 20px;
+    }
+    
+    // lg: Large devices (desktops, 992px and up)
+    @include media-breakpoint-up(lg) {
+        font-size: 32px;
+        bottom: 30px;
+    }
+    
+    // xl: Extra large devices (large desktops, 1200px and up)
+    @include media-breakpoint-up(xl) {
+        font-size: 38px;
+        bottom: 40px;
+    }
+}
+
+// Override fullscreen caption sizes as well
+.plyr:fullscreen .plyr__captions,
+.plyr--fullscreen-fallback .plyr__captions {
+    // sm: Small devices (landscape phones, 576px and up)
+    @include media-breakpoint-up(sm) {
+        font-size: 20px;
+        bottom: 10px;
+    }
+    
+    // md: Medium devices (tablets, 768px and up)
+    @include media-breakpoint-up(md) {
+        font-size: 26px;
+        bottom: 20px;
+    }
+    
+    // lg: Large devices (desktops, 992px and up)
+    @include media-breakpoint-up(lg) {
+        font-size: 32px;
+        bottom: 30px;
+    }
+    
+    // xl: Extra large devices (large desktops, 1200px and up)
+    @include media-breakpoint-up(xl) {
+        font-size: 38px;
+        bottom: 40px;
+    }
+
+}
+.plyr__caption {
+
+    line-height: 200%;
+    padding: .1em 0.5em;
+}

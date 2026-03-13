@@ -1,0 +1,236 @@
+// --------------------------------------------------
+// Video.js skin overrides (video-skin-trouble)
+// --------------------------------------------------
+
+$color_1: #fff;
+$background_color_2: rgba(43, 51, 63, 0);
+$background_color_4: rgba(255, 255, 255, 0.2);
+
+
+.video-js.video-skin-trouble {
+	font-size: $font-size-base;
+	color: $color_1;
+	font-family: $font-family-base;
+
+	// FONTS
+	.vjs-error {
+		.vjs-error-display {
+			.vjs-modal-dialog-content {
+				font-family: $font-family-base;
+			    font-size: 16px;
+			    
+			}
+			&:before {
+				font-family: $font-family-base;
+				text-shadow: 0 0 1em $black;
+				top: 20%;
+			}
+		}
+	}
+	.vjs-menu {
+		.vjs-menu-content {
+			font-family: $font-family-base;
+		}
+	}
+	.vjs-no-js {
+		font-family: $font-family-base;
+	}
+
+	// Loading animation
+	.vjs-loading-spinner {
+	    border: 6px solid rgba(255, 255, 255, 0.7);
+	}
+	.vjs-big-play-button {
+		width: 128px;
+		height: 128px;
+		line-height: 120px;
+		border: 0;
+		border-radius: 50%;
+		text-shadow: none;
+		left: 50%;
+		top: 50%;
+		margin: -60px 0 0 -60px;
+		font-size: 60px;
+		background: none; /// REMOVES CIRCLE rgba(255, 255, 255, 0.7);
+		border: 6px solid $color_1;
+		&:focus {
+			background: $background_color_4;
+		}
+		&:before {
+			color: $color_1;
+		}
+	}
+	&:hover {
+		.vjs-big-play-button {
+			background-color: $background_color_2;
+		}
+	}
+
+	// Big play button
+
+	.vjs-control {
+	    width: 62px;
+	    text-shadow: 0 0 1em $black;
+		&:before {
+			font-size: 22px;
+			line-height: 60px;
+		}
+		&:focus {
+			text-shadow: 0 0 1em $black;
+		}
+	}
+
+	// Control bar
+	.vjs-control-bar {
+		background-color: $background_color_2;
+		height: 60px;
+		padding: 0 0px;
+		@media (min-width: map-get($grid-breakpoints, sm)) {
+			padding: 0 14px;
+		}
+	}
+	.vjs-menu-button {
+		.vjs-menu-content {
+			background-color: $background_color_2;
+		}
+	}
+	.video-js .vjs-progress-holder {
+	    height: 8px;
+	}
+
+	.vjs-slider {
+		background-color: $background_color_4;
+		box-shadow: 0 0 1em rgba(51, 51, 51, 0.4);
+	}
+
+	// Volume control
+	.vjs-volume-bar {
+		background: $background_color_4!important;
+		margin-top: 28px;
+	}
+	.vjs-volume-level {
+		background: $color_1;
+		&:before {
+			display: none;
+		}
+	}
+
+	// Progress / time control
+	.vjs-progress-control {
+			&:hover {
+				.vjs-mouse-display {
+					&:after {
+						font-family: $font-family-base;
+						-webkit-border-radius: 0;
+						-moz-border-radius: 0;
+						border-radius: 0;
+						background: $background_color_4;
+						color: #fff;
+						font-size: 16px;
+					}
+				}
+				.vjs-play-progress {
+					&:after {
+						font-family: $font-family-base;
+						-webkit-border-radius: 0;
+						-moz-border-radius: 0;
+						border-radius: 0;
+						background: $background_color_4;
+						color: #fff;
+						font-size: 16px;
+
+					}
+				}
+				.vjs-time-tooltip {
+					font-family: $font-family-base;
+					-webkit-border-radius: 0;
+					-moz-border-radius: 0;
+					border-radius: 0;
+					background: $background_color_4;
+					color: #fff;
+					font-size: 16px;
+
+				}
+			}
+		}
+
+
+	.vjs-play-progress {
+		background: $color_1;
+	}
+	.vjs-slider-bar {
+		background: $color_1;
+
+		margin-top: 28px;
+	}
+	.vjs-play-progress {
+		&:before {
+			display: none;
+		}
+	}
+	.vjs-load-progress {
+		background: #bfc7d3;
+		background: $background_color_4;
+		div {
+			background: rgba(255, 255, 255, 0.2);
+		}
+	}
+
+	// Resolution options menu
+	.vjs-menu {
+		.vjs-menu-content {
+			bottom: 40px;
+			li{
+				float: none;
+				display: block;
+				font-size: 16px;
+			}
+			li.vjs-menu-title {
+			    display: none!important;
+			}
+			li.vjs-selected {
+				background-color: $background_color_4;
+				color: #fff;
+			    text-shadow: none;
+			    width: 75px;
+			    margin: 0 auto;
+				&:focus {
+					background-color: $background_color_4;
+				    width: 75px!important;
+				    margin: 0 auto!important;
+				}
+				&:hover {
+					background-color: $background_color_4;
+				    width: 75px!important;
+				    margin: 0 auto!important;
+				}
+			}
+			li.vjs-menu-item {
+				&:focus {
+					background-color: $background_color_4;
+				    width: 75px!important;
+				    margin: 0 auto!important;
+				}
+				&:hover {
+					background-color: $background_color_4;
+				    width: 75px!important;
+				    margin: 0 auto!important;
+				}
+			}
+		}
+	}
+
+
+	.vjs-time-control {
+	    font-size: 16px;
+	    line-height: 60px;
+	}
+}
+
+// Hide big play button once video has started playing
+.video-js.video-skin-trouble.vjs-has-started {
+	.vjs-big-play-button {
+		display: none!important;
+	}
+}
+
