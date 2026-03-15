@@ -139,6 +139,18 @@ if ( is_user_logged_in() ) {
 	add_action( 'wp_enqueue_scripts', 'example_ajax_enqueue' );
 }
 
+// Reset gallery ACF fields in the Gutenberg UI after save
+function gallery_enqueue_editor_reset_script() {
+	wp_enqueue_script(
+		'gallery-reset-after-save',
+		get_template_directory_uri() . '/library/js/gallery-reset-after-save.js',
+		array(),
+		'1.0',
+		true
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'gallery_enqueue_editor_reset_script' );
+
 // ----------------------
 //
 // AJAX: Atachments Order -- Change database wp_posts >> menu_order via Ajax request
@@ -342,3 +354,207 @@ function change_attachment_margin() {
    die();
 }
 add_action( 'wp_ajax_change_attachment_margin', 'change_attachment_margin' );
+
+
+/************* Order images by chronological order *************/
+
+// Reorder post attachments by date (chronological) on save.
+// Triggered when ACF field 'order_media_attachments' is set to 'chronological'.
+function reorder_images_by_date( $ID, $post ) {
+
+    if( get_field('order_media_attachments') !== 'chronological') {
+        return;
+    }
+
+    $args = array(
+        'numberposts'       => -1,
+        'orderby'           => 'date',
+        'order'             => 'ASC',
+        'post_parent'       => $post->ID,
+        'post_status'       => null,
+        'post_type'         => 'attachment'
+    );
+
+    $images = get_children( $args );
+
+    if($images){
+
+        // Order just the new added media
+        if (get_field('order_just_the_new_added_pictures')) {
+
+            // Find the highest existing menu_order
+            $highest_menu_order = 0;
+
+            foreach($images as $image){
+                if ($highest_menu_order < $image->menu_order) {
+                    $highest_menu_order = $image->menu_order;
+                }
+            }
+
+            // Order unordered images from the highest menu order value up
+            $count_item = $highest_menu_order;
+
+            foreach($images as $image){
+                if ($image->menu_order == 0) {
+                    $count_item++;
+                    wp_update_post( array(
+                        'ID'           => $image->ID,
+                        'menu_order'   => $count_item,
+                        'post_type'    => 'attachment',
+                    ));
+                }
+            }
+
+        // Order all the media items
+        } else {
+
+            $count_item = 0;
+
+            foreach($images as $image){
+                $count_item++;
+                wp_update_post( array(
+                    'ID'           => $image->ID,
+                    'menu_order'   => $count_item,
+                    'post_type'    => 'attachment',
+                ));
+            }
+
+        }
+
+    }
+
+    // Reset checkboxes after reordering
+    update_field('order_media_attachments', false);
+    update_field('order_just_the_new_added_pictures', false);
+}
+add_action( 'save_post', 'reorder_images_by_date', 10, 2 );
+
+
+/************* Order images by random order *************/
+
+// Reorder post attachments in random order on save.
+// Triggered when ACF field 'order_media_attachments' is set to 'random'.
+// Attachments with ACF field 'skip_random' are placed first in their existing order.
+function reorder_images_by_random_order( $ID, $post ) {
+
+    if( get_field('order_media_attachments') !== 'random') {
+        return;
+    }
+
+    $args = array(
+        'numberposts'       => -1,
+        'orderby'           => 'menu_order',
+        'order'             => 'ASC',
+        'post_parent'       => $post->ID,
+        'post_status'       => null,
+        'post_type'         => 'attachment'
+    );
+
+    $attachments = get_children($args);
+
+    if($attachments){
+
+        $number_attachments_skiping_order = 0;
+
+        // Assign first menu_order positions to attachments that skip random order
+        foreach($attachments as $attachment){
+            if ( get_field("skip_random", $attachment->ID) == true ) {
+                $number_attachments_skiping_order++;
+                wp_update_post( array(
+                    'ID'           => $attachment->ID,
+                    'menu_order'   => $number_attachments_skiping_order,
+                    'post_type'    => 'attachment',
+                ));
+            }
+        }
+
+        // Create a shuffled array of order numbers for the remaining attachments
+        $atachments_count = count($attachments);
+        $menu_order = range($number_attachments_skiping_order + 1, $atachments_count);
+        shuffle($menu_order);
+
+        $count_item = 0;
+
+        // Assign random order to every non-skipped attachment
+        foreach($attachments as $attachment){
+            if ( get_field("skip_random", $attachment->ID) == false ) {
+                wp_update_post( array(
+                    'ID'           => $attachment->ID,
+                    'menu_order'   => $menu_order[$count_item],
+                    'post_type'    => 'attachment',
+                ));
+                $count_item++;
+            }
+        }
+
+    }
+
+    // Reset checkbox after reordering
+    update_field('order_media_attachments', false);
+}
+add_action( 'save_post', 'reorder_images_by_random_order', 10, 2 );
+
+
+/************* Re-attach images from post editor *************/
+
+// Move attachments from one post to another on save.
+// Supports two modes: 'keep' (move all EXCEPT selected) or 'reattach' (move only selected).
+function re_attach_images_from_post_editor( $ID, $post ) {
+
+    if( get_field('re-attach_images_from_post_editor') != true ) {
+        return;
+    }
+
+    $re_attach_mode = get_field('re-attach_mode');
+
+    // Get the IDs of selected images
+    $images_selected = get_field('selected_images');
+    $image_selected_IDs = array();
+    if( $images_selected ) {
+        foreach( $images_selected as $image ) {
+            $image_selected_IDs[] = $image['ID'];
+        }
+    }
+
+    // Get the destination post ID
+    $destination_post_ids = get_field('destination_post');
+    $destination_post_id = $destination_post_ids[0];
+
+    $args = array(
+        'numberposts'       => -1,
+        'orderby'           => 'date',
+        'order'             => 'ASC',
+        'post_parent'       => $post->ID,
+        'post_status'       => null,
+        'post_type'         => 'attachment'
+    );
+
+    $images = get_children( $args );
+
+    if($images){
+
+        foreach($images as $image){
+
+            // In 'keep' mode, move images NOT in the selection
+            // In 'reattach' mode, move images IN the selection
+            $in_selection = in_array($image->ID, $image_selected_IDs);
+            $should_move = ($re_attach_mode == 'keep') ? !$in_selection : $in_selection;
+
+            if($should_move) {
+                wp_update_post( array(
+                    'ID'           => $image->ID,
+                    'post_parent'  => $destination_post_id,
+                    'post_type'    => 'attachment',
+                ));
+            }
+
+        }
+
+    }
+
+    // Reset fields after re-attaching
+    update_field('re-attach_images_from_post_editor', false);
+    update_field('destination_post', array());
+    update_field('selected_images', array());
+}
+add_action( 'save_post', 're_attach_images_from_post_editor', 10, 2 );

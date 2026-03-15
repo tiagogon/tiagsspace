@@ -19,6 +19,7 @@
  *  6. Video Player Options       — embed URL, self-host, player config (films/hyper)
  *  7. Video player per attachment — per-video player overrides
  *  8. Video player(s) per post   — per-post video player overrides
+ *  9. Re-attach images           — move attachments between posts from editor
  *
  * @see https://www.advancedcustomfields.com/resources/register-fields-via-php/
  */
@@ -794,6 +795,62 @@ add_action( 'acf/include_fields', function() {
 				'type' => 'true_false',
 				'instructions' => 'Add video schema for the first video on Twitter and Facebook.',
 				'conditional_logic' => array( array( array( 'field' => 'field_59cf9efdaeb67', 'operator' => '==', 'value' => '1' ) ) ),
+			),
+		),
+		'location' => array(
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'post' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'page' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'dusk' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'emulsion' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'log' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'hyper' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'films' ) ),
+		),
+		'active' => true,
+	) );
+
+	// =========================================================================
+	// 9. Re-attach images from post editor
+	// =========================================================================
+	acf_add_local_field_group( array(
+		'key' => 'group_5921cdc08a134',
+		'title' => 'Re-attach images from post editor',
+		'fields' => array(
+			array(
+				'key' => 'field_5921cdfcd2e32',
+				'label' => 'Re-attach images from post editor',
+				'name' => 're-attach_images_from_post_editor',
+				'type' => 'true_false',
+			),
+			array(
+				'key' => 'field_5921d2baf3f6e',
+				'label' => 'Destination post',
+				'name' => 'destination_post',
+				'type' => 'relationship',
+				'conditional_logic' => array( array( array( 'field' => 'field_5921cdfcd2e32', 'operator' => '==', 'value' => '1' ) ) ),
+				'filters' => array( 'search', 'post_type', 'taxonomy' ),
+				'elements' => array( 'featured_image' ),
+				'max' => 1,
+				'return_format' => 'id',
+			),
+			array(
+				'key' => 'field_5921ce1ed2e33',
+				'label' => 'Re-attach mode',
+				'name' => 're-attach_mode',
+				'type' => 'radio',
+				'conditional_logic' => array( array( array( 'field' => 'field_5921cdfcd2e32', 'operator' => '==', 'value' => '1' ) ) ),
+				'choices' => array( 'keep' => 'Keep these images', 'reattach' => 'Re-attach these images' ),
+				'default_value' => 'keep',
+				'return_format' => 'value',
+			),
+			array(
+				'key' => 'field_5921cea9d2e34',
+				'label' => 'Selected Images',
+				'name' => 'selected_images',
+				'type' => 'gallery',
+				'conditional_logic' => array( array( array( 'field' => 'field_5921cdfcd2e32', 'operator' => '==', 'value' => '1' ) ) ),
+				'insert' => 'append',
+				'library' => 'uploadedTo',
 			),
 		),
 		'location' => array(
