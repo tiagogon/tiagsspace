@@ -26,7 +26,7 @@ This is a custom WordPress theme called "tiagsspace" (Tiags' Space). It uses a c
 - `library/seo-and-feed.php` — Feed links, Feedly support, feed title/content formatting, Yoast OpenGraph and Twitter image overrides
 - `library/gallery-functions.php` — Gallery admin UI (hide/delete/reorder/resize), AJAX handlers for media order, attachment size, margin changes
 - `library/query-filters.php` — Hide posts from index/archives/feeds (ACF field), exclude hidden adjacent posts, purge Table Index cache on post changes
-- `template-parts/` — reusable template parts (archive-grid, archive-table, entry-body, entry-gallery, entry-video-player, etc.)
+- `template-parts/` — reusable template parts (header-title, header-menu, header-lower, archive-grid, archive-table, entry-body, entry-gallery, entry-gallery-horizontal, entry-video-player)
 
 ### SCSS / CSS
 - SCSS source files live in `library/styles/`
