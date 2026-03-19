@@ -182,7 +182,8 @@ add_action( 'acf/include_fields', function() {
 				'wrapper' => array( 'width' => '51' ),
 				'choices' => array(
 					'chronological' => 'Chronological',
-					'random' => 'Random',
+					'capture_time'  => 'Capture time (EXIF)',
+					'random'        => 'Random',
 				),
 				'allow_null' => 1,
 				'layout' => 'horizontal',
@@ -193,7 +194,10 @@ add_action( 'acf/include_fields', function() {
 				'name' => 'order_just_the_new_added_pictures',
 				'type' => 'true_false',
 				'instructions' => "This will order just the new added images ('menu_order' => 0) after the current order.",
-				'conditional_logic' => array( array( array( 'field' => 'field_5a2dbd936ecca', 'operator' => '==', 'value' => 'chronological' ) ) ),
+				'conditional_logic' => array(
+					array( array( 'field' => 'field_5a2dbd936ecca', 'operator' => '==', 'value' => 'chronological' ) ),
+					array( array( 'field' => 'field_5a2dbd936ecca', 'operator' => '==', 'value' => 'capture_time' ) ),
+				),
 				'wrapper' => array( 'width' => '49' ),
 			),
 

@@ -430,6 +430,97 @@ function reorder_images_by_date( $ID, $post ) {
 add_action( 'save_post', 'reorder_images_by_date', 10, 2 );
 
 
+/************* Order images by capture time (EXIF) *************/
+
+// Reorder post attachments by EXIF capture time on save.
+// Triggered when ACF field 'order_media_attachments' is set to 'capture_time'.
+// Falls back to DB upload date for attachments with no EXIF timestamp.
+function reorder_images_by_capture_time( $ID, $post ) {
+
+    if( get_field('order_media_attachments') !== 'capture_time') {
+        return;
+    }
+
+    $args = array(
+        'numberposts'       => -1,
+        'orderby'           => 'menu_order',
+        'order'             => 'ASC',
+        'post_parent'       => $post->ID,
+        'post_status'       => null,
+        'post_type'         => 'attachment'
+    );
+
+    $attachments = get_children( $args );
+
+    if ( $attachments ) {
+
+        // Helper: get capture timestamp from EXIF, falling back to upload date
+        $get_capture_time = function( $attachment ) {
+            $meta = wp_get_attachment_metadata( $attachment->ID );
+            $ts = isset( $meta['image_meta']['created_timestamp'] ) ? (int) $meta['image_meta']['created_timestamp'] : 0;
+            return $ts > 0 ? $ts : strtotime( $attachment->post_date );
+        };
+
+        if ( get_field('order_just_the_new_added_pictures') ) {
+
+            // Find the highest existing menu_order
+            $highest_menu_order = 0;
+            foreach ( $attachments as $attachment ) {
+                if ( $highest_menu_order < $attachment->menu_order ) {
+                    $highest_menu_order = $attachment->menu_order;
+                }
+            }
+
+            // Collect unordered attachments (menu_order == 0) and sort by capture time
+            $new_attachments = array();
+            foreach ( $attachments as $attachment ) {
+                if ( $attachment->menu_order == 0 ) {
+                    $new_attachments[] = $attachment;
+                }
+            }
+            usort( $new_attachments, function( $a, $b ) use ( $get_capture_time ) {
+                return $get_capture_time( $a ) - $get_capture_time( $b );
+            });
+
+            $count_item = $highest_menu_order;
+            foreach ( $new_attachments as $attachment ) {
+                $count_item++;
+                wp_update_post( array(
+                    'ID'           => $attachment->ID,
+                    'menu_order'   => $count_item,
+                    'post_type'    => 'attachment',
+                ));
+            }
+
+        } else {
+
+            // Sort all attachments by capture time
+            $attachments_array = array_values( $attachments );
+            usort( $attachments_array, function( $a, $b ) use ( $get_capture_time ) {
+                return $get_capture_time( $a ) - $get_capture_time( $b );
+            });
+
+            $count_item = 0;
+            foreach ( $attachments_array as $attachment ) {
+                $count_item++;
+                wp_update_post( array(
+                    'ID'           => $attachment->ID,
+                    'menu_order'   => $count_item,
+                    'post_type'    => 'attachment',
+                ));
+            }
+
+        }
+
+    }
+
+    // Reset checkboxes after reordering
+    update_field('order_media_attachments', false);
+    update_field('order_just_the_new_added_pictures', false);
+}
+add_action( 'save_post', 'reorder_images_by_capture_time', 10, 2 );
+
+
 /************* Order images by random order *************/
 
 // Reorder post attachments in random order on save.
