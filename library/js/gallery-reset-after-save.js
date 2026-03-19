@@ -18,7 +18,9 @@
                 var fieldsToUncheck = [
                     'order_just_the_new_added_pictures',
                     'order_media_attachments',
-                    're-attach_images_from_post_editor'
+                    're-attach_images_from_post_editor',
+                    'select_all_vertical_images',
+                    'select_all_horizontal_images'
                 ];
 
                 fieldsToUncheck.forEach( function( fieldName ) {

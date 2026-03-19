@@ -507,7 +507,7 @@ function re_attach_images_from_post_editor( $ID, $post ) {
 
     $re_attach_mode = get_field('re-attach_mode');
 
-    // Get the IDs of selected images
+    // Get the IDs of manually selected images
     $images_selected = get_field('selected_images');
     $image_selected_IDs = array();
     if( $images_selected ) {
@@ -515,6 +515,10 @@ function re_attach_images_from_post_editor( $ID, $post ) {
             $image_selected_IDs[] = $image['ID'];
         }
     }
+
+    // Get orientation checkboxes
+    $select_vertical   = get_field('select_all_vertical_images');
+    $select_horizontal = get_field('select_all_horizontal_images');
 
     // Get the destination post ID
     $destination_post_ids = get_field('destination_post');
@@ -532,6 +536,24 @@ function re_attach_images_from_post_editor( $ID, $post ) {
     $images = get_children( $args );
 
     if($images){
+
+        // Merge orientation-based images into the selection
+        if ( $select_vertical || $select_horizontal ) {
+            foreach ( $images as $image ) {
+                if ( in_array( $image->ID, $image_selected_IDs ) ) {
+                    continue;
+                }
+                $meta = wp_get_attachment_metadata( $image->ID );
+                if ( ! $meta || empty( $meta['width'] ) || empty( $meta['height'] ) ) {
+                    continue;
+                }
+                $is_vertical   = $meta['height'] > $meta['width'];
+                $is_horizontal = $meta['width'] > $meta['height'];
+                if ( ( $select_vertical && $is_vertical ) || ( $select_horizontal && $is_horizontal ) ) {
+                    $image_selected_IDs[] = $image->ID;
+                }
+            }
+        }
 
         foreach($images as $image){
 
@@ -556,5 +578,7 @@ function re_attach_images_from_post_editor( $ID, $post ) {
     update_field('re-attach_images_from_post_editor', false);
     update_field('destination_post', array());
     update_field('selected_images', array());
+    update_field('select_all_vertical_images', false);
+    update_field('select_all_horizontal_images', false);
 }
 add_action( 'save_post', 're_attach_images_from_post_editor', 10, 2 );

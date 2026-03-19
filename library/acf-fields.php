@@ -844,6 +844,20 @@ add_action( 'acf/include_fields', function() {
 				'return_format' => 'value',
 			),
 			array(
+				'key' => 'field_select_all_vertical_images',
+				'label' => 'All vertical images',
+				'name' => 'select_all_vertical_images',
+				'type' => 'true_false',
+				'conditional_logic' => array( array( array( 'field' => 'field_5921cdfcd2e32', 'operator' => '==', 'value' => '1' ) ) ),
+			),
+			array(
+				'key' => 'field_select_all_horizontal_images',
+				'label' => 'All horizontal images',
+				'name' => 'select_all_horizontal_images',
+				'type' => 'true_false',
+				'conditional_logic' => array( array( array( 'field' => 'field_5921cdfcd2e32', 'operator' => '==', 'value' => '1' ) ) ),
+			),
+			array(
 				'key' => 'field_5921cea9d2e34',
 				'label' => 'Selected Images',
 				'name' => 'selected_images',
