@@ -840,7 +840,7 @@ add_action( 'acf/include_fields', function() {
 				'type' => 'radio',
 				'conditional_logic' => array( array( array( 'field' => 'field_5921cdfcd2e32', 'operator' => '==', 'value' => '1' ) ) ),
 				'choices' => array( 'keep' => 'Keep these images', 'reattach' => 'Re-attach these images' ),
-				'default_value' => 'keep',
+				'default_value' => 'reattach',
 				'return_format' => 'value',
 			),
 			array(
