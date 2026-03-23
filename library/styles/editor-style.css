@@ -108,7 +108,7 @@ ol, ul, dl {
 }
 
 /* Dark mode support */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   body {
     color: #fff;
   }
@@ -120,4 +120,4 @@ ol, ul, dl {
   a {
     color: #fff;
   }
-}
+} */
