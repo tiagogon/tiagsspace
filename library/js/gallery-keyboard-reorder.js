@@ -45,18 +45,17 @@
     }
 
     function scrollToFocused( items, focusIdx ) {
-        var last = items.length - 1;
-        // Ensure focused item + 1 neighbor after it are in the viewport
-        var peekIdx = Math.min( focusIdx + 1, last );
+        // Ensure focused item + 1 neighbor before it are in the viewport
+        var peekIdx = Math.max( focusIdx - 1, 0 );
         var focusRect = items[focusIdx].getBoundingClientRect();
         var peekRect  = items[peekIdx].getBoundingClientRect();
 
-        // If focused item is above viewport, scroll it into view at top
-        if ( focusRect.top < 0 ) {
-            items[focusIdx].scrollIntoView( { block: 'start', behavior: 'smooth' } );
-        // If the peek item's bottom is below viewport, scroll so it's visible
-        } else if ( peekRect.bottom > window.innerHeight ) {
-            items[peekIdx].scrollIntoView( { block: 'end', behavior: 'smooth' } );
+        // If the peek item's top is above viewport, scroll it into view at top
+        if ( peekRect.top < 0 ) {
+            items[peekIdx].scrollIntoView( { block: 'start', behavior: 'smooth' } );
+        // If focused item's bottom is below viewport, scroll so it's visible
+        } else if ( focusRect.bottom > window.innerHeight ) {
+            items[focusIdx].scrollIntoView( { block: 'end', behavior: 'smooth' } );
         }
     }
 
