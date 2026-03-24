@@ -336,7 +336,6 @@
         applyOrder( result.ids, items );
         var updatedItems = getItems();
         flashItem( updatedItems, focusIdx );
-        scrollToFocused( updatedItems, focusIdx );
     } );
 
     // ── Click to focus ────────────────────────────────────────
