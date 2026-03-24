@@ -15,7 +15,6 @@
 	var PREVIEW_ID = 'draft-preview-new-tab';
 	var MEDIA_ID   = 'editor-open-media-library';
 	var pollTimer  = null;
-	var mediaFrame = null;
 
 	/* ---- Preview helpers ---- */
 
@@ -122,19 +121,13 @@
 
 			var postId = wp.data.select( 'core/editor' ).getCurrentPostId();
 
-			// Re-create each time so uploadedTo matches the current post.
-			if ( mediaFrame ) {
-				mediaFrame.dispose();
-			}
-
-			mediaFrame = wp.media( {
-				title:    'Media Library',
-				multiple: false,
-				library:  { type: '', uploadedTo: postId },
-				button:   { text: 'Select' }
+			// Use the native WP editor media modal — same behaviour as the
+			// block inserter → Media → "Open media library" pathway.
+			wp.media.editor.open( 'editor-toolbar-' + postId, {
+				frame:    'post',
+				state:    'insert',
+				multiple: true
 			} );
-
-			mediaFrame.open();
 		} );
 
 		// Insert as first child — preview button will then go before it.
