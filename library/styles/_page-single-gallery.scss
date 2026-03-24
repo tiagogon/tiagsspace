@@ -340,3 +340,19 @@ a.delete{
   opacity: .5;
   background: #C8EBFB;
 }
+
+// keyboard reorder flash
+@keyframes kb-flash-shadow {
+  0%   { box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.5); }
+  100% { box-shadow: 0 0 0 3px rgba(0, 0, 0, 0); }
+}
+@keyframes kb-flash-shadow-light {
+  0%   { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6); }
+  100% { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0); }
+}
+.thumbnail--kb-flash {
+  animation: kb-flash-shadow 0.4s ease-out forwards;
+  @media (prefers-color-scheme: dark) {
+    animation: kb-flash-shadow-light 0.4s ease-out forwards;
+  }
+}

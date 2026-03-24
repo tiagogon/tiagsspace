@@ -1138,11 +1138,20 @@ if (have_rows('extra_content')) {
             var el = document.getElementById('gallery-<?php the_ID(); ?>');
             var sortable = Sortable.create(el, {
                 dataIdAttr: 'attachmentId',
-                onSort: console.log("Sorted happend."),
-                onMove: console.log("Move happend.")
+                onSort: function() {
+                    console.log("Sorted happend.");
+                    if (typeof window.galleryKeyboardReorderReset === 'function') {
+                        window.galleryKeyboardReorderReset();
+                    }
+                },
+                onMove: function() { console.log("Move happend."); }
             });
 
         </script>
+
+        <!-- Keyboard arrow reorder -->
+        <script>window.galleryKeyboardReorderTarget = 'gallery-<?php the_ID(); ?>';</script>
+        <script src="<?php bloginfo('template_url'); ?>/library/js/gallery-keyboard-reorder.js"></script>
 
         <!-- CUSTOM FUNCTIONS -->
         <script type="text/javascript">
