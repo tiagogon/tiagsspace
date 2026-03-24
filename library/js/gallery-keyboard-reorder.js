@@ -18,6 +18,10 @@
 
     var FLASH_CLASS = 'thumbnail--kb-flash';
 
+    // ── Hide / undo stack ───────────────────────────────────
+    // Each entry: { element, nextSiblingId, prevSiblingId, attachmentId }
+    var hideStack = [];
+
     // ── Helpers ──────────────────────────────────────────────
 
     function getItems() {
@@ -40,6 +44,22 @@
         items[idx].classList.add( FLASH_CLASS );
     }
 
+    function scrollToFocused( items, focusIdx ) {
+        var last = items.length - 1;
+        // Ensure focused item + 1 neighbor after it are in the viewport
+        var peekIdx = Math.min( focusIdx + 1, last );
+        var focusRect = items[focusIdx].getBoundingClientRect();
+        var peekRect  = items[peekIdx].getBoundingClientRect();
+
+        // If focused item is above viewport, scroll it into view at top
+        if ( focusRect.top < 0 ) {
+            items[focusIdx].scrollIntoView( { block: 'start', behavior: 'smooth' } );
+        // If the peek item's bottom is below viewport, scroll so it's visible
+        } else if ( peekRect.bottom > window.innerHeight ) {
+            items[peekIdx].scrollIntoView( { block: 'end', behavior: 'smooth' } );
+        }
+    }
+
     function masonryRelayout() {
         if ( typeof jQuery !== 'undefined' && jQuery.fn.masonry ) {
             var $grid = jQuery( container );
@@ -47,6 +67,132 @@
                 $grid.masonry( 'reloadItems' ).masonry( 'layout' );
             }
         }
+    }
+
+    // ── AJAX helper for hide/unhide ──────────────────────────
+
+    function ajaxToggleHide( attachmentId, hide ) {
+        var ajaxUrl = window.galleryAjaxUrl;
+        var nonce   = window.galleryHideNonce;
+        if ( ! ajaxUrl || ! nonce ) return;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open( 'POST', ajaxUrl, true );
+        xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+        xhr.send(
+            'action=gallery_toggle_hide_attachment' +
+            '&attachment_id=' + encodeURIComponent( attachmentId ) +
+            '&hide=' + ( hide ? '1' : '0' ) +
+            '&_nonce=' + encodeURIComponent( nonce )
+        );
+    }
+
+    // ── Hide focused item (H) ───────────────────────────────
+
+    function hideCurrentItem() {
+        var items = getItems();
+        if ( items.length === 0 ) return;
+
+        var focusStr = container.getAttribute( 'data-kb-focus' );
+        var focusIdx = focusStr !== null ? Math.min( parseInt( focusStr, 10 ) || 0, items.length - 1 ) : 0;
+
+        var el   = items[ focusIdx ];
+        var attId = el.getAttribute( 'attachmentId' );
+
+        // Record neighbours for undo positioning
+        var nextSiblingId = ( focusIdx + 1 < items.length ) ? items[ focusIdx + 1 ].getAttribute( 'attachmentId' ) : null;
+        var prevSiblingId = ( focusIdx - 1 >= 0 ) ? items[ focusIdx - 1 ].getAttribute( 'attachmentId' ) : null;
+
+        hideStack.push( {
+            element: el,
+            attachmentId: attId,
+            nextSiblingId: nextSiblingId,
+            prevSiblingId: prevSiblingId
+        } );
+
+        // Remove from DOM
+        container.removeChild( el );
+
+        // Persist: set remove_from_default_gallery = 1
+        ajaxToggleHide( attId, true );
+
+        // Update focus
+        var updatedItems = getItems();
+        if ( updatedItems.length === 0 ) {
+            container.removeAttribute( 'data-kb-focus' );
+            container.removeAttribute( 'data-kb-tracked-id' );
+        } else {
+            var newFocus = Math.min( focusIdx, updatedItems.length - 1 );
+            var newId    = updatedItems[ newFocus ].getAttribute( 'attachmentId' );
+            container.setAttribute( 'data-kb-focus', newFocus );
+            container.setAttribute( 'data-kb-tracked-id', newId );
+            flashItem( updatedItems, newFocus );
+            scrollToFocused( updatedItems, newFocus );
+        }
+
+        masonryRelayout();
+    }
+
+    // ── Undo last hide (U) ──────────────────────────────────
+
+    function undoHide() {
+        if ( hideStack.length === 0 ) return;
+
+        var entry = hideStack.pop();
+        var items = getItems();
+
+        // Find the reference sibling to insert next to
+        var inserted = false;
+
+        // 1. Try to insert before the item that was on the right
+        if ( entry.nextSiblingId ) {
+            for ( var i = 0; i < items.length; i++ ) {
+                if ( items[i].getAttribute( 'attachmentId' ) === entry.nextSiblingId ) {
+                    container.insertBefore( entry.element, items[i] );
+                    inserted = true;
+                    break;
+                }
+            }
+        }
+
+        // 2. Try to insert after the item that was on the left
+        if ( ! inserted && entry.prevSiblingId ) {
+            for ( var j = 0; j < items.length; j++ ) {
+                if ( items[j].getAttribute( 'attachmentId' ) === entry.prevSiblingId ) {
+                    // insertAfter: insert before the next sibling, or appendChild if last
+                    var ref = items[j].nextElementSibling;
+                    if ( ref ) {
+                        container.insertBefore( entry.element, ref );
+                    } else {
+                        container.appendChild( entry.element );
+                    }
+                    inserted = true;
+                    break;
+                }
+            }
+        }
+
+        // 3. Fallback: append to end
+        if ( ! inserted ) {
+            container.appendChild( entry.element );
+        }
+
+        // Persist: clear remove_from_default_gallery
+        ajaxToggleHide( entry.attachmentId, false );
+
+        // Set focus to the restored item
+        var updatedItems = getItems();
+        for ( var k = 0; k < updatedItems.length; k++ ) {
+            if ( updatedItems[k].getAttribute( 'attachmentId' ) === entry.attachmentId ) {
+                container.setAttribute( 'data-kb-focus', k );
+                container.setAttribute( 'data-kb-tracked-id', entry.attachmentId );
+                flashItem( updatedItems, k );
+                scrollToFocused( updatedItems, k );
+                break;
+            }
+        }
+
+        masonryRelayout();
     }
 
     function applyOrder( newIds, items ) {
@@ -105,6 +251,30 @@
         if ( e.metaKey || e.ctrlKey || e.altKey ) return;
 
         var key = e.key;
+
+        // S = Save Order
+        if ( key === 's' || key === 'S' ) {
+            if ( typeof window.orderAttachmentesOnWpDb === 'function' ) {
+                e.preventDefault();
+                window.orderAttachmentesOnWpDb();
+            }
+            return;
+        }
+
+        // H = Hide focused item
+        if ( key === 'h' || key === 'H' ) {
+            e.preventDefault();
+            hideCurrentItem();
+            return;
+        }
+
+        // U = Undo last hide
+        if ( key === 'u' || key === 'U' ) {
+            e.preventDefault();
+            undoHide();
+            return;
+        }
+
         if ( key !== 'ArrowUp' && key !== 'ArrowDown' && key !== 'ArrowLeft' && key !== 'ArrowRight' ) return;
 
         var items = getItems();
@@ -145,6 +315,7 @@
             container.setAttribute( 'data-kb-focus', focusIdx );
             container.setAttribute( 'data-kb-tracked-id', trackedId );
             flashItem( items, focusIdx );
+            scrollToFocused( items, focusIdx );
             return;
         }
 
@@ -163,7 +334,33 @@
         container.setAttribute( 'data-kb-tracked-id', trackedId );
 
         applyOrder( result.ids, items );
-        flashItem( getItems(), focusIdx );
+        var updatedItems = getItems();
+        flashItem( updatedItems, focusIdx );
+        scrollToFocused( updatedItems, focusIdx );
+    } );
+
+    // ── Click to focus ────────────────────────────────────────
+
+    container.addEventListener( 'click', function ( e ) {
+        var target = e.target;
+        // Walk up from the click target to find the .item ancestor
+        while ( target && target !== container ) {
+            if ( target.classList.contains( 'item' ) ) break;
+            target = target.parentNode;
+        }
+        if ( ! target || target === container ) return;
+
+        var items = getItems();
+        for ( var i = 0; i < items.length; i++ ) {
+            if ( items[i] === target ) {
+                var attId = items[i].getAttribute( 'attachmentId' );
+                container.setAttribute( 'data-kb-focus', i );
+                container.setAttribute( 'data-kb-tracked-id', attId );
+                flashItem( items, i );
+                scrollToFocused( items, i );
+                break;
+            }
+        }
     } );
 
     // ── Public reset for Sortable sync ───────────────────────

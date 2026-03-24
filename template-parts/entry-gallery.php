@@ -1150,7 +1150,11 @@ if (have_rows('extra_content')) {
         </script>
 
         <!-- Keyboard arrow reorder -->
-        <script>window.galleryKeyboardReorderTarget = 'gallery-<?php the_ID(); ?>';</script>
+        <script>
+        window.galleryKeyboardReorderTarget = 'gallery-<?php the_ID(); ?>';
+        window.galleryHideNonce = '<?php echo wp_create_nonce( 'gallery_hide_attachment' ); ?>';
+        window.galleryAjaxUrl = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+        </script>
         <script src="<?php bloginfo('template_url'); ?>/library/js/gallery-keyboard-reorder.js"></script>
 
         <!-- CUSTOM FUNCTIONS -->

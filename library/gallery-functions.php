@@ -32,7 +32,7 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 			}
 		</script>
 
-		<button class="remove" onclick="removeDiv(this);">HIDE</button>
+		<button class="remove" onclick="removeDiv(this);">HIDE (H/U)</button>
 	';
 
 	// DELETE based on: https://stackoverflow.com/questions/15729334/how-to-trigger-a-link-with-jquery-without-refreshing-the-page
@@ -69,7 +69,7 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 
 	// save order of gallery -- function on single-gallery -- ajax functions on functions.php
 	echo '
-	<button class="saveorder" onclick="orderAttachmentesOnWpDb();">SAVE ORDER</button>
+	<button class="saveorder" onclick="orderAttachmentesOnWpDb();">SAVE ORDER (S)</button>
 	';
 
 	// Change Atachement Grid Size
@@ -188,6 +188,28 @@ function gallery_media_order_change_request() {
    die();
 }
 add_action( 'wp_ajax_gallery_media_order_change_request', 'gallery_media_order_change_request' );
+
+// ----------------------
+// AJAX: Toggle attachment "Remove from default gallery" ACF field
+// ----------------------
+function gallery_toggle_hide_attachment() {
+	check_ajax_referer( 'gallery_hide_attachment', '_nonce' );
+
+	$attachment_id = isset( $_POST['attachment_id'] ) ? intval( $_POST['attachment_id'] ) : 0;
+	$hide          = isset( $_POST['hide'] ) ? $_POST['hide'] : '1';
+
+	if ( ! $attachment_id || ! current_user_can( 'edit_post', $attachment_id ) ) {
+		wp_send_json_error( 'Permission denied.' );
+	}
+
+	update_field( 'remove_from_default_gallery', $hide === '1' ? 1 : 0, $attachment_id );
+
+	wp_send_json_success( array(
+		'attachment_id' => $attachment_id,
+		'hidden'        => $hide === '1',
+	) );
+}
+add_action( 'wp_ajax_gallery_toggle_hide_attachment', 'gallery_toggle_hide_attachment' );
 
 // ----------------------
 // AJAX: Attachmens Diferent size on Gallery
