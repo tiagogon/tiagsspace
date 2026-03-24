@@ -86,21 +86,21 @@
         );
     }
 
-    // ── Hide focused item (H) ───────────────────────────────
+    // ── Hide a specific item element ────────────────────────
 
-    function hideCurrentItem() {
+    function hideItemElement( el ) {
         var items = getItems();
-        if ( items.length === 0 ) return;
+        var idx = -1;
+        for ( var i = 0; i < items.length; i++ ) {
+            if ( items[i] === el ) { idx = i; break; }
+        }
+        if ( idx < 0 ) return;
 
-        var focusStr = container.getAttribute( 'data-kb-focus' );
-        var focusIdx = focusStr !== null ? Math.min( parseInt( focusStr, 10 ) || 0, items.length - 1 ) : 0;
-
-        var el   = items[ focusIdx ];
         var attId = el.getAttribute( 'attachmentId' );
 
         // Record neighbours for undo positioning
-        var nextSiblingId = ( focusIdx + 1 < items.length ) ? items[ focusIdx + 1 ].getAttribute( 'attachmentId' ) : null;
-        var prevSiblingId = ( focusIdx - 1 >= 0 ) ? items[ focusIdx - 1 ].getAttribute( 'attachmentId' ) : null;
+        var nextSiblingId = ( idx + 1 < items.length ) ? items[ idx + 1 ].getAttribute( 'attachmentId' ) : null;
+        var prevSiblingId = ( idx - 1 >= 0 ) ? items[ idx - 1 ].getAttribute( 'attachmentId' ) : null;
 
         hideStack.push( {
             element: el,
@@ -121,7 +121,7 @@
             container.removeAttribute( 'data-kb-focus' );
             container.removeAttribute( 'data-kb-tracked-id' );
         } else {
-            var newFocus = Math.min( focusIdx, updatedItems.length - 1 );
+            var newFocus = Math.min( idx, updatedItems.length - 1 );
             var newId    = updatedItems[ newFocus ].getAttribute( 'attachmentId' );
             container.setAttribute( 'data-kb-focus', newFocus );
             container.setAttribute( 'data-kb-tracked-id', newId );
@@ -130,6 +130,18 @@
         }
 
         masonryRelayout();
+    }
+
+    // ── Hide focused item (H) ───────────────────────────────
+
+    function hideCurrentItem() {
+        var items = getItems();
+        if ( items.length === 0 ) return;
+
+        var focusStr = container.getAttribute( 'data-kb-focus' );
+        var focusIdx = focusStr !== null ? Math.min( parseInt( focusStr, 10 ) || 0, items.length - 1 ) : 0;
+
+        hideItemElement( items[ focusIdx ] );
     }
 
     // ── Undo last hide (U) ──────────────────────────────────
@@ -336,6 +348,27 @@
         var updatedItems = getItems();
         flashItem( updatedItems, focusIdx );
     } );
+
+    // ── Intercept HIDE button clicks (capture phase) ────────
+    // Fires before the inline onclick="removeDiv(this)" so we can
+    // route the hide through hideItemElement (push to hideStack + AJAX).
+
+    container.addEventListener( 'click', function ( e ) {
+        if ( ! e.target.classList.contains( 'remove' ) ) return;
+
+        e.stopPropagation();
+        e.preventDefault();
+
+        // Walk up to find the .item ancestor
+        var item = e.target.parentNode;
+        while ( item && item !== container ) {
+            if ( item.classList.contains( 'item' ) ) break;
+            item = item.parentNode;
+        }
+        if ( ! item || item === container ) return;
+
+        hideItemElement( item );
+    }, true ); // ← capture phase
 
     // ── Click to focus ────────────────────────────────────────
 

@@ -14,8 +14,8 @@ require_once('library/helpers.php');          // WP cleanup, pagination, content
 // Custom Video Player Functions
 require_once('library/plyr-player.php');      // Plyr video player helper
 
-// Admin Functions (commented out by default)
-// require_once('library/admin.php');         // custom admin functions
+// Admin Functions
+require_once('library/admin.php');              // custom admin functions
 
 // Theme modules
 require_once('library/custom-post-types.php');  // CPT registrations, main loop/feed/archive inclusion

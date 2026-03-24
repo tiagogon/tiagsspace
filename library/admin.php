@@ -55,6 +55,15 @@ http://digwp.com/2010/10/customize-wordpress-dashboard/
 
 	// DELETED
 
-
-
+// "Preview in new tab" icon for draft/pending posts (published posts get a native one)
+function enqueue_editor_draft_preview_link() {
+	wp_enqueue_script(
+		'editor-draft-preview-link',
+		get_template_directory_uri() . '/library/js/editor-draft-preview-link.js',
+		array(),
+		'1.2',
+		true
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'enqueue_editor_draft_preview_link' );
 

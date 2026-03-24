@@ -151,6 +151,22 @@ function gallery_enqueue_editor_reset_script() {
 }
 add_action( 'enqueue_block_editor_assets', 'gallery_enqueue_editor_reset_script' );
 
+// Default the media library modal filter to "Uploaded to this post" on post edit screens
+function enqueue_media_library_default_uploaded() {
+	$screen = get_current_screen();
+	if ( ! $screen || $screen->base !== 'post' ) {
+		return;
+	}
+	wp_enqueue_script(
+		'media-library-default-uploaded',
+		get_template_directory_uri() . '/library/js/media-library-default-uploaded.js',
+		array( 'media-views' ),
+		'1.0',
+		true
+	);
+}
+add_action( 'admin_enqueue_scripts', 'enqueue_media_library_default_uploaded' );
+
 // ----------------------
 //
 // AJAX: Atachments Order -- Change database wp_posts >> menu_order via Ajax request
