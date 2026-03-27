@@ -1131,17 +1131,47 @@ if (have_rows('extra_content')) {
     if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
 
         // Manual order images ?>
+        <style>
+            #gallery-<?php the_ID(); ?> .item { -webkit-user-select: none; -moz-user-select: none; user-select: none; }
+            .sortable-fallback { transition: none !important; padding: 0 !important; opacity: 1 !important; }
+        </style>
         <script src="<?php bloginfo('template_url'); ?>/library/js/Sortable-master/Sortable.js"></script>
         <script type="text/javascript">
             // As an Admin, I can sort the media elements on a gallery when I am previewing the post
             // documentation here: https://github.com/RubaXa/Sortable
             var el = document.getElementById('gallery-<?php the_ID(); ?>');
+
+            // Prevent lightbox (Intense Images / Magnific Popup) from opening after a drag
+            var wasDragging = false;
+            el.addEventListener('click', function(e) {
+                if (wasDragging) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    wasDragging = false;
+                }
+            }, true);
+
             var sortable = Sortable.create(el, {
                 dataIdAttr: 'attachmentId',
+                forceFallback: true,
+                fallbackOnBody: true,
+                fallbackTolerance: 3,
+                onStart: function() {
+                    wasDragging = true;
+                },
+                onUnchoose: function() {
+                    // Reset flag after a short delay so the click event is caught first
+                    setTimeout(function() { wasDragging = false; }, 50);
+                },
                 onSort: function() {
                     console.log("Sorted happend.");
                     if (typeof window.galleryKeyboardReorderReset === 'function') {
                         window.galleryKeyboardReorderReset();
+                    }
+                    // Refresh Masonry layout after drag-reorder
+                    var $grid = jQuery('#gallery-<?php the_ID(); ?>');
+                    if ($grid.data('masonry')) {
+                        $grid.masonry('reloadItems').masonry('layout');
                     }
                 },
                 onMove: function() { console.log("Move happend."); }
