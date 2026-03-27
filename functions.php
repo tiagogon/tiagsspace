@@ -134,6 +134,7 @@ function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $
 
 /************* THUMBNAIL SIZE OPTIONS *************/
 add_theme_support( 'post-thumbnails' );
+add_post_type_support( 'attachment', 'page-attributes' ); // exposes menu_order via REST API
 
 // HD/6
 add_image_size( 'thumbnail', 480, 960, false ); // update also on /wp-admin/options-media.php

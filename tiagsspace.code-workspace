@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../plugins/tumblr-posting-api"
+		},
+		{
+			"path": "../../plugins/instagram-posting-api"
+		},
+		{
+			"path": "../../../../lightroom-wp-export"
+		}
+	],
+	"settings": {
+		"chatgpt-helper.model": "gpt-4"
+	}
+}
