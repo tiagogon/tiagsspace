@@ -139,6 +139,22 @@ function gallery_enqueue_editor_reset_script() {
 		'1.0',
 		true
 	);
+
+	wp_enqueue_script(
+		'gallery-hidden-attachments-check',
+		get_template_directory_uri() . '/library/js/gallery-hidden-attachments-check.js',
+		array( 'jquery' ),
+		'1.0',
+		true
+	);
+	wp_localize_script(
+		'gallery-hidden-attachments-check',
+		'galleryHiddenCheck',
+		array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'gallery_hidden_check' ),
+		)
+	);
 }
 add_action( 'enqueue_block_editor_assets', 'gallery_enqueue_editor_reset_script' );
 
@@ -233,6 +249,70 @@ function gallery_reorder_hidden_attachments() {
 	wp_send_json_success( 'Reordered ' . count( $hidden ) . ' hidden attachments after position ' . $visible_count );
 }
 add_action( 'wp_ajax_gallery_reorder_hidden_attachments', 'gallery_reorder_hidden_attachments' );
+
+// ----------------------
+// AJAX: Count hidden attachments for a post
+// ----------------------
+function gallery_count_hidden_attachments() {
+	check_ajax_referer( 'gallery_hidden_check', '_nonce' );
+
+	$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
+	if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
+		wp_send_json_error( 'Permission denied.' );
+	}
+
+	$hidden = get_posts( array(
+		'numberposts' => -1,
+		'post_parent' => $post_id,
+		'post_status' => 'any',
+		'post_type'   => 'attachment',
+		'fields'      => 'ids',
+		'meta_query'  => array(
+			array(
+				'key'   => 'remove_from_default_gallery',
+				'value' => '1',
+			),
+		),
+	) );
+
+	wp_send_json_success( array( 'count' => count( $hidden ) ) );
+}
+add_action( 'wp_ajax_gallery_count_hidden_attachments', 'gallery_count_hidden_attachments' );
+
+// ----------------------
+// AJAX: Permanently delete hidden attachments for a post
+// ----------------------
+function gallery_delete_hidden_attachments() {
+	check_ajax_referer( 'gallery_hidden_check', '_nonce' );
+
+	$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
+	if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
+		wp_send_json_error( 'Permission denied.' );
+	}
+
+	$hidden = get_posts( array(
+		'numberposts' => -1,
+		'post_parent' => $post_id,
+		'post_status' => 'any',
+		'post_type'   => 'attachment',
+		'meta_query'  => array(
+			array(
+				'key'   => 'remove_from_default_gallery',
+				'value' => '1',
+			),
+		),
+	) );
+
+	$deleted = 0;
+	foreach ( $hidden as $att ) {
+		if ( wp_delete_attachment( $att->ID, true ) ) {
+			$deleted++;
+		}
+	}
+
+	wp_send_json_success( array( 'deleted' => $deleted ) );
+}
+add_action( 'wp_ajax_gallery_delete_hidden_attachments', 'gallery_delete_hidden_attachments' );
 
 // ----------------------
 // AJAX: Toggle attachment "Remove from default gallery" ACF field
