@@ -971,7 +971,7 @@ if (have_rows('extra_content')) {
         <script type="text/javascript">
             // $(document).ready(function() {
                 $('.magnific_popup-gallery-<?php the_ID(); ?>').magnificPopup({
-                  delegate: 'a',
+                  delegate: 'a.magnific-popup-link',
                   type: 'image',
                   tLoading: '...',
                   mainClass: 'mfp-fade',
