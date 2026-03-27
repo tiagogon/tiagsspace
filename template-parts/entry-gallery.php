@@ -1227,6 +1227,22 @@ if (have_rows('extra_content')) {
 
             }); // loop ends
 
+            // Push hidden attachments after visible ones in menu_order
+            $.ajax({
+                url: example_ajax_obj.ajaxurl,
+                data: {
+                    'action': 'gallery_reorder_hidden_attachments',
+                    'post_id': <?php the_ID(); ?>,
+                    'visible_count': menuOrderCount
+                },
+                success: function(data) {
+                    console.log('Hidden attachments reordered:', data);
+                },
+                error: function(errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+
             // Reload pages
                ///location.reload();
 

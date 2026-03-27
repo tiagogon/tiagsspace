@@ -23,11 +23,11 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 			((btn.parentNode).parentNode).removeChild(btn.parentNode);
 
 			// reiniciate sortable
-			var el = document.getElementById("#gallery-'.$gallery_id.'");
+			var el = document.getElementById("gallery-'.$gallery_id.'");
 			var sortable = Sortable.create(el, { /* options */ });
 
 			// reiniciate masonry
-			$("#gallery-'.$gallery_id.'").masonry();
+			$("#gallery-'.$gallery_id.'").masonry(\'reloadItems\').masonry(\'layout\');
 
 			}
 		</script>
@@ -57,11 +57,11 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 				});
 
 				// reiniciate sortable
-				var el = document.getElementById("#gallery-'.$gallery_id.'");
+				var el = document.getElementById("gallery-'.$gallery_id.'");
 				var sortable = Sortable.create(el, { /* options */ });
 
 				// reiniciate masonry
-				$("#gallery-'.$gallery_id.'").masonry();
+				$("#gallery-'.$gallery_id.'").masonry(\'reloadItems\').masonry(\'layout\');
 
 			});
 		</script>
@@ -195,6 +195,44 @@ function gallery_media_order_change_request() {
    die();
 }
 add_action( 'wp_ajax_gallery_media_order_change_request', 'gallery_media_order_change_request' );
+
+// ----------------------
+// AJAX: Reorder hidden attachments after visible ones
+// ----------------------
+function gallery_reorder_hidden_attachments() {
+
+	$post_id       = isset( $_REQUEST['post_id'] ) ? intval( $_REQUEST['post_id'] ) : 0;
+	$visible_count = isset( $_REQUEST['visible_count'] ) ? intval( $_REQUEST['visible_count'] ) : 0;
+
+	if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
+		wp_send_json_error( 'Permission denied.' );
+	}
+
+	$hidden = get_posts( array(
+		'numberposts' => -1,
+		'orderby'     => 'menu_order',
+		'order'       => 'ASC',
+		'post_parent' => $post_id,
+		'post_status' => 'any',
+		'post_type'   => 'attachment',
+		'meta_query'  => array(
+			array(
+				'key'   => 'remove_from_default_gallery',
+				'value' => '1',
+			),
+		),
+	) );
+
+	global $wpdb;
+	$order = $visible_count;
+	foreach ( $hidden as $att ) {
+		$order++;
+		$wpdb->update( 'wp_posts', array( 'menu_order' => $order ), array( 'ID' => $att->ID ) );
+	}
+
+	wp_send_json_success( 'Reordered ' . count( $hidden ) . ' hidden attachments after position ' . $visible_count );
+}
+add_action( 'wp_ajax_gallery_reorder_hidden_attachments', 'gallery_reorder_hidden_attachments' );
 
 // ----------------------
 // AJAX: Toggle attachment "Remove from default gallery" ACF field
