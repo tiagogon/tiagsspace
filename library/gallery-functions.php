@@ -115,21 +115,12 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 	';
 }
 
-// change order of media atachments on database
-	// via: https://wptheming.com/2013/07/simple-ajax-example/
-
-// Activate ajax on the frontend
-
-// define ajax url as a global variable on the frontend
+// Make ajax_url available on the frontend for gallery AJAX calls
 if ( is_user_logged_in() ) {
 	function example_ajax_enqueue() {
-		// Enqueue javascript on the frontend.
-		wp_enqueue_script(
-			'example-ajax-script',
-			get_template_directory_uri() . '/library/js/simple-ajax-example.js',
-			array('jquery')
-		);
-		// The wp_localize_script allows us to output the ajax_url path for our script to use.
+		// Register a dummy handle so wp_localize_script has something to attach to.
+		wp_register_script( 'example-ajax-script', '' );
+		wp_enqueue_script( 'example-ajax-script' );
 		wp_localize_script(
 			'example-ajax-script',
 			'example_ajax_obj',
