@@ -955,7 +955,7 @@ if (have_rows('extra_content')) {
                                     itemSelector: '.item',
                                     columnWidth: '.masonry-item-sizer',
                                     percentPosition: true,
-                                    transitionDuration: '0.6s',
+                                    transitionDuration: <?php echo (is_preview() && is_user_logged_in()) ? "'0'" : "'0.6s'"; ?>,
                                     gutter: 0
                                 });
                             });

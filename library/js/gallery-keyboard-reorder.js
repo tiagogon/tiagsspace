@@ -59,11 +59,17 @@
         }
     }
 
+    var _masonryRafId = 0;
     function masonryRelayout() {
         if ( typeof jQuery !== 'undefined' && jQuery.fn.masonry ) {
             var $grid = jQuery( container );
             if ( $grid.data( 'masonry' ) ) {
-                $grid.masonry( 'reloadItems' ).masonry( 'layout' );
+                // Cancel any pending relayout so rapid keypresses
+                // only trigger one layout after the last reorder
+                cancelAnimationFrame( _masonryRafId );
+                _masonryRafId = requestAnimationFrame( function () {
+                    $grid.masonry( 'reloadItems' ).masonry( 'layout' );
+                } );
             }
         }
     }
