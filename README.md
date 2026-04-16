@@ -117,12 +117,101 @@ The theme uses a custom **48-column** Bootstrap grid (not the default 12-column)
 
 ## Deployment
 
-Push to the GitHub repo → a webhook on the production server (Ubuntu/nginx) automatically downloads the new version.
+Push to the `main` branch on GitHub → a webhook on the production server (Ubuntu 24.04 / nginx / PHP 8.4) automatically pulls the new version and flushes the page cache.
 
-**Important:** The production server is Linux (case-sensitive filesystem), while local dev is macOS (case-insensitive). When renaming files with only a case change, use a two-step `git mv`:
+### Deployment flow
+
 ```
+git push origin main
+      │
+      ▼
+GitHub webhook (push event)
+      │
+      ▼
+https://tiags.space/hook-tiagsspace
+      │
+      ▼
+/var/www/webhooks/tiagsspace/deploy.php
+      │
+      ├─ Verify HMAC-SHA256 signature
+      ├─ Check ref === refs/heads/main
+      ├─ git pull origin main
+      └─ Flush W3 Total Cache (if active)
+      │
+      ▼
+Theme updated on tiags.space
+```
+
+### Server components
+
+| Component | Details |
+|---|---|
+| Webhook script | `/var/www/webhooks/tiagsspace/deploy.php` |
+| Nginx location | `/hook-tiagsspace` → PHP-FPM (`php8.4-fpm.sock`) via `fastcgi_params` |
+| Theme directory | `/var/www/tiagsspace/wp-content/themes/tiagsspace` (git repo, owned by `www-data`) |
+| Git remote | `git@github.com:tiagogon/tiagsspace.git` (SSH) |
+| Cache | W3 Total Cache flushed via WP-CLI after pull (skipped if plugin inactive) |
+
+### GitHub webhook settings
+
+- **Payload URL:** `https://tiags.space/hook-tiagsspace`
+- **Content type:** `application/json`
+- **Secret:** HMAC secret (stored in `deploy.php`, not in the repo)
+- **Events:** Just the push event
+
+### What the deploy script does
+
+1. Reads the raw POST payload and the `X-Hub-Signature-256` header
+2. Computes `sha256=` HMAC of the payload using the shared secret
+3. Compares signatures with `hash_equals()` — rejects with 403 on mismatch
+4. Decodes JSON and checks `ref === refs/heads/main` — ignores other branches
+5. Runs `git pull origin main` in the theme directory
+6. Checks if W3 Total Cache is active via WP-CLI; if so, flushes all caches
+
+### Manual deployment
+
+```bash
+cd /var/www/tiagsspace/wp-content/themes/tiagsspace
+git pull origin main
+```
+
+### Debugging
+
+```bash
+# Nginx access log
+sudo tail -f /var/log/nginx/access.log
+
+# PHP-FPM errors
+sudo tail -f /var/log/php*-fpm.log
+
+# Git status in theme directory
+cd /var/www/tiagsspace/wp-content/themes/tiagsspace && git status
+```
+
+### Plugin webhooks
+
+The same pattern is used for plugin auto-deployment. Each plugin has its own webhook endpoint and deploy script, pulling to both `/var/www/tiagsspace/` and `/var/www/lentoworld/`:
+
+| Plugin | Webhook URL | Deploy script |
+|---|---|---|
+| instagram-posting-api | `https://tiags.space/hook-instagram-posting-api` | `deploy-instagram-posting-api.php` |
+| tumblr-posting-api | `https://tiags.space/hook-tumblr-posting-api` | `deploy-tumblr-posting-api.php` |
+
+All deploy scripts live in `/var/www/webhooks/tiagsspace/` and share the same HMAC secret.
+
+### Case-sensitive filesystem
+
+The production server is **Linux (case-sensitive)**, local dev is **macOS (case-insensitive)**. When renaming files with only a case change, macOS won't detect it. Use a two-step `git mv`:
+```bash
 git mv old-Name temp-name && git mv temp-name new-name
 ```
+
+### Security notes
+
+- HMAC-SHA256 signature verification prevents unauthorized deployments
+- Only pushes to `main` trigger a pull; other branches are ignored
+- The webhook secret is stored only in `deploy.php` on the server, never in the repository
+- The deploy script runs as `www-data` (no elevated privileges for git operations)
 
 ## Contact
 
