@@ -11,9 +11,6 @@
 		},
 		{
 			"path": "../../../../lightroom-wp-export"
-		},
-		{
-			"path": "../../plugins/community-event-finder"
 		}
 	],
 	"settings": {

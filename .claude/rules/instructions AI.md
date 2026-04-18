@@ -66,7 +66,7 @@ The header in header.php has conditional logic for displaying the site name:
 When adding new post types or taxonomies, remember to add corresponding header title conditions in header.php and menu entries in the collapseMenu section.
 
 ## Deployment
-The theme is deployed via GitHub: push to the repo triggers a webhook on the production server (Ubuntu/nginx), which downloads the new version automatically. The production server is Linux (case-sensitive filesystem), while local development is macOS (case-insensitive).
+The theme is deployed via GitHub: push to `main` triggers a webhook (`/hook-tiagsspace`) on the production server (Ubuntu 24.04 / nginx / PHP 8.4), which runs `git pull` in `/var/www/tiagsspace/wp-content/themes/tiagsspace` and flushes W3 Total Cache. The deploy script (`/var/www/webhooks/tiagsspace/deploy.php`) verifies the GitHub HMAC-SHA256 signature and only acts on `refs/heads/main`. See README.md § Deployment for full details. The production server is Linux (case-sensitive filesystem), while local development is macOS (case-insensitive).
 
 **Important:** When renaming files or directories with only a case change (e.g. `Sporting-Grotesque` → `sporting-grotesque`), macOS won't detect it. You must use `git mv` with a two-step rename (via a temp name) so Git tracks the change:
 ```

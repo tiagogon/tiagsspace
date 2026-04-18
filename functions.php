@@ -26,8 +26,29 @@ require_once('library/gallery-functions.php');  // Gallery admin UI, AJAX handle
 require_once('library/query-filters.php');      // Hide posts from archives, cache purge
 require_once('library/acf-fields.php');         // ACF field groups (registered via PHP)
 
-// Remove icon and number of coments on the top-nav-bar
+// Disable comments entirely
+add_action('init', function() {
+	$types = ['post', 'page', 'films', 'dusk', 'hyper', '4k-lento', 'log', 'cityburns'];
+	foreach ($types as $type) {
+		remove_post_type_support($type, 'comments');
+		remove_post_type_support($type, 'trackbacks');
+	}
+});
+add_filter('comments_open', '__return_false', 20, 2);
+add_filter('pings_open', '__return_false', 20, 2);
+add_filter('comments_array', '__return_empty_array', 10, 2);
+add_action('admin_menu', function() { remove_menu_page('edit-comments.php'); });
 add_action('wp_before_admin_bar_render', function() { global $wp_admin_bar; $wp_admin_bar->remove_menu('comments'); });
+add_action('admin_init', function() {
+	if (global_redirect_check('edit-comments.php')) {
+		wp_safe_redirect(admin_url());
+		exit;
+	}
+});
+function global_redirect_check($page) {
+	global $pagenow;
+	return $pagenow === $page;
+}
 
 // Custom Backend Footer
 add_filter('admin_footer_text', 'wp_bootstrap_custom_admin_footer');
