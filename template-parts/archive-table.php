@@ -112,8 +112,19 @@ $total = $table_query->found_posts;
                     if ( $thumb ) $thumb_url = $thumb[0];
                 }
 
+                // Self-hosted video URL for animated hover preview (films / hyper post types)
+                $video_url = '';
+                $self_host_film = get_field( 'self_host_film', $post_id );
+                if ( $self_host_film ) {
+                    $attachment_id = is_array( $self_host_film ) ? ( $self_host_film['ID'] ?? 0 ) : intval( $self_host_film );
+                    if ( $attachment_id ) {
+                        $url = wp_get_attachment_url( $attachment_id );
+                        if ( $url ) $video_url = $url;
+                    }
+                }
+
             ?>
-                <tr data-href="<?php echo esc_url( $permalink ); ?>"<?php if ( $thumb_url ) echo ' data-thumb="' . esc_url( $thumb_url ) . '"'; ?>>
+                <tr data-href="<?php echo esc_url( $permalink ); ?>"<?php if ( $thumb_url ) echo ' data-thumb="' . esc_url( $thumb_url ) . '"'; ?><?php if ( $video_url ) echo ' data-video="' . esc_url( $video_url ) . '"'; ?>>
                     <td class="ti-col-published"><?php echo esc_html( $year_display ); ?></td>
                     <td class="ti-col-type"><?php
                         $current_type = get_post_type();
@@ -149,6 +160,7 @@ $total = $table_query->found_posts;
 
     <div class="ti-hover-preview" aria-hidden="true">
         <img src="" alt="">
+        <video class="ti-hover-preview-video" muted loop playsinline preload="none" aria-hidden="true"></video>
     </div>
 
 </div>
@@ -157,10 +169,12 @@ $total = $table_query->found_posts;
 (function() {
     const preview = document.querySelector('.ti-hover-preview');
     const previewImg = preview ? preview.querySelector('img') : null;
-    if (!preview || !previewImg) return;
+    const previewVideo = preview ? preview.querySelector('video') : null;
+    if (!preview || !previewImg || !previewVideo) return;
 
     let active = false;
     let currentSrc = '';
+    let currentVideoSrc = '';
 
     const table = document.querySelector('.table-index');
     if (!table) return;
@@ -172,26 +186,42 @@ $total = $table_query->found_posts;
         window.location.href = row.getAttribute('data-href');
     });
 
-    // Thumbnail preview on row hover
+    // Thumbnail / video preview on row hover
     table.addEventListener('mouseenter', function(e) {
-        const row = e.target.closest('tr[data-thumb]');
+        const row = e.target.closest('tr[data-thumb], tr[data-video]');
         if (!row) return;
-        const src = row.getAttribute('data-thumb');
-        if (!src) return;
+        const videoSrc = row.getAttribute('data-video');
+        const imgSrc   = row.getAttribute('data-thumb');
 
-        if (src !== currentSrc) {
-            currentSrc = src;
-            previewImg.src = src;
+        if (videoSrc) {
+            previewImg.style.display = 'none';
+            previewVideo.style.display = '';
+            if (videoSrc !== currentVideoSrc) {
+                currentVideoSrc = videoSrc;
+                previewVideo.src = videoSrc;
+            }
+            previewVideo.play().catch(function() {});
+        } else if (imgSrc) {
+            previewVideo.style.display = 'none';
+            previewImg.style.display = '';
+            if (imgSrc !== currentSrc) {
+                currentSrc = imgSrc;
+                previewImg.src = imgSrc;
+            }
+        } else {
+            return;
         }
+
         active = true;
         preview.classList.add('is-visible');
     }, true);
 
     table.addEventListener('mouseleave', function(e) {
-        const row = e.target.closest('tr[data-thumb]');
+        const row = e.target.closest('tr[data-thumb], tr[data-video]');
         if (!row) return;
         active = false;
         preview.classList.remove('is-visible');
+        if (!previewVideo.paused) previewVideo.pause();
     }, true);
 
     document.addEventListener('mousemove', function(e) {

@@ -7588,7 +7588,8 @@ a.delete {
   transition: opacity 0.2s ease; }
   .ti-hover-preview.is-visible {
     opacity: 1; }
-  .ti-hover-preview img {
+  .ti-hover-preview img,
+  .ti-hover-preview video {
     display: block;
     max-width: 600px;
     max-height: 600px;
