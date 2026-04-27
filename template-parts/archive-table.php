@@ -112,14 +112,18 @@ $total = $table_query->found_posts;
                     if ( $thumb ) $thumb_url = $thumb[0];
                 }
 
-                // Self-hosted video URL for animated hover preview (films / hyper post types)
+                // Animated video thumbnail for hover preview (ACF "video_thumbnail" — index thumbnail field)
                 $video_url = '';
-                $self_host_film = get_field( 'self_host_film', $post_id );
-                if ( $self_host_film ) {
-                    $attachment_id = is_array( $self_host_film ) ? ( $self_host_film['ID'] ?? 0 ) : intval( $self_host_film );
+                $video_thumbnail = get_field( 'video_thumbnail', $post_id );
+                if ( $video_thumbnail ) {
+                    $attachment_id = is_array( $video_thumbnail )
+                        ? ( $video_thumbnail['ID'] ?? ( $video_thumbnail['id'] ?? 0 ) )
+                        : intval( $video_thumbnail );
                     if ( $attachment_id ) {
                         $url = wp_get_attachment_url( $attachment_id );
                         if ( $url ) $video_url = $url;
+                    } elseif ( is_array( $video_thumbnail ) && ! empty( $video_thumbnail['url'] ) ) {
+                        $video_url = $video_thumbnail['url'];
                     }
                 }
 
