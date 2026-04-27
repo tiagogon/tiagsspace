@@ -112,18 +112,28 @@ $total = $table_query->found_posts;
                     if ( $thumb ) $thumb_url = $thumb[0];
                 }
 
-                // Animated video thumbnail for hover preview (ACF "video_thumbnail" — index thumbnail field)
+                // Animated video thumbnail for hover preview (ACF "video_thumbnail" — index thumbnail field).
+                // Read raw postmeta first so it works even if ACF location rules don't expose the field
+                // for this post type (e.g. an "events" CPT not listed in the field group).
                 $video_url = '';
-                $video_thumbnail = get_field( 'video_thumbnail', $post_id );
+                $video_thumbnail = get_post_meta( $post_id, 'video_thumbnail', true );
+                if ( ! $video_thumbnail && function_exists( 'get_field' ) ) {
+                    $video_thumbnail = get_field( 'video_thumbnail', $post_id );
+                }
                 if ( $video_thumbnail ) {
-                    $attachment_id = is_array( $video_thumbnail )
-                        ? ( $video_thumbnail['ID'] ?? ( $video_thumbnail['id'] ?? 0 ) )
-                        : intval( $video_thumbnail );
+                    $attachment_id = 0;
+                    if ( is_array( $video_thumbnail ) ) {
+                        $attachment_id = intval( $video_thumbnail['ID'] ?? ( $video_thumbnail['id'] ?? 0 ) );
+                    } else {
+                        $attachment_id = intval( $video_thumbnail );
+                    }
                     if ( $attachment_id ) {
                         $url = wp_get_attachment_url( $attachment_id );
                         if ( $url ) $video_url = $url;
                     } elseif ( is_array( $video_thumbnail ) && ! empty( $video_thumbnail['url'] ) ) {
                         $video_url = $video_thumbnail['url'];
+                    } elseif ( is_string( $video_thumbnail ) && filter_var( $video_thumbnail, FILTER_VALIDATE_URL ) ) {
+                        $video_url = $video_thumbnail;
                     }
                 }
 
