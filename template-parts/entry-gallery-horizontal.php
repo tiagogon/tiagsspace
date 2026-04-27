@@ -21,26 +21,6 @@ Gallery template for single pages
     // if there are images atached to the post
     if($images){
 
-
-		// --- Extra contente // Videos ---
-	    // --------------------------------
-
-	    // creat a empety array where the IDs of the images before the content will be
-		$extra_content = array();
-
-		if (have_rows('extra_content')) {
-			while ( have_rows('extra_content')) : the_row();
-
-				$extra_content[] = array( get_sub_field('the_image_before'), get_sub_field('vimeo_id'));
-
-			endwhile;
-
-            // GET VIMEO API SCRIPT from CDN?>
-            <script src="https://f.vimeocdn.com/js/froogaloop2.min.js"></script>
-
-        <?php }
-
-
         // -------------------------------
         // --- Sefault Galerry Settings ---
         // --------------------------------
@@ -235,39 +215,6 @@ Gallery template for single pages
 
                             </figure>
                         </div>
-
-	                    <?php
-	                    // --- Add Extra Contente // Youtube Video ---
-
-	                    // If Image is an image before extra content
-	                    foreach ($extra_content as $k => $v) {
-
-	                    	// If ID of image before is the ID of current image, then output Youtube code
-	                    	if ($v[0] == $image->ID ) {
-
-                                $count_item++; ?>
-
-								<style>
-									.embed-container { position: relative; padding-bottom: 177%; height: 0; overflow: hidden; max-width: 100%; }
-									.embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-								</style>
-
-	                    		<div id="x" class="thumbnail item">
-
-	                    			<div class="embed-container">
-
-
-										<iframe class="vimdeoiframe" src='https://player.vimeo.com/video/<?php echo $v[1]; ?>?api=1;title=0&byline=0&portrait=0&color=666666&autoplay=1&loop=1&badge=0' frameborder='0' webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-
-
-
-									</div>
-
-	                    		</div>
-
-
-	                    	<?php } // end if
-	                    } ?>
 
                     <?php } // end IF image is not to be removed ?>
 

@@ -251,46 +251,6 @@ add_action( 'acf/include_fields', function() {
 				),
 			),
 
-			// --- Extra Content (repeater) ---
-			array(
-				'key' => 'field_5526d6b304c63',
-				'label' => 'Extra Content',
-				'name' => 'extra_content',
-				'type' => 'repeater',
-				'conditional_logic' => array( array( array( 'field' => 'field_544eab85fc4e1', 'operator' => '!=', 'value' => '1' ) ) ),
-				'layout' => 'table',
-				'button_label' => 'Add Extra content',
-				'sub_fields' => array(
-					array(
-						'key' => 'field_5526d72604c64',
-						'label' => 'The Image Before',
-						'name' => 'the_image_before',
-						'type' => 'image',
-						'preview_size' => 'thumbnail',
-						'library' => 'uploadedTo',
-						'return_format' => 'id',
-						'parent_repeater' => 'field_5526d6b304c63',
-					),
-					array(
-						'key' => 'field_5526d92d04c65',
-						'label' => 'Vimeo ID',
-						'name' => 'vimeo_id',
-						'type' => 'text',
-						'formatting' => 'none',
-						'parent_repeater' => 'field_5526d6b304c63',
-					),
-					array(
-						'key' => 'field_5526e8de6092d',
-						'label' => 'Note',
-						'name' => 'extra_note',
-						'type' => 'text',
-						'wrapper' => array( 'width' => 40 ),
-						'formatting' => 'html',
-						'parent_repeater' => 'field_5526d6b304c63',
-					),
-				),
-			),
-
 			// --- Animation ---
 			array(
 				'key' => 'field_5aa46b0b71393',
@@ -600,19 +560,10 @@ add_action( 'acf/include_fields', function() {
 		'title' => 'Video Player Options',
 		'fields' => array(
 			array(
-				'key' => 'field_58247c0598d3a',
-				'label' => 'Youtube or Vimeo URL',
-				'name' => 'video_embed',
-				'type' => 'url',
-				'instructions' => 'Vimeo URL should be with video ID',
-				'placeholder' => 'e.g.: https://player.vimeo.com/video/747432421',
-			),
-			array(
 				'key' => 'field_687d30e9f178d',
 				'label' => 'Self Host Film',
 				'name' => 'self_host_film',
 				'type' => 'file',
-				'conditional_logic' => array( array( array( 'field' => 'field_58247c0598d3a', 'operator' => '==empty' ) ) ),
 				'return_format' => 'id',
 			),
 			array(
@@ -620,7 +571,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Film Player Options',
 				'name' => 'film_player_options',
 				'type' => 'checkbox',
-				'instructions' => "All these setting will override the vimeo settings defined on the video level\n\n* Background will have the following effect: 1) All player toggles and elements will be turned off (including the play/pause button), 2) The video will automatically loop. 3) The video will be set to autoplay. /4) The video will be muted",
+				'instructions' => "Per-film overrides for the video player.\n\n* Background will have the following effect: 1) All player toggles and elements will be turned off (including the play/pause button), 2) The video will automatically loop. 3) The video will be set to autoplay. 4) The video will be muted",
 				'choices' => array(
 					'loop' => 'Loop',
 					'autoplay' => 'Autoplay',

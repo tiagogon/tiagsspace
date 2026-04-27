@@ -18,7 +18,7 @@ This is a custom WordPress theme called "tiagsspace" (Tiags' Space). It uses a c
 ### PHP files
 - `functions.php` — theme setup: enqueues, theme supports, responsive image helper, thumbnail sizes, upload mimes, favicons, archive title cleanup, misc hooks. Requires all `library/*.php` files.
 - `library/helpers.php` — WordPress cleanup utilities (head cleanup, pagination, excerpt formatting, image p-tag filter)
-- `library/plyr-player.php` — Plyr video player helper (self-hosted + YouTube/Vimeo)
+- `library/plyr-player.php` — Plyr video player helper (self-hosted only)
 - `library/admin.php` — Dashboard widget cleanup (commented out by default)
 - `library/custom-post-types.php` — CPT registrations (films, dusk, hyper, 4k-lento, log, cityburns), log-branch admin filter, admin menu order, CPTs in main loop/feed/archives
 - `library/custom-taxonomies.php` — Taxonomy registrations (places, medium, log-branch, from), admin taxonomy filters, CPTs on tag archives, disable categories

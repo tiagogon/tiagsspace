@@ -3,12 +3,9 @@
 Template: Self-hosted video with Plyr + Videopack resolutions
 */
 
-// Check for external video URL first (YouTube/Vimeo), fall back to self-hosted attachment
-$video_embed = get_field('video_embed');
-$video_source = !empty($video_embed) ? $video_embed : get_field('self_host_film');
+$video_source = get_field('self_host_film');
 
 // Debug output
-echo '<!-- DEBUG: video_embed = ' . print_r($video_embed, true) . ' -->';
 echo '<!-- DEBUG: video_source = ' . print_r($video_source, true) . ' -->';
 ?>
 

@@ -30,9 +30,7 @@ if ($background_image) {
 
 	<?PHP
 	// Video
-	if (get_field('video_embed')) {
-		get_template_part( 'template-parts/entry', 'video-player' );
-	}elseif (get_field('self_host_film')){
+	if (get_field('self_host_film')) {
 		get_template_part( 'template-parts/entry', 'video-player' );
 	}
 
