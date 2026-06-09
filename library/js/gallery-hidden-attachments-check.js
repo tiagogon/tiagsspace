@@ -17,6 +17,12 @@
     var checking   = false;
     var lastStatus = wp.data.select( 'core/editor' ).getEditedPostAttribute( 'status' );
 
+    // Statuses a post can be in *before* the user makes it public. A real
+    // publish/schedule/private action transitions FROM one of these. On initial
+    // page load of an already-public post the status hydrates straight to
+    // 'publish' (from null/undefined), which must NOT be treated as a transition.
+    var DRAFT_STATUSES = [ 'draft', 'auto-draft', 'pending' ];
+
     wp.data.subscribe( function() {
         if ( checking ) {
             return;
@@ -30,9 +36,13 @@
             return;
         }
 
-        // Detect transition to a public-facing status (don't require isSaving)
+        // Detect transition to a public-facing status (don't require isSaving).
+        // Require the previous status to be a draft-like one so that initial
+        // hydration of an already-public post (null/undefined -> 'publish') and
+        // re-saving an existing public post ('publish' -> 'publish') don't fire.
         var isPublishTransition = (
             newStatus !== lastStatus &&
+            DRAFT_STATUSES.indexOf( lastStatus ) !== -1 &&
             ( newStatus === 'publish' || newStatus === 'future' || newStatus === 'private' )
         );
 
