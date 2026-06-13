@@ -14,57 +14,59 @@
 // Edit atachment media (image/video/etc) -- hide, delete and save gallery order
 function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachment_id) {
 
+	// This function runs once per attachment, but the script blocks below are
+	// shared — print them only on the first call to avoid stacked handlers.
+	static $scripts_printed = false;
 
 	// HIDE based on: https://stackoverflow.com/questions/40144638/how-to-remove-the-div-that-a-button-is-contained-in-when-the-button-is-clicked
 
+	if ( ! $scripts_printed ) {
+		echo '
+			<script type="text/javascript">
+				function removeDiv(btn){
+					((btn.parentNode).parentNode).removeChild(btn.parentNode);
+
+					if (typeof window.galleryKeyboardReorderReset === "function") {
+						window.galleryKeyboardReorderReset();
+					}
+
+					// relayout masonry
+					$("#gallery-'.$gallery_id.'").masonry(\'reloadItems\').masonry(\'layout\');
+				}
+			</script>
+		';
+
+		// DELETE based on: https://stackoverflow.com/questions/15729334/how-to-trigger-a-link-with-jquery-without-refreshing-the-page
+
+		echo '
+			<script type="text/javascript">
+				$(document).on("click", ".delete", function(e){
+					e.preventDefault();
+					var targetUrl = $(this).attr("rel");
+					$.ajax({
+						url: targetUrl,
+						type: "GET",
+						success:function(data) {
+							// This outputs the result of the ajax request
+							console.log(data);
+						},
+						error: function(errorThrown){
+							console.log(errorThrown);
+						}
+					});
+				});
+			</script>
+		';
+
+		$scripts_printed = true;
+	}
+
 	echo '
-		<script type="text/javascript">
-			function removeDiv(btn){
-			((btn.parentNode).parentNode).removeChild(btn.parentNode);
-
-			// reiniciate sortable
-			var el = document.getElementById("gallery-'.$gallery_id.'");
-			var sortable = Sortable.create(el, { /* options */ });
-
-			// reiniciate masonry
-			$("#gallery-'.$gallery_id.'").masonry(\'reloadItems\').masonry(\'layout\');
-
-			}
-		</script>
-
 		<button class="remove" onclick="removeDiv(this);">HIDE (H/U)</button>
 	';
 
-	// DELETE based on: https://stackoverflow.com/questions/15729334/how-to-trigger-a-link-with-jquery-without-refreshing-the-page
-
 	echo '
 		<a class="delete" href="javascript:;" rel="' . wp_nonce_url( get_bloginfo('url') . '/wp-admin/post.php?action=delete&amp;post=' . $attachment_id, 'delete-post_' . $attachment_id) . '" onclick="removeDiv(this);">DELETE</a>
-
-		<script type="text/javascript">
-			$(".delete").click(function(e){
-			 	e.preventDefault();
-				var targetUrl = $(this).attr("rel");
-			 	$.ajax({
-					url: targetUrl,
-					type: "GET",
-                    success:function(data) {
-                        // This outputs the result of the ajax request
-                        console.log(data);
-                    },
-                    error: function(errorThrown){
-                        console.log(errorThrown);
-                    }
-				});
-
-				// reiniciate sortable
-				var el = document.getElementById("gallery-'.$gallery_id.'");
-				var sortable = Sortable.create(el, { /* options */ });
-
-				// reiniciate masonry
-				$("#gallery-'.$gallery_id.'").masonry(\'reloadItems\').masonry(\'layout\');
-
-			});
-		</script>
 	';
 
 	// save order of gallery -- function on single-gallery -- ajax functions on functions.php
