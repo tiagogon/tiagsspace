@@ -113,9 +113,10 @@
 	 * Inject the button into the modal footer and wire selection state.
 	 */
 	function injectButton( frame ) {
-		var $toolbar = $( '.media-frame-toolbar .media-toolbar-secondary' );
+		// Primary (right-hand) toolbar area that holds "Insert into post".
+		var $primary = $( '.media-frame-toolbar .media-toolbar-primary' );
 
-		if ( ! $toolbar.length || document.getElementById( BUTTON_ID ) ) {
+		if ( ! $primary.length || document.getElementById( BUTTON_ID ) ) {
 			return;
 		}
 
@@ -126,14 +127,14 @@
 			text:  cfg.label
 		} );
 
-		$button.css( 'margin-left', '8px' );
-
 		$button.on( 'click', function ( e ) {
 			e.preventDefault();
 			performDuplicate( frame, $button );
 		} );
 
-		$toolbar.append( $button );
+		// Primary toolbar buttons float right (first in DOM = right-most), so
+		// appending after "Insert into post" places this button just to its left.
+		$primary.append( $button );
 
 		var selection = getSelection( frame );
 
