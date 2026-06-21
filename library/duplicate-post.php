@@ -301,9 +301,9 @@ function tiagsspace_add_duplicate_row_action( $actions, $post ) {
 	}
 
 	$actions['tiagsspace_duplicate'] = sprintf(
-		'<a href="%s" aria-label="%s">%s</a>',
+		'<a href="%s" target="_blank" rel="noopener noreferrer" aria-label="%s">%s</a>',
 		esc_url( tiagsspace_duplicate_url( $post->ID ) ),
-		esc_attr( sprintf( __( 'Duplicate "%s"', 'tiagsspace' ), get_the_title( $post ) ) ),
+		esc_attr( sprintf( __( 'Duplicate "%s" (opens in a new tab)', 'tiagsspace' ), get_the_title( $post ) ) ),
 		esc_html__( 'Duplicate', 'tiagsspace' )
 	);
 

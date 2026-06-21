@@ -56,8 +56,8 @@
 		btn.id        = BUTTON_ID;
 		btn.type      = 'button';
 		btn.className = 'components-button has-icon';
-		btn.setAttribute( 'aria-label', 'Duplicate to new draft' );
-		btn.title     = 'Duplicate to new draft';
+		btn.setAttribute( 'aria-label', 'Duplicate to new draft (opens in a new tab)' );
+		btn.title     = 'Duplicate to new draft (opens in a new tab)';
 
 		// Dashicon "admin-page" (copy/duplicate pages icon).
 		btn.innerHTML =
@@ -69,7 +69,7 @@
 
 		btn.addEventListener( 'click', function( e ) {
 			e.preventDefault();
-			window.location.href = tiagsspaceDuplicate.url;
+			window.open( tiagsspaceDuplicate.url, '_blank', 'noopener,noreferrer' );
 		} );
 
 		container.insertBefore( btn, container.firstChild );
