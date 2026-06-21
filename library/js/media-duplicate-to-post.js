@@ -17,6 +17,10 @@
 	var cfg       = window.tiagsspaceMediaDuplicate;
 	var BUTTON_ID = 'tiagsspace-duplicate-to-post';
 
+	// Set after a successful duplicate so the next modal open force-refreshes
+	// the library (the selected media were re-parented away from this post).
+	var pendingRefresh = false;
+
 	/**
 	 * Resolve the post being edited.
 	 */
@@ -46,10 +50,7 @@
 	}
 
 	/**
-	 * Invalidate WP's client-side media caches so the library re-queries the
-	 * server on next open. The per-query cache (wp.media.model.Query.queries)
-	 * is the key one — without clearing it, a reopened modal returns the stale
-	 * cached result (e.g. media that has since been re-parented away).
+	 * Invalidate WP's global media query cache.
 	 */
 	function flushMediaCaches() {
 		try {
@@ -59,6 +60,25 @@
 			var all = wp.media.model && wp.media.model.Attachment && wp.media.model.Attachment.all;
 			if ( all && all.reset ) {
 				all.reset();
+			}
+		} catch ( e ) {}
+	}
+
+	/**
+	 * Force a frame's library to re-fetch from the server.
+	 *
+	 * The reused frame keeps a library that mirrors a cached Query instance;
+	 * library.more() won't re-hit the server once that Query is "complete", so
+	 * after media is re-parented away the grid stays empty. Bumping a throwaway
+	 * prop changes the query cache key, which makes the library re-mirror a
+	 * fresh Query and pull the post's current media from the server.
+	 */
+	function forceLibraryRefresh( frame ) {
+		try {
+			var state   = frame && frame.state && frame.state();
+			var library = state && state.get && state.get( 'library' );
+			if ( library && library.props && library.props.set ) {
+				library.props.set( 'ignore', ( + new Date() ) );
 			}
 		} catch ( e ) {}
 	}
@@ -113,6 +133,7 @@
 						selection.reset();
 					}
 					flushMediaCaches();
+					pendingRefresh = true;
 					if ( frame && frame.close ) {
 						frame.close();
 					}
@@ -183,6 +204,12 @@
 				// Defer so the toolbar DOM exists.
 				setTimeout( function () {
 					injectButton( frame );
+					// Runs after media-library-default-uploaded.js's reset()/more()
+					// so our fresh re-query wins and the grid isn't left empty.
+					if ( pendingRefresh ) {
+						pendingRefresh = false;
+						forceLibraryRefresh( frame );
+					}
 				}, 0 );
 			} );
 			// Re-inject when switching states (e.g. back from Create gallery).
