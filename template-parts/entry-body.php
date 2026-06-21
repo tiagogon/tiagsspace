@@ -124,7 +124,9 @@ Single // log Archive pages >> Content
         $attachments = get_posts(array(
             'post_type' => 'attachment',
             'numberposts' => -1,
-            'post_parent' => $post->ID
+            'post_parent' => $post->ID,
+            'orderby' => 'menu_order',
+            'order' => 'ASC'
         ));
 
 
@@ -140,9 +142,11 @@ Single // log Archive pages >> Content
             ), admin_url( 'admin-ajax.php' ) );
             echo '<a href="' . esc_url( $zip_url ) . '">All attachments</a>';
 
+            $position = 0;
             foreach ($attachments as $attachment) {
+                $position++;
                 $file_url = wp_get_attachment_url($attachment->ID);
-                $file_name = get_the_title() . ' - ' . $attachment->post_title;
+                $file_name = get_the_title() . ' - attachement-' . sprintf('%03d', $position) . ' - ' . $attachment->post_title;
                 echo '</br><a href="' . esc_url($file_url) . '" download="' . sanitize_file_name($file_name) . '">' . $attachment->post_title . '</a>';
             }
 

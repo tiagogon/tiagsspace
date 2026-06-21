@@ -838,11 +838,14 @@ function download_all_attachments() {
 		wp_die( 'ZipArchive is not available on this server.', 'Download error', array( 'response' => 500 ) );
 	}
 
-	// Same attachment set as the per-image download list in entry-body.php.
+	// Same attachment set AND order as the per-image download list in entry-body.php,
+	// so the per-attachment position number matches between the two.
 	$attachments = get_posts( array(
 		'post_type'   => 'attachment',
 		'numberposts' => -1,
 		'post_parent' => $post_id,
+		'orderby'     => 'menu_order',
+		'order'       => 'ASC',
 	) );
 
 	if ( ! $attachments ) {
@@ -860,15 +863,17 @@ function download_all_attachments() {
 
 	$used_names = array();
 	$added      = 0;
+	$position   = 0;
 
 	foreach ( $attachments as $attachment ) {
+		$position++; // Menu-order position; incremented before any skip to stay in sync with the list.
 		$file_path = get_attached_file( $attachment->ID );
 		if ( ! $file_path || ! is_readable( $file_path ) ) {
 			continue; // Skip files missing on disk.
 		}
 
 		$extension = pathinfo( $file_path, PATHINFO_EXTENSION );
-		$base_name = sanitize_file_name( $post_title . ' - ' . $attachment->post_title );
+		$base_name = sanitize_file_name( $post_title . ' - attachement-' . sprintf( '%03d', $position ) . ' - ' . $attachment->post_title );
 		$zip_name  = $base_name . ( $extension ? '.' . $extension : '' );
 
 		// De-duplicate colliding names.
