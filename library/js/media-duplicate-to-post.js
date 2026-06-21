@@ -45,6 +45,24 @@
 		return null;
 	}
 
+	/**
+	 * Invalidate WP's client-side media caches so the library re-queries the
+	 * server on next open. The per-query cache (wp.media.model.Query.queries)
+	 * is the key one — without clearing it, a reopened modal returns the stale
+	 * cached result (e.g. media that has since been re-parented away).
+	 */
+	function flushMediaCaches() {
+		try {
+			if ( wp.media.model && wp.media.model.Query ) {
+				wp.media.model.Query.queries = [];
+			}
+			var all = wp.media.model && wp.media.model.Attachment && wp.media.model.Attachment.all;
+			if ( all && all.reset ) {
+				all.reset();
+			}
+		} catch ( e ) {}
+	}
+
 	function performDuplicate( frame, $button ) {
 		var selection = getSelection( frame );
 		if ( ! selection || ! selection.length ) {
@@ -87,6 +105,14 @@
 					} else {
 						window.location.href = res.data.edit_url;
 					}
+					// The selected media just left this post (re-parented onto the
+					// copy). Clear the stale selection and flush WP's media caches
+					// so reopening the modal shows the post's current media without
+					// a manual page refresh.
+					if ( selection ) {
+						selection.reset();
+					}
+					flushMediaCaches();
 					if ( frame && frame.close ) {
 						frame.close();
 					}
