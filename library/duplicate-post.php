@@ -446,10 +446,36 @@ function tiagsspace_ajax_duplicate_to_post() {
 		wp_send_json_error( array( 'message' => $new_id->get_error_message() ) );
 	}
 
+	$moved = tiagsspace_move_attachments_to_post( $attachment_ids, $new_id );
+
+	wp_send_json_success(
+		array(
+			'edit_url' => get_edit_post_link( $new_id, 'raw' ),
+			'moved'    => $moved,
+		)
+	);
+}
+add_action( 'wp_ajax_tiagsspace_duplicate_to_post', 'tiagsspace_ajax_duplicate_to_post' );
+
+/**
+ * Re-parent attachments onto a destination post.
+ *
+ * Each attachment moves off its current parent (one attachment can only have
+ * one parent). menu_order is left untouched so the destination keeps the
+ * attachments' existing gallery order. Shared by the media-modal AJAX handler
+ * and the MCP duplicate ability.
+ *
+ * @param int[] $attachment_ids Attachment IDs to move.
+ * @param int   $dest_post_id   Destination post ID.
+ * @return int Number of attachments successfully re-parented.
+ */
+function tiagsspace_move_attachments_to_post( $attachment_ids, $dest_post_id ) {
 	$moved = 0;
 
-	foreach ( $attachment_ids as $att_id ) {
-		if ( 'attachment' !== get_post_type( $att_id ) ) {
+	foreach ( (array) $attachment_ids as $att_id ) {
+		$att_id = absint( $att_id );
+
+		if ( ! $att_id || 'attachment' !== get_post_type( $att_id ) ) {
 			continue;
 		}
 
@@ -461,7 +487,7 @@ function tiagsspace_ajax_duplicate_to_post() {
 		$updated = wp_update_post(
 			array(
 				'ID'          => $att_id,
-				'post_parent' => $new_id,
+				'post_parent' => $dest_post_id,
 			),
 			true
 		);
@@ -471,14 +497,8 @@ function tiagsspace_ajax_duplicate_to_post() {
 		}
 	}
 
-	wp_send_json_success(
-		array(
-			'edit_url' => get_edit_post_link( $new_id, 'raw' ),
-			'moved'    => $moved,
-		)
-	);
+	return $moved;
 }
-add_action( 'wp_ajax_tiagsspace_duplicate_to_post', 'tiagsspace_ajax_duplicate_to_post' );
 
 /**
  * Enqueue the "Add to a duplicated post" media-modal button on post screens.
@@ -509,3 +529,130 @@ function tiagsspace_enqueue_media_duplicate_to_post() {
 	);
 }
 add_action( 'admin_enqueue_scripts', 'tiagsspace_enqueue_media_duplicate_to_post' );
+
+/* -------------------------------------------------------------------------
+ * MCP ability: duplicate a post over the WordPress Abilities API.
+ *
+ * Surfaces as the MCP tool `mcp-content-duplicate-post`. Reuses the namespace
+ * and category registered by the mcp-content-abilities plugin. The
+ * wp_abilities_api_init action only fires when the Abilities API is present,
+ * so this is a no-op when the MCP stack is inactive.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Register the duplicate-post ability.
+ */
+function tiagsspace_register_duplicate_ability() {
+	if ( ! function_exists( 'wp_register_ability' ) ) {
+		return;
+	}
+
+	wp_register_ability(
+		'mcp-content/duplicate-post',
+		array(
+			'label'               => __( 'Duplicate post', 'tiagsspace' ),
+			'description'         => __( 'Duplicate a post (any type, any status) into a new draft, copying all content, post meta (ACF fields, featured image) and taxonomy terms. Optionally move selected media attachments onto the copy (they are re-parented off the original). Returns the new post id and edit URL.', 'tiagsspace' ),
+			'category'            => 'content-management',
+			'input_schema'        => array(
+				'type'       => 'object',
+				'properties' => array(
+					'source_post_id'      => array(
+						'type'        => 'integer',
+						'description' => 'ID of the post to duplicate.',
+					),
+					'title'               => array(
+						'type'        => 'string',
+						'description' => 'Optional title override for the copy. Defaults to "<original> — copy".',
+					),
+					'status'              => array(
+						'type'        => 'string',
+						'description' => 'Optional post status for the copy: draft, publish, pending, private. Default "draft".',
+					),
+					'move_attachment_ids' => array(
+						'type'        => 'array',
+						'items'       => array( 'type' => 'integer' ),
+						'description' => 'Optional attachment IDs to re-parent onto the copy. They move off the original (an attachment can only have one parent); their gallery order is preserved.',
+					),
+				),
+				'required'   => array( 'source_post_id' ),
+			),
+			'permission_callback' => function ( $input ) {
+				$id = is_array( $input ) ? (int) ( $input['source_post_id'] ?? 0 ) : 0;
+				return $id ? tiagsspace_can_duplicate( $id ) : false;
+			},
+			'meta'                => array(
+				'mcp'         => array(
+					'public' => true,
+					'type'   => 'tool',
+				),
+				'annotations' => array(
+					'readonly'    => false,
+					'destructive' => false,
+					'idempotent'  => false,
+				),
+			),
+			'execute_callback'    => function ( $input ) {
+				$input = is_array( $input ) ? $input : array();
+				$id    = (int) ( $input['source_post_id'] ?? 0 );
+
+				if ( ! $id || ! get_post( $id ) ) {
+					return new WP_Error( 'not_found', __( 'Source post not found.', 'tiagsspace' ), array( 'status' => 404 ) );
+				}
+
+				$overrides = array();
+				if ( ! empty( $input['title'] ) ) {
+					$overrides['post_title'] = sanitize_text_field( $input['title'] );
+				}
+				if ( ! empty( $input['status'] ) ) {
+					$overrides['post_status'] = sanitize_key( $input['status'] );
+				}
+
+				$new_id = tiagsspace_duplicate_post( $id, $overrides );
+
+				if ( is_wp_error( $new_id ) ) {
+					return $new_id;
+				}
+
+				$moved = 0;
+				if ( ! empty( $input['move_attachment_ids'] ) && is_array( $input['move_attachment_ids'] ) ) {
+					$att_ids = array_filter( array_map( 'absint', $input['move_attachment_ids'] ) );
+					$moved   = tiagsspace_move_attachments_to_post( $att_ids, $new_id );
+				}
+
+				$post = get_post( $new_id );
+
+				return array(
+					'id'                => (int) $new_id,
+					'title'             => $post->post_title,
+					'status'            => $post->post_status,
+					'link'              => (string) get_permalink( $new_id ),
+					'edit'              => (string) get_edit_post_link( $new_id, 'raw' ),
+					'moved_attachments' => (int) $moved,
+				);
+			},
+		)
+	);
+}
+add_action( 'wp_abilities_api_init', 'tiagsspace_register_duplicate_ability' );
+
+/**
+ * Surface the duplicate-post ability as a first-class MCP tool on the default
+ * server (mirrors how mcp-content-abilities exposes its own abilities).
+ */
+function tiagsspace_register_duplicate_mcp_tool( $config ) {
+	if ( ! is_array( $config ) ) {
+		return $config;
+	}
+
+	$config['tools'] = array_values(
+		array_unique(
+			array_merge(
+				isset( $config['tools'] ) && is_array( $config['tools'] ) ? $config['tools'] : array(),
+				array( 'mcp-content/duplicate-post' )
+			)
+		)
+	);
+
+	return $config;
+}
+add_filter( 'mcp_adapter_default_server_config', 'tiagsspace_register_duplicate_mcp_tool' );
