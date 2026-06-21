@@ -822,3 +822,82 @@ function re_attach_images_from_post_editor( $ID, $post ) {
     update_field('select_all_horizontal_images', false);
 }
 add_action( 'save_post', 're_attach_images_from_post_editor', 10, 2 );
+
+// ----------------------
+// AJAX: Download all of a post's attachments as a single zip
+// ----------------------
+function download_all_attachments() {
+	check_ajax_referer( 'download_all_attachments', '_nonce' );
+
+	$post_id = isset( $_REQUEST['post_id'] ) ? intval( $_REQUEST['post_id'] ) : 0;
+	if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
+		wp_die( 'Permission denied.', 'Download error', array( 'response' => 403 ) );
+	}
+
+	if ( ! class_exists( 'ZipArchive' ) ) {
+		wp_die( 'ZipArchive is not available on this server.', 'Download error', array( 'response' => 500 ) );
+	}
+
+	// Same attachment set as the per-image download list in entry-body.php.
+	$attachments = get_posts( array(
+		'post_type'   => 'attachment',
+		'numberposts' => -1,
+		'post_parent' => $post_id,
+	) );
+
+	if ( ! $attachments ) {
+		wp_die( 'No attachments found for this post.', 'Download error', array( 'response' => 404 ) );
+	}
+
+	$post_title = get_the_title( $post_id );
+
+	$tmp_file = wp_tempnam( 'attachments-' . $post_id . '.zip' );
+	$zip      = new ZipArchive();
+	if ( $zip->open( $tmp_file, ZipArchive::CREATE | ZipArchive::OVERWRITE ) !== true ) {
+		@unlink( $tmp_file );
+		wp_die( 'Could not create the zip archive.', 'Download error', array( 'response' => 500 ) );
+	}
+
+	$used_names = array();
+	$added      = 0;
+
+	foreach ( $attachments as $attachment ) {
+		$file_path = get_attached_file( $attachment->ID );
+		if ( ! $file_path || ! is_readable( $file_path ) ) {
+			continue; // Skip files missing on disk.
+		}
+
+		$extension = pathinfo( $file_path, PATHINFO_EXTENSION );
+		$base_name = sanitize_file_name( $post_title . ' - ' . $attachment->post_title );
+		$zip_name  = $base_name . ( $extension ? '.' . $extension : '' );
+
+		// De-duplicate colliding names.
+		if ( isset( $used_names[ $zip_name ] ) ) {
+			$used_names[ $zip_name ]++;
+			$zip_name = $base_name . '-' . $used_names[ $zip_name ] . ( $extension ? '.' . $extension : '' );
+		} else {
+			$used_names[ $zip_name ] = 1;
+		}
+
+		$zip->addFile( $file_path, $zip_name );
+		$added++;
+	}
+
+	$zip->close();
+
+	if ( ! $added ) {
+		@unlink( $tmp_file );
+		wp_die( 'None of the attachment files could be read.', 'Download error', array( 'response' => 404 ) );
+	}
+
+	$download_name = sanitize_file_name( ( get_post_field( 'post_name', $post_id ) ?: 'attachments-' . $post_id ) . '.zip' );
+
+	nocache_headers();
+	header( 'Content-Type: application/zip' );
+	header( 'Content-Disposition: attachment; filename="' . $download_name . '"' );
+	header( 'Content-Length: ' . filesize( $tmp_file ) );
+	readfile( $tmp_file );
+	@unlink( $tmp_file );
+	exit;
+}
+add_action( 'wp_ajax_download_all_attachments', 'download_all_attachments' );

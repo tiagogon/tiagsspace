@@ -132,6 +132,14 @@ Single // log Archive pages >> Content
             echo '<a id="download-all-attachments-'.$post->ID.'" href="#" download-all-'.$post->ID.'>Download</a>';
             echo '<div style="display: none;" id="download-links-'.$post->ID.'">';
 
+            // Zip of all attachments (streamed server-side via admin-ajax).
+            $zip_url = add_query_arg( array(
+                'action'  => 'download_all_attachments',
+                'post_id' => $post->ID,
+                '_nonce'  => wp_create_nonce( 'download_all_attachments' ),
+            ), admin_url( 'admin-ajax.php' ) );
+            echo '<a href="' . esc_url( $zip_url ) . '">All attachments</a>';
+
             foreach ($attachments as $attachment) {
                 $file_url = wp_get_attachment_url($attachment->ID);
                 $file_name = get_the_title() . ' - ' . $attachment->post_title;
