@@ -420,3 +420,92 @@ function tiagsspace_enqueue_editor_duplicate_button() {
 	);
 }
 add_action( 'enqueue_block_editor_assets', 'tiagsspace_enqueue_editor_duplicate_button' );
+
+/**
+ * AJAX: duplicate a post and move the selected attachments onto the copy.
+ *
+ * Used by the "Add to a duplicated post" call-to-action in the media modal.
+ * Selected media are re-parented (post_parent → new post) — they move off the
+ * original, since an attachment can only have one parent. Their menu_order is
+ * left untouched so the copy keeps the original gallery order.
+ */
+function tiagsspace_ajax_duplicate_to_post() {
+	check_ajax_referer( 'tiagsspace_duplicate_to_post', '_nonce' );
+
+	$source_id      = isset( $_POST['source_id'] ) ? absint( $_POST['source_id'] ) : 0;
+	$attachment_ids = isset( $_POST['attachment_ids'] ) ? (array) wp_unslash( $_POST['attachment_ids'] ) : array();
+	$attachment_ids = array_filter( array_map( 'absint', $attachment_ids ) );
+
+	if ( ! $source_id || ! tiagsspace_can_duplicate( $source_id ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied.', 'tiagsspace' ) ) );
+	}
+
+	$new_id = tiagsspace_duplicate_post( $source_id );
+
+	if ( is_wp_error( $new_id ) ) {
+		wp_send_json_error( array( 'message' => $new_id->get_error_message() ) );
+	}
+
+	$moved = 0;
+
+	foreach ( $attachment_ids as $att_id ) {
+		if ( 'attachment' !== get_post_type( $att_id ) ) {
+			continue;
+		}
+
+		if ( ! current_user_can( 'edit_post', $att_id ) ) {
+			continue;
+		}
+
+		// Re-parent only; menu_order is preserved to keep the gallery order.
+		$updated = wp_update_post(
+			array(
+				'ID'          => $att_id,
+				'post_parent' => $new_id,
+			),
+			true
+		);
+
+		if ( ! is_wp_error( $updated ) ) {
+			$moved++;
+		}
+	}
+
+	wp_send_json_success(
+		array(
+			'edit_url' => get_edit_post_link( $new_id, 'raw' ),
+			'moved'    => $moved,
+		)
+	);
+}
+add_action( 'wp_ajax_tiagsspace_duplicate_to_post', 'tiagsspace_ajax_duplicate_to_post' );
+
+/**
+ * Enqueue the "Add to a duplicated post" media-modal button on post screens.
+ */
+function tiagsspace_enqueue_media_duplicate_to_post() {
+	$screen = get_current_screen();
+
+	if ( ! $screen || 'post' !== $screen->base ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'media-duplicate-to-post',
+		get_template_directory_uri() . '/library/js/media-duplicate-to-post.js',
+		array( 'jquery', 'media-views' ),
+		'1.0',
+		true
+	);
+
+	wp_localize_script(
+		'media-duplicate-to-post',
+		'tiagsspaceMediaDuplicate',
+		array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'tiagsspace_duplicate_to_post' ),
+			'label'   => __( 'Add to a duplicated post', 'tiagsspace' ),
+		)
+	);
+}
+add_action( 'admin_enqueue_scripts', 'tiagsspace_enqueue_media_duplicate_to_post' );
