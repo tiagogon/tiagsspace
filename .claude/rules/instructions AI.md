@@ -26,6 +26,7 @@ This is a custom WordPress theme called "tiagsspace" (Tiags' Space). It uses a c
 - `library/seo-and-feed.php` — Feed links, Feedly support, feed title/content formatting, Yoast OpenGraph and Twitter image overrides
 - `library/gallery-functions.php` — Gallery admin UI (hide/delete/reorder/resize), AJAX handlers for media order, attachment size, margin changes
 - `library/query-filters.php` — Hide posts from index/archives/feeds (ACF field), exclude hidden adjacent posts, purge Table Index cache on post changes
+- `library/duplicate-post.php` — Reusable `tiagsspace_duplicate_post($id, $overrides)` clones any post (any type/status) to a new draft, copying all meta (ACF/featured image) + taxonomy terms; attachments are NOT re-parented. Exposes a per-row "Duplicate" link, a "Duplicate" bulk action, and a Gutenberg editor-header icon (`library/js/editor-duplicate-button.js`). Title gets a `— copy` / `— copy N` suffix. Fires `tiagsspace_post_duplicated` action.
 - `template-parts/` — reusable template parts (header-title, header-menu, header-lower, archive-grid, archive-table, entry-body, entry-gallery, entry-gallery-horizontal, entry-video-player)
 
 ### SCSS / CSS
