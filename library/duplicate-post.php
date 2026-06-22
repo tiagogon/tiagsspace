@@ -515,7 +515,8 @@ function tiagsspace_move_attachments_to_post( $attachment_ids, $dest_post_id, $s
 }
 
 /**
- * Enqueue the "Add to a duplicated post" media-modal button on post screens.
+ * Enqueue the media-modal CTA buttons ("Add to a duplicated post" and
+ * "Delete permanently") on post screens.
  */
 function tiagsspace_enqueue_media_duplicate_to_post() {
 	$screen = get_current_screen();
@@ -528,7 +529,7 @@ function tiagsspace_enqueue_media_duplicate_to_post() {
 		'media-duplicate-to-post',
 		get_template_directory_uri() . '/library/js/media-duplicate-to-post.js',
 		array( 'jquery', 'media-views' ),
-		'1.3',
+		'1.4',
 		true
 	);
 
@@ -536,13 +537,57 @@ function tiagsspace_enqueue_media_duplicate_to_post() {
 		'media-duplicate-to-post',
 		'tiagsspaceMediaDuplicate',
 		array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'tiagsspace_duplicate_to_post' ),
-			'label'   => __( 'Add to a duplicated post', 'tiagsspace' ),
+			'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+			'nonce'       => wp_create_nonce( 'tiagsspace_duplicate_to_post' ),
+			'label'       => __( 'Add to a duplicated post', 'tiagsspace' ),
+			'deleteNonce' => wp_create_nonce( 'tiagsspace_delete_attachments' ),
+			'deleteLabel' => __( 'Delete permanently', 'tiagsspace' ),
 		)
 	);
 }
 add_action( 'admin_enqueue_scripts', 'tiagsspace_enqueue_media_duplicate_to_post' );
+
+/**
+ * AJAX: permanently delete the selected attachments.
+ *
+ * Used by the "Delete permanently" call-to-action in the media modal. WordPress
+ * media has no trash, so wp_delete_attachment( $id, true ) removes the file and
+ * detaches it from every post that used it. Each attachment is capability-checked.
+ */
+function tiagsspace_ajax_delete_attachments() {
+	check_ajax_referer( 'tiagsspace_delete_attachments', '_nonce' );
+
+	$attachment_ids = isset( $_POST['attachment_ids'] ) ? (array) wp_unslash( $_POST['attachment_ids'] ) : array();
+	$attachment_ids = array_filter( array_map( 'absint', $attachment_ids ) );
+
+	$deleted = array();
+
+	foreach ( $attachment_ids as $att_id ) {
+		if ( 'attachment' !== get_post_type( $att_id ) ) {
+			continue;
+		}
+
+		if ( ! current_user_can( 'delete_post', $att_id ) ) {
+			continue;
+		}
+
+		if ( wp_delete_attachment( $att_id, true ) ) {
+			$deleted[] = $att_id;
+		}
+	}
+
+	if ( empty( $deleted ) ) {
+		wp_send_json_error( array( 'message' => __( 'No media could be deleted.', 'tiagsspace' ) ) );
+	}
+
+	wp_send_json_success(
+		array(
+			'deleted' => count( $deleted ),
+			'ids'     => $deleted,
+		)
+	);
+}
+add_action( 'wp_ajax_tiagsspace_delete_attachments', 'tiagsspace_ajax_delete_attachments' );
 
 /* -------------------------------------------------------------------------
  * MCP ability: duplicate a post over the WordPress Abilities API.

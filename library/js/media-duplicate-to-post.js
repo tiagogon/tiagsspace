@@ -1,21 +1,25 @@
 /**
- * "Add to a duplicated post" — media modal call-to-action.
+ * Media modal call-to-action buttons (post editor "Add media" modal).
  *
- * In the post editor's "Add media" modal, the user selects N attachments and
- * clicks this button. It duplicates the current post, re-parents the selected
- * media onto the copy (keeping their gallery order), and opens the new draft's
- * editor in a new tab.
+ * Hosts two bulk actions on the selected attachments, added to the modal's
+ * primary (bottom-right) toolbar:
  *
- * Re-parenting moves the media OFF the original post — an attachment can only
- * have one parent.
+ * 1. "Add to a duplicated post" — duplicates the current post, re-parents the
+ *    selected media onto the copy (keeping gallery order; re-parenting moves
+ *    them OFF the original, since an attachment has one parent), opens the new
+ *    draft in a new tab.
+ *
+ * 2. "Delete permanently" — permanently deletes the selected attachments
+ *    (WordPress media has no trash). Guarded by a confirm dialog.
  */
 ( function ( $ ) {
 	if ( ! window.wp || ! wp.media || ! window.tiagsspaceMediaDuplicate ) {
 		return;
 	}
 
-	var cfg       = window.tiagsspaceMediaDuplicate;
-	var BUTTON_ID = 'tiagsspace-duplicate-to-post';
+	var cfg            = window.tiagsspaceMediaDuplicate;
+	var BUTTON_ID      = 'tiagsspace-duplicate-to-post';
+	var DELETE_BTN_ID  = 'tiagsspace-delete-attachments';
 
 	// Set after a successful duplicate so the next modal open force-refreshes
 	// the library (the selected media were re-parented away from this post).
@@ -156,8 +160,49 @@
 			} );
 	}
 
+	function performDelete( frame, $button ) {
+		var selection = getSelection( frame );
+		if ( ! selection || ! selection.length ) {
+			return;
+		}
+
+		var ids = selection.models.map( function ( model ) {
+			return model.get( 'id' );
+		} );
+
+		if ( ! window.confirm( 'Permanently delete ' + ids.length + ' media file(s)? This cannot be undone.' ) ) {
+			return;
+		}
+
+		$button.prop( 'disabled', true );
+
+		$.post( cfg.ajaxurl, {
+			action:         'tiagsspace_delete_attachments',
+			_nonce:         cfg.deleteNonce,
+			attachment_ids: ids
+		} )
+			.done( function ( res ) {
+				if ( res && res.success ) {
+					// Drop the deleted items from the grid without a manual refresh.
+					selection.reset();
+					flushMediaCaches();
+					forceLibraryRefresh( frame );
+				} else {
+					var msg = res && res.data && res.data.message ? res.data.message : 'Could not delete the selected media.';
+					window.alert( msg );
+				}
+			} )
+			.fail( function () {
+				window.alert( 'Could not delete the selected media.' );
+			} )
+			.always( function () {
+				$button.prop( 'disabled', false );
+			} );
+	}
+
 	/**
-	 * Inject the button into the modal footer and wire selection state.
+	 * Inject the CTA buttons into the modal's primary toolbar and wire them to
+	 * the current selection state.
 	 */
 	function injectButton( frame ) {
 		// Primary (right-hand) toolbar area that holds "Insert into post".
@@ -179,14 +224,31 @@
 			performDuplicate( frame, $button );
 		} );
 
+		var $delete = $( '<button>', {
+			type:  'button',
+			id:    DELETE_BTN_ID,
+			class: 'button media-button button-large',
+			text:  cfg.deleteLabel
+		} );
+
+		$delete.css( 'color', '#b32d2e' );
+
+		$delete.on( 'click', function ( e ) {
+			e.preventDefault();
+			performDelete( frame, $delete );
+		} );
+
 		// Primary toolbar buttons float right (first in DOM = right-most), so
-		// appending after "Insert into post" places this button just to its left.
+		// appending places these to the left of the native "Insert into post".
 		$primary.append( $button );
+		$primary.append( $delete );
 
 		var selection = getSelection( frame );
 
 		function sync() {
-			$button.prop( 'disabled', ! selection || ! selection.length );
+			var disabled = ! selection || ! selection.length;
+			$button.prop( 'disabled', disabled );
+			$delete.prop( 'disabled', disabled );
 		}
 
 		if ( selection ) {
