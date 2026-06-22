@@ -446,7 +446,7 @@ function tiagsspace_ajax_duplicate_to_post() {
 		wp_send_json_error( array( 'message' => $new_id->get_error_message() ) );
 	}
 
-	$moved = tiagsspace_move_attachments_to_post( $attachment_ids, $new_id );
+	$moved = tiagsspace_move_attachments_to_post( $attachment_ids, $new_id, true );
 
 	wp_send_json_success(
 		array(
@@ -465,12 +465,18 @@ add_action( 'wp_ajax_tiagsspace_duplicate_to_post', 'tiagsspace_ajax_duplicate_t
  * attachments' existing gallery order. Shared by the media-modal AJAX handler
  * and the MCP duplicate ability.
  *
- * @param int[] $attachment_ids Attachment IDs to move.
- * @param int   $dest_post_id   Destination post ID.
+ * When $set_featured_from_first is true, the first moved attachment that is an
+ * image becomes the destination's featured image (overriding any inherited
+ * one), so the copy gets a sensible cover from its new gallery.
+ *
+ * @param int[] $attachment_ids          Attachment IDs to move (in order).
+ * @param int   $dest_post_id            Destination post ID.
+ * @param bool  $set_featured_from_first Set the first moved image as featured.
  * @return int Number of attachments successfully re-parented.
  */
-function tiagsspace_move_attachments_to_post( $attachment_ids, $dest_post_id ) {
-	$moved = 0;
+function tiagsspace_move_attachments_to_post( $attachment_ids, $dest_post_id, $set_featured_from_first = false ) {
+	$moved          = 0;
+	$first_image_id = 0;
 
 	foreach ( (array) $attachment_ids as $att_id ) {
 		$att_id = absint( $att_id );
@@ -494,7 +500,15 @@ function tiagsspace_move_attachments_to_post( $attachment_ids, $dest_post_id ) {
 
 		if ( ! is_wp_error( $updated ) ) {
 			$moved++;
+
+			if ( ! $first_image_id && wp_attachment_is_image( $att_id ) ) {
+				$first_image_id = $att_id;
+			}
 		}
+	}
+
+	if ( $set_featured_from_first && $first_image_id ) {
+		set_post_thumbnail( $dest_post_id, $first_image_id );
 	}
 
 	return $moved;
@@ -616,7 +630,7 @@ function tiagsspace_register_duplicate_ability() {
 				$moved = 0;
 				if ( ! empty( $input['move_attachment_ids'] ) && is_array( $input['move_attachment_ids'] ) ) {
 					$att_ids = array_filter( array_map( 'absint', $input['move_attachment_ids'] ) );
-					$moved   = tiagsspace_move_attachments_to_post( $att_ids, $new_id );
+					$moved   = tiagsspace_move_attachments_to_post( $att_ids, $new_id, true );
 				}
 
 				$post = get_post( $new_id );
