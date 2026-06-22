@@ -175,6 +175,19 @@ function tiagsspace_duplicate_post( $source_post_id, $overrides = array() ) {
 	tiagsspace_duplicate_copy_meta( $source->ID, $new_id );
 	tiagsspace_duplicate_copy_terms( $source, $new_id );
 
+	// ACF previews read a post's values from its LATEST revision, and ACF only
+	// copies meta into a revision on an editor save. Our meta was written
+	// straight to the post, so without seeding a revision the first preview
+	// (before any manual save) would read an empty revision and fall back to the
+	// template's hardcoded defaults. Replicate a "Save draft": ensure a revision
+	// exists, then copy the ACF meta into it.
+	if ( function_exists( 'acf_save_post_revision' ) ) {
+		if ( function_exists( 'wp_save_post_revision' ) ) {
+			wp_save_post_revision( $new_id );
+		}
+		acf_save_post_revision( $new_id );
+	}
+
 	/**
 	 * Fires after a post has been duplicated.
 	 *
