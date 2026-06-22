@@ -100,6 +100,25 @@ function tiagsspace_delete_with_media_url( $post_id ) {
 	return tiagsspace_trash_action_url( $post_id, 'delete' );
 }
 
+/**
+ * The "All Posts" list-table URL for a post's type.
+ *
+ * Used as the post-action redirect so deleting/trashing from the editor lands on
+ * the list rather than the now-gone edit screen. Capture before deletion.
+ *
+ * @param int $post_id Post ID (must still exist).
+ * @return string
+ */
+function tiagsspace_post_type_list_url( $post_id ) {
+	$post_type = get_post_type( $post_id );
+
+	if ( ! $post_type || 'post' === $post_type ) {
+		return admin_url( 'edit.php' );
+	}
+
+	return add_query_arg( 'post_type', $post_type, admin_url( 'edit.php' ) );
+}
+
 /* -------------------------------------------------------------------------
  * Media deletion — the shared core.
  * ---------------------------------------------------------------------- */
@@ -198,15 +217,12 @@ function tiagsspace_handle_trash_with_media() {
 		wp_die( esc_html__( 'You are not allowed to trash this post.', 'tiagsspace' ) );
 	}
 
+	$list = tiagsspace_post_type_list_url( $post_id );
+
 	update_post_meta( $post_id, TIAGSSPACE_DELETE_MEDIA_META, '1' );
 	wp_trash_post( $post_id );
 
-	$back = add_query_arg(
-		'tiagsspace_trashed',
-		'media',
-		wp_get_referer() ? wp_get_referer() : admin_url( 'edit.php' )
-	);
-	wp_safe_redirect( $back );
+	wp_safe_redirect( add_query_arg( 'tiagsspace_trashed', 'media', $list ) );
 	exit;
 }
 add_action( 'admin_post_tiagsspace_trash_with_media', 'tiagsspace_handle_trash_with_media' );
@@ -228,18 +244,20 @@ function tiagsspace_handle_delete_with_media() {
 	}
 
 	$media_count = tiagsspace_count_post_attachments( $post_id );
+	$list        = tiagsspace_post_type_list_url( $post_id );
 
 	update_post_meta( $post_id, TIAGSSPACE_DELETE_MEDIA_META, '1' );
 	wp_delete_post( $post_id, true );
 
-	$back = add_query_arg(
-		array(
-			'tiagsspace_deleted' => 1,
-			'tiagsspace_media'   => $media_count,
-		),
-		wp_get_referer() ? wp_get_referer() : admin_url( 'edit.php' )
+	wp_safe_redirect(
+		add_query_arg(
+			array(
+				'tiagsspace_deleted' => 1,
+				'tiagsspace_media'   => $media_count,
+			),
+			$list
+		)
 	);
-	wp_safe_redirect( $back );
 	exit;
 }
 add_action( 'admin_post_tiagsspace_delete_with_media', 'tiagsspace_handle_delete_with_media' );
