@@ -5646,9 +5646,24 @@ figure {
   --plyr-control-background: $white;
   --plyr-color-main: $dark; }
 
-.plyr__spinner {
-  display: none !important; }
+.plyr--loading:has(video.film-player)::after {
+  content: '';
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: 50%;
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: plyr-buffer-spin 0.8s linear infinite;
+  pointer-events: none; }
 
+@keyframes plyr-buffer-spin {
+  to {
+    transform: rotate(360deg); } }
 .plyr {
   font-family: "Sporting_Grotesque_Regular", sans-serif;
   width: 100%;
@@ -7206,6 +7221,11 @@ a.delete {
   padding-right: 0px;
   padding-left: 0px;
   padding-bottom: 16px; }
+
+.embed-container {
+  aspect-ratio: 16 / 9; }
+  .embed-container .plyr {
+    height: 100%; }
 
 .player .captions > span {
   font-size: 0.9em !important;

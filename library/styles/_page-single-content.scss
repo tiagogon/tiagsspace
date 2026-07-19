@@ -25,6 +25,16 @@
   padding-bottom: $grid-gutter-width;
 }
 
+// Reserve the 16:9 box from first paint so the page doesn't reflow when Plyr
+// initialises (Plyr's own ratio is applied only after its JS runs).
+.embed-container {
+  aspect-ratio: 16 / 9;
+
+  .plyr {
+    height: 100%;
+  }
+}
+
 .player {
   .captions {
     >span {

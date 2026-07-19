@@ -29,9 +29,28 @@ $plyr-audio-control-bg-hover: $plyr-tab-focus-default-color !default;
   --plyr-color-main: $dark;
 }
 
-// Hide adaptive quality spinner
-.plyr__spinner {
-  display: none !important;
+// Buffering spinner — Plyr 3.x has no spinner element of its own (only a faint
+// progress-bar stripe), so we draw one on .plyr--loading. Scoped to the single
+// film player via :has() so ambient archive thumbnail loops stay spinner-free.
+// Shown on both playback paths (MP4 and HLS both fire media `waiting`).
+.plyr--loading:has(video.film-player)::after {
+  content: '';
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: 50%;
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  border: 3px solid rgba($white, 0.25);
+  border-top-color: $white;
+  border-radius: 50%;
+  animation: plyr-buffer-spin 0.8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes plyr-buffer-spin {
+  to { transform: rotate(360deg); }
 }
 
 

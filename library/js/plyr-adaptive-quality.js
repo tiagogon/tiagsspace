@@ -1,6 +1,12 @@
 /**
- * Plyr Adaptive Quality System
- * 
+ * Plyr Adaptive Quality System — PROGRESSIVE MP4 FILM PATH ONLY
+ *
+ * Loaded only for films whose `self_host_film` attachment is a regular video
+ * file (see library/video/enqueues.php). HLS films use library/js/video-player/
+ * init-hls.js instead, which delegates adaptation to hls.js / the native player.
+ * This hand-rolled engine gets only minimal maintenance; the long-term fix for
+ * a film's playback is to convert it to HLS.
+ *
  * This script augments Plyr with:
  *  - Adaptive selection based on displayed element height × device pixel ratio
  *  - A visible "Auto" quality option which re-enables adaptive mode
@@ -724,6 +730,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const COOLDOWN_MS = 3000;
         const SEEK_SUPPRESS_MS = 10000;
         const MIN_BUFFER_AHEAD = 0.9;
+        const STARTUP_GRACE_MS = 4000; // buffer is naturally thin right after play starts
         let stallTimer = null;
 
         function clearStallTimer() {
@@ -733,21 +740,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Seconds buffered ahead of the playhead, measured on the range that
+        // actually contains currentTime. Using buffered.end(last) is wrong after
+        // a seek, where disjoint ranges exist and the last one may not hold the
+        // playhead — exactly when jurors scrub around a film.
+        function bufferAheadFor() {
+            try {
+                const b = videoEl.buffered;
+                if (!b || !b.length) return 0;
+                const now = videoEl.currentTime || 0;
+                for (let i = 0; i < b.length; i++) {
+                    if (now >= b.start(i) - 0.25 && now <= b.end(i) + 0.25) {
+                        return b.end(i) - now;
+                    }
+                }
+                return 0;
+            } catch (e) { return 0; }
+        }
+
+        function inStartupGrace() {
+            const t = videoEl._playStartedAt || 0;
+            return t && (Date.now() - t) < STARTUP_GRACE_MS;
+        }
+
         let lowBufferCount = 0;
-        const LOW_BUFFER_COUNT_THRESHOLD = 1;
+        const LOW_BUFFER_COUNT_THRESHOLD = 3;
 
         function onTimeUpdate() {
             try {
                 try { if (videoEl._suppressAutoAfterUserSeek && (Date.now() - videoEl._suppressAutoAfterUserSeek) < SEEK_SUPPRESS_MS) { if (isDebugEnabled(videoEl)) debugLog(player, 'onTimeUpdate: suppressed due to recent user seek', { age: Date.now() - videoEl._suppressAutoAfterUserSeek }); lowBufferCount = 0; return; } } catch (e) {}
                 if (videoEl._userSelectedQuality) { lowBufferCount = 0; return; }
                 if (videoEl._adaptiveEnabled === false || (player && player._adaptiveEnabled === false)) { lowBufferCount = 0; return; }
+                if (inStartupGrace()) { lowBufferCount = 0; return; }
 
-                let bufEnd = 0;
-                try {
-                    if (videoEl.buffered && videoEl.buffered.length) bufEnd = videoEl.buffered.end(videoEl.buffered.length - 1);
-                } catch (e) { bufEnd = 0; }
-                const now = (videoEl.currentTime || 0);
-                const bufferAhead = (bufEnd - now);
+                const bufferAhead = bufferAheadFor();
 
                 if (bufferAhead <= MIN_BUFFER_AHEAD) {
                     lowBufferCount++;
@@ -783,16 +809,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearStallTimer();
                 stallTimer = setTimeout(() => {
                     try {
-                        let bufEnd = 0;
-                        try {
-                            if (videoEl.buffered && videoEl.buffered.length) {
-                                bufEnd = videoEl.buffered.end(videoEl.buffered.length - 1);
-                            }
-                        } catch (e) { bufEnd = 0; }
-
-                        const now = (videoEl.currentTime || 0);
-                        const bufferAhead = (bufEnd - now);
-                        try { debugLog(player, 'onWaiting bufferAhead', { bufferAhead: bufferAhead, now: now, bufEnd: bufEnd }); } catch (e) {}
+                        const bufferAhead = bufferAheadFor();
+                        try { debugLog(player, 'onWaiting bufferAhead', { bufferAhead: bufferAhead, currentTime: (videoEl.currentTime || 0) }); } catch (e) {}
 
                         if (bufferAhead > MIN_BUFFER_AHEAD) return;
 
@@ -817,6 +835,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function onPlaying() {
             clearStallTimer();
+            if (!videoEl._playStartedAt) videoEl._playStartedAt = Date.now();
         }
 
         function onCanPlay() {

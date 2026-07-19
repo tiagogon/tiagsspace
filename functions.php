@@ -11,8 +11,10 @@ sidebars, comments, ect.
 // Theme helper functions
 require_once('library/helpers.php');          // WP cleanup, pagination, content filters
 
-// Custom Video Player Functions
-require_once('library/plyr-player.php');      // Plyr video player helper
+// Video Player module (portable: Plyr + HLS)
+require_once('library/video/player.php');     // render_video_player() dispatcher (MP4 ladder / HLS)
+require_once('library/video/enqueues.php');   // conditional player asset registration
+require_once('library/video/hls-import.php'); // Media Library .hlspack.zip → HLS attachment
 
 // Admin Functions
 require_once('library/admin.php');              // custom admin functions
@@ -69,7 +71,7 @@ function tiagsspace_enqueue_assets() {
     $template_dir = get_template_directory_uri();
 
     // ----- CSS ----- (order matters)
-    wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], null);
+    wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], tiagsspace_asset_ver('/library/js/plyr/plyr.css'));
     wp_enqueue_style('swiper', $template_dir . '/library/js/swiper/swiper-bundle.min.css', [], null);
     wp_enqueue_style('theme-style', $template_dir . '/library/styles/main.min.css', [], null);
 
@@ -93,7 +95,7 @@ function tiagsspace_enqueue_assets() {
         // Header helpers to replace inline scripts
         wp_enqueue_script('header-helpers', $template_dir . '/library/js/header-helpers.js', array('jquery'), null, true);
     // Plyr
-    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.js', [], null, true);
+    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.js', [], tiagsspace_asset_ver('/library/js/plyr/plyr.js'), true);
 
     // Bootstrap
     wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], null, true);
@@ -170,6 +172,9 @@ add_image_size( 'medium', 940, 1880, false ); // update also on /wp-admin/option
 
 // container large desktop size
 add_image_size( 'large', 1200, 2400, false ); // update also on /wp-admin/options-media.php
+
+// video poster / full-bleed (largest, no crop) — avoids shipping the full original as a poster
+add_image_size( 'xlarge', 1920, 3840, false );
 
 // Disable Wordpress -scaled version created on 5.3 https://make.wordpress.org/core/2019/10/09/introducing-handling-of-big-images-in-wordpress-5-3/
 add_filter( 'big_image_size_threshold', '__return_false' );

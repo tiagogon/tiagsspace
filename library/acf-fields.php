@@ -496,6 +496,7 @@ add_action( 'acf/include_fields', function() {
 				'name' => 'video_thumbnail',
 				'type' => 'file',
 				'return_format' => 'id',
+				'instructions' => "Upload MP4 (H.264); .mov won't play in all browsers.",
 			),
 			array(
 				'key' => 'field_5a161de1ff4c4',
@@ -565,6 +566,7 @@ add_action( 'acf/include_fields', function() {
 				'name' => 'self_host_film',
 				'type' => 'file',
 				'return_format' => 'id',
+				'instructions' => "Select a video (MP4 \u00b7 H.264 \u2014 .mov won't play in all browsers) for the progressive quality ladder, OR an HLS bundle (the .m3u8 attachment created when you upload a .hlspack.zip) for adaptive 4K streaming. The file type is the mode switch: .m3u8 = HLS, any other video = MP4.",
 			),
 			array(
 				'key' => 'field_6318db3971842',
