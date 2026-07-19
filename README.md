@@ -55,8 +55,14 @@ Categories are disabled.
 │   ├── gallery-functions.php   # Gallery admin UI, AJAX handlers (reorder/resize/margin)
 │   ├── query-filters.php       # Hide posts from archives, adjacent post exclusions
 │   ├── seo-and-feed.php        # Feed formatting, Yoast overrides
-│   ├── plyr-player.php         # Plyr video player helper
 │   ├── admin.php               # Dashboard cleanup
+│   │
+│   ├── video/                  # Portable video module (Plyr + HLS) — see § Video
+│   │   ├── player.php          # render_video_player() dispatcher + helpers
+│   │   ├── player-mp4.php      # progressive MP4 quality ladder
+│   │   ├── player-hls.php      # HLS (.m3u8) renderer
+│   │   ├── hls-import.php      # Media Library .hlspack.zip → HLS attachment
+│   │   └── enqueues.php        # conditional asset registration
 │   │
 │   ├── styles/                 # SCSS source files
 │   │   ├── main.scss           # Entry point → compiled to main.css + main.min.css
@@ -72,16 +78,17 @@ Categories are disabled.
 │   │
 │   └── js/
 │       ├── header-helpers.js          # showText/showYear hover helpers
-│       ├── plyr-adaptive-quality.js   # Plyr quality switcher
+│       ├── plyr-adaptive-quality.js   # MP4 films only: hand-rolled quality switch
+│       ├── video-player/init-hls.js   # HLS: native (Safari) / hls.js + Plyr menu
 │       ├── simple-ajax-example.js     # Gallery AJAX (logged-in only)
 │       ├── bootstrap.min.js           # Compiled Bootstrap JS
 │       └── (third-party libraries — do not edit)
 │           ├── jquery/        ├── masonry/
 │           ├── modernizr/     ├── Magnific-Popup/
 │           ├── picturefill/   ├── swiper/
-│           ├── plyr/          ├── Sortable-master/
-│           ├── intense-images/├── model-viewer/
-│           └── infinite-scroll/
+│           ├── plyr/          ├── hls/         # vendored hls.js
+│           ├── intense-images/├── Sortable-master/
+│           └── model-viewer/  └── infinite-scroll/
 │
 └── template-parts/
     ├── header-title.php              # Conditional page title (breadcrumb-style)
@@ -114,6 +121,50 @@ All field groups are registered via PHP in `library/acf-fields.php` — no datab
 ### Grid
 
 The theme uses a custom **48-column** Bootstrap grid (not the default 12-column).
+
+## Video
+
+Films (`films` post type) play through the portable module in `library/video/`. The
+attachment chosen in the **Self Host Film** field decides the tech automatically:
+
+- an **`.m3u8`** attachment → **HLS** (adaptive; native on Safari/iOS, hls.js elsewhere)
+- any other video file → the **progressive MP4 ladder** (Plyr + `plyr-adaptive-quality.js`)
+
+Videopack is still used for archive thumbnail loops and gallery videos — only films use
+this module.
+
+### MP4 workflow (simple, unchanged)
+
+1. Upload the video (MP4 · H.264 — `.mov` won't play in every browser) in the Media Library.
+2. Optionally let Videopack encode smaller versions (they attach as children → become
+   quality rungs).
+3. Set it as **Self Host Film** on the film. Done.
+
+### HLS workflow (adaptive, best for 4K / mobile / festival jurors)
+
+1. Export the master from DaVinci (MP4 preferred: H.264 High, 2160p24 ~14–18 Mbps, AAC).
+   `.mov` masters also work as script input.
+2. On your Mac, build the bundle:
+   ```bash
+   bin/hls-package.sh master.mp4 my-film-slug
+   # → my-film-slug.hlspack.zip   (add --thumb / --fallback if you want those extras)
+   ```
+   Requires `ffmpeg` + `ffprobe`. The ladder is capped to the master's height.
+3. **Drag `my-film-slug.hlspack.zip` into the Media Library** like any file. The theme
+   unpacks it into `uploads/hls/<attachment-id>/` and turns it into an `.m3u8` attachment.
+4. Select that attachment in **Self Host Film**. The player detects `.m3u8` and streams HLS.
+
+Notes:
+- No terminal upload — the zip goes through the normal Media Library uploader.
+- Import problems are logged to `wp-content/uploads/hls/import.log` and shown as an admin
+  notice; the zip is left intact on failure.
+- Deleting the attachment removes its `uploads/hls/<id>/` folder.
+- Add `?video_debug=1` to a film URL to log the playback engine, quality switches and
+  bandwidth to the browser console.
+
+**Server (one-time on prod):** ensure nginx serves `.m3u8` as
+`application/vnd.apple.mpegurl` and `.m4s` as `video/iso.segment`, and that the long-cache
+static rule covers `uploads/hls/` (VOD playlists are immutable).
 
 ## Deployment
 
