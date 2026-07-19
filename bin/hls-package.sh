@@ -48,18 +48,26 @@ SRC_H=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv
 [[ -n "$SRC_H" ]] || { echo "Could not read master height" >&2; exit 1; }
 echo "Master height: ${SRC_H}p"
 
-# Segment length (s) and derived GOP (keyframe interval) at 24 fps.
+# Segment length (s). Keyframes are forced to exact segment boundaries below, so
+# rungs stay aligned for clean ABR switching whatever the master's frame rate is.
 SEG=6
-FPS=24
-GOP=$(( SEG * FPS ))   # keyframes aligned to segment boundaries
+# Preserve the master's frame rate — do NOT resample to 24, which judders 25 or
+# 23.976 masters (very visible on slow art-film pans). GOP is derived from the
+# real fps so the -g hint matches the forced keyframe cadence.
+FPS_RAW=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$MASTER" | head -1)
+FPS=$(awk -F/ '{ if (NF==2 && $2>0) printf "%.3f", $1/$2; else printf "%.3f", $1 }' <<<"$FPS_RAW")
+GOP=$(awk -v f="$FPS" -v s="$SEG" 'BEGIN{ printf "%d", (f*s)+0.5 }')
+echo "Master fps: ${FPS} (GOP ${GOP})"
 
 # Ladder: "height width video_kbps audio_kbps". Highest first.
+# Tuned for art films (grain/gradients/shadows) from a high-quality master
+# (ProRes). 4K at 20 Mbps ~ good-era Vimeo 4K; encode with -preset slow below.
 LADDER=(
-  "2160 3840 14000 256"
-  "1080 1920 4500 192"
-  "720  1280 2500 160"
-  "480  854  1200 128"
-  "360  640  700  96"
+  "2160 3840 20000 256"
+  "1080 1920 10000 256"
+  "720  1280 5000  192"
+  "480  854  2500  128"
+  "360  640  1000  128"
 )
 
 # Keep only rungs at or below the master height; always keep at least one.
@@ -95,13 +103,14 @@ VAR_MAP=""
 for ((i=0;i<N;i++)); do
   vk=$(awk '{print $3}' <<<"${SELECTED[$i]}")
   ak=$(awk '{print $4}' <<<"${SELECTED[$i]}")
-  maxrate=$(( vk * 110 / 100 ))
+  maxrate=$(( vk * 120 / 100 ))
   bufsize=$(( vk * 2 ))
   ARGS+=(
     -map "[v${i}out]" -map 0:a:0?
-    -c:v:${i} libx264 -profile:v:${i} high -preset veryfast
+    -c:v:${i} libx264 -profile:v:${i} high -preset slow
     -b:v:${i} "${vk}k" -maxrate:v:${i} "${maxrate}k" -bufsize:v:${i} "${bufsize}k"
-    -g "$GOP" -keyint_min "$GOP" -sc_threshold 0 -r "$FPS"
+    -g "$GOP" -keyint_min "$GOP" -sc_threshold 0
+    -force_key_frames:v:${i} "expr:gte(t,n_forced*${SEG})"
     -c:a:${i} aac -b:a:${i} "${ak}k" -ac 2
   )
   VAR_MAP+="v:${i},a:${i} "
@@ -130,8 +139,8 @@ ffmpeg "${ARGS[@]}"
 if (( WANT_FALLBACK )); then
   echo "Encoding 1080 fallback…"
   ffmpeg -y -i "$MASTER" -vf "scale=w=1920:h=1080:force_original_aspect_ratio=decrease" \
-    -c:v libx264 -profile:v high -preset veryfast -b:v 4500k -maxrate 5000k -bufsize 9000k \
-    -movflags +faststart -c:a aac -b:a 192k -ac 2 "${SLUG}-1080.mp4"
+    -c:v libx264 -profile:v high -preset slow -b:v 10000k -maxrate 12000k -bufsize 20000k \
+    -movflags +faststart -c:a aac -b:a 256k -ac 2 "${SLUG}-1080.mp4"
 fi
 
 if (( WANT_THUMB )); then
