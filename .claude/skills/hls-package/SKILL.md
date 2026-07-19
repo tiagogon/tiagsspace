@@ -58,6 +58,19 @@ recommend, rather than guessing from filenames.
    Use `run_in_background: true` and notify the user with the exact zip path when
    it finishes. Never fabricate completion — wait for the real result.
 
+   **During the encode a working folder `<slug>/` appears and grows** — that is
+   normal; the `.hlspack.zip` is only written at the END and the folder is then
+   removed. Warn the user so a "folder but no zip yet" doesn't look like a failure.
+
+### Color handling (guaranteed by the script)
+The script converts 10-bit 4:2:2 ProRes to 8-bit 4:2:0 (H.264 High can't take
+4:2:2) with high-precision chroma (`lanczos+accurate_rnd+full_chroma_int`) and
+**stamps BT.709 primaries/transfer/matrix + limited (tv) range on the frames via
+`setparams`** — so every rung (including SD-sized 480/360, which players would
+otherwise guess as BT.601) carries explicit color metadata even if the master is
+untagged. Pixels are never matrix-converted (BT.709 in → BT.709 out). Masters are
+assumed Rec.709; if one is ever HDR/P3, stop and discuss before encoding.
+
 ### Source location / NAS
 Any path the Mac can read works, including a NAS **mounted** under `/Volumes/…`.
 Claude cannot mount a NAS (needs the user's Finder credentials) — if it isn't

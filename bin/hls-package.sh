@@ -95,8 +95,13 @@ for ((i=0;i<N;i++)); do
   h=$(awk '{print $1}' <<<"${SELECTED[$i]}")
   # scale keeping even dimensions; force the rung height
   # format=yuv420p converts to 8-bit 4:2:0 — H.264 High profile can't take the
-  # 10-bit 4:2:2 that ProRes 422 masters carry. This is the correct web delivery format.
-  FILTER+="[v${i}]scale=w=${w}:h=${h}:force_original_aspect_ratio=decrease,pad=${w}:${h}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p[v${i}out];"
+  # 10-bit 4:2:2 that ProRes 422 masters carry. This is the correct web delivery
+  # format. lanczos = cleaner downscales; accurate_rnd+full_chroma_int = full-
+  # precision chroma when halving 4:2:2 → 4:2:0 (fine color edges stay clean).
+  # setparams stamps BT.709 + limited range on the FRAMES — modern ffmpeg
+  # encoders take colour metadata from frames (overriding -color_* context
+  # options), so this is what reliably lands in the H.264 VUI on every rung.
+  FILTER+="[v${i}]scale=w=${w}:h=${h}:force_original_aspect_ratio=decrease:flags=lanczos+accurate_rnd+full_chroma_int,pad=${w}:${h}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p,setparams=range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709[v${i}out];"
 done
 FILTER="${FILTER%;}"  # strip trailing ;
 
@@ -113,6 +118,7 @@ for ((i=0;i<N;i++)); do
     -b:v:${i} "${vk}k" -maxrate:v:${i} "${maxrate}k" -bufsize:v:${i} "${bufsize}k"
     -g "$GOP" -keyint_min "$GOP" -sc_threshold 0
     -force_key_frames:v:${i} "expr:gte(t,n_forced*${SEG})"
+    -colorspace:v:${i} bt709 -color_primaries:v:${i} bt709 -color_trc:v:${i} bt709 -color_range:v:${i} tv
     -c:a:${i} aac -b:a:${i} "${ak}k" -ac 2
   )
   VAR_MAP+="v:${i},a:${i} "
@@ -132,7 +138,7 @@ ARGS+=(
   "${WORK}/stream_%v/playlist.m3u8"
 )
 
-echo "Encoding HLS ladder…"
+echo "Encoding HLS ladder… (segments appear in ./${WORK}/ while encoding; the .zip is written at the END and the folder removed)"
 ffmpeg "${ARGS[@]}"
 
 # master.m3u8 uses paths relative to WORK root (stream_N/playlist.m3u8) — good.
@@ -140,15 +146,17 @@ ffmpeg "${ARGS[@]}"
 # ---- optional extras --------------------------------------------------------
 if (( WANT_FALLBACK )); then
   echo "Encoding 1080 fallback…"
-  ffmpeg -y -i "$MASTER" -vf "scale=w=1920:h=1080:force_original_aspect_ratio=decrease,format=yuv420p" \
+  ffmpeg -y -i "$MASTER" -vf "scale=w=1920:h=1080:force_original_aspect_ratio=decrease:flags=lanczos+accurate_rnd+full_chroma_int,format=yuv420p,setparams=range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709" \
     -c:v libx264 -profile:v high -preset slow -b:v 10000k -maxrate 12000k -bufsize 20000k \
+    -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv \
     -movflags +faststart -c:a aac -b:a 256k -ac 2 "${SLUG}-1080.mp4"
 fi
 
 if (( WANT_THUMB )); then
   echo "Encoding muted thumbnail loop…"
-  ffmpeg -y -i "$MASTER" -t 8 -an -vf "scale=w=720:h=-2,format=yuv420p" \
+  ffmpeg -y -i "$MASTER" -t 8 -an -vf "scale=w=720:h=-2:flags=lanczos+accurate_rnd+full_chroma_int,format=yuv420p,setparams=range=tv:color_primaries=bt709:color_trc=bt709:colorspace=bt709" \
     -c:v libx264 -profile:v high -preset veryfast -b:v 900k -maxrate 1000k -bufsize 1800k \
+    -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv \
     -movflags +faststart "${SLUG}-thumb.mp4"
 fi
 
