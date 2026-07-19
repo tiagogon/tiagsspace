@@ -94,7 +94,9 @@ for ((i=0;i<N;i++)); do
   w=$(awk '{print $2}' <<<"${SELECTED[$i]}")
   h=$(awk '{print $1}' <<<"${SELECTED[$i]}")
   # scale keeping even dimensions; force the rung height
-  FILTER+="[v${i}]scale=w=${w}:h=${h}:force_original_aspect_ratio=decrease,pad=${w}:${h}:(ow-iw)/2:(oh-ih)/2,setsar=1[v${i}out];"
+  # format=yuv420p converts to 8-bit 4:2:0 — H.264 High profile can't take the
+  # 10-bit 4:2:2 that ProRes 422 masters carry. This is the correct web delivery format.
+  FILTER+="[v${i}]scale=w=${w}:h=${h}:force_original_aspect_ratio=decrease,pad=${w}:${h}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p[v${i}out];"
 done
 FILTER="${FILTER%;}"  # strip trailing ;
 
@@ -138,14 +140,14 @@ ffmpeg "${ARGS[@]}"
 # ---- optional extras --------------------------------------------------------
 if (( WANT_FALLBACK )); then
   echo "Encoding 1080 fallback…"
-  ffmpeg -y -i "$MASTER" -vf "scale=w=1920:h=1080:force_original_aspect_ratio=decrease" \
+  ffmpeg -y -i "$MASTER" -vf "scale=w=1920:h=1080:force_original_aspect_ratio=decrease,format=yuv420p" \
     -c:v libx264 -profile:v high -preset slow -b:v 10000k -maxrate 12000k -bufsize 20000k \
     -movflags +faststart -c:a aac -b:a 256k -ac 2 "${SLUG}-1080.mp4"
 fi
 
 if (( WANT_THUMB )); then
   echo "Encoding muted thumbnail loop…"
-  ffmpeg -y -i "$MASTER" -t 8 -an -vf "scale=w=720:h=-2" \
+  ffmpeg -y -i "$MASTER" -t 8 -an -vf "scale=w=720:h=-2,format=yuv420p" \
     -c:v libx264 -profile:v high -preset veryfast -b:v 900k -maxrate 1000k -bufsize 1800k \
     -movflags +faststart "${SLUG}-thumb.mp4"
 fi
