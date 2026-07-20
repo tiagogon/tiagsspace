@@ -19,26 +19,14 @@ if (!is_array($player_options)) {
     $player_options = [];
 }
 
-// Caption tracks (ACF repeater). Rows with no file are skipped; the module
-// normalises the rest and falls back to Videopack's _kgvid-meta when this
-// is empty, so MP4 films using the old workflow keep working untouched.
-$caption_tracks = [];
-$caption_rows = get_field('film_caption_tracks');
-if (is_array($caption_rows)) {
-    foreach ($caption_rows as $row) {
-        if (empty($row['caption_file'])) {
-            continue;
-        }
-        $srclang = !empty($row['caption_srclang']) ? strtolower($row['caption_srclang']) : 'en';
-        $caption_tracks[] = [
-            'src'     => $row['caption_file'],
-            'srclang' => $srclang,
-            'label'   => !empty($row['caption_label']) ? $row['caption_label'] : strtoupper($srclang),
-            'kind'    => 'subtitles',
-            'default' => !empty($row['caption_default']),
-        ];
-    }
-}
+// Caption tracks live on the .m3u8 ATTACHMENT, not this post — the HLS bundle
+// they generate into is keyed by attachment ID. These sidecar <track> elements
+// are only a fallback: once renditions exist in the playlist, player-hls.php
+// drops them (both would load and every cue would render twice). MP4 films fall
+// back to Videopack's _kgvid-meta inside the module, untouched.
+$caption_tracks = function_exists('tiagsspace_film_caption_tracks')
+    ? tiagsspace_film_caption_tracks($attachment_id)
+    : [];
 
 // Enqueue the matching playback engine (footer scripts, so late enqueue is fine).
 if (function_exists('tiagsspace_video_is_hls') && tiagsspace_video_is_hls($attachment_id)) {

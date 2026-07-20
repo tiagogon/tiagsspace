@@ -17,6 +17,7 @@
  *  4. Index thumbnail options    — video/animated thumbnails, column size
  *  5. Taxonomy Options           — is_archived flag for log-branch
  *  6. Video Player Options       — embed URL, self-host, player config (films/hyper)
+ * 6b. Caption tracks            — WebVTT subtitles, on the .m3u8 attachment
  *  7. Video player per attachment — per-video player overrides
  *  8. Video player(s) per post   — per-post video player overrides
  *  9. Re-attach images           — move attachments between posts from editor
@@ -583,53 +584,6 @@ add_action( 'acf/include_fields', function() {
 				),
 				'default_value' => array( 'autopause', 'dnt', 'controls', 'keyboard', 'playsinline' ),
 				'layout' => 'vertical',
-			),
-			array(
-				'key' => 'field_69a1c4e2b7f31',
-				'label' => 'Caption tracks',
-				'name' => 'film_caption_tracks',
-				'type' => 'repeater',
-				'instructions' => "WebVTT (.vtt) subtitle tracks for this film. Works for both HLS and MP4 films.\n\nVideopack's own captions panel never appears for an .m3u8 attachment, so this is the place to manage them. Tick Default on the track that should be pre-selected — if none is ticked, the first row wins.",
-				'conditional_logic' => array( array( array( 'field' => 'field_687d30e9f178d', 'operator' => '!=empty' ) ) ),
-				'layout' => 'table',
-				'button_label' => 'Add caption track',
-				'sub_fields' => array(
-					array(
-						'key' => 'field_69a1c4e2b7f35',
-						'label' => 'File',
-						'name' => 'caption_file',
-						'type' => 'file',
-						'return_format' => 'url',
-						'required' => 1,
-						'mime_types' => 'vtt',
-						'instructions' => 'A .vtt file from the Media Library.',
-					),
-					array(
-						'key' => 'field_69a1c4e2b7f39',
-						'label' => 'Language',
-						'name' => 'caption_srclang',
-						'type' => 'text',
-						'required' => 1,
-						'maxlength' => 5,
-						'placeholder' => 'pt',
-						'instructions' => 'Language code, e.g. pt or en.',
-					),
-					array(
-						'key' => 'field_69a1c4e2b7f3d',
-						'label' => 'Label',
-						'name' => 'caption_label',
-						'type' => 'text',
-						'placeholder' => 'Português',
-						'instructions' => 'Shown in the player captions menu.',
-					),
-					array(
-						'key' => 'field_69a1c4e2b7f41',
-						'label' => 'Default',
-						'name' => 'caption_default',
-						'type' => 'true_false',
-						'ui' => 1,
-					),
-				),
 			),
 		),
 		'location' => array(
