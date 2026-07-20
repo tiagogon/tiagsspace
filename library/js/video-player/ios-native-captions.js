@@ -230,6 +230,14 @@
     }
 
     function bind(video) {
+        // Films with in-manifest subtitle renditions are handled by the native
+        // layer end to end: Plyr captions are disabled in their config and
+        // AVPlayer applies DEFAULT/AUTOSELECT itself (proven with a bare
+        // <video>). Touching track modes here would only reintroduce the fight
+        // this script keeps losing. Sidecar-track films (the MP4/Videopack
+        // path) still need the supervisor below.
+        if (video.getAttribute('data-manifest-subs') === '1') return;
+
         // Native handoff only happens where webkitEnterFullscreen exists, i.e.
         // iPhone/iPod. iPad reports as desktop Safari and keeps the Plyr overlay.
         if (typeof video.webkitEnterFullscreen !== 'function') return;

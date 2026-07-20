@@ -56,9 +56,40 @@
         } catch (e) {}
     }
 
+    /**
+     * On films with in-manifest subtitle renditions (data-manifest-subs="1"),
+     * the server-emitted data-plyr-config ships with Plyr captions fully
+     * disabled: on the native HLS path (iPhone) AVPlayer must own caption
+     * selection — a bare <video> with this manifest renders subtitles in native
+     * fullscreen, and every Plyr-managed variant we tried did not, because
+     * Plyr's captions.update() demotes manifest tracks to hidden.
+     *
+     * On the hls.js path, Plyr's caption manager is proven to work against
+     * manifest renditions, so this helper re-enables it. It must rewrite the
+     * data-plyr-config ATTRIBUTE (not pass constructor options): in the
+     * vendored Plyr build the merge order is defaults → options → attribute,
+     * so the attribute always wins.
+     */
+    function reenablePlyrCaptions(video) {
+        if (video.getAttribute('data-manifest-subs') !== '1') return;
+        try {
+            var config = JSON.parse(video.getAttribute('data-plyr-config') || '{}');
+            config.captions = { active: true, language: 'auto', update: true };
+            config.settings = ['captions'];
+            if (Array.isArray(config.controls) && config.controls.indexOf('captions') === -1) {
+                var at = config.controls.indexOf('fullscreen');
+                if (at === -1) at = config.controls.length;
+                config.controls.splice(at, 0, 'captions', 'settings');
+            }
+            video.setAttribute('data-plyr-config', JSON.stringify(config));
+        } catch (e) {}
+    }
+
     function initNative(video, debug) {
         // The <source type="application/vnd.apple.mpegurl"> is already present;
         // Safari/iOS play it natively and handle adaptation. No quality menu.
+        // Manifest-subs films keep the caption-disabled config emitted by the
+        // server: the native layer owns subtitles here (see reenablePlyrCaptions).
         if (debug) log('engine: native HLS (Safari/iOS)');
         if (window.Plyr) {
             var player = new Plyr(video);
@@ -68,6 +99,8 @@
 
     function initHlsJs(video, src, debug) {
         if (debug) log('engine: hls.js', src);
+
+        reenablePlyrCaptions(video);
 
         var hls = new Hls({
             capLevelToPlayerSize: true, // don't fetch levels larger than the display

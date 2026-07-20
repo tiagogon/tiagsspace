@@ -63,6 +63,24 @@ if (!function_exists('tiagsspace_render_video_hls')) {
         // native path never had one, so this keeps every browser consistent.
         // (The MP4 renderer keeps its menu — it has no ABR to fall back on.)
         $config = tiagsspace_video_build_config($args, ['settings' => ['captions']]);
+
+        // Manifest-subs films: Plyr must not manage captions AT ALL on the native
+        // HLS path (iPhone). A bare <video> with this manifest renders subtitles
+        // in native fullscreen; every failure mode we chased came from Plyr
+        // demoting the manifest tracks (captions.update() on addtrack) or from
+        // scripts fighting it. So the server-emitted config — which wins over
+        // constructor options in Plyr's merge order — ships with captions fully
+        // disabled and no captions UI. init-hls.js re-enables Plyr captions by
+        // rewriting this attribute on the hls.js path only, where Plyr's manager
+        // is proven to work against manifest renditions.
+        if ($has_manifest_subs) {
+            $config['captions'] = ['active' => false, 'update' => false];
+            $config['settings'] = [];
+            if (is_array($config['controls'])) {
+                $config['controls'] = array_values(array_diff($config['controls'], ['captions', 'settings']));
+            }
+        }
+
         $json = wp_json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         $extra_attrs   = tiagsspace_video_extra_attrs($args);
