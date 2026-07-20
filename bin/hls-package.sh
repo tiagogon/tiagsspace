@@ -143,6 +143,13 @@ ffmpeg "${ARGS[@]}"
 
 # master.m3u8 uses paths relative to WORK root (stream_N/playlist.m3u8) — good.
 
+# Declare that no embedded CEA-608/708 closed captions exist. Without this
+# attribute the HLS spec lets clients assume captions MAY be present, so Safari
+# synthesizes a phantom captions track and the player shows a CC menu even for
+# caption-less films. Sidecar WebVTT captions (separate .vtt uploads) are
+# unrelated and unaffected by this.
+sed -i '' -E '/CLOSED-CAPTIONS/!s/^(#EXT-X-STREAM-INF:.*)$/\1,CLOSED-CAPTIONS=NONE/' "${WORK}/master.m3u8"
+
 # ---- optional extras --------------------------------------------------------
 if (( WANT_FALLBACK )); then
   echo "Encoding 1080 fallback…"

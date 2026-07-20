@@ -2,10 +2,14 @@
  * HLS player init — Plyr + hls.js / native HLS.
  *
  * Initialises every `.film-player--hls` <video> on the page:
- *   - Safari / iOS (native `application/vnd.apple.mpegurl`) → let the OS play
- *     the .m3u8 and adapt quality. No quality menu (the OS decides).
- *   - Everything else → hls.js drives playback; Plyr's quality menu is wired to
- *     hls.js levels with an "Auto" default that follows the network.
+ *   - MSE available (Chrome/Edge/Firefox…) → hls.js drives playback; Plyr's
+ *     quality menu is wired to hls.js levels with an "Auto" default that
+ *     follows the network. hls.js is preferred even though modern Chrome
+ *     reports native HLS support — native gives no quality menu and ignores
+ *     capLevelToPlayerSize.
+ *   - Safari / iOS (native `application/vnd.apple.mpegurl`, no MSE for this) →
+ *     let the OS play the .m3u8 and adapt quality. No quality menu (the OS
+ *     decides).
  *
  * The rest of the player config (controls, captions, ratio, fullscreen) comes
  * from the element's data-plyr-config, emitted by library/video/player-hls.php.
@@ -151,14 +155,19 @@
             return;
         }
 
-        // Prefer native HLS where available (Safari/iOS): better battery, no JS.
-        if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            initNative(video, debug);
+        // Prefer hls.js wherever MSE is available. Modern Chrome also reports
+        // native HLS support ("maybe"), but its native path gives Plyr no
+        // quality menu and ignores capLevelToPlayerSize — hls.js keeps the UI
+        // consistent across Chrome/Edge/Firefox.
+        if (window.Hls && Hls.isSupported()) {
+            initHlsJs(video, src, debug);
             return;
         }
 
-        if (window.Hls && Hls.isSupported()) {
-            initHlsJs(video, src, debug);
+        // Safari/iOS: hls.js's MSE path is unavailable/restricted there, and
+        // native HLS is genuinely better (battery, OS-level ABR).
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            initNative(video, debug);
             return;
         }
 

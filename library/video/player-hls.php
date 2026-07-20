@@ -31,7 +31,17 @@ if (!function_exists('tiagsspace_render_video_hls')) {
             return '';
         }
 
-        $poster         = tiagsspace_video_poster($args);
+        $poster = tiagsspace_video_poster($args);
+
+        // Captions for HLS films are sidecar WebVTT <track>s read from
+        // Videopack's _kgvid-meta ON THE .M3U8 ATTACHMENT (same workflow as MP4
+        // films: upload the .vtt separately). They are unrelated to the
+        // CLOSED-CAPTIONS=NONE attribute in master.m3u8, which only declares
+        // that no embedded CEA-608 captions exist in the video stream (without
+        // it Safari synthesizes a phantom CC track). CAVEAT for the first
+        // captioned HLS migration: Videopack's captions UI may not appear on an
+        // attachment with MIME application/vnd.apple.mpegurl — if so, the
+        // _kgvid-meta 'track' array needs a filter or manual meta entry.
         $caption_tracks = tiagsspace_video_caption_tracks($attachment_id);
         $player_options = isset($args['player_options']) && is_array($args['player_options']) ? $args['player_options'] : [];
 

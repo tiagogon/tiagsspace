@@ -87,6 +87,22 @@ Tell the user to:
 2. Set that attachment as the film's **Self Host Film** field. Done — the player
    detects `.m3u8` and streams HLS.
 
+## Captions
+
+- The export is **identical** for captioned films — captions are NOT encoded
+  into the HLS bundle. They stay sidecar WebVTT files, uploaded separately and
+  wired via Videopack's `_kgvid-meta` **on the .m3u8 attachment** (same workflow
+  as MP4 films; `library/video/player-hls.php` renders them as `<track>`
+  elements, which work with both hls.js and native Safari HLS).
+- The script stamps `CLOSED-CAPTIONS=NONE` on every `#EXT-X-STREAM-INF` line of
+  `master.m3u8`. That only declares "no *embedded* CEA-608 captions in the video
+  stream" — without it Safari synthesizes a phantom CC track and the player
+  shows a captions menu on caption-less films. It does not affect sidecar VTT.
+- **Unverified caveat (check on the first captioned HLS migration):** Videopack's
+  captions UI may not appear on an attachment whose MIME is
+  `application/vnd.apple.mpegurl`. If so, the `_kgvid-meta` `track` array needs
+  a small filter or manual meta entry.
+
 ## Gotchas
 
 - **nginx MIME (prod, one-time):** native Safari/iOS may refuse the playlist
