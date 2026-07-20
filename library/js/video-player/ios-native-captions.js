@@ -123,9 +123,18 @@
         // Others go to "hidden", never "disabled" — a disabled track risks
         // disappearing from Apple's subtitle menu, and the viewer should still be
         // able to switch language while fullscreen.
-        captionTracks(video).forEach(function (track) {
-            track.mode = (track === wanted) ? 'showing' : 'hidden';
-        });
+        var promote = function () {
+            captionTracks(video).forEach(function (track) {
+                track.mode = (track === wanted) ? 'showing' : 'hidden';
+            });
+        };
+        promote();
+
+        // Plyr re-hides the active track from a setTimeout inside captions.toggle(),
+        // and captions.update() demotes anything "showing" whenever a track is
+        // added. Either can land just after us and undo the promotion, so re-assert
+        // once the current task queue has drained.
+        setTimeout(promote, 0);
 
         if (debug) log('fullscreen in — showing', wanted.language || wanted.label || '?');
     }

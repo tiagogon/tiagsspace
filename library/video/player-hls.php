@@ -33,16 +33,28 @@ if (!function_exists('tiagsspace_render_video_hls')) {
 
         $poster = tiagsspace_video_poster($args);
 
-        // Captions for HLS films come from the ACF "Caption tracks" repeater on
-        // the film post (see template-parts/entry-video-player.php), passed in
-        // via $args['caption_tracks']. Videopack's own captions panel never
-        // renders for an .m3u8 attachment (its admin UI is mime-gated to
-        // video/*), so that workflow is not available here — ACF is the source
-        // of truth for HLS films. They are unrelated to the CLOSED-CAPTIONS=NONE
-        // attribute in master.m3u8, which only declares that no embedded CEA-608
-        // captions exist in the video stream (without it Safari synthesizes a
-        // phantom CC track).
-        $caption_tracks = tiagsspace_video_caption_tracks($attachment_id, $args);
+        // Captions come from one of two places, and they are mutually exclusive.
+        //
+        // 1. IN-MANIFEST renditions (`EXT-X-MEDIA:TYPE=SUBTITLES` in the playlist,
+        //    generated into uploads/hls/<id>/subs/). This is the only form iOS
+        //    renders in native fullscreen: sidecar <track> elements are a DOM
+        //    concept with no AVPlayer media-selection group behind them, so
+        //    Apple's player lists nothing and draws nothing.
+        // 2. SIDECAR <track> elements, from $args['caption_tracks'].
+        //
+        // When the bundle has manifest renditions we must NOT also emit sidecar
+        // tracks. Both would load into the same <video>, and two things break:
+        // hls.js merges them and every cue renders twice (verified), and Plyr's
+        // captions.update() — bound to `addtrack` — force-demotes whatever is
+        // `showing` to `hidden`, so the promote-on-fullscreen handler in
+        // ios-native-captions.js would target a sidecar track that iOS cannot
+        // draw while hiding the manifest track that it can.
+        //
+        // Unrelated to CLOSED-CAPTIONS=NONE in the playlist, which only declares
+        // that no embedded CEA-608 captions exist (without it Safari synthesizes
+        // a phantom CC track).
+        $has_manifest_subs = (bool) get_post_meta($attachment_id, '_tiagsspace_hls_subs', true);
+        $caption_tracks    = $has_manifest_subs ? [] : tiagsspace_video_caption_tracks($attachment_id, $args);
         $player_options = isset($args['player_options']) && is_array($args['player_options']) ? $args['player_options'] : [];
 
         // Quality for HLS is driven by the JS (hls.levels / native), not by
@@ -60,6 +72,7 @@ if (!function_exists('tiagsspace_render_video_hls')) {
         ?>
         <video class="plyr film-player film-player--hls" data-debug="0"
             data-hls-src="<?php echo esc_url($playlist_url); ?>"
+            <?php if ($has_manifest_subs) : ?>data-manifest-subs="1"<?php endif; ?>
             <?php echo $extra_attrs; ?>
             <?php if ($poster) : ?>poster="<?php echo $poster; ?>"<?php endif; ?>
             data-plyr-config='<?php echo esc_attr($json); ?>'
