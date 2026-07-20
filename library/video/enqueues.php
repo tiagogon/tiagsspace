@@ -57,12 +57,22 @@ function tiagsspace_video_register_assets() {
         tiagsspace_asset_ver('/library/js/video-player/init-hls.js'),
         true
     );
+
+    // Shared by both playback paths: fullscreen on play (see the file for why).
+    wp_register_script(
+        'video-player-fullscreen-on-play',
+        $uri . '/library/js/video-player/fullscreen-on-play.js',
+        ['plyr'],
+        tiagsspace_asset_ver('/library/js/video-player/fullscreen-on-play.js'),
+        true
+    );
 }
 
 if (!function_exists('tiagsspace_video_enqueue_mp4')) {
     /** Enqueue the progressive MP4 adaptive-quality engine. */
     function tiagsspace_video_enqueue_mp4() {
         wp_enqueue_script('plyr-adaptive-quality');
+        wp_enqueue_script('video-player-fullscreen-on-play');
     }
 }
 
@@ -71,5 +81,6 @@ if (!function_exists('tiagsspace_video_enqueue_hls')) {
     function tiagsspace_video_enqueue_hls() {
         wp_enqueue_script('hls-js');
         wp_enqueue_script('video-player-init-hls');
+        wp_enqueue_script('video-player-fullscreen-on-play');
     }
 }
