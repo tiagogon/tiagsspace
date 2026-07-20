@@ -53,6 +53,9 @@ if (!function_exists('tiagsspace_render_video_hls')) {
         // Unrelated to CLOSED-CAPTIONS=NONE in the playlist, which only declares
         // that no embedded CEA-608 captions exist (without it Safari synthesizes
         // a phantom CC track).
+        // Literal rather than TIAGSSPACE_HLS_SUBS_META: this file is parsed before
+        // hls-subtitles.php defines that constant, and the module must survive
+        // being copied into another theme without the generator alongside it.
         $has_manifest_subs = (bool) get_post_meta($attachment_id, '_tiagsspace_hls_subs', true);
         $caption_tracks    = $has_manifest_subs ? [] : tiagsspace_video_caption_tracks($attachment_id, $args);
         $player_options = isset($args['player_options']) && is_array($args['player_options']) ? $args['player_options'] : [];
