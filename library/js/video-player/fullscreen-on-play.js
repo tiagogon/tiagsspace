@@ -19,10 +19,16 @@
  *
  * iOS: Plyr's `iosNative: true` routes iPhone to video.webkitEnterFullscreen(),
  * i.e. Apple's own player. True fullscreen with correct landscape rotation, at
- * the cost of our Plyr skin and caption styling for the duration. iPadOS 13+ and
- * everything else get real fullscreen with the skin intact.
+ * the cost of our Plyr skin for the duration. iPadOS 13+ and everything else get
+ * real fullscreen with the skin intact.
+ *
+ * That handoff also breaks captions outright — not merely their styling — because
+ * Plyr keeps every text track "hidden" and renders cues into its own overlay,
+ * which the native player never shows. ios-native-captions.js exists to fix that;
+ * see its header for the full explanation.
  *
  * @see library/video/enqueues.php (enqueued for both MP4 and HLS films)
+ * @see library/js/video-player/ios-native-captions.js (captions during that handoff)
  */
 (function () {
     'use strict';

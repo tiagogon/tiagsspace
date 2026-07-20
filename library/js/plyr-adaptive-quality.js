@@ -448,8 +448,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (e) {}
             }
 
+            // load() re-runs resource selection, which can reset text-track state.
+            // Capture the caption tracks by language so they can be put back once
+            // the new source has metadata — otherwise a quality swap mid-playback
+            // (fullscreen triggers one) silently drops the viewer's subtitles.
+            let captionModes = [];
+            try {
+                captionModes = Array.from(videoEl.textTracks || [])
+                    .filter(t => t.kind === 'subtitles' || t.kind === 'captions')
+                    .map(t => ({ language: t.language, label: t.label, mode: t.mode }));
+            } catch (e) {}
+
             videoEl.src = target.src;
             videoEl.load();
+
+            if (captionModes.length) {
+                const restoreCaptions = function () {
+                    try {
+                        Array.from(videoEl.textTracks || []).forEach(track => {
+                            const saved = captionModes.find(c =>
+                                c.language === track.language && c.label === track.label
+                            );
+                            if (saved && track.mode !== saved.mode) track.mode = saved.mode;
+                        });
+                    } catch (e) {}
+                };
+                try { videoEl.addEventListener('loadedmetadata', restoreCaptions, { once: true }); } catch (e) {}
+            }
 
             try { videoEl._currentQuality = target.size || desiredSize; } catch (e) {}
             try { if (player) player._currentQuality = target.size || desiredSize; } catch (e) {}

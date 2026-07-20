@@ -66,6 +66,16 @@ function tiagsspace_video_register_assets() {
         tiagsspace_asset_ver('/library/js/video-player/fullscreen-on-play.js'),
         true
     );
+
+    // Shared by both playback paths: keep captions visible once iPhone hands
+    // the video to Apple's native fullscreen player (see the file for why).
+    wp_register_script(
+        'video-player-ios-native-captions',
+        $uri . '/library/js/video-player/ios-native-captions.js',
+        ['plyr'],
+        tiagsspace_asset_ver('/library/js/video-player/ios-native-captions.js'),
+        true
+    );
 }
 
 if (!function_exists('tiagsspace_video_enqueue_mp4')) {
@@ -73,6 +83,7 @@ if (!function_exists('tiagsspace_video_enqueue_mp4')) {
     function tiagsspace_video_enqueue_mp4() {
         wp_enqueue_script('plyr-adaptive-quality');
         wp_enqueue_script('video-player-fullscreen-on-play');
+        wp_enqueue_script('video-player-ios-native-captions');
     }
 }
 
@@ -82,5 +93,6 @@ if (!function_exists('tiagsspace_video_enqueue_hls')) {
         wp_enqueue_script('hls-js');
         wp_enqueue_script('video-player-init-hls');
         wp_enqueue_script('video-player-fullscreen-on-play');
+        wp_enqueue_script('video-player-ios-native-captions');
     }
 }
