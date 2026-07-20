@@ -2,14 +2,15 @@
  * HLS player init — Plyr + hls.js / native HLS.
  *
  * Initialises every `.film-player--hls` <video> on the page:
- *   - MSE available (Chrome/Edge/Firefox…) → hls.js drives playback; Plyr's
- *     quality menu is wired to hls.js levels with an "Auto" default that
- *     follows the network. hls.js is preferred even though modern Chrome
- *     reports native HLS support — native gives no quality menu and ignores
- *     capLevelToPlayerSize.
+ *   - MSE available (Chrome/Edge/Firefox…) → hls.js drives playback and its ABR
+ *     picks the rung. hls.js is preferred even though modern Chrome reports
+ *     native HLS support, because native ignores capLevelToPlayerSize.
  *   - Safari / iOS (native `application/vnd.apple.mpegurl`, no MSE for this) →
- *     let the OS play the .m3u8 and adapt quality. No quality menu (the OS
- *     decides).
+ *     let the OS play the .m3u8 and adapt quality.
+ *
+ * Neither path offers a quality menu: choosing a rung is the player's job, not
+ * the viewer's, and this way every browser behaves the same. Use ?video_debug=1
+ * to see which rung ABR actually settled on.
  *
  * The rest of the player config (controls, captions, ratio, fullscreen) comes
  * from the element's data-plyr-config, emitted by library/video/player-hls.php.
@@ -23,10 +24,8 @@
 (function () {
     'use strict';
 
-    var AUTO = 0; // Plyr quality value we reserve for "Auto"
-
     /**
-     * Menu label for an hls.js level, as a 16:9-equivalent height.
+     * Debug label for an hls.js level, as a 16:9-equivalent height.
      *
      * Rungs are encoded at the master's own aspect ratio (bin/hls-package.sh
      * fits the picture into a 16:9 box without padding), so a 2.39:1 film's
@@ -78,47 +77,19 @@
         hls.loadSource(src);
 
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            // Build Plyr quality options from the ladder, tallest first, with
-            // Auto (0) at the front as the default. Menu values are nominal
-            // heights, so keep a value → level index map for switching; if two
-            // levels share a nominal height the higher-bitrate one wins.
-            var levelFor = {};
-            hls.levels.forEach(function (level, index) {
-                var nominal = nominalHeight(level);
-                if (!nominal) return;
-                var current = levelFor[nominal];
-                if (current === undefined || level.bitrate > hls.levels[current].bitrate) {
-                    levelFor[nominal] = index;
-                }
-            });
-
-            var heights = Object.keys(levelFor)
-                .map(Number)
-                .sort(function (a, b) { return b - a; });
-
-            var options = [AUTO].concat(heights);
-
-            if (debug) log('levels', heights.map(function (h) {
-                var l = hls.levels[levelFor[h]];
-                return h + 'p (' + l.width + 'x' + l.height + ')';
+            if (debug) log('levels', hls.levels.map(function (level) {
+                return nominalHeight(level) + 'p (' + level.width + 'x' + level.height + ')';
             }));
 
-            var player = new Plyr(video, {
-                quality: {
-                    default: AUTO,
-                    options: options,
-                    forced: true,
-                    onChange: function (quality) {
-                        setQuality(hls, quality, levelFor, debug);
-                    }
-                },
-                i18n: { qualityLabel: { 0: 'Auto' } }
-            });
+            // No quality options: ABR owns the choice. Controls come from
+            // data-plyr-config.
+            var player = new Plyr(video);
 
             player.hls = hls;
             video.plyr = player;
 
-            // Reflect ABR's automatic switches in the menu label while on Auto.
+            // ABR's switches are invisible in the UI by design — this log is the
+            // only way to see them.
             hls.on(Hls.Events.LEVEL_SWITCHED, function (event, data) {
                 if (debug) {
                     var lvl = hls.levels[data.level];
@@ -154,18 +125,6 @@
         });
     }
 
-    function setQuality(hls, quality, levelFor, debug) {
-        if (quality === AUTO) {
-            hls.currentLevel = -1; // back to ABR
-            if (debug) log('quality → Auto');
-            return;
-        }
-        var index = levelFor[quality];
-        if (index === undefined) return;
-        hls.currentLevel = index;
-        if (debug) log('quality → ' + quality + 'p (manual)');
-    }
-
     function initOne(video) {
         if (video._hlsInited) return;
         video._hlsInited = true;
@@ -182,9 +141,9 @@
         }
 
         // Prefer hls.js wherever MSE is available. Modern Chrome also reports
-        // native HLS support ("maybe"), but its native path gives Plyr no
-        // quality menu and ignores capLevelToPlayerSize — hls.js keeps the UI
-        // consistent across Chrome/Edge/Firefox.
+        // native HLS support ("maybe"), but its native path ignores
+        // capLevelToPlayerSize, so it will happily pull a 4K rung into a small
+        // player. hls.js caps to the display size instead.
         if (window.Hls && Hls.isSupported()) {
             initHlsJs(video, src, debug);
             return;

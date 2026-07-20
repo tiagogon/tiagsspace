@@ -46,8 +46,11 @@ if (!function_exists('tiagsspace_render_video_hls')) {
         $player_options = isset($args['player_options']) && is_array($args['player_options']) ? $args['player_options'] : [];
 
         // Quality for HLS is driven by the JS (hls.levels / native), not by
-        // <source> sizes — so no quality.default here.
-        $config = tiagsspace_video_build_config($args);
+        // <source> sizes — so no quality.default here. And no quality pane at
+        // all: adapting to the connection is the player's job, and Safari's
+        // native path never had one, so this keeps every browser consistent.
+        // (The MP4 renderer keeps its menu — it has no ABR to fall back on.)
+        $config = tiagsspace_video_build_config($args, ['settings' => ['captions']]);
         $json = wp_json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         $extra_attrs   = tiagsspace_video_extra_attrs($args);
