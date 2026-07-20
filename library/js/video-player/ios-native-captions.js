@@ -86,15 +86,26 @@
      * The track to show in fullscreen, or null when captions are off.
      *
      * captions.currentTrackNode is the real TextTrack object, which sidesteps
-     * Plyr's index filtering. Without a Plyr instance — or with captions on but
-     * nothing selected yet — we fall back to the <track default> the renderers
-     * emit.
+     * Plyr's index filtering. It can lag behind — Plyr assigns it from deferred
+     * callbacks, and on manifest-subs films the tracks themselves can arrive
+     * after the play-click that triggered fullscreen — so fall back to matching
+     * Plyr's language, then to the first caption track. There are no sidecar
+     * <track default> elements to fall back to on manifest-subs films.
      */
     function trackToShow(video, player) {
+        var tracks = captionTracks(video);
+
         if (player) {
             try {
                 if (!player.captions || !player.captions.toggled) return null;
                 if (player.captions.currentTrackNode) return player.captions.currentTrackNode;
+                var lang = (player.language || '').toLowerCase();
+                if (lang) {
+                    var match = tracks.filter(function (t) {
+                        return (t.language || '').toLowerCase().indexOf(lang) === 0;
+                    })[0];
+                    if (match) return match;
+                }
             } catch (e) {}
         }
 
@@ -103,40 +114,61 @@
             if (el && el.track) return el.track;
         } catch (e) {}
 
-        return null;
+        return tracks[0] || null;
     }
 
     function onBeginFullscreen(video) {
         var debug = debugEnabled(video);
-        var player = video.plyr || null;
-        var wanted = trackToShow(video, player);
 
-        if (!wanted) {
-            if (debug) log('fullscreen in — captions off, nothing to show');
-            return;
-        }
+        // A single promotion at entry is not enough. Verified in Plyr's source:
+        // captions.toggle() re-hides the current track from a setTimeout, and
+        // captions.update() — bound to addtrack — demotes any "showing" track,
+        // including manifest renditions that arrive AFTER fullscreen began. So
+        // supervise the whole fullscreen window instead of firing once:
+        //
+        //   - if the wanted track drifted back to "hidden", that was Plyr
+        //     (Apple's Off sets "disabled", not "hidden") → re-promote;
+        //   - if the viewer picked another language in Apple's menu, adopt it;
+        //   - if the viewer chose Off ("disabled"), respect it and stand down;
+        //   - if captions are off in Plyr, do nothing at all.
+        //
+        // The interval dies on webkitendfullscreen.
+        var supervise = function () {
+            var player = video.plyr || null;
+            var wanted = video._tiagsCaptionTrack || trackToShow(video, player);
+            if (!wanted) return;
 
-        // Remember what we promoted so exit can tell "unchanged" from "the viewer
-        // picked something else in Apple's menu".
-        video._tiagsCaptionTrack = wanted;
+            var tracks = captionTracks(video);
 
-        // Others go to "hidden", never "disabled" — a disabled track risks
-        // disappearing from Apple's subtitle menu, and the viewer should still be
-        // able to switch language while fullscreen.
-        var promote = function () {
-            captionTracks(video).forEach(function (track) {
-                track.mode = (track === wanted) ? 'showing' : 'hidden';
-            });
+            var chosen = tracks.filter(function (t) { return t.mode === 'showing'; })[0];
+            if (chosen && chosen !== wanted) {
+                // Apple's menu is live during fullscreen — the viewer switched.
+                video._tiagsCaptionTrack = wanted = chosen;
+                if (debug) log('adopted', wanted.language || wanted.label || '?');
+            }
+
+            if (wanted.mode === 'disabled') {
+                // Off via Apple's menu. Their call; stop pushing.
+                video._tiagsCaptionUserOff = true;
+                return;
+            }
+            if (video._tiagsCaptionUserOff) return;
+
+            if (wanted.mode !== 'showing') {
+                video._tiagsCaptionTrack = wanted;
+                tracks.forEach(function (track) {
+                    track.mode = (track === wanted) ? 'showing' : 'hidden';
+                });
+                if (debug) log('promoted', wanted.language || wanted.label || '?');
+            }
         };
-        promote();
 
-        // Plyr re-hides the active track from a setTimeout inside captions.toggle(),
-        // and captions.update() demotes anything "showing" whenever a track is
-        // added. Either can land just after us and undo the promotion, so re-assert
-        // once the current task queue has drained.
-        setTimeout(promote, 0);
+        if (video._tiagsCaptionInterval) clearInterval(video._tiagsCaptionInterval);
+        video._tiagsCaptionUserOff = false;
+        supervise();
+        video._tiagsCaptionInterval = setInterval(supervise, 300);
 
-        if (debug) log('fullscreen in — showing', wanted.language || wanted.label || '?');
+        if (debug) log('fullscreen in — supervising captions');
     }
 
     function onEndFullscreen(video) {
@@ -144,6 +176,14 @@
         var player = video.plyr || null;
         var tracks = captionTracks(video);
         var previous = video._tiagsCaptionTrack || null;
+
+        // Stop the fullscreen supervisor before touching modes, or it would
+        // fight the restore below on its next tick.
+        if (video._tiagsCaptionInterval) {
+            clearInterval(video._tiagsCaptionInterval);
+            video._tiagsCaptionInterval = null;
+        }
+        delete video._tiagsCaptionUserOff;
 
         // What is showing now may not be what we promoted: Apple's own subtitle
         // menu is live during fullscreen. Adopt the viewer's choice so Plyr's
