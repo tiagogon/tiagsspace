@@ -450,7 +450,7 @@ Index of posts for Home and Archives
                                             }
 
                                             if ($format_url) {
-                                                $sources .= '<source src="' . esc_url($format_url) . '" type="' . esc_attr($format_mime) . '">' . "\n";
+                                                $sources .= '<source src="' . esc_url(tiagsspace_versioned_media_url($format_url)) . '" type="' . esc_attr($format_mime) . '">' . "\n";
                                             }
                                         }
                                     }
@@ -459,7 +459,7 @@ Index of posts for Home and Archives
                                     if (empty($sources)) {
                                         $fallback_url = $video_direct_url ? $video_direct_url : ($video_attachment_id ? wp_get_attachment_url($video_attachment_id) : '');
                                         if ($fallback_url) {
-                                            $sources .= '<source src="' . esc_url($fallback_url) . '" type="' . esc_attr($video_mime_type) . '">' . "\n";
+                                            $sources .= '<source src="' . esc_url(tiagsspace_versioned_media_url($fallback_url)) . '" type="' . esc_attr($video_mime_type) . '">' . "\n";
                                         }
                                     }
 

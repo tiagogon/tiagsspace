@@ -453,3 +453,41 @@ function last_post_link_function( $atts ) {
 	wp_reset_postdata();
 }
 add_shortcode( 'last_post_link', 'last_post_link_function' );
+
+
+/*
+ * Append a filemtime-based version query to an uploads URL.
+ *
+ * Media is served with a one-year Cache-Control, so replacing a file in place
+ * (same filename) leaves visitors on the old copy until their cache expires.
+ * Versioning the URL makes it a distinct cache entry and forces a refetch.
+ * Returns the URL untouched if it isn't an uploads file or is missing on disk.
+ */
+function tiagsspace_versioned_media_url($url) {
+	if (empty($url)) {
+		return $url;
+	}
+
+	$uploads = wp_upload_dir();
+	if (empty($uploads['baseurl']) || empty($uploads['basedir'])) {
+		return $url;
+	}
+
+	// Compare protocol-relative so http/https mismatches still match.
+	$baseurl = preg_replace('#^https?:#', '', $uploads['baseurl']);
+	$target  = preg_replace('#^https?:#', '', $url);
+
+	if (strpos($target, $baseurl) !== 0) {
+		return $url;
+	}
+
+	$relative = substr($target, strlen($baseurl));
+	$relative = explode('?', $relative);
+	$path     = $uploads['basedir'] . urldecode($relative[0]);
+
+	if (!file_exists($path)) {
+		return $url;
+	}
+
+	return add_query_arg('v', filemtime($path), $url);
+}
