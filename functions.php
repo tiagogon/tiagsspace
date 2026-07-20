@@ -15,6 +15,8 @@ require_once('library/helpers.php');          // WP cleanup, pagination, content
 require_once('library/video/player.php');     // render_video_player() dispatcher (MP4 ladder / HLS)
 require_once('library/video/enqueues.php');   // conditional player asset registration
 require_once('library/video/hls-import.php'); // Media Library .hlspack.zip → HLS attachment
+require_once('library/video/hls-subtitles.php'); // EXT-X-MEDIA subtitle renditions in a bundle
+require_once('library/film-captions.php');    // ACF glue: caption rows → subtitle renditions
 
 // Admin Functions
 require_once('library/admin.php');              // custom admin functions

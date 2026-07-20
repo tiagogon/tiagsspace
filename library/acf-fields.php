@@ -640,6 +640,77 @@ add_action( 'acf/include_fields', function() {
 	) );
 
 	// =========================================================================
+	// 6b. Caption tracks — on the .m3u8 ATTACHMENT, not the film post
+	// =========================================================================
+	// Captions belong to the video asset, and the HLS bundle they are generated
+	// into lives at uploads/hls/<attachment-id>/ — so the attachment ID is the
+	// natural key. ACF's attachment location rule compares the FULL mime type
+	// whenever the rule value contains a slash (ACF_Location_Attachment::match),
+	// so this targets .m3u8 exactly rather than the whole application/* bucket.
+	// m3u8 is registered in upload_mimes by library/video/hls-import.php, which
+	// is why it appears in ACF's dropdown at all.
+	//
+	// MP4 films are deliberately NOT covered: Videopack's captions panel is
+	// mime-gated to video/*, so it already works there, and a second UI on the
+	// same object with no defined precedence would only cause confusion.
+	acf_add_local_field_group( array(
+		'key' => 'group_69a2f1a4c0e11',
+		'title' => 'Caption tracks',
+		'fields' => array(
+			array(
+				'key' => 'field_69a2f1a4c0e15',
+				'label' => 'Caption tracks',
+				'name' => 'caption_tracks',
+				'type' => 'repeater',
+				'instructions' => "WebVTT (.vtt) subtitle tracks for this film.\n\nSaving regenerates the subtitle renditions inside the HLS bundle — that is what makes captions work in the iPhone's fullscreen player. No video is re-encoded.\n\nTick Default on the track that should be pre-selected; if none is ticked, the first row wins.",
+				'layout' => 'table',
+				'button_label' => 'Add caption track',
+				'sub_fields' => array(
+					array(
+						'key' => 'field_69a2f1a4c0e19',
+						'label' => 'File',
+						'name' => 'caption_file',
+						'type' => 'file',
+						'return_format' => 'url',
+						'required' => 1,
+						'mime_types' => 'vtt',
+						'instructions' => 'A .vtt file from the Media Library.',
+					),
+					array(
+						'key' => 'field_69a2f1a4c0e1d',
+						'label' => 'Language',
+						'name' => 'caption_srclang',
+						'type' => 'text',
+						'required' => 1,
+						'maxlength' => 5,
+						'placeholder' => 'pt',
+						'instructions' => 'Language code, e.g. pt or en.',
+					),
+					array(
+						'key' => 'field_69a2f1a4c0e21',
+						'label' => 'Label',
+						'name' => 'caption_label',
+						'type' => 'text',
+						'placeholder' => 'Português',
+						'instructions' => 'Shown in the player captions menu.',
+					),
+					array(
+						'key' => 'field_69a2f1a4c0e25',
+						'label' => 'Default',
+						'name' => 'caption_default',
+						'type' => 'true_false',
+						'ui' => 1,
+					),
+				),
+			),
+		),
+		'location' => array(
+			array( array( 'param' => 'attachment', 'operator' => '==', 'value' => 'application/vnd.apple.mpegurl' ) ),
+		),
+		'active' => true,
+	) );
+
+	// =========================================================================
 	// 7. Video player per attachment
 	// =========================================================================
 	acf_add_local_field_group( array(
