@@ -33,16 +33,16 @@ if (!function_exists('tiagsspace_render_video_hls')) {
 
         $poster = tiagsspace_video_poster($args);
 
-        // Captions for HLS films are sidecar WebVTT <track>s read from
-        // Videopack's _kgvid-meta ON THE .M3U8 ATTACHMENT (same workflow as MP4
-        // films: upload the .vtt separately). They are unrelated to the
-        // CLOSED-CAPTIONS=NONE attribute in master.m3u8, which only declares
-        // that no embedded CEA-608 captions exist in the video stream (without
-        // it Safari synthesizes a phantom CC track). CAVEAT for the first
-        // captioned HLS migration: Videopack's captions UI may not appear on an
-        // attachment with MIME application/vnd.apple.mpegurl — if so, the
-        // _kgvid-meta 'track' array needs a filter or manual meta entry.
-        $caption_tracks = tiagsspace_video_caption_tracks($attachment_id);
+        // Captions for HLS films come from the ACF "Caption tracks" repeater on
+        // the film post (see template-parts/entry-video-player.php), passed in
+        // via $args['caption_tracks']. Videopack's own captions panel never
+        // renders for an .m3u8 attachment (its admin UI is mime-gated to
+        // video/*), so that workflow is not available here — ACF is the source
+        // of truth for HLS films. They are unrelated to the CLOSED-CAPTIONS=NONE
+        // attribute in master.m3u8, which only declares that no embedded CEA-608
+        // captions exist in the video stream (without it Safari synthesizes a
+        // phantom CC track).
+        $caption_tracks = tiagsspace_video_caption_tracks($attachment_id, $args);
         $player_options = isset($args['player_options']) && is_array($args['player_options']) ? $args['player_options'] : [];
 
         // Quality for HLS is driven by the JS (hls.levels / native), not by
@@ -71,8 +71,19 @@ if (!function_exists('tiagsspace_render_video_hls')) {
         >
             <source src="<?php echo esc_url($playlist_url); ?>" type="application/vnd.apple.mpegurl">
 
+            <?php
+            // Only one <track> may carry `default`: whichever row was flagged,
+            // or the first row when none was.
+            $default_index = 0;
+            foreach ($caption_tracks as $index => $track) {
+                if (!empty($track['default'])) {
+                    $default_index = $index;
+                    break;
+                }
+            }
+            ?>
             <?php foreach ($caption_tracks as $index => $track) : ?>
-                <track kind="<?php echo $track['kind']; ?>" src="<?php echo $track['src']; ?>" srclang="<?php echo $track['srclang']; ?>" label="<?php echo $track['label']; ?>"<?php echo ($index === 0) ? ' default' : ''; ?>>
+                <track kind="<?php echo $track['kind']; ?>" src="<?php echo $track['src']; ?>" srclang="<?php echo $track['srclang']; ?>" label="<?php echo $track['label']; ?>"<?php echo ($index === $default_index) ? ' default' : ''; ?>>
             <?php endforeach; ?>
 
             <?php esc_html_e('Your browser does not support the video tag.', 'tiagsspace'); ?>

@@ -108,7 +108,7 @@ if (!function_exists('tiagsspace_render_video_mp4')) {
         });
 
         $poster         = tiagsspace_video_poster($args);
-        $caption_tracks = tiagsspace_video_caption_tracks($attachment_id);
+        $caption_tracks = tiagsspace_video_caption_tracks($attachment_id, $args);
         $player_options = isset($args['player_options']) && is_array($args['player_options']) ? $args['player_options'] : [];
 
         $config = tiagsspace_video_build_config($args, [
@@ -135,8 +135,19 @@ if (!function_exists('tiagsspace_render_video_mp4')) {
                 <source src="<?php echo esc_url($source['src']); ?>" type="<?php echo esc_attr($source['type']); ?>" size="<?php echo esc_attr($source['size']); ?>" label="<?php echo esc_attr($source['size'] . 'p'); ?>">
             <?php endforeach; ?>
 
+            <?php
+            // Only one <track> may carry `default`: whichever row was flagged,
+            // or the first row when none was.
+            $default_index = 0;
+            foreach ($caption_tracks as $index => $track) {
+                if (!empty($track['default'])) {
+                    $default_index = $index;
+                    break;
+                }
+            }
+            ?>
             <?php foreach ($caption_tracks as $index => $track) : ?>
-                <track kind="<?php echo $track['kind']; ?>" src="<?php echo $track['src']; ?>" srclang="<?php echo $track['srclang']; ?>" label="<?php echo $track['label']; ?>"<?php echo ($index === 0) ? ' default' : ''; ?>>
+                <track kind="<?php echo $track['kind']; ?>" src="<?php echo $track['src']; ?>" srclang="<?php echo $track['srclang']; ?>" label="<?php echo $track['label']; ?>"<?php echo ($index === $default_index) ? ' default' : ''; ?>>
             <?php endforeach; ?>
 
             <?php esc_html_e('Your browser does not support the video tag.', 'tiagsspace'); ?>

@@ -121,13 +121,38 @@ if (!function_exists('tiagsspace_video_poster')) {
 
 if (!function_exists('tiagsspace_video_caption_tracks')) {
     /**
-     * Build WebVTT caption <track> data from Videopack (_kgvid-meta).
+     * Build WebVTT caption <track> data for an attachment.
      *
-     * @param int $attachment_id
-     * @return array[] Each: src, srclang, label, kind (all pre-escaped).
+     * Prefers the theme-owned ACF repeater (passed in via $args['caption_tracks'],
+     * gathered by the caller — see the portability contract at the top of this
+     * file) so HLS films get a working admin UI (Videopack's captions panel never
+     * renders for an .m3u8 attachment). Falls back to Videopack's own
+     * `_kgvid-meta` when the caller has none, so MP4 films using the old
+     * workflow are unaffected.
+     *
+     * @param int   $attachment_id
+     * @param array $args Renderer args; reads $args['caption_tracks'] if present.
+     * @return array[] Each: src, srclang, label, kind, default (all pre-escaped
+     *                 except default, which is a plain bool).
      */
-    function tiagsspace_video_caption_tracks($attachment_id) {
+    function tiagsspace_video_caption_tracks($attachment_id, $args = []) {
         $tracks = [];
+
+        if (!empty($args['caption_tracks']) && is_array($args['caption_tracks'])) {
+            foreach ($args['caption_tracks'] as $track) {
+                if (is_array($track) && !empty($track['src'])) {
+                    $tracks[] = [
+                        'src'     => esc_url($track['src']),
+                        'srclang' => esc_attr(strtolower($track['srclang'] ?? 'en')),
+                        'label'   => esc_html($track['label'] ?? 'Captions'),
+                        'kind'    => esc_attr($track['kind'] ?? 'subtitles'),
+                        'default' => !empty($track['default']),
+                    ];
+                }
+            }
+            return $tracks;
+        }
+
         $kgvid_meta = get_post_meta($attachment_id, '_kgvid-meta', true);
 
         if ($kgvid_meta && isset($kgvid_meta['track']) && is_array($kgvid_meta['track'])) {
@@ -138,6 +163,7 @@ if (!function_exists('tiagsspace_video_caption_tracks')) {
                         'srclang' => esc_attr(strtolower($track['srclang'] ?? 'en')),
                         'label'   => esc_html($track['label'] ?? 'Captions'),
                         'kind'    => esc_attr($track['kind'] ?? 'captions'),
+                        'default' => !empty($track['default']),
                     ];
                 }
             }
