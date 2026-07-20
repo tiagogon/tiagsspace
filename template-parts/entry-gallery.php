@@ -8,12 +8,20 @@ Gallery template for single pages
 // get attachmens atached to the post
 // On preview pages $post is a revision; resolve to the parent post so attachments are found
 $gallery_post_id = wp_is_post_revision( $post->ID ) ? wp_get_post_parent_id( $post->ID ) : $post->ID;
+
+// Exclude the film's own video source (the `self_host_film` attachment — an HLS
+// .m3u8 or a progressive video). It's rendered by the player, not the gallery;
+// dragging an HLS bundle in while editing parents it to the post, so without
+// this it would render as a stray empty gallery item.
+$self_host_film_id = intval( get_field( 'self_host_film', $gallery_post_id ) );
+
 $args = array(
     'numberposts'       => -1, // Using -1 loads all posts
     'orderby'           => 'menu_order', // set in the page media manager
     'order'             => 'ASC',
     // 'post_mime_type'    => 'image', // Make sure it doesn't pull other resources, like videos
     'post_parent'       => $gallery_post_id, // Important part - ensures the associated images are loaded
+    'exclude'           => $self_host_film_id ? array( $self_host_film_id ) : array(),
     'post_status'       => null,
     'post_type'         => 'attachment',
     'meta_query'        => array(

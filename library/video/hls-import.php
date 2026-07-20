@@ -37,6 +37,24 @@ if (!function_exists('tiagsspace_hls_is_bundle')) {
     }
 }
 
+if (!function_exists('tiagsspace_hls_playlist_name')) {
+    /**
+     * Derive a film-specific playlist filename from the uploaded bundle path,
+     * e.g. ".../project-forest.hlspack.zip" -> "project-forest.m3u8".
+     * Falls back to "master.m3u8" if nothing usable remains after sanitising.
+     *
+     * @param string $zip_path
+     * @return string
+     */
+    function tiagsspace_hls_playlist_name($zip_path) {
+        $base = basename((string) $zip_path);
+        $base = preg_replace('/\.hlspack\.zip$/i', '', $base);
+        $base = preg_replace('/\.zip$/i', '', $base);
+        $base = sanitize_file_name($base);
+        return ($base !== '') ? $base . '.m3u8' : 'master.m3u8';
+    }
+}
+
 if (!function_exists('tiagsspace_hls_rrmdir')) {
     /**
      * Recursively delete a directory, but only if it lives under $guard_base.
@@ -164,12 +182,26 @@ function tiagsspace_hls_on_add_attachment($post_id) {
     }
     tiagsspace_hls_log("OK   attachment $post_id: extracted");
 
-    // Re-point the attachment at the extracted master playlist.
-    $master_path = trailingslashit($dest_dir) . 'master.m3u8';
-    update_attached_file($post_id, $master_path);
-    tiagsspace_hls_log("OK   attachment $post_id: re-pointed to master.m3u8");
+    // Give the top playlist a film-specific name (derived from the uploaded zip,
+    // e.g. project-forest.hlspack.zip -> project-forest.m3u8) so the Media
+    // Library shows something meaningful instead of every film's file being
+    // "master.m3u8". The bundle's internal segment/variant references are
+    // relative, so renaming only the entry playlist is safe.
+    $playlist = tiagsspace_hls_playlist_name($file); // e.g. "project-forest.m3u8"
+    $src      = trailingslashit($dest_dir) . 'master.m3u8';
+    $master_path = trailingslashit($dest_dir) . $playlist;
+    if ($playlist !== 'master.m3u8' && file_exists($src) && @rename($src, $master_path)) {
+        tiagsspace_hls_log("OK   attachment $post_id: playlist renamed to $playlist");
+    } else {
+        $master_path = $src; // fall back to master.m3u8 if rename didn't happen
+        $playlist    = 'master.m3u8';
+    }
 
-    $master_url = trailingslashit($uploads['baseurl']) . 'hls/' . $post_id . '/master.m3u8';
+    // Re-point the attachment at the (possibly renamed) master playlist.
+    update_attached_file($post_id, $master_path);
+    tiagsspace_hls_log("OK   attachment $post_id: re-pointed to $playlist");
+
+    $master_url = trailingslashit($uploads['baseurl']) . 'hls/' . $post_id . '/' . $playlist;
     wp_update_post([
         'ID'             => $post_id,
         'post_mime_type' => 'application/vnd.apple.mpegurl',
