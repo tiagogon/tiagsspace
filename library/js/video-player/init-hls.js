@@ -102,6 +102,19 @@
             if (debug) log('engine: native HLS, native player (manifest subs)');
             video.classList.add('film-player--native');
             video.controls = true;
+
+            // Fullscreen on play, natively. fullscreen-on-play.js cannot help
+            // here: it delegates on [data-plyr="play"] inside a .plyr container,
+            // and neither exists once Plyr is skipped. Dropping playsinline is
+            // the native equivalent — iOS then enters fullscreen by itself when
+            // playback starts, with no script and so no user-activation problem.
+            // Ambient films keep playing inline: seizing the screen is exactly
+            // what fullscreen-on-play.js excludes them from.
+            if (!video.hasAttribute('loop') && !video.hasAttribute('autoplay')) {
+                video.removeAttribute('playsinline');
+                video.removeAttribute('webkit-playsinline');
+                if (debug) log('playsinline removed — iOS will fullscreen on play');
+            }
             return;
         }
 

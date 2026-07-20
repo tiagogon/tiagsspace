@@ -42,36 +42,130 @@
         return video.hasAttribute('loop') || video.hasAttribute('autoplay');
     }
 
+    function debugEnabled(video) {
+        try {
+            if (video && video.getAttribute('data-debug') === '1') return true;
+            return /[?&]video_debug=1\b/.test(window.location.search);
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function log() {
+        try {
+            if (!window.console || !console.log) return;
+            var args = Array.prototype.slice.call(arguments);
+            args.unshift('[fullscreen]');
+            console.log.apply(console, args);
+        } catch (e) {}
+    }
+
+    /**
+     * Enter fullscreen, handling the outcome.
+     *
+     * WHY NOT JUST player.fullscreen.enter(): Plyr calls
+     * `target.requestFullscreen({navigationUI:"hide"})` and never captures the
+     * returned promise (verified in the vendored source — enter() returns
+     * undefined). A rejected request therefore fails completely silently: no
+     * error, no retry, and no fallback, because Plyr's `fallback: true` only
+     * engages when the API is ABSENT, never when a request is refused. Calling
+     * the API ourselves lets us see the rejection and still fill the screen via
+     * Plyr's CSS fallback.
+     */
     function enterFullscreen(player, video) {
-        // Plyr handles vendor prefixes and routes iOS to webkitEnterFullscreen.
+        var debug = debugEnabled(video);
+
+        // iOS native player: no Plyr, no container — go straight to the element.
+        // (Manifest-subs films drop playsinline in init-hls.js and fullscreen on
+        // their own, so this is only for sidecar-track films on iPhone.)
+        if (!player) {
+            try {
+                if (typeof video.webkitEnterFullscreen === 'function') {
+                    video.webkitEnterFullscreen();
+                    if (debug) log('webkitEnterFullscreen (no Plyr)');
+                }
+            } catch (e) {}
+            return;
+        }
+
+        var container = player.elements && player.elements.container;
+
+        // iOS via Plyr's iosNative path: element-level, returns no promise.
+        if (typeof video.webkitEnterFullscreen === 'function'
+            && player.config && player.config.fullscreen && player.config.fullscreen.iosNative) {
+            try {
+                video.webkitEnterFullscreen();
+                if (debug) log('webkitEnterFullscreen (iosNative)');
+                return;
+            } catch (e) {}
+        }
+
+        if (container && typeof container.requestFullscreen === 'function') {
+            try {
+                var result = container.requestFullscreen({ navigationUI: 'hide' });
+                if (result && typeof result.then === 'function') {
+                    result.then(function () {
+                        if (debug) log('entered');
+                        lockLandscape(debug);
+                    })['catch'](function (err) {
+                        if (debug) log('REJECTED:', err && err.name, err && err.message, '— using CSS fallback');
+                        cssFallback(player);
+                    });
+                } else {
+                    // Older/prefixed implementations return nothing; assume it worked.
+                    if (debug) log('requested (no promise returned)');
+                    lockLandscape(debug);
+                }
+                return;
+            } catch (err) {
+                if (debug) log('THREW:', err && err.name, err && err.message, '— using CSS fallback');
+                cssFallback(player);
+                return;
+            }
+        }
+
+        // No native API at all: Plyr's own path (which will use its fallback).
         try {
             if (player.fullscreen && typeof player.fullscreen.enter === 'function') {
                 player.fullscreen.enter();
-                return;
-            }
-        } catch (e) {}
-
-        // Direct iOS fallback if Plyr's own path is unavailable. Needs metadata
-        // loaded; with preload="metadata" that is normally true by click time.
-        try {
-            if (typeof video.webkitEnterFullscreen === 'function') {
-                video.webkitEnterFullscreen();
+                if (debug) log('delegated to plyr.fullscreen.enter()');
             }
         } catch (e) {}
     }
 
     /**
-     * Best-effort landscape lock. Android Chrome honours it inside fullscreen;
-     * iOS Safari does not implement it at all (native fullscreen rotates anyway).
-     * Must not throw or leave an unhandled rejection.
+     * Plyr's CSS "fullscreen" — the viewport-filling mode its `fallback: true`
+     * config already intends. Used when a native request is refused, so the
+     * viewer gets a filled screen instead of nothing happening.
      */
-    function lockLandscape() {
+    function cssFallback(player) {
         try {
+            if (player.fullscreen && typeof player.fullscreen.toggleFallback === 'function') {
+                player.fullscreen.toggleFallback(true);
+            }
+        } catch (e) {}
+    }
+
+    /**
+     * Best-effort landscape lock, only AFTER fullscreen is confirmed.
+     *
+     * Ordering matters: screen.orientation.lock() requires active fullscreen, so
+     * calling it synchronously alongside the request guarantees a rejection mid
+     * transition — and on some engines a failed lock aborts the transition
+     * itself. Touch devices only; on a desktop it can only ever reject.
+     */
+    function lockLandscape(debug) {
+        try {
+            var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+            if (!isTouch) return;
+
             var orientation = window.screen && window.screen.orientation;
             if (orientation && typeof orientation.lock === 'function') {
                 var result = orientation.lock('landscape');
                 if (result && typeof result.catch === 'function') {
-                    result.catch(function () {});
+                    result['catch'](function (err) {
+                        if (debug) log('orientation lock refused:', err && err.name);
+                    });
                 }
             }
         } catch (e) {}
@@ -103,7 +197,8 @@
             if (player.fullscreen && player.fullscreen.active) return;
         } catch (e) {}
 
+        // lockLandscape() is deliberately NOT called here — it now runs only once
+        // fullscreen is confirmed, inside enterFullscreen().
         enterFullscreen(player, video);
-        lockLandscape();
     }, true);
 })();
