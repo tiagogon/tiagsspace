@@ -19,8 +19,25 @@ Do not hardcode bitrates in this skill. Current setup (as of last edit): a
 2160/1080/720/480/360 ladder at 20/10/5/2.5/1 Mbps, H.264 High + AAC, `-preset
 slow`, 6 s fMP4 segments, and it **preserves the master's frame rate**
 (24/25/30/23.976/29.97 — never forces 24) with keyframes on segment boundaries.
-The ladder auto-caps to the master's height. To change quality, edit the
-`LADDER=(...)` array and encode params in the script, don't work around them.
+To change quality, edit the `LADDER=(...)` array and encode params in the
+script, don't work around them.
+
+**The ladder entries are 16:9 boxes, not fixed output sizes.** The picture is
+fitted into each box with its aspect ratio preserved and **never padded**, and a
+box is used only when that needs no upscaling. So:
+
+- **Sub-4K masters work fine** — the ladder just gets shorter. A 1080p master
+  gives 1080/720/480/360; a 720p master gives 720/480/360. Nothing is upscaled,
+  ever: a master smaller than the bottom box is encoded at its own size.
+- **Non-16:9 masters keep their shape.** A 2.39:1 4K master tops out at
+  3840x1608, not a padded 1920x1080 — box selection compares *both* dimensions,
+  so a wide master still earns the 3840-wide box even though it is under 2160
+  tall. Portrait and 4:3 masters work the same way.
+- **Bitrates scale with the real pixel count**, so a rung that doesn't fill its
+  box isn't budgeted for one. For 16:9 masters the factor is exactly 1 and the
+  `LADDER` numbers are used as written.
+- A master whose height falls between boxes is fitted into the next box down.
+  Add a `LADDER` entry if you want a native rung for it.
 
 Flags: `--thumb` (muted loop MP4 for the archive grid), `--fallback` (a single
 progressive 1080p MP4), `--keep` (keep the unzipped working folder).
@@ -105,6 +122,13 @@ Tell the user to:
 
 ## Gotchas
 
+- **Anamorphic masters (SAR ≠ 1:1)** would come out horizontally squeezed — the
+  filter chain stamps `setsar=1` and assumes square pixels. The script prints a
+  WARNING and continues; stop and de-anamorphose the master rather than shipping
+  the bundle.
+- Because rungs are no longer padded to 16:9, a non-16:9 film is letterboxed by
+  the player's CSS instead (`.embed-container` is `aspect-ratio: 16/9` and Plyr
+  is configured `ratio => 16:9`). Visually the same, no bits wasted on bars.
 - **nginx MIME (prod, one-time):** native Safari/iOS may refuse the playlist
   unless nginx serves `.m3u8` as `application/vnd.apple.mpegurl` and `.m4s` as
   `video/iso.segment`. hls.js (Chrome/Firefox) works regardless. Flag this if the

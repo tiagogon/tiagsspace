@@ -149,7 +149,10 @@ this module.
    bin/hls-package.sh master.mp4 my-film-slug
    # → my-film-slug.hlspack.zip   (add --thumb / --fallback if you want those extras)
    ```
-   Requires `ffmpeg` + `ffprobe`. The ladder is capped to the master's height.
+   Requires `ffmpeg` + `ffprobe`. Ladder rungs are 16:9 boxes the picture is fitted
+   into with its aspect ratio preserved (never padded), and a rung is only used if it
+   needs no upscaling — so a sub-4K master simply produces a shorter ladder, and a
+   2.39:1 4K master tops out at 3840x1608 instead of a letterboxed 1920x1080.
 3. **Drag `my-film-slug.hlspack.zip` into the Media Library** like any file. The theme
    unpacks it into `uploads/hls/<attachment-id>/` and turns it into an `.m3u8` attachment.
 4. Select that attachment in **Self Host Film**. The player detects `.m3u8` and streams HLS.

@@ -25,6 +25,20 @@
 
     var AUTO = 0; // Plyr quality value we reserve for "Auto"
 
+    /**
+     * Menu label for an hls.js level, as a 16:9-equivalent height.
+     *
+     * Rungs are encoded at the master's own aspect ratio (bin/hls-package.sh
+     * fits the picture into a 16:9 box without padding), so a 2.39:1 film's
+     * levels are 3840x1608, 1920x804… Labelling those by raw height would show
+     * "1608p / 804p". Taking the taller of the real height and the height the
+     * level's width implies at 16:9 gives back the familiar 2160 / 1080, and is
+     * a no-op for 16:9 films.
+     */
+    function nominalHeight(level) {
+        return Math.max(level.height || 0, Math.round((level.width || 0) * 9 / 16));
+    }
+
     function debugEnabled(video) {
         try {
             if (video && video.getAttribute('data-debug') === '1') return true;
@@ -64,16 +78,30 @@
         hls.loadSource(src);
 
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            // Build Plyr quality options from the ladder heights, tallest first,
-            // with Auto (0) at the front as the default.
-            var heights = hls.levels
-                .map(function (l) { return l.height; })
-                .filter(function (h, i, a) { return h && a.indexOf(h) === i; })
+            // Build Plyr quality options from the ladder, tallest first, with
+            // Auto (0) at the front as the default. Menu values are nominal
+            // heights, so keep a value → level index map for switching; if two
+            // levels share a nominal height the higher-bitrate one wins.
+            var levelFor = {};
+            hls.levels.forEach(function (level, index) {
+                var nominal = nominalHeight(level);
+                if (!nominal) return;
+                var current = levelFor[nominal];
+                if (current === undefined || level.bitrate > hls.levels[current].bitrate) {
+                    levelFor[nominal] = index;
+                }
+            });
+
+            var heights = Object.keys(levelFor)
+                .map(Number)
                 .sort(function (a, b) { return b - a; });
 
             var options = [AUTO].concat(heights);
 
-            if (debug) log('levels', heights);
+            if (debug) log('levels', heights.map(function (h) {
+                var l = hls.levels[levelFor[h]];
+                return h + 'p (' + l.width + 'x' + l.height + ')';
+            }));
 
             var player = new Plyr(video, {
                 quality: {
@@ -81,7 +109,7 @@
                     options: options,
                     forced: true,
                     onChange: function (quality) {
-                        setQuality(hls, quality, debug);
+                        setQuality(hls, quality, levelFor, debug);
                     }
                 },
                 i18n: { qualityLabel: { 0: 'Auto' } }
@@ -94,7 +122,8 @@
             hls.on(Hls.Events.LEVEL_SWITCHED, function (event, data) {
                 if (debug) {
                     var lvl = hls.levels[data.level];
-                    log('level switched →', lvl ? lvl.height + 'p' : data.level,
+                    log('level switched →',
+                        lvl ? nominalHeight(lvl) + 'p (' + lvl.width + 'x' + lvl.height + ')' : data.level,
                         'bw≈', Math.round(hls.bandwidthEstimate / 1000) + 'kbps');
                 }
             });
@@ -125,19 +154,16 @@
         });
     }
 
-    function setQuality(hls, quality, debug) {
+    function setQuality(hls, quality, levelFor, debug) {
         if (quality === AUTO) {
             hls.currentLevel = -1; // back to ABR
             if (debug) log('quality → Auto');
             return;
         }
-        for (var i = 0; i < hls.levels.length; i++) {
-            if (hls.levels[i].height === quality) {
-                hls.currentLevel = i;
-                if (debug) log('quality → ' + quality + 'p (manual)');
-                return;
-            }
-        }
+        var index = levelFor[quality];
+        if (index === undefined) return;
+        hls.currentLevel = index;
+        if (debug) log('quality → ' + quality + 'p (manual)');
     }
 
     function initOne(video) {
