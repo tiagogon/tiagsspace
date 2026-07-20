@@ -178,8 +178,14 @@ if (!function_exists('tiagsspace_video_build_config')) {
         ];
 
         // Controls: a fixed set when enabled, otherwise none (background videos).
+        // The mute toggle only earns its place when the film starts muted — there it is
+        // the affordance to turn sound on. Otherwise it is noise.
         if (in_array('controls', $player_options, true)) {
-            $config['controls'] = ['play-large', 'play', 'progress', 'current-time', 'mute', 'captions', 'settings', 'fullscreen'];
+            $config['controls'] = array_merge(
+                ['play-large', 'play', 'progress', 'current-time'],
+                in_array('muted', $player_options, true) ? ['mute'] : [],
+                ['captions', 'settings', 'fullscreen']
+            );
         } else {
             $config['controls'] = false;
         }
