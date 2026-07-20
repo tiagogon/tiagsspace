@@ -33,6 +33,14 @@
   .plyr {
     height: 100%;
   }
+
+  // iPhone native player (manifest-subs films skip Plyr entirely there —
+  // see init-hls.js). The raw <video> must fill the 16:9 box itself.
+  video.film-player--native {
+    height: 100%;
+    width: 100%;
+    background: #000;
+  }
 }
 
 .player {

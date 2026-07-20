@@ -88,8 +88,22 @@
     function initNative(video, debug) {
         // The <source type="application/vnd.apple.mpegurl"> is already present;
         // Safari/iOS play it natively and handle adaptation. No quality menu.
-        // Manifest-subs films keep the caption-disabled config emitted by the
-        // server: the native layer owns subtitles here (see reenablePlyrCaptions).
+        //
+        // Manifest-subs films skip Plyr COMPLETELY on this path and use Apple's
+        // player, inline included. This is a deliberate trade, decided after a
+        // controlled test: a bare <video> with the same manifest renders
+        // subtitles in native fullscreen, and every Plyr-wrapped variant —
+        // captions managed, supervised, or fully disabled — did not. Captions
+        // for iPhone viewers beat the Plyr skin. This path only runs where MSE
+        // is unavailable (iPhone/iPod); iPad and desktop take the hls.js path
+        // and keep the Plyr UI.
+        if (video.getAttribute('data-manifest-subs') === '1') {
+            if (debug) log('engine: native HLS, native player (manifest subs)');
+            video.classList.add('film-player--native');
+            video.controls = true;
+            return;
+        }
+
         if (debug) log('engine: native HLS (Safari/iOS)');
         if (window.Plyr) {
             var player = new Plyr(video);

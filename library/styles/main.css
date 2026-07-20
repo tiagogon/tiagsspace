@@ -7226,6 +7226,10 @@ a.delete {
   aspect-ratio: 16 / 9; }
   .embed-container .plyr {
     height: 100%; }
+  .embed-container video.film-player--native {
+    height: 100%;
+    width: 100%;
+    background: #000; }
 
 .player .captions > span {
   font-size: 0.9em !important;
