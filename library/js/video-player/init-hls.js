@@ -94,9 +94,10 @@
         // controlled test: a bare <video> with the same manifest renders
         // subtitles in native fullscreen, and every Plyr-wrapped variant —
         // captions managed, supervised, or fully disabled — did not. Captions
-        // for iPhone viewers beat the Plyr skin. This path only runs where MSE
-        // is unavailable (iPhone/iPod); iPad and desktop take the hls.js path
-        // and keep the Plyr UI.
+        // for iPhone viewers beat the Plyr skin. iPhones reach here via the
+        // explicit override in initOne() (modern iOS has ManagedMediaSource, so
+        // Hls.isSupported() is true there and would otherwise steal this path);
+        // iPad reports as Macintosh and keeps hls.js + the Plyr UI.
         if (video.getAttribute('data-manifest-subs') === '1') {
             if (debug) log('engine: native HLS, native player (manifest subs)');
             video.classList.add('film-player--native');
@@ -184,6 +185,21 @@
         }
         if (!src) {
             if (debug) log('no HLS source found on element');
+            return;
+        }
+
+        // iPhone + manifest subtitles: native HLS MUST win over hls.js.
+        // iOS 17.1+ ships ManagedMediaSource, so Hls.isSupported() is true on
+        // modern iPhones and the MSE branch below would grab them — but
+        // subtitle tracks created in JS (hls.js's route) are listed yet never
+        // painted by AVPlayer in native fullscreen. Only true native playback
+        // (src=m3u8, AVPlayer reads the manifest itself) renders the in-manifest
+        // renditions — proven with a bare <video> on device. iPad reports as
+        // Macintosh and stays on hls.js + Plyr, where captions work.
+        if (video.getAttribute('data-manifest-subs') === '1'
+            && /iPhone|iPod/i.test(navigator.userAgent)
+            && video.canPlayType('application/vnd.apple.mpegurl')) {
+            initNative(video, debug);
             return;
         }
 
