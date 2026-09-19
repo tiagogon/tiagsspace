@@ -13,6 +13,7 @@
  * Field groups:
  *  1. Attachment settings        — per-attachment gallery/display options
  *  2. Background & Around        — background image, hide nav, hide from archives
+ * 2b. Set language               — en / pt / mixed, drives <html lang>, og:locale, %%label%%
  *  3. Gallery                    — gallery layout, ordering, animation, columns
  *  4. Index thumbnail options    — video/animated thumbnails, column size
  *  5. Taxonomy Options           — is_archived flag for log-branch
@@ -161,6 +162,47 @@ add_action( 'acf/include_fields', function() {
 			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'dusk' ) ),
 			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'post' ) ),
 		),
+		'active' => true,
+	) );
+
+	// =========================================================================
+	// 2b. Set language — declares the language a set is written in (SEO)
+	//     Read by seo-and-feed.php: <html lang>, og:locale, schema inLanguage,
+	//     and the language of the %%label%% meta description.
+	// =========================================================================
+	acf_add_local_field_group( array(
+		'key' => 'group_68cd7a1e3f0b2',
+		'title' => 'Set language',
+		'fields' => array(
+			array(
+				'key' => 'field_68cd7a1e3f0b3',
+				'label' => 'Language of this set',
+				'name' => 'set_language',
+				'type' => 'select',
+				'instructions' => 'English is the site default. "Portuguese" declares the page as pt-PT to browsers, search engines and share cards. "Mixed" keeps the default and leaves lang attributes on individual blocks to you.',
+				'choices' => array(
+					'en' => 'English',
+					'pt' => 'Portuguese',
+					'mixed' => 'Mixed',
+				),
+				'default_value' => 'en',
+				'return_format' => 'value',
+				'allow_null' => 0,
+				'multiple' => 0,
+				'ui' => 0,
+			),
+		),
+		'location' => array(
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'post' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'page' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'dusk' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'hyper' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'log' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'films' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'cityburns' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => '4k-lento' ) ),
+		),
+		'position' => 'side',
 		'active' => true,
 	) );
 
