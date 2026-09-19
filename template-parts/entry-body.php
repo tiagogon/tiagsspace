@@ -23,6 +23,12 @@ Single // log Archive pages >> Content
   $logs_branch = "";
   $logs_branch = "".taxonomy_list($post->ID,'log-branch',' ',' /',', ', ' & ', 'link');
 
+  // Metadata footer (date, terms, Edit, Download) is editor-only and only on the
+  // single post itself — on Log listings the title already links to the post, so
+  // editors open the post to reach it. Visitors never get the footer in the DOM.
+  $is_single = is_singular();
+  $show_meta = $is_single && current_user_can( 'edit_post', $post->ID );
+
 ?>
 
 <header>
@@ -30,7 +36,8 @@ Single // log Archive pages >> Content
     <div class="page-header">
         <h1 class="single-title" itemprop="headline">
            <?php
-           if (!is_post_type_archive() AND !is_tax( 'log-branch' )) {
+           // "<Type> / " prefix — skipped for films, which are not an artistic series.
+           if ( 'films' !== $post_type && !is_post_type_archive() AND !is_tax( 'log-branch' )) {
              echo '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a> /  ';
            }
            if (!is_tax( 'log-branch' ) ) {
@@ -42,20 +49,23 @@ Single // log Archive pages >> Content
            //     echo '4KL'.sprintf("%02d", number_of_the_post($post->ID)).' ';
            // }
 
-          if (is_singular('')) {
-            echo get_the_title();
-          }else {
+          if ( $is_single ) {
+            if ( $show_meta ) {
+              // Editors: the title itself toggles the metadata footer below.
+              echo '<a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">'.get_the_title().'</a>';
+            } else {
+              echo get_the_title();
+            }
+          } else {
             echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
           }
-
-          echo str_repeat('&nbsp;', 1).'<a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">+</a>';
           ?>
         </h1>
     </div>
 
 </header> <!-- end article header -->
 
-<?php
+<?php if ( $show_meta ) {
 
   // Get taxonamies string
   $taxonomies_string = '';
@@ -108,50 +118,47 @@ Single // log Archive pages >> Content
     echo $taxonomies_string;
 
 
-    // Edit post links
-    if( is_user_logged_in() ) {
+    // Edit post link (the footer only renders for users who can edit the post)
 
-        // Delete post button
-        // echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
+    // Delete post button
+    // echo ' <a href="'.get_delete_post_link( $id).'">#Trash </a> ';
 
-        // Edit post
+    echo ' • ';
+    edit_post_link('Edit', '', '');
+
+    //Download attachements
+    $attachments = get_posts(array(
+        'post_type' => 'attachment',
+        'numberposts' => -1,
+        'post_parent' => $post->ID,
+        'orderby' => 'menu_order',
+        'order' => 'ASC'
+    ));
+
+
+    if ($attachments) {
         echo ' • ';
-        edit_post_link('Edit', '', '');
+        echo '<a id="download-all-attachments-'.$post->ID.'" href="#" download-all-'.$post->ID.'>Download</a>';
+        echo '<div style="display: none;" id="download-links-'.$post->ID.'">';
 
-        echo ' • ';
+        // Zip of all attachments (streamed server-side via admin-ajax).
+        $zip_url = add_query_arg( array(
+            'action'  => 'download_all_attachments',
+            'post_id' => $post->ID,
+            '_nonce'  => wp_create_nonce( 'download_all_attachments' ),
+        ), admin_url( 'admin-ajax.php' ) );
+        echo '<a href="' . esc_url( $zip_url ) . '">All attachments</a>';
 
-        //Download attachements
-        $attachments = get_posts(array(
-            'post_type' => 'attachment',
-            'numberposts' => -1,
-            'post_parent' => $post->ID,
-            'orderby' => 'menu_order',
-            'order' => 'ASC'
-        ));
+        $position = 0;
+        foreach ($attachments as $attachment) {
+            $position++;
+            $file_url = wp_get_attachment_url($attachment->ID);
+            $file_name = get_the_title() . ' - attachement-' . sprintf('%03d', $position) . ' - ' . $attachment->post_title;
+            echo '</br><a href="' . esc_url($file_url) . '" download="' . sanitize_file_name($file_name) . '">' . $attachment->post_title . '</a>';
+        }
 
-
-        if ($attachments) {
-            echo '<a id="download-all-attachments-'.$post->ID.'" href="#" download-all-'.$post->ID.'>Download</a>';
-            echo '<div style="display: none;" id="download-links-'.$post->ID.'">';
-
-            // Zip of all attachments (streamed server-side via admin-ajax).
-            $zip_url = add_query_arg( array(
-                'action'  => 'download_all_attachments',
-                'post_id' => $post->ID,
-                '_nonce'  => wp_create_nonce( 'download_all_attachments' ),
-            ), admin_url( 'admin-ajax.php' ) );
-            echo '<a href="' . esc_url( $zip_url ) . '">All attachments</a>';
-
-            $position = 0;
-            foreach ($attachments as $attachment) {
-                $position++;
-                $file_url = wp_get_attachment_url($attachment->ID);
-                $file_name = get_the_title() . ' - attachement-' . sprintf('%03d', $position) . ' - ' . $attachment->post_title;
-                echo '</br><a href="' . esc_url($file_url) . '" download="' . sanitize_file_name($file_name) . '">' . $attachment->post_title . '</a>';
-            }
-
-            echo '</div>';
-        }?>
+        echo '</div>';
+        ?>
         <script>
         document.getElementById('download-all-attachments<?php echo "-".$post->ID; ?>').addEventListener('click', function(e) {
             e.preventDefault();
@@ -159,18 +166,10 @@ Single // log Archive pages >> Content
         });
         </script>
         <?php
-
-    }?>
-
-    <?php
-
-
-
-?>
-
-
-
+    }
+    ?>
 
   </p>
 
 </footer> <!-- end article footer -->
+<?php } // $show_meta ?>
