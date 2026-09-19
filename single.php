@@ -94,11 +94,11 @@ if (! get_field('disable_previouse_next_&_related_posts')) { ?>
 
             <?php // PAGINATION links — plain "Next" / "Previous" labels (not the adjacent post's title) ?>
 
-    	        <nav class="nav-next col-24">
-    	            <span><?php next_post_link('%link', 'Next'); ?></span>
-    	        </nav>
     	        <nav class="nav-previous col-24">
     	        	<span><?php previous_post_link('%link', 'Previous'); ?></span>
+    	        </nav>
+    	        <nav class="nav-next col-24">
+    	            <span><?php next_post_link('%link', 'Next'); ?></span>
     	        </nav>
 
         </div>

@@ -511,8 +511,8 @@
 // --------------------------------------------------
 
 .single-navigation {
-  nav.nav-previous {
-    text-align: right;
+  nav.nav-next {
+    text-align: right; // Previous sits left, Next sits right
   }
   .nav-previous, .nav-next {
     margin-bottom: $grid-gutter-width;

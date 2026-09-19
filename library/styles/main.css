@@ -7462,7 +7462,7 @@ a.delete {
     .post-type-archive-log .single-content, .tax-log-branch .single-content {
       margin-bottom: 40px; } }
 
-.single-navigation nav.nav-previous {
+.single-navigation nav.nav-next {
   text-align: right; }
 .single-navigation .nav-previous, .single-navigation .nav-next {
   margin-bottom: 16px; }
