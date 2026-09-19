@@ -5377,7 +5377,7 @@ a.text-dark:hover, a.text-dark:focus {
   visibility: hidden !important; }
 
 body {
-  font-size: 32px;
+  font-size: 0px;
   line-height: 1.5;
   min-height: 100vh; }
   body a:hover {
@@ -6490,8 +6490,8 @@ img.mfp-img {
           margin-top: 8px; }
         #collapseMenu .row .menu-group ul li {
           margin-left: none;
-          margin-bottom: 16px;
-          font-size: 32px; }
+          margin-bottom: 0px;
+          font-size: 0px; }
           #collapseMenu .row .menu-group ul li .active {
             text-decoration: underline; }
           #collapseMenu .row .menu-group ul li li {
@@ -6517,7 +6517,7 @@ img.mfp-img {
   #site-header .topbar-left {
     float: left; }
     #site-header .topbar-left h1, #site-header .topbar-left a {
-      font-size: 32px;
+      font-size: 0px;
       font-family: "Lora", serif; }
   #site-header #topbar,
   #site-header .slicknav_nav {
@@ -6531,7 +6531,7 @@ img.mfp-img {
       display: inline-block;
       outline: none;
       color: #fff;
-      font-size: 32px;
+      font-size: 0px;
       margin-left: 13px;
       line-height: 1.3; }
       #site-header #topbar a .long,
@@ -6576,13 +6576,13 @@ img.mfp-img {
   #lower-header .row .left-side {
     float: left; }
     #lower-header .row .left-side h1, #lower-header .row .left-side a {
-      font-size: 32px;
+      font-size: 0px;
       font-family: "Lora", serif; }
   #lower-header .row .right-side {
     float: right;
     text-align: right; }
     #lower-header .row .right-side h1, #lower-header .row .right-side a {
-      font-size: 32px;
+      font-size: 0px;
       font-family: "Lora", serif; }
 
 @media (max-width: 768px) {
@@ -6681,7 +6681,7 @@ body #collapseMenu a:hover {
   padding-top: 0; }
 
 .year-separator {
-  font-size: 32px;
+  font-size: 0px;
   font-family: "Lora", serif; }
   @media (prefers-color-scheme: dark) {
     .year-separator {
@@ -6703,7 +6703,7 @@ body #collapseMenu a:hover {
       background-color: #16161b; } }
   .yarpp-related-header h3 {
     color: #000;
-    font-size: 32px;
+    font-size: 0px;
     line-height: 1.3;
     background-color: transparent;
     display: inline-block;
@@ -6826,7 +6826,7 @@ li.masonry-item {
   .archive-navigation .nav-previous a, .archive-navigation .nav-next a, .archive-navigation .more-sets a {
     color: #000;
     font-family: "Lora", serif;
-    font-size: 32px;
+    font-size: 0px;
     line-height: 1.3; }
     @media (prefers-color-scheme: dark) {
       .archive-navigation .nav-previous a, .archive-navigation .nav-next a, .archive-navigation .more-sets a {
@@ -7218,12 +7218,12 @@ a.delete {
 .single-content .page-header h1.single-title {
   margin-top: 0;
   margin-bottom: 16px;
-  font-size: 32px;
+  font-size: 0px;
   color: #000; }
   .single-content .page-header h1.single-title a {
     color: #000; }
 .single-content .page-header p.meta {
-  margin-bottom: 32px;
+  margin-bottom: 0px;
   font-size: 12px;
   display: none; }
 .single-content section.post-content {
@@ -7242,7 +7242,7 @@ a.delete {
   color: #000; }
   .single-content footer p.footer-meta {
     margin-bottom: 0px;
-    font-size: 32px;
+    font-size: 0px;
     font-family: "Lora", serif;
     line-height: 1.3em;
     color: #000; }
@@ -7273,9 +7273,9 @@ a.delete {
 
 @media (max-width: 576px) {
   .post-type-archive-log .single-content .page-header h1.single-title, .tax-log-branch .single-content .page-header h1.single-title {
-    font-size: 32px; }
+    font-size: 0px; }
   .post-type-archive-log .single-content footer p.footer-meta, .tax-log-branch .single-content footer p.footer-meta {
-    font-size: 32px; } }
+    font-size: 0px; } }
 .background-w-dark-color .single-navigation .nav-previous span a, .background-w-dark-color .single-navigation .nav-next span a {
   color: #fff; }
 
@@ -7494,7 +7494,7 @@ a.delete {
   margin-bottom: 16px; }
   .single-navigation .nav-previous span a, .single-navigation .nav-next span a {
     font-family: "Lora", serif;
-    font-size: 32px;
+    font-size: 0px;
     line-height: 1.3;
     background-color: transparent;
     transition: all 1s ease-out; }
@@ -7523,7 +7523,7 @@ a.delete {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 32px;
+  font-size: 0px;
   font-family: "Lora", serif;
   line-height: 1.45; }
   .table-index th,
