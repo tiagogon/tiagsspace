@@ -1,46 +1,58 @@
 /* ==========================================================================
-   Editor Style — matches single post content (_page-single-content.scss)
+   Editor Style — mirrors front-end post content (Lora, 32px)
    ========================================================================== */
 
-/* Font faces */
+/* Font faces — Lora (SIL OFL 1.1), one family, real 400/600 × normal/italic */
 @font-face {
-  font-family: 'Sporting_Grotesque_Regular';
-  src: url('../fonts/sporting-grotesque/Regular/Sporting_Grotesque-Regular_web.eot');
-  src: url('../fonts/sporting-grotesque/Regular/Sporting_Grotesque-Regular_web.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/sporting-grotesque/Regular/Sporting_Grotesque-Regular_web.woff') format('woff'),
-       url('../fonts/sporting-grotesque/Regular/Sporting_Grotesque-Regular_web.woff2') format('woff2'),
-       url('../fonts/sporting-grotesque/Regular/Sporting_Grotesque-Regular_web.ttf') format('truetype');
-  font-weight: normal;
+  font-family: 'Lora';
+  src: url('../fonts/lora/lora-latin-ext-400-normal.woff2') format('woff2'),
+       url('../fonts/lora/lora-latin-ext-400-normal.woff') format('woff');
+  font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 @font-face {
-  font-family: 'Sporting_Grotesque_Bold';
-  src: url('../fonts/sporting-grotesque/Bold/Sporting_Grotesque-Bold_web.eot');
-  src: url('../fonts/sporting-grotesque/Bold/Sporting_Grotesque-Bold_web.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/sporting-grotesque/Bold/Sporting_Grotesque-Bold_web.woff') format('woff'),
-       url('../fonts/sporting-grotesque/Bold/Sporting_Grotesque-Bold_web.woff2') format('woff2'),
-       url('../fonts/sporting-grotesque/Bold/Sporting_Grotesque-Bold_web.ttf') format('truetype');
-  font-weight: normal;
+  font-family: 'Lora';
+  src: url('../fonts/lora/lora-latin-ext-400-italic.woff2') format('woff2'),
+       url('../fonts/lora/lora-latin-ext-400-italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Lora';
+  src: url('../fonts/lora/lora-latin-ext-600-normal.woff2') format('woff2'),
+       url('../fonts/lora/lora-latin-ext-600-normal.woff') format('woff');
+  font-weight: 600;
   font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Lora';
+  src: url('../fonts/lora/lora-latin-ext-600-italic.woff2') format('woff2'),
+       url('../fonts/lora/lora-latin-ext-600-italic.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
 }
 
-/* Body / base text — matches body & .single-content section.post-content p */
+/* Body / base text */
 body {
-  font-family: "Sporting_Grotesque_Regular", sans-serif;
-  font-size: 16px;
-  line-height: 1.7;
+  font-family: "Lora", serif;
+  font-size: 32px;
+  line-height: 1.5;
   color: #000;
 }
 
 p {
   margin: 0 0 16px;
-  font-family: "Sporting_Grotesque_Regular", sans-serif;
-  font-size: 16px;
-  line-height: 1.7;
+  font-family: "Lora", serif;
+  font-size: 32px;
+  line-height: 1.5;
   color: #000;
 }
 
-/* Headings — matches $font-family-headings, $headings-font-weight: 400 */
+/* Headings — one family, regular weight, same size as body */
 h1,
 h2,
 h3,
@@ -48,43 +60,15 @@ h4,
 h5,
 h6 {
   margin: 0 0 16px;
-  font-family: "Sporting_Grotesque_Bold", sans-serif;
+  font-family: "Lora", serif;
   font-weight: 400;
+  font-size: 32px;
+  line-height: 1.3;
   color: #000;
   text-rendering: optimizelegibility;
 }
 
-h1 {
-  font-size: 21px;
-  line-height: 1.3;
-}
-
-h2 {
-  font-size: 19px;
-  line-height: 1.3;
-}
-
-h3 {
-  font-size: 18px;
-  line-height: 1.3;
-}
-
-h4 {
-  font-size: 16px;
-  line-height: 1.3;
-}
-
-h5 {
-  font-size: 14px;
-  line-height: 1.3;
-}
-
-h6 {
-  font-size: 12px;
-  line-height: 1.3;
-}
-
-/* Links — matches .single-content section.post-content p a */
+/* Links */
 a {
   color: #000;
   text-decoration: underline;
@@ -94,14 +78,15 @@ a:hover {
   text-decoration: none;
 }
 
-/* Emphasis — matches body em override */
-em {
-  font-style: normal;
-  font-family: "Sporting_Grotesque_Bold", sans-serif;
-  font-size: 18px;
+/* Emphasis — real italic and bold */
+em, i {
+  font-style: italic;
+}
+strong, b {
+  font-weight: 600;
 }
 
-/* Lists — matches .single-content section.post-content ol, ul, dl */
+/* Lists */
 ol, ul, dl {
   padding: 16px;
   color: #000;

@@ -149,7 +149,7 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
 
 // post content wrap styles
 function content_wrap() {
-    echo "col-48 offset-0 col-sm-40 offset-sm-4 col-md-32 offset-md-8 col-lg-27 offset-lg-9";
+    echo "col-48 offset-0 col-sm-40 offset-sm-4 col-md-32 offset-md-8 col-lg-38 offset-lg-8";
 }
 
 
@@ -191,18 +191,6 @@ function color_background_parameters ($parameter) {
 			$background_day_night_mode = 'background-w-light-color';
 	} elseif ($background_color_class=="dark") {
 			$background_day_night_mode = 'background-w-dark-color';
-	} elseif ($background_color_class=="deep-purple") {
-			$background_day_night_mode = 'background-w-dark-color';
-	} elseif ($background_color_class=="blue") {
-			$background_day_night_mode = 'background-w-dark-color';
-	} elseif ($background_color_class=="yellow") {
-			$background_day_night_mode = 'background-w-light-color';
-	} elseif ($background_color_class=="lime") {
-			$background_day_night_mode = 'background-w-light-color';
-	} elseif ($background_color_class=="earth") {
-			$background_day_night_mode = 'background-w-light-color';
-	} elseif ($background_color_class=="sky") {
-			$background_day_night_mode = 'background-w-light-color';
 	}
 
 	// Return logic
