@@ -7564,8 +7564,7 @@ a.delete {
   table-layout: fixed;
   font-size: 21px;
   font-family: "Karrik", sans-serif;
-  line-height: 1.45;
-  text-transform: uppercase; }
+  line-height: 1.45; }
   .table-index th,
   .table-index td {
     padding: 6px 12px 6px 0;
