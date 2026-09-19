@@ -50,10 +50,8 @@
     }
 
     tbody tr {
-        transition: color 0.15s ease;
-
         &:hover {
-            color: $highlight-link;
+            text-decoration: underline; // clickable row: underline only, no colour change
         }
     }
 

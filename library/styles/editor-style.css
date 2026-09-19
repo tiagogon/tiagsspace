@@ -39,7 +39,7 @@
 /* Body / base text */
 body {
   font-family: "Lora", serif;
-  font-size: 32px;
+  font-size: 26px;
   line-height: 1.5;
   color: #000;
 }
@@ -47,7 +47,7 @@ body {
 p {
   margin: 0 0 16px;
   font-family: "Lora", serif;
-  font-size: 32px;
+  font-size: 26px;
   line-height: 1.5;
   color: #000;
 }
@@ -62,7 +62,7 @@ h6 {
   margin: 0 0 16px;
   font-family: "Lora", serif;
   font-weight: 400;
-  font-size: 32px;
+  font-size: 38px;
   line-height: 1.3;
   color: #000;
   text-rendering: optimizelegibility;
@@ -74,8 +74,7 @@ a {
   text-decoration: underline;
 }
 a:hover {
-  color: #3c00f5;
-  text-decoration: none;
+  text-decoration: underline; /* hover = underline only, never a colour change */
 }
 
 /* Emphasis — real italic and bold */

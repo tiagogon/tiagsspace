@@ -21,24 +21,11 @@ body {
   isolation: isolate; // establishes a stacking context so the fixed headers'
                       // mix-blend-mode inverts against page content (not themselves)
   a:hover {
-    color: $highlight-link;
-    text-decoration: none;
+    text-decoration: underline; // hover = underline only, never a colour change
   }
   @media (prefers-color-scheme: dark) {
     color: $white;
   }
-}
-
-// Global link hover color — high specificity override
-// Covers post content, metadata, archive navigation, and single post areas
-.single-content section.post-content p a:hover,
-.single-content section.post-content a:hover,
-.single-content .page-header h1.single-title a:hover,
-.single-content footer p.footer-meta a:hover,
-.single-content footer a:hover,
-.archive-navigation a:hover,
-.single-navigation a:hover {
-  color: $highlight-link;
 }
 
 body.background-w-dark-color {

@@ -79,6 +79,7 @@
     }
   }
   section.post-content {
+    font-size: $font-size-content; // prose in posts + pages; title/meta stay at $font-size-heading
     p {
       color: $dark;
       a {

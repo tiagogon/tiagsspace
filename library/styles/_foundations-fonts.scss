@@ -14,11 +14,9 @@ $dark-lighten-vibe-contrast:      #1d1a17; // rgba(29,26,23,1)
 
 // Accent colors (used by the lightbox + single-content section coloring)
 $blue-earth:       #00349E;
-$deep-purple:      #3c00f5;
 $blue:             $blue-earth;
 $lime:             #aeff2b;
 $yellow:           #fffb2b;
-$highlight-link:   $deep-purple;
 
 // Main page index colors and gradients
 $tiagsssss-color:                   $grey-light-cold-vibe;
@@ -77,7 +75,8 @@ $font-family-sans-serif: $font-family-base;   // Bootstrap base reads this name
 $font-family-headings:   $font-family-base;
 $font-family-menu:       $font-family-base;
 
-$font-size:         30px;
+$font-size:         38px;   // chrome + titles: header, nav, menu, index, post titles
+$font-size-content: 26px;   // prose inside posts/pages (section.post-content)
 $font-size-p:       $font-size;
 $font-size-heading: $font-size;
 $font-size-nav:     $font-size;

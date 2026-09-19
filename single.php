@@ -92,48 +92,14 @@ if (! get_field('disable_previouse_next_&_related_posts')) { ?>
     <div class="single-navigation container-fluid side-padding d-none d-sm-block">
         <div class="row justify-content-between">
 
-            <?php // PAGINATION links
-
-            $post_type = get_post_type($post->ID);
-
-            if ($post_type == "hyper" OR $post_type == "4k-lento") {
-
-                //number
-            	$next_number = number_of_the_post($post->ID) + 1;
-            	$previous_number = number_of_the_post($post->ID) - 1;
-
-                //prefix
-                if ($post_type == "hyper") {
-                    $prefix = "H";
-                }
-                if ($post_type == "4k-lento") {
-                    $prefix = "4KL";
-                }
-
-                // final sring
-                $next_string = $prefix.sprintf("%02d", $next_number);
-            	$previous_string = $prefix.sprintf("%02d", $previous_number);
-            	?>
+            <?php // PAGINATION links — plain "Next" / "Previous" labels (not the adjacent post's title) ?>
 
     	        <nav class="nav-next col-24">
-    	            <!-- <span><?php next_post_link('%link', ''.$next_string); ?></span> -->
-    	            <span><?php next_post_link('%link'); ?></span>
+    	            <span><?php next_post_link('%link', 'Next'); ?></span>
     	        </nav>
     	        <nav class="nav-previous col-24">
-    	        	<!-- <span><?php previous_post_link('%link', $previous_string.''); ?></span> -->
-    	        	<span><?php previous_post_link('%link'); ?></span>
+    	        	<span><?php previous_post_link('%link', 'Previous'); ?></span>
     	        </nav>
-
-            <?php } else { ?>
-
-    	        <nav class="nav-next col-24">
-    	            <span><?php next_post_link('%link'); ?></span>
-    	        </nav>
-    	        <nav class="nav-previous col-24">
-    	        	<span><?php previous_post_link('%link'); ?></span>
-    	        </nav>
-
-            <?php } ?>
 
         </div>
     </div>
