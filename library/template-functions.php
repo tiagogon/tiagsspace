@@ -191,18 +191,6 @@ function color_background_parameters ($parameter) {
 			$background_day_night_mode = 'background-w-light-color';
 	} elseif ($background_color_class=="dark") {
 			$background_day_night_mode = 'background-w-dark-color';
-	} elseif ($background_color_class=="deep-purple") {
-			$background_day_night_mode = 'background-w-dark-color';
-	} elseif ($background_color_class=="blue") {
-			$background_day_night_mode = 'background-w-dark-color';
-	} elseif ($background_color_class=="yellow") {
-			$background_day_night_mode = 'background-w-light-color';
-	} elseif ($background_color_class=="lime") {
-			$background_day_night_mode = 'background-w-light-color';
-	} elseif ($background_color_class=="earth") {
-			$background_day_night_mode = 'background-w-light-color';
-	} elseif ($background_color_class=="sky") {
-			$background_day_night_mode = 'background-w-light-color';
 	}
 
 	// Return logic
