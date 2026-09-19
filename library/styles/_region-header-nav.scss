@@ -82,7 +82,7 @@
   }
   .topbar-left  {
     float: left;
-    h1, a {
+    h1, .site-title, a {
       font-size: $font-size-nav;
       font-family: $font-family-menu;
       color: $white; // blend base — inverted by the header's mix-blend-mode
@@ -139,6 +139,16 @@
 // Lower header (fixed bottom bar)
 // --------------------------------------------------
 
+// .site-title is a <p> everywhere but the front page (where it is the <h1>) and in the
+// lower header; give the <p> the heading's box so both render the same.
+#site-header .site-title,
+#lower-header .site-title {
+  margin-top: 0;
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
 #lower-header {
   padding-top: $grid-gutter-width;
   padding-bottom: $grid-gutter-width;
@@ -150,7 +160,7 @@
   .row {
     .left-side {
       float: left;
-      h1, a {
+      h1, .site-title, a {
         font-size: $font-size-nav;
         font-family: $font-family-menu;
         color: $white; // blend base — inverted by the header's mix-blend-mode
@@ -159,7 +169,7 @@
     .right-side {
       float: right;
       text-align: right;
-      h1, a {
+      h1, .site-title, a {
         font-size: $font-size-nav;
         font-family: $font-family-menu;
         color: $white; // blend base — inverted by the header's mix-blend-mode
@@ -212,7 +222,7 @@
       }
     }
       .slicknav_nav {
-            a,h1 {
+            a, h1, .site-title {
               color: $dark;
               &:hover {
                 &::before,
@@ -245,7 +255,7 @@
   #site-header {
     // Title (.topbar-left) + Reveal word (#topbar) use mix-blend-mode instead.
     .slicknav_nav {
-      a, h1 {
+      a, h1, .site-title {
         color: $dark;
         @media (prefers-color-scheme: dark) {
           color: $white;
@@ -257,7 +267,7 @@
 
 .tiagsssss-color, .white-darkmode {
   #collapseMenu {
-    a, h1 {
+    a, h1, .site-title {
       color: $dark;
       @media (prefers-color-scheme: dark) {
         color: $white;
@@ -273,7 +283,7 @@
 // Make text white for dark color backgrounds
 .background-w-dark-color,
 .background-w-dark-color-header {
-  a, h1 {
+  a, h1, .site-title {
     color: $white;
   }
 }

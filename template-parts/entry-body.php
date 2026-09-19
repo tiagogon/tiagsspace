@@ -34,21 +34,26 @@ Single // log Archive pages >> Content
 <header>
 
     <div class="page-header">
-        <h1 class="single-title" itemprop="headline">
+        <?php
+        // The heading element holds ONLY the work's title (one <h1> per page; <h2> on listings).
+        // The "<Type> / <branch> /" breadcrumb prefix sits beside it in the same inline flow,
+        // so the rendering is unchanged (see .single-title in _page-single-content.scss).
+        $heading_tag = $is_single ? 'h1' : 'h2';
+        $prefix = '';
+        // "<Type> / " prefix — skipped for films, which are not an artistic series.
+        if ( 'films' !== $post_type && !is_post_type_archive() AND !is_tax( 'log-branch' )) {
+          $prefix .= '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a> / ';
+        }
+        if (!is_tax( 'log-branch' ) && $logs_branch ) {
+          $prefix .= trim( $logs_branch ).' ';
+        }
+        ?>
+        <div class="single-title">
            <?php
-           // "<Type> / " prefix — skipped for films, which are not an artistic series.
-           if ( 'films' !== $post_type && !is_post_type_archive() AND !is_tax( 'log-branch' )) {
-             echo '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a> /  ';
+           if ( $prefix ) {
+             echo '<span class="single-title-prefix">'.$prefix.'</span>';
            }
-           if (!is_tax( 'log-branch' ) ) {
-             echo $logs_branch.' ';
-             //echo taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'link');
-           }
-
-           // if (is_singular('4k-lento')) {
-           //     echo '4KL'.sprintf("%02d", number_of_the_post($post->ID)).' ';
-           // }
-
+           echo '<'.$heading_tag.' class="single-title-heading" itemprop="headline">';
           if ( $is_single ) {
             if ( $show_meta ) {
               // Editors: the title itself toggles the metadata footer below.
@@ -59,8 +64,9 @@ Single // log Archive pages >> Content
           } else {
             echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
           }
+          echo '</'.$heading_tag.'>';
           ?>
-        </h1>
+        </div>
     </div>
 
 </header> <!-- end article header -->

@@ -63,13 +63,23 @@
 
 .single-content {
   .page-header {
-    h1.single-title {
+    .single-title {
       margin-top: 0;
       margin-bottom: $grid-gutter-width;
       font-size: $font-size-heading;
+      font-weight: 500; // Bootstrap heading defaults, kept now that the wrapper is a <div>
+      line-height: 1.2;
       color: $dark;
       a {
         color: $dark;
+      }
+      // The heading (h1 on singles, h2 on listings) holds only the work's title and
+      // flows inline after the breadcrumb prefix, exactly as the old single <h1> did.
+      .single-title-heading {
+        display: inline;
+        margin: 0;
+        font: inherit;
+        color: inherit;
       }
     }
     p.meta {
@@ -133,7 +143,7 @@
   .post-type-archive-log, .tax-log-branch {
     .single-content {
       .page-header {
-        h1.single-title {
+        .single-title {
           font-size: $font-size-p;
         }
       }
@@ -170,7 +180,7 @@
 .tiagsssss-color, .white-darkmode {
   .single-content {
     .page-header {
-      h1.single-title {
+      .single-title {
         @media (prefers-color-scheme: dark) {
           color: $white;
         }
@@ -248,7 +258,7 @@
 .background-w-dark-color {
   .single-content {
     .page-header {
-      h1.single-title {
+      .single-title {
         color: $white;
         a {
           color: $white;

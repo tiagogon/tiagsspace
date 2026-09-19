@@ -6514,7 +6514,7 @@ img.mfp-img {
     display: block !important; }
   #site-header .topbar-left {
     float: left; }
-    #site-header .topbar-left h1, #site-header .topbar-left a {
+    #site-header .topbar-left h1, #site-header .topbar-left .site-title, #site-header .topbar-left a {
       font-size: 38px;
       font-family: "Lora", serif;
       color: #fff; }
@@ -6565,6 +6565,13 @@ img.mfp-img {
   #site-header .header-other-pages-title {
     display: none !important; }
 
+#site-header .site-title,
+#lower-header .site-title {
+  margin-top: 0;
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2; }
+
 #lower-header {
   padding-top: 16px;
   padding-bottom: 16px;
@@ -6575,14 +6582,14 @@ img.mfp-img {
   mix-blend-mode: difference; }
   #lower-header .row .left-side {
     float: left; }
-    #lower-header .row .left-side h1, #lower-header .row .left-side a {
+    #lower-header .row .left-side h1, #lower-header .row .left-side .site-title, #lower-header .row .left-side a {
       font-size: 38px;
       font-family: "Lora", serif;
       color: #fff; }
   #lower-header .row .right-side {
     float: right;
     text-align: right; }
-    #lower-header .row .right-side h1, #lower-header .row .right-side a {
+    #lower-header .row .right-side h1, #lower-header .row .right-side .site-title, #lower-header .row .right-side a {
       font-size: 38px;
       font-family: "Lora", serif;
       color: #fff; }
@@ -6602,34 +6609,35 @@ img.mfp-img {
     color: #000; }
   .background-w-light-color #site-header .slicknav_menu * {
     box-sizing: border-box; } }
-.background-w-light-color #site-header .slicknav_nav a, .background-w-light-color #site-header .slicknav_nav h1 {
+.background-w-light-color #site-header .slicknav_nav a, .background-w-light-color #site-header .slicknav_nav h1, .background-w-light-color #site-header .slicknav_nav .site-title {
   color: #000; }
-  .background-w-light-color #site-header .slicknav_nav a:hover::before, .background-w-light-color #site-header .slicknav_nav a:hover::after, .background-w-light-color #site-header .slicknav_nav h1:hover::before, .background-w-light-color #site-header .slicknav_nav h1:hover::after {
+  .background-w-light-color #site-header .slicknav_nav a:hover::before, .background-w-light-color #site-header .slicknav_nav a:hover::after, .background-w-light-color #site-header .slicknav_nav h1:hover::before, .background-w-light-color #site-header .slicknav_nav h1:hover::after, .background-w-light-color #site-header .slicknav_nav .site-title:hover::before, .background-w-light-color #site-header .slicknav_nav .site-title:hover::after {
     opacity: 1;
     -webkit-transform: translateX(0px);
     -moz-transform: translateX(0px);
     transform: translateX(0px); }
-  .background-w-light-color #site-header .slicknav_nav a:focus::before, .background-w-light-color #site-header .slicknav_nav a:focus::after, .background-w-light-color #site-header .slicknav_nav h1:focus::before, .background-w-light-color #site-header .slicknav_nav h1:focus::after {
+  .background-w-light-color #site-header .slicknav_nav a:focus::before, .background-w-light-color #site-header .slicknav_nav a:focus::after, .background-w-light-color #site-header .slicknav_nav h1:focus::before, .background-w-light-color #site-header .slicknav_nav h1:focus::after, .background-w-light-color #site-header .slicknav_nav .site-title:focus::before, .background-w-light-color #site-header .slicknav_nav .site-title:focus::after {
     opacity: 1;
     -webkit-transform: translateX(0px);
     -moz-transform: translateX(0px);
     transform: translateX(0px); }
 
-.tiagsssss-color #site-header .slicknav_nav a, .tiagsssss-color #site-header .slicknav_nav h1, .white-darkmode #site-header .slicknav_nav a, .white-darkmode #site-header .slicknav_nav h1 {
+.tiagsssss-color #site-header .slicknav_nav a, .tiagsssss-color #site-header .slicknav_nav h1, .tiagsssss-color #site-header .slicknav_nav .site-title, .white-darkmode #site-header .slicknav_nav a, .white-darkmode #site-header .slicknav_nav h1, .white-darkmode #site-header .slicknav_nav .site-title {
   color: #000; }
   @media (prefers-color-scheme: dark) {
-    .tiagsssss-color #site-header .slicknav_nav a, .tiagsssss-color #site-header .slicknav_nav h1, .white-darkmode #site-header .slicknav_nav a, .white-darkmode #site-header .slicknav_nav h1 {
+    .tiagsssss-color #site-header .slicknav_nav a, .tiagsssss-color #site-header .slicknav_nav h1, .tiagsssss-color #site-header .slicknav_nav .site-title, .white-darkmode #site-header .slicknav_nav a, .white-darkmode #site-header .slicknav_nav h1, .white-darkmode #site-header .slicknav_nav .site-title {
       color: #fff; } }
 
-.tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1, .white-darkmode #collapseMenu a, .white-darkmode #collapseMenu h1 {
+.tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1, .tiagsssss-color #collapseMenu .site-title, .white-darkmode #collapseMenu a, .white-darkmode #collapseMenu h1, .white-darkmode #collapseMenu .site-title {
   color: #000; }
   @media (prefers-color-scheme: dark) {
-    .tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1, .white-darkmode #collapseMenu a, .white-darkmode #collapseMenu h1 {
+    .tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1, .tiagsssss-color #collapseMenu .site-title, .white-darkmode #collapseMenu a, .white-darkmode #collapseMenu h1, .white-darkmode #collapseMenu .site-title {
       color: #fff; } }
 
-.background-w-dark-color a, .background-w-dark-color h1,
+.background-w-dark-color a, .background-w-dark-color h1, .background-w-dark-color .site-title,
 .background-w-dark-color-header a,
-.background-w-dark-color-header h1 {
+.background-w-dark-color-header h1,
+.background-w-dark-color-header .site-title {
   color: #fff; }
 
 body #site-header #topbar a:hover,
@@ -7188,13 +7196,20 @@ a.delete {
   border-radius: 0px;
   padding: 0.2em .3em .3em; }
 
-.single-content .page-header h1.single-title {
+.single-content .page-header .single-title {
   margin-top: 0;
   margin-bottom: 16px;
   font-size: 38px;
+  font-weight: 500;
+  line-height: 1.2;
   color: #000; }
-  .single-content .page-header h1.single-title a {
+  .single-content .page-header .single-title a {
     color: #000; }
+  .single-content .page-header .single-title .single-title-heading {
+    display: inline;
+    margin: 0;
+    font: inherit;
+    color: inherit; }
 .single-content .page-header p.meta {
   margin-bottom: 38px;
   font-size: 12px;
@@ -7246,7 +7261,7 @@ a.delete {
               transition: none; } }
 
 @media (max-width: 576px) {
-  .post-type-archive-log .single-content .page-header h1.single-title, .tax-log-branch .single-content .page-header h1.single-title {
+  .post-type-archive-log .single-content .page-header .single-title, .tax-log-branch .single-content .page-header .single-title {
     font-size: 38px; }
   .post-type-archive-log .single-content footer p.footer-meta, .tax-log-branch .single-content footer p.footer-meta {
     font-size: 38px; } }
@@ -7254,10 +7269,10 @@ a.delete {
   color: #fff; }
 
 @media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content .page-header h1.single-title, .white-darkmode .single-content .page-header h1.single-title {
+  .tiagsssss-color .single-content .page-header .single-title, .white-darkmode .single-content .page-header .single-title {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content .page-header h1.single-title a, .white-darkmode .single-content .page-header h1.single-title a {
+  .tiagsssss-color .single-content .page-header .single-title a, .white-darkmode .single-content .page-header .single-title a {
     color: #fff; } }
 @media (prefers-color-scheme: dark) {
   .tiagsssss-color .single-content section.post-content h1, .tiagsssss-color .single-content section.post-content h2, .tiagsssss-color .single-content section.post-content h3, .tiagsssss-color .single-content section.post-content h4, .tiagsssss-color .single-content section.post-content h5, .tiagsssss-color .single-content section.post-content p, .white-darkmode .single-content section.post-content h1, .white-darkmode .single-content section.post-content h2, .white-darkmode .single-content section.post-content h3, .white-darkmode .single-content section.post-content h4, .white-darkmode .single-content section.post-content h5, .white-darkmode .single-content section.post-content p {
@@ -7290,9 +7305,9 @@ a.delete {
   .tiagsssss-color .single-navigation .nav-previous span a, .tiagsssss-color .single-navigation .nav-next span a, .white-darkmode .single-navigation .nav-previous span a, .white-darkmode .single-navigation .nav-next span a {
     color: #fff; } }
 
-.background-w-dark-color .single-content .page-header h1.single-title {
+.background-w-dark-color .single-content .page-header .single-title {
   color: #fff; }
-  .background-w-dark-color .single-content .page-header h1.single-title a {
+  .background-w-dark-color .single-content .page-header .single-title a {
     color: #fff; }
 .background-w-dark-color .single-content .page-header p.meta {
   color: #fff; }
