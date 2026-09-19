@@ -6640,7 +6640,7 @@ body #collapseMenu a:hover {
   text-decoration: underline; }
 
 .first-block {
-  padding-top: 64px; }
+  padding-top: 83.2px; }
 
 .index-block, .container {
   padding-left: 12px;
@@ -7564,8 +7564,9 @@ a.delete {
     max-width: 600px;
     max-height: 600px;
     object-fit: contain;
-    border-radius: 2px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); }
+    border-radius: 0px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    margin: 50px; }
 
 @media (hover: none) {
   .ti-hover-preview {
