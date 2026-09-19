@@ -112,6 +112,24 @@
 	 * Search overlay
 	 * ------------------------------------------------------------------ */
 
+	/**
+	 * Highest computed z-index among the currently rendered media-modal layers.
+	 *
+	 * The media modal stacks high (560000+ on this install), and the value has
+	 * drifted across WP versions, so read it live rather than trusting a magic
+	 * number — the overlay is then placed above whatever is actually there.
+	 */
+	function topMediaZ() {
+		var max = 0;
+		document.querySelectorAll( '.media-modal, .media-modal-backdrop, .media-frame' ).forEach( function ( el ) {
+			var z = parseInt( window.getComputedStyle( el ).zIndex, 10 );
+			if ( ! isNaN( z ) && z > max ) {
+				max = z;
+			}
+		} );
+		return max;
+	}
+
 	var overlayInjectedStyles = false;
 
 	function injectOverlayStyles() {
@@ -121,7 +139,7 @@
 		overlayInjectedStyles = true;
 
 		var css = [
-			'.tiagsspace-attach-backdrop{position:fixed;inset:0;z-index:200000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;}',
+			'.tiagsspace-attach-backdrop{position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;}',
 			'.tiagsspace-attach-panel{background:#fff;width:520px;max-width:calc(100vw - 40px);max-height:calc(100vh - 80px);border-radius:4px;box-shadow:0 5px 30px rgba(0,0,0,.4);display:flex;flex-direction:column;overflow:hidden;}',
 			'.tiagsspace-attach-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #dcdcde;}',
 			'.tiagsspace-attach-head h2{margin:0;font-size:16px;line-height:1.3;}',
@@ -181,6 +199,10 @@
 		$backdrop.append( $panel );
 		$( 'body' ).append( $backdrop );
 
+		// Sit above the media modal whatever its z-index is (inline beats the
+		// stylesheet, so this wins regardless of theme/plugin/core changes).
+		$backdrop.css( 'z-index', ( topMediaZ() || 990000 ) + 10000 );
+
 		$input.trigger( 'focus' );
 
 		function close() {
@@ -197,6 +219,8 @@
 		} );
 		$( document ).on( 'keydown.tiagsspaceAttach', function ( e ) {
 			if ( 'Escape' === e.key ) {
+				// Close only our overlay; don't let WP's modal also swallow Esc.
+				e.stopPropagation();
 				close();
 			}
 		} );
