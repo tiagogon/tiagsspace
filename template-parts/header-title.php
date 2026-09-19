@@ -5,7 +5,7 @@ Outputs breadcrumb-style <h1> with #over-text span for JS hover label.
 Each condition overrides the previous — last match wins.
 */
 
-$siteName = "Space";
+$siteName = "Tiags' Space";
 // Responsive site name: "S" on mobile, full name on ≥sm
 $Webpage_name = '<span class="d-inline d-sm-none">S</span><span class="d-none d-sm-inline">'.$siteName.'</span>';
 $over_text = '<span id="over-text" class="d-none d-sm-inline"></span>';
