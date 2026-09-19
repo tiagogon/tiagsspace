@@ -107,8 +107,11 @@ ol, ul, dl {
   color: #000;
 }
 
-/* Dark mode support */
-/* @media (prefers-color-scheme: dark) {
+/* Dark mode support — mirrors the front end (_foundations-tokens.scss).
+   Fires under prefers-color-scheme, which the "Dark Mode for WP Dashboard"
+   plugin's Auto mode follows, so canvas text flips white to match the plugin's
+   dark background. Light mode is untouched. */
+@media (prefers-color-scheme: dark) {
   body {
     color: #fff;
   }
@@ -120,4 +123,4 @@ ol, ul, dl {
   a {
     color: #fff;
   }
-} */
+}
