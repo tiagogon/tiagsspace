@@ -5821,6 +5821,8 @@ video.plyr-thumbnail-front {
     bottom: 40px; } }
 
 .plyr__caption {
+  background: #00000045;
+  border-radius: 0px;
   line-height: 200%;
   padding: .1em 0.5em; }
 
