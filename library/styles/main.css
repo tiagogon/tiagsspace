@@ -5789,14 +5789,14 @@ video.plyr-thumbnail-front {
   @media (min-width: 768px) {
     .plyr__captions {
       font-size: 26px;
-      bottom: 20px; } }
+      bottom: 24px; } }
   @media (min-width: 992px) {
     .plyr__captions {
       font-size: 32px;
-      bottom: 30px; } }
+      bottom: 36px; } }
   @media (min-width: 1200px) {
     .plyr__captions {
-      font-size: 42px;
+      font-size: 46px;
       bottom: 40px; } }
 
 @media (min-width: 576px) {

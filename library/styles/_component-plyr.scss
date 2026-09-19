@@ -321,18 +321,18 @@ video.plyr-thumbnail-front {
     // md: Medium devices (tablets, 768px and up)
     @include media-breakpoint-up(md) {
         font-size: 26px;
-        bottom: 20px;
+        bottom: 24px;
     }
     
     // lg: Large devices (desktops, 992px and up)
     @include media-breakpoint-up(lg) {
         font-size: 32px;
-        bottom: 30px;
+        bottom: 36px;
     }
     
     // xl: Extra large devices (large desktops, 1200px and up)
     @include media-breakpoint-up(xl) {
-        font-size: 42px;
+        font-size: 46px;
         bottom: 40px; 
     }
 }
