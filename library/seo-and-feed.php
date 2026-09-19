@@ -423,15 +423,26 @@ function tiagsspace_add_opengraph_image( $container ) {
 add_filter( 'wpseo_add_opengraph_images', 'tiagsspace_add_opengraph_image' );
 
 // Yoast still appends the image cached in its indexable after ours (add_from_indexable
-// has no has_images() guard), and that cache can be stale. When we chose an image,
-// drop every other og:image so previews never pick a second, wrong one.
-add_filter( 'wpseo_opengraph_image', function ( $url ) {
-    $chosen = tiagsspace_chosen_share_image_url();
-    if ( $chosen && $url !== $chosen ) {
-        return '';
+// has no has_images() guard) and that cache can be stale, while the per-image
+// `wpseo_opengraph_image` filter cannot remove an image (an empty result keeps the
+// original URL). So when we have an image, replace the presentation's whole image
+// list with it before the presenters run. Twitter falls back to og:image on its own.
+add_filter( 'wpseo_frontend_presentation', function ( $presentation, $context ) {
+    if ( ! is_object( $presentation ) ) {
+        return $presentation;
     }
-    return $url;
-}, 20 );
+    $id = tiagsspace_share_image_id();
+    if ( ! $id ) {
+        return $presentation;
+    }
+    $image = tiagsspace_share_image_array( $id );
+    if ( ! $image ) {
+        return $presentation;
+    }
+    $presentation->open_graph_images = array( $image['url'] => $image );
+    tiagsspace_chosen_share_image_url( $image['url'] );
+    return $presentation;
+}, 10, 2 );
 
 
 // ----- Per-set language -----
