@@ -180,12 +180,15 @@
 				$( '<button>', { type: 'button', 'class': 'tiagsspace-attach-close', 'aria-label': i18n.close || 'Close' } ).html( '&times;' )
 			);
 
+		// NB: set autocomplete via .attr(), NOT in the props map — wp-admin loads
+		// jQuery UI Autocomplete, so an `autocomplete` key would be mistaken for
+		// the .autocomplete() widget method and throw ("cannot call methods on
+		// autocomplete prior to initialization"), aborting the overlay.
 		var $input = $( '<input>', {
 			type: 'search',
 			'class': 'tiagsspace-attach-search',
-			placeholder: i18n.placeholder || 'Search posts by title…',
-			autocomplete: 'off'
-		} );
+			placeholder: i18n.placeholder || 'Search posts by title…'
+		} ).attr( 'autocomplete', 'off' );
 
 		var $note    = $( '<p>', { 'class': 'tiagsspace-attach-note' } ).text( i18n.hint || 'Type a title to search…' );
 		var $results = $( '<ul>', { 'class': 'tiagsspace-attach-results' } );
