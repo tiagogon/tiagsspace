@@ -656,6 +656,18 @@ function tiagsspace_seo_label( $post_id, $lang = null, $omit = array() ) {
     return implode( ' ', $sentences );
 }
 
+/**
+ * %%pagenumber%% renders "1" on the first page; archive titles use it as
+ * "Hyper %%pagenumber%% / %%sitename%%", so blank it unless we are past page 1
+ * (Yoast collapses the leftover double space).
+ */
+add_filter( 'wpseo_replacements', function ( $replacements ) {
+    if ( is_array( $replacements ) && array_key_exists( '%%pagenumber%%', $replacements ) && (int) get_query_var( 'paged' ) < 2 ) {
+        $replacements['%%pagenumber%%'] = '';
+    }
+    return $replacements;
+} );
+
 /** Yoast replacement variable %%label%%. */
 add_action( 'wpseo_register_extra_replacements', function () {
     if ( ! function_exists( 'wpseo_register_var_replacement' ) ) {
