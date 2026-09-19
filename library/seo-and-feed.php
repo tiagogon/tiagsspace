@@ -170,7 +170,7 @@ if ( ! defined( 'TIAGSSPACE_SHARE_IMAGE_MAX_BYTES' ) ) {
 /** Public URL of the AI / text-and-data-mining policy page. Empty until the
  *  page exists; the tdm-policy meta/header is only emitted when set. */
 if ( ! defined( 'TIAGSSPACE_AI_POLICY_URL' ) ) {
-    define( 'TIAGSSPACE_AI_POLICY_URL', '' );
+    define( 'TIAGSSPACE_AI_POLICY_URL', 'https://tiags.space/ai-policy/' );
 }
 
 /** Public post types that carry archive material (used for share images,
