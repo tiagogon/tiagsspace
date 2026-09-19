@@ -7165,7 +7165,8 @@ button.remove {
   button.remove:hover {
     opacity: 1; }
 
-button.saveorder {
+button.saveorder,
+button.nexthidden {
   opacity: 0;
   position: absolute;
   bottom: 0;
@@ -7178,7 +7179,8 @@ button.saveorder {
   border-width: 0;
   text-shadow: 1px 1px #E3E5F2;
   background-color: transparent !important; }
-  button.saveorder:hover {
+  button.saveorder:hover,
+  button.nexthidden:hover {
     opacity: 1; }
 
 a.delete {
