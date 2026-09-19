@@ -5379,7 +5379,8 @@ a.text-dark:hover, a.text-dark:focus {
 body {
   font-size: 30px;
   line-height: 1.5;
-  min-height: 100vh; }
+  min-height: 100vh;
+  isolation: isolate; }
   body a:hover {
     color: #3c00f5;
     text-decoration: none; }
@@ -6509,7 +6510,8 @@ img.mfp-img {
   position: fixed;
   z-index: 1000;
   top: 0px;
-  font-family: "Lora", serif; }
+  font-family: "Lora", serif;
+  mix-blend-mode: difference; }
   #site-header .slicknav_menutxt {
     display: none; }
   #site-header .slicknav_nav.slicknav_hidden {
@@ -6518,7 +6520,8 @@ img.mfp-img {
     float: left; }
     #site-header .topbar-left h1, #site-header .topbar-left a {
       font-size: 30px;
-      font-family: "Lora", serif; }
+      font-family: "Lora", serif;
+      color: #fff; }
   #site-header #topbar,
   #site-header .slicknav_nav {
     float: right;
@@ -6572,18 +6575,21 @@ img.mfp-img {
   position: fixed;
   z-index: 1000;
   bottom: 0px;
-  font-family: "Lora", serif; }
+  font-family: "Lora", serif;
+  mix-blend-mode: difference; }
   #lower-header .row .left-side {
     float: left; }
     #lower-header .row .left-side h1, #lower-header .row .left-side a {
       font-size: 30px;
-      font-family: "Lora", serif; }
+      font-family: "Lora", serif;
+      color: #fff; }
   #lower-header .row .right-side {
     float: right;
     text-align: right; }
     #lower-header .row .right-side h1, #lower-header .row .right-side a {
       font-size: 30px;
-      font-family: "Lora", serif; }
+      font-family: "Lora", serif;
+      color: #fff; }
 
 @media (max-width: 768px) {
   #site-header {
@@ -6591,17 +6597,6 @@ img.mfp-img {
 
   .home #site-header {
     background: transparent; } }
-.background-w-light-color #site-header h1 a {
-  color: #000;
-  transition: all 1s ease-out; }
-  @media screen and (prefers-reduced-motion: reduce) {
-    .background-w-light-color #site-header h1 a {
-      transition: none; } }
-  .background-w-light-color #site-header h1 a:hover {
-    transition: all 1s ease-out; }
-    @media screen and (prefers-reduced-motion: reduce) {
-      .background-w-light-color #site-header h1 a:hover {
-        transition: none; } }
 @media (max-width: 768px) {
   .background-w-light-color #site-header .slicknav_menu .slicknav_btn .slicknav_menutxt {
     color: #000; }
@@ -6611,41 +6606,23 @@ img.mfp-img {
     color: #000; }
   .background-w-light-color #site-header .slicknav_menu * {
     box-sizing: border-box; } }
-.background-w-light-color #site-header #topbar a, .background-w-light-color #site-header #topbar h1, .background-w-light-color #site-header .topbar-left a, .background-w-light-color #site-header .topbar-left h1,
-.background-w-light-color #site-header .slicknav_nav a,
-.background-w-light-color #site-header .slicknav_nav h1 {
+.background-w-light-color #site-header .slicknav_nav a, .background-w-light-color #site-header .slicknav_nav h1 {
   color: #000; }
-  .background-w-light-color #site-header #topbar a:hover::before, .background-w-light-color #site-header #topbar a:hover::after, .background-w-light-color #site-header #topbar h1:hover::before, .background-w-light-color #site-header #topbar h1:hover::after, .background-w-light-color #site-header .topbar-left a:hover::before, .background-w-light-color #site-header .topbar-left a:hover::after, .background-w-light-color #site-header .topbar-left h1:hover::before, .background-w-light-color #site-header .topbar-left h1:hover::after,
-  .background-w-light-color #site-header .slicknav_nav a:hover::before,
-  .background-w-light-color #site-header .slicknav_nav a:hover::after,
-  .background-w-light-color #site-header .slicknav_nav h1:hover::before,
-  .background-w-light-color #site-header .slicknav_nav h1:hover::after {
+  .background-w-light-color #site-header .slicknav_nav a:hover::before, .background-w-light-color #site-header .slicknav_nav a:hover::after, .background-w-light-color #site-header .slicknav_nav h1:hover::before, .background-w-light-color #site-header .slicknav_nav h1:hover::after {
     opacity: 1;
     -webkit-transform: translateX(0px);
     -moz-transform: translateX(0px);
     transform: translateX(0px); }
-  .background-w-light-color #site-header #topbar a:focus::before, .background-w-light-color #site-header #topbar a:focus::after, .background-w-light-color #site-header #topbar h1:focus::before, .background-w-light-color #site-header #topbar h1:focus::after, .background-w-light-color #site-header .topbar-left a:focus::before, .background-w-light-color #site-header .topbar-left a:focus::after, .background-w-light-color #site-header .topbar-left h1:focus::before, .background-w-light-color #site-header .topbar-left h1:focus::after,
-  .background-w-light-color #site-header .slicknav_nav a:focus::before,
-  .background-w-light-color #site-header .slicknav_nav a:focus::after,
-  .background-w-light-color #site-header .slicknav_nav h1:focus::before,
-  .background-w-light-color #site-header .slicknav_nav h1:focus::after {
+  .background-w-light-color #site-header .slicknav_nav a:focus::before, .background-w-light-color #site-header .slicknav_nav a:focus::after, .background-w-light-color #site-header .slicknav_nav h1:focus::before, .background-w-light-color #site-header .slicknav_nav h1:focus::after {
     opacity: 1;
     -webkit-transform: translateX(0px);
     -moz-transform: translateX(0px);
     transform: translateX(0px); }
 
-.tiagsssss-color #site-header #topbar a, .tiagsssss-color #site-header #topbar h1, .tiagsssss-color #site-header .topbar-left a, .tiagsssss-color #site-header .topbar-left h1,
-.tiagsssss-color #site-header .slicknav_nav a,
-.tiagsssss-color #site-header .slicknav_nav h1, .white-darkmode #site-header #topbar a, .white-darkmode #site-header #topbar h1, .white-darkmode #site-header .topbar-left a, .white-darkmode #site-header .topbar-left h1,
-.white-darkmode #site-header .slicknav_nav a,
-.white-darkmode #site-header .slicknav_nav h1 {
+.tiagsssss-color #site-header .slicknav_nav a, .tiagsssss-color #site-header .slicknav_nav h1, .white-darkmode #site-header .slicknav_nav a, .white-darkmode #site-header .slicknav_nav h1 {
   color: #000; }
   @media (prefers-color-scheme: dark) {
-    .tiagsssss-color #site-header #topbar a, .tiagsssss-color #site-header #topbar h1, .tiagsssss-color #site-header .topbar-left a, .tiagsssss-color #site-header .topbar-left h1,
-    .tiagsssss-color #site-header .slicknav_nav a,
-    .tiagsssss-color #site-header .slicknav_nav h1, .white-darkmode #site-header #topbar a, .white-darkmode #site-header #topbar h1, .white-darkmode #site-header .topbar-left a, .white-darkmode #site-header .topbar-left h1,
-    .white-darkmode #site-header .slicknav_nav a,
-    .white-darkmode #site-header .slicknav_nav h1 {
+    .tiagsssss-color #site-header .slicknav_nav a, .tiagsssss-color #site-header .slicknav_nav h1, .white-darkmode #site-header .slicknav_nav a, .white-darkmode #site-header .slicknav_nav h1 {
       color: #fff; } }
 
 .tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1, .white-darkmode #collapseMenu a, .white-darkmode #collapseMenu h1 {

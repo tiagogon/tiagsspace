@@ -68,6 +68,11 @@
   z-index: 1000;
   top: 0px;
   font-family: $font-family-menu;
+  // Negative/invert effect: the whole (transparent) fixed bar blends against
+  // the content behind it, so its white text reads as the photo's inverse —
+  // white over dark, black over light. Needs `isolation: isolate` on <body>
+  // (see _foundations-tokens.scss) so it blends against the page, not itself.
+  mix-blend-mode: difference;
 
   .slicknav_menutxt {
     display: none;
@@ -80,6 +85,7 @@
     h1, a {
       font-size: $font-size-nav;
       font-family: $font-family-menu;
+      color: $white; // blend base — inverted by the header's mix-blend-mode
     }
   }
   #topbar,
@@ -140,12 +146,14 @@
   z-index: 1000;
   bottom: 0px;
   font-family: $font-family-menu;
+  mix-blend-mode: difference; // same negative/invert effect as #site-header
   .row {
     .left-side {
       float: left;
       h1, a {
         font-size: $font-size-nav;
         font-family: $font-family-menu;
+        color: $white; // blend base — inverted by the header's mix-blend-mode
       }
     }
     .right-side {
@@ -154,6 +162,7 @@
       h1, a {
         font-size: $font-size-nav;
         font-family: $font-family-menu;
+        color: $white; // blend base — inverted by the header's mix-blend-mode
       }
     }
   }
@@ -180,15 +189,8 @@
 
 .background-w-light-color {
   #site-header {
-    h1 {
-      a {
-        color: $dark;
-        @include transition(all 1s ease-out);
-        &:hover {
-          @include transition(all 1s ease-out);
-        }
-      }
-    }
+    // NOTE: title (.topbar-left) + Reveal word (#topbar) are intentionally not
+    // colored here — the header's mix-blend-mode: difference inverts them vs the backdrop.
     @media (max-width: map-get($grid-breakpoints, md)) {
       .slicknav_menu {
         .slicknav_btn {
@@ -209,7 +211,6 @@
         }
       }
     }
-      #topbar,.topbar-left,
       .slicknav_nav {
             a,h1 {
               color: $dark;
@@ -242,7 +243,7 @@
 
 .tiagsssss-color, .white-darkmode {
   #site-header {
-    #topbar, .topbar-left,
+    // Title (.topbar-left) + Reveal word (#topbar) use mix-blend-mode instead.
     .slicknav_nav {
       a, h1 {
         color: $dark;

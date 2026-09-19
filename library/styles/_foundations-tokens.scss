@@ -6,6 +6,8 @@ body {
   font-size: $font-size;
   line-height: 1.5;
   min-height: 100vh;
+  isolation: isolate; // establishes a stacking context so the fixed headers'
+                      // mix-blend-mode inverts against page content (not themselves)
   a:hover {
     color: $highlight-link;
     text-decoration: none;
