@@ -25,7 +25,8 @@ require_once('library/admin.php');              // custom admin functions
 require_once('library/custom-post-types.php');  // CPT registrations, main loop/feed/archive inclusion
 require_once('library/custom-taxonomies.php');  // Taxonomy registrations, admin filters
 require_once('library/template-functions.php'); // Template helpers (taxonomy lists, colors, stats)
-require_once('library/seo-and-feed.php');       // Yoast OG/Twitter hooks, RSS feed customization
+require_once('library/seo-and-feed.php');       // Share image, OG image, %%label%%, language, TDM reservation, RSS feed
+require_once('library/seo-schema.php');         // Yoast schema pieces: Person alternateName, films VideoObject
 require_once('library/gallery-functions.php');  // Gallery admin UI, AJAX handlers
 require_once('library/query-filters.php');      // Hide posts from archives, cache purge
 require_once('library/acf-fields.php');         // ACF field groups (registered via PHP)
@@ -178,6 +179,10 @@ add_image_size( 'large', 1200, 2400, false ); // update also on /wp-admin/option
 
 // video poster / full-bleed (largest, no crop) — avoids shipping the full original as a poster
 add_image_size( 'xlarge', 1920, 3840, false );
+
+// link-preview image (og:image / twitter:image): 1200px box, no crop, re-encoded to <280 KB
+// by tiagsspace_cap_share_image_bytes() so WhatsApp renders it. Backfill: wp tiagsspace share-images
+add_image_size( 'share', 1200, 1200, false );
 
 // Disable Wordpress -scaled version created on 5.3 https://make.wordpress.org/core/2019/10/09/introducing-handling-of-big-images-in-wordpress-5-3/
 add_filter( 'big_image_size_threshold', '__return_false' );

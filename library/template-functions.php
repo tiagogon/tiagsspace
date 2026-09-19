@@ -9,6 +9,45 @@
  */
 
 
+/**
+ * Attachment IDs that belong to a post's default gallery, in menu order.
+ *
+ * Excludes attachments flagged with the ACF true/false `remove_from_default_gallery`.
+ * ACF may store '0' or no row at all when unchecked, hence the OR meta_query.
+ *
+ * @param int    $post_id
+ * @param string $mime_type  e.g. 'image' or 'video'; '' for every attachment.
+ * @return int[]
+ */
+function tiagsspace_post_gallery_ids( $post_id, $mime_type = '' ) {
+    $args = array(
+        'post_type'      => 'attachment',
+        'posts_per_page' => -1,
+        'post_parent'    => (int) $post_id,
+        'post_status'    => 'any',
+        'fields'         => 'ids',
+        'orderby'        => 'menu_order',
+        'order'          => 'ASC',
+        'meta_query'     => array(
+            'relation' => 'OR',
+            array(
+                'key'     => 'remove_from_default_gallery',
+                'compare' => 'NOT EXISTS',
+            ),
+            array(
+                'key'     => 'remove_from_default_gallery',
+                'value'   => '1',
+                'compare' => '!=',
+            ),
+        ),
+    );
+    if ( $mime_type ) {
+        $args['post_mime_type'] = $mime_type;
+    }
+    return array_map( 'intval', (array) get_posts( $args ) );
+}
+
+
 // LIST OF TAGS
 function taxonomy_list($post_id_of_the_tags,$custom_taxonomy, $tag_before, $tag_after, $separator_term, $separator_term_last, $tax_link) {
     //ID of the current post

@@ -84,26 +84,7 @@ $total = $table_query->found_posts;
                 $year_display = implode( ', ', $all_years );
 
                 // Count attachments not excluded from gallery
-                $items_query = get_posts( array(
-                    'post_type'      => 'attachment',
-                    'posts_per_page' => -1,
-                    'post_parent'    => $post_id,
-                    'post_status'    => 'any',
-                    'fields'         => 'ids',
-                    'meta_query'     => array(
-                        'relation' => 'OR',
-                        array(
-                            'key'     => 'remove_from_default_gallery',
-                            'compare' => 'NOT EXISTS',
-                        ),
-                        array(
-                            'key'     => 'remove_from_default_gallery',
-                            'value'   => '1',
-                            'compare' => '!=',
-                        ),
-                    ),
-                ) );
-                $items_count = count( $items_query );
+                $items_count = count( tiagsspace_post_gallery_ids( $post_id ) );
 
                 // Thumbnail URL for hover preview
                 $thumb_url = '';
