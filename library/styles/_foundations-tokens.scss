@@ -3,8 +3,9 @@
 // --------------------------------------------------
 
 body {
-  font-size: $font-size-p;
-  line-height: 1.7;
+  // font-size: $font-size-p;        // original 16px — uncomment to restore
+  font-size: $font-size-heading;     // Karrik trial: match title size (21px)
+  line-height: 1.5;
   min-height: 100vh;
   a:hover {
     color: $highlight-link;

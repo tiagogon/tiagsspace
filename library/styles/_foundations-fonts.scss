@@ -79,22 +79,48 @@ $tiagsssss-color-darkmode-gradient: linear-gradient(0deg, $dark-lighten-vibe-con
     font-style: normal;
 }
 
+// Karrik (Velvetyne, SIL OFL 1.1) — Regular
+@font-face {
+    font-family: 'Karrik';
+    src: url('../fonts/karrik/Karrik-Regular.woff2') format('woff2'),
+         url('../fonts/karrik/Karrik-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+// Karrik — Italic (own family so it can be assigned via the font-stack variables)
+@font-face {
+    font-family: 'Karrik_Italic';
+    src: url('../fonts/karrik/Karrik-Italic.woff2') format('woff2'),
+         url('../fonts/karrik/Karrik-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 
 // --------------------------------------------------
 // Font stacks
 // --------------------------------------------------
 
-$font-family-menu:       "Sporting_Grotesque_Bold", sans-serif;
-$font-family-headings:   "Sporting_Grotesque_Bold", sans-serif;
-$font-family-sans-serif: "Sporting_Grotesque_Regular", sans-serif;
+// --- Sporting Grotesque (original — uncomment to restore) ---
+// $font-family-menu:       "Sporting_Grotesque_Bold", sans-serif;
+// $font-family-headings:   "Sporting_Grotesque_Bold", sans-serif;
+// $font-family-sans-serif: "Sporting_Grotesque_Regular", sans-serif;
+
+// --- Karrik trial (comment out to disable) ---
+$font-family-menu:       "Karrik", sans-serif;   // menu + nav → regular
+$font-family-headings:   "Karrik", sans-serif;   // titles h1–h6 → regular
+$font-family-sans-serif: "Karrik", sans-serif;   // body → regular
 
 
 // --------------------------------------------------
 // Font sizing & weight
 // --------------------------------------------------
 
-$font-size-p:           16px;
-$font-size-heading:     21px;
+$font-size-p:           18px;
+$font-size-heading:     24px;
 $font-size-nav:         21px;
 $font-size-menu:        23px;
 
