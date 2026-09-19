@@ -286,6 +286,9 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
      *     wp tiagsspace share-images 39345 --force
      */
     WP_CLI::add_command( 'tiagsspace share-images', function ( $args, $assoc ) {
+        // Something in the stack re-arms a 300 s execution limit under wp-cli; the
+        // whole library takes hours, so lift it here and again on every iteration.
+        ignore_user_abort( true );
         $force = ! empty( $assoc['force'] );
         $ids   = array_map( 'intval', $args );
         if ( empty( $ids ) ) {
@@ -302,6 +305,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
         $tally = array();
         $total = count( $ids );
         foreach ( $ids as $i => $id ) {
+            set_time_limit( 0 );
             $result = tiagsspace_generate_share_image( $id, $force );
             $tally[ $result ] = isset( $tally[ $result ] ) ? $tally[ $result ] + 1 : 1;
             if ( ! in_array( $result, array( 'ok', 'skipped', 'small' ), true ) ) {
