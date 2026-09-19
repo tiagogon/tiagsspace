@@ -184,7 +184,7 @@ function enqueue_media_library_default_uploaded() {
 		'media-library-default-uploaded',
 		get_template_directory_uri() . '/library/js/media-library-default-uploaded.js',
 		array( 'media-views' ),
-		'1.0',
+		'1.1',
 		true
 	);
 }

@@ -26,16 +26,20 @@
 		var frame = originalMedia.apply( this, arguments );
 		if ( frame && frame.on ) {
 			frame.on( 'open', function() {
-				// Clear the global attachment cache
+				// Clear the global attachment cache (stale items deleted elsewhere).
 				if ( wp.media.Attachment && wp.media.Attachment.all ) {
 					wp.media.Attachment.all.reset();
 				}
-				// Force the frame's library to re-query from server
+				// Force the library to re-mirror a fresh Query and refetch from the
+				// server. reset()+more() alone leaves the grid empty on reopen,
+				// because a Query that considers itself "complete" won't re-fetch;
+				// bumping a throwaway prop changes the query cache key so a fresh
+				// Query is mirrored and pulled from the server (same pattern the
+				// media-modal CTA scripts use in forceLibraryRefresh()).
 				if ( frame.state && frame.state() ) {
 					var library = frame.state().get( 'library' );
-					if ( library ) {
-						library.reset();
-						library.more();
+					if ( library && library.props && library.props.set ) {
+						library.props.set( 'ignore', ( + new Date() ) );
 					}
 				}
 			} );
