@@ -77,7 +77,9 @@ function tiagsspace_enqueue_assets() {
     // ----- CSS ----- (order matters)
     wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], tiagsspace_asset_ver('/library/js/plyr/plyr.css'));
     wp_enqueue_style('swiper', $template_dir . '/library/js/swiper/swiper-bundle.min.css', [], null);
-    wp_enqueue_style('theme-style', $template_dir . '/library/styles/main.min.css', [], null);
+    // Versioned by filemtime: the server sends a 1-year Cache-Control on static files, so an
+    // unversioned URL leaves visitors on a stale stylesheet after every recompile.
+    wp_enqueue_style('theme-style', $template_dir . '/library/styles/main.min.css', [], tiagsspace_asset_ver('/library/styles/main.min.css'));
 
     // ----- jQuery -----
     // Use local jQuery to match existing theme expectations
@@ -97,7 +99,7 @@ function tiagsspace_enqueue_assets() {
         // Classie removed: no longer needed; use classList/jQuery
 
         // Header helpers to replace inline scripts
-        wp_enqueue_script('header-helpers', $template_dir . '/library/js/header-helpers.js', array('jquery'), null, true);
+        wp_enqueue_script('header-helpers', $template_dir . '/library/js/header-helpers.js', array('jquery'), tiagsspace_asset_ver('/library/js/header-helpers.js'), true);
     // Plyr
     wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.js', [], tiagsspace_asset_ver('/library/js/plyr/plyr.js'), true);
 
