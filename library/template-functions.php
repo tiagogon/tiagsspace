@@ -149,7 +149,7 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
 
 // post content wrap styles
 function content_wrap() {
-    echo "col-48 offset-0 col-sm-40 offset-sm-4 col-md-32 offset-md-8 col-lg-38 offset-lg-8";
+    echo "col-48 offset-0 col-sm-40 offset-sm-4 col-md-32 offset-md-8 col-lg-37 offset-lg-8";
 }
 
 
