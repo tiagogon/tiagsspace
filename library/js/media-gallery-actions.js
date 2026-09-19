@@ -228,11 +228,13 @@
 			return;
 		}
 
-		// One floated group so the select + buttons line up on the right without
-		// fighting the toolbar's floated media-buttons.
+		// One floated group, full toolbar height with its contents centered, so
+		// the select + buttons line up with the native (vertically centered)
+		// media-buttons regardless of the toolbar's exact metrics.
 		var $wrap = $( '<span>', { id: WRAP_ID } ).css( {
 			'float': 'right',
-			display: 'inline-flex',
+			height: '100%',
+			display: 'flex',
 			'align-items': 'center',
 			gap: '6px',
 			'margin-left': '8px'
@@ -240,7 +242,7 @@
 
 		var $mode = $( '<select>', { id: MODE_ID, 'class': 'attachment-filters' } );
 		$mode.append( $( '<option>', { value: 'chronological' } ).text( i18n.chronological || 'Chronological' ) );
-		$mode.append( $( '<option>', { value: 'capture_time' } ).text( i18n.captureTime || 'Capture time (EXIF)' ) );
+		$mode.append( $( '<option>', { value: 'capture_time', selected: 'selected' } ).text( i18n.captureTime || 'Capture time (EXIF)' ) );
 		$mode.append( $( '<option>', { value: 'random' } ).text( i18n.random || 'Random' ) );
 
 		var $apply = $( '<button>', { type: 'button', id: APPLY_ID, 'class': 'button media-button button-large' } ).text( i18n.applyAll || 'Apply to all' );
@@ -260,6 +262,22 @@
 
 		$wrap.append( $mode, $apply, $delete );
 		$bar.append( $wrap );
+
+		// Belt-and-suspenders: nudge our group's vertical center onto a native
+		// toolbar button's center, so it lines up whatever the toolbar metrics.
+		try {
+			var native = $bar.children( '.media-button' ).filter( function () {
+				return ! $wrap[ 0 ].contains( this );
+			} )[ 0 ];
+			if ( native ) {
+				var nb = native.getBoundingClientRect();
+				var wb = $wrap[ 0 ].getBoundingClientRect();
+				var delta = ( nb.top + nb.height / 2 ) - ( wb.top + wb.height / 2 );
+				if ( Math.abs( delta ) > 1 ) {
+					$wrap.css( 'margin-top', ( parseFloat( $wrap.css( 'marginTop' ) ) || 0 ) + delta + 'px' );
+				}
+			}
+		} catch ( e ) {}
 
 		// Live "Apply (N)" / "Apply to all" based on the current selection.
 		var selection = getSelection( frame );
