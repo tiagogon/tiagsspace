@@ -269,11 +269,20 @@
 
         var key = e.key;
 
-        // S = Save Order
-        if ( key === 's' || key === 'S' ) {
-            if ( typeof window.orderAttachmentesOnWpDb === 'function' ) {
+        // Order now auto-saves on every drag, so there is no Save Order key.
+
+        // N = reveal the next hidden attachment after the focused item
+        if ( key === 'n' || key === 'N' ) {
+            if ( typeof window.revealGalleryHiddenAfter === 'function' ) {
                 e.preventDefault();
-                window.orderAttachmentesOnWpDb();
+                var items = getItems();
+                if ( items.length === 0 ) {
+                    window.revealGalleryHiddenAfter( null );
+                } else {
+                    var focusStr = container.getAttribute( 'data-kb-focus' );
+                    var focusIdx = focusStr !== null ? Math.min( parseInt( focusStr, 10 ) || 0, items.length - 1 ) : 0;
+                    window.revealGalleryHiddenAfter( items[ focusIdx ] );
+                }
             }
             return;
         }

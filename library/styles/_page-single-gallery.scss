@@ -298,7 +298,8 @@ button.remove{
 	}
 }
 
-button.saveorder{
+button.saveorder,
+button.nexthidden{
 	opacity: 0;
 	position: absolute;
 	bottom: 0;

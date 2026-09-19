@@ -69,10 +69,32 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 		<a class="delete" href="javascript:;" rel="' . wp_nonce_url( get_bloginfo('url') . '/wp-admin/post.php?action=delete&amp;post=' . $attachment_id, 'delete-post_' . $attachment_id) . '" onclick="removeDiv(this);">DELETE</a>
 	';
 
-	// save order of gallery -- function on single-gallery -- ajax functions on functions.php
-	echo '
-	<button class="saveorder" onclick="orderAttachmentesOnWpDb();">SAVE ORDER (S)</button>
+	// Reveal the next hidden attachment right after this one. Order now
+	// auto-saves on every drag (see entry-gallery.php onSort), so the old
+	// "SAVE ORDER (S)" button is gone. Only render this when the post actually
+	// has hidden attachments (count computed once per request per gallery).
+	static $has_hidden_by_gallery = array();
+	if ( ! isset( $has_hidden_by_gallery[ $gallery_id ] ) ) {
+		$hidden_ids = get_posts( array(
+			'numberposts' => 1,
+			'post_parent' => $gallery_id,
+			'post_status' => 'any',
+			'post_type'   => 'attachment',
+			'fields'      => 'ids',
+			'meta_query'  => array(
+				array(
+					'key'   => 'remove_from_default_gallery',
+					'value' => '1',
+				),
+			),
+		) );
+		$has_hidden_by_gallery[ $gallery_id ] = ! empty( $hidden_ids );
+	}
+	if ( $has_hidden_by_gallery[ $gallery_id ] ) {
+		echo '
+	<button class="nexthidden" onclick="revealNextHidden(this);">NEXT HIDDEN (N)</button>
 	';
+	}
 
 	// Change Atachement Grid Size
 	echo '
