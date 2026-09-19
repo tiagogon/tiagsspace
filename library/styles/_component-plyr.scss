@@ -332,8 +332,8 @@ video.plyr-thumbnail-front {
     
     // xl: Extra large devices (large desktops, 1200px and up)
     @include media-breakpoint-up(xl) {
-        font-size: 38px;
-        bottom: 40px;
+        font-size: 42px;
+        bottom: 40px; 
     }
 }
 

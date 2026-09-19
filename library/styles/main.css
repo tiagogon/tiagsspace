@@ -5796,7 +5796,7 @@ video.plyr-thumbnail-front {
       bottom: 30px; } }
   @media (min-width: 1200px) {
     .plyr__captions {
-      font-size: 38px;
+      font-size: 42px;
       bottom: 40px; } }
 
 @media (min-width: 576px) {
