@@ -218,17 +218,25 @@
 	 * ------------------------------------------------------------------ */
 
 	function injectControls( frame ) {
-		// Prefer the secondary (left) toolbar; fall back to primary.
-		var $bar = $( '.media-frame-toolbar .media-toolbar-secondary' );
-		if ( ! $bar.length ) {
-			$bar = $( '.media-frame-toolbar .media-toolbar-primary' );
-		}
+		// The primary (right) toolbar — same home as the other CTAs. The
+		// secondary (left) toolbar can't be used: WP renders its own absolutely
+		// positioned selection strip there once anything is selected, which
+		// overlaps injected controls.
+		var $bar = $( '.media-frame-toolbar .media-toolbar-primary' );
 
 		if ( ! $bar.length || document.getElementById( WRAP_ID ) ) {
 			return;
 		}
 
-		var $wrap = $( '<span>', { id: WRAP_ID } ).css( { display: 'inline-flex', 'align-items': 'center', gap: '6px', 'margin-right': '8px' } );
+		// One floated group so the select + buttons line up on the right without
+		// fighting the toolbar's floated media-buttons.
+		var $wrap = $( '<span>', { id: WRAP_ID } ).css( {
+			'float': 'right',
+			display: 'inline-flex',
+			'align-items': 'center',
+			gap: '6px',
+			'margin-left': '8px'
+		} );
 
 		var $mode = $( '<select>', { id: MODE_ID, 'class': 'attachment-filters' } );
 		$mode.append( $( '<option>', { value: 'chronological' } ).text( i18n.chronological || 'Chronological' ) );
@@ -250,9 +258,8 @@
 			performDeleteHidden( frame, $delete );
 		} );
 
-		$wrap.append( $mode, $apply );
+		$wrap.append( $mode, $apply, $delete );
 		$bar.append( $wrap );
-		$bar.append( $delete );
 
 		// Live "Apply (N)" / "Apply to all" based on the current selection.
 		var selection = getSelection( frame );
