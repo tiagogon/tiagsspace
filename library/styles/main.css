@@ -5376,6 +5376,12 @@ a.text-dark:hover, a.text-dark:focus {
 .invisible {
   visibility: hidden !important; }
 
+html {
+  background: #fff; }
+  @media (prefers-color-scheme: dark) {
+    html {
+      background: #000; } }
+
 body {
   font-size: 30px;
   line-height: 1.5;

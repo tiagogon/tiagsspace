@@ -2,6 +2,18 @@
 // Body defaults
 // --------------------------------------------------
 
+// <html> must carry its own background: without one, CSS propagates the
+// <body> background up to the root canvas — i.e. *outside* body's isolated
+// group — so the fixed headers' mix-blend-mode would see nothing behind them
+// over plain areas and stay white. Body covers 100vh, so this only ever peeks
+// out on over-scroll; keep it scheme-matched.
+html {
+  background: $white;
+  @media (prefers-color-scheme: dark) {
+    background: $white-darkmode;
+  }
+}
+
 body {
   font-size: $font-size;
   line-height: 1.5;
