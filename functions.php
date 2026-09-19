@@ -30,6 +30,7 @@ require_once('library/gallery-functions.php');  // Gallery admin UI, AJAX handle
 require_once('library/query-filters.php');      // Hide posts from archives, cache purge
 require_once('library/acf-fields.php');         // ACF field groups (registered via PHP)
 require_once('library/duplicate-post.php');     // Duplicate any post to a new draft (row/bulk/editor)
+require_once('library/media-attach-to-post.php'); // "Add to existing post" media-modal CTA (re-parent attachments)
 require_once('library/trash-post.php');          // Trash post with attached-media choice (row/bulk/editor)
 
 // Disable comments entirely
