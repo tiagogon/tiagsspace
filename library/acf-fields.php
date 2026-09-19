@@ -172,54 +172,6 @@ add_action( 'acf/include_fields', function() {
 		'title' => 'Gallery',
 		'fields' => array(
 
-			// --- Ordering ---
-			array(
-				'key' => 'field_5a2dbd936ecca',
-				'label' => 'Order media attachments',
-				'name' => 'order_media_attachments',
-				'type' => 'radio',
-				'instructions' => 'Save post to reorder media attachments.',
-				'wrapper' => array( 'width' => '51' ),
-				'choices' => array(
-					'chronological' => 'Chronological',
-					'capture_time'  => 'Capture time (EXIF)',
-					'random'        => 'Random',
-				),
-				'allow_null' => 1,
-				'layout' => 'horizontal',
-			),
-			array(
-				'key' => 'field_5ae9f4c3fd95d',
-				'label' => 'Order just the new added pictures',
-				'name' => 'order_just_the_new_added_pictures',
-				'type' => 'true_false',
-				'instructions' => "This will order just the new added images ('menu_order' => 0) after the current order.",
-				'conditional_logic' => array(
-					array( array( 'field' => 'field_5a2dbd936ecca', 'operator' => '==', 'value' => 'chronological' ) ),
-					array( array( 'field' => 'field_5a2dbd936ecca', 'operator' => '==', 'value' => 'capture_time' ) ),
-				),
-				'wrapper' => array( 'width' => '49' ),
-			),
-
-			// --- Deletion ---
-			array(
-				'key' => 'field_5929a3e121b2d',
-				'label' => 'Delete non selected images',
-				'name' => 'delete_not_selected_image',
-				'type' => 'true_false',
-				'instructions' => 'Will delete all the media attachments to this post marked as remove from gallery.',
-				'wrapper' => array( 'width' => '51' ),
-				'message' => 'Delete non selected images',
-			),
-			array(
-				'key' => 'field_5ae9fe0947140',
-				'label' => 'Delete all the attached media!',
-				'name' => 'delete_all_the_attached_media',
-				'type' => 'true_false',
-				'conditional_logic' => array( array( array( 'field' => 'field_5929a3e121b2d', 'operator' => '==', 'value' => '1' ) ) ),
-				'wrapper' => array( 'width' => '49' ),
-			),
-
 			// --- Gallery toggle ---
 			array(
 				'key' => 'field_544eab85fc4e1',
