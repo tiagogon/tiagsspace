@@ -5780,7 +5780,6 @@ video.plyr-thumbnail-front {
 
 .plyr__captions {
   font-size: 16px;
-  font-weight: 600;
   line-height: 1.4;
   bottom: 0; }
   @media (min-width: 576px) {
