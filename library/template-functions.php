@@ -66,6 +66,7 @@ function taxonomy_list_w_numbers($post_id_of_the_tags,$custom_taxonomy, $tag_bef
     $terms = get_the_terms( $this_id, $custom_taxonomy );
 
     // cont number of terms
+	$terms_count = 0;
 	if ($terms) {
 		$terms_count = count( $terms );
 	}
@@ -183,6 +184,7 @@ function color_background_parameters ($parameter) {
 	}
 
 	// Mapping color class to HEX code and font mode
+	$background_day_night_mode = 'background-w-light-color';
 	if ($background_color_class=="tiagsssss-color") {
 			$background_day_night_mode = 'background-w-light-color';
 	} elseif ($background_color_class=="white") {

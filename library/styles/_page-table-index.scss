@@ -63,7 +63,7 @@
 }
 
 // Responsive: tweaks for smaller screens
-@media (max-width: map-get($grid-breakpoints, md) - 1) {
+@include media-breakpoint-down(sm) {
     .table-index {
         font-size: 12px;
 
@@ -112,7 +112,7 @@
     }
 }
 
-@media (max-width: map-get($grid-breakpoints, sm) - 1) {
+@include media-breakpoint-down(xs) {
     .table-index {
         .ti-col-medium    { display: none; }
         .ti-col-title     { width: 45%; }

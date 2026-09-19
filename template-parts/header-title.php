@@ -43,19 +43,19 @@ if (is_post_type_archive('log')) {
 
 // ----- Taxonomies -----
 if (is_tax('log-branch')) {
-	$term = $wp_query->queried_object;
+	$term = get_queried_object();
 	$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / <a href="'.get_post_type_archive_link('log').'">Log</a> / '.$term->name.'</h1>';
 }
 if (is_tax('medium')) {
-	$term = $wp_query->queried_object;
+	$term = get_queried_object();
 	$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Medium / '.$term->name.$over_text.'</h1>';
 }
 if (is_tax('from')) {
-	$term = $wp_query->queried_object;
+	$term = get_queried_object();
 	$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Dating  / '.$term->name.$over_text.'</h1>';
 }
 if (is_tax('places')) {
-	$term = $wp_query->queried_object;
+	$term = get_queried_object();
 	$header_left_title = '<h1><a href="'.home_url().'">'.$Webpage_name.'</a> / Place / '.$term->name.$over_text.'</h1>';
 }
 if (is_tag()) {

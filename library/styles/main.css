@@ -7532,7 +7532,7 @@ a.delete {
     color: inherit;
     text-decoration: none; }
 
-@media (max-width: 767px) {
+@media (max-width: 767.98px) {
   .table-index {
     font-size: 12px; }
     .table-index th,
@@ -7571,7 +7571,7 @@ a.delete {
 @media (hover: none) {
   .ti-hover-preview {
     display: none; } }
-@media (max-width: 575px) {
+@media (max-width: 575.98px) {
   .table-index .ti-col-medium {
     display: none; }
   .table-index .ti-col-title {
