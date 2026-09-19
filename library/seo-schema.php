@@ -77,7 +77,7 @@ if ( class_exists( '\Yoast\WP\SEO\Generators\Schema\Abstract_Schema_Piece' ) ) {
             $thumb_id = (int) get_post_thumbnail_id( $post_id );
             if ( $thumb_id ) {
                 $thumbs = array();
-                foreach ( array( 'xlarge', 'share' ) as $size ) {
+                foreach ( array( 'xlarge', 'medium' ) as $size ) {
                     $src = wp_get_attachment_image_src( $thumb_id, $size );
                     if ( $src && ! empty( $src[0] ) ) {
                         $thumbs[] = $src[0];

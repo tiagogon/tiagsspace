@@ -182,9 +182,8 @@ add_image_size( 'large', 1200, 2400, false ); // update also on /wp-admin/option
 // video poster / full-bleed (largest, no crop) — avoids shipping the full original as a poster
 add_image_size( 'xlarge', 1920, 3840, false );
 
-// link-preview image (og:image / twitter:image): 1200px box, no crop, re-encoded to <280 KB
-// by tiagsspace_cap_share_image_bytes() so WhatsApp renders it. Backfill: wp tiagsspace share-images
-add_image_size( 'share', 1200, 1200, false );
+// Link previews (og:image) reuse these sizes: seo-and-feed.php picks the largest one under 280 KB
+// so WhatsApp renders it. No dedicated share size.
 
 // Disable Wordpress -scaled version created on 5.3 https://make.wordpress.org/core/2019/10/09/introducing-handling-of-big-images-in-wordpress-5-3/
 add_filter( 'big_image_size_threshold', '__return_false' );

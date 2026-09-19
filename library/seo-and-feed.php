@@ -161,7 +161,7 @@ add_filter('the_content', 'wptuts_feedimgs');
  * machine-readable AI/TDM reservation. Schema pieces live in seo-schema.php.
  */
 
-/** Byte ceiling for the `share` image size. WhatsApp stops rendering link
+/** Byte ceiling for the link-preview image. WhatsApp stops rendering link
  *  previews somewhere around 300 KB, so stay clearly under it. */
 if ( ! defined( 'TIAGSSPACE_SHARE_IMAGE_MAX_BYTES' ) ) {
     define( 'TIAGSSPACE_SHARE_IMAGE_MAX_BYTES', 280000 );
@@ -177,146 +177,6 @@ if ( ! defined( 'TIAGSSPACE_AI_POLICY_URL' ) ) {
  *  the label variable and the language field). */
 function tiagsspace_seo_post_types() {
     return array( 'post', 'dusk', 'films', 'log', 'hyper', 'cityburns', '4k-lento' );
-}
-
-
-// ----- Share image size: keep the `share` file under the byte ceiling -----
-// The size itself is registered in functions.php (1200x1200 box, no crop).
-// After WordPress generates the sizes, re-save only the `share` file at a
-// lower JPEG quality until it fits. Originals and every other size are untouched.
-
-function tiagsspace_cap_share_image_bytes( $metadata, $attachment_id ) {
-    if ( empty( $metadata['sizes']['share']['file'] ) ) {
-        return $metadata;
-    }
-    $mime = isset( $metadata['sizes']['share']['mime-type'] ) ? $metadata['sizes']['share']['mime-type'] : get_post_mime_type( $attachment_id );
-    if ( ! in_array( $mime, array( 'image/jpeg', 'image/webp' ), true ) ) {
-        return $metadata; // PNG/GIF quality knobs do not shrink files predictably; leave them
-    }
-    $original = get_attached_file( $attachment_id );
-    if ( ! $original ) {
-        return $metadata;
-    }
-    $path = dirname( $original ) . '/' . $metadata['sizes']['share']['file'];
-    if ( ! file_exists( $path ) ) {
-        return $metadata;
-    }
-
-    clearstatcache( true, $path );
-    $size = filesize( $path );
-    if ( $size > TIAGSSPACE_SHARE_IMAGE_MAX_BYTES ) {
-        foreach ( array( 76, 70, 64, 58, 52 ) as $quality ) {
-            $editor = wp_get_image_editor( $path );
-            if ( is_wp_error( $editor ) ) {
-                break;
-            }
-            $editor->set_quality( $quality );
-            $saved = $editor->save( $path );
-            if ( is_wp_error( $saved ) ) {
-                break;
-            }
-            clearstatcache( true, $path );
-            $size = filesize( $path );
-            if ( $size <= TIAGSSPACE_SHARE_IMAGE_MAX_BYTES ) {
-                break;
-            }
-        }
-    }
-    $metadata['sizes']['share']['filesize'] = $size;
-    return $metadata;
-}
-add_filter( 'wp_generate_attachment_metadata', 'tiagsspace_cap_share_image_bytes', 20, 2 );
-
-/**
- * Generate (or refresh) the `share` size for one attachment without touching
- * the other sizes, then apply the byte cap. Used by the WP-CLI command below
- * for the existing library; new uploads go through the normal metadata path.
- *
- * @return string 'ok' | 'skipped' | 'small' | 'missing-file' | 'error'
- */
-function tiagsspace_generate_share_image( $attachment_id, $force = false ) {
-    if ( ! wp_attachment_is_image( $attachment_id ) ) {
-        return 'skipped';
-    }
-    $file = get_attached_file( $attachment_id );
-    if ( ! $file || ! file_exists( $file ) ) {
-        return 'missing-file';
-    }
-    $metadata = wp_get_attachment_metadata( $attachment_id );
-    if ( ! is_array( $metadata ) ) {
-        $metadata = array();
-    }
-    if ( ! $force && ! empty( $metadata['sizes']['share']['file'] )
-        && file_exists( dirname( $file ) . '/' . $metadata['sizes']['share']['file'] ) ) {
-        return 'skipped';
-    }
-    $editor = wp_get_image_editor( $file );
-    if ( is_wp_error( $editor ) ) {
-        return 'error';
-    }
-    $dims = $editor->get_size();
-    if ( ! empty( $dims['width'] ) && $dims['width'] <= 1200 && $dims['height'] <= 1200 ) {
-        return 'small'; // WordPress never upscales: no share size for originals inside the 1200 box (medium/full is used instead)
-    }
-    $resized = $editor->resize( 1200, 1200, false );
-    if ( is_wp_error( $resized ) ) {
-        return 'error';
-    }
-    $saved = $editor->save();
-    if ( is_wp_error( $saved ) || empty( $saved['file'] ) ) {
-        return 'error';
-    }
-    unset( $saved['path'] );
-    $metadata['sizes']['share'] = $saved;
-    $metadata = tiagsspace_cap_share_image_bytes( $metadata, $attachment_id );
-    wp_update_attachment_metadata( $attachment_id, $metadata );
-    return 'ok';
-}
-
-if ( defined( 'WP_CLI' ) && WP_CLI ) {
-    /**
-     * Build the `share` image size for the existing library.
-     *
-     * ## OPTIONS
-     * [<id>...]   Attachment IDs. Default: every image attachment.
-     * [--force]   Rebuild even when a share file already exists.
-     *
-     * ## EXAMPLES
-     *     wp tiagsspace share-images
-     *     wp tiagsspace share-images 39345 --force
-     */
-    WP_CLI::add_command( 'tiagsspace share-images', function ( $args, $assoc ) {
-        // Something in the stack re-arms a 300 s execution limit under wp-cli; the
-        // whole library takes hours, so lift it here and again on every iteration.
-        ignore_user_abort( true );
-        $force = ! empty( $assoc['force'] );
-        $ids   = array_map( 'intval', $args );
-        if ( empty( $ids ) ) {
-            $ids = get_posts( array(
-                'post_type'      => 'attachment',
-                'post_status'    => 'any',
-                'post_mime_type' => 'image',
-                'posts_per_page' => -1,
-                'fields'         => 'ids',
-                'orderby'        => 'ID',
-                'order'          => 'DESC',
-            ) );
-        }
-        $tally = array();
-        $total = count( $ids );
-        foreach ( $ids as $i => $id ) {
-            set_time_limit( 0 );
-            $result = tiagsspace_generate_share_image( $id, $force );
-            $tally[ $result ] = isset( $tally[ $result ] ) ? $tally[ $result ] + 1 : 1;
-            if ( ! in_array( $result, array( 'ok', 'skipped', 'small' ), true ) ) {
-                WP_CLI::warning( "$id: $result" );
-            }
-            if ( ( $i + 1 ) % 200 === 0 ) {
-                WP_CLI::log( sprintf( '%d / %d', $i + 1, $total ) );
-            }
-        }
-        WP_CLI::success( 'share-images: ' . json_encode( $tally ) );
-    } );
 }
 
 
@@ -380,21 +240,41 @@ function tiagsspace_share_image_id() {
 }
 
 /**
- * Image array for the Yoast container: the `share` size when it exists,
- * otherwise `medium` (older uploads until `wp tiagsspace share-images` has run).
+ * Image array for the Yoast container: the LARGEST existing size of the
+ * attachment whose file is under the byte ceiling (medium 940 → medium_large
+ * 768 → small 720 → thumbnail 480). No dedicated size is generated: the sizes
+ * the theme already keeps cover it, and only the oversized `medium` files
+ * (about a quarter of them) fall through to the next rung.
  */
 function tiagsspace_share_image_array( $attachment_id ) {
-    foreach ( array( 'share', 'medium' ) as $size ) {
+    $meta = wp_get_attachment_metadata( $attachment_id );
+    if ( empty( $meta['sizes'] ) || ! is_array( $meta['sizes'] ) ) {
+        return null;
+    }
+    $original = get_attached_file( $attachment_id );
+    $dir      = $original ? dirname( $original ) : '';
+    foreach ( array( 'medium', 'medium_large', 'small', 'thumbnail' ) as $size ) {
+        if ( empty( $meta['sizes'][ $size ]['file'] ) ) {
+            continue;
+        }
+        $s     = $meta['sizes'][ $size ];
+        $bytes = ! empty( $s['filesize'] ) ? (int) $s['filesize'] : 0; // stored since WP 6.0
+        if ( ! $bytes && $dir ) {
+            $path  = $dir . '/' . $s['file'];
+            $bytes = file_exists( $path ) ? (int) filesize( $path ) : 0;
+        }
+        if ( ! $bytes || $bytes > TIAGSSPACE_SHARE_IMAGE_MAX_BYTES ) {
+            continue;
+        }
         $src = wp_get_attachment_image_src( $attachment_id, $size );
         if ( ! $src || empty( $src[3] ) ) {
             continue; // $src[3] is false when WordPress fell back to the full-size original
         }
-        $meta = wp_get_attachment_metadata( $attachment_id );
         return array(
             'url'    => $src[0],
             'width'  => (int) $src[1],
             'height' => (int) $src[2],
-            'type'   => isset( $meta['sizes'][ $size ]['mime-type'] ) ? $meta['sizes'][ $size ]['mime-type'] : get_post_mime_type( $attachment_id ),
+            'type'   => isset( $s['mime-type'] ) ? $s['mime-type'] : get_post_mime_type( $attachment_id ),
             'size'   => $size,
             'id'     => (int) $attachment_id,
             'alt'    => (string) get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
