@@ -3,12 +3,12 @@
 Header >> Left title (conditional per page type)
 Outputs the breadcrumb-style site title with #over-text span for JS hover label.
 It is the page's <h1> on the front page and on archives (where "Tiags' Space / Log" IS the page
-heading); on singular views and search it is a <p class="site-title"> so the work's own title
+heading); on singular views, search and 404 it is a <p class="site-title"> so the work's own title
 (entry-body.php) or the search heading stays the single <h1>. Each condition overrides the
 previous — last match wins.
 */
 
-$site_title_is_h1 = ! is_singular() && ! is_search();
+$site_title_is_h1 = ! is_singular() && ! is_search() && ! is_404();
 $t_open  = $site_title_is_h1 ? '<h1 class="site-title">' : '<p class="site-title">';
 $t_close = $site_title_is_h1 ? '</h1>' : '</p>';
 

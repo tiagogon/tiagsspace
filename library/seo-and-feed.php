@@ -232,7 +232,7 @@ add_filter( 'wp_generate_attachment_metadata', 'tiagsspace_cap_share_image_bytes
  * the other sizes, then apply the byte cap. Used by the WP-CLI command below
  * for the existing library; new uploads go through the normal metadata path.
  *
- * @return string 'ok' | 'skipped' | 'missing-file' | 'error'
+ * @return string 'ok' | 'skipped' | 'small' | 'missing-file' | 'error'
  */
 function tiagsspace_generate_share_image( $attachment_id, $force = false ) {
     if ( ! wp_attachment_is_image( $attachment_id ) ) {
@@ -253,6 +253,10 @@ function tiagsspace_generate_share_image( $attachment_id, $force = false ) {
     $editor = wp_get_image_editor( $file );
     if ( is_wp_error( $editor ) ) {
         return 'error';
+    }
+    $dims = $editor->get_size();
+    if ( ! empty( $dims['width'] ) && $dims['width'] <= 1200 && $dims['height'] <= 1200 ) {
+        return 'small'; // WordPress never upscales: no share size for originals inside the 1200 box (medium/full is used instead)
     }
     $resized = $editor->resize( 1200, 1200, false );
     if ( is_wp_error( $resized ) ) {
@@ -300,7 +304,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
         foreach ( $ids as $i => $id ) {
             $result = tiagsspace_generate_share_image( $id, $force );
             $tally[ $result ] = isset( $tally[ $result ] ) ? $tally[ $result ] + 1 : 1;
-            if ( $result !== 'ok' && $result !== 'skipped' ) {
+            if ( ! in_array( $result, array( 'ok', 'skipped', 'small' ), true ) ) {
                 WP_CLI::warning( "$id: $result" );
             }
             if ( ( $i + 1 ) % 200 === 0 ) {
@@ -396,17 +400,38 @@ function tiagsspace_share_image_array( $attachment_id ) {
     return null;
 }
 
+/** URL of the image this theme chose for the current request ('' when none). */
+function tiagsspace_chosen_share_image_url( $set = null ) {
+    static $url = '';
+    if ( $set !== null ) {
+        $url = (string) $set;
+    }
+    return $url;
+}
+
 function tiagsspace_add_opengraph_image( $container ) {
     $id = tiagsspace_share_image_id();
     if ( $id && is_object( $container ) && method_exists( $container, 'add_image' ) ) {
         $image = tiagsspace_share_image_array( $id );
         if ( $image ) {
             $container->add_image( $image );
+            tiagsspace_chosen_share_image_url( $image['url'] );
         }
     }
     return $container;
 }
 add_filter( 'wpseo_add_opengraph_images', 'tiagsspace_add_opengraph_image' );
+
+// Yoast still appends the image cached in its indexable after ours (add_from_indexable
+// has no has_images() guard), and that cache can be stale. When we chose an image,
+// drop every other og:image so previews never pick a second, wrong one.
+add_filter( 'wpseo_opengraph_image', function ( $url ) {
+    $chosen = tiagsspace_chosen_share_image_url();
+    if ( $chosen && $url !== $chosen ) {
+        return '';
+    }
+    return $url;
+}, 20 );
 
 
 // ----- Per-set language -----
