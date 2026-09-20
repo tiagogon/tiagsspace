@@ -24,9 +24,26 @@
     }
   }
 
+  // Reveal/Hide word: follow the MENU only. The toggle collapses three targets at
+  // once (menu, top title, lower date); Bootstrap rewrites the trigger's
+  // aria-expanded after each one, and the last processed is a title being hidden,
+  // so the word ended up inverted. shown/hidden fire after the whole toggle.
+  function bindMenuWord(){
+    if (!window.jQuery) { return; }
+    var $menu = jQuery('#collapseMenu');
+    var $trigger = jQuery('#topbar a[href="#collapseMenu"]');
+    if (!$menu.length || !$trigger.length) { return; }
+    $menu.on('shown.bs.collapse hidden.bs.collapse', function(e){
+      if (e.target !== this) { return; } // ignore nested collapses (Log branches) bubbling up
+      $trigger.attr('aria-expanded', e.type === 'shown' ? 'true' : 'false');
+    });
+  }
+
+  function init(){ autoOpenCollapses(); bindMenuWord(); }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', autoOpenCollapses);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    autoOpenCollapses();
+    init();
   }
 })();
