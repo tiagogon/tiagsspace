@@ -136,6 +136,9 @@
   }
   #topbar {
     @include header-side-offset(right);
+    // Same line box as .site-title (line-height 1.2), so "Reveal" shares the
+    // title's baseline; with the body's 1.5 it sat ~6px lower (visible on phones).
+    line-height: 1.2;
   }
   #topbar,
   .slicknav_nav {
@@ -149,7 +152,7 @@
       color: $white;
       font-size: $font-size-nav;
       margin-left: 13px;
-      line-height: 1.3;
+      line-height: inherit; // 1.2 from #topbar — keeps the baseline level with the title
       .long { display: none; }
       .short { display: inline; }
       &:hover {
