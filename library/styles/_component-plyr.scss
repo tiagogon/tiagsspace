@@ -306,65 +306,47 @@ video.plyr-thumbnail-front {
 // --------------------------------------------------
 // Caption styling — responsive sizing
 // --------------------------------------------------
-.plyr__captions {
+// One set of sizes for inline AND fullscreen. Plyr's own stylesheet bumps
+// `.plyr:fullscreen .plyr__captions` / `.plyr--fullscreen-fallback .plyr__captions`
+// to 21px at >=1024px with a more specific selector, so the same rules are
+// re-applied under those selectors to keep captions identical in fullscreen.
+@mixin tiagsspace-caption-sizes {
     font-size: 16px; // xs: mobile base
     //font-weight: 600;
     line-height: 1.4;
     bottom: 0;
-    
+
     // sm: Small devices (landscape phones, 576px and up)
     @include media-breakpoint-up(sm) {
         font-size: 20px;
         bottom: 10px;
     }
-    
+
     // md: Medium devices (tablets, 768px and up)
     @include media-breakpoint-up(md) {
         font-size: 26px;
         bottom: 24px;
     }
-    
+
     // lg: Large devices (desktops, 992px and up)
     @include media-breakpoint-up(lg) {
         font-size: 32px;
         bottom: 36px;
     }
-    
+
     // xl: Extra large devices (large desktops, 1200px and up)
     @include media-breakpoint-up(xl) {
         font-size: 46px;
-        bottom: 40px; 
+        bottom: 40px;
     }
 }
 
-// Override fullscreen caption sizes as well
+.plyr__captions,
 .plyr:fullscreen .plyr__captions,
 .plyr--fullscreen-fallback .plyr__captions {
-    // sm: Small devices (landscape phones, 576px and up)
-    @include media-breakpoint-up(sm) {
-        font-size: 20px;
-        bottom: 10px;
-    }
-    
-    // md: Medium devices (tablets, 768px and up)
-    @include media-breakpoint-up(md) {
-        font-size: 26px;
-        bottom: 20px;
-    }
-    
-    // lg: Large devices (desktops, 992px and up)
-    @include media-breakpoint-up(lg) {
-        font-size: 36px;
-        bottom: 30px;
-    }
-    
-    // xl: Extra large devices (large desktops, 1200px and up)
-    @include media-breakpoint-up(xl) {
-        font-size: 38px;
-        bottom: 46px;
-    }
-
+    @include tiagsspace-caption-sizes;
 }
+
 .plyr__caption {
     background: #00000045;
     border-radius: 0px;

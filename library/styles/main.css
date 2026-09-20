@@ -5811,47 +5811,36 @@ video.plyr-thumbnail-front {
 .thumbnail.media-audio .plyr--audio .plyr__controls .plyr__time {
   display: none; }
 
-.plyr__captions {
+.plyr__captions,
+.plyr:fullscreen .plyr__captions,
+.plyr--fullscreen-fallback .plyr__captions {
   font-size: 16px;
   line-height: 1.4;
   bottom: 0; }
   @media (min-width: 576px) {
-    .plyr__captions {
+    .plyr__captions,
+    .plyr:fullscreen .plyr__captions,
+    .plyr--fullscreen-fallback .plyr__captions {
       font-size: 20px;
       bottom: 10px; } }
   @media (min-width: 768px) {
-    .plyr__captions {
+    .plyr__captions,
+    .plyr:fullscreen .plyr__captions,
+    .plyr--fullscreen-fallback .plyr__captions {
       font-size: 26px;
       bottom: 24px; } }
   @media (min-width: 992px) {
-    .plyr__captions {
+    .plyr__captions,
+    .plyr:fullscreen .plyr__captions,
+    .plyr--fullscreen-fallback .plyr__captions {
       font-size: 32px;
       bottom: 36px; } }
   @media (min-width: 1200px) {
-    .plyr__captions {
+    .plyr__captions,
+    .plyr:fullscreen .plyr__captions,
+    .plyr--fullscreen-fallback .plyr__captions {
       font-size: 46px;
       bottom: 40px; } }
-
-@media (min-width: 576px) {
-  .plyr:fullscreen .plyr__captions,
-  .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 20px;
-    bottom: 10px; } }
-@media (min-width: 768px) {
-  .plyr:fullscreen .plyr__captions,
-  .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 26px;
-    bottom: 20px; } }
-@media (min-width: 992px) {
-  .plyr:fullscreen .plyr__captions,
-  .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 36px;
-    bottom: 30px; } }
-@media (min-width: 1200px) {
-  .plyr:fullscreen .plyr__captions,
-  .plyr--fullscreen-fallback .plyr__captions {
-    font-size: 38px;
-    bottom: 46px; } }
 
 .plyr__caption {
   background: #00000045;
