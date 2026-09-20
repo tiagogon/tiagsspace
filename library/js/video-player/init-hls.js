@@ -125,6 +125,60 @@
         }
     }
 
+    /**
+     * Keep hls.js's selected subtitle rendition equal to Plyr's caption choice.
+     *
+     * Plyr and hls.js disagree about what text-track modes mean. Plyr never
+     * writes "showing": it sets the track it renders to "hidden" and paints
+     * the cues itself. hls.js listens to textTracks "change", re-derives its
+     * selection from the modes (first "showing" wins, else the LAST "hidden"),
+     * then writes modes back: its pick becomes "showing"/"hidden" and every
+     * other track "disabled". Left to guess, it can pick a different rendition
+     * than Plyr did — the browser then paints one language natively while
+     * Plyr's overlay freezes on a track that no longer receives cues. Telling
+     * hls.js explicitly which rendition Plyr wants makes its mode writes agree
+     * with Plyr's, and the feedback loop settles at once.
+     */
+    function bindSubtitleSync(player, hls, debug) {
+        function findRendition(node) {
+            var tracks = hls.subtitleTracks || [];
+            var lang = (node.language || '').toLowerCase();
+            var label = node.label || '';
+            var byLang = [];
+            for (var i = 0; i < tracks.length; i++) {
+                if ((tracks[i].lang || '').toLowerCase() === lang) byLang.push(i);
+            }
+            if (byLang.length > 1) {
+                for (var j = 0; j < byLang.length; j++) {
+                    if ((tracks[byLang[j]].name || '') === label) return byLang[j];
+                }
+            }
+            return byLang.length ? byLang[0] : -1;
+        }
+
+        function sync() {
+            if (!hls.subtitleTracks || !hls.subtitleTracks.length) return;
+            var captions = player.captions || {};
+            var on = captions.active && captions.toggled !== false;
+            var node = on ? captions.currentTrackNode : null;
+            var wanted = node ? findRendition(node) : -1;
+            if (node && wanted === -1) {
+                if (debug) log('subtitle sync: no hls.js rendition for', node.language, node.label);
+                return;
+            }
+            if (hls.subtitleTrack !== wanted) {
+                hls.subtitleTrack = wanted;
+                if (debug) log('subtitle sync →', node ? node.language : 'off', 'hls.js track', wanted);
+            }
+        }
+
+        player.on('languagechange', sync);
+        player.on('captionsenabled', sync);
+        player.on('captionsdisabled', sync);
+        hls.on(Hls.Events.SUBTITLE_TRACKS_UPDATED, sync);
+        sync();
+    }
+
     function initHlsJs(video, src, debug) {
         if (debug) log('engine: hls.js', src);
 
@@ -134,6 +188,14 @@
             capLevelToPlayerSize: true, // don't fetch levels larger than the display
             startLevel: -1              // let ABR pick the start level
         });
+
+        // Plyr paints cues in its own overlay; hls.js must only feed them.
+        // This is an instance property, not a constructor option. Left at its
+        // default (true), hls.js sets its selected subtitle track to mode
+        // "showing" and the browser's native cue renderer paints it as well —
+        // invisible in WebKit/Blink (Plyr hides ::-webkit-media-text-track-
+        // container) but drawn on top of Plyr's overlay in Firefox.
+        hls.subtitleDisplay = false;
 
         hls.loadSource(src);
 
@@ -148,6 +210,8 @@
 
             player.hls = hls;
             video.plyr = player;
+
+            bindSubtitleSync(player, hls, debug);
 
             // ABR's switches are invisible in the UI by design — this log is the
             // only way to see them.
