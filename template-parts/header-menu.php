@@ -12,14 +12,14 @@ $menu_groups_class = "col-sm-24 col-md-16 col-xl-9 menu-group";
 <div id="collapseMenu" class="collapse container-fluid index-block multi-collapse">
 	<div class="row d-flex justify-content-start">
 
-		<?php // ----- Site name ----- ?>
+		<!-- <?php // ----- Site name ----- ?>
 		<div class="<?php echo $menu_groups_class; ?>">
 			<ul>
 				<li>
 					<a href="<?php echo home_url(); ?>">Tiags' Space</a>
 				</li>
 			</ul>
-		</div>
+		</div> -->
 
 		<?php // ----- Main pages ----- ?>
 		<div class="<?php echo $menu_groups_class; ?>">
