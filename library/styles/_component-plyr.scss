@@ -360,5 +360,5 @@ video.plyr-thumbnail-front {
 // same wrapper; plyr.css already reads it on .plyr__caption.
 .embed-container.captions-contrast--shadow .plyr__caption {
     background: transparent;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, .85), 0 0 8px rgba(0, 0, 0, .55);
+    text-shadow: 0 1px 2px rgba(0,0,0,.55),0 0 8px rgba(0,0,0,.55);
 }
