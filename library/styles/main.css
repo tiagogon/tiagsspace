@@ -5385,8 +5385,7 @@ html {
 body {
   font-size: 38px;
   line-height: 1.5;
-  min-height: 100vh;
-  isolation: isolate; }
+  min-height: 100vh; }
   body a:hover {
     text-decoration: underline; }
   @media (prefers-color-scheme: dark) {

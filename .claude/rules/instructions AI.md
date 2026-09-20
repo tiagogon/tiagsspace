@@ -91,6 +91,8 @@ The header in header.php has conditional logic for displaying the site name:
 
 When adding new post types or taxonomies, remember to add corresponding header title conditions in header.php and menu entries in the collapseMenu section.
 
+**Header text colour** (`#site-header`, `#lower-header`): the fixed bars are transparent with `mix-blend-mode: difference` and a white text base, so the title / Reveal word / lower date read as the inverse of whatever is behind them. They blend against the **root** group; the `<html>` background in `_foundations-tokens.scss` is the base over plain areas. **Never put `isolation: isolate` on `<body>`** (or any ancestor of the bars): it makes the page an off-screen surface that Firefox re-rasterises in pieces after a re-layout (menu collapse, fullscreen exit) and leaves 1px horizontal seams across the viewport. Per-scheme/background colour rules still apply to the menu (`.slicknav_nav`, `#collapseMenu`) only.
+
 ## Deployment
 The theme is deployed via GitHub: push to `main` triggers a webhook (`/hook-tiagsspace`) on the production server (Ubuntu 24.04 / nginx / PHP 8.4), which runs `git pull` in `/var/www/tiagsspace/wp-content/themes/tiagsspace` and flushes W3 Total Cache. The deploy script (`/var/www/webhooks/tiagsspace/deploy.php`) verifies the GitHub HMAC-SHA256 signature and only acts on `refs/heads/main`. See README.md § Deployment for full details. The production server is Linux (case-sensitive filesystem), while local development is macOS (case-insensitive).
 

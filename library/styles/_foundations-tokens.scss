@@ -2,11 +2,16 @@
 // Body defaults
 // --------------------------------------------------
 
-// <html> must carry its own background: without one, CSS propagates the
-// <body> background up to the root canvas — i.e. *outside* body's isolated
-// group — so the fixed headers' mix-blend-mode would see nothing behind them
-// over plain areas and stay white. Body covers 100vh, so this only ever peeks
-// out on over-scroll; keep it scheme-matched.
+// <html> must carry its own background: the fixed headers' mix-blend-mode
+// blends against the root group, and this background is what makes that group
+// opaque over plain areas (otherwise the white text would stay white there).
+// Body covers 100vh, so it only ever peeks out on over-scroll; keep it
+// scheme-matched.
+//
+// Do NOT add `isolation: isolate` to <body>: it turns the page into a separate
+// off-screen surface, which Firefox (WebRender) re-rasterises in pieces after a
+// re-layout (menu collapse, fullscreen exit) and leaves 1px horizontal seams
+// across the viewport. Blending against the root needs no isolation.
 html {
   background: $white;
   @media (prefers-color-scheme: dark) {
@@ -18,8 +23,6 @@ body {
   font-size: $font-size;
   line-height: 1.5;
   min-height: 100vh;
-  isolation: isolate; // establishes a stacking context so the fixed headers'
-                      // mix-blend-mode inverts against page content (not themselves)
   a:hover {
     text-decoration: underline; // hover = underline only, never a colour change
   }

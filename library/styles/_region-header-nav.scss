@@ -70,8 +70,9 @@
   font-family: $font-family-menu;
   // Negative/invert effect: the whole (transparent) fixed bar blends against
   // the content behind it, so its white text reads as the photo's inverse —
-  // white over dark, black over light. Needs `isolation: isolate` on <body>
-  // (see _foundations-tokens.scss) so it blends against the page, not itself.
+  // white over dark, black over light. It blends against the root group; the
+  // <html> background in _foundations-tokens.scss is the base over plain areas.
+  // No `isolation` anywhere on the page: on <body> it causes 1px seams in Firefox.
   mix-blend-mode: difference;
 
   .slicknav_menutxt {
