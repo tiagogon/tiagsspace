@@ -5417,6 +5417,8 @@ html {
 body {
   font-size: 38px;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh; }
   body a:hover {
     text-decoration: underline; }

@@ -22,6 +22,12 @@ html {
 body {
   font-size: $font-size;
   line-height: 1.5;
+  // Match the reference rendering (fontsource.org): grayscale antialiasing on
+  // macOS, so strokes read as designed instead of the heavier subpixel default.
+  // No effect on other platforms. Do NOT add font-feature-settings: kern/liga/calt
+  // are already the browser defaults and Lora needs nothing forced.
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   a:hover {
     text-decoration: underline; // hover = underline only, never a colour change
