@@ -17,7 +17,7 @@
  *  3. Gallery                    — gallery layout, ordering, animation, columns
  *  4. Index thumbnail options    — video/animated thumbnails, column size
  *  5. Taxonomy Options           — is_archived flag for log-branch
- *  6. Video Player Options       — embed URL, self-host, player config (films/hyper)
+ *  6. Video Player Options       — self-host file, player config, caption colour/contrast (films/hyper)
  * 6b. Caption tracks            — WebVTT subtitles, on the .m3u8 attachment
  *  7. Video player per attachment — per-video player overrides
  *  8. Video player(s) per post   — per-post video player overrides
@@ -577,6 +577,54 @@ add_action( 'acf/include_fields', function() {
 				),
 				'default_value' => array( 'autopause', 'dnt', 'controls', 'keyboard', 'playsinline' ),
 				'layout' => 'vertical',
+			),
+
+			// --- Caption styling (read by template-parts/entry-video-player.php) ---
+			// Applied to the Plyr overlay only: iPhone hands playback to Apple's
+			// native player, which draws captions in the viewer's system style.
+			array(
+				'key' => 'field_68ce3b1a7d201',
+				'label' => 'Caption colour',
+				'name' => 'caption_color',
+				'type' => 'select',
+				'instructions' => 'Text colour of the captions. "Custom" reveals a colour picker.',
+				'choices' => array(
+					'white' => 'White',
+					'yellow' => 'Yellow',
+					'custom' => 'Custom…',
+				),
+				'default_value' => 'white',
+				'return_format' => 'value',
+				'allow_null' => 0,
+				'multiple' => 0,
+				'ui' => 0,
+			),
+			array(
+				'key' => 'field_68ce3b1a7d203',
+				'label' => 'Custom caption colour',
+				'name' => 'caption_color_custom',
+				'type' => 'color_picker',
+				'default_value' => '#ffe100',
+				'return_format' => 'string',
+				'enable_opacity' => 0,
+				'conditional_logic' => array( array( array(
+					'field' => 'field_68ce3b1a7d201', 'operator' => '==', 'value' => 'custom' ) ) ),
+			),
+			array(
+				'key' => 'field_68ce3b1a7d202',
+				'label' => 'Caption contrast',
+				'name' => 'caption_contrast',
+				'type' => 'select',
+				'instructions' => "Box: today's look, a translucent grey box behind each line. Shadow: no box, a soft dark shadow behind the text. iPhone uses Apple's player and its own system caption style.",
+				'choices' => array(
+					'box' => 'Translucent grey box',
+					'shadow' => 'Soft text shadow, no box',
+				),
+				'default_value' => 'box',
+				'return_format' => 'value',
+				'allow_null' => 0,
+				'multiple' => 0,
+				'ui' => 0,
 			),
 		),
 		'location' => array(
