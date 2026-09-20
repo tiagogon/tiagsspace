@@ -17,7 +17,8 @@
   .row {
     padding-top: 60px;
     height: 102vh;
-    overflow: scroll;
+    overflow-y: auto;   // was `scroll`: no permanent scrollbar gutters where scrollbars take space
+    overflow-x: hidden;
     .menu-group {
       padding-bottom: $grid-gutter-width*2;
       ul {
@@ -61,19 +62,62 @@
 // Site header (fixed top bar)
 // --------------------------------------------------
 
+// Horizontal offset of the fixed text blocks: the same values as `.side-padding`
+// (_region-archive-grid.scss), so the text sits exactly where the padded bar put it.
+@mixin header-side-offset($side) {
+  #{$side}: $grid-gutter-width-mobile;
+  @media (min-width: map-get($grid-breakpoints, lg)) {
+    #{$side}: $grid-gutter-width;
+  }
+}
+
+// Negative/invert effect: the title block and the Reveal/Hide word are
+// transparent, position: fixed and `mix-blend-mode: difference` with white text,
+// so they read as the inverse of whatever is behind them — white over dark, black
+// over light. Only those two small boxes blend (the GPU reads back and blends
+// exactly their area every frame), not a full-width bar. They blend against the
+// root group; the <html> background in _foundations-tokens.scss is the base over
+// plain areas. No `isolation` anywhere on the page: on <body> it causes 1px seams
+// in Firefox.
+//
+// #site-header itself is a zero-height, non-painting container. It must NEVER get
+// position: fixed, a z-index, opacity, transform or filter: any of those makes it
+// a stacking context, and the children would then blend against the (empty)
+// header instead of the page.
 #site-header {
-  padding-top: $grid-gutter-width;
-  padding-bottom: $grid-gutter-width;
-  position: fixed;
-  z-index: 1000;
-  top: 0px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  pointer-events: none;
   font-family: $font-family-menu;
-  // Negative/invert effect: the whole (transparent) fixed bar blends against
-  // the content behind it, so its white text reads as the photo's inverse —
-  // white over dark, black over light. It blends against the root group; the
-  // <html> background in _foundations-tokens.scss is the base over plain areas.
-  // No `isolation` anywhere on the page: on <body> it causes 1px seams in Firefox.
-  mix-blend-mode: difference;
+
+  .row {
+    margin: 0; // the row is empty; its negative gutters would overflow the viewport
+  }
+
+  .topbar-left,
+  #topbar {
+    position: fixed;
+    top: $grid-gutter-width;
+    z-index: 1000; // above #collapseMenu (999), as the bar was
+    width: auto;
+    max-width: none;
+    flex: none;
+    padding: 0;
+    margin: 0;
+    pointer-events: auto;
+    mix-blend-mode: difference;
+  }
+  // Bootstrap's `.collapsing { position: relative }` would pull the title block
+  // into flow while the menu toggles it; keep it fixed throughout.
+  .topbar-left.collapsing {
+    position: fixed;
+  }
 
   .slicknav_menutxt {
     display: none;
@@ -82,16 +126,19 @@
     display: block!important;
   }
   .topbar-left  {
-    float: left;
+    @include header-side-offset(left);
+    max-width: 66vw; // the old col-32 width, so long hover labels wrap the same way
     h1, .site-title, a {
       font-size: $font-size-nav;
       font-family: $font-family-menu;
-      color: $white; // blend base — inverted by the header's mix-blend-mode
+      color: $white; // blend base — inverted by the block's mix-blend-mode
     }
+  }
+  #topbar {
+    @include header-side-offset(right);
   }
   #topbar,
   .slicknav_nav {
-    float: right;
     text-align: right;
     a {
       text-align: right;
@@ -108,29 +155,10 @@
       &:hover {
         .short { display: none; }
         .long { display: inline; }
-        &::before,
-        &::after {
-          opacity: 1;
-          -webkit-transform: translateX(0px);
-          -moz-transform: translateX(0px);
-          transform: translateX(0px);
-        }
-      }
-      &:focus {
-        &::before,
-        &::after {
-          opacity: 1;
-          -webkit-transform: translateX(0px);
-          -moz-transform: translateX(0px);
-          transform: translateX(0px);
-        }
       }
     }
   }
 
-  @media (max-width: map-get($grid-breakpoints, sm)) {
-    padding-bottom: 20px;
-  }
   .header-other-pages-title {
     display: none!important;
   }
@@ -150,46 +178,31 @@
   line-height: 1.2;
 }
 
+// Same invert effect as the top text blocks. Only one text (the hover date) at the
+// left, so the bar itself is shrink-wrapped to it instead of spanning the viewport:
+// the blended area is the date's box, nothing more.
 #lower-header {
   padding-top: $grid-gutter-width;
   padding-bottom: $grid-gutter-width;
   position: fixed;
   z-index: 1000;
   bottom: 0px;
+  left: 0;
+  width: auto;
+  max-width: none;
+  flex: none;
   font-family: $font-family-menu;
-  mix-blend-mode: difference; // same negative/invert effect as #site-header
+  mix-blend-mode: difference;
   .row {
     .left-side {
-      float: left;
+      width: auto;
+      max-width: none;
+      flex: none;
       h1, .site-title, a {
         font-size: $font-size-nav;
         font-family: $font-family-menu;
-        color: $white; // blend base — inverted by the header's mix-blend-mode
+        color: $white; // blend base — inverted by the bar's mix-blend-mode
       }
-    }
-    .right-side {
-      float: right;
-      text-align: right;
-      h1, .site-title, a {
-        font-size: $font-size-nav;
-        font-family: $font-family-menu;
-        color: $white; // blend base — inverted by the header's mix-blend-mode
-      }
-    }
-  }
-}
-
-// --------------------------------------------------
-// Mobile: transparent header background
-// --------------------------------------------------
-
-@media (max-width: map-get($grid-breakpoints, md)) {
-  #site-header {
-    background-color: transparent;
-  }
-  .home {
-    #site-header {
-      background: transparent;
     }
   }
 }
@@ -225,24 +238,6 @@
       .slicknav_nav {
             a, h1, .site-title {
               color: $dark;
-              &:hover {
-                &::before,
-                &::after {
-                  opacity: 1;
-                  -webkit-transform: translateX(0px);
-                  -moz-transform: translateX(0px);
-                  transform: translateX(0px);
-                }
-              }
-              &:focus {
-                &::before,
-                &::after {
-                  opacity: 1;
-                  -webkit-transform: translateX(0px);
-                  -moz-transform: translateX(0px);
-                  transform: translateX(0px);
-                }
-              }
             }
       }
   }

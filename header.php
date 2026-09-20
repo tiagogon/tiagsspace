@@ -19,7 +19,7 @@
 
 		<?php if (function_exists('wp_body_open')) { wp_body_open(); } ?>
 
-		<header id="site-header" class="header-front-page container-fluid side-padding Fixed" role="banner">
+		<header id="site-header" class="header-front-page container-fluid" role="banner">
 
 			<div class="row">
 

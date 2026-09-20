@@ -388,7 +388,9 @@ Index of posts for Home and Archives
 
                       ?>
 
-                      <figure onMouseOver="showText('<?php echo $post_title; ?>'); showYear('<?php echo get_the_date('Y-m'); ?>')" onMouseOut="hide(); hideYear();">
+                      <?php // mouseenter/mouseleave, not mouseover/mouseout: those bubble from every child
+                            // (link, container, img/video) and re-wrote the fixed header blocks on each crossing. ?>
+                      <figure onmouseenter="showText('<?php echo $post_title; ?>'); showYear('<?php echo get_the_date('Y-m'); ?>')" onmouseleave="hide(); hideYear();">
 
                           <a href="<?php echo get_permalink(); ?>">
 
@@ -588,42 +590,10 @@ Index of posts for Home and Archives
         </script>
     <?php
 
-    // Play videos just on the view port and fix of iOS
-    // VIA: https://stackoverflow.com/questions/15395920/play-html5-video-when-scrolled-to
-    if (is_post_type_archive( "films" )
-       // Acitvate it for Log series with video autoplay -- NEEDS TO BE TESTED
-       // OR is_post_type_archive( "log" ) OR is_tax( 'log-branch' )
-    ) { ?>
-
-        <script>
-            $(document).ready(function() {
-                // Get media - with autoplay disabled (audio or video)
-                var media = $('video').not("[autoplay='autoplay']");
-                var tolerancePixel = 40;
-
-                function checkMedia(){
-                    // Get current browser top and bottom
-                    var scrollTop = $(window).scrollTop() + tolerancePixel;
-                    var scrollBottom = $(window).scrollTop() + $(window).height() - tolerancePixel;
-
-                    media.each(function(index, el) {
-                        var yTopMedia = $(this).offset().top;
-                        var yBottomMedia = $(this).height() + yTopMedia;
-
-                        if(scrollTop < yBottomMedia && scrollBottom > yTopMedia){ //view explaination in `In brief` section above
-                            $(this).get(0).play();
-                        } else {
-                            $(this).get(0).pause();
-                        }
-                    });
-
-                    //}
-                }
-                $(document).on('scroll', checkMedia);
-            });
-        </script>
-
-    <?php } ?>
+    // Thumbnail videos play in view / pause out of view via the IntersectionObserver in
+    // footer.php (initializePlyrElementsThumnails). No scroll handler here: the old jQuery
+    // one forced a layout per video per scroll event and fought the observer.
+    ?>
 
     <?php if (is_singular() == false ) { ?>
 

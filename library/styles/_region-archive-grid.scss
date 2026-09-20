@@ -178,25 +178,14 @@ li.masonry-item {
         }
 
         video {
-          transform: translateX(0%) translateY(0%);
           background-size: cover;
           max-width: 100%;
           width: 100%;
           // max-height removed: 100% of a height:0 parent = 0, which collapses portrait
           // video posters on resize. overflow:hidden on .imgcontainer clips it instead.
           height: auto;
-          -webkit-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
-          -moz-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
-          -o-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
-          -ms-filter: blur(0px) contrast(1) brightness(1) grayscale(0);
-          filter: url(#blur);
-          filter: blur(0px) contrast(1) brightness(1) grayscale(0);  filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
-          transition: 0.5s filter ease-in-out;
-          -webkit-transition: 0.5s -webkit-filter ease-in-out;
-          -moz-transition: 0.5s -moz-filter ease-in-out;
-          -ms-transition: 0.5s -ms-filter ease-in-out;
-          -o-transition: 0.5s -o-filter ease-in-out;
-          @include transition(filter 0.5s ease-in-out);
+          // No `filter` / `transform` here: an identity filter still forces a filter
+          // pass on every decoded frame of every autoplaying thumbnail, for nothing.
         }
       }
     }
