@@ -5828,19 +5828,19 @@ video.plyr-thumbnail-front {
     .plyr:fullscreen .plyr__captions,
     .plyr--fullscreen-fallback .plyr__captions {
       font-size: 26px;
-      bottom: 40px; } }
+      bottom: 20px; } }
   @media (min-width: 992px) {
     .plyr__captions,
     .plyr:fullscreen .plyr__captions,
     .plyr--fullscreen-fallback .plyr__captions {
       font-size: 32px;
-      bottom: 62px; } }
+      bottom: 34px; } }
   @media (min-width: 1200px) {
     .plyr__captions,
     .plyr:fullscreen .plyr__captions,
     .plyr--fullscreen-fallback .plyr__captions {
-      font-size: 46px;
-      bottom: 68px; } }
+      font-size: 38px;
+      bottom: 43px; } }
   @media (min-width: 1800px) {
     .plyr__captions,
     .plyr:fullscreen .plyr__captions,
