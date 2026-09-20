@@ -68,8 +68,8 @@ This is a custom WordPress theme called "tiagsspace" (Tiags' Space). It uses a c
 
 ### Fonts
 - Font files live in `library/fonts/`
-- Only active font: `sporting-grotesque/` (Regular + Bold)
-- Referenced via relative paths in SCSS: `url('../fonts/sporting-grotesque/...')`
+- Only active font: `lora/` (Lora, SIL OFL; latin-ext subset; 400 + 600, normal + italic, woff2 with woff fallback)
+- Declared in `_foundations-fonts.scss` (`@font-face`, `font-display: swap`) via relative paths: `url('../fonts/lora/...')`
 
 ## Custom Post Types
 The theme uses several custom post types: `hyper`, `4k-lento`, `films`, `dusk`, `cityburns`, and `log`.
