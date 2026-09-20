@@ -5840,7 +5840,12 @@ video.plyr-thumbnail-front {
     .plyr:fullscreen .plyr__captions,
     .plyr--fullscreen-fallback .plyr__captions {
       font-size: 46px;
-      bottom: 40px; } }
+      bottom: 42px; } }
+  @media (min-width: 1800px) {
+    .plyr__captions,
+    .plyr:fullscreen .plyr__captions,
+    .plyr--fullscreen-fallback .plyr__captions {
+      font-size: 54px; } }
 
 .plyr__caption {
   background: #00000045;

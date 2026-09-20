@@ -337,7 +337,13 @@ video.plyr-thumbnail-front {
     // xl: Extra large devices (large desktops, 1200px and up)
     @include media-breakpoint-up(xl) {
         font-size: 46px;
-        bottom: 40px;
+        bottom: 42px;
+    }
+
+    // Very large screens (1800px and up) — no Bootstrap breakpoint for this,
+    // so it's a plain media query rather than media-breakpoint-up().
+    @media (min-width: 1800px) {
+        font-size: 54px;
     }
 }
 
