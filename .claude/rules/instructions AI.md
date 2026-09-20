@@ -68,8 +68,9 @@ This is a custom WordPress theme called "tiagsspace" (Tiags' Space). It uses a c
 
 ### Fonts
 - Font files live in `library/fonts/`
-- Only active font: `lora/` (Lora, SIL OFL; latin-ext subset; 400 + 600, normal + italic, woff2 with woff fallback)
-- Declared in `_foundations-fonts.scss` (`@font-face`, `font-display: swap`) via relative paths: `url('../fonts/lora/...')`
+- Only active font: `lora/` (Lora, SIL OFL, files from `@fontsource/lora` 5.3.0, **woff2 only**; 400 + 600, normal + italic)
+- **Every face ships as two subsets with `unicode-range`**: `lora-latin-*` (A–Z, digits, Latin‑1 accents — every page) and `lora-latin-ext-*` (U+0100 and up — fetched on demand). The ext subset alone has **no basic letters**: shipping it without the latin file, or without the ranges, makes the whole site silently render in Times. Declared by a loop in `_foundations-fonts.scss` (`@font-face`, `font-display: swap`) via relative paths `url('../fonts/lora/...')`.
+- `functions.php` preloads `lora-latin-400-normal.woff2` on `wp_head` (priority 1) so the first paint is Lora, not the fallback serif.
 
 ## Custom Post Types
 The theme uses several custom post types: `hyper`, `4k-lento`, `films`, `dusk`, `cityburns`, and `log`.

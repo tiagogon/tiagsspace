@@ -121,6 +121,13 @@ add_action('after_setup_theme', function(){
 });
 add_action('wp_enqueue_scripts', 'tiagsspace_enqueue_assets');
 
+// Preload the one font face every page paints above the fold (Lora 400 normal, latin
+// subset) so it is fetched before the stylesheet is parsed; with font-display: swap this
+// removes the fallback-serif flash on first visits. Other faces/subsets load on demand.
+add_action('wp_head', function () {
+    echo '<link rel="preload" href="' . esc_url(get_template_directory_uri() . '/library/fonts/lora/lora-latin-400-normal.woff2') . '" as="font" type="font/woff2" crossorigin>' . "\n";
+}, 1);
+
 // Helper: render responsive image with full srcset so browser can pick optimal size
 // Uses <img> with srcset/sizes instead of <picture> for better resolution selection
 function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $fallback_sizes_attr, $img_class = '', $img_alt = '') {
