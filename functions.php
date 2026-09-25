@@ -248,17 +248,26 @@ function lm_dequeue_footer_styles()
 // Re-run the script to change an icon; never hand-edit the PNGs.
 
 /**
+ * URL of one icon file, with ?v=<filemtime> so browsers and Google drop a
+ * cached icon after a regenerate.
+ *
+ * @param string $file   e.g. 'favicon-32x32.png'
+ * @param string $subdir '' for the front end, '/adminarea' for wp-admin.
+ */
+function tiagsspace_favicon_url( $file, $subdir = '' ) {
+   $rel = '/favicon.ico' . $subdir . '/' . $file;
+   $ver = tiagsspace_asset_ver( $rel );
+   return get_template_directory_uri() . $rel . ( $ver ? '?v=' . $ver : '' );
+}
+
+/**
  * Emit the <link>/<meta> tags for one icon set.
  *
  * @param string $subdir '' for the front end, '/adminarea' for wp-admin.
  */
 function tiagsspace_favicon_links( $subdir = '' ) {
-   $rel  = '/favicon.ico' . $subdir;
-   $base = get_template_directory_uri() . $rel;
-   // ?v=<filemtime> so browsers and Google drop a cached icon after a regenerate.
-   $url  = function ( $file ) use ( $rel, $base ) {
-      $ver = tiagsspace_asset_ver( $rel . '/' . $file );
-      return $base . '/' . $file . ( $ver ? '?v=' . $ver : '' );
+   $url = function ( $file ) use ( $subdir ) {
+      return tiagsspace_favicon_url( $file, $subdir );
    };
 
    $tags = array();
@@ -288,6 +297,32 @@ function add_my_favicon_admin() {
 }
 add_action( 'wp_head', 'add_my_favicon' ); //front end
 add_action( 'admin_head', 'add_my_favicon_admin' ); //admin end
+
+/**
+ * Root-path icon requests. Firefox iOS (and other clients) fetch /favicon.ico
+ * and /apple-touch-icon.png at the domain root instead of reading the <link>
+ * tags. With no Site Icon set in the Customizer, WordPress core answers
+ * /favicon.ico with a redirect to its own W logo (do_favicon()), so Firefox
+ * cached the WordPress logo. Point both at the theme's 💿 set instead.
+ */
+function tiagsspace_site_icon_fallback( $url, $size ) {
+   // Not has_site_icon(): that calls get_site_icon_url() and would recurse into this filter.
+   if ( (int) get_option( 'site_icon' ) > 0 ) {
+      return $url;
+   }
+   return tiagsspace_favicon_url( $size <= 48 ? 'favicon.ico' : 'android-icon-192x192.png' );
+}
+add_filter( 'get_site_icon_url', 'tiagsspace_site_icon_fallback', 10, 2 );
+
+function tiagsspace_root_touch_icon_redirect() {
+   $path = wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH );
+   $home = rtrim( (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH ), '/' );
+   if ( in_array( $path, array( $home . '/apple-touch-icon.png', $home . '/apple-touch-icon-precomposed.png' ), true ) ) {
+      wp_redirect( tiagsspace_favicon_url( 'apple-icon-180x180.png' ), 301 );
+      exit;
+   }
+}
+add_action( 'init', 'tiagsspace_root_touch_icon_redirect' );
 
 
 
