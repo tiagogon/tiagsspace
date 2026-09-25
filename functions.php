@@ -243,47 +243,48 @@ function lm_dequeue_footer_styles()
 
 
 /************* Favicon *************/
+// Both icon sets are generated from an Apple emoji by bin/favicon-from-emoji.js
+// (💿 for the site in favicon.ico/, 🕳️ for wp-admin in favicon.ico/adminarea/).
+// Re-run the script to change an icon; never hand-edit the PNGs.
+
+/**
+ * Emit the <link>/<meta> tags for one icon set.
+ *
+ * @param string $subdir '' for the front end, '/adminarea' for wp-admin.
+ */
+function tiagsspace_favicon_links( $subdir = '' ) {
+   $rel  = '/favicon.ico' . $subdir;
+   $base = get_template_directory_uri() . $rel;
+   // ?v=<filemtime> so browsers and Google drop a cached icon after a regenerate.
+   $url  = function ( $file ) use ( $rel, $base ) {
+      $ver = tiagsspace_asset_ver( $rel . '/' . $file );
+      return $base . '/' . $file . ( $ver ? '?v=' . $ver : '' );
+   };
+
+   $tags = array();
+   foreach ( array( 57, 60, 72, 76, 114, 120, 144, 152, 180 ) as $s ) {
+      $tags[] = '<link rel="apple-touch-icon" sizes="' . $s . 'x' . $s . '" href="' . $url( "apple-icon-{$s}x{$s}.png" ) . '">';
+   }
+   $tags[] = '<link rel="icon" type="image/png" sizes="192x192" href="' . $url( 'android-icon-192x192.png' ) . '">';
+   $tags[] = '<link rel="icon" type="image/png" sizes="96x96" href="' . $url( 'favicon-96x96.png' ) . '">';
+   // 48px is the multiple Google's favicon crawler asks for.
+   $tags[] = '<link rel="icon" type="image/png" sizes="48x48" href="' . $url( 'android-icon-48x48.png' ) . '">';
+   $tags[] = '<link rel="icon" type="image/png" sizes="32x32" href="' . $url( 'favicon-32x32.png' ) . '">';
+   $tags[] = '<link rel="icon" type="image/png" sizes="16x16" href="' . $url( 'favicon-16x16.png' ) . '">';
+   $tags[] = '<link rel="icon" href="' . $url( 'favicon.ico' ) . '" sizes="any">';
+   $tags[] = '<link rel="manifest" href="' . $url( 'manifest.json' ) . '">';
+   $tags[] = '<meta name="msapplication-TileImage" content="' . $url( 'ms-icon-144x144.png' ) . '">';
+
+   echo "\t" . implode( "\n\t", $tags ) . "\n";
+}
 
 function add_my_favicon() {
-   $favicon_path = get_template_directory_uri() . '/favicon.ico';
-
-   echo '   <link rel="apple-touch-icon" sizes="57x57" href="'.$favicon_path.'/apple-icon-57x57.png">
-            <link rel="apple-touch-icon" sizes="60x60" href="'.$favicon_path.'/apple-icon-60x60.png">
-            <link rel="apple-touch-icon" sizes="72x72" href="'.$favicon_path.'/apple-icon-72x72.png">
-            <link rel="apple-touch-icon" sizes="76x76" href="'.$favicon_path.'/apple-icon-76x76.png">
-            <link rel="apple-touch-icon" sizes="114x114" href="'.$favicon_path.'/apple-icon-114x114.png">
-            <link rel="apple-touch-icon" sizes="120x120" href="'.$favicon_path.'/apple-icon-120x120.png">
-            <link rel="apple-touch-icon" sizes="144x144" href="'.$favicon_path.'/apple-icon-144x144.png">
-            <link rel="apple-touch-icon" sizes="152x152" href="'.$favicon_path.'/apple-icon-152x152.png">
-            <link rel="apple-touch-icon" sizes="180x180" href="'.$favicon_path.'/apple-icon-180x180.png">
-            <link rel="icon" type="image/png" sizes="192x192"  href="'.$favicon_path.'/android-icon-192x192.png">
-            <link rel="icon" type="image/png" sizes="32x32" href="'.$favicon_path.'/favicon-32x32.png">
-            <link rel="icon" type="image/png" sizes="96x96" href="'.$favicon_path.'/favicon-96x96.png">
-            <link rel="icon" type="image/png" sizes="16x16" href="'.$favicon_path.'/favicon-16x16.png">
-            <link rel="manifest" href="'.$favicon_path.'/manifest.json">
-            <meta name="msapplication-TileImage" content="'.$favicon_path.'/ms-icon-144x144.png">';
-
+   tiagsspace_favicon_links();
 }
 function add_my_favicon_admin() {
-   $favicon_path = get_template_directory_uri() . '/favicon.ico/adminarea';
-
-   echo '   <link rel="apple-touch-icon" sizes="57x57" href="'.$favicon_path.'/apple-icon-57x57.png">
-            <link rel="apple-touch-icon" sizes="60x60" href="'.$favicon_path.'/apple-icon-60x60.png">
-            <link rel="apple-touch-icon" sizes="72x72" href="'.$favicon_path.'/apple-icon-72x72.png">
-            <link rel="apple-touch-icon" sizes="76x76" href="'.$favicon_path.'/apple-icon-76x76.png">
-            <link rel="apple-touch-icon" sizes="114x114" href="'.$favicon_path.'/apple-icon-114x114.png">
-            <link rel="apple-touch-icon" sizes="120x120" href="'.$favicon_path.'/apple-icon-120x120.png">
-            <link rel="apple-touch-icon" sizes="144x144" href="'.$favicon_path.'/apple-icon-144x144.png">
-            <link rel="apple-touch-icon" sizes="152x152" href="'.$favicon_path.'/apple-icon-152x152.png">
-            <link rel="apple-touch-icon" sizes="180x180" href="'.$favicon_path.'/apple-icon-180x180.png">
-            <link rel="icon" type="image/png" sizes="192x192"  href="'.$favicon_path.'/android-icon-192x192.png">
-            <link rel="icon" type="image/png" sizes="32x32" href="'.$favicon_path.'/favicon-32x32.png">
-            <link rel="icon" type="image/png" sizes="96x96" href="'.$favicon_path.'/favicon-96x96.png">
-            <link rel="icon" type="image/png" sizes="16x16" href="'.$favicon_path.'/favicon-16x16.png">
-            <link rel="manifest" href="'.$favicon_path.'/manifest.json">
-            <meta name="msapplication-TileColor" content="#3c00f5">
-            <meta name="msapplication-TileImage" content="'.$favicon_path.'/ms-icon-144x144.png">
-            <meta name="theme-color" content="#3c00f5">';
+   tiagsspace_favicon_links( '/adminarea' );
+   echo "\t" . '<meta name="msapplication-TileColor" content="#3c00f5">' . "\n";
+   echo "\t" . '<meta name="theme-color" content="#3c00f5">' . "\n";
 }
 add_action( 'wp_head', 'add_my_favicon' ); //front end
 add_action( 'admin_head', 'add_my_favicon_admin' ); //admin end

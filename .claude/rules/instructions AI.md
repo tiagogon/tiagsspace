@@ -67,6 +67,10 @@ This is a custom WordPress theme called "tiagsspace" (Tiags' Space). It uses a c
   - `_region-` — shared page areas (header, footer, archive grid)
   - `_page-` — page-specific styles (single-content, single-gallery, table-index)
 
+### Favicons
+- Two icon sets, both **generated from an Apple emoji** by `bin/favicon-from-emoji.js` (macOS JXA + AppKit, run with `osascript -l JavaScript`; no compiler, no Pillow — the Swift toolchain on this Mac is broken, don't reach for it): `favicon.ico/` is the site (💿, a round emoji so Google's circular crop loses nothing) and `favicon.ico/adminarea/` is wp-admin (🕳️). To change an icon, run the script with the new emoji and the target dir; **never hand-edit the PNGs**. The glyph is cropped to its alpha bbox and scaled to fill the canvas with zero margin; `apple-icon-*` get an opaque `--touch-bg` (default `#ffffff`) because iOS blackens transparency, everything else keeps alpha; `favicon.ico` is PNG-in-ICO 16/32/48; `manifest.json`/`browserconfig.xml` are rewritten with paths relative to themselves (the old absolute `/android-icon-…` ones 404'd).
+- `functions.php` emits both sets through one helper, `tiagsspace_favicon_links($subdir)`, on `wp_head` and `admin_head`. Every href carries `?v=<filemtime>` via `tiagsspace_asset_ver()` so a regenerated icon replaces the cached one after deploy. Includes a 48px `rel=icon` (the multiple Google asks for) and the `.ico` with `sizes="any"`.
+
 ### Fonts
 - Font files live in `library/fonts/`
 - Only active font: `lora/` (Lora, SIL OFL, files from `@fontsource/lora` 5.3.0, **woff2 only**; 400 + 600, normal + italic)
