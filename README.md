@@ -45,7 +45,7 @@ Categories are disabled.
 ├── search.php / searchform.php
 ├── attachment.php
 ├── functions.php               # Theme setup, enqueues, helpers
-├── favicon.ico/                # Icon set (💿) + adminarea/ (🕳️) — generated, see bin/
+├── favicon.ico/                # Icon set (💿) + adminarea/ (📿) — generated, see bin/
 ├── bin/
 │   ├── hls-package.sh          # ffmpeg → .hlspack.zip (see § Video)
 │   └── favicon-from-emoji.js   # JXA: rebuilds favicon.ico/ from one Apple emoji

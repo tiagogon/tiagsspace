@@ -244,7 +244,7 @@ function lm_dequeue_footer_styles()
 
 /************* Favicon *************/
 // Both icon sets are generated from an Apple emoji by bin/favicon-from-emoji.js
-// (💿 for the site in favicon.ico/, 🕳️ for wp-admin in favicon.ico/adminarea/).
+// (💿 for the site in favicon.ico/, 📿 for wp-admin in favicon.ico/adminarea/).
 // Re-run the script to change an icon; never hand-edit the PNGs.
 
 /**

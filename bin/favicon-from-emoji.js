@@ -4,7 +4,7 @@
 // Plain macOS JXA + AppKit: no compiler, no Pillow, no ImageMagick.
 //
 //   osascript -l JavaScript bin/favicon-from-emoji.js "💿" favicon.ico
-//   osascript -l JavaScript bin/favicon-from-emoji.js "🕳️" favicon.ico/adminarea --touch-bg '#ffffff'
+//   osascript -l JavaScript bin/favicon-from-emoji.js "📿" favicon.ico/adminarea --touch-bg '#ffffff'
 //
 // Renders the glyph with Apple Color Emoji, crops to its alpha bounding box and
 // scales it to FILL each canvas (zero margin) so a round emoji survives Google's
