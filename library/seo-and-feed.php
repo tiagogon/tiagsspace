@@ -549,22 +549,41 @@ add_filter( 'wpseo_replacements', function ( $replacements ) {
 } );
 
 /**
- * Archive-wide figures for the home page description, always current:
- *   %%archive_sets%%   published, non-hidden sets across the archive types "532"
- *   %%archive_images%% their gallery images, rounded down to the hundred   "5,300"
- *   %%archive_years%%  first–last year among the `from` terms in use      "2007–2026"
- * Cached for six hours; the page cache sits in front of it anyway.
+ * Figures for an archive, always current: how many sets, how many images, and
+ * the first and last year among the `from` terms of those sets.
  *
- * @return array{sets:int,images:int,years:string}
+ * $scope is what tiagsspace_archive_scope() returns:
+ *   array( 'type' => 'all' )                                  the whole archive
+ *   array( 'type' => 'post_type', 'post_type' => 'dusk' )     one series
+ *   array( 'type' => 'term', 'taxonomy' => …, 'term_id' => … ) one place, medium, year, branch or tag
+ *
+ * @return array{sets:int,images:int,first:int,last:int,years:string}
  */
-function tiagsspace_archive_stats() {
-    $cached = get_transient( 'tiagsspace_archive_stats' );
-    if ( is_array( $cached ) && isset( $cached['sets'], $cached['images'], $cached['years'] ) ) {
+function tiagsspace_archive_stats( $scope = null ) {
+    global $wpdb;
+    if ( ! is_array( $scope ) || empty( $scope['type'] ) ) {
+        $scope = array( 'type' => 'all' );
+    }
+
+    // One cache entry per scope. The salt changes whenever a set is published or
+    // unpublished (see below), so every scope refreshes at once.
+    $salt = (int) get_option( 'tiagsspace_archive_stats_salt', 1 );
+    $key  = 'tiagsspace_astats_' . md5( wp_json_encode( $scope ) . '|' . $salt );
+    $cached = get_transient( $key );
+    if ( is_array( $cached ) && isset( $cached['sets'], $cached['images'], $cached['first'], $cached['last'] ) ) {
         return $cached;
     }
-    global $wpdb;
+
     $types = tiagsspace_seo_post_types();
-    $in    = implode( ',', array_fill( 0, count( $types ), '%s' ) );
+    if ( $scope['type'] === 'post_type' ) {
+        $types = array_values( array_intersect( $types, (array) $scope['post_type'] ) );
+    }
+    $empty = array( 'sets' => 0, 'images' => 0, 'first' => 0, 'last' => 0, 'years' => '' );
+    if ( ! $types ) {
+        return $empty;
+    }
+    $params = $types;
+    $in     = implode( ',', array_fill( 0, count( $types ), '%s' ) );
 
     // Only what a visitor can reach: published sets that are not flagged
     // "hide from archives and feed", and images not flagged "hide from gallery".
@@ -575,9 +594,31 @@ function tiagsspace_archive_stats() {
                               AND h.meta_key = 'hide_post_from_main_page_archives_and_feed'
                               AND h.meta_value = '1' )";
 
+    if ( $scope['type'] === 'term' ) {
+        $term = get_term( (int) $scope['term_id'], $scope['taxonomy'] );
+        if ( ! $term || is_wp_error( $term ) ) {
+            return $empty;
+        }
+        // A parent term counts its children ("Photography" includes the iPhone sets).
+        $term_ids = array( (int) $term->term_id );
+        if ( is_taxonomy_hierarchical( $term->taxonomy ) ) {
+            $children = get_term_children( $term->term_id, $term->taxonomy );
+            if ( ! is_wp_error( $children ) ) {
+                $term_ids = array_merge( $term_ids, array_map( 'intval', $children ) );
+            }
+        }
+        // Integers and an escaped taxonomy name only, so the clause carries no
+        // placeholder of its own and can sit inside the prepared queries below.
+        $ids_in   = implode( ',', array_map( 'intval', $term_ids ) );
+        $taxonomy = esc_sql( $term->taxonomy );
+        $visible_set .= " AND EXISTS ( SELECT 1 FROM {$wpdb->term_relationships} tr
+                           JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id
+                           WHERE tr.object_id = p.ID AND tt.taxonomy = '{$taxonomy}' AND tt.term_id IN ($ids_in) )";
+    }
+
     $sets = (int) $wpdb->get_var( $wpdb->prepare(
         "SELECT COUNT(*) FROM {$wpdb->posts} p WHERE $visible_set",
-        $types
+        $params
     ) );
     $images = (int) $wpdb->get_var( $wpdb->prepare(
         "SELECT COUNT(*) FROM {$wpdb->posts} a
@@ -588,48 +629,239 @@ function tiagsspace_archive_stats() {
                             WHERE g.post_id = a.ID
                               AND g.meta_key = 'remove_from_default_gallery'
                               AND g.meta_value = '1' )",
-        $types
+        $params
     ) );
+    // First and last year among the numeric `from` terms attached to those sets.
+    $years = $wpdb->get_row( $wpdb->prepare(
+        "SELECT MIN( CAST( t.name AS UNSIGNED ) ) AS first, MAX( CAST( t.name AS UNSIGNED ) ) AS last
+         FROM {$wpdb->posts} p
+         JOIN {$wpdb->term_relationships} yr ON yr.object_id = p.ID
+         JOIN {$wpdb->term_taxonomy} yt ON yt.term_taxonomy_id = yr.term_taxonomy_id AND yt.taxonomy = 'from'
+         JOIN {$wpdb->terms} t ON t.term_id = yt.term_id AND t.name REGEXP '^[0-9]{4}$'
+         WHERE $visible_set",
+        $params
+    ) );
+    $first = $years ? (int) $years->first : 0;
+    $last  = $years ? (int) $years->last : 0;
 
-    $years = array();
-    $terms = taxonomy_exists( 'from' ) ? get_terms( array( 'taxonomy' => 'from', 'hide_empty' => true ) ) : array();
-    if ( $terms && ! is_wp_error( $terms ) ) {
-        foreach ( $terms as $term ) {
-            if ( preg_match( '/^\d{4}$/', $term->name ) ) {
-                $years[] = (int) $term->name;
-            }
+    $span = '';
+    if ( $first ) {
+        $span = ( $first === $last ) ? (string) $first : $first . '–' . $last;
+    }
+
+    $stats = array( 'sets' => $sets, 'images' => $images, 'first' => $first, 'last' => $last, 'years' => $span );
+    set_transient( $key, $stats, 6 * HOUR_IN_SECONDS );
+    return $stats;
+}
+
+// A set published, unpublished or trashed changes the figures: drop every cached scope.
+add_action( 'transition_post_status', function ( $new, $old, $post ) {
+    if ( $new === $old || ! $post || ! in_array( $post->post_type, tiagsspace_seo_post_types(), true ) ) {
+        return;
+    }
+    if ( $new === 'publish' || $old === 'publish' ) {
+        update_option( 'tiagsspace_archive_stats_salt', time(), false );
+    }
+}, 10, 3 );
+
+/**
+ * Which archive the current page is: a term, a series, or the whole archive.
+ * $args is what Yoast hands to a replacement callback (it carries term_id and
+ * taxonomy on term pages), used when the main query cannot tell.
+ */
+function tiagsspace_archive_scope( $args = array() ) {
+    $args = (array) $args;
+    if ( is_tax() || is_tag() || is_category() ) {
+        $term = get_queried_object();
+        if ( $term && ! empty( $term->term_id ) && ! empty( $term->taxonomy ) ) {
+            return array( 'type' => 'term', 'taxonomy' => $term->taxonomy, 'term_id' => (int) $term->term_id );
         }
     }
-    $span = '';
-    if ( $years ) {
-        $span = ( min( $years ) === max( $years ) ) ? (string) min( $years ) : min( $years ) . '–' . max( $years );
+    if ( is_post_type_archive() ) {
+        $pt = get_query_var( 'post_type' );
+        $pt = is_array( $pt ) ? reset( $pt ) : $pt;
+        if ( $pt ) {
+            return array( 'type' => 'post_type', 'post_type' => (string) $pt );
+        }
+    }
+    if ( ! empty( $args['term_id'] ) && ! empty( $args['taxonomy'] ) ) {
+        return array( 'type' => 'term', 'taxonomy' => (string) $args['taxonomy'], 'term_id' => (int) $args['term_id'] );
+    }
+    return array( 'type' => 'all' );
+}
+
+/**
+ * The rounding rule for image counts: down to the hundred from 100 up, down to
+ * the ten from 10 to 99, exact below 10. Never up, so a sentence never overstates.
+ *
+ * @return array{0:int,1:bool} the figure, and whether it was rounded
+ */
+function tiagsspace_round_figure( $n ) {
+    $n = max( 0, (int) $n );
+    if ( $n >= 100 ) {
+        $r = (int) ( floor( $n / 100 ) * 100 );
+    } elseif ( $n >= 10 ) {
+        $r = (int) ( floor( $n / 10 ) * 10 );
+    } else {
+        $r = $n;
+    }
+    return array( $r, $r !== $n );
+}
+
+/** A count in words from one to twelve, in digits from 13. */
+function tiagsspace_count_words( $n, $capitalise = false ) {
+    $n = (int) $n;
+    $w = ( $n >= 1 && $n <= 12 ) ? tiagsspace_number_word( $n, 'en' ) : number_format( $n );
+    return $capitalise ? $w : lcfirst( $w );
+}
+
+/** "more than 1,100 images", "eight images", "one image". Empty for zero. */
+function tiagsspace_images_phrase( $n ) {
+    list( $r, $rounded ) = tiagsspace_round_figure( $n );
+    if ( $r < 1 ) {
+        return '';
+    }
+    return ( $rounded ? 'more than ' : '' ) . tiagsspace_count_words( $r ) . ' ' . ( $r === 1 ? 'image' : 'images' );
+}
+
+/** "between 2007 and 2025", or "in 2016" when there is one year. Empty when unknown. */
+function tiagsspace_years_phrase( $stats, $single = 'in' ) {
+    if ( empty( $stats['first'] ) ) {
+        return '';
+    }
+    if ( (int) $stats['first'] === (int) $stats['last'] ) {
+        return $single . ' ' . (int) $stats['first'];
+    }
+    return 'between ' . (int) $stats['first'] . ' and ' . (int) $stats['last'];
+}
+
+/**
+ * The description of an archive page, one sentence per archive type. The wording
+ * is Tiago's (27 Sep 2026); only the figures are computed.
+ *
+ *   series   A series of 127 sets and more than 1,100 images made between 2007 and 2025.
+ *   log      A log of 115 entries and more than 400 images made between 2016 and 2025.
+ *   mixes    A series of 36 DJ mixes recorded between 2016 and 2025.
+ *   films    Eight films made between 2008 and 2025.
+ *   place    335 sets and more than 3,600 images made in Berlin between 2010 and 2026.
+ *   medium   iPhone, the medium of 212 sets and more than 2,800 images made between 2014 and 2026.
+ *   year     23 sets and more than 100 images dated from 2024.
+ *   branch   Still, a branch of the Log with 20 entries and more than 70 images made between 2017 and 2023.
+ *   tag      beach, a tag on one set of eight images dated from 2016.
+ *
+ * Returns '' when the archive holds no sets, so no description is printed.
+ */
+function tiagsspace_archive_label( $scope = null ) {
+    $scope = $scope ? $scope : tiagsspace_archive_scope();
+    $s     = tiagsspace_archive_stats( $scope );
+    $n     = (int) $s['sets'];
+    if ( $n < 1 ) {
+        return '';
+    }
+    $images = tiagsspace_images_phrase( $s['images'] );
+    $made   = tiagsspace_years_phrase( $s, 'in' );           // between 2007 and 2025 | in 2016
+    $dated  = tiagsspace_years_phrase( $s, 'from' );         // between 2014 and 2015 | from 2016
+    $tail   = function ( $verb, $when ) {
+        return $when !== '' ? ' ' . $verb . ' ' . $when : '';
+    };
+    $plural = function ( $count, $one, $many ) {
+        return (int) $count === 1 ? $one : $many;
+    };
+
+    if ( $scope['type'] === 'post_type' ) {
+        switch ( $scope['post_type'] ) {
+            case 'films':
+                return tiagsspace_count_words( $n, true ) . ' ' . $plural( $n, 'film', 'films' ) . $tail( 'made', $made ) . '.';
+            case '4k-lento':
+                return 'A series of ' . tiagsspace_count_words( $n ) . ' ' . $plural( $n, 'DJ mix', 'DJ mixes' ) . $tail( 'recorded', $made ) . '.';
+            case 'log':
+                return 'A log of ' . tiagsspace_count_words( $n ) . ' ' . $plural( $n, 'entry', 'entries' )
+                    . ( $images ? ' and ' . $images : '' ) . $tail( 'made', $made ) . '.';
+            default:
+                return 'A series of ' . tiagsspace_count_words( $n ) . ' ' . $plural( $n, 'set', 'sets' )
+                    . ( $images ? ' and ' . $images : '' ) . $tail( 'made', $made ) . '.';
+        }
     }
 
-    $stats = array( 'sets' => $sets, 'images' => $images, 'years' => $span );
-    set_transient( 'tiagsspace_archive_stats', $stats, 6 * HOUR_IN_SECONDS );
-    return $stats;
+    if ( $scope['type'] === 'term' ) {
+        $term = get_term( (int) $scope['term_id'], $scope['taxonomy'] );
+        $name = ( $term && ! is_wp_error( $term ) ) ? html_entity_decode( $term->name, ENT_QUOTES, 'UTF-8' ) : '';
+        $sets = tiagsspace_count_words( $n, true ) . ' ' . $plural( $n, 'set', 'sets' );
+        switch ( $scope['taxonomy'] ) {
+            case 'places':
+                return $sets . ( $images ? ' and ' . $images : '' ) . ' made in ' . $name . ( $made !== '' ? ' ' . $made : '' ) . '.';
+            case 'from':
+                return $sets . ( $images ? ' and ' . $images : '' ) . ' dated from ' . $name . '.';
+            case 'medium':
+                return $name . ', the medium of ' . tiagsspace_count_words( $n ) . ' ' . $plural( $n, 'set', 'sets' )
+                    . ( $images ? ' and ' . $images : '' ) . $tail( 'made', $made ) . '.';
+            case 'log-branch':
+                return $name . ', a branch of the Log with ' . tiagsspace_count_words( $n ) . ' ' . $plural( $n, 'entry', 'entries' )
+                    . ( $images ? ' and ' . $images : '' ) . $tail( 'made', $made ) . '.';
+            default: // tags and any other taxonomy
+                return $name . ', a tag on ' . tiagsspace_count_words( $n ) . ' ' . $plural( $n, 'set', 'sets' )
+                    . ( $images ? ( $n === 1 ? ' of ' : ' with ' ) . $images : '' ) . $tail( 'dated', $dated ) . '.';
+        }
+    }
+
+    // Whole archive.
+    return tiagsspace_count_words( $n, true ) . ' ' . $plural( $n, 'set', 'sets' )
+        . ( $images ? ' and ' . $images : '' ) . $tail( 'made', $made ) . '.';
 }
 
 add_action( 'wpseo_register_extra_replacements', function () {
     if ( ! function_exists( 'wpseo_register_var_replacement' ) ) {
         return;
     }
+    // The three figures always describe the WHOLE archive (home and Index sentences).
     wpseo_register_var_replacement( '%%archive_sets%%', function () {
         $s = tiagsspace_archive_stats();
         return number_format( $s['sets'] );
-    }, 'advanced', 'Number of published sets in the archive.' );
+    }, 'advanced', 'Number of published sets in the whole archive.' );
     wpseo_register_var_replacement( '%%archive_images%%', function () {
         $s = tiagsspace_archive_stats();
-        // Always a round hundred, rounded DOWN so the sentence never overstates
-        // (5,422 → "5,400"). Below 100 there is no hundred to show, so the exact count.
-        $n = $s['images'] >= 100 ? (int) ( floor( $s['images'] / 100 ) * 100 ) : (int) $s['images'];
-        return number_format( $n );
-    }, 'advanced', 'Number of images in the archive, rounded down to the hundred.' );
+        list( $r, $rounded ) = tiagsspace_round_figure( $s['images'] );
+        return ( $rounded ? 'more than ' : '' ) . number_format( $r );
+    }, 'advanced', 'Images in the whole archive, rounded down, with "more than" when rounded.' );
     wpseo_register_var_replacement( '%%archive_years%%', function () {
         $s = tiagsspace_archive_stats();
         return $s['years'];
-    }, 'advanced', 'First–last year among the "from" terms in use.' );
+    }, 'advanced', 'First–last year of the whole archive, as "2007–2026".' );
+    wpseo_register_var_replacement( '%%archive_between%%', function () {
+        return tiagsspace_years_phrase( tiagsspace_archive_stats(), 'in' );
+    }, 'advanced', 'Years of the whole archive as words: "between 2007 and 2026".' );
+    // The sentence for the archive page being viewed.
+    wpseo_register_var_replacement( '%%archive_label%%', function ( $var, $args ) {
+        return tiagsspace_archive_label( tiagsspace_archive_scope( $args ) );
+    }, 'advanced', 'Description sentence for the archive page being viewed.' );
 } );
+
+
+// ----- Share cards: bare titles -----
+// Yoast's free version ignores its own "social title" templates and repeats the
+// search title on share cards. A card carries the bare name instead: the work's
+// title, the series name, the term name. The home card keeps Yoast's own setting.
+
+function tiagsspace_bare_share_title( $title ) {
+    if ( is_front_page() || is_home() ) {
+        return $title;
+    }
+    if ( is_singular() ) {
+        $bare = get_the_title( get_queried_object_id() );
+    } elseif ( is_post_type_archive() ) {
+        $pt   = get_query_var( 'post_type' );
+        $bare = tiagsspace_series_name( is_array( $pt ) ? reset( $pt ) : $pt, 'archive' );
+    } elseif ( is_tax() || is_tag() || is_category() ) {
+        $term = get_queried_object();
+        $bare = ( $term && ! empty( $term->name ) ) ? $term->name : '';
+    } else {
+        $bare = '';
+    }
+    $bare = trim( wp_strip_all_tags( html_entity_decode( (string) $bare, ENT_QUOTES, 'UTF-8' ) ) );
+    return $bare !== '' ? $bare : $title;
+}
+add_filter( 'wpseo_opengraph_title', 'tiagsspace_bare_share_title', 20 );
+add_filter( 'wpseo_twitter_title', 'tiagsspace_bare_share_title', 20 );
 
 /** Yoast replacement variable %%label%%. */
 add_action( 'wpseo_register_extra_replacements', function () {
