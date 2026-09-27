@@ -48,6 +48,36 @@ function tiagsspace_post_gallery_ids( $post_id, $mime_type = '' ) {
 }
 
 
+/**
+ * The name a series is shown under, in titles, headings and share cards.
+ *
+ * The post types keep their short labels ("Dusk"), which the admin and the menu
+ * use. Everywhere a visitor or a search engine reads the name of the series, it
+ * is spelled as returned here, so a set and its archive say the same thing.
+ *
+ * @param string $post_type
+ * @param string $context  'archive' for the series page, 'single' for one work in it.
+ *                         They differ only where a work has a singular: a mix, a film.
+ * @return string          Falls back to the post type's own label.
+ */
+function tiagsspace_series_name( $post_type, $context = 'archive' ) {
+    $names = array(
+        'dusk'      => array( 'archive' => 'Dusk Series',    'single' => 'Dusk Series' ),
+        'hyper'     => array( 'archive' => 'Hyper Series',   'single' => 'Hyper Series' ),
+        'cityburns' => array( 'archive' => 'City Series',    'single' => 'City Series' ),
+        '4k-lento'  => array( 'archive' => '4K Lento Mixes', 'single' => '4K Lento Mix' ),
+        'films'     => array( 'archive' => 'Films',          'single' => 'Film' ),
+        'log'       => array( 'archive' => 'Log',            'single' => 'Log' ),
+    );
+    $context = ( $context === 'single' ) ? 'single' : 'archive';
+    if ( isset( $names[ $post_type ] ) ) {
+        return $names[ $post_type ][ $context ];
+    }
+    $obj = get_post_type_object( $post_type );
+    return $obj ? $obj->labels->name : '';
+}
+
+
 // LIST OF TAGS
 function taxonomy_list($post_id_of_the_tags,$custom_taxonomy, $tag_before, $tag_after, $separator_term, $separator_term_last, $tax_link) {
     //ID of the current post

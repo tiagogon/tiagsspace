@@ -42,7 +42,9 @@ Single // log Archive pages >> Content
         $prefix = '';
         // "<Type> / " prefix — skipped for films, which are not an artistic series.
         if ( 'films' !== $post_type && !is_post_type_archive() AND !is_tax( 'log-branch' )) {
-          $prefix .= '<a href="'.get_post_type_archive_link( $post_type ).'">'.$obj->labels->name.'</a> / ';
+          // Same words as the page title ("Dusk Series", "4K Lento Mix"), so the heading and
+          // the search result agree. See tiagsspace_series_name().
+          $prefix .= '<a href="'.get_post_type_archive_link( $post_type ).'">'.esc_html( tiagsspace_series_name( $post_type, 'single' ) ).'</a> / ';
         }
         if (!is_tax( 'log-branch' ) && $logs_branch ) {
           $prefix .= trim( $logs_branch ).' ';
