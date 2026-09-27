@@ -2,7 +2,9 @@
 /**
  * Yoast schema pieces.
  *
- * - Person: alternateName "Tiags" (the site represents a person; settings in Yoast).
+ * - Person and WebSite: the aliases "Tiags" and "Tiagsssss"; the Person also carries
+ *   the site and the profiles Yoast has no field for (the site represents a person;
+ *   settings in Yoast).
  * - Films: a VideoObject piece for self-hosted films, referenced from the WebPage,
  *   so films are eligible for video results. Gallery/[KGVID] videos are not covered.
  * - WebPage: inLanguage follows the per-set language (see seo-and-feed.php).
@@ -10,9 +12,41 @@
  * @package tiagsspace
  */
 
+/**
+ * Aliases. In everything a person reads the name is "Tiago H. G." and the site
+ * is "Tiags' Space"; the aliases live here only, where they tell a search engine
+ * that the handles belong to the same person and the same site.
+ */
+function tiagsspace_schema_aliases() {
+    return array( 'Tiags', 'Tiagsssss' );
+}
+
+/**
+ * Profiles that Yoast has no profile field for. Instagram, SoundCloud and Tumblr
+ * come from the author's profile fields; these are added beside them.
+ */
+function tiagsspace_schema_profiles() {
+    return array(
+        home_url( '/' ),
+        'https://ra.co/dj/tiagsssss',
+        'https://www.goodreads.com/user/show/15893684-tiago-h-g',
+        'https://letterboxd.com/tiagsssss/',
+    );
+}
+
 add_filter( 'wpseo_schema_person', function ( $data ) {
-    if ( is_array( $data ) && empty( $data['alternateName'] ) ) {
-        $data['alternateName'] = 'Tiags';
+    if ( ! is_array( $data ) ) {
+        return $data;
+    }
+    $data['alternateName'] = tiagsspace_schema_aliases();
+    $same = isset( $data['sameAs'] ) ? (array) $data['sameAs'] : array();
+    $data['sameAs'] = array_values( array_unique( array_merge( $same, tiagsspace_schema_profiles() ) ) );
+    return $data;
+} );
+
+add_filter( 'wpseo_schema_website', function ( $data ) {
+    if ( is_array( $data ) ) {
+        $data['alternateName'] = tiagsspace_schema_aliases();
     }
     return $data;
 } );
