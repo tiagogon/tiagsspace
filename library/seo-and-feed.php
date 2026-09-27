@@ -550,8 +550,8 @@ add_filter( 'wpseo_replacements', function ( $replacements ) {
 
 /**
  * Archive-wide figures for the home page description, always current:
- *   %%archive_sets%%   published sets across the archive post types      "532"
- *   %%archive_images%% images attached to them, rounded down to 100      "5,400"
+ *   %%archive_sets%%   published, non-hidden sets across the archive types "532"
+ *   %%archive_images%% their gallery images, rounded down to the hundred   "5,300"
  *   %%archive_years%%  first–last year among the `from` terms in use      "2007–2026"
  * Cached for six hours; the page cache sits in front of it anyway.
  *
@@ -566,15 +566,28 @@ function tiagsspace_archive_stats() {
     $types = tiagsspace_seo_post_types();
     $in    = implode( ',', array_fill( 0, count( $types ), '%s' ) );
 
+    // Only what a visitor can reach: published sets that are not flagged
+    // "hide from archives and feed", and images not flagged "hide from gallery".
+    // ACF true/false stores '1' when checked; '0' or no row at all when not.
+    $visible_set = "p.post_status = 'publish' AND p.post_type IN ($in)
+           AND NOT EXISTS ( SELECT 1 FROM {$wpdb->postmeta} h
+                            WHERE h.post_id = p.ID
+                              AND h.meta_key = 'hide_post_from_main_page_archives_and_feed'
+                              AND h.meta_value = '1' )";
+
     $sets = (int) $wpdb->get_var( $wpdb->prepare(
-        "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status = 'publish' AND post_type IN ($in)",
+        "SELECT COUNT(*) FROM {$wpdb->posts} p WHERE $visible_set",
         $types
     ) );
     $images = (int) $wpdb->get_var( $wpdb->prepare(
         "SELECT COUNT(*) FROM {$wpdb->posts} a
          JOIN {$wpdb->posts} p ON p.ID = a.post_parent
          WHERE a.post_type = 'attachment' AND a.post_mime_type LIKE 'image/%%'
-           AND p.post_status = 'publish' AND p.post_type IN ($in)",
+           AND $visible_set
+           AND NOT EXISTS ( SELECT 1 FROM {$wpdb->postmeta} g
+                            WHERE g.post_id = a.ID
+                              AND g.meta_key = 'remove_from_default_gallery'
+                              AND g.meta_value = '1' )",
         $types
     ) );
 
@@ -607,7 +620,9 @@ add_action( 'wpseo_register_extra_replacements', function () {
     }, 'advanced', 'Number of published sets in the archive.' );
     wpseo_register_var_replacement( '%%archive_images%%', function () {
         $s = tiagsspace_archive_stats();
-        $n = $s['images'] >= 100 ? (int) ( floor( $s['images'] / 100 ) * 100 ) : $s['images'];
+        // Always a round hundred, rounded DOWN so the sentence never overstates
+        // (5,422 → "5,400"). Below 100 there is no hundred to show, so the exact count.
+        $n = $s['images'] >= 100 ? (int) ( floor( $s['images'] / 100 ) * 100 ) : (int) $s['images'];
         return number_format( $n );
     }, 'advanced', 'Number of images in the archive, rounded down to the hundred.' );
     wpseo_register_var_replacement( '%%archive_years%%', function () {
