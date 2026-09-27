@@ -8,7 +8,9 @@ heading); on singular views, search and 404 it is a <p class="site-title"> so th
 previous — last match wins.
 */
 
-$site_title_is_h1 = ! is_singular() && ! is_search() && ! is_404();
+// The Index page is a table with no heading of its own, so there the header
+// ("Tiags' Space / Index") is the page's <h1>, as on the archives.
+$site_title_is_h1 = ( ! is_singular() || is_page( 'index' ) ) && ! is_search() && ! is_404();
 $t_open  = $site_title_is_h1 ? '<h1 class="site-title">' : '<p class="site-title">';
 $t_close = $site_title_is_h1 ? '</h1>' : '</p>';
 

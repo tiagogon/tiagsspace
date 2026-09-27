@@ -847,7 +847,17 @@ function tiagsspace_bare_share_title( $title ) {
         return $title;
     }
     if ( is_singular() ) {
-        $bare = get_the_title( get_queried_object_id() );
+        $id   = get_queried_object_id();
+        $bare = get_the_title( $id );
+        // A page with its own search title ("Links / %%sitename%%") shares under the
+        // first segment of that title, so the card and the search result agree.
+        $own = trim( (string) get_post_meta( $id, '_yoast_wpseo_title', true ) );
+        if ( $own !== '' && strpos( $own, ' / ' ) !== false ) {
+            $first = trim( strstr( $own, ' / ', true ) );
+            if ( $first !== '' && strpos( $first, '%%' ) === false ) {
+                $bare = $first;
+            }
+        }
     } elseif ( is_post_type_archive() ) {
         $pt   = get_query_var( 'post_type' );
         $bare = tiagsspace_series_name( is_array( $pt ) ? reset( $pt ) : $pt, 'archive' );
