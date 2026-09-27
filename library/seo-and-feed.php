@@ -548,6 +548,74 @@ add_filter( 'wpseo_replacements', function ( $replacements ) {
     return $replacements;
 } );
 
+/**
+ * Archive-wide figures for the home page description, always current:
+ *   %%archive_sets%%   published sets across the archive post types      "532"
+ *   %%archive_images%% images attached to them, rounded down to 100      "5,400"
+ *   %%archive_years%%  first–last year among the `from` terms in use      "2007–2026"
+ * Cached for six hours; the page cache sits in front of it anyway.
+ *
+ * @return array{sets:int,images:int,years:string}
+ */
+function tiagsspace_archive_stats() {
+    $cached = get_transient( 'tiagsspace_archive_stats' );
+    if ( is_array( $cached ) && isset( $cached['sets'], $cached['images'], $cached['years'] ) ) {
+        return $cached;
+    }
+    global $wpdb;
+    $types = tiagsspace_seo_post_types();
+    $in    = implode( ',', array_fill( 0, count( $types ), '%s' ) );
+
+    $sets = (int) $wpdb->get_var( $wpdb->prepare(
+        "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status = 'publish' AND post_type IN ($in)",
+        $types
+    ) );
+    $images = (int) $wpdb->get_var( $wpdb->prepare(
+        "SELECT COUNT(*) FROM {$wpdb->posts} a
+         JOIN {$wpdb->posts} p ON p.ID = a.post_parent
+         WHERE a.post_type = 'attachment' AND a.post_mime_type LIKE 'image/%%'
+           AND p.post_status = 'publish' AND p.post_type IN ($in)",
+        $types
+    ) );
+
+    $years = array();
+    $terms = taxonomy_exists( 'from' ) ? get_terms( array( 'taxonomy' => 'from', 'hide_empty' => true ) ) : array();
+    if ( $terms && ! is_wp_error( $terms ) ) {
+        foreach ( $terms as $term ) {
+            if ( preg_match( '/^\d{4}$/', $term->name ) ) {
+                $years[] = (int) $term->name;
+            }
+        }
+    }
+    $span = '';
+    if ( $years ) {
+        $span = ( min( $years ) === max( $years ) ) ? (string) min( $years ) : min( $years ) . '–' . max( $years );
+    }
+
+    $stats = array( 'sets' => $sets, 'images' => $images, 'years' => $span );
+    set_transient( 'tiagsspace_archive_stats', $stats, 6 * HOUR_IN_SECONDS );
+    return $stats;
+}
+
+add_action( 'wpseo_register_extra_replacements', function () {
+    if ( ! function_exists( 'wpseo_register_var_replacement' ) ) {
+        return;
+    }
+    wpseo_register_var_replacement( '%%archive_sets%%', function () {
+        $s = tiagsspace_archive_stats();
+        return number_format( $s['sets'] );
+    }, 'advanced', 'Number of published sets in the archive.' );
+    wpseo_register_var_replacement( '%%archive_images%%', function () {
+        $s = tiagsspace_archive_stats();
+        $n = $s['images'] >= 100 ? (int) ( floor( $s['images'] / 100 ) * 100 ) : $s['images'];
+        return number_format( $n );
+    }, 'advanced', 'Number of images in the archive, rounded down to the hundred.' );
+    wpseo_register_var_replacement( '%%archive_years%%', function () {
+        $s = tiagsspace_archive_stats();
+        return $s['years'];
+    }, 'advanced', 'First–last year among the "from" terms in use.' );
+} );
+
 /** Yoast replacement variable %%label%%. */
 add_action( 'wpseo_register_extra_replacements', function () {
     if ( ! function_exists( 'wpseo_register_var_replacement' ) ) {
