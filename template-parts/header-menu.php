@@ -37,16 +37,16 @@ $menu_groups_class = "col-sm-24 col-md-16 col-xl-9 menu-group";
 		<div class="<?php echo $menu_groups_class; ?>">
 			<ul>
 				<li>
-					<a href="<?php echo get_post_type_archive_link('hyper'); ?>" class="<?php if (is_post_type_archive('hyper')) { echo "active"; } if (is_singular('hyper')) { echo " active"; } ?>">Hyper</a>
+					<a href="<?php echo get_post_type_archive_link('hyper'); ?>" class="<?php if (is_post_type_archive('hyper')) { echo "active"; } if (is_singular('hyper')) { echo " active"; } ?>"><?php echo esc_html( tiagsspace_series_name( 'hyper' ) ); ?></a>
 				</li>
 				<li>
-					<a href="<?php echo get_post_type_archive_link('4k-lento'); ?>" class="<?php if (is_post_type_archive('4k-lento')) { echo "active"; } if (is_singular('4k-lento')) { echo " active"; } ?>">4K Lento</a>
+					<a href="<?php echo get_post_type_archive_link('4k-lento'); ?>" class="<?php if (is_post_type_archive('4k-lento')) { echo "active"; } if (is_singular('4k-lento')) { echo " active"; } ?>"><?php /* Short name on purpose: "4K Lento Mixes" is wider than the menu column and wraps onto two lines from 768px up. */ ?>4K Lento</a>
 				</li>
 				<!-- <li>
 					<a href="<?php echo get_post_type_archive_link('films'); ?>" class="<?php if (is_post_type_archive('Films')) { echo "active"; } if (is_singular('films')) { echo " active"; } ?>">Film</a>
 				</li> -->
 				<li>
-					<a href="<?php echo get_post_type_archive_link('dusk'); ?>" class="<?php if (is_post_type_archive('dusk')) { echo "active"; } if (is_singular('dusk')) { echo " active"; } ?>">Dusk</a>
+					<a href="<?php echo get_post_type_archive_link('dusk'); ?>" class="<?php if (is_post_type_archive('dusk')) { echo "active"; } if (is_singular('dusk')) { echo " active"; } ?>"><?php echo esc_html( tiagsspace_series_name( 'dusk' ) ); ?></a>
 				</li>
 				<li>
 					<a data-toggle="collapse" href="#collapselog-branch" role="button" aria-expanded="false" aria-controls="collapsePlaces">Log</a>
@@ -129,7 +129,7 @@ $menu_groups_class = "col-sm-24 col-md-16 col-xl-9 menu-group";
 							<a data-toggle="collapse" href="#collapsePastFromSeries" role="button" aria-expanded="false" aria-controls="collapsePastFromSeries">Series</a>
 							<ul class="collapse" id="collapsePastFromSeries">
 								<li>
-									<a href="<?php echo get_post_type_archive_link('cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active"; } if (is_singular('cityburns')) { echo " active"; } ?>">City</a>
+									<a href="<?php echo get_post_type_archive_link('cityburns'); ?>" class="<?php if (is_post_type_archive('cityburns')) { echo "active"; } if (is_singular('cityburns')) { echo " active"; } ?>"><?php echo esc_html( tiagsspace_series_name( 'cityburns' ) ); ?></a>
 								</li>
 							</ul>
 						</li>

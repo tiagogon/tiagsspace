@@ -36,28 +36,23 @@ if (is_page('index')) {
 // On phones the header is one line wide enough for "S / 4K Lento" only, so the
 // added word ("Series", "Mixes") shows from the sm breakpoint up, exactly like the
 // site name does. It stays in the markup either way.
-$series_header = function ( $post_type, $short ) {
-	$full  = tiagsspace_series_name( $post_type );
-	$extra = ( strpos( $full, $short ) === 0 ) ? substr( $full, strlen( $short ) ) : '';
-	if ( $extra === '' ) {
-		return esc_html( $full );
-	}
-	return esc_html( $short ).'<span class="d-none d-sm-inline">'.esc_html( $extra ).'</span>';
+$series_header = function ( $post_type ) {
+	return tiagsspace_series_name_html( $post_type, 'archive', 'sm' );
 };
 if (is_post_type_archive('hyper')) {
-	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / '.$series_header( 'hyper', 'Hyper' ).$over_text.$t_close;
+	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / '.$series_header( 'hyper' ).$over_text.$t_close;
 }
 if (is_post_type_archive('4k-lento')) {
-	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / '.$series_header( '4k-lento', '4K Lento' ).$over_text.$t_close;
+	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / '.$series_header( '4k-lento' ).$over_text.$t_close;
 }
 if (is_post_type_archive('films')) {
 	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / Film'.$over_text.$t_close;
 }
 if (is_post_type_archive('dusk')) {
-	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / '.$series_header( 'dusk', 'Dusk' ).$over_text.$t_close;
+	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / '.$series_header( 'dusk' ).$over_text.$t_close;
 }
 if (is_post_type_archive('cityburns')) {
-	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / '.$series_header( 'cityburns', 'City' ).$over_text.$t_close;
+	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / '.$series_header( 'cityburns' ).$over_text.$t_close;
 }
 if (is_post_type_archive('log')) {
 	$header_left_title = $t_open.'<a href="'.home_url().'">'.$Webpage_name.'</a> / Log'.$t_close;

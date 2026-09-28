@@ -49,11 +49,12 @@ function tiagsspace_post_gallery_ids( $post_id, $mime_type = '' ) {
 
 
 /**
- * The name a series is shown under, in titles, headings and share cards.
+ * The name a series is shown under: titles, headings, archive headers, share
+ * cards, the menu and the label shown when the mouse is over a thumbnail.
  *
- * The post types keep their short labels ("Dusk"), which the admin and the menu
- * use. Everywhere a visitor or a search engine reads the name of the series, it
- * is spelled as returned here, so a set and its archive say the same thing.
+ * The post types keep their short labels ("Dusk"), which the admin uses.
+ * Everywhere a visitor or a search engine reads the name of the series, it is
+ * spelled as returned here, so a set and its archive say the same thing.
  *
  * @param string $post_type
  * @param string $context  'archive' for the series page, 'single' for one work in it.
@@ -75,6 +76,35 @@ function tiagsspace_series_name( $post_type, $context = 'archive' ) {
     }
     $obj = get_post_type_object( $post_type );
     return $obj ? $obj->labels->name : '';
+}
+
+/**
+ * The same name as HTML for places that are short of room: the short name is
+ * always shown and the added word ("Series", "Mix", "Mixes") only from a
+ * Bootstrap breakpoint up. The whole name stays in the markup either way.
+ *
+ * Used by the header of a series archive (from 'sm': a phone header holds
+ * "S / 4K Lento" on one line and nothing longer) and by the thumbnail hover
+ * label (from 'md' on the home page, from 'xl' elsewhere: measured with the
+ * longest titles, the added word never costs the label an extra line).
+ *
+ * @param string $post_type
+ * @param string $context  'archive' | 'single', as tiagsspace_series_name()
+ * @param string $from     'sm' | 'md' | 'lg' | 'xl'
+ * @return string          Escaped HTML.
+ */
+function tiagsspace_series_name_html( $post_type, $context = 'archive', $from = 'sm' ) {
+    $short = array( 'dusk' => 'Dusk', 'hyper' => 'Hyper', 'cityburns' => 'City', '4k-lento' => '4K Lento' );
+    $full  = tiagsspace_series_name( $post_type, $context );
+    $from  = in_array( $from, array( 'sm', 'md', 'lg', 'xl' ), true ) ? $from : 'sm';
+    if ( ! isset( $short[ $post_type ] ) || strpos( $full, $short[ $post_type ] ) !== 0 ) {
+        return esc_html( $full );
+    }
+    $extra = substr( $full, strlen( $short[ $post_type ] ) );
+    if ( $extra === '' ) {
+        return esc_html( $full );
+    }
+    return esc_html( $short[ $post_type ] ) . '<span class="d-none d-' . $from . '-inline">' . esc_html( $extra ) . '</span>';
 }
 
 

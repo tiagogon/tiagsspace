@@ -341,10 +341,23 @@ Index of posts for Home and Archives
 
                       // get Strings -- post type name and log branches
                         // Post type name string
+                        // Spelled as everywhere else: "Dusk Series", "Hyper Series", "4K Lento Mix"
+                        // (see tiagsspace_series_name()). The added word shows only where it does not
+                        // push the label onto another line, measured with the longest titles:
+                        // from md (768px) on the home page, from xl (1200px) on every other page,
+                        // whose header is longer ("Tiags' Space / Place / Berlin > Space / …").
+                        // City keeps its full name at every width, as it always has.
+                        // The string ends up inside showText('…') in a double-quoted attribute, so
+                        // the span's own quotes are written as &quot;.
                         $post_type_name_string = "";
                         $post_type = get_post_type( $post->ID );
                         $obj = get_post_type_object( $post_type );
-                        $post_type_name_string = $obj->labels->name;
+                        if ( 'cityburns' === $post_type ) {
+                          $post_type_name_string = esc_html( tiagsspace_series_name( $post_type, 'single' ) );
+                        } else {
+                          $label_from = ( is_home() || is_front_page() ) ? 'md' : 'xl';
+                          $post_type_name_string = str_replace( '"', '&quot;', tiagsspace_series_name_html( $post_type, 'single', $label_from ) );
+                        }
 
                         // Log Branches next_string
                         $log_branches_string = "";
