@@ -837,6 +837,99 @@ add_action( 'wpseo_register_extra_replacements', function () {
 } );
 
 
+// ----- Search titles: the patterns live in the theme -----
+// A search title is a page's <title>: the browser tab and the line Google prints.
+// It names the work first, then what the work belongs to, joined by " ‹ "
+// ("Away ‹ Dusk Series ‹ Tiags' Space"). The slash is kept for folder order, which
+// is how the page itself reads ("Tiags' Space / Dusk Series / Away"). The home
+// title sets two names side by side, so it takes a middle dot.
+//
+// Yoast keeps these patterns in its settings. The theme owns the list and hands it
+// over whenever the list changes, so local and live agree and a change to a title
+// travels by commit. Do not edit the patterns in Yoast's settings screen: the next
+// change here replaces them. A title written by hand on one set or page is
+// untouched by this.
+
+function tiagsspace_title_templates() {
+    $s    = ' ‹ ';
+    $site = '%%sitename%%';
+
+    $t = array(
+        'title-home-wpseo'    => $site . ' · Tiago H. G.',
+        'title-post'          => '%%title%%' . $s . $site,
+        'title-page'          => '%%title%%' . $s . $site,
+        'title-attachment'    => '%%title%%' . $s . $site,
+        'title-archive-wpseo' => '%%date%% %%pagenumber%%' . $s . $site,
+        'title-search-wpseo'  => '%%searchphrase%%' . $s . 'Search' . $s . $site,
+        'title-404-wpseo'     => 'Not found' . $s . $site,
+    );
+    foreach ( array( 'dusk', 'hyper', 'cityburns', '4k-lento', 'films', 'log' ) as $pt ) {
+        $t[ 'title-' . $pt ]           = '%%title%%' . $s . tiagsspace_series_name( $pt, 'single' ) . $s . $site;
+        $t[ 'title-ptarchive-' . $pt ] = tiagsspace_series_name( $pt, 'archive' ) . ' %%pagenumber%%' . $s . $site;
+    }
+    // A log entry also names its branch.
+    $t['title-log'] = '%%title%%' . $s . '%%ct_log-branch%%' . $s . tiagsspace_series_name( 'log', 'single' ) . $s . $site;
+
+    $taxonomies = array(
+        'post_tag'   => 'Tag',
+        'places'     => 'Place',
+        'medium'     => 'Medium',
+        'log-branch' => 'Log',
+        'from'       => 'Year',
+    );
+    foreach ( $taxonomies as $tax => $word ) {
+        $t[ 'title-tax-' . $tax ] = '%%term_title%% %%pagenumber%%' . $s . $word . $s . $site;
+    }
+    return $t;
+}
+
+/**
+ * Hands the list to Yoast when it differs from the one handed over last. Saving
+ * through Yoast's own settings makes Yoast refresh the copies it keeps of the
+ * home, archive, search and not-found titles. Priority 20: post types and
+ * taxonomies are registered by then.
+ */
+add_action( 'init', function () {
+    if ( ! class_exists( 'WPSEO_Options' ) ) {
+        return;
+    }
+    $templates = tiagsspace_title_templates();
+    $hash      = md5( wp_json_encode( $templates ) );
+    if ( get_option( 'tiagsspace_title_templates_hash' ) === $hash ) {
+        return;
+    }
+    $titles = get_option( 'wpseo_titles' );
+    if ( ! is_array( $titles ) ) {
+        return;
+    }
+    update_option( 'wpseo_titles', array_merge( $titles, $templates ) );
+    update_option( 'tiagsspace_title_templates_hash', $hash );
+}, 20 );
+
+// For the home page, the archives of a post type, date archives, search and
+// not-found, Yoast renders a copy of the pattern that it stores with its own record
+// of the page, and it only refreshes that copy on a production site. These pages
+// read the theme's list directly, so a local or staging copy shows the same titles.
+add_filter( 'wpseo_frontend_presentation', function ( $presentation ) {
+    if ( ! is_object( $presentation ) || empty( $presentation->model ) ) {
+        return $presentation;
+    }
+    $sub  = (string) $presentation->model->object_sub_type;
+    $keys = array(
+        'home-page'         => 'title-home-wpseo',
+        'date-archive'      => 'title-archive-wpseo',
+        'post-type-archive' => 'title-ptarchive-' . $sub,
+        'system-page'       => ( '404' === $sub ) ? 'title-404-wpseo' : 'title-search-wpseo',
+    );
+    $type      = (string) $presentation->model->object_type;
+    $templates = tiagsspace_title_templates();
+    if ( isset( $keys[ $type ], $templates[ $keys[ $type ] ] ) ) {
+        $presentation->title = $templates[ $keys[ $type ] ];
+    }
+    return $presentation;
+}, 10 );
+
+
 // ----- Share cards: bare titles -----
 // Yoast's free version ignores its own "social title" templates and repeats the
 // search title on share cards. A card carries the bare name instead: the work's
@@ -849,12 +942,15 @@ function tiagsspace_bare_share_title( $title ) {
     if ( is_singular() ) {
         $id   = get_queried_object_id();
         $bare = get_the_title( $id );
-        // A page with its own search title ("Links / %%sitename%%") shares under the
+        // A page with its own search title ("Links ‹ %%sitename%%") shares under the
         // first segment of that title, so the card and the search result agree.
+        // Titles are separated by " ‹ " (work first, then what it belongs to); the
+        // slash is still read, for titles written before the change.
         $own = trim( (string) get_post_meta( $id, '_yoast_wpseo_title', true ) );
-        if ( $own !== '' && strpos( $own, ' / ' ) !== false ) {
-            $first = trim( strstr( $own, ' / ', true ) );
-            if ( $first !== '' && strpos( $first, '%%' ) === false ) {
+        if ( $own !== '' ) {
+            $parts = preg_split( '#\s+(?:‹|/)\s+#u', $own, 2 );
+            $first = trim( (string) $parts[0] );
+            if ( count( $parts ) > 1 && $first !== '' && strpos( $first, '%%' ) === false ) {
                 $bare = $first;
             }
         }
