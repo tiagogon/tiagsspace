@@ -1,3 +1,6 @@
 
 # Claude Code personal/local settings — never commit (may contain secrets)
 .claude/settings.local.json
+
+# Local-only dev notes (test accounts, local URLs)
+.claude/rules/local-dev.md
