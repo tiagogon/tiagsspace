@@ -257,30 +257,51 @@
 		sync();
 	}
 
-	// Hook every media frame's open event (mirrors media-library-default-uploaded.js).
+	/**
+	 * Wire a frame's open / content:render events.
+	 *
+	 * WordPress 7.1+ block editor (@wordpress/media-utils) builds
+	 * MediaFrame.Select / MediaFrame.Post subclasses directly instead of calling
+	 * wp.media(), so hook the frame constructor (every frame class extends
+	 * Select) and keep the wp.media() wrapper for anything else; the flag
+	 * prevents double wiring when both paths run for the same frame.
+	 */
+	function wireFrame( frame ) {
+		if ( ! frame || ! frame.on || frame.__tiagsspaceDuplicateWired ) {
+			return;
+		}
+		frame.__tiagsspaceDuplicateWired = true;
+		frame.on( 'open', function () {
+			// Defer so the toolbar DOM exists.
+			setTimeout( function () {
+				injectButton( frame );
+				// Runs after media-library-default-uploaded.js's reset()/more()
+				// so our fresh re-query wins and the grid isn't left empty.
+				if ( pendingRefresh ) {
+					pendingRefresh = false;
+					forceLibraryRefresh( frame );
+				}
+			}, 0 );
+		} );
+		// Re-inject when switching states (e.g. back from Create gallery).
+		frame.on( 'content:render', function () {
+			setTimeout( function () {
+				injectButton( frame );
+			}, 0 );
+		} );
+	}
+
+	var SelectFrame = wp.media.view.MediaFrame.Select;
+	var originalSelectInit = SelectFrame.prototype.initialize;
+	SelectFrame.prototype.initialize = function () {
+		originalSelectInit.apply( this, arguments );
+		wireFrame( this );
+	};
+
 	var originalMedia = wp.media;
 	wp.media = function () {
 		var frame = originalMedia.apply( this, arguments );
-		if ( frame && frame.on ) {
-			frame.on( 'open', function () {
-				// Defer so the toolbar DOM exists.
-				setTimeout( function () {
-					injectButton( frame );
-					// Runs after media-library-default-uploaded.js's reset()/more()
-					// so our fresh re-query wins and the grid isn't left empty.
-					if ( pendingRefresh ) {
-						pendingRefresh = false;
-						forceLibraryRefresh( frame );
-					}
-				}, 0 );
-			} );
-			// Re-inject when switching states (e.g. back from Create gallery).
-			frame.on( 'content:render', function () {
-				setTimeout( function () {
-					injectButton( frame );
-				}, 0 );
-			} );
-		}
+		wireFrame( frame );
 		return frame;
 	};
 	$.extend( wp.media, originalMedia );

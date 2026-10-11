@@ -20,30 +20,46 @@
 
 	// Force media library to re-fetch from server every time it opens,
 	// so attachments deleted in another tab or by automated cleanup are not shown as stale.
-	// Override wp.media() to hook into every frame's "open" event.
+	function refetchOnOpen( frame ) {
+		if ( ! frame || ! frame.on || frame.__tiagsspaceRefetchWired ) {
+			return;
+		}
+		frame.__tiagsspaceRefetchWired = true;
+		frame.on( 'open', function() {
+			// Clear the global attachment cache (stale items deleted elsewhere).
+			if ( wp.media.Attachment && wp.media.Attachment.all ) {
+				wp.media.Attachment.all.reset();
+			}
+			// Force the library to re-mirror a fresh Query and refetch from the
+			// server. reset()+more() alone leaves the grid empty on reopen,
+			// because a Query that considers itself "complete" won't re-fetch;
+			// bumping a throwaway prop changes the query cache key so a fresh
+			// Query is mirrored and pulled from the server (same pattern the
+			// media-modal CTA scripts use in forceLibraryRefresh()).
+			if ( frame.state && frame.state() ) {
+				var library = frame.state().get( 'library' );
+				if ( library && library.props && library.props.set ) {
+					library.props.set( 'ignore', ( + new Date() ) );
+				}
+			}
+		} );
+	}
+
+	// WordPress 7.1+ block editor (@wordpress/media-utils) builds
+	// MediaFrame.Select / MediaFrame.Post subclasses directly instead of calling
+	// wp.media(), so hook the frame constructor (every frame class extends
+	// Select) and keep the wp.media() wrapper for anything else.
+	var SelectFrame = wp.media.view.MediaFrame.Select;
+	var originalSelectInit = SelectFrame.prototype.initialize;
+	SelectFrame.prototype.initialize = function () {
+		originalSelectInit.apply( this, arguments );
+		refetchOnOpen( this );
+	};
+
 	var originalMedia = wp.media;
 	wp.media = function() {
 		var frame = originalMedia.apply( this, arguments );
-		if ( frame && frame.on ) {
-			frame.on( 'open', function() {
-				// Clear the global attachment cache (stale items deleted elsewhere).
-				if ( wp.media.Attachment && wp.media.Attachment.all ) {
-					wp.media.Attachment.all.reset();
-				}
-				// Force the library to re-mirror a fresh Query and refetch from the
-				// server. reset()+more() alone leaves the grid empty on reopen,
-				// because a Query that considers itself "complete" won't re-fetch;
-				// bumping a throwaway prop changes the query cache key so a fresh
-				// Query is mirrored and pulled from the server (same pattern the
-				// media-modal CTA scripts use in forceLibraryRefresh()).
-				if ( frame.state && frame.state() ) {
-					var library = frame.state().get( 'library' );
-					if ( library && library.props && library.props.set ) {
-						library.props.set( 'ignore', ( + new Date() ) );
-					}
-				}
-			} );
-		}
+		refetchOnOpen( frame );
 		return frame;
 	};
 	// Copy all static properties (Attachment, view, etc.)
