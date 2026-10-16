@@ -595,17 +595,24 @@ if($attachmens){
                 forceFallback: true,
                 fallbackOnBody: true,
                 fallbackTolerance: 3,
-                onStart: function() {
+                onStart: function(evt) {
                     wasDragging = true;
+                    // Picking an image up makes it the keyboard-focused one,
+                    // even if it is dropped back in the same slot (no onSort then).
+                    if (typeof window.galleryKeyboardReorderFocus === 'function') {
+                        window.galleryKeyboardReorderFocus(evt.item);
+                    }
                 },
                 onUnchoose: function() {
                     // Reset flag after a short delay so the click event is caught first
                     setTimeout(function() { wasDragging = false; }, 50);
                 },
-                onSort: function() {
+                onSort: function(evt) {
                     console.log("Sorted happend.");
-                    if (typeof window.galleryKeyboardReorderReset === 'function') {
-                        window.galleryKeyboardReorderReset();
+                    // Keep keyboard focus on the dragged item at its new index
+                    // (DOM order is final when onSort fires).
+                    if (typeof window.galleryKeyboardReorderFocus === 'function') {
+                        window.galleryKeyboardReorderFocus(evt.item);
                     }
                     // Refresh Masonry layout after drag-reorder
                     var $grid = jQuery('#gallery-<?php the_ID(); ?>');

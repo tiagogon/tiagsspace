@@ -416,4 +416,21 @@
         container.removeAttribute( 'data-kb-tracked-id' );
     };
 
+    // Make a given .item the focused + tracked element. Sortable calls this
+    // with the dragged element on pick-up and on drop, so the keyboard keeps
+    // acting on the image that was just moved instead of falling back to the
+    // first one. No scrollToFocused(): the item is already where the viewer
+    // dropped it, and Masonry is still animating so rects would be stale.
+    window.galleryKeyboardReorderFocus = function ( el ) {
+        var items = getItems();
+        for ( var i = 0; i < items.length; i++ ) {
+            if ( items[i] === el ) {
+                container.setAttribute( 'data-kb-focus', i );
+                container.setAttribute( 'data-kb-tracked-id', items[i].getAttribute( 'attachmentId' ) );
+                flashItem( items, i );
+                return;
+            }
+        }
+    };
+
 })();
