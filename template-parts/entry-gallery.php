@@ -773,7 +773,11 @@ if($attachmens){
                 if (intenseEls.length) { Intense(intenseEls); }
             }
 
-            if (typeof window.galleryKeyboardReorderReset === 'function') {
+            // The revealed item becomes the keyboard's focused + tracked item,
+            // so a following arrow / H / N acts on it.
+            if (typeof window.galleryKeyboardReorderFocus === 'function') {
+                window.galleryKeyboardReorderFocus(node);
+            } else if (typeof window.galleryKeyboardReorderReset === 'function') {
                 window.galleryKeyboardReorderReset();
             }
 
