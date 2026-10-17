@@ -577,7 +577,8 @@ if($attachmens){
             #gallery-<?php the_ID(); ?> .item { -webkit-user-select: none; -moz-user-select: none; user-select: none; }
             .sortable-fallback { transition: none !important; padding: 0 !important; opacity: 1 !important; }
         </style>
-        <script src="<?php bloginfo('template_url'); ?>/library/js/Sortable-master/Sortable.js"></script>
+        <?php // Static files are served with a one-year cache: version both tags by filemtime. ?>
+        <script src="<?php bloginfo('template_url'); ?>/library/js/Sortable-master/Sortable.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/Sortable-master/Sortable.js' ) ); ?>"></script>
         <script type="text/javascript">
             // As an Admin, I can sort the media elements on a gallery when I am previewing the post
             // documentation here: https://github.com/RubaXa/Sortable
@@ -642,7 +643,7 @@ if($attachmens){
         // Lightbox mode, so a revealed hidden item can be re-bound to it.
         window.galleryLightbox = '<?php echo esc_js( $light_box ); ?>';
         </script>
-        <script src="<?php bloginfo('template_url'); ?>/library/js/gallery-keyboard-reorder.js"></script>
+        <script src="<?php bloginfo('template_url'); ?>/library/js/gallery-keyboard-reorder.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/gallery-keyboard-reorder.js' ) ); ?>"></script>
 
         <!-- CUSTOM FUNCTIONS -->
         <script type="text/javascript">
