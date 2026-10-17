@@ -359,21 +359,24 @@ if($attachmens){
             ),
         ) );
 
-        if ( $hidden_pool_items ) {
-            $rendering_hidden_pool = true;
-            ?>
-            <div id="gallery-hidden-pool-<?php the_ID(); ?>" class="gallery-hidden-pool" style="display:none" aria-hidden="true">
-                <?php
+        // The pool is always present in preview mode, even when empty: H parks
+        // hidden nodes here and orderAttachmentesOnWpDb() reads it to keep
+        // hidden items at their spot in menu_order.
+        $rendering_hidden_pool = true;
+        ?>
+        <div id="gallery-hidden-pool-<?php the_ID(); ?>" class="gallery-hidden-pool" style="display:none" aria-hidden="true">
+            <?php
+            if ( $hidden_pool_items ) {
                 // gallery-item.php increments $count_item itself.
                 foreach ( $hidden_pool_items as $attachmen ) {
                     include( locate_template( 'template-parts/gallery-item.php' ) );
                 }
                 wp_reset_postdata();
-                ?>
-            </div>
-            <?php
-            $rendering_hidden_pool = false;
-        }
+            }
+            ?>
+        </div>
+        <?php
+        $rendering_hidden_pool = false;
     }
     ?>
 
@@ -646,20 +649,56 @@ if($attachmens){
 
         // Custom functions
 
-        // Reorder Gallery Attachments via AJAX call
+        // Save the gallery order (menu_order) via AJAX, one request per item.
+        // Visible items are numbered in DOM order. Hidden items (off-grid pool)
+        // are interleaved right after the visible item that preceded them at the
+        // last save — the one with the largest previous attachmentOrder below
+        // theirs — so a hidden image keeps its spot and U can put it back there
+        // later. Hidden items with no visible predecessor go to the front.
+        // Nothing is pushed to the end of the gallery anymore.
+        function galleryItemsOf(parent) {
+            return parent ? Array.prototype.filter.call(parent.children, function (c) {
+                return c.classList && c.classList.contains('item');
+            }) : [];
+        }
+        function galleryOrderOf(el) {
+            return parseInt(el.getAttribute('attachmentOrder'), 10) || 0;
+        }
+
         function orderAttachmentesOnWpDb() {
+            var grid = document.getElementById('gallery-<?php the_ID(); ?>');
+            var pool = document.getElementById('gallery-hidden-pool-<?php the_ID(); ?>');
+            if (!grid) return;
 
-            var menuOrderCount = 0;
+            var visible = galleryItemsOf(grid);
+            var hidden  = galleryItemsOf(pool).sort(function (a, b) {
+                return galleryOrderOf(a) - galleryOrderOf(b);
+            });
 
-            $('#gallery-<?php the_ID(); ?>').children('div').each(function () {
+            // after[i] = hidden items anchored behind visible[i]; front = no anchor.
+            var front = [];
+            var after = visible.map(function () { return []; });
+            hidden.forEach(function (h) {
+                var ho = galleryOrderOf(h), anchor = -1, best = -Infinity;
+                for (var i = 0; i < visible.length; i++) {
+                    var vo = galleryOrderOf(visible[i]);
+                    if (vo < ho && vo > best) { best = vo; anchor = i; }
+                }
+                (anchor < 0 ? front : after[anchor]).push(h);
+            });
 
-                menuOrderCount++;
+            var sequence = front.slice();
+            visible.forEach(function (v, i) {
+                sequence.push(v);
+                sequence = sequence.concat(after[i]);
+            });
 
-                console.log(menuOrderCount);
-                console.log(this.getAttribute('attachmentid')); //log every element found to console output
-
-                var attachmentId = this.getAttribute('attachmentid');
-                var attachmentOrder = menuOrderCount;
+            sequence.forEach(function (el, idx) {
+                var attachmentId = el.getAttribute('attachmentId');
+                var attachmentOrder = idx + 1;
+                // The next save in this page anchors against these fresh numbers.
+                el.setAttribute('attachmentOrder', attachmentOrder);
+                if (!attachmentId) return;
 
                 // This does the ajax request to change the menu_order value on the wp_db
                 $.ajax({
@@ -671,44 +710,13 @@ if($attachmens){
                     },
                     cache: false,  // Disable caching explicitly
                     success:function(data) {
-                        // This outputs the result of the ajax request
                         console.log(data);
                     },
                     error: function(errorThrown){
                         console.log(errorThrown);
                     }
                 });
-
-            }); // loop ends
-
-            // Push hidden attachments after visible ones in menu_order
-            $.ajax({
-                url: example_ajax_obj.ajaxurl,
-                data: {
-                    'action': 'gallery_reorder_hidden_attachments',
-                    'post_id': <?php the_ID(); ?>,
-                    'visible_count': menuOrderCount
-                },
-                success: function(data) {
-                    console.log('Hidden attachments reordered:', data);
-                },
-                error: function(errorThrown) {
-                    console.log(errorThrown);
-                }
             });
-
-            // Reload pages
-               ///location.reload();
-
-               // THis solves the issue of some images not being order, the last ones of the gallerie. this was happening because the page was reloaded to fast and the api calles aborted 
-               let reloadTimeout;
-                function debounceReload() {
-                    clearTimeout(reloadTimeout);
-                    reloadTimeout = setTimeout(function() {
-                        location.reload();
-                    }, 1000); // 1 second delay
-                }
-
         }
 
         // Debounced wrapper around orderAttachmentesOnWpDb so drag auto-save and
@@ -723,27 +731,10 @@ if($attachmens){
             }, 400);
         };
 
-        // Reveal the next hidden attachment (from the off-grid pool) and drop it
-        // into the grid right after `refItem`. Works for items hidden in ANY
-        // session, unlike the in-memory Undo (U) stack. No page reload.
-        window.revealGalleryHiddenAfter = function (refItem) {
-            var grid = document.getElementById('gallery-<?php the_ID(); ?>');
+        // Shared tail of both reveal paths, once `node` sits in the grid:
+        // persist the unhide, rebind Masonry / lightbox, focus it, save the order.
+        function finishGalleryReveal(node) {
             var pool = document.getElementById('gallery-hidden-pool-<?php the_ID(); ?>');
-            if (!grid || !pool) return;
-
-            var node = pool.querySelector('.item');
-            if (!node) {
-                // Nothing left to reveal.
-                document.querySelectorAll('.nexthidden').forEach(function (b) { b.style.display = 'none'; });
-                return;
-            }
-
-            // Move it into the grid, right after the reference item (or append).
-            if (refItem && refItem.parentNode === grid) {
-                refItem.insertAdjacentElement('afterend', node);
-            } else {
-                grid.appendChild(node);
-            }
 
             // Persist unhide: clear remove_from_default_gallery on the attachment.
             var attId = node.getAttribute('attachmentId');
@@ -787,9 +778,68 @@ if($attachmens){
             }
 
             // Hide the reveal buttons once the pool is empty.
-            if (!pool.querySelector('.item')) {
+            if (!pool || !pool.querySelector('.item')) {
                 document.querySelectorAll('.nexthidden').forEach(function (b) { b.style.display = 'none'; });
             }
+        }
+
+        // N: reveal the next hidden attachment (first in the off-grid pool) and
+        // drop it into the grid right after `refItem` (or append). Works for
+        // items hidden in ANY session, unlike the in-memory Undo (U) stack.
+        window.revealGalleryHiddenAfter = function (refItem) {
+            var grid = document.getElementById('gallery-<?php the_ID(); ?>');
+            var pool = document.getElementById('gallery-hidden-pool-<?php the_ID(); ?>');
+            if (!grid || !pool) return;
+
+            var node = pool.querySelector('.item');
+            if (!node) {
+                // Nothing left to reveal.
+                document.querySelectorAll('.nexthidden').forEach(function (b) { b.style.display = 'none'; });
+                return;
+            }
+
+            if (refItem && refItem.parentNode === grid) {
+                refItem.insertAdjacentElement('afterend', node);
+            } else {
+                grid.appendChild(node);
+            }
+
+            finishGalleryReveal(node);
+        };
+
+        // U with an empty undo stack: put the most recently hidden image (the
+        // pool item with the highest saved menu_order) back where menu_order
+        // says it was — right after the visible item with the largest
+        // attachmentOrder below its own, or first in the grid when there is
+        // none. Returns false when the pool is empty.
+        window.revealGalleryHiddenRestore = function () {
+            var grid = document.getElementById('gallery-<?php the_ID(); ?>');
+            var pool = document.getElementById('gallery-hidden-pool-<?php the_ID(); ?>');
+            if (!grid || !pool) return false;
+
+            var node = null;
+            galleryItemsOf(pool).forEach(function (h) {
+                if (!node || galleryOrderOf(h) > galleryOrderOf(node)) node = h;
+            });
+            if (!node) return false;
+
+            var order = galleryOrderOf(node), anchor = null, best = -Infinity;
+            var visible = galleryItemsOf(grid);
+            visible.forEach(function (v) {
+                var vo = galleryOrderOf(v);
+                if (vo < order && vo > best) { best = vo; anchor = v; }
+            });
+
+            if (anchor) {
+                anchor.insertAdjacentElement('afterend', node);
+            } else if (visible.length) {
+                grid.insertBefore(node, visible[0]); // after the Masonry sizer
+            } else {
+                grid.appendChild(node);
+            }
+
+            finishGalleryReveal(node);
+            return true;
         };
 
         // Per-image "NEXT HIDDEN" button handler.

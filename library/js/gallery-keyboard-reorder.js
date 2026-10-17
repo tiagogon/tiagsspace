@@ -3,6 +3,12 @@
  *
  * Left / Right  — move focus between items (no wrap)
  * Up / Down     — swap focused item with neighbor (wraps at edges)
+ * H             — hide the focused item (node parks in the off-grid pool)
+ * U             — undo this session's hides (in-memory stack); once that is
+ *                 empty, restore pooled hidden items one per press, highest
+ *                 saved menu_order first, each at its saved spot
+ *                 (window.revealGalleryHiddenRestore, entry-gallery.php)
+ * N             — reveal the next pooled hidden item after the focused one
  *
  * Requires: window.galleryKeyboardReorderTarget = 'gallery-{ID}'
  * set before this script loads.
@@ -115,8 +121,15 @@
             prevSiblingId: prevSiblingId
         } );
 
-        // Remove from DOM
-        container.removeChild( el );
+        // Park the node in the off-grid pool (it keeps its attachmentOrder, so
+        // the order save keeps it at its spot and U can restore it after a
+        // refresh). The undo stack still holds the same node.
+        var pool = document.getElementById( 'gallery-hidden-pool-' + containerId.replace( 'gallery-', '' ) );
+        if ( pool ) {
+            pool.appendChild( el );
+        } else {
+            container.removeChild( el );
+        }
 
         // Persist: set remove_from_default_gallery = 1
         ajaxToggleHide( attId, true );
@@ -153,7 +166,14 @@
     // ── Undo last hide (U) ──────────────────────────────────
 
     function undoHide() {
-        if ( hideStack.length === 0 ) return;
+        // Nothing hidden in this session (e.g. after a refresh): restore the
+        // most recently hidden pooled item at its saved spot instead.
+        if ( hideStack.length === 0 ) {
+            if ( typeof window.revealGalleryHiddenRestore === 'function' ) {
+                window.revealGalleryHiddenRestore();
+            }
+            return;
+        }
 
         var entry = hideStack.pop();
         var items = getItems();
