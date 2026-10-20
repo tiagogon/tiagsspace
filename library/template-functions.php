@@ -78,36 +78,6 @@ function tiagsspace_series_name( $post_type, $context = 'archive' ) {
     return $obj ? $obj->labels->name : '';
 }
 
-/**
- * The same name as HTML for places that are short of room: the short name is
- * always shown and the added word ("Series", "Mix", "Mixes") only from a
- * Bootstrap breakpoint up. The whole name stays in the markup either way.
- *
- * Used by the header of a series archive (from 'sm': a phone header holds
- * "S / 4K Lento" on one line and nothing longer) and by the thumbnail hover
- * label (from 'md' on the home page, from 'xl' elsewhere: measured with the
- * longest titles, the added word never costs the label an extra line).
- *
- * @param string $post_type
- * @param string $context  'archive' | 'single', as tiagsspace_series_name()
- * @param string $from     'sm' | 'md' | 'lg' | 'xl'
- * @return string          Escaped HTML.
- */
-function tiagsspace_series_name_html( $post_type, $context = 'archive', $from = 'sm' ) {
-    $short = array( 'dusk' => 'Dusk', 'hyper' => 'Hyper', 'cityburns' => 'City', '4k-lento' => '4K Lento' );
-    $full  = tiagsspace_series_name( $post_type, $context );
-    $from  = in_array( $from, array( 'sm', 'md', 'lg', 'xl' ), true ) ? $from : 'sm';
-    if ( ! isset( $short[ $post_type ] ) || strpos( $full, $short[ $post_type ] ) !== 0 ) {
-        return esc_html( $full );
-    }
-    $extra = substr( $full, strlen( $short[ $post_type ] ) );
-    if ( $extra === '' ) {
-        return esc_html( $full );
-    }
-    return esc_html( $short[ $post_type ] ) . '<span class="d-none d-' . $from . '-inline">' . esc_html( $extra ) . '</span>';
-}
-
-
 // LIST OF TAGS
 function taxonomy_list($post_id_of_the_tags,$custom_taxonomy, $tag_before, $tag_after, $separator_term, $separator_term_last, $tax_link) {
     //ID of the current post
