@@ -82,6 +82,30 @@
         color: inherit;
       }
     }
+    // The date line that took the title's place on a single work ("20250913 +").
+    // The "+" is a button that reads as text: the glyph sits where a word would,
+    // with a hit area of about 44px around it (padding, pulled back by margin).
+    .entry-date .entry-date-toggle {
+      display: inline-block;
+      padding: 10px 14px;
+      margin: -10px -14px;
+      border: 0;
+      background: none;
+      font: inherit;
+      line-height: inherit;
+      color: inherit;
+      cursor: pointer;
+      &:hover {
+        text-decoration: none;
+      }
+      &:focus {
+        outline: none;
+      }
+      &:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: -6px;
+      }
+    }
     p.meta {
       margin-bottom: $font-size-heading;
       font-size: 12px;
@@ -137,6 +161,10 @@
       }
     }
   }
+}
+// The expanded terms sit right under the date line, not a second gutter away.
+.single-content header + footer {
+  margin-top: 0;
 }
 // Log archive: smaller title on mobile
 @media (max-width: map-get($grid-breakpoints, sm)) {

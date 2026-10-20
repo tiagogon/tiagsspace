@@ -6575,6 +6575,11 @@ img.mfp-img {
       font-size: 36px;
       font-family: "Lora", serif;
       color: #fff; }
+    #site-header .topbar-left .site-title-heading {
+      display: inline;
+      margin: 0;
+      font: inherit;
+      color: inherit; }
   #site-header #topbar {
     right: 12px;
     line-height: 1.2; }
@@ -6610,6 +6615,11 @@ img.mfp-img {
   #site-header .header-other-pages-title {
     display: none !important; }
 
+@media (max-width: 575.98px) {
+  body.header-entry-title #site-header .topbar-left,
+  body.header-entry-title #site-header .topbar-left.collapsing {
+    position: absolute;
+    max-width: calc(100vw - 72px); } }
 #site-header .site-title,
 #lower-header .site-title {
   margin-top: 0;
@@ -7221,6 +7231,23 @@ a.delete {
     margin: 0;
     font: inherit;
     color: inherit; }
+.single-content .page-header .entry-date .entry-date-toggle {
+  display: inline-block;
+  padding: 10px 14px;
+  margin: -10px -14px;
+  border: 0;
+  background: none;
+  font: inherit;
+  line-height: inherit;
+  color: inherit;
+  cursor: pointer; }
+  .single-content .page-header .entry-date .entry-date-toggle:hover {
+    text-decoration: none; }
+  .single-content .page-header .entry-date .entry-date-toggle:focus {
+    outline: none; }
+  .single-content .page-header .entry-date .entry-date-toggle:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -6px; }
 .single-content .page-header p.meta {
   margin-bottom: 36px;
   font-size: 12px;
@@ -7270,6 +7297,9 @@ a.delete {
           @media screen and (prefers-reduced-motion: reduce) {
             .single-content footer ul li a:hover {
               transition: none; } }
+
+.single-content header + footer {
+  margin-top: 0; }
 
 @media (max-width: 576px) {
   .post-type-archive-log .single-content .page-header .single-title, .tax-log-branch .single-content .page-header .single-title {

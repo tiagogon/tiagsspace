@@ -25,6 +25,22 @@ require_once __DIR__ . '/crumbs.php';
 require_once __DIR__ . '/render.php';
 
 /**
+ * Body class "header-entry-title" on the pages whose header line carries a
+ * work's title (every singular view but the Index page), so the stylesheet can
+ * treat that line differently from an archive's (_region-header-nav.scss).
+ */
+add_filter( 'body_class', function ( $classes ) {
+    $crumbs = tiagsspace_page_crumbs();
+    foreach ( $crumbs as $crumb ) {
+        if ( ! empty( $crumb['heading'] ) ) {
+            $classes[] = 'header-entry-title';
+            break;
+        }
+    }
+    return $classes;
+} );
+
+/**
  * WP-CLI: print the crumbs and the rendered lines of one or more posts, to
  * check the module against README.md or to see what a work will be called.
  *

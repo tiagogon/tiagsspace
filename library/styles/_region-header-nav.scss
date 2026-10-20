@@ -133,6 +133,14 @@
       font-family: $font-family-menu;
       color: $white; // blend base — inverted by the block's mix-blend-mode
     }
+    // A single work: the title crumb is the page's <h1>, inline in the line
+    // ("Tiags' Space / Dusk Series / Them"), rendered exactly as the words around it.
+    .site-title-heading {
+      display: inline;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+    }
   }
   #topbar {
     @include header-side-offset(right);
@@ -164,6 +172,21 @@
 
   .header-other-pages-title {
     display: none!important;
+  }
+}
+
+// A single work on a phone (body.header-entry-title, set by library/page-title/):
+// the line may take the whole width left of "R", and it scrolls away with the
+// page instead of staying fixed, so it reads once at the top and the work is then
+// left alone. position: absolute inside the zero-height absolute #site-header
+// blends exactly as fixed did. Archives keep the fixed header at every width.
+@include media-breakpoint-down(xs) {
+  body.header-entry-title #site-header {
+    .topbar-left,
+    .topbar-left.collapsing {
+      position: absolute;
+      max-width: calc(100vw - 72px);
+    }
   }
 }
 
