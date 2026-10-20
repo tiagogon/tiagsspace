@@ -339,71 +339,29 @@ Index of posts for Home and Archives
 
                       <?php
 
-                      // get Strings -- post type name and log branches
-                        // Post type name string
-                        // Spelled as everywhere else: "Dusk Series", "Hyper Series", "4K Lento Mix"
-                        // (see tiagsspace_series_name()). The added word shows only where it does not
-                        // push the label onto another line, measured with the longest titles:
-                        // from md (768px) on the home page, from xl (1200px) on every other page,
-                        // whose header is longer ("Tiags' Space / Place / Berlin > Space / …").
-                        // City keeps its full name at every width, as it always has.
-                        // The string ends up inside showText('…') in a double-quoted attribute, so
-                        // the span's own quotes are written as &quot;.
-                        $post_type_name_string = "";
-                        $post_type = get_post_type( $post->ID );
-                        $obj = get_post_type_object( $post_type );
-                        if ( 'cityburns' === $post_type ) {
-                          $post_type_name_string = esc_html( tiagsspace_series_name( $post_type, 'single' ) );
-                        } else {
-                          $label_from = ( is_home() || is_front_page() ) ? 'md' : 'xl';
-                          $post_type_name_string = str_replace( '"', '&quot;', tiagsspace_series_name_html( $post_type, 'single', $label_from ) );
-                        }
-
-                        // Log Branches next_string
-                        $log_branches_string = "";
-                        $log_branches_string = taxonomy_list($post->ID,'log-branch','',' ',', ', ' & ', 'no-link');
-
-                      // Declare empety virable
-                      $post_title = "";
-
-                      // Tiags Space root
-                      $post_title_space_root = " > Space";
-
-                      // Post type root
-                      $post_title_type_archive_root = "";
-                      $post_title_type_archive_root = " / ".$post_type_name_string;
-
-                      // Log Branch root
-                      $post_title_logBranch_root = "";
-                      if (!$log_branches_string== "") {
-                        $post_title_logBranch_root = " / ".$log_branches_string;
-                      }
-
-                      // post title root prefix
-                      $post_title_prefix = " / ";
-
-                      // Build title to display per view
-                      if (is_tax() and !is_tax( 'log-branch' )  ) {
-                        $post_title = $post_title_space_root.$post_title_type_archive_root.$post_title_logBranch_root.$post_title_prefix.get_the_title($post->ID);
-                      } elseif (is_post_type_archive('hyper')
-                      OR is_post_type_archive('4k-lento')
-                      OR is_post_type_archive('films')
-                      OR is_post_type_archive('dusk')
-                      OR is_post_type_archive('cityburns'))
-                      {
-                        $post_title = $post_title_prefix.get_the_title($post->ID);
-                      } elseif (is_singular()) {
-                        $post_title = $post_title_space_root.$post_title_type_archive_root.$post_title_logBranch_root.$post_title_prefix.get_the_title($post->ID);
-                      } else {
-                        $post_title = $post_title_type_archive_root.$post_title_logBranch_root.$post_title_prefix.get_the_title($post->ID);
-                      }
-
+                      // Hover label: what the fixed header shows while the mouse is over this
+                      // thumbnail. showText() appends it after the page title, so it starts
+                      // with the separator. On the archive of one series it is the title alone;
+                      // elsewhere the series (or Log and branch) comes first. The series' added
+                      // word ("Series", "Mix") shows from md on the home page and from xl
+                      // elsewhere, measured with the longest titles; City never shortens.
+                      // Singles and taxonomy pages keep their " > Space" root.
+                      // Built by library/page-title/ and stored in data-label, so no PHP
+                      // writes JavaScript and any title survives (quotes, ampersands).
+                      $label_config = tiagsspace_page_title_config();
+                      $label_omit   = is_post_type_archive() ? array( 'type', 'branch' ) : array();
+                      $label_bp     = in_array( $post_type, $label_config['label_always_full'], true ) ? false : ( ( is_home() || is_front_page() ) ? 'md' : 'xl' );
+                      $label_before = ( is_singular() || ( is_tax() && ! is_tax( 'log-branch' ) ) ) ? ' > Space' : '';
+                      $post_title   = tiagsspace_render_crumbs(
+                          tiagsspace_entry_crumbs( $post->ID, array( 'omit' => $label_omit ) ),
+                          array( 'links' => false, 'responsive' => $label_bp, 'before' => $label_before, 'leading_sep' => true, 'wrap' => false )
+                      );
 
                       ?>
 
                       <?php // mouseenter/mouseleave, not mouseover/mouseout: those bubble from every child
                             // (link, container, img/video) and re-wrote the fixed header blocks on each crossing. ?>
-                      <figure onmouseenter="showText('<?php echo $post_title; ?>'); showYear('<?php echo get_the_date('Y-m'); ?>')" onmouseleave="hide(); hideYear();">
+                      <figure data-label="<?php echo esc_attr( $post_title ); ?>" onmouseenter="showText(this.dataset.label); showYear('<?php echo get_the_date('Y-m'); ?>')" onmouseleave="hide(); hideYear();">
 
                           <a href="<?php echo get_permalink(); ?>">
 

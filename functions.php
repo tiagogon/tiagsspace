@@ -17,6 +17,7 @@ require_once('library/video/enqueues.php');   // conditional player asset regist
 require_once('library/video/hls-import.php'); // Media Library .hlspack.zip → HLS attachment
 require_once('library/video/hls-subtitles.php'); // EXT-X-MEDIA subtitle renditions in a bundle
 require_once('library/film-captions.php');    // ACF glue: caption rows → subtitle renditions
+require_once('library/page-title/page-title.php'); // Page title: header line, entry titles, hover labels (crumbs + renderer)
 
 // Admin Functions
 require_once('library/admin.php');              // custom admin functions

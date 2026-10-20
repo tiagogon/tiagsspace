@@ -20,9 +20,6 @@ Single // log Archive pages >> Content
 
   $year = get_the_time("Y");
 
-  $logs_branch = "";
-  $logs_branch = "".taxonomy_list($post->ID,'log-branch',' ',' /',', ', ' & ', 'link');
-
   // Metadata footer (date, terms, Edit, Download) is editor-only and only on the
   // single post itself — on Log listings the title already links to the post, so
   // editors open the post to reach it. Visitors never get the footer in the DOM.
@@ -35,40 +32,38 @@ Single // log Archive pages >> Content
 
     <div class="page-header">
         <?php
-        // The heading element holds ONLY the work's title (one <h1> per page; <h2> on listings).
-        // The "<Type> / <branch> /" breadcrumb prefix sits beside it in the same inline flow,
-        // so the rendering is unchanged (see .single-title in _page-single-content.scss).
-        $heading_tag = $is_single ? 'h1' : 'h2';
-        $prefix = '';
-        // "<Type> / " prefix — skipped for films, which are not an artistic series.
-        if ( 'films' !== $post_type && !is_post_type_archive() AND !is_tax( 'log-branch' )) {
-          // Same words as the page title ("Dusk Series", "4K Lento Mix"), so the heading and
-          // the search result agree. See tiagsspace_series_name().
-          $prefix .= '<a href="'.get_post_type_archive_link( $post_type ).'">'.esc_html( tiagsspace_series_name( $post_type, 'single' ) ).'</a> / ';
-        }
-        if (!is_tax( 'log-branch' ) && $logs_branch ) {
-          $prefix .= trim( $logs_branch ).' ';
+        // The title line: "<Series> / <branch> / <Title>", built by library/page-title/.
+        // The heading element (h1 on the single post, h2 on listings) holds only the
+        // work's title; the series and branch crumbs sit beside it in the same inline
+        // flow (see .single-title in _page-single-content.scss). A listing leaves out
+        // what its page header already says: the Log archive the type, a branch
+        // listing the type and the branch.
+        $render_args = array(
+            'class'         => 'single-title',
+            'responsive'    => false,
+            'heading_attrs' => array( 'itemprop' => 'headline' ),
+        );
+        if ( $is_single ) {
+            $crumbs = tiagsspace_entry_crumbs( $post->ID );
+            $render_args['heading'] = 'h1';
+            if ( $show_meta ) {
+                // Editors: the title itself toggles the metadata footer below.
+                $toggle_id = 'collapsePostFooter' . $post->ID;
+                $crumbs[ count( $crumbs ) - 1 ]['url'] = '#' . $toggle_id;
+                echo str_replace(
+                    '<a href="#' . $toggle_id . '">',
+                    '<a data-toggle="collapse" href="#' . $toggle_id . '" role="button" aria-expanded="false" aria-controls="' . $toggle_id . '">',
+                    tiagsspace_render_crumbs( $crumbs, $render_args )
+                );
+            } else {
+                echo tiagsspace_render_crumbs( $crumbs, $render_args );
+            }
+        } else {
+            $omit = is_tax( 'log-branch' ) ? array( 'type', 'branch' ) : ( is_post_type_archive() ? array( 'type' ) : array() );
+            $render_args['heading'] = 'h2';
+            echo tiagsspace_render_crumbs( tiagsspace_entry_crumbs( $post->ID, array( 'omit' => $omit, 'link_title' => true ) ), $render_args );
         }
         ?>
-        <div class="single-title">
-           <?php
-           if ( $prefix ) {
-             echo '<span class="single-title-prefix">'.$prefix.'</span>';
-           }
-           echo '<'.$heading_tag.' class="single-title-heading" itemprop="headline">';
-          if ( $is_single ) {
-            if ( $show_meta ) {
-              // Editors: the title itself toggles the metadata footer below.
-              echo '<a data-toggle="collapse" href="#collapsePostFooter'.$post->ID.'" role="button" aria-expanded="false" aria-controls="collapsePostFooter'.$post->ID.'">'.get_the_title().'</a>';
-            } else {
-              echo get_the_title();
-            }
-          } else {
-            echo '<a href="'.get_permalink().'">'.get_the_title().'</a>';
-          }
-          echo '</'.$heading_tag.'>';
-          ?>
-        </div>
     </div>
 
 </header> <!-- end article header -->
