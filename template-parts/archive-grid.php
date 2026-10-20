@@ -340,28 +340,32 @@ Index of posts for Home and Archives
                       <?php
 
                       // Hover label: what the fixed header shows while the mouse is over this
-                      // thumbnail. showText() appends it after the page title, so it starts
-                      // with the separator. On the archive of one series it is the title alone;
-                      // elsewhere the series (or Log and branch) comes first. The series' added
-                      // word ("Series", "Mix") shows from md on the home page and from xl
-                      // elsewhere, measured with the longest titles; City never shortens.
-                      // Singles and taxonomy pages keep their " > Space" root.
-                      // Built by library/page-title/ and stored in data-label, so no PHP
-                      // writes JavaScript and any title survives (quotes, ampersands).
+                      // thumbnail. On an archive, showText() appends it after the page title,
+                      // so it starts with the separator; on the archive of one series it is the
+                      // title alone, elsewhere the series (or Log and branch) comes first, and
+                      // taxonomy pages keep their " > Space" root. On a single work (the related
+                      // sets) it replaces everything after "Tiags' Space / " in the header, so it
+                      // uses the header's own short-form rule (sm) and no leading separator.
+                      // The series' added word ("Series", "Mix") shows from md on the home page
+                      // and from xl on archives, measured with the longest titles; City never
+                      // shortens. Built by library/page-title/ and stored in data-label, so no
+                      // PHP writes JavaScript and any title survives (quotes, ampersands).
                       $label_config = tiagsspace_page_title_config();
+                      $label_single = is_singular();
                       $label_omit   = is_post_type_archive() ? array( 'type', 'branch' ) : array();
-                      $label_bp     = in_array( $post_type, $label_config['label_always_full'], true ) ? false : ( ( is_home() || is_front_page() ) ? 'md' : 'xl' );
-                      $label_before = ( is_singular() || ( is_tax() && ! is_tax( 'log-branch' ) ) ) ? ' > Space' : '';
+                      $label_bp     = in_array( $post_type, $label_config['label_always_full'], true ) ? false : ( $label_single ? 'sm' : ( ( is_home() || is_front_page() ) ? 'md' : 'xl' ) );
+                      $label_before = ( ! $label_single && is_tax() && ! is_tax( 'log-branch' ) ) ? ' > Space' : '';
                       $post_title   = tiagsspace_render_crumbs(
                           tiagsspace_entry_crumbs( $post->ID, array( 'omit' => $label_omit ) ),
-                          array( 'links' => false, 'responsive' => $label_bp, 'before' => $label_before, 'leading_sep' => true, 'wrap' => false )
+                          array( 'links' => false, 'responsive' => $label_bp, 'before' => $label_before, 'leading_sep' => ! $label_single, 'wrap' => false )
                       );
 
                       ?>
 
                       <?php // mouseenter/mouseleave, not mouseover/mouseout: those bubble from every child
-                            // (link, container, img/video) and re-wrote the fixed header blocks on each crossing. ?>
-                      <figure data-label="<?php echo esc_attr( $post_title ); ?>" onmouseenter="showText(this.dataset.label); showYear('<?php echo get_the_date('Y-m'); ?>')" onmouseleave="hide(); hideYear();">
+                            // (link, container, img/video) and re-wrote the fixed header blocks on each crossing.
+                            // Keyboard focus shows the same label: header-helpers.js reads data-label / data-year. ?>
+                      <figure data-label="<?php echo esc_attr( $post_title ); ?>" data-year="<?php echo esc_attr( get_the_date( 'Y-m' ) ); ?>" onmouseenter="showText(this.dataset.label); showYear(this.dataset.year)" onmouseleave="hide(); hideYear();">
 
                           <a href="<?php echo get_permalink(); ?>">
 

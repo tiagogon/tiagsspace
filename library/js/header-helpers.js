@@ -6,8 +6,24 @@
     var el = byId(id); text = text || '';
     if (el && el.innerHTML !== text) { el.innerHTML = text; }
   }
-  window.showText = function(text){ setLabel('over-text', text); };
-  window.hide = function(){ setLabel('over-text', ''); };
+  // On a single work the header line is the work's title. While a related
+  // thumbnail is hovered, everything after the site crumb (.site-title-entry,
+  // rendered by library/page-title/) gives way to that thumbnail's label, and
+  // comes back on leave. Only while the label target is displayed (from the sm
+  // breakpoint up): below it the span is hidden, and a touch tap, which fires
+  // mouseenter, would otherwise blank the title.
+  function entrySpan(){ return document.querySelector('#site-header .site-title-entry'); }
+  function labelShown(){ var el = byId('over-text'); return !!el && getComputedStyle(el).display !== 'none'; }
+  window.showText = function(text){
+    var entry = entrySpan();
+    if (entry && labelShown()) { entry.hidden = true; }
+    setLabel('over-text', text);
+  };
+  window.hide = function(){
+    setLabel('over-text', '');
+    var entry = entrySpan();
+    if (entry) { entry.hidden = false; }
+  };
 
   window.showYear = function(text){ setLabel('over-text-year-published', text); };
   window.hideYear = function(){ setLabel('over-text-year-published', ''); };
@@ -39,7 +55,29 @@
     });
   }
 
-  function init(){ autoOpenCollapses(); bindMenuWord(); }
+  // Keyboard parity for the hover label: focusing a thumbnail's link shows the
+  // same label as the mouse does (the figures carry data-label / data-year).
+  // One delegated pair of listeners; focusin/focusout bubble, unlike focus/blur.
+  function bindLabelFocus(){
+    function figureOf(target){
+      return target && target.closest ? target.closest('figure[data-label]') : null;
+    }
+    document.addEventListener('focusin', function(e){
+      var fig = figureOf(e.target);
+      if (fig) { window.showText(fig.dataset.label); window.showYear(fig.dataset.year || ''); }
+    });
+    document.addEventListener('focusout', function(e){
+      if (figureOf(e.target)) { window.hide(); window.hideYear(); }
+    });
+  }
+
+  // A page restored from the back/forward cache may still show a label whose
+  // mouseleave never fired.
+  function bindPageShow(){
+    window.addEventListener('pageshow', function(){ window.hide(); window.hideYear(); });
+  }
+
+  function init(){ autoOpenCollapses(); bindMenuWord(); bindLabelFocus(); bindPageShow(); }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
