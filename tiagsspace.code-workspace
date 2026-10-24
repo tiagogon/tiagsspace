@@ -17,6 +17,9 @@
 		},
 		{
 			"path": "../../plugins/queue-posts"
+		},
+		{
+			"path": "../../plugins/wp-fediverse-posting"
 		}
 	],
 	"settings": {
