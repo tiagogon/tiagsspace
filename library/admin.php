@@ -162,3 +162,60 @@ function enqueue_editor_draft_preview_link() {
 }
 add_action( 'enqueue_block_editor_assets', 'enqueue_editor_draft_preview_link' );
 
+
+/************* ADMIN BAR *****************/
+
+// Toolbar items dropped everywhere (wp-admin and the front end), and the posting
+// shortcuts in the order they should read. Ids that don't exist on a site are skipped.
+function tiagsspace_admin_bar_layout() {
+	return array(
+		'remove' => array( 'wp-logo', 'command-palette', 'new-content', 'search', 'w3tc' ),
+		'order'  => array( 'queue-posts-planner', 'instagram-planner', 'fediverse-planner' ),
+	);
+}
+
+// Runs last, so every plugin node exists. The toolbar draws top-level items in the
+// order they were added, so the shortcuts are re-added in the wanted order where the
+// first of them stood, and every top-level item after that point (the dark-mode
+// toggle) is re-added behind them to keep its place. Children keep their parent id.
+add_action( 'admin_bar_menu', 'tiagsspace_admin_bar_tidy', PHP_INT_MAX );
+function tiagsspace_admin_bar_tidy( $bar ) {
+	$layout = tiagsspace_admin_bar_layout();
+
+	foreach ( $layout['remove'] as $id ) {
+		$bar->remove_node( $id );
+	}
+
+	$top = array();
+	foreach ( (array) $bar->get_nodes() as $id => $node ) {
+		if ( empty( $node->parent ) && empty( $node->group ) ) {
+			$top[] = $id;
+		}
+	}
+
+	$start = null;
+	foreach ( $top as $i => $id ) {
+		if ( in_array( $id, $layout['order'], true ) ) {
+			$start = $i;
+			break;
+		}
+	}
+	if ( null === $start ) {
+		return;
+	}
+
+	$tail  = array_slice( $top, $start );
+	$nodes = array();
+	foreach ( $tail as $id ) {
+		$nodes[ $id ] = (array) $bar->get_node( $id );
+		$bar->remove_node( $id );
+	}
+
+	$sequence = array_merge(
+		array_intersect( $layout['order'], $tail ),
+		array_diff( $tail, $layout['order'] )
+	);
+	foreach ( $sequence as $id ) {
+		$bar->add_node( $nodes[ $id ] );
+	}
+}
