@@ -5,8 +5,10 @@
  * the other theme CTAs:
  *
  * 1. "Select ▾" — a menu that sets the frame's selection from the loaded
- *    library: All / None / Portrait / Landscape / Images / Videos / Audio, each
- *    with a live count. An item REPLACES the selection; Shift-click ADDS to it.
+ *    library: All / None / Portrait / Landscape / Images / Videos / Audio /
+ *    Hidden from gallery / In the gallery (the `remove_from_default_gallery`
+ *    flag, shipped on the model as `tiagsspaceHidden`), each with a live
+ *    count. An item REPLACES the selection; Shift-click ADDS to it.
  *    Rendered only on frames that allow multiple selection.
  *
  * 2. "Reorder ▾" — a menu whose header names the scope (all N attachments, or
@@ -484,6 +486,14 @@
 		},
 		audio: function ( m ) {
 			return m.get( 'type' ) === 'audio';
+		},
+		// `tiagsspaceHidden` is the `remove_from_default_gallery` flag, added to
+		// the attachment model by gallery-functions.php (wp_prepare_attachment_for_js).
+		hidden: function ( m ) {
+			return !! m.get( 'tiagsspaceHidden' );
+		},
+		visible: function ( m ) {
+			return ! m.get( 'tiagsspaceHidden' );
 		}
 	};
 
@@ -593,7 +603,10 @@
 				{ separator: true },
 				entry( 'image', t( 'images', 'Images' ) ),
 				entry( 'video', t( 'videos', 'Videos' ) ),
-				entry( 'audio', t( 'audio', 'Audio' ) )
+				entry( 'audio', t( 'audio', 'Audio' ) ),
+				{ separator: true },
+				entry( 'hidden', t( 'hidden', 'Hidden from gallery' ) ),
+				entry( 'visible', t( 'visible', 'In the gallery' ) )
 			];
 		}
 

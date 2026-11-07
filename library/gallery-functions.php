@@ -257,6 +257,8 @@ function enqueue_media_gallery_actions() {
 				'images'             => __( 'Images', 'tiagsspace' ),
 				'videos'             => __( 'Videos', 'tiagsspace' ),
 				'audio'              => __( 'Audio', 'tiagsspace' ),
+				'hidden'             => __( 'Hidden from gallery', 'tiagsspace' ),
+				'visible'            => __( 'In the gallery', 'tiagsspace' ),
 				// Delete hidden
 				'deleteHidden'       => __( 'Delete hidden attachments (%d)', 'tiagsspace' ),
 				'confirmDelete'      => __( 'Permanently delete %d hidden attachment(s)? This cannot be undone.', 'tiagsspace' ),
@@ -266,6 +268,24 @@ function enqueue_media_gallery_actions() {
 	);
 }
 add_action( 'admin_enqueue_scripts', 'enqueue_media_gallery_actions' );
+
+/**
+ * Expose the `remove_from_default_gallery` flag on the JS attachment model.
+ *
+ * The media modal's Select ▾ menu filters the loaded library in the browser
+ * (Hidden from gallery / In the gallery), so the flag has to travel with each
+ * attachment. Read straight from post meta: the meta cache is primed for every
+ * attachment the query returns, so this adds no queries.
+ *
+ * @param array   $response   Attachment data for JS.
+ * @param WP_Post $attachment Attachment post.
+ * @return array
+ */
+function tiagsspace_attachment_js_hidden_flag( $response, $attachment ) {
+	$response['tiagsspaceHidden'] = '1' === (string) get_post_meta( $attachment->ID, 'remove_from_default_gallery', true );
+	return $response;
+}
+add_filter( 'wp_prepare_attachment_for_js', 'tiagsspace_attachment_js_hidden_flag', 10, 2 );
 
 // ----------------------
 //
