@@ -24,6 +24,41 @@ function wp_bootstrap_head_cleanup() {
 }
 add_action('init', 'wp_bootstrap_head_cleanup');
 
+// --------------------------------------------------
+// Emoji — let the operating system draw them
+// --------------------------------------------------
+// Core's wp-emoji-loader tests the browser against the newest emoji it knows
+// (WP 7.1: an Emoji 17 glyph). Any OS a release or two behind fails the test,
+// and core then swaps EVERY emoji on the page, front end and wp-admin alike,
+// for Twemoji SVGs fetched from s.w.org. With the script gone the browser
+// uses its own colour emoji font: Apple Color Emoji on Mac/iPhone/iPad,
+// Segoe UI Emoji on Windows, Noto on Android. No request leaves the site.
+// Unhooking `print_emoji_styles` is enough for the stylesheet: core's
+// wp_enqueue_emoji_styles() bails when that legacy action is gone.
+function tiagsspace_disable_emoji() {
+	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+	remove_action( 'embed_head', 'print_emoji_detection_script' );
+	remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+	remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+	remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+	add_filter( 'tiny_mce_plugins', 'tiagsspace_disable_emoji_tinymce' );
+	add_filter( 'emoji_svg_url', '__return_false' ); // drops the s.w.org dns-prefetch too
+}
+add_action( 'init', 'tiagsspace_disable_emoji' );
+
+// wp-admin registers its copies in wp-admin/includes/admin-filters.php, which
+// admin.php loads AFTER `init` has fired, so they must go on `admin_init`.
+function tiagsspace_disable_emoji_admin() {
+	remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+	remove_action( 'admin_print_styles', 'print_emoji_styles' );
+}
+add_action( 'admin_init', 'tiagsspace_disable_emoji_admin' );
+
+function tiagsspace_disable_emoji_tinymce( $plugins ) {
+	return is_array( $plugins ) ? array_diff( $plugins, array( 'wpemoji' ) ) : array();
+}
+
 // Hide WP version from RSS feeds
 function wp_bootstrap_rss_version() { return ''; }
 add_filter('the_generator', 'wp_bootstrap_rss_version');
