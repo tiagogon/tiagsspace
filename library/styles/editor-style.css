@@ -77,7 +77,15 @@
   unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
 }
 
-/* Body / base text */
+/* Body / base text.
+   The text colour is set ONCE, here, and every element below inherits it.
+   The "Dark Mode for WP Dashboard" plugin recolours the canvas body itself
+   (body.dark-mode.editor-styles-wrapper in the iframed block canvas,
+   body.mce-content-body in TinyMCE) when its toggle is dark; an explicit
+   colour on p/h1/a would never inherit and left the title black on the dark
+   canvas. Never add explicit text colours or a prefers-color-scheme block
+   back here: the plugin has a manual toggle, so the OS scheme and the admin
+   skin can disagree. */
 body {
   font-family: "Lora", serif;
   font-size: 23px; /* $font-size-content */
@@ -93,7 +101,7 @@ p {
   font-family: "Lora", serif;
   font-size: 23px; /* $font-size-content */
   line-height: 1.5;
-  color: #000;
+  color: inherit;
 }
 
 /* Headings — one family, regular weight, Bootstrap scale as on the front end */
@@ -107,7 +115,7 @@ h6 {
   font-family: "Lora", serif;
   font-weight: 400;
   line-height: 1.2;
-  color: #000;
+  color: inherit; /* beats core's h1 {color:#1d2327} at equal specificity, later in the cascade */
 }
 h1 { font-size: 40px; }
 h2 { font-size: 32px; }
@@ -118,7 +126,7 @@ h6 { font-size: 16px; }
 
 /* Links */
 a {
-  color: #000;
+  color: inherit;
   text-decoration: underline;
 }
 a:hover {
@@ -136,23 +144,5 @@ strong, b {
 /* Lists */
 ol, ul, dl {
   padding: 16px;
-  color: #000;
-}
-
-/* Dark mode support — mirrors the front end (_foundations-tokens.scss).
-   Fires under prefers-color-scheme, which the "Dark Mode for WP Dashboard"
-   plugin's Auto mode follows, so canvas text flips white to match the plugin's
-   dark background. Light mode is untouched. */
-@media (prefers-color-scheme: dark) {
-  body {
-    color: #fff;
-  }
-  p,
-  h1, h2, h3, h4, h5, h6,
-  ol, ul, dl {
-    color: #fff;
-  }
-  a {
-    color: #fff;
-  }
+  color: inherit;
 }
