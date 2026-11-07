@@ -174,8 +174,24 @@ function gallery_enqueue_editor_reset_script() {
 }
 add_action( 'enqueue_block_editor_assets', 'gallery_enqueue_editor_reset_script' );
 
+// Admin media stylesheet: the modal toolbar menus and dialogs, the uncropped
+// grid, the list tables' featured-image column (library/styles/admin-media.css).
+function tiagsspace_enqueue_admin_media_style() {
+	$screen = get_current_screen();
+	if ( ! $screen || ! in_array( $screen->base, array( 'post', 'edit' ), true ) ) {
+		return;
+	}
+	wp_enqueue_style(
+		'tiagsspace-admin-media',
+		get_template_directory_uri() . '/library/styles/admin-media.css',
+		array(),
+		tiagsspace_asset_ver( '/library/styles/admin-media.css' )
+	);
+}
+add_action( 'admin_enqueue_scripts', 'tiagsspace_enqueue_admin_media_style' );
+
 // Shared frame hook for every media-modal script (see library/js/media-frame-wire.js).
-// Registered early (priority 5) so the four scripts below can list it as a dependency.
+// Registered early (priority 5) so the scripts below can list it as a dependency.
 function tiagsspace_register_media_frame_wire() {
 	$screen = get_current_screen();
 	if ( ! $screen || $screen->base !== 'post' ) {
@@ -202,26 +218,84 @@ function enqueue_media_library_default_uploaded() {
 		'media-library-default-uploaded',
 		get_template_directory_uri() . '/library/js/media-library-default-uploaded.js',
 		array( 'media-views', 'media-frame-wire' ),
-		'1.2',
+		tiagsspace_asset_ver( '/library/js/media-library-default-uploaded.js' ),
 		true
 	);
 }
 add_action( 'admin_enqueue_scripts', 'enqueue_media_library_default_uploaded' );
 
-// Media-modal gallery CTAs: "Select ▾" + "Reorder ▾" (Capture time/Upload date/Random) + "Delete hidden attachments"
+/**
+ * Media-modal toolbar: Delete ▾ · Select ▾ · Sort ▾ · Move to ▾ before
+ * "Insert into post" (library/js/media-toolbar.js). The buttons and their
+ * menu headers are here; the items are registered by the three provider
+ * scripts (media-gallery-actions, media-duplicate-to-post,
+ * media-attach-to-post), which list `media-toolbar` as a dependency.
+ */
+function tiagsspace_enqueue_media_toolbar() {
+	$screen = get_current_screen();
+	if ( ! $screen || $screen->base !== 'post' ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'media-toolbar',
+		get_template_directory_uri() . '/library/js/media-toolbar.js',
+		array( 'jquery', 'media-views', 'media-frame-wire' ),
+		tiagsspace_asset_ver( '/library/js/media-toolbar.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'media-toolbar',
+		'tiagsspaceMediaToolbarCfg',
+		array(
+			'i18n' => array(
+				'groupLabel'      => __( 'Gallery actions', 'tiagsspace' ),
+				// Buttons
+				'delete'          => __( 'Delete', 'tiagsspace' ),
+				'select'          => __( 'Select', 'tiagsspace' ),
+				'selectN'         => __( 'Select (%d)', 'tiagsspace' ),
+				'sort'            => __( 'Sort', 'tiagsspace' ),
+				'move'            => __( 'Move to', 'tiagsspace' ),
+				'moveN'           => __( 'Move %d to', 'tiagsspace' ),
+				'actions'         => __( 'Actions', 'tiagsspace' ),
+				'actionsN'        => __( 'Actions (%d)', 'tiagsspace' ),
+				// Menu headers
+				'cannotUndo'      => __( 'Cannot be undone', 'tiagsspace' ),
+				'shiftAdds'       => __( 'Shift-click adds to the selection', 'tiagsspace' ),
+				'sortAll'         => __( 'Sort all attachments', 'tiagsspace' ),
+				'sortAllN'        => __( 'Sort all %d attachments', 'tiagsspace' ),
+				'sortSelectedN'   => __( 'Sort the %d selected', 'tiagsspace' ),
+				'sortKeepSlots'   => __( 'They keep their slots', 'tiagsspace' ),
+				'sortOneSelected' => __( 'One item selected: nothing to sort', 'tiagsspace' ),
+				'moveSelectedN'   => __( 'Move the %d selected', 'tiagsspace' ),
+				'moveLeave'       => __( 'They leave this post', 'tiagsspace' ),
+				'moveNone'        => __( 'Select items to move', 'tiagsspace' ),
+				'nothingHere'     => __( 'Nothing registered', 'tiagsspace' ),
+				'loading'         => __( 'Loading…', 'tiagsspace' ),
+				// Dialogs
+				'close'           => __( 'Close', 'tiagsspace' ),
+				'cancel'          => __( 'Cancel', 'tiagsspace' ),
+				'ok'              => __( 'OK', 'tiagsspace' ),
+			),
+		)
+	);
+}
+add_action( 'admin_enqueue_scripts', 'tiagsspace_enqueue_media_toolbar' );
+
+// Gallery actions on the media-modal toolbar: Select ▾ items, Sort ▾ items,
+// Delete ▾ "Hidden from gallery (N)…".
 function enqueue_media_gallery_actions() {
 	$screen = get_current_screen();
 	if ( ! $screen || $screen->base !== 'post' ) {
 		return;
 	}
 
-	$path = get_template_directory() . '/library/js/media-gallery-actions.js';
-
 	wp_enqueue_script(
 		'media-gallery-actions',
 		get_template_directory_uri() . '/library/js/media-gallery-actions.js',
-		array( 'jquery', 'media-views', 'media-frame-wire' ),
-		file_exists( $path ) ? filemtime( $path ) : '1.0',
+		array( 'jquery', 'media-views', 'media-frame-wire', 'media-toolbar' ),
+		tiagsspace_asset_ver( '/library/js/media-gallery-actions.js' ),
 		true
 	);
 
@@ -233,36 +307,35 @@ function enqueue_media_gallery_actions() {
 			'reorderNonce' => wp_create_nonce( 'gallery_reorder_attachments' ),
 			'hiddenNonce'  => wp_create_nonce( 'gallery_hidden_check' ),
 			'i18n'         => array(
-				// Reorder ▾
-				'reorder'            => __( 'Reorder', 'tiagsspace' ),
-				'reordering'         => __( 'Reordering…', 'tiagsspace' ),
-				'reorderAll'         => __( 'Reorder all attachments', 'tiagsspace' ),
-				'reorderAllN'        => __( 'Reorder all %d attachments', 'tiagsspace' ),
-				'reorderSelectedN'   => __( 'Reorder the %d selected', 'tiagsspace' ),
-				'reorderKeepSlots'   => __( '(they keep their slots)', 'tiagsspace' ),
-				'reorderOneSelected' => __( 'One item selected: nothing to reorder', 'tiagsspace' ),
-				'captureTime'        => __( 'Capture time (EXIF)', 'tiagsspace' ),
-				'chronological'      => __( 'Upload date', 'tiagsspace' ),
-				'random'             => __( 'Random', 'tiagsspace' ),
-				'reorderError'       => __( 'Could not reorder the gallery.', 'tiagsspace' ),
+				'postError'         => __( 'Could not determine the current post.', 'tiagsspace' ),
 				// Select ▾
-				'select'             => __( 'Select', 'tiagsspace' ),
-				'selectN'            => __( 'Select (%d)', 'tiagsspace' ),
-				'shiftAdds'          => __( 'Shift-click adds to the selection', 'tiagsspace' ),
-				'loadingAll'         => __( 'Loading all attachments…', 'tiagsspace' ),
-				'selectAll'          => __( 'All', 'tiagsspace' ),
-				'selectNone'         => __( 'None', 'tiagsspace' ),
-				'portrait'           => __( 'Portrait', 'tiagsspace' ),
-				'landscape'          => __( 'Landscape', 'tiagsspace' ),
-				'images'             => __( 'Images', 'tiagsspace' ),
-				'videos'             => __( 'Videos', 'tiagsspace' ),
-				'audio'              => __( 'Audio', 'tiagsspace' ),
-				'hidden'             => __( 'Hidden from gallery', 'tiagsspace' ),
-				'visible'            => __( 'In the gallery', 'tiagsspace' ),
-				// Delete hidden
-				'deleteHidden'       => __( 'Delete hidden attachments (%d)', 'tiagsspace' ),
-				'confirmDelete'      => __( 'Permanently delete %d hidden attachment(s)? This cannot be undone.', 'tiagsspace' ),
-				'deleteError'        => __( 'Could not delete the hidden attachments.', 'tiagsspace' ),
+				'selectAll'         => __( 'All', 'tiagsspace' ),
+				'selectNone'        => __( 'None', 'tiagsspace' ),
+				'portrait'          => __( 'Portrait', 'tiagsspace' ),
+				'landscape'         => __( 'Landscape', 'tiagsspace' ),
+				'images'            => __( 'Images', 'tiagsspace' ),
+				'videos'            => __( 'Videos', 'tiagsspace' ),
+				'audio'             => __( 'Audio', 'tiagsspace' ),
+				'hidden'            => __( 'Hidden from gallery', 'tiagsspace' ),
+				'visible'           => __( 'In the gallery', 'tiagsspace' ),
+				// Sort ▾
+				'byCapture'         => __( 'By capture time (EXIF)', 'tiagsspace' ),
+				'byUpload'          => __( 'By upload date', 'tiagsspace' ),
+				'shuffle'           => __( 'Shuffle', 'tiagsspace' ),
+				'sortAllTitle'      => __( 'Sort all %d attachments?', 'tiagsspace' ),
+				'sortAllTitleNoCount' => __( 'Sort all attachments?', 'tiagsspace' ),
+				'sortAllText'       => __( 'The current order of the gallery is replaced.', 'tiagsspace' ),
+				'sortConfirm'       => __( 'Sort', 'tiagsspace' ),
+				'sortError'         => __( 'Could not sort the gallery.', 'tiagsspace' ),
+				// Delete ▾ hidden
+				'hiddenItem'        => __( 'Hidden from gallery (%d)…', 'tiagsspace' ),
+				'hiddenTitle'       => __( 'Delete %d hidden attachments permanently?', 'tiagsspace' ),
+				'hiddenTitle1'      => __( 'Delete one hidden attachment permanently?', 'tiagsspace' ),
+				'hiddenText'        => __( 'They are the attachments flagged “remove from default gallery”.', 'tiagsspace' ),
+				'deleteText'        => __( 'They are removed from the Media Library and from disk. This cannot be undone.', 'tiagsspace' ),
+				'deleteConfirm'     => __( 'Delete %d', 'tiagsspace' ),
+				'deleteConfirm1'    => __( 'Delete one', 'tiagsspace' ),
+				'deleteError'       => __( 'Could not delete the hidden attachments.', 'tiagsspace' ),
 			),
 		)
 	);

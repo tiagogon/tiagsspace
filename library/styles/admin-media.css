@@ -1,0 +1,399 @@
+/**
+ * Admin media UI: everything the theme adds to the media modal and to the
+ * list tables' featured-image column.
+ *
+ * Plain CSS outside the Koala pipeline (same precedent as editor-style.css),
+ * enqueued by tiagsspace_enqueue_admin_media_style() in
+ * library/gallery-functions.php on the post edit and list screens.
+ *
+ * The dark admin skin (dark-mode-for-wp-dashboard) toggles body.dark-mode and
+ * defines its --dm-* tokens only under that class, so every colour here has a
+ * light rule and a body.dark-mode rule with a fallback.
+ *
+ * Sections:
+ *   1. Modal toolbar: the theme's menu group (library/js/media-toolbar.js)
+ *   2. Popover menus
+ *   3. Dialogs (confirm, "Another post…" search)
+ *   4. Modal grid: whole image, no name band, hidden items dimmed
+ *   5. List tables: uncropped featured image, double on big screens
+ */
+
+/* -------------------------------------------------------------------------
+ * 1. Modal toolbar group
+ *
+ * Core floats `.media-toolbar-primary > .media-button` left (DOM order is
+ * visual order) and lays the selection strip over everything but the right
+ * 350px. The group is prepended before "Insert into post", so the order reads
+ * Delete · Select · Sort · Move to · [Insert into post].
+ * ---------------------------------------------------------------------- */
+.media-frame-toolbar .media-toolbar-primary > .tiagsspace-mt {
+	float: left;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 10px 14px 10px 10px;
+}
+.media-frame-toolbar .media-toolbar-primary > .tiagsspace-mt > .media-button {
+	margin: 0;
+	float: none;
+}
+/* Two modes: the four group buttons, or one "Actions ▾" when the row would
+   wrap (media-toolbar.js measures and toggles .is-overflow). */
+.tiagsspace-mt.is-overflow > .tiagsspace-mt-group,
+.tiagsspace-mt:not(.is-overflow) > .tiagsspace-mt-all {
+	display: none;
+}
+.tiagsspace-mt-caret {
+	display: inline-block;
+	margin-left: 4px;
+	font-size: 10px;
+	line-height: 1;
+}
+/* Danger tone: WP's error red; the dark skin's token wins under body.dark-mode. */
+.wp-core-ui .tiagsspace-mt .button.tiagsspace-mt-danger:not([disabled]) {
+	color: #b32d2e;
+}
+body.dark-mode.wp-core-ui .tiagsspace-mt .button.tiagsspace-mt-danger:not([disabled]) {
+	color: var(--dm-error, #f87171);
+}
+
+/* -------------------------------------------------------------------------
+ * 2. Popover menus (anchored above the toolbar button)
+ * ---------------------------------------------------------------------- */
+.tiagsspace-menu {
+	position: absolute;
+	bottom: calc(100% - 4px);
+	min-width: 230px;
+	max-height: calc(100vh - 160px);
+	overflow: auto;
+	margin: 0;
+	padding: 6px 0;
+	background: #fff;
+	color: #1d2327;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+	z-index: 200;
+	text-align: left;
+	font-size: 13px;
+	line-height: 1.4;
+}
+.tiagsspace-menu[hidden] {
+	display: none;
+}
+.tiagsspace-menu-header {
+	padding: 6px 14px 2px;
+	color: #646970;
+	font-size: 12px;
+	white-space: nowrap;
+}
+.tiagsspace-menu-header + .tiagsspace-menu-header {
+	padding-top: 0;
+}
+.tiagsspace-menu-header:last-of-type,
+.tiagsspace-menu-header + .tiagsspace-menu-item {
+	margin-top: 4px;
+}
+.tiagsspace-menu-title {
+	font-weight: 600;
+	color: #1d2327;
+	font-size: 13px;
+}
+.tiagsspace-menu-sep {
+	height: 0;
+	margin: 4px 0;
+	border-top: 1px solid #dcdcde;
+}
+.tiagsspace-menu-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 0;
+	margin: 0;
+	padding: 8px 14px;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	white-space: nowrap;
+}
+.tiagsspace-menu-item:hover,
+.tiagsspace-menu-item:focus {
+	background: #f0f0f1;
+	outline: none;
+}
+.tiagsspace-menu-item:focus-visible {
+	box-shadow: inset 0 0 0 2px #2271b1;
+}
+.tiagsspace-menu-item[disabled] {
+	opacity: .5;
+	cursor: default;
+	background: none;
+}
+.tiagsspace-menu-item.tiagsspace-menu-danger:not([disabled]),
+.tiagsspace-menu-header.tiagsspace-menu-danger {
+	color: #b32d2e;
+}
+.tiagsspace-menu-count {
+	color: #646970;
+	font-variant-numeric: tabular-nums;
+}
+
+body.dark-mode .tiagsspace-menu {
+	background: var(--dm-bg-elevated, #252a34);
+	color: var(--dm-text-primary, #eceff4);
+	border-color: var(--dm-border, #3b4252);
+	box-shadow: var(--dm-shadow-lg, 0 8px 24px rgba(0, 0, 0, .5));
+}
+body.dark-mode .tiagsspace-menu-item:hover,
+body.dark-mode .tiagsspace-menu-item:focus {
+	background: var(--dm-bg-hover, #3d4555);
+}
+body.dark-mode .tiagsspace-menu-item:focus-visible {
+	box-shadow: inset 0 0 0 2px var(--dm-accent, #6b9cff);
+}
+body.dark-mode .tiagsspace-menu-header,
+body.dark-mode .tiagsspace-menu-count {
+	color: var(--dm-text-secondary, #a0aab6);
+}
+body.dark-mode .tiagsspace-menu-title {
+	color: var(--dm-text-primary, #eceff4);
+}
+body.dark-mode .tiagsspace-menu-sep {
+	border-color: var(--dm-border, #3b4252);
+}
+body.dark-mode .tiagsspace-menu-item.tiagsspace-menu-danger:not([disabled]),
+body.dark-mode .tiagsspace-menu-header.tiagsspace-menu-danger {
+	color: var(--dm-error, #f87171);
+}
+
+/* -------------------------------------------------------------------------
+ * 3. Dialogs: the confirm panel and the "Another post…" search
+ * (tiagsspaceMediaToolbar.dialog()). z-index is set inline above the modal.
+ * ---------------------------------------------------------------------- */
+.tiagsspace-dialog-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 1000000;
+	background: rgba(0, 0, 0, .55);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.tiagsspace-dialog {
+	background: #fff;
+	color: #1d2327;
+	width: 520px;
+	max-width: calc(100vw - 40px);
+	max-height: calc(100vh - 80px);
+	border-radius: 4px;
+	box-shadow: 0 5px 30px rgba(0, 0, 0, .4);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+.tiagsspace-dialog--confirm {
+	width: 440px;
+}
+.tiagsspace-dialog-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px 20px;
+	border-bottom: 1px solid #dcdcde;
+}
+.tiagsspace-dialog-head h2 {
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.3;
+}
+.tiagsspace-dialog-close {
+	border: 0;
+	background: none;
+	cursor: pointer;
+	font-size: 20px;
+	line-height: 1;
+	color: #646970;
+	padding: 4px;
+}
+.tiagsspace-dialog-close:hover {
+	color: #135e96;
+}
+.tiagsspace-dialog-body {
+	padding: 16px 20px;
+	overflow: auto;
+	font-size: 13px;
+}
+.tiagsspace-dialog-body p {
+	margin: 0 0 8px;
+}
+.tiagsspace-dialog-body p:last-child {
+	margin-bottom: 0;
+}
+.tiagsspace-dialog-foot {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	padding: 12px 20px;
+	border-top: 1px solid #dcdcde;
+}
+.wp-core-ui .tiagsspace-dialog-foot .button.tiagsspace-dialog-danger {
+	background: #b32d2e;
+	border-color: #b32d2e;
+	color: #fff;
+}
+.wp-core-ui .tiagsspace-dialog-foot .button.tiagsspace-dialog-danger:hover,
+.wp-core-ui .tiagsspace-dialog-foot .button.tiagsspace-dialog-danger:focus {
+	background: #8a2424;
+	border-color: #8a2424;
+	color: #fff;
+}
+/* Search dialog parts */
+.tiagsspace-dialog-search {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 8px 10px;
+	font-size: 14px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+}
+.tiagsspace-dialog-results {
+	list-style: none;
+	margin: 12px 0 0;
+	padding: 0;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	max-height: 40vh;
+	overflow: auto;
+}
+.tiagsspace-dialog-results:empty {
+	display: none;
+}
+.tiagsspace-dialog-result {
+	padding: 10px 12px;
+	cursor: pointer;
+	border-bottom: 1px solid #f0f0f1;
+}
+.tiagsspace-dialog-result:last-child {
+	border-bottom: 0;
+}
+.tiagsspace-dialog-result:hover,
+.tiagsspace-dialog-result:focus {
+	background: #f0f6fc;
+	outline: none;
+}
+.tiagsspace-dialog-result-title {
+	font-weight: 600;
+	color: #1d2327;
+}
+.tiagsspace-dialog-result-meta {
+	font-size: 12px;
+	color: #646970;
+	text-transform: capitalize;
+	margin-top: 2px;
+}
+.tiagsspace-dialog-note {
+	margin: 12px 0 0;
+	color: #646970;
+	font-size: 13px;
+}
+
+body.dark-mode .tiagsspace-dialog {
+	background: var(--dm-bg-elevated, #252a34);
+	color: var(--dm-text-primary, #eceff4);
+	box-shadow: var(--dm-shadow-lg, 0 8px 24px rgba(0, 0, 0, .5));
+}
+body.dark-mode .tiagsspace-dialog-head,
+body.dark-mode .tiagsspace-dialog-foot {
+	border-color: var(--dm-border, #3b4252);
+}
+body.dark-mode .tiagsspace-dialog-head h2 {
+	color: var(--dm-text-primary, #eceff4);
+}
+body.dark-mode .tiagsspace-dialog-close {
+	color: var(--dm-text-secondary, #a0aab6);
+}
+body.dark-mode .tiagsspace-dialog-close:hover {
+	color: var(--dm-accent, #6b9cff);
+}
+body.dark-mode.wp-core-ui .tiagsspace-dialog-foot .button.tiagsspace-dialog-danger {
+	background: var(--dm-error-fill, #c0393b);
+	border-color: var(--dm-error-fill, #c0393b);
+	color: var(--dm-text-on-accent, #fff);
+}
+body.dark-mode .tiagsspace-dialog-search {
+	background: var(--dm-bg-input, #1b1f27);
+	color: var(--dm-text-primary, #eceff4);
+	border-color: var(--dm-border-strong, #4c566a);
+}
+body.dark-mode .tiagsspace-dialog-results {
+	border-color: var(--dm-border, #3b4252);
+}
+body.dark-mode .tiagsspace-dialog-result {
+	border-color: var(--dm-border-subtle, #2e3440);
+}
+body.dark-mode .tiagsspace-dialog-result:hover,
+body.dark-mode .tiagsspace-dialog-result:focus {
+	background: var(--dm-bg-hover, #3d4555);
+}
+body.dark-mode .tiagsspace-dialog-result-title {
+	color: var(--dm-text-primary, #eceff4);
+}
+body.dark-mode .tiagsspace-dialog-result-meta,
+body.dark-mode .tiagsspace-dialog-note {
+	color: var(--dm-text-secondary, #a0aab6);
+}
+
+/* -------------------------------------------------------------------------
+ * 4. Modal grid
+ *
+ * Core (media-views.css) crops every thumbnail to the square cell
+ * (`.portrait img { max-width: 100% }`, `.landscape img { max-height: 100% }`,
+ * the other axis overflows) and, since 6.x, prints the item's aria-label as a
+ * band over it (`.attachment:not(:has(.filename))::after`). Both are undone
+ * here: the image is contained in the square so the format reads from the
+ * bands, and the name stays in the Details panel and in the aria-label.
+ * The selection strip's small thumbnails (.media-selection) are left alone.
+ * ---------------------------------------------------------------------- */
+.wp-core-ui .media-modal .attachments-browser .attachment::after {
+	content: none;
+}
+.wp-core-ui .media-modal .attachments-browser .attachment .thumbnail .centered img {
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+}
+/* Hidden from the gallery (`remove_from_default_gallery`, flag set on the
+   <li> by media-toolbar.js from the model's tiagsspaceHidden). */
+.wp-core-ui .media-modal .attachments-browser .attachment[data-hidden="1"] .thumbnail {
+	opacity: .55;
+}
+
+/* -------------------------------------------------------------------------
+ * 5. List tables: featured-image column (featured-image-column plugin)
+ *
+ * The file is the theme's uncropped `thumbnail` size (480×960), chosen by the
+ * `featured_image_post_thumbnail_size` filter in functions.php. One size on
+ * every screen (Tiago, Nov 2026). The plugin sizes the column with an id
+ * selector (`th#featured-image`), so the override matches the id too; the
+ * table is `table-layout: fixed`, so the header cell sets the column width.
+ * ---------------------------------------------------------------------- */
+.wp-list-table th#featured-image,
+.wp-list-table td.featured-image.column-featured-image {
+	width: 72px;
+	max-width: none;
+	max-height: none;
+}
+.wp-list-table td.column-featured-image img {
+	width: auto;
+	height: auto;
+	max-width: 60px;
+	max-height: 90px;
+	vertical-align: top;
+}

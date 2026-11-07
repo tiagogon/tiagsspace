@@ -1,267 +1,76 @@
 /**
- * Media modal "Add to existing post" call-to-action (post editor "Add media").
+ * Media modal: move the selection to another post (post editor "Add media").
  *
- * Adds a button to the modal's primary toolbar that lets the editor move the
- * selected attachments onto an existing post: click it, search any post by
- * title (any post type, any status), pick one, and the selected attachments
- * are re-parented onto it (appended to the end of that post's attachments,
- * keeping their relative order). Two tabs then open — the target's edit screen
- * and, when the target is publicly viewable, its front-end view.
+ * Registration on the shared toolbar (library/js/media-toolbar.js):
  *
- * Frame wiring comes from media-frame-wire.js (a script dependency); the
- * media-cache helpers are local so it never depends on the sibling duplicate
- * script's load order. Its search overlay is styled from JS (these CTAs aren't part of
- * the SCSS pipeline — mirrors trash-post-modal.js).
+ * - Move to ▾ Another post…: opens a search dialog (any post type, any
+ *   status), and the picked post receives the selected attachments,
+ *   re-parented onto it (appended to the end of its attachments, keeping
+ *   their relative order). Two tabs then open: the target's edit screen and,
+ *   when the target is publicly viewable, its front-end view.
+ *
+ * The dialog is the shared scaffold (tiagsspaceMediaToolbar.dialog), styled
+ * by library/styles/admin-media.css (§3).
  */
 ( function ( $ ) {
-	if ( ! window.wp || ! wp.media || ! window.tiagsspaceMediaAttach ) {
+	if ( ! window.wp || ! wp.media || ! window.tiagsspaceMediaToolbar || ! window.tiagsspaceMediaAttach ) {
 		return;
 	}
 
-	var cfg       = window.tiagsspaceMediaAttach;
-	var i18n      = cfg.i18n || {};
-	var BUTTON_ID = 'tiagsspace-add-to-existing';
-	var DEBOUNCE  = 250;
+	var toolbar  = window.tiagsspaceMediaToolbar;
+	var cfg      = window.tiagsspaceMediaAttach;
+	var i18n     = cfg.i18n || {};
+	var DEBOUNCE = 250;
 
-	// Set after a successful attach so the next modal open force-refreshes the
-	// library (the selected media were re-parented away from this post).
-	var pendingRefresh = false;
+	function t( key, fallback ) {
+		return i18n[ key ] || fallback;
+	}
 
-	/**
-	 * printf-style %d / %s helper for the localized strings.
-	 */
 	function format( str, value ) {
 		return String( str ).replace( /%[ds]/, value );
 	}
 
-	/**
-	 * Resolve the post being edited (for excluding it from search results).
-	 */
-	function getSourcePostId() {
-		if ( wp.media.view.settings.post && wp.media.view.settings.post.id ) {
-			return parseInt( wp.media.view.settings.post.id, 10 );
-		}
-
-		if ( window.wp.data && wp.data.select( 'core/editor' ) ) {
-			var id = wp.data.select( 'core/editor' ).getCurrentPostId();
-			if ( id ) {
-				return parseInt( id, 10 );
-			}
-		}
-
-		return 0;
-	}
-
-	/**
-	 * Current selection collection of the frame (or null).
-	 */
-	function getSelection( frame ) {
-		if ( frame && frame.state && frame.state() && frame.state().get ) {
-			return frame.state().get( 'selection' );
-		}
-		return null;
-	}
-
-	/**
-	 * Selected attachment IDs sorted by gallery order (menu_order).
-	 */
-	function getOrderedSelectionIds( selection ) {
-		if ( ! selection || ! selection.length ) {
-			return [];
-		}
-
-		return selection.models
-			.slice()
-			.sort( function ( a, b ) {
-				return ( a.get( 'menuOrder' ) || 0 ) - ( b.get( 'menuOrder' ) || 0 );
-			} )
-			.map( function ( model ) {
-				return model.get( 'id' );
-			} );
-	}
-
-	/**
-	 * Invalidate WP's global media query cache.
-	 */
-	function flushMediaCaches() {
-		try {
-			if ( wp.media.model && wp.media.model.Query ) {
-				wp.media.model.Query.queries = [];
-			}
-			var all = wp.media.model && wp.media.model.Attachment && wp.media.model.Attachment.all;
-			if ( all && all.reset ) {
-				all.reset();
-			}
-		} catch ( e ) {}
-	}
-
-	/**
-	 * Force a frame's library to re-fetch from the server.
-	 */
-	function forceLibraryRefresh( frame ) {
-		try {
-			var state   = frame && frame.state && frame.state();
-			var library = state && state.get && state.get( 'library' );
-			if ( library && library.props && library.props.set ) {
-				library.props.set( 'ignore', ( + new Date() ) );
-			}
-		} catch ( e ) {}
-	}
-
 	/* ---------------------------------------------------------------------
-	 * Search overlay
+	 * Search dialog
 	 * ------------------------------------------------------------------ */
 
-	/**
-	 * Highest computed z-index among the currently rendered media-modal layers.
-	 *
-	 * The media modal stacks high (560000+ on this install), and the value has
-	 * drifted across WP versions, so read it live rather than trusting a magic
-	 * number — the overlay is then placed above whatever is actually there.
-	 */
-	function topMediaZ() {
-		var max = 0;
-		document.querySelectorAll( '.media-modal, .media-modal-backdrop, .media-frame' ).forEach( function ( el ) {
-			var z = parseInt( window.getComputedStyle( el ).zIndex, 10 );
-			if ( ! isNaN( z ) && z > max ) {
-				max = z;
-			}
-		} );
-		return max;
-	}
-
-	var overlayInjectedStyles = false;
-
-	function injectOverlayStyles() {
-		if ( overlayInjectedStyles ) {
-			return;
-		}
-		overlayInjectedStyles = true;
-
-		var css = [
-			'.tiagsspace-attach-backdrop{position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;}',
-			'.tiagsspace-attach-panel{background:#fff;width:520px;max-width:calc(100vw - 40px);max-height:calc(100vh - 80px);border-radius:4px;box-shadow:0 5px 30px rgba(0,0,0,.4);display:flex;flex-direction:column;overflow:hidden;}',
-			'.tiagsspace-attach-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #dcdcde;}',
-			'.tiagsspace-attach-head h2{margin:0;font-size:16px;line-height:1.3;}',
-			'.tiagsspace-attach-close{border:0;background:none;cursor:pointer;font-size:20px;line-height:1;color:#646970;padding:4px;}',
-			'.tiagsspace-attach-close:hover{color:#135e96;}',
-			'.tiagsspace-attach-body{padding:16px 20px;overflow:auto;}',
-			'.tiagsspace-attach-search{width:100%;box-sizing:border-box;padding:8px 10px;font-size:14px;border:1px solid #8c8f94;border-radius:4px;}',
-			'.tiagsspace-attach-results{list-style:none;margin:12px 0 0;padding:0;border:1px solid #dcdcde;border-radius:4px;max-height:40vh;overflow:auto;}',
-			'.tiagsspace-attach-results:empty{display:none;}',
-			'.tiagsspace-attach-result{padding:10px 12px;cursor:pointer;border-bottom:1px solid #f0f0f1;}',
-			'.tiagsspace-attach-result:last-child{border-bottom:0;}',
-			'.tiagsspace-attach-result:hover,.tiagsspace-attach-result:focus{background:#f0f6fc;outline:none;}',
-			'.tiagsspace-attach-result-title{font-weight:600;color:#1d2327;}',
-			'.tiagsspace-attach-result-meta{font-size:12px;color:#646970;text-transform:capitalize;margin-top:2px;}',
-			'.tiagsspace-attach-note{margin:12px 0 0;color:#646970;font-size:13px;}',
-			'.tiagsspace-attach-foot{padding:12px 20px;border-top:1px solid #dcdcde;text-align:right;}',
-			// Dark admin skin (dark-mode-for-wp-dashboard: body.dark-mode + --dm-* tokens).
-			'body.dark-mode .tiagsspace-attach-panel{background:var(--dm-bg-elevated,#252a34);color:var(--dm-text-primary,#eceff4);box-shadow:var(--dm-shadow-lg,0 8px 24px rgba(0,0,0,.5));}',
-			'body.dark-mode .tiagsspace-attach-head,body.dark-mode .tiagsspace-attach-foot{border-color:var(--dm-border,#3b4252);}',
-			'body.dark-mode .tiagsspace-attach-head h2{color:var(--dm-text-primary,#eceff4);}',
-			'body.dark-mode .tiagsspace-attach-close{color:var(--dm-text-secondary,#a0aab6);}',
-			'body.dark-mode .tiagsspace-attach-close:hover{color:var(--dm-accent,#6b9cff);}',
-			'body.dark-mode .tiagsspace-attach-search{background:var(--dm-bg-input,#1b1f27);color:var(--dm-text-primary,#eceff4);border-color:var(--dm-border-strong,#4c566a);}',
-			'body.dark-mode .tiagsspace-attach-results{border-color:var(--dm-border,#3b4252);}',
-			'body.dark-mode .tiagsspace-attach-result{border-color:var(--dm-border-subtle,#2e3440);}',
-			'body.dark-mode .tiagsspace-attach-result:hover,body.dark-mode .tiagsspace-attach-result:focus{background:var(--dm-bg-hover,#3d4555);}',
-			'body.dark-mode .tiagsspace-attach-result-title{color:var(--dm-text-primary,#eceff4);}',
-			'body.dark-mode .tiagsspace-attach-result-meta,body.dark-mode .tiagsspace-attach-note{color:var(--dm-text-secondary,#a0aab6);}'
-		].join( '' );
-
-		var style = document.createElement( 'style' );
-		style.id = 'tiagsspace-attach-styles';
-		style.textContent = css;
-		document.head.appendChild( style );
-	}
-
-	/**
-	 * Open the search overlay for a set of attachment IDs. `onPick` receives the
-	 * chosen result object.
-	 */
-	function openSearchOverlay( count, currentPostId, onPick ) {
-		injectOverlayStyles();
-
-		var $backdrop = $( '<div>', { 'class': 'tiagsspace-attach-backdrop' } );
-		var $panel    = $( '<div>', { 'class': 'tiagsspace-attach-panel', role: 'dialog', 'aria-modal': 'true' } );
-
-		var $head = $( '<div>', { 'class': 'tiagsspace-attach-head' } )
-			.append( $( '<h2>' ).text( format( i18n.heading || 'Add %d item(s) to an existing post', count ) ) )
-			.append(
-				$( '<button>', { type: 'button', 'class': 'tiagsspace-attach-close', 'aria-label': i18n.close || 'Close' } ).html( '&times;' )
-			);
-
-		// NB: set autocomplete via .attr(), NOT in the props map — wp-admin loads
-		// jQuery UI Autocomplete, so an `autocomplete` key would be mistaken for
-		// the .autocomplete() widget method and throw ("cannot call methods on
-		// autocomplete prior to initialization"), aborting the overlay.
+	function openSearchDialog( ctx, onPick ) {
+		// NB: set autocomplete via .attr(), NOT in the props map — wp-admin
+		// loads jQuery UI Autocomplete, so an `autocomplete` key would be taken
+		// for the .autocomplete() widget method and throw.
 		var $input = $( '<input>', {
-			type: 'search',
-			'class': 'tiagsspace-attach-search',
-			placeholder: i18n.placeholder || 'Search posts by title…'
+			type:        'search',
+			'class':     'tiagsspace-dialog-search',
+			placeholder: t( 'placeholder', 'Search posts by title…' ),
+			autofocus:   true
 		} ).attr( 'autocomplete', 'off' );
+		var $note    = $( '<p>', { 'class': 'tiagsspace-dialog-note', 'aria-live': 'polite' } ).text( t( 'hint', 'Type a title to search…' ) );
+		var $results = $( '<ul>', { 'class': 'tiagsspace-dialog-results' } );
+		var $body    = $( '<div>' ).append( $input, $note, $results );
 
-		var $note    = $( '<p>', { 'class': 'tiagsspace-attach-note' } ).text( i18n.hint || 'Type a title to search…' );
-		var $results = $( '<ul>', { 'class': 'tiagsspace-attach-results' } );
-
-		var $body = $( '<div>', { 'class': 'tiagsspace-attach-body' } ).append( $input, $note, $results );
-
-		var $cancel = $( '<button>', { type: 'button', 'class': 'button button-large' } ).text( i18n.cancel || 'Cancel' );
-		var $foot   = $( '<div>', { 'class': 'tiagsspace-attach-foot' } ).append( $cancel );
-
-		$panel.append( $head, $body, $foot );
-		$backdrop.append( $panel );
-		$( 'body' ).append( $backdrop );
-
-		// Sit above the media modal whatever its z-index is (inline beats the
-		// stylesheet, so this wins regardless of theme/plugin/core changes).
-		$backdrop.css( 'z-index', ( topMediaZ() || 990000 ) + 10000 );
-
-		$input.trigger( 'focus' );
-
-		function close() {
-			$backdrop.remove();
-			$( document ).off( 'keydown.tiagsspaceAttach' );
-		}
-
-		$cancel.on( 'click', close );
-		$head.find( '.tiagsspace-attach-close' ).on( 'click', close );
-		$backdrop.on( 'click', function ( e ) {
-			if ( e.target === $backdrop[ 0 ] ) {
-				close();
-			}
-		} );
-		$( document ).on( 'keydown.tiagsspaceAttach', function ( e ) {
-			if ( 'Escape' === e.key ) {
-				// Close only our overlay; don't let WP's modal also swallow Esc.
-				e.stopPropagation();
-				close();
-			}
+		var dlg = toolbar.dialog( {
+			title:   ctx.n === 1 ? t( 'heading1', 'Move one item to another post' ) : format( t( 'heading', 'Move %d items to another post' ), ctx.n ),
+			$body:   $body,
+			buttons: [ { label: t( 'cancel', 'Cancel' ) } ]
 		} );
 
 		function renderResults( results ) {
 			$results.empty();
-
 			if ( ! results.length ) {
-				$note.text( format( i18n.noMatches || 'No posts match “%s”.', $input.val() ) ).show();
+				$note.text( format( t( 'noMatches', 'No posts match “%s”.' ), $input.val() ) ).show();
 				return;
 			}
-
 			$note.hide();
-
 			results.forEach( function ( item ) {
-				var $li = $( '<li>', { 'class': 'tiagsspace-attach-result', tabindex: 0, role: 'button' } );
-				$li.append( $( '<div>', { 'class': 'tiagsspace-attach-result-title' } ).text( item.title ) );
-				$li.append( $( '<div>', { 'class': 'tiagsspace-attach-result-meta' } ).text( item.type_label + ' · ' + item.status ) );
-
+				var $li = $( '<li>', { 'class': 'tiagsspace-dialog-result', tabindex: 0, role: 'button' } );
+				$li.append( $( '<div>', { 'class': 'tiagsspace-dialog-result-title' } ).text( item.title ) );
+				$li.append( $( '<div>', { 'class': 'tiagsspace-dialog-result-meta' } ).text( item.type_label + ' · ' + item.status ) );
 				function pick() {
-					// Keep the overlay up until the attach AJAX confirms; onPick
-					// closes it on success. Opening tabs happens inside this
-					// user-gesture click (see performAttach).
-					onPick( item, close );
+					// The dialog stays up until the move is confirmed by the
+					// server; onPick closes it on success. Tabs open inside
+					// this click (a user gesture).
+					onPick( item, dlg.close );
 				}
-
 				$li.on( 'click', pick );
 				$li.on( 'keydown', function ( e ) {
 					if ( 'Enter' === e.key || ' ' === e.key ) {
@@ -269,7 +78,6 @@
 						pick();
 					}
 				} );
-
 				$results.append( $li );
 			} );
 		}
@@ -279,38 +87,34 @@
 
 		function runSearch() {
 			var term = $.trim( $input.val() );
-
 			if ( term.length < 2 ) {
 				$results.empty();
-				$note.text( i18n.hint || 'Type a title to search…' ).show();
+				$note.text( t( 'hint', 'Type a title to search…' ) ).show();
 				return;
 			}
-
-			$note.text( i18n.searching || 'Searching…' ).show();
+			$note.text( t( 'searching', 'Searching…' ) ).show();
 			$results.empty();
-
 			if ( xhr && xhr.abort ) {
 				xhr.abort();
 			}
-
 			xhr = $.post( cfg.ajaxurl, {
 				action:          'tiagsspace_media_attach_search',
 				_nonce:          cfg.searchNonce,
 				search:          term,
-				current_post_id: currentPostId
+				current_post_id: ctx.postId
 			} )
 				.done( function ( res ) {
 					if ( res && res.success && res.data && res.data.results ) {
 						renderResults( res.data.results );
 					} else {
-						$note.text( i18n.searchError || 'Search failed. Try again.' ).show();
+						$note.text( t( 'searchError', 'Search failed. Try again.' ) ).show();
 					}
 				} )
 				.fail( function ( jqXHR, statusText ) {
 					if ( 'abort' === statusText ) {
 						return;
 					}
-					$note.text( i18n.searchError || 'Search failed. Try again.' ).show();
+					$note.text( t( 'searchError', 'Search failed. Try again.' ) ).show();
 				} );
 		}
 
@@ -321,23 +125,22 @@
 	}
 
 	/* ---------------------------------------------------------------------
-	 * Attach action
+	 * Move
 	 * ------------------------------------------------------------------ */
 
-	function performAttach( frame, item, closeOverlay ) {
-		var selection = getSelection( frame );
-		var ids       = getOrderedSelectionIds( selection );
-
+	function performAttach( ctx, item, closeDialog ) {
+		var ids = ctx.ids();
 		if ( ! ids.length ) {
-			closeOverlay();
+			closeDialog();
 			return;
 		}
 
-		// Open tabs synchronously inside the result click (a user gesture) so
-		// popup blockers don't intervene. URLs are filled once AJAX returns.
+		// Tabs open synchronously inside the result click so popup blockers
+		// don't intervene; URLs are filled once AJAX returns.
 		var editTab = window.open( 'about:blank', '_blank' );
 		var viewTab = item.is_viewable ? window.open( 'about:blank', '_blank' ) : null;
 
+		ctx.busy( true );
 		$.post( cfg.ajaxurl, {
 			action:         'tiagsspace_media_attach_attach',
 			_nonce:         cfg.attachNonce,
@@ -356,103 +159,45 @@
 							viewTab.close();
 						}
 					}
-
-					// The selected media just left this post; clear the stale
-					// selection and flush caches so reopening the modal shows the
-					// post's current media without a manual page refresh.
-					if ( selection ) {
-						selection.reset();
-					}
-					flushMediaCaches();
-					pendingRefresh = true;
-
-					closeOverlay();
-					if ( frame && frame.close ) {
-						frame.close();
+					// The selected media just left this post.
+					ctx.refresh();
+					closeDialog();
+					if ( ctx.frame && ctx.frame.close ) {
+						ctx.frame.close();
 					}
 				} else {
 					if ( editTab ) { editTab.close(); }
 					if ( viewTab ) { viewTab.close(); }
-					var msg = res && res.data && res.data.message ? res.data.message : ( i18n.attachError || 'Could not add the media to that post.' );
-					window.alert( msg );
+					window.alert( res && res.data && res.data.message ? res.data.message : t( 'attachError', 'Could not move the media to that post.' ) );
 				}
 			} )
 			.fail( function () {
 				if ( editTab ) { editTab.close(); }
 				if ( viewTab ) { viewTab.close(); }
-				window.alert( i18n.attachError || 'Could not add the media to that post.' );
+				window.alert( t( 'attachError', 'Could not move the media to that post.' ) );
+			} )
+			.always( function () {
+				ctx.busy( false );
 			} );
 	}
 
-	/* ---------------------------------------------------------------------
-	 * Button injection + frame wiring
-	 * ------------------------------------------------------------------ */
-
-	function injectButton( frame ) {
-		var $primary = $( '.media-frame-toolbar .media-toolbar-primary' );
-
-		if ( ! $primary.length || document.getElementById( BUTTON_ID ) ) {
-			return;
-		}
-
-		var $button = $( '<button>', {
-			type:  'button',
-			id:    BUTTON_ID,
-			'class': 'button media-button button-large',
-			text:  cfg.label
-		} );
-
-		$button.on( 'click', function ( e ) {
-			e.preventDefault();
-
-			var selection = getSelection( frame );
-			var ids       = getOrderedSelectionIds( selection );
-
-			if ( ! ids.length ) {
+	toolbar.register( {
+		id:    'move-existing',
+		group: 'move',
+		order: 20,
+		label: function () {
+			return t( 'item', 'Another post…' );
+		},
+		enabled: function ( ctx ) {
+			return ctx.n > 0;
+		},
+		run: function ( ctx ) {
+			if ( ! ctx.ids().length ) {
 				return;
 			}
-
-			openSearchOverlay( ids.length, getSourcePostId(), function ( item, closeOverlay ) {
-				performAttach( frame, item, closeOverlay );
+			openSearchDialog( ctx, function ( item, closeDialog ) {
+				performAttach( ctx, item, closeDialog );
 			} );
-		} );
-
-		$primary.append( $button );
-
-		var selection = getSelection( frame );
-
-		function sync() {
-			$button.prop( 'disabled', ! selection || ! selection.length );
 		}
-
-		if ( selection ) {
-			selection.on( 'add remove reset', sync );
-		}
-		sync();
-	}
-
-	/**
-	 * Wire a frame's open / content:render events. Called once per frame by
-	 * media-frame-wire.js (which hooks the frame constructor).
-	 */
-	function wireFrame( frame ) {
-		frame.on( 'open', function () {
-			setTimeout( function () {
-				injectButton( frame );
-				if ( pendingRefresh ) {
-					pendingRefresh = false;
-					forceLibraryRefresh( frame );
-				}
-			}, 0 );
-		} );
-		frame.on( 'content:render', function () {
-			setTimeout( function () {
-				injectButton( frame );
-			}, 0 );
-		} );
-	}
-
-	if ( window.tiagsspaceMediaFrame ) {
-		window.tiagsspaceMediaFrame.onFrame( 'attach-to-post', wireFrame );
-	}
+	} );
 } )( jQuery );

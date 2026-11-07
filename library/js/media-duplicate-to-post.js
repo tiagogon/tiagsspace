@@ -1,125 +1,61 @@
 /**
- * Media modal call-to-action buttons (post editor "Add media" modal).
+ * Media modal: move the selection to a duplicate of this post, or delete it
+ * (post editor "Add media" modal).
  *
- * Hosts two bulk actions on the selected attachments, added to the modal's
- * primary (bottom-right) toolbar:
+ * Registrations on the shared toolbar (library/js/media-toolbar.js):
  *
- * 1. "Add to a duplicated post" — duplicates the current post, re-parents the
- *    selected media onto the copy (keeping gallery order; re-parenting moves
- *    them OFF the original, since an attachment has one parent), opens the new
- *    draft in a new tab.
+ * - Move to ▾ A new duplicate of this post…: duplicates the current post and
+ *   re-parents the selected media onto the copy (keeping gallery order).
+ *   Re-parenting moves them OFF this post, since an attachment has one
+ *   parent. The new draft opens in a new tab.
  *
- * 2. "Delete permanently" — permanently deletes the selected attachments
- *    (WordPress media has no trash). Guarded by a confirm dialog.
+ * - Delete ▾ The N selected…: permanently deletes the selected attachments
+ *   (WordPress media has no trash). Confirmed in the shared panel.
  */
 ( function ( $ ) {
-	if ( ! window.wp || ! wp.media || ! window.tiagsspaceMediaDuplicate ) {
+	if ( ! window.wp || ! wp.media || ! window.tiagsspaceMediaToolbar || ! window.tiagsspaceMediaDuplicate ) {
 		return;
 	}
 
-	var cfg            = window.tiagsspaceMediaDuplicate;
-	var BUTTON_ID      = 'tiagsspace-duplicate-to-post';
-	var DELETE_BTN_ID  = 'tiagsspace-delete-attachments';
+	var toolbar = window.tiagsspaceMediaToolbar;
+	var cfg     = window.tiagsspaceMediaDuplicate;
+	var i18n    = cfg.i18n || {};
 
-	// Set after a successful duplicate so the next modal open force-refreshes
-	// the library (the selected media were re-parented away from this post).
-	var pendingRefresh = false;
+	function t( key, fallback ) {
+		return i18n[ key ] || fallback;
+	}
 
-	/**
-	 * Resolve the post being edited.
-	 */
-	function getSourcePostId( frame ) {
-		if ( wp.media.view.settings.post && wp.media.view.settings.post.id ) {
-			return parseInt( wp.media.view.settings.post.id, 10 );
+	function format( str, value ) {
+		return String( str ).replace( /%[ds]/, value );
+	}
+
+	function count( n, key, fallback, key1, fallback1 ) {
+		return n === 1 ? t( key1, fallback1 ) : format( t( key, fallback ), n );
+	}
+
+	/* ---------------------------------------------------------------------
+	 * Move to ▾ A new duplicate of this post…
+	 * ------------------------------------------------------------------ */
+
+	function performDuplicate( ctx ) {
+		var ids = ctx.ids();
+		if ( ! ids.length ) {
+			return;
 		}
-
-		if ( window.wp.data && wp.data.select( 'core/editor' ) ) {
-			var id = wp.data.select( 'core/editor' ).getCurrentPostId();
-			if ( id ) {
-				return parseInt( id, 10 );
-			}
-		}
-
-		return 0;
-	}
-
-	/**
-	 * Current selection collection of the frame (or null).
-	 */
-	function getSelection( frame ) {
-		if ( frame && frame.state && frame.state() && frame.state().get ) {
-			return frame.state().get( 'selection' );
-		}
-		return null;
-	}
-
-	/**
-	 * Invalidate WP's global media query cache.
-	 */
-	function flushMediaCaches() {
-		try {
-			if ( wp.media.model && wp.media.model.Query ) {
-				wp.media.model.Query.queries = [];
-			}
-			var all = wp.media.model && wp.media.model.Attachment && wp.media.model.Attachment.all;
-			if ( all && all.reset ) {
-				all.reset();
-			}
-		} catch ( e ) {}
-	}
-
-	/**
-	 * Force a frame's library to re-fetch from the server.
-	 *
-	 * The reused frame keeps a library that mirrors a cached Query instance;
-	 * library.more() won't re-hit the server once that Query is "complete", so
-	 * after media is re-parented away the grid stays empty. Bumping a throwaway
-	 * prop changes the query cache key, which makes the library re-mirror a
-	 * fresh Query and pull the post's current media from the server.
-	 */
-	function forceLibraryRefresh( frame ) {
-		try {
-			var state   = frame && frame.state && frame.state();
-			var library = state && state.get && state.get( 'library' );
-			if ( library && library.props && library.props.set ) {
-				library.props.set( 'ignore', ( + new Date() ) );
-			}
-		} catch ( e ) {}
-	}
-
-	function performDuplicate( frame, $button ) {
-		var selection = getSelection( frame );
-		if ( ! selection || ! selection.length ) {
+		if ( ! ctx.postId ) {
+			window.alert( t( 'postError', 'Could not determine the current post.' ) );
 			return;
 		}
 
-		var sourceId = getSourcePostId( frame );
-		if ( ! sourceId ) {
-			window.alert( 'Could not determine the current post to duplicate.' );
-			return;
-		}
-
-		// Selected attachments sorted by their existing gallery order (menu_order),
-		// so the copy keeps the original order rather than the click order.
-		var ids = selection.models
-			.slice()
-			.sort( function ( a, b ) {
-				return ( a.get( 'menuOrder' ) || 0 ) - ( b.get( 'menuOrder' ) || 0 );
-			} )
-			.map( function ( model ) {
-				return model.get( 'id' );
-			} );
-
-		// Open the tab synchronously inside the click handler to avoid popup
-		// blockers; its URL is filled in once the AJAX call returns.
+		// Opened synchronously inside the confirm click (a user gesture) so
+		// popup blockers let it through; the URL is filled once AJAX returns.
 		var tab = window.open( 'about:blank', '_blank' );
 
-		$button.prop( 'disabled', true );
-
+		ctx.busy( true );
 		$.post( cfg.ajaxurl, {
 			action:         'tiagsspace_duplicate_to_post',
 			_nonce:         cfg.nonce,
-			source_id:      sourceId,
+			source_id:      ctx.postId,
 			attachment_ids: ids
 		} )
 			.done( function ( res ) {
@@ -129,161 +65,105 @@
 					} else {
 						window.location.href = res.data.edit_url;
 					}
-					// The selected media just left this post (re-parented onto the
-					// copy). Clear the stale selection and flush WP's media caches
-					// so reopening the modal shows the post's current media without
-					// a manual page refresh.
-					if ( selection ) {
-						selection.reset();
-					}
-					flushMediaCaches();
-					pendingRefresh = true;
-					if ( frame && frame.close ) {
-						frame.close();
+					// The selected media just left this post.
+					ctx.refresh();
+					if ( ctx.frame && ctx.frame.close ) {
+						ctx.frame.close();
 					}
 				} else {
 					if ( tab ) {
 						tab.close();
 					}
-					var msg = res && res.data && res.data.message ? res.data.message : 'Could not duplicate the post.';
-					window.alert( msg );
+					window.alert( res && res.data && res.data.message ? res.data.message : t( 'duplicateError', 'Could not duplicate the post.' ) );
 				}
 			} )
 			.fail( function () {
 				if ( tab ) {
 					tab.close();
 				}
-				window.alert( 'Could not duplicate the post.' );
+				window.alert( t( 'duplicateError', 'Could not duplicate the post.' ) );
 			} )
 			.always( function () {
-				$button.prop( 'disabled', false );
+				ctx.busy( false );
 			} );
 	}
 
-	function performDelete( frame, $button ) {
-		var selection = getSelection( frame );
-		if ( ! selection || ! selection.length ) {
-			return;
-		}
-
-		var ids = selection.models.map( function ( model ) {
-			return model.get( 'id' );
-		} );
-
-		if ( ! window.confirm( 'Permanently delete ' + ids.length + ' media file(s)? This cannot be undone.' ) ) {
-			return;
-		}
-
-		$button.prop( 'disabled', true );
-
-		$.post( cfg.ajaxurl, {
-			action:         'tiagsspace_delete_attachments',
-			_nonce:         cfg.deleteNonce,
-			attachment_ids: ids
-		} )
-			.done( function ( res ) {
-				if ( res && res.success ) {
-					// Drop the deleted items from the grid without a manual refresh.
-					selection.reset();
-					flushMediaCaches();
-					forceLibraryRefresh( frame );
-				} else {
-					var msg = res && res.data && res.data.message ? res.data.message : 'Could not delete the selected media.';
-					window.alert( msg );
+	toolbar.register( {
+		id:    'move-duplicate',
+		group: 'move',
+		order: 10,
+		label: function () {
+			return t( 'duplicateItem', 'A new duplicate of this post…' );
+		},
+		enabled: function ( ctx ) {
+			return ctx.n > 0;
+		},
+		run: function ( ctx ) {
+			ctx.confirm( {
+				title:        count( ctx.n, 'duplicateTitle', 'Move %d items to a new duplicate of this post?', 'duplicateTitle1', 'Move one item to a new duplicate of this post?' ),
+				text:         t( 'duplicateText', 'A draft copy of this post is created and the selected items leave this post for it. The draft opens in a new tab.' ),
+				confirmLabel: count( ctx.n, 'moveConfirm', 'Move %d', 'moveConfirm1', 'Move one' )
+			} ).done( function ( ok ) {
+				// .done() runs synchronously inside the confirm click, which
+				// keeps window.open() inside the user gesture.
+				if ( ok ) {
+					performDuplicate( ctx );
 				}
-			} )
-			.fail( function () {
-				window.alert( 'Could not delete the selected media.' );
-			} )
-			.always( function () {
-				$button.prop( 'disabled', false );
 			} );
-	}
-
-	/**
-	 * Inject the CTA buttons into the modal's primary toolbar and wire them to
-	 * the current selection state.
-	 */
-	function injectButton( frame ) {
-		// Primary (right-hand) toolbar area that holds "Insert into post".
-		var $primary = $( '.media-frame-toolbar .media-toolbar-primary' );
-
-		if ( ! $primary.length || document.getElementById( BUTTON_ID ) ) {
-			return;
 		}
+	} );
 
-		var $button = $( '<button>', {
-			type:  'button',
-			id:    BUTTON_ID,
-			class: 'button media-button button-large',
-			text:  cfg.label
-		} );
+	/* ---------------------------------------------------------------------
+	 * Delete ▾ The N selected…
+	 * ------------------------------------------------------------------ */
 
-		$button.on( 'click', function ( e ) {
-			e.preventDefault();
-			performDuplicate( frame, $button );
-		} );
-
-		var $delete = $( '<button>', {
-			type:  'button',
-			id:    DELETE_BTN_ID,
-			class: 'button media-button button-large',
-			text:  cfg.deleteLabel
-		} );
-
-		// WP's error red; under the dark admin skin (body.dark-mode) the plugin's token wins.
-		$delete.css( 'color', 'var(--dm-error, #b32d2e)' );
-
-		$delete.on( 'click', function ( e ) {
-			e.preventDefault();
-			performDelete( frame, $delete );
-		} );
-
-		// Primary toolbar buttons float right (first in DOM = right-most), so
-		// appending places these to the left of the native "Insert into post".
-		$primary.append( $button );
-		$primary.append( $delete );
-
-		var selection = getSelection( frame );
-
-		function sync() {
-			var disabled = ! selection || ! selection.length;
-			$button.prop( 'disabled', disabled );
-			$delete.prop( 'disabled', disabled );
-		}
-
-		if ( selection ) {
-			selection.on( 'add remove reset', sync );
-		}
-		sync();
-	}
-
-	/**
-	 * Wire a frame's open / content:render events. Called once per frame by
-	 * media-frame-wire.js (which hooks the frame constructor).
-	 */
-	function wireFrame( frame ) {
-		frame.on( 'open', function () {
-			// Defer so the toolbar DOM exists.
-			setTimeout( function () {
-				injectButton( frame );
-				// Runs after media-library-default-uploaded.js's reset()/more()
-				// so our fresh re-query wins and the grid isn't left empty.
-				if ( pendingRefresh ) {
-					pendingRefresh = false;
-					forceLibraryRefresh( frame );
+	toolbar.register( {
+		id:    'delete-selected',
+		group: 'delete',
+		order: 10,
+		label: function ( ctx ) {
+			if ( ! ctx.n ) {
+				return t( 'deleteItem0', 'The selected items…' );
+			}
+			return count( ctx.n, 'deleteItem', 'The %d selected…', 'deleteItem1', 'The one selected…' );
+		},
+		enabled: function ( ctx ) {
+			return ctx.n > 0;
+		},
+		run: function ( ctx ) {
+			var ids = ctx.ids();
+			if ( ! ids.length ) {
+				return;
+			}
+			ctx.confirm( {
+				title:        count( ids.length, 'deleteTitle', 'Delete %d attachments permanently?', 'deleteTitle1', 'Delete one attachment permanently?' ),
+				text:         t( 'deleteText', 'They are removed from the Media Library and from disk. This cannot be undone.' ),
+				confirmLabel: count( ids.length, 'deleteConfirm', 'Delete %d', 'deleteConfirm1', 'Delete one' ),
+				danger:       true
+			} ).done( function ( ok ) {
+				if ( ! ok ) {
+					return;
 				}
-			}, 0 );
-		} );
-		// Re-inject when switching states (e.g. back from Create gallery).
-		frame.on( 'content:render', function () {
-			setTimeout( function () {
-				injectButton( frame );
-			}, 0 );
-		} );
-	}
-
-	if ( window.tiagsspaceMediaFrame ) {
-		window.tiagsspaceMediaFrame.onFrame( 'duplicate-to-post', wireFrame );
-	}
+				ctx.busy( true );
+				$.post( cfg.ajaxurl, {
+					action:         'tiagsspace_delete_attachments',
+					_nonce:         cfg.deleteNonce,
+					attachment_ids: ids
+				} )
+					.done( function ( res ) {
+						if ( res && res.success ) {
+							ctx.refresh();
+						} else {
+							window.alert( res && res.data && res.data.message ? res.data.message : t( 'deleteError', 'Could not delete the selected media.' ) );
+						}
+					} )
+					.fail( function () {
+						window.alert( t( 'deleteError', 'Could not delete the selected media.' ) );
+					} )
+					.always( function () {
+						ctx.busy( false );
+					} );
+			} );
+		}
+	} );
 } )( jQuery );

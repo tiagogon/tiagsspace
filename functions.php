@@ -327,17 +327,13 @@ add_action( 'init', 'tiagsspace_root_touch_icon_redirect' );
 
 
 
-// Style Featured Images Size and style on Post lists
-add_action('admin_head', 'my_custom_featured_image_css');
-function my_custom_featured_image_css() {
-  echo '<style>
-    .featured-image.column-featured-image img {
-        max-width: 60px;
-        height: auto;
-        vertical-align: top;
-        max-height: none;
-    }
-  </style>';
+// List tables: the featured-image column (featured-image-column plugin) asks
+// for a 50×50 file, which WordPress serves from a legacy 120×120 crop on old
+// uploads. Serve the theme's uncropped `thumbnail` size (480×960) instead; the
+// cell and image sizes live in library/styles/admin-media.css (§5).
+add_filter( 'featured_image_post_thumbnail_size', 'tiagsspace_list_table_thumbnail_size' );
+function tiagsspace_list_table_thumbnail_size( $size ) {
+   return 'thumbnail';
 }
 
 
