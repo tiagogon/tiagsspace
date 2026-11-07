@@ -174,6 +174,24 @@ function gallery_enqueue_editor_reset_script() {
 }
 add_action( 'enqueue_block_editor_assets', 'gallery_enqueue_editor_reset_script' );
 
+// Shared frame hook for every media-modal script (see library/js/media-frame-wire.js).
+// Registered early (priority 5) so the four scripts below can list it as a dependency.
+function tiagsspace_register_media_frame_wire() {
+	$screen = get_current_screen();
+	if ( ! $screen || $screen->base !== 'post' ) {
+		return;
+	}
+	$path = get_template_directory() . '/library/js/media-frame-wire.js';
+	wp_register_script(
+		'media-frame-wire',
+		get_template_directory_uri() . '/library/js/media-frame-wire.js',
+		array( 'jquery', 'media-views' ),
+		file_exists( $path ) ? filemtime( $path ) : '1.0',
+		true
+	);
+}
+add_action( 'admin_enqueue_scripts', 'tiagsspace_register_media_frame_wire', 5 );
+
 // Default the media library modal filter to "Uploaded to this post" on post edit screens
 function enqueue_media_library_default_uploaded() {
 	$screen = get_current_screen();
@@ -183,8 +201,8 @@ function enqueue_media_library_default_uploaded() {
 	wp_enqueue_script(
 		'media-library-default-uploaded',
 		get_template_directory_uri() . '/library/js/media-library-default-uploaded.js',
-		array( 'media-views' ),
-		'1.1',
+		array( 'media-views', 'media-frame-wire' ),
+		'1.2',
 		true
 	);
 }
@@ -202,7 +220,7 @@ function enqueue_media_gallery_actions() {
 	wp_enqueue_script(
 		'media-gallery-actions',
 		get_template_directory_uri() . '/library/js/media-gallery-actions.js',
-		array( 'jquery', 'media-views' ),
+		array( 'jquery', 'media-views', 'media-frame-wire' ),
 		file_exists( $path ) ? filemtime( $path ) : '1.0',
 		true
 	);

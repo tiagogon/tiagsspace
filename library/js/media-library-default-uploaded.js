@@ -21,10 +21,6 @@
 	// Force media library to re-fetch from server every time it opens,
 	// so attachments deleted in another tab or by automated cleanup are not shown as stale.
 	function refetchOnOpen( frame ) {
-		if ( ! frame || ! frame.on || frame.__tiagsspaceRefetchWired ) {
-			return;
-		}
-		frame.__tiagsspaceRefetchWired = true;
 		frame.on( 'open', function() {
 			// Clear the global attachment cache (stale items deleted elsewhere).
 			if ( wp.media.Attachment && wp.media.Attachment.all ) {
@@ -45,23 +41,9 @@
 		} );
 	}
 
-	// WordPress 7.1+ block editor (@wordpress/media-utils) builds
-	// MediaFrame.Select / MediaFrame.Post subclasses directly instead of calling
-	// wp.media(), so hook the frame constructor (every frame class extends
-	// Select) and keep the wp.media() wrapper for anything else.
-	var SelectFrame = wp.media.view.MediaFrame.Select;
-	var originalSelectInit = SelectFrame.prototype.initialize;
-	SelectFrame.prototype.initialize = function () {
-		originalSelectInit.apply( this, arguments );
-		refetchOnOpen( this );
-	};
-
-	var originalMedia = wp.media;
-	wp.media = function() {
-		var frame = originalMedia.apply( this, arguments );
-		refetchOnOpen( frame );
-		return frame;
-	};
-	// Copy all static properties (Attachment, view, etc.)
-	jQuery.extend( wp.media, originalMedia );
+	// Called once per frame by media-frame-wire.js (which hooks the frame
+	// constructor, so the block editor's directly built frames are covered).
+	if ( window.tiagsspaceMediaFrame ) {
+		window.tiagsspaceMediaFrame.onFrame( 'default-uploaded', refetchOnOpen );
+	}
 })();

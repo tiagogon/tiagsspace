@@ -258,19 +258,10 @@
 	}
 
 	/**
-	 * Wire a frame's open / content:render events.
-	 *
-	 * WordPress 7.1+ block editor (@wordpress/media-utils) builds
-	 * MediaFrame.Select / MediaFrame.Post subclasses directly instead of calling
-	 * wp.media(), so hook the frame constructor (every frame class extends
-	 * Select) and keep the wp.media() wrapper for anything else; the flag
-	 * prevents double wiring when both paths run for the same frame.
+	 * Wire a frame's open / content:render events. Called once per frame by
+	 * media-frame-wire.js (which hooks the frame constructor).
 	 */
 	function wireFrame( frame ) {
-		if ( ! frame || ! frame.on || frame.__tiagsspaceDuplicateWired ) {
-			return;
-		}
-		frame.__tiagsspaceDuplicateWired = true;
 		frame.on( 'open', function () {
 			// Defer so the toolbar DOM exists.
 			setTimeout( function () {
@@ -291,18 +282,7 @@
 		} );
 	}
 
-	var SelectFrame = wp.media.view.MediaFrame.Select;
-	var originalSelectInit = SelectFrame.prototype.initialize;
-	SelectFrame.prototype.initialize = function () {
-		originalSelectInit.apply( this, arguments );
-		wireFrame( this );
-	};
-
-	var originalMedia = wp.media;
-	wp.media = function () {
-		var frame = originalMedia.apply( this, arguments );
-		wireFrame( frame );
-		return frame;
-	};
-	$.extend( wp.media, originalMedia );
+	if ( window.tiagsspaceMediaFrame ) {
+		window.tiagsspaceMediaFrame.onFrame( 'duplicate-to-post', wireFrame );
+	}
 } )( jQuery );

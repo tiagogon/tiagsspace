@@ -226,7 +226,7 @@ function tiagsspace_media_attach_enqueue() {
 	wp_enqueue_script(
 		'media-attach-to-post',
 		get_template_directory_uri() . '/library/js/media-attach-to-post.js',
-		array( 'jquery', 'media-views' ),
+		array( 'jquery', 'media-views', 'media-frame-wire' ),
 		file_exists( $path ) ? filemtime( $path ) : '1.0',
 		true
 	);

@@ -25,8 +25,8 @@
  * hook, and the code injects nothing when the toolbar, state or library can't
  * be resolved.
  *
- * Self-contained (its own frame-wiring + cache helpers) so it never depends on
- * the sibling CTA scripts' load order.
+ * Frame wiring comes from media-frame-wire.js (a script dependency); the
+ * cache helpers are local so the script never depends on its siblings.
  */
 ( function ( $ ) {
 	if ( ! window.wp || ! wp.media || ! window.galleryMediaActions ) {
@@ -753,20 +753,11 @@
 	}
 
 	/**
-	 * Wire a frame's open / content:render events.
-	 *
-	 * WordPress 7.1+ block editor (@wordpress/media-utils) builds
-	 * MediaFrame.Select / MediaFrame.Post subclasses directly instead of calling
-	 * wp.media(), so a wp.media() wrapper alone never sees the Image block's
-	 * modal. Hook the frame constructor (every frame class extends Select) and
-	 * keep the wp.media() wrapper for anything else; the flag prevents double
-	 * wiring when both paths run for the same frame.
+	 * Wire a frame's open / content:render / close events. Called once per
+	 * frame by media-frame-wire.js (which hooks the frame constructor, so the
+	 * block editor's directly built frames are covered too).
 	 */
 	function wireFrame( frame ) {
-		if ( ! frame || ! frame.on || frame.__tiagsspaceGalleryActionsWired ) {
-			return;
-		}
-		frame.__tiagsspaceGalleryActionsWired = true;
 		frame.on( 'open', function () {
 			setTimeout( function () {
 				injectControls( frame );
@@ -788,18 +779,7 @@
 		} );
 	}
 
-	var SelectFrame      = wp.media.view.MediaFrame.Select;
-	var originalSelectInit = SelectFrame.prototype.initialize;
-	SelectFrame.prototype.initialize = function () {
-		originalSelectInit.apply( this, arguments );
-		wireFrame( this );
-	};
-
-	var originalMedia = wp.media;
-	wp.media = function () {
-		var frame = originalMedia.apply( this, arguments );
-		wireFrame( frame );
-		return frame;
-	};
-	$.extend( wp.media, originalMedia );
+	if ( window.tiagsspaceMediaFrame ) {
+		window.tiagsspaceMediaFrame.onFrame( 'gallery-actions', wireFrame );
+	}
 } )( jQuery );

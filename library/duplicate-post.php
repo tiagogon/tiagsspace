@@ -541,8 +541,8 @@ function tiagsspace_enqueue_media_duplicate_to_post() {
 	wp_enqueue_script(
 		'media-duplicate-to-post',
 		get_template_directory_uri() . '/library/js/media-duplicate-to-post.js',
-		array( 'jquery', 'media-views' ),
-		'1.4',
+		array( 'jquery', 'media-views', 'media-frame-wire' ),
+		'1.5',
 		true
 	);
 

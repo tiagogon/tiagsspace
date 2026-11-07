@@ -8,9 +8,9 @@
  * keeping their relative order). Two tabs then open — the target's edit screen
  * and, when the target is publicly viewable, its front-end view.
  *
- * Self-contained: it carries its own small copies of the frame-open wiring and
- * media-cache helpers so it never depends on the sibling duplicate script's
- * load order. Its search overlay is styled from JS (these CTAs aren't part of
+ * Frame wiring comes from media-frame-wire.js (a script dependency); the
+ * media-cache helpers are local so it never depends on the sibling duplicate
+ * script's load order. Its search overlay is styled from JS (these CTAs aren't part of
  * the SCSS pipeline — mirrors trash-post-modal.js).
  */
 ( function ( $ ) {
@@ -420,19 +420,10 @@
 	}
 
 	/**
-	 * Wire a frame's open / content:render events.
-	 *
-	 * WordPress 7.1+ block editor (@wordpress/media-utils) builds
-	 * MediaFrame.Select / MediaFrame.Post subclasses directly instead of calling
-	 * wp.media(), so hook the frame constructor (every frame class extends
-	 * Select) and keep the wp.media() wrapper for anything else; the flag
-	 * prevents double wiring when both paths run for the same frame.
+	 * Wire a frame's open / content:render events. Called once per frame by
+	 * media-frame-wire.js (which hooks the frame constructor).
 	 */
 	function wireFrame( frame ) {
-		if ( ! frame || ! frame.on || frame.__tiagsspaceAttachWired ) {
-			return;
-		}
-		frame.__tiagsspaceAttachWired = true;
 		frame.on( 'open', function () {
 			setTimeout( function () {
 				injectButton( frame );
@@ -449,18 +440,7 @@
 		} );
 	}
 
-	var SelectFrame = wp.media.view.MediaFrame.Select;
-	var originalSelectInit = SelectFrame.prototype.initialize;
-	SelectFrame.prototype.initialize = function () {
-		originalSelectInit.apply( this, arguments );
-		wireFrame( this );
-	};
-
-	var originalMedia = wp.media;
-	wp.media = function () {
-		var frame = originalMedia.apply( this, arguments );
-		wireFrame( frame );
-		return frame;
-	};
-	$.extend( wp.media, originalMedia );
+	if ( window.tiagsspaceMediaFrame ) {
+		window.tiagsspaceMediaFrame.onFrame( 'attach-to-post', wireFrame );
+	}
 } )( jQuery );
