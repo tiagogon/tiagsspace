@@ -162,6 +162,54 @@ function enqueue_editor_draft_preview_link() {
 }
 add_action( 'enqueue_block_editor_assets', 'enqueue_editor_draft_preview_link' );
 
+// One scroll for the canvas and the meta boxes (see library/js/editor-single-scroll.js).
+// Core (6.7+) shows the "Meta Boxes" pane as a resizable split under an always-iframed
+// canvas; the script sizes the iframe to its content and this CSS lets both take their
+// natural height, so the skeleton's content area scrolls everything. Scoped to the class
+// the script adds only while the flow applies; without it core's split is untouched.
+function tiagsspace_enqueue_editor_single_scroll() {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen || 'post' !== $screen->base ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'tiagsspace-editor-single-scroll',
+		get_template_directory_uri() . '/library/js/editor-single-scroll.js',
+		array( 'wp-data', 'wp-dom-ready' ),
+		tiagsspace_asset_ver( '/library/js/editor-single-scroll.js' ),
+		true
+	);
+
+	$css = '
+body.tiagsspace-editor-flow .edit-post-layout.has-metaboxes .interface-interface-skeleton__content:has(.edit-post-meta-boxes-main) .editor-visual-editor {
+	flex: 0 0 auto;
+	max-height: none;
+	overflow: visible;
+	min-height: 320px;
+}
+body.tiagsspace-editor-flow .edit-post-meta-boxes-main {
+	height: auto !important;
+	flex: 0 0 auto;
+	overflow: visible;
+	filter: none;
+}
+body.tiagsspace-editor-flow .edit-post-meta-boxes-main .edit-post-meta-boxes-main__liner {
+	overflow: visible;
+}
+body.tiagsspace-editor-flow .edit-post-meta-boxes-main__presenter {
+	position: sticky;
+	top: 0;
+	background-color: inherit;
+}
+body.tiagsspace-editor-flow .edit-post-meta-boxes-main__presenter [role="separator"] {
+	display: none;
+}
+';
+	wp_add_inline_style( 'wp-edit-post', $css );
+}
+add_action( 'enqueue_block_editor_assets', 'tiagsspace_enqueue_editor_single_scroll' );
+
 
 /************* ADMIN BAR *****************/
 
