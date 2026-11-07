@@ -190,7 +190,7 @@ function enqueue_media_library_default_uploaded() {
 }
 add_action( 'admin_enqueue_scripts', 'enqueue_media_library_default_uploaded' );
 
-// Media-modal gallery CTAs: "Order" (Chronological/EXIF/Random) + "Delete hidden attachments"
+// Media-modal gallery CTAs: "Select ▾" + "Reorder ▾" (Capture time/Upload date/Random) + "Delete hidden attachments"
 function enqueue_media_gallery_actions() {
 	$screen = get_current_screen();
 	if ( ! $screen || $screen->base !== 'post' ) {
@@ -215,16 +215,34 @@ function enqueue_media_gallery_actions() {
 			'reorderNonce' => wp_create_nonce( 'gallery_reorder_attachments' ),
 			'hiddenNonce'  => wp_create_nonce( 'gallery_hidden_check' ),
 			'i18n'         => array(
-				'orderLabel'   => __( 'Order', 'tiagsspace' ),
-				'chronological'=> __( 'Chronological', 'tiagsspace' ),
-				'captureTime'  => __( 'Capture time (EXIF)', 'tiagsspace' ),
-				'random'       => __( 'Random', 'tiagsspace' ),
-				'applyAll'     => __( 'Apply to all', 'tiagsspace' ),
-				'applyN'       => __( 'Apply (%d)', 'tiagsspace' ),
-				'deleteHidden' => __( 'Delete hidden attachments (%d)', 'tiagsspace' ),
-				'confirmDelete'=> __( 'Permanently delete %d hidden attachment(s)? This cannot be undone.', 'tiagsspace' ),
-				'reorderError' => __( 'Could not reorder the gallery.', 'tiagsspace' ),
-				'deleteError'  => __( 'Could not delete the hidden attachments.', 'tiagsspace' ),
+				// Reorder ▾
+				'reorder'            => __( 'Reorder', 'tiagsspace' ),
+				'reordering'         => __( 'Reordering…', 'tiagsspace' ),
+				'reorderAll'         => __( 'Reorder all attachments', 'tiagsspace' ),
+				'reorderAllN'        => __( 'Reorder all %d attachments', 'tiagsspace' ),
+				'reorderSelectedN'   => __( 'Reorder the %d selected', 'tiagsspace' ),
+				'reorderKeepSlots'   => __( '(they keep their slots)', 'tiagsspace' ),
+				'reorderOneSelected' => __( 'One item selected: nothing to reorder', 'tiagsspace' ),
+				'captureTime'        => __( 'Capture time (EXIF)', 'tiagsspace' ),
+				'chronological'      => __( 'Upload date', 'tiagsspace' ),
+				'random'             => __( 'Random', 'tiagsspace' ),
+				'reorderError'       => __( 'Could not reorder the gallery.', 'tiagsspace' ),
+				// Select ▾
+				'select'             => __( 'Select', 'tiagsspace' ),
+				'selectN'            => __( 'Select (%d)', 'tiagsspace' ),
+				'shiftAdds'          => __( 'Shift-click adds to the selection', 'tiagsspace' ),
+				'loadingAll'         => __( 'Loading all attachments…', 'tiagsspace' ),
+				'selectAll'          => __( 'All', 'tiagsspace' ),
+				'selectNone'         => __( 'None', 'tiagsspace' ),
+				'portrait'           => __( 'Portrait', 'tiagsspace' ),
+				'landscape'          => __( 'Landscape', 'tiagsspace' ),
+				'images'             => __( 'Images', 'tiagsspace' ),
+				'videos'             => __( 'Videos', 'tiagsspace' ),
+				'audio'              => __( 'Audio', 'tiagsspace' ),
+				// Delete hidden
+				'deleteHidden'       => __( 'Delete hidden attachments (%d)', 'tiagsspace' ),
+				'confirmDelete'      => __( 'Permanently delete %d hidden attachment(s)? This cannot be undone.', 'tiagsspace' ),
+				'deleteError'        => __( 'Could not delete the hidden attachments.', 'tiagsspace' ),
 			),
 		)
 	);
