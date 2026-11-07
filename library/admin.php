@@ -162,6 +162,17 @@ function enqueue_editor_draft_preview_link() {
 }
 add_action( 'enqueue_block_editor_assets', 'enqueue_editor_draft_preview_link' );
 
+// Editor chrome adjustments (sidebar featured image uncropped): library/styles/editor-ui.css.
+function tiagsspace_enqueue_editor_ui_style() {
+	wp_enqueue_style(
+		'tiagsspace-editor-ui',
+		get_template_directory_uri() . '/library/styles/editor-ui.css',
+		array(),
+		tiagsspace_asset_ver( '/library/styles/editor-ui.css' )
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'tiagsspace_enqueue_editor_ui_style' );
+
 // One scroll for the canvas and the meta boxes (see library/js/editor-single-scroll.js).
 // Core (6.7+) shows the "Meta Boxes" pane as a resizable split under an always-iframed
 // canvas; the script sizes the iframe to its content and this CSS lets both take their

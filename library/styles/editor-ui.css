@@ -1,0 +1,19 @@
+/**
+ * Block editor chrome (sidebar, panels): the theme's adjustments to the
+ * editor's own UI, outside the canvas. Plain CSS outside the Koala pipeline
+ * (same precedent as editor-style.css), enqueued on
+ * enqueue_block_editor_assets by tiagsspace_enqueue_editor_ui_style() in
+ * library/admin.php.
+ */
+
+/* Featured image in the document sidebar: core forces a 2:1 crop
+   (aspect-ratio + object-fit: cover). Show the whole picture at its own
+   ratio instead; the archive is mostly portrait photographs. */
+.editor-post-featured-image__preview .editor-post-featured-image__preview-image {
+	aspect-ratio: auto;
+	object-fit: contain;
+	height: auto;
+}
+.editor-post-featured-image__preview.components-button {
+	height: auto;
+}
