@@ -542,7 +542,7 @@ function tiagsspace_enqueue_media_duplicate_to_post() {
 		'media-duplicate-to-post',
 		get_template_directory_uri() . '/library/js/media-duplicate-to-post.js',
 		array( 'jquery', 'media-views', 'media-frame-wire' ),
-		'1.5',
+		tiagsspace_asset_ver( '/library/js/media-duplicate-to-post.js' ),
 		true
 	);
 

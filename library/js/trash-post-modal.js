@@ -43,7 +43,13 @@
 			'justify-content:center;}' +
 			'.tiagsspace-trash-modal .tiagsspace-trash-cancel{margin-top:8px;' +
 			'background:none;border:none;color:#2271b1;cursor:pointer;' +
-			'text-decoration:underline;padding:6px;}';
+			'text-decoration:underline;padding:6px;}' +
+			// Dark admin skin (dark-mode-for-wp-dashboard: body.dark-mode + --dm-* tokens).
+			'body.dark-mode .tiagsspace-trash-modal{background:var(--dm-bg-elevated,#252a34);' +
+			'color:var(--dm-text-primary,#eceff4);box-shadow:var(--dm-shadow-lg,0 8px 24px rgba(0,0,0,.5));}' +
+			'body.dark-mode .tiagsspace-trash-modal h2{color:var(--dm-text-primary,#eceff4);}' +
+			'body.dark-mode .tiagsspace-trash-modal p{color:var(--dm-text-secondary,#a0aab6);}' +
+			'body.dark-mode .tiagsspace-trash-modal .tiagsspace-trash-cancel{color:var(--dm-accent,#6b9cff);}';
 
 		$( '<style id="tiagsspace-trash-styles">' ).text( css ).appendTo( document.head );
 	}

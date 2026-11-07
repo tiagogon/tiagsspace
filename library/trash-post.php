@@ -462,7 +462,7 @@ function tiagsspace_enqueue_trash_modal_list( $hook ) {
 		'tiagsspace-trash-modal',
 		get_template_directory_uri() . '/library/js/trash-post-modal.js',
 		array( 'jquery' ),
-		'1.0',
+		tiagsspace_asset_ver( '/library/js/trash-post-modal.js' ),
 		true
 	);
 
@@ -488,7 +488,7 @@ function tiagsspace_enqueue_trash_modal_editor() {
 		'tiagsspace-trash-modal',
 		get_template_directory_uri() . '/library/js/trash-post-modal.js',
 		array( 'jquery', 'wp-data' ),
-		'1.0',
+		tiagsspace_asset_ver( '/library/js/trash-post-modal.js' ),
 		true
 	);
 

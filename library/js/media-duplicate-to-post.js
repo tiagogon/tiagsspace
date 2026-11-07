@@ -231,7 +231,8 @@
 			text:  cfg.deleteLabel
 		} );
 
-		$delete.css( 'color', '#b32d2e' );
+		// WP's error red; under the dark admin skin (body.dark-mode) the plugin's token wins.
+		$delete.css( 'color', 'var(--dm-error, #b32d2e)' );
 
 		$delete.on( 'click', function ( e ) {
 			e.preventDefault();
