@@ -369,6 +369,18 @@ body.dark-mode .tiagsspace-dialog-note {
 	width: auto;
 	height: auto;
 }
+/* No hairline around the cell: core's inset shadows on .attachment-preview
+   and .thumbnail::after, and the dark skin's 1px border. The selection and
+   focus rings on .attachment itself stay. Cells are 1.5× core's size
+   (idealColumnWidth scaled in media-toolbar.js). */
+.wp-core-ui .media-modal .attachments-browser .attachment-preview,
+body.wp-admin.dark-mode .media-modal .wp-core-ui .attachments-browser .attachment-preview {
+	border: 0;
+	box-shadow: none;
+}
+.wp-core-ui .media-modal .attachments-browser .attachment .thumbnail::after {
+	box-shadow: none;
+}
 /* Hidden from the gallery (`remove_from_default_gallery`, flag set on the
    <li> by media-toolbar.js from the model's tiagsspaceHidden). */
 .wp-core-ui .media-modal .attachments-browser .attachment[data-hidden="1"] .thumbnail {

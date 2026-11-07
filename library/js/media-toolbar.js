@@ -910,6 +910,32 @@
 		};
 	} )();
 
+	/* ---------------------------------------------------------------------
+	 * Grid: cells 1.5× core's size in the editor's Add media frame
+	 *
+	 * Core derives the column count from `idealColumnWidth` (170px for the
+	 * Post frame's library states) in Attachments#setColumns, on open and on
+	 * resize. Scaling the ideal width once per view gives fewer, larger
+	 * columns; plugin pickers (Select frames) keep core's size.
+	 * ------------------------------------------------------------------ */
+
+	( function () {
+		var Attachments = wp.media.view.Attachments;
+		if ( ! Attachments || ! Attachments.prototype.setColumns ) {
+			return;
+		}
+		var originalSetColumns = Attachments.prototype.setColumns;
+		Attachments.prototype.setColumns = function () {
+			try {
+				if ( ! this.__tiagsspaceScaled && this.controller && isPostFrame( this.controller ) && this.options.idealColumnWidth ) {
+					this.options.idealColumnWidth = Math.round( this.options.idealColumnWidth * 1.5 );
+					this.__tiagsspaceScaled = true;
+				}
+			} catch ( e ) {}
+			return originalSetColumns.apply( this, arguments );
+		};
+	} )();
+
 	window.tiagsspaceMediaToolbar = {
 		register:            register,
 		dialog:              dialog,
