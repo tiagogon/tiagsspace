@@ -2,7 +2,7 @@
 /**
  * Custom Post Type registrations and related query modifications.
  *
- * Registers: films, dusk, hyper, 4k-lento, log, cityburns (archived).
+ * Registers: films, dusk, hyper, 4k-lento, log, cidade (archived; was cityburns until Nov 2026).
  * Includes: log-branch admin filter, admin menu order, CPTs in main loop/feed/archives.
  *
  * @package tiagsspace
@@ -282,25 +282,27 @@ function tsm_convert_id_to_term_in_query($query) {
 // ----- Archeived Custom Post Types Series -----
 // ---------------------------------------------
 
-    // Register Custom Post Type cityburns.com // ARCHIVED
-    function custom_post_type_cityburns() {
+    // Register Custom Post Type cidade // ARCHIVED
+    // Called cityburns ("City Series", /cityburns/) until Nov 2026; library/migrate-cidade.php
+    // moved the posts and library/redirects.php sends the old addresses here.
+    function custom_post_type_cidade() {
       $labels = array(
-        'name'                => _x( 'City Series', 'Post Type General Name', 'text_domain' ),
-        'singular_name'       => _x( 'City', 'Post Type Singular Name', 'text_domain' ),
-        'menu_name'           => __( 'City', 'text_domain' ),
+        'name'                => _x( 'Cidade Series', 'Post Type General Name', 'text_domain' ),
+        'singular_name'       => _x( 'Cidade', 'Post Type Singular Name', 'text_domain' ),
+        'menu_name'           => __( 'Cidade', 'text_domain' ),
         'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
-        'all_items'           => __( 'All CB Posts', 'text_domain' ),
-        'view_item'           => __( 'View CB Post', 'text_domain' ),
-        'add_new_item'        => __( 'Add New CB Post', 'text_domain' ),
-        'add_new'             => __( 'Add New CB Post', 'text_domain' ),
-        'edit_item'           => __( 'Edit CB Post', 'text_domain' ),
-        'update_item'         => __( 'Update CB Post', 'text_domain' ),
-        'search_items'        => __( 'Search CB Post', 'text_domain' ),
+        'all_items'           => __( 'All Cidade Posts', 'text_domain' ),
+        'view_item'           => __( 'View Cidade Post', 'text_domain' ),
+        'add_new_item'        => __( 'Add New Cidade Post', 'text_domain' ),
+        'add_new'             => __( 'Add New Cidade Post', 'text_domain' ),
+        'edit_item'           => __( 'Edit Cidade Post', 'text_domain' ),
+        'update_item'         => __( 'Update Cidade Post', 'text_domain' ),
+        'search_items'        => __( 'Search Cidade Post', 'text_domain' ),
         'not_found'           => __( 'Not found', 'text_domain' ),
         'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
       );
       $args = array(
-        'label'               => __( 'cityburns', 'text_domain' ),
+        'label'               => __( 'cidade', 'text_domain' ),
         'description'         => __( 'The sun below the horizon.', 'text_domain' ),
         'labels'              => $labels,
         'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'trackbacks', 'revisions', 'custom-fields', ),
@@ -316,15 +318,16 @@ function tsm_convert_id_to_term_in_query($query) {
         'menu_icon'           => 'dashicons-media-archive',
         'can_export'          => true,
         'has_archive'         => true,
+        'rewrite'             => array( 'slug' => 'cidade', 'with_front' => false ),
         'exclude_from_search' => false,
         'publicly_queryable'  => true,
         'capability_type'     => 'post',
         'yarpp_support'       => true,
       );
-      register_post_type( 'cityburns', $args );
+      register_post_type( 'cidade', $args );
     }
     // Hook into the 'init' action
-    add_action( 'init', 'custom_post_type_cityburns', 0 );
+    add_action( 'init', 'custom_post_type_cidade', 0 );
 
 
 
@@ -347,7 +350,7 @@ function tsm_convert_id_to_term_in_query($query) {
 function my_get_posts( $query ) {
 
     if ( is_home() && $query->is_main_query() )
-        $query->set( 'post_type', array( 'post', 'dusk', 'films', 'hyper', 'log', 'cityburns', '4k-lento') );
+        $query->set( 'post_type', array( 'post', 'dusk', 'films', 'hyper', 'log', 'cidade', '4k-lento') );
 
     return $query;
 }
@@ -355,7 +358,7 @@ add_filter( 'pre_get_posts', 'my_get_posts' );
 
 function myfeed_request($qv) {
     if (isset($qv['feed']) && !isset($qv['post_type']))
-        $qv['post_type'] = array('post', 'dusk', 'films', 'hyper', 'log', 'cityburns', '4k-lento');
+        $qv['post_type'] = array('post', 'dusk', 'films', 'hyper', 'log', 'cidade', '4k-lento');
     return $qv;
 }
 add_filter('request', 'myfeed_request');
@@ -369,12 +372,18 @@ add_filter('request', 'myfeed_request');
 
 add_filter('pre_get_posts', 'query_post_type');
 function query_post_type($query) {
-    if(is_category() || is_tag()) {
+    // Main query only. It used to change EVERY query on a tag or category page,
+    // so a secondary lookup (a post's attachments for the Queue Posts preview arrows,
+    // related sets…) was forced onto the archive's post types and found nothing.
+    if ( is_admin() || ! $query->is_main_query() ) {
+        return $query;
+    }
+    if($query->is_category() || $query->is_tag()) {
         $post_type = get_query_var('post_type');
         if($post_type) {
             $post_type = $post_type;
         } else {
-            $post_type = array('post', 'dusk', 'films', 'hyper', 'log', 'cityburns', '4k-lento'); // replace CPT to your custom post type
+            $post_type = array('post', 'dusk', 'films', 'hyper', 'log', 'cidade', '4k-lento'); // replace CPT to your custom post type
         }
         $query->set('post_type',$post_type);
 

@@ -34,10 +34,12 @@ require_once('library/acf-fields.php');         // ACF field groups (registered 
 require_once('library/duplicate-post.php');     // Duplicate any post to a new draft (row/bulk/editor)
 require_once('library/media-attach-to-post.php'); // "Add to existing post" media-modal CTA (re-parent attachments)
 require_once('library/trash-post.php');          // Trash post with attached-media choice (row/bulk/editor)
+require_once('library/redirects.php');           // Redirects of this installation (one list: PHP + generated nginx snippet)
+require_once('library/migrate-cidade.php');      // One-off: post type cityburns → cidade (wp tiagsspace cidade-migrate)
 
 // Disable comments entirely
 add_action('init', function() {
-	$types = ['post', 'page', 'films', 'dusk', 'hyper', '4k-lento', 'log', 'cityburns'];
+	$types = ['post', 'page', 'films', 'dusk', 'hyper', '4k-lento', 'log', 'cidade'];
 	foreach ($types as $type) {
 		remove_post_type_support($type, 'comments');
 		remove_post_type_support($type, 'trackbacks');
@@ -384,7 +386,7 @@ function index_next_post_type($current_post_id) {
 
     $args = array(
         'posts_per_page' => 1,
-        'post_type' => array( 'post', 'dusk', 'films', 'hyper', 'log', 'cityburns'),
+        'post_type' => array( 'post', 'dusk', 'films', 'hyper', 'log', 'cidade'),
         'post_status' => array( 'publish' ),
     );
     $inner_query = new WP_Query( $args );

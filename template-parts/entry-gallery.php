@@ -82,8 +82,8 @@ if($attachmens){
             $deactivat_masonry      = true;
         }
 
-        // City Burns
-        elseif ( is_singular( 'cityburns' )) {
+        // Cidade (City Series until Nov 2026)
+        elseif ( is_singular( 'cidade' )) {
             $class_container        = 'container-fluid';
             $number_of_columns_xs   = 1;
             $number_of_columns_sm   = 1;

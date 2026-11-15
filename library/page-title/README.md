@@ -2,7 +2,7 @@
 
 One model and one renderer for every line on the site that says where the visitor is:
 
-- the fixed top-left header line ("Tiags' Space / Dusk Series / Them"),
+- the fixed top-left header line ("Tiags' Space / Dusk / Them"),
 - a listing's entry title after each gallery ("Blwww / Thunder" on the Log archive),
 - the label the header shows while the mouse is over a thumbnail.
 
@@ -28,7 +28,7 @@ Callers: `template-parts/header-title.php`, `template-parts/entry-body.php`,
 A **crumb** is a plain array with exactly four keys, made only through `tiagsspace_crumb()`:
 
 ```php
-array( 'label' => 'Dusk Series', 'short' => 'Dusk', 'url' => 'https://…/dusk/', 'heading' => false )
+array( 'label' => '4K Lento Mixes', 'short' => '4K Lento', 'url' => 'https://…/4k-lento/', 'heading' => false )
 ```
 
 - `label` — the words, plain text, unescaped (required)
@@ -50,7 +50,7 @@ The crumbs that name one work: its series (or the Log), its Log branches, its ti
 
 | input (local site) | result |
 |---|---|
-| `35362` (a Dusk set) | `Dusk Series → /dusk/` (short "Dusk"), `Them` * |
+| `35362` (a Dusk set) | `Dusk → /dusk/` (short "Dusk"), `Them` * |
 | `36413` (a Log entry) | `Log → /log/`, `Blwww → /log-branch/blwww/`, `Thunder` * |
 | `30179` (a film) | `32 Sec Brush` * |
 | `33989` (a page) | `About` * |
@@ -69,7 +69,7 @@ The crumbs of the page a query shows (the main query by default).
 |---|---|
 | home, search, 404 | `Tiags' Space` |
 | the Index page | `Tiags' Space`, `Index` |
-| a series archive | `Tiags' Space`, `Dusk Series` (short "Dusk"); films: `Film` (see `archive_word`) |
+| a series archive | `Tiags' Space`, `Dusk` (short "Dusk"); films: `Film` (see `archive_word`) |
 | the Log archive | `Tiags' Space`, `Log` |
 | a Log branch | `Tiags' Space`, `Log → /log/`, `Blwww` |
 | a taxonomy term | `Tiags' Space`, `Place`, `Algarve` |
@@ -100,8 +100,8 @@ is escaped here; print the result as it is.
 | `wrap` | `true` | `false` returns the crumbs only, no wrapper element (labels). |
 
 Two responsive forms, both from the theme's markup: when the short form is the
-start of the label ("Dusk" / "Dusk Series") only the rest is hidden on small
-screens (`Dusk<span class="d-none d-sm-inline"> Series</span>`); otherwise ("S" /
+start of the label ("4K Lento" / "4K Lento Mixes") only the rest is hidden on small
+screens (`4K Lento<span class="d-none d-sm-inline"> Mixes</span>`); when it equals the label ("Dusk") the word is printed once; otherwise ("S" /
 "Tiags' Space") the two forms are swapped (`<span class="d-inline d-sm-none">S</span><span class="d-none d-sm-inline">Tiags' Space</span>`).
 
 The prefix and group spans only appear around a heading element; a plain line
@@ -115,7 +115,7 @@ Series archive header:
 tiagsspace_render_crumbs( tiagsspace_page_crumbs(), [ 'heading' => 'h1', 'over_text' => true ] );
 ```
 ```html
-<h1 class="site-title"><a href="https://…"><span class="d-inline d-sm-none">S</span><span class="d-none d-sm-inline">Tiags' Space</span></a> / Dusk<span class="d-none d-sm-inline"> Series</span><span id="over-text" class="d-none d-sm-inline"></span></h1>
+<h1 class="site-title"><a href="https://…"><span class="d-inline d-sm-none">S</span><span class="d-none d-sm-inline">Tiags' Space</span></a> / Dusk<span id="over-text" class="d-none d-sm-inline"></span></h1>
 ```
 
 Log listing entry:
@@ -134,7 +134,7 @@ Hover label on the home page (goes into `data-label` with `esc_attr()`):
 tiagsspace_render_crumbs( tiagsspace_entry_crumbs( 35362 ), [ 'links' => false, 'responsive' => 'md', 'leading_sep' => true, 'wrap' => false ] );
 ```
 ```
- / Dusk<span class="d-none d-md-inline"> Series</span> / Them
+ / Dusk / Them
 ```
 
 ## Rules this module keeps

@@ -19,7 +19,7 @@ Based on Eddie Machado's Bones starter theme, heavily customised with a **48-col
 | `dusk` | Dusk | |
 | `films` | Films | |
 | `log` | Log | Uses `log-branch` taxonomy |
-| `cityburns` | City Series | Archived / closed |
+| `cidade` | Cidade Series (was `cityburns`, City Series, until Nov 2026) | Archived / closed |
 
 ## Custom Taxonomies
 
