@@ -5,9 +5,10 @@
  * Everything the page-title module needs to know about this theme's content
  * lives here, as data. Adding a post type or a taxonomy is one line in this
  * file; the builders in crumbs.php read it and never spell a name themselves.
- * The long spelling of a series ("Dusk Series", "4K Lento Mix") stays in
- * tiagsspace_series_name() (library/template-functions.php), which is the
- * single source of those words for titles, share cards and the menu alike.
+ * The words of a series live in library/template-functions.php: what the page
+ * shows (menu, header, hover labels) comes from tiagsspace_series_ui_name(),
+ * plain words ("Dusk", "Hyper", "Cidade", "4K Lento Mixes"); what search engines
+ * read (<title>, share cards) from tiagsspace_series_name() ("Dusk Series").
  *
  * @see README.md for the contract and worked examples.
  */
@@ -26,25 +27,27 @@ return array(
     ),
 
     // Post types whose works get NO type crumb before the title. Every other
-    // post type gets one, spelled by tiagsspace_series_name( $type, 'single' )
+    // post type gets one, spelled by tiagsspace_series_ui_name( $type, 'single' )
     // (which falls back to the post type's label, so plain posts read "Posts").
     // Films are not an artistic series; a page belongs to no series.
     'no_type_crumb' => array( 'films', 'page' ),
 
     // The short form of a series name: the part that is always shown; the rest
-    // of the name ("Series", "Mix") only from the responsive breakpoint up.
+    // of the name ("Mixes", "Mix") only from the responsive breakpoint up. Where the
+    // UI name is the short form itself (Dusk, Hyper, Cidade) nothing is added.
     'short' => array(
         'dusk'      => 'Dusk',
         'hyper'     => 'Hyper',
-        'cityburns' => 'City',
+        'cidade'    => 'Cidade',
         '4k-lento'  => '4K Lento',
     ),
 
-    // Post types whose hover label never shortens (City always reads "City Series").
-    'label_always_full' => array( 'cityburns' ),
+    // Post types whose hover label never shortens. Empty since Nov 2026: it held
+    // the City Series ("City" alone read oddly); "Cidade" needs no suffix.
+    'label_always_full' => array(),
 
     // The header word of a series archive, when it differs from
-    // tiagsspace_series_name( $type, 'archive' ).
+    // tiagsspace_series_ui_name( $type, 'archive' ).
     'archive_word' => array(
         'films' => 'Film',
     ),

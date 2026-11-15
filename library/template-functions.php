@@ -65,7 +65,7 @@ function tiagsspace_series_name( $post_type, $context = 'archive' ) {
     $names = array(
         'dusk'      => array( 'archive' => 'Dusk Series',    'single' => 'Dusk Series' ),
         'hyper'     => array( 'archive' => 'Hyper Series',   'single' => 'Hyper Series' ),
-        'cityburns' => array( 'archive' => 'City Series',    'single' => 'City Series' ),
+        'cidade'    => array( 'archive' => 'Cidade Series',  'single' => 'Cidade Series' ),
         '4k-lento'  => array( 'archive' => '4K Lento Mixes', 'single' => '4K Lento Mix' ),
         'films'     => array( 'archive' => 'Films',          'single' => 'Film' ),
         'log'       => array( 'archive' => 'Log',            'single' => 'Log' ),
@@ -76,6 +76,25 @@ function tiagsspace_series_name( $post_type, $context = 'archive' ) {
     }
     $obj = get_post_type_object( $post_type );
     return $obj ? $obj->labels->name : '';
+}
+
+/**
+ * The name of a series as the page itself shows it: the menu, the header line, a set's
+ * type crumb, the thumbnail hover label. Plain words, no "Series" (Tiago, Nov 2026: simple,
+ * not pretentious). "Dusk Series" and the like stay in what search engines read
+ * (tiagsspace_series_name(): <title> templates, share cards).
+ *
+ * @param string $post_type
+ * @param string $context  'archive' or 'single', as tiagsspace_series_name().
+ * @return string
+ */
+function tiagsspace_series_ui_name( $post_type, $context = 'archive' ) {
+    $plain = array(
+        'dusk'   => 'Dusk',
+        'hyper'  => 'Hyper',
+        'cidade' => 'Cidade',
+    );
+    return isset( $plain[ $post_type ] ) ? $plain[ $post_type ] : tiagsspace_series_name( $post_type, $context );
 }
 
 // LIST OF TAGS

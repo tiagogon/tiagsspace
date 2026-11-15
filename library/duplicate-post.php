@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string[]
  */
 function tiagsspace_duplicatable_post_types() {
-	$types = array( 'post', 'films', 'dusk', 'hyper', '4k-lento', 'log', 'cityburns' );
+	$types = array( 'post', 'films', 'dusk', 'hyper', '4k-lento', 'log', 'cidade' );
 
 	/**
 	 * Filter the list of post types that expose the Duplicate UI.

@@ -106,7 +106,7 @@ if ( ! function_exists( 'tiagsspace_entry_crumbs' ) ) {
         // The series, or the Log, the work belongs to.
         if ( ! in_array( 'type', $omit, true ) && ! in_array( $post_type, $config['no_type_crumb'], true ) ) {
             $short    = isset( $config['short'][ $post_type ] ) ? $config['short'][ $post_type ] : '';
-            $crumbs[] = tiagsspace_crumb( tiagsspace_series_name( $post_type, 'single' ), array(
+            $crumbs[] = tiagsspace_crumb( tiagsspace_series_ui_name( $post_type, 'single' ), array(
                 'short' => $short,
                 'url'   => get_post_type_archive_link( $post_type ),
             ) );
@@ -172,7 +172,7 @@ if ( ! function_exists( 'tiagsspace_page_crumbs' ) ) {
             $post_type = $object instanceof WP_Post_Type ? $object->name : (string) $query->get( 'post_type' );
             $word      = isset( $config['archive_word'][ $post_type ] )
                 ? $config['archive_word'][ $post_type ]
-                : tiagsspace_series_name( $post_type, 'archive' );
+                : tiagsspace_series_ui_name( $post_type, 'archive' );
             $short     = isset( $config['short'][ $post_type ] ) ? $config['short'][ $post_type ] : '';
             $crumbs[]  = tiagsspace_crumb( $word, array( 'short' => $short ) );
 
@@ -180,7 +180,7 @@ if ( ! function_exists( 'tiagsspace_page_crumbs' ) ) {
             $term = $query->get_queried_object();
             if ( $term instanceof WP_Term ) {
                 if ( $term->taxonomy === $config['branch_taxonomy'] ) {
-                    $crumbs[] = tiagsspace_crumb( tiagsspace_series_name( $config['branch_post_type'], 'archive' ), array(
+                    $crumbs[] = tiagsspace_crumb( tiagsspace_series_ui_name( $config['branch_post_type'], 'archive' ), array(
                         'url' => get_post_type_archive_link( $config['branch_post_type'] ),
                     ) );
                     $crumbs[] = tiagsspace_crumb( $term->name );

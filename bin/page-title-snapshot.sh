@@ -34,7 +34,7 @@ PATHS=(
   "/"                                            # home
   "/dusk/"                                       # series archive
   "/hyper/"
-  "/cityburns/"
+  "/cidade/"
   "/4k-lento/"
   "/films/"                                      # archive word "Film"
   "/log/"                                        # listing with <h2> titles
@@ -46,7 +46,7 @@ PATHS=(
   "/index/"                                      # Index page (table)
   "/dusk/them/"                                  # single set
   "/hyper/b12/"
-  "/cityburns/higluk/"
+  "/cidade/higluk/"
   "/4k-lento/untouched/"                         # mix, background image
   "/films/32-seconds-brush/"                     # film, no series crumb
   "/log/thunder/"                                # Log entry

@@ -346,9 +346,9 @@ Index of posts for Home and Archives
                       // taxonomy pages keep their " > Space" root. On a single work (the related
                       // sets) it replaces everything after "Tiags' Space / " in the header, so it
                       // uses the header's own short-form rule (sm) and no leading separator.
-                      // The series' added word ("Series", "Mix") shows from md on the home page
-                      // and from xl on archives, measured with the longest titles; City never
-                      // shortens. Built by library/page-title/ and stored in data-label, so no
+                      // A series' added word (4K Lento's "Mixes") shows from md on the home page
+                      // and from xl on archives, measured with the longest titles; Dusk, Hyper and
+                      // Cidade have none. Built by library/page-title/ and stored in data-label, so no
                       // PHP writes JavaScript and any title survives (quotes, ampersands).
                       $label_config = tiagsspace_page_title_config();
                       $label_single = is_singular();
