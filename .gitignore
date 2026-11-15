@@ -4,3 +4,6 @@
 
 # Local-only dev notes (test accounts, local URLs)
 .claude/rules/local-dev.md
+
+# Tumblr theme preview pages (built by tumblr/preview.js from live posts)
+tumblr/preview/

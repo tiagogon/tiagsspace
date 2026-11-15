@@ -1,0 +1,402 @@
+<html>
+<head>
+<title>{Title}</title>
+<link rel="shortcut icon" href="{Favicon}">
+<link rel="alternate" type="application/rss+xml" href="{RSS}">
+{block:Description}
+<meta name="description" content="{MetaDescription}" />
+{/block:Description}
+<meta name="color-scheme" content="light dark">
+
+<!--
+  Source of truth: tumblr/theme.html in the tiagsspace WordPress theme repo.
+  Edit it there and paste the whole file into Tumblr > Edit theme > Edit HTML.
+
+  Typeface: Lora, the one tiags.space uses. Layout, widths and sizes are the
+  original theme's and are meant to stay that way.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+
+<!--
+  Disassemble 3.0 Theme for Tumblr
+  by Georgia Harris
+  www.smpldesign.co.uk
+-->
+
+<!-- DEFAULT COLORS -->
+<meta name="color:Video Corner Fold" content="red">
+<meta name="if:Show Captions" content="0"/>
+<meta name="if:Uppercase Links" content="0">
+<meta name="if:Fade On Hover" content="0">
+<meta name="if:Show Tags on Index Page" content="0">
+
+<style type="text/css">
+
+/* Colours of tiags.space's index (_foundations-fonts.scss, .tiagsssss-color):
+   light by default, dark when the visitor's system is dark. They replace the
+   theme's Text and Background colour options, which no longer do anything. */
+:root {
+    --text: #000;
+    --paper: #E3E5F2;
+    --paper-warm: #F2EFE3;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text: #fff;
+        --paper: #16161b;
+        --paper-warm: #1d1a17;
+    }
+}
+
+/* The background sits on <html>, not <body>: the fixed words below blend
+   against the root group, and the root needs its own opaque background for
+   that (same rule as _foundations-tokens.scss on tiags.space). */
+html {
+    background-color: var(--paper);
+    background: linear-gradient(0deg, var(--paper-warm) 0%, var(--paper) 100%);
+}
+
+body {
+    font-family: "Lora", serif;
+    color: var(--text);
+    font-size:21px;
+    line-height:25px;
+    font-weight:400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 576px) {
+    html {
+        background: var(--paper); /* the iOS status bar breaks with gradients */
+    }
+}
+
+.post-caption, .post-caption a{
+    font-size: 21px;
+    line-height: 1.5;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+p{
+    font-size: 21px;
+}
+
+a {
+    padding-bottom:2px;
+    color: var(--text);
+    text-decoration:none;
+    font-style: italic;
+}
+
+.caption a {
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 21px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    border: none;
+    border : 0;
+    outline:none;
+}
+
+a img {
+    outline: none;
+}
+
+iframe#tumblr_controls {
+    display:none;
+}
+
+#wrapper {
+    {block:PermalinkPage}
+    width:580px;
+    {/block:PermalinkPage}
+    position:relative;
+    margin: 50px auto;
+}
+
+#post {
+    padding:40px;
+}
+
+#post img {
+    width:100%;
+}
+
+#post img:hover {
+    {block:IndexPage}
+    {block:IfFadeOnHover}
+    opacity:1;
+    {/block:IfFadeOnHover}
+    {/block:IndexPage}
+}
+
+#post embed, #post iframe {
+    width:100% !important;
+}
+
+#post .photoset a:first-child {
+    display:block !important;
+    border:0 !important;
+    padding:0 !important;
+}
+
+#post .photoset a {
+    display:none;
+}
+
+/* The fixed words (tiags.space, Message, Random, Back to top…) read as the
+   inverse of whatever is behind them: white text with mix-blend-mode:
+   difference turns black over a light background or picture, white over a dark
+   one, as the header on tiags.space does (_region-header-nav.scss). Each box
+   blends by itself; never give #wrapper or <body> a z-index, opacity,
+   transform, filter or isolation, or the words would blend against an empty
+   layer instead of the pictures. */
+.title, .follow, .archive, .message, .random, #toTop {
+    color: #fff;
+    mix-blend-mode: difference;
+}
+.title a, .follow a, .archive a, .message a, .random a {
+    color: #fff;
+}
+
+.title {
+    width:100%;
+    text-align:center;
+    margin:auto;
+    position:fixed;
+    top:20px;
+    z-index:10;
+    display: none;
+}
+
+.follow {
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:5000;
+    display: none;
+}
+
+.archive {
+    position:fixed;
+    top:20px;
+    left:20px;
+    z-index:5000;
+}
+
+.message {
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    z-index:5000;
+}
+
+.random {
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    z-index:5000;
+}
+
+#toTop {
+    width:100%;
+    text-align:center;
+    margin:auto;
+    z-index:4000;
+    position:fixed;
+    display:none;
+    bottom:20px;
+    cursor:pointer;
+    font-style: italic;
+}
+
+.player {
+    background:#000;
+}
+
+ul.chat {
+    list-style-type:none;
+    padding:0;
+    margin:0;
+}
+
+#infscr-loading {
+    display:none !important;
+}
+
+.corner {
+    top:6px;
+    right:40px;
+    position:absolute;
+    padding:1em 1.5em;
+    margin:2em auto;
+    color:#fff;
+    overflow:hidden;
+    z-index:4000;
+}
+
+.corner:before {
+    content:"";
+    position:absolute;
+    top:0px;
+    right:0px;
+    border-width:0 25px 25px 0;
+    border-style:solid;
+    border-color:#fff #fff {color:Video Corner Fold} {color:Video Corner Fold};
+    background:#fff;
+    display:block; width:0; /* Firefox 3.0 damage limitation */
+}
+
+{CustomCSS}
+
+</style>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://static.tumblr.com/88q9p1j/5nJomwpp7/disassemble_v3.js"></script>
+
+<script type="text/javascript">
+$(function() {
+    $(window).scroll(function() {
+        if($(this).scrollTop() != 0) {
+            $('#toTop').fadeIn();
+        } else {
+            $('#toTop').fadeOut();
+        }
+    });
+
+    $('#toTop').click(function() {
+        $('body,html').animate({scrollTop:0},800);
+    });
+
+    // Load the next page early. disassemble_v3.js (Tumblr-hosted, not ours to
+    // edit) starts infinite scroll with the plugin default, bufferPx: 80, so the
+    // next posts were fetched only 80px before the end of the page, and then
+    // stay hidden until all their images arrive. Asking 2.5 screen heights
+    // ahead gives Tumblr's images time to load while the viewer is still
+    // looking at the current page. This handler runs after the theme's own
+    // ready handler (registered later), so the instance exists by now.
+    var scroller = $('#wrapper').data('infinitescroll');
+    if (scroller && scroller.options) {
+        var setBuffer = function() {
+            scroller.options.bufferPx = Math.round($(window).height() * 2.5);
+        };
+        setBuffer();
+        $(window).resize(setBuffer);
+    }
+});
+</script>
+
+</head>
+
+<body>
+
+{block:IfUppercaseLinks}<div style="text-transform:uppercase">{/block:IfUppercaseLinks}
+
+<div class="title"><a href="/">{Title}</a></div>
+<div class="archive"><a href="https://tiags.space" target="_blank">tiags.space</a></div>
+<div class="message"><a href="/ask">Message</a></div>
+<div class="follow">{block:PermalinkPage}{block:Posts}<a href="{ReblogURL}" target="_blank">Reblog</a> / {/block:Posts}{/block:PermalinkPage}<a href="https://www.tumblr.com/follow/{Name}">Follow</a></div>
+<div class="random"><a href="/random">Random</a></div>
+<div id="toTop">Back to top</div>
+
+{block:IfUppercaseLinks}</div>{/block:IfUppercaseLinks}
+
+<div id="wrapper">
+
+{block:Posts}
+
+<div id="post"
+{block:IndexPage}
+{block:Post1}style="width:380px"{/block:Post1}
+{block:Post2}style="width:410px"{/block:Post2}
+{block:Post3}style="width:500px"{/block:Post3}
+{block:Post4}style="width:290px"{/block:Post4}
+{block:Post5}style="width:320px"{/block:Post5}
+{block:Post6}style="width:460px"{/block:Post6}
+{block:Post7}style="width:530px"{/block:Post7}
+{block:Post8}style="width:280px"{/block:Post8}
+{block:Post9}style="width:340px"{/block:Post9}
+{block:Post10}style="width:400px"{/block:Post10}
+{block:Post11}style="width:260px"{/block:Post11}
+{block:Post12}style="width:370px"{/block:Post12}
+{block:Post13}style="width:520px"{/block:Post13}
+{block:Post14}style="width:310px"{/block:Post14}
+{block:Post15}style="width:250px"{/block:Post15}
+{/block:IndexPage}
+{block:PermalinkPage}style="width:500px"{/block:PermalinkPage}
+>
+
+{block:Text}
+{block:Title}<a href="{Permalink}">{Title}</a>{/block:Title}
+{Body}
+{/block:Text}
+
+{block:Link}
+<a href="{URL}" class="link" {Target}>{Name}</a>
+{block:Description}<div class="description">{Description}</div>{/block:Description}
+{/block:Link}
+
+{block:Quote}
+<a style="border:0 !important" href="{Permalink}">"{Quote}"</a>
+{block:Source}
+<p>&mdash; {Source}</p>
+{/block:Source}
+{/block:Quote}
+
+{block:Photo}
+{block:IndexPage}<a href="{block:LinkURL}{LinkURL}{/block:LinkURL}" target="_blank"><div style="border:none"><img src="{PhotoURL-HighRes}" alt="{PhotoAlt}" border="0"/></div></a>{/block:IndexPage}{block:PermalinkPage}{LinkOpenTag}<div style="border:none"><img src="{PhotoURL-HighRes}" alt="{PhotoAlt}"/></div>{LinkCloseTag}{/block:PermalinkPage}
+{block:IndexPage}{block:IfShowCaptions}{block:Caption}<div class="caption">{Caption}</div>{/block:Caption}{/block:IfShowCaptions}{/block:IndexPage}
+{block:PermalinkPage}{block:Caption}<div class="caption">{Caption}</div>{/block:Caption}{/block:PermalinkPage}
+{/block:Photo}
+
+{block:Chat}
+{block:Title}<h2>{Title}</h2>{/block:Title}
+<ul class="chat">{block:Lines}<li class="user_{UserNumber}">{block:Label}<span class="label">{Label}</span>{/block:Label} {Line}</li>{/block:Lines}</ul>
+{/block:Chat}
+
+{block:Video}
+{block:IndexPage}<a href="{Permalink}"><div class="corner"></div></a>{/block:IndexPage}
+<div id="video">
+{Video-500}
+</div>
+{block:IndexPage}{block:IfShowCaptions}{block:Caption}<div class="caption">{Caption}</div>{/block:Caption}{/block:IfShowCaptions}{/block:IndexPage}
+{block:PermalinkPage}{block:Caption}<div class="caption">{Caption}</div>{/block:Caption}{/block:PermalinkPage}
+{/block:Video}
+
+{block:Photoset}
+{block:IndexPage}<div class="photoset">{block:Photos}<a href="{block:LinkURL}{LinkURL}{/block:LinkURL}" target="_blank"><img src="{PhotoURL-HighRes}"></a>{/block:Photos}</div>{/block:IndexPage}
+{block:PermalinkPage}{Photoset-500}{/block:PermalinkPage}
+{block:IndexPage}{block:IfShowCaptions}{block:Caption}<div class="caption">{Caption}</div>{/block:Caption}{/block:IfShowCaptions}{/block:IndexPage}
+{block:PermalinkPage}{block:Caption}<div class="caption">{Caption}</div>{/block:Caption}{/block:PermalinkPage}
+{/block:Photoset}
+
+{block:Audio}
+{block:AlbumArt}<a href="{Permalink}"><img src="{AlbumArtURL}"></a>{/block:AlbumArt}
+<div class="player">{AudioPlayerBlack}</div>
+{block:IndexPage}{block:IfShowCaptions}{block:Caption}<div class="caption">{Caption}</div>{/block:Caption}{/block:IfShowCaptions}{/block:IndexPage}
+{block:PermalinkPage}{block:Caption}<div class="caption">{Caption}</div>{/block:Caption}{/block:PermalinkPage}
+{/block:Audio}
+
+{block:IfShowTagsOnIndexPage}<div class="post-caption">{block:IndexPage}{block:Date}Posted {TimeAgo} and has {NoteCountWithLabel}{block:HasTags}<br>{block:Tags}<a href="{TagURL}">#{Tag}</a> {/block:Tags}{/block:HasTags}{/block:Date}{/block:IndexPage}</div>{/block:IfShowTagsOnIndexPage}
+{block:PermalinkPage}<div class="post-caption">{block:Date}Posted {TimeAgo} and has {NoteCountWithLabel}{block:HasTags}<br>{block:Tags}<a href="{TagURL}">#{Tag}</a> {/block:Tags}{/block:HasTags}{/block:Date}</div>{/block:PermalinkPage}
+
+</div>
+{/block:Posts}
+
+{block:NextPage}<div id="page-nav"><a href="{NextPage}"></a>{/block:NextPage}
+
+</div>
+
+</body>
+</html>
