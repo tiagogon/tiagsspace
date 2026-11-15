@@ -369,7 +369,13 @@ add_filter('request', 'myfeed_request');
 
 add_filter('pre_get_posts', 'query_post_type');
 function query_post_type($query) {
-    if(is_category() || is_tag()) {
+    // Main query only. It used to change EVERY query on a tag or category page,
+    // so a secondary lookup (a post's attachments for the Queue Posts preview arrows,
+    // related sets…) was forced onto the archive's post types and found nothing.
+    if ( is_admin() || ! $query->is_main_query() ) {
+        return $query;
+    }
+    if($query->is_category() || $query->is_tag()) {
         $post_type = get_query_var('post_type');
         if($post_type) {
             $post_type = $post_type;
