@@ -4,6 +4,8 @@
  * The same items as the media modal, calling the same AJAX handlers:
  *   Delete ▾  The N selected…          tiagsspace_delete_attachments       (library/duplicate-post.php)
  *             Hidden from gallery (N)… gallery_delete_hidden_attachments   (library/gallery-functions.php)
+ *   Set as featured image (one image selected) and the per-image Feature chip
+ *                                      tiagsspace_set_featured_image       (library/gallery-functions.php)
  *   Select ▾  All · None · Portrait · Landscape · Images · Videos · Audio
  *   Sort ▾    By capture time (EXIF) · By upload date · Shuffle
  *                                      gallery_reorder_attachments         (library/gallery-functions.php)
@@ -47,6 +49,69 @@
 		},
 		enabled: function ( ctx ) { return ctx.n > 0 && typeof window.galleryKeyboardReorderHideSelected === 'function'; },
 		run:     function () { window.galleryKeyboardReorderHideSelected(); }
+	} );
+
+	// ── Set as featured image ───────────────────────────────
+	// Two ways in: the Feature chip on each image, and a plain button on the bar
+	// while exactly one image is selected. Saved at once; the chip of the
+	// featured image reads "Featured".
+
+	var featuredId = parseInt( cfg.featuredId, 10 ) || 0;
+
+	function paintFeatured() {
+		Array.prototype.forEach.call( document.querySelectorAll( '.tge-feature' ), function ( chip ) {
+			var on = parseInt( chip.getAttribute( 'data-attachment' ), 10 ) === featuredId;
+			chip.setAttribute( 'aria-pressed', on ? 'true' : 'false' );
+			chip.textContent = on ? tr( 'edit', 'featured', 'Featured' ) : tr( 'edit', 'feature', 'Feature' );
+			chip.setAttribute( 'data-tip', on ? tr( 'edit', 'tipFeatured', 'The featured image of this post' ) : tr( 'edit', 'tipFeature', 'Set as the featured image of this post' ) );
+		} );
+	}
+
+	function setFeatured( id ) {
+		id = parseInt( id, 10 ) || 0;
+		if ( ! id || id === featuredId ) return Promise.resolve();
+		return api.post( 'tiagsspace_set_featured_image', {
+			_nonce:        cfg.nonces.featured,
+			post_id:       cfg.postId,
+			attachment_id: id
+		} ).then( function () {
+			featuredId = id;
+			paintFeatured();
+			if ( api.notice ) api.notice( g( 'featuredDone', 'Featured image set' ) );
+			if ( api.refreshToolbar ) api.refreshToolbar();
+		}, function ( err ) {
+			fail( err, g( 'featuredError', 'Could not set the featured image.' ) );
+		} );
+	}
+
+	document.addEventListener( 'click', function ( e ) {
+		var chip = e.target && e.target.closest ? e.target.closest( '.tge-feature' ) : null;
+		if ( ! chip ) return;
+		e.preventDefault();
+		e.stopPropagation();
+		setFeatured( chip.getAttribute( 'data-attachment' ) );
+	} );
+
+	function oneSelectedImage( ctx ) {
+		if ( ctx.n !== 1 ) return 0;
+		var id = String( ctx.ids[ 0 ] );
+		var item = ctx.items.filter( function ( el ) { return String( el.getAttribute( 'attachmentId' ) ) === id; } )[ 0 ];
+		return item && item.getAttribute( 'data-kind' ) === 'image' ? parseInt( id, 10 ) : 0;
+	}
+
+	api.register( {
+		id:      'set-featured',
+		group:   'feature',
+		order:   10,
+		label:   function () { return tr( 'toolbar', 'setFeatured', 'Set as featured image' ); },
+		enabled: function ( ctx ) {
+			var id = oneSelectedImage( ctx );
+			return id > 0 && id !== featuredId;
+		},
+		run: function ( ctx ) {
+			ctx.busy( true );
+			setFeatured( oneSelectedImage( ctx ) ).then( function () { ctx.busy( false ); } );
+		}
 	} );
 
 	// ── Restore hidden (a plain button, only while something is hidden) ──

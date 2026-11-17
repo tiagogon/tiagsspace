@@ -128,6 +128,10 @@ function tiagsspace_gallery_edit_i18n() {
 		'tipRestore'     => __( 'Put every hidden image back in the gallery · one at a time  U', 'tiagsspace' ),
 		'delete'         => __( 'Delete', 'tiagsspace' ),
 		'tipDelete'      => __( 'Delete permanently…', 'tiagsspace' ),
+		'feature'        => __( 'Feature', 'tiagsspace' ),
+		'featured'       => __( 'Featured', 'tiagsspace' ),
+		'tipFeature'     => __( 'Set as the featured image of this post', 'tiagsspace' ),
+		'tipFeatured'    => __( 'The featured image of this post', 'tiagsspace' ),
 		'nextHidden'     => __( 'Next hidden', 'tiagsspace' ),
 		'tipNextHidden'  => __( 'Show the next hidden image here  N', 'tiagsspace' ),
 		'tipSmaller'     => __( 'Smaller', 'tiagsspace' ),
@@ -159,6 +163,7 @@ function tiagsspace_gallery_edit_i18n() {
 function tiagsspace_gallery_edit_config( $post_id, $loop_id ) {
 	return array(
 		'postId' => (int) $post_id,
+		'featuredId' => (int) get_post_thumbnail_id( $post_id ),
 		'gridId' => 'gallery-' . (int) $loop_id,
 		'poolId' => 'gallery-hidden-pool-' . (int) $loop_id,
 		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
@@ -169,6 +174,7 @@ function tiagsspace_gallery_edit_config( $post_id, $loop_id ) {
 			'duplicate'      => wp_create_nonce( 'tiagsspace_duplicate_to_post' ),
 			'attachSearch'   => wp_create_nonce( 'tiagsspace_media_attach_search' ),
 			'attach'         => wp_create_nonce( 'tiagsspace_media_attach_attach' ),
+			'featured'       => wp_create_nonce( 'tiagsspace_set_featured_image' ),
 		),
 		'i18n' => array(
 			'toolbar'   => tiagsspace_media_toolbar_i18n(),
@@ -365,6 +371,17 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 	echo '<div class="tge-item-actions">';
 	printf( '<button type="button" class="remove tge-chip" data-tip="%s">%s</button>', esc_attr( $w['tipHide'] ), esc_html( $w['hide'] ) );
 	printf( '<a class="delete tge-chip" href="#" role="button" rel="%s" data-tip="%s">%s</a>', esc_url( $delete_url ), esc_attr( $w['tipDelete'] ), esc_html( $w['delete'] ) );
+	// Images only: a video or audio file cannot be a featured image.
+	if ( wp_attachment_is_image( $attachment_id ) ) {
+		$is_featured = (int) get_post_thumbnail_id( $gallery_id ) === $attachment_id;
+		printf(
+			'<button type="button" class="tge-chip tge-feature" data-attachment="%d" aria-pressed="%s" data-tip="%s">%s</button>',
+			$attachment_id,
+			$is_featured ? 'true' : 'false',
+			esc_attr( $is_featured ? $w['tipFeatured'] : $w['tipFeature'] ),
+			esc_html( $is_featured ? $w['featured'] : $w['feature'] )
+		);
+	}
 	if ( $has_hidden_by_gallery[ $gallery_id ] ) {
 		printf( '<button type="button" class="nexthidden tge-chip" onclick="revealNextHidden(this);" data-tip="%s">%s</button>', esc_attr( $w['tipNextHidden'] ), esc_html( $w['nextHidden'] ) );
 	}
@@ -508,6 +525,8 @@ function tiagsspace_media_toolbar_i18n() {
 		'moveN'           => __( 'Move %d to', 'tiagsspace' ),
 		'actions'         => __( 'Actions', 'tiagsspace' ),
 		'actionsN'        => __( 'Actions (%d)', 'tiagsspace' ),
+		'setFeatured'     => __( 'Set as featured image', 'tiagsspace' ),
+		'featuredBadge'   => __( 'Featured', 'tiagsspace' ),
 		// Menu headers
 		'cannotUndo'      => __( 'Cannot be undone', 'tiagsspace' ),
 		'shiftAdds'       => __( 'Shift-click adds to the selection', 'tiagsspace' ),
@@ -555,6 +574,9 @@ function tiagsspace_media_gallery_actions_i18n() {
 		'sortAllText'       => __( 'The current order of the gallery is replaced.', 'tiagsspace' ),
 		'sortConfirm'       => __( 'Sort', 'tiagsspace' ),
 		'sortError'         => __( 'Could not sort the gallery.', 'tiagsspace' ),
+		// Set as featured image
+		'featuredDone'      => __( 'Featured image set', 'tiagsspace' ),
+		'featuredError'     => __( 'Could not set the featured image.', 'tiagsspace' ),
 		// Delete ▾ hidden
 		'hiddenItem'        => __( 'Hidden from gallery (%d)…', 'tiagsspace' ),
 		'hiddenTitle'       => __( 'Delete %d hidden attachments permanently?', 'tiagsspace' ),
@@ -621,6 +643,7 @@ function enqueue_media_gallery_actions() {
 			'ajaxurl'      => admin_url( 'admin-ajax.php' ),
 			'reorderNonce' => wp_create_nonce( 'gallery_reorder_attachments' ),
 			'hiddenNonce'  => wp_create_nonce( 'gallery_hidden_check' ),
+			'featuredNonce' => wp_create_nonce( 'tiagsspace_set_featured_image' ),
 			'i18n'         => tiagsspace_media_gallery_actions_i18n(),
 		)
 	);
@@ -641,6 +664,14 @@ add_action( 'admin_enqueue_scripts', 'enqueue_media_gallery_actions' );
  */
 function tiagsspace_attachment_js_hidden_flag( $response, $attachment ) {
 	$response['tiagsspaceHidden'] = '1' === (string) get_post_meta( $attachment->ID, 'remove_from_default_gallery', true );
+
+	// Featured image of the post being edited (the modal sends its post_id with
+	// every library query), else of the attachment's own parent.
+	$for_post = isset( $_REQUEST['post_id'] ) ? absint( $_REQUEST['post_id'] ) : 0;
+	if ( ! $for_post ) {
+		$for_post = (int) $attachment->post_parent;
+	}
+	$response['tiagsspaceFeatured'] = $for_post && (int) get_post_thumbnail_id( $for_post ) === (int) $attachment->ID;
 	return $response;
 }
 add_filter( 'wp_prepare_attachment_for_js', 'tiagsspace_attachment_js_hidden_flag', 10, 2 );
@@ -683,6 +714,38 @@ function gallery_media_order_change_request() {
    die();
 }
 add_action( 'wp_ajax_gallery_media_order_change_request', 'gallery_media_order_change_request' );
+
+// ----------------------
+// AJAX: Set an image as the post's featured image (gallery editor chip and
+// toolbar button, media-modal "Set as featured image"). Saved at once.
+// ----------------------
+function tiagsspace_set_featured_image() {
+	check_ajax_referer( 'tiagsspace_set_featured_image', '_nonce' );
+
+	$post_id       = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+	$attachment_id = isset( $_POST['attachment_id'] ) ? absint( $_POST['attachment_id'] ) : 0;
+
+	if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied.', 'tiagsspace' ) ), 403 );
+	}
+	if ( ! $attachment_id || ! wp_attachment_is_image( $attachment_id ) ) {
+		wp_send_json_error( array( 'message' => __( 'Only an image can be the featured image.', 'tiagsspace' ) ), 400 );
+	}
+
+	// set_post_thumbnail() returns false when the value is already stored.
+	if ( (int) get_post_thumbnail_id( $post_id ) !== $attachment_id ) {
+		if ( ! set_post_thumbnail( $post_id, $attachment_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Could not set the featured image.', 'tiagsspace' ) ), 500 );
+		}
+		tiagsspace_gallery_touch_parent( $post_id, true );
+	}
+
+	wp_send_json_success( array(
+		'post_id'       => $post_id,
+		'attachment_id' => $attachment_id,
+	) );
+}
+add_action( 'wp_ajax_tiagsspace_set_featured_image', 'tiagsspace_set_featured_image' );
 
 // ----------------------
 // AJAX: Count hidden attachments for a post

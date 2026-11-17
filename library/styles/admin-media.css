@@ -43,6 +43,11 @@
 .tiagsspace-mt:not(.is-overflow) > .tiagsspace-mt-all {
 	display: none;
 }
+/* A plain button (Set as featured image) is there only while it can be used;
+   in the collapsed row it is the first item of "Actions ▾". */
+.media-frame-toolbar .media-toolbar-primary > .tiagsspace-mt > .media-button[hidden] {
+	display: none;
+}
 .tiagsspace-mt-caret {
 	display: inline-block;
 	margin-left: 4px;
@@ -385,6 +390,28 @@ body.wp-admin.dark-mode .media-modal .wp-core-ui .attachments-browser .attachmen
    <li> by media-toolbar.js from the model's tiagsspaceHidden). */
 .wp-core-ui .media-modal .attachments-browser .attachment[data-hidden="1"] .thumbnail {
 	opacity: .55;
+}
+
+/* The post's featured image: a small badge in the cell's corner (the word
+   comes from the attribute, set by media-toolbar.js from tiagsspaceFeatured). */
+.wp-core-ui .media-modal .attachments-browser .attachment[data-featured] .attachment-preview::before {
+	content: attr(data-featured);
+	position: absolute;
+	left: 6px;
+	bottom: 6px;
+	z-index: 2;
+	padding: 3px 6px;
+	border-radius: 3px;
+	background: #1d2327;
+	color: #fff;
+	font-size: 11px;
+	line-height: 1.2;
+	pointer-events: none;
+}
+body.dark-mode .media-modal .wp-core-ui .attachments-browser .attachment[data-featured] .attachment-preview::before,
+body.dark-mode.wp-core-ui .media-modal .attachments-browser .attachment[data-featured] .attachment-preview::before {
+	background: var(--dm-text-primary, #eceff4);
+	color: #2e3440;
 }
 
 /* -------------------------------------------------------------------------

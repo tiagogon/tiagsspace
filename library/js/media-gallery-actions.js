@@ -13,6 +13,10 @@
  *   the selection (they keep their slots) or, with nothing selected, every
  *   attachment of the post, which asks for confirmation first.
  *
+ * - Set as featured image: a plain button, on the bar while exactly one image
+ *   is selected and it is not the featured image already. Saved at once
+ *   (tiagsspace_set_featured_image); the editor's Featured image panel follows.
+ *
  * - Delete ▾ Hidden from gallery (N)…: deletes the post's attachments flagged
  *   `remove_from_default_gallery`. N is fetched when the menu opens.
  *
@@ -209,6 +213,99 @@
 	sortEntry( 'capture_time', 10, 'byCapture', 'By capture time (EXIF)' );
 	sortEntry( 'chronological', 20, 'byUpload', 'By upload date' );
 	sortEntry( 'random', 30, 'shuffle', 'Shuffle' );
+
+	/* ---------------------------------------------------------------------
+	 * Set as featured image
+	 * ------------------------------------------------------------------ */
+
+	function oneSelectedImage( ctx ) {
+		if ( ctx.n !== 1 || ! ctx.selection ) {
+			return null;
+		}
+		var m = ctx.selection.first();
+		return m && m.get( 'type' ) === 'image' ? m : null;
+	}
+
+	/**
+	 * The value is saved already; make the editor show it. Block editor: put
+	 * it in the saved record (nothing to save, the post stays clean) and drop
+	 * an unsaved choice of another image, which would win on the next save.
+	 * Classic editor: core redraws its Featured image box.
+	 */
+	function showInEditor( id ) {
+		try {
+			var editor = window.wp && wp.data && wp.data.select( 'core/editor' );
+			var postId = editor && editor.getCurrentPostId && editor.getCurrentPostId();
+			if ( postId ) {
+				var type   = editor.getCurrentPostType();
+				var record = wp.data.select( 'core' ).getEntityRecord( 'postType', type, postId );
+				if ( record ) {
+					wp.data.dispatch( 'core' ).receiveEntityRecords( 'postType', type, $.extend( {}, record, { featured_media: id } ) );
+				}
+				if ( editor.getEditedPostAttribute( 'featured_media' ) !== id ) {
+					wp.data.dispatch( 'core/editor' ).editPost( { featured_media: id } );
+				}
+				return;
+			}
+			if ( wp.media.featuredImage && $( '#postimagediv' ).length ) {
+				wp.media.featuredImage.set( id );
+			}
+		} catch ( e ) {}
+	}
+
+	toolbar.register( {
+		id:    'set-featured',
+		group: 'feature',
+		order: 10,
+		label: function ( ctx ) {
+			return ( ctx.i18n && ctx.i18n.setFeatured ) || 'Set as featured image';
+		},
+		enabled: function ( ctx ) {
+			var m = oneSelectedImage( ctx );
+			return !! m && ! m.get( 'tiagsspaceFeatured' );
+		},
+		run: function ( ctx ) {
+			var m = oneSelectedImage( ctx );
+			if ( ! m ) {
+				return;
+			}
+			if ( ! ctx.postId ) {
+				window.alert( t( 'postError', 'Could not determine the current post.' ) );
+				return;
+			}
+			var id = m.get( 'id' );
+			ctx.busy( true );
+			$.post( cfg.ajaxurl, {
+				action:        'tiagsspace_set_featured_image',
+				_nonce:        cfg.featuredNonce,
+				post_id:       ctx.postId,
+				attachment_id: id
+			} )
+				.done( function ( res ) {
+					if ( res && res.success ) {
+						// The badge moves: one featured image per post.
+						if ( ctx.library ) {
+							ctx.library.each( function ( other ) {
+								if ( other !== m && other.get( 'tiagsspaceFeatured' ) ) {
+									other.set( 'tiagsspaceFeatured', false );
+								}
+							} );
+						}
+						m.set( 'tiagsspaceFeatured', true );
+						showInEditor( id );
+					} else {
+						window.alert( res && res.data && res.data.message ? res.data.message : t( 'featuredError', 'Could not set the featured image.' ) );
+					}
+				} )
+				.fail( function ( xhr ) {
+					var msg = xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message;
+					window.alert( msg || t( 'featuredError', 'Could not set the featured image.' ) );
+				} )
+				.always( function () {
+					ctx.busy( false );
+				} );
+		}
+	} );
 
 	/* ---------------------------------------------------------------------
 	 * Delete ▾ Hidden from gallery (N)…

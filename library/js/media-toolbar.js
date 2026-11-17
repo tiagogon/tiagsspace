@@ -12,7 +12,7 @@
  *
  *   tiagsspaceMediaToolbar.register( {
  *       id:      'sort-capture',
- *       group:   'sort',                 // delete | select | sort | move
+ *       group:   'sort',                 // delete | select | sort | move (menus), feature (a plain button)
  *       order:   10,                     // position inside the group
  *       label:   function ( ctx ) {},    // item text ("…" when it confirms)
  *       count:   function ( ctx ) {},    // optional number shown at the right
@@ -57,6 +57,9 @@
 	var i18n      = cfg.i18n || {};
 	var format    = wire.format;
 	var GROUPS    = [ 'delete', 'select', 'sort', 'move' ];
+	// Plain buttons (no menu): one registered action each, on the bar only
+	// while that action can be used.
+	var DIRECT    = [ 'feature' ];
 	var MAX_PAGES = 50;
 	var INST      = '__tiagsspaceToolbar';
 	var uid       = 0;
@@ -72,7 +75,7 @@
 	var actions = [];
 
 	function register( action ) {
-		if ( ! action || ! action.id || GROUPS.indexOf( action.group ) === -1 || typeof action.run !== 'function' ) {
+		if ( ! action || ! action.id || GROUPS.concat( DIRECT ).indexOf( action.group ) === -1 || typeof action.run !== 'function' ) {
 			if ( window.console && console.warn ) {
 				console.warn( 'tiagsspaceMediaToolbar: invalid registration', action );
 			}
@@ -98,6 +101,11 @@
 	 * Group chrome: button label, menu header lines, tone.
 	 */
 	var groupDefs = {
+		feature: {
+			label: function () {
+				return t( 'setFeatured', 'Set as featured image' );
+			}
+		},
 		'delete': {
 			danger: true,
 			label: function () {
@@ -742,19 +750,41 @@
 		};
 		frame[ INST ] = inst;
 
-		function makeButton( key, extraClass ) {
+		function makeButton( key, extraClass, plain ) {
 			var $b = $( '<button>', {
 				type:    'button',
 				id:      'tiagsspace-mt-' + key + '-' + ( ++uid ),
 				'class': 'button media-button button-large ' + extraClass
 			} );
-			$b.append( $( '<span>', { 'class': 'tiagsspace-mt-text' } ) )
-				.append( ' ' )
-				.append( $( '<span>', { 'class': 'tiagsspace-mt-caret', 'aria-hidden': 'true' } ).text( '▾' ) );
+			$b.append( $( '<span>', { 'class': 'tiagsspace-mt-text' } ) );
+			if ( ! plain ) {
+				$b.append( ' ' )
+					.append( $( '<span>', { 'class': 'tiagsspace-mt-caret', 'aria-hidden': 'true' } ).text( '▾' ) );
+			}
 			buttons[ key ] = $b;
 			$wrap.append( $b );
 			return $b;
 		}
+
+		// The one usable action of a plain-button group, or null.
+		function directAction( g, ctx ) {
+			var a = groupActions( g )[ 0 ];
+			return a && ( typeof a.enabled !== 'function' || a.enabled( ctx ) ) ? a : null;
+		}
+
+		DIRECT.forEach( function ( g ) {
+			makeButton( g, 'tiagsspace-mt-group tiagsspace-mt-direct', true ).on( 'click', function ( e ) {
+				e.preventDefault();
+				if ( openMenu ) {
+					openMenu.close();
+				}
+				var ctx = buildCtx( frame, inst );
+				var a   = directAction( g, ctx );
+				if ( a ) {
+					a.run( ctx, e );
+				}
+			} );
+		} );
 
 		GROUPS.forEach( function ( g ) {
 			var $b = makeButton( g, 'tiagsspace-mt-group' + ( groupDefs[ g ].danger ? ' tiagsspace-mt-danger' : '' ) );
@@ -772,8 +802,14 @@
 			onOpen: function () {
 				return openGroups( GROUPS, inst, function ( ctx ) {
 					var list = [];
+					DIRECT.forEach( function ( g ) {
+						var a = directAction( g, ctx );
+						if ( a ) {
+							list.push( { label: a.label( ctx ), onClick: function ( e ) { a.run( ctx, e ); } } );
+						}
+					} );
 					GROUPS.forEach( function ( g, i ) {
-						if ( i ) {
+						if ( i || list.length ) {
 							list.push( { separator: true } );
 						}
 						list.push( { header: groupDefs[ g ].label( ctx ), title: true, danger: !! groupDefs[ g ].danger } );
@@ -795,6 +831,11 @@
 			GROUPS.forEach( function ( g ) {
 				setLabel( buttons[ g ], groupDefs[ g ].label( ctx ) );
 			} );
+			DIRECT.forEach( function ( g ) {
+				var a = directAction( g, ctx );
+				setLabel( buttons[ g ], a ? a.label( ctx ) : groupDefs[ g ].label( ctx ) );
+				buttons[ g ].prop( 'hidden', ! a );
+			} );
 			setLabel( $all, ctx.n ? format( t( 'actionsN', 'Actions (%d)' ), ctx.n ) : t( 'actions', 'Actions' ) );
 			inst.layout();
 		};
@@ -809,8 +850,10 @@
 			try {
 				$wrap.removeClass( 'is-overflow' );
 				var need = 0;
-				GROUPS.forEach( function ( g ) {
-					need += buttons[ g ].outerWidth( true ) + 6;
+				GROUPS.concat( DIRECT ).forEach( function ( g ) {
+					if ( ! buttons[ g ].prop( 'hidden' ) ) {
+						need += buttons[ g ].outerWidth( true ) + 6;
+					}
 				} );
 				need += 24; // group margins
 				var others = 0;
@@ -838,14 +881,14 @@
 			selection.on( 'add remove reset', onChange );
 		}
 		if ( library && library.on ) {
-			library.on( 'add remove reset', onChange );
+			library.on( 'add remove reset change:tiagsspaceFeatured', onChange );
 		}
 		inst.off = function () {
 			if ( selection && selection.off ) {
 				selection.off( 'add remove reset', onChange );
 			}
 			if ( library && library.off ) {
-				library.off( 'add remove reset', onChange );
+				library.off( 'add remove reset change:tiagsspaceFeatured', onChange );
 			}
 		};
 
@@ -888,7 +931,8 @@
 	wire.onFrame( 'media-toolbar', wireFrame );
 
 	/* ---------------------------------------------------------------------
-	 * Grid: flag items hidden from the gallery (dimmed by admin-media.css)
+	 * Grid: flag items hidden from the gallery (dimmed by admin-media.css) and
+	 * the post's featured image (a "Featured" badge)
 	 * ------------------------------------------------------------------ */
 
 	( function () {
@@ -904,6 +948,12 @@
 					this.$el.attr( 'data-hidden', '1' );
 				} else {
 					this.$el.removeAttr( 'data-hidden' );
+				}
+				// The post's featured image: the attribute holds the badge's word.
+				if ( this.model && this.model.get( 'tiagsspaceFeatured' ) ) {
+					this.$el.attr( 'data-featured', t( 'featuredBadge', 'Featured' ) );
+				} else {
+					this.$el.removeAttr( 'data-featured' );
 				}
 			} catch ( e ) {}
 			return out;

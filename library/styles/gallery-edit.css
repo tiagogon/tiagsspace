@@ -85,6 +85,12 @@
 	color: var(--tge-bg);
 	text-decoration: none;
 }
+/* The chip of the post's featured image: solid, like a pressed key. */
+.tge-chip[aria-pressed="true"] {
+	background: var(--tge-fg);
+	color: var(--tge-bg);
+	cursor: default;
+}
 .tge-chip:focus-visible,
 .tge-button:focus-visible,
 .tge-link:focus-visible,

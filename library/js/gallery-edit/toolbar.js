@@ -12,7 +12,8 @@
  *
  *   tiagsspaceGalleryEdit.register( {
  *       id:              'unique-id',
- *       group:           'delete' | 'select' | 'sort' | 'move',
+ *       group:           'delete' | 'select' | 'sort' | 'move' (menus),
+ *                        'hide' | 'feature' | 'restore' (plain buttons),
  *       order:           10,
  *       separatorBefore: false,
  *       label:   function ( ctx ) {},  // item text ("…" when it confirms)
@@ -310,7 +311,7 @@
 
 	// ── Groups: button words and menu headers (as in media-toolbar.js) ──
 
-	var GROUPS = [ 'hide', 'restore', 'delete', 'select', 'sort', 'move' ];
+	var GROUPS = [ 'hide', 'feature', 'restore', 'delete', 'select', 'sort', 'move' ];
 
 	var IS_MAC = /Mac|iPhone|iPad/.test( navigator.platform || navigator.userAgent || '' );
 
@@ -323,6 +324,12 @@
 			},
 			headers: function () { return []; },
 			hint:    function () { return t( 'tipHideBar', 'Hide the selected from the gallery  H · undo  U' ); }
+		},
+		feature: {
+			direct:  true,
+			label:   function () { return t( 'setFeatured', 'Set as featured image' ); },
+			headers: function () { return []; },
+			hint:    function () { return t( 'tipFeature', 'Set as the featured image of this post' ); }
 		},
 		restore: {
 			direct:  true,
@@ -551,6 +558,7 @@
 		layout();
 	}
 	api.refreshToolbar = sync;
+	api.notice = notice;
 
 	function setBusy( on ) {
 		bar.classList.toggle( 'is-busy', !! on );
