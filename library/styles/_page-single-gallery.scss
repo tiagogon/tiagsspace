@@ -243,104 +243,10 @@ div.thumbnail {
 
 
 // --------------------------------------------------
-// Edit attachment media: reorder / delete controls
+// Edit attachment media: the per-image controls, the check box and the
+// sortable ghost are styled in library/styles/gallery-edit.css, loaded only
+// in gallery edit mode (never shipped to visitors).
 // --------------------------------------------------
-
-.itemPosition {
-	opacity: 0;
-	position: absolute;
-    z-index: 1;
-	padding: 5px;
-	color: white;
-
-	font-size: 16px;
-
-	border-color: transparent;
-    border-style: none;
-    border-width: 0;
-    background-color: transparent!important;
-	text-shadow: 1px 1px $tiagsssss-color;
-	&:hover{
-		opacity: 1;
-	}
-	button{
-
-		color: white;
-
-		font-size: 16px;
-
-		border-color: transparent;
-	    border-style: none;
-	    border-width: 0;
-	    background-color: transparent!important;
-		text-shadow: 1px 1px $tiagsssss-color;
-
-	}
-}
-button.remove{
-	opacity: 0;
-	position: absolute;
-	bottom: 0;
-	right: 0;
-    z-index: 1;
-	padding: 5px;
-	color: white;
-
-	font-size: 16px;
-
-	border-color: transparent;
-    border-style: none;
-    border-width: 0;
-    background-color: transparent!important;
-	text-shadow: 1px 1px $tiagsssss-color;
-	&:hover{
-		opacity: 1;
-	}
-}
-
-button.saveorder,
-button.nexthidden{
-	opacity: 0;
-	position: absolute;
-	bottom: 0;
-    z-index: 1;
-	padding: 5px;
-	color: white;
-
-	font-size: 16px;
-
-	border-color: transparent;
-    border-style: none;
-    border-width: 0;
-	text-shadow: 1px 1px $tiagsssss-color;
-    background-color: transparent!important;
-	&:hover{
-		opacity: 1;
-	}
-}
-
-a.delete{
-	opacity: 0;
-	position: absolute;
-    z-index: 1;
-	right: 0;
-	padding: 5px;
-	color: white;
-
-	font-size: 16px;
-
-	text-shadow: 1px 1px $tiagsssss-color;
-	&:hover{
-		opacity: 1;
-		text-decoration: none;
-	}
-}
-
-// sortable drag ghost
-.sortable-ghost {
-  opacity: .5;
-  background: #C8EBFB;
-}
 
 // keyboard reorder flash
 @keyframes kb-flash-shadow {

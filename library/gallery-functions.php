@@ -8,71 +8,322 @@
  * @package tiagsspace
  */
 
+/************* Gallery edit mode: where the front-end editor runs *************/
+
+// Post meta that switches edit mode off for one published post (the "Gallery
+// edit: on/off" link in the entry footer). Absent = the site-wide default.
+const TIAGSSPACE_GALLERY_EDIT_OFF_META = '_tiagsspace_gallery_edit_off';
+
+/**
+ * May the published post's gallery be edited on the front end at all?
+ * (Flag on, published, not an animation gallery, current user can edit it.)
+ * Says nothing about the per-post off switch; see tiagsspace_gallery_edit_mode().
+ */
+function tiagsspace_gallery_edit_available( $post_id ) {
+	$post_id = (int) $post_id;
+	return $post_id
+		&& function_exists( 'tiagsspace_setting' )
+		&& tiagsspace_setting( 'gallery_edit_published' )
+		&& 'publish' === get_post_status( $post_id )
+		&& ! get_field( 'animation_number_of_attachment_shown', $post_id )
+		&& current_user_can( 'edit_post', $post_id );
+}
+
+/**
+ * The one gate for the front-end gallery editor (per-item controls, Sortable,
+ * keyboard keys, selection and toolbar). True on:
+ *   - a preview, for a logged-in user (as it has always been), or
+ *   - a single published post when Appearance → Theme Settings allows it, the
+ *     user can edit it and it has not been switched off with the footer link.
+ * Never on listings, never for an animation gallery. On a published post it also
+ * keeps W3TC from caching the page (it carries nonces and edit controls).
+ *
+ * @param int $post_id The gallery's post (not a revision).
+ */
+function tiagsspace_gallery_edit_mode( $post_id = 0 ) {
+	static $cache = array();
+
+	$post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+	if ( wp_is_post_revision( $post_id ) ) {
+		$post_id = (int) wp_get_post_parent_id( $post_id );
+	}
+	if ( isset( $cache[ $post_id ] ) ) {
+		return $cache[ $post_id ];
+	}
+
+	$on = false;
+	if ( ! get_field( 'animation_number_of_attachment_shown', $post_id ) ) {
+		if ( is_preview() && is_user_logged_in() ) {
+			$on = true;
+		} elseif ( is_singular() && (int) get_queried_object_id() === $post_id
+			&& tiagsspace_gallery_edit_available( $post_id )
+			&& ! get_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META, true ) ) {
+			$on = true;
+			if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+				define( 'DONOTCACHEPAGE', true );
+			}
+		}
+	}
+
+	return $cache[ $post_id ] = $on;
+}
+
+/** URL of the footer link that switches edit mode off / on for one post. */
+function tiagsspace_gallery_edit_toggle_url( $post_id ) {
+	return wp_nonce_url(
+		add_query_arg(
+			array(
+				'action' => 'tiagsspace_gallery_edit_toggle',
+				'post'   => (int) $post_id,
+			),
+			admin_url( 'admin-post.php' )
+		),
+		'tiagsspace_gallery_edit_toggle_' . (int) $post_id
+	);
+}
+
+add_action( 'admin_post_tiagsspace_gallery_edit_toggle', 'tiagsspace_handle_gallery_edit_toggle' );
+function tiagsspace_handle_gallery_edit_toggle() {
+	$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+	check_admin_referer( 'tiagsspace_gallery_edit_toggle_' . $post_id );
+	if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
+		wp_die( esc_html__( 'You cannot edit this post.', 'tiagsspace' ), 403 );
+	}
+
+	if ( get_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META, true ) ) {
+		delete_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META );
+	} else {
+		update_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META, 1 );
+	}
+
+	wp_safe_redirect( get_permalink( $post_id ) );
+	exit;
+}
+
+// A duplicate starts with the site default, not the source's switch.
+add_filter( 'tiagsspace_duplicate_meta_denylist', function ( $keys ) {
+	$keys[] = TIAGSSPACE_GALLERY_EDIT_OFF_META;
+	return $keys;
+} );
+
+/**
+ * Words only the front-end editor uses (the menus themselves reuse the media
+ * modal's tables, see tiagsspace_gallery_edit_config()).
+ */
+function tiagsspace_gallery_edit_i18n() {
+	return array(
+		'selectItem'     => __( 'Select %s', 'tiagsspace' ),
+		'selectedOne'    => __( '%d selected', 'tiagsspace' ),
+		'selectedN'      => __( '%d selected', 'tiagsspace' ),
+		'attachmentsOne' => __( '%d attachment', 'tiagsspace' ),
+		'attachmentsN'   => __( '%d attachments', 'tiagsspace' ),
+		'clear'          => __( 'Clear', 'tiagsspace' ),
+		'selectKeys'     => __( 'Select  S · Shift+arrows extend · %s all · Esc clears', 'tiagsspace' ),
+		'tipSelect'      => __( 'Select  S · Shift-click a range', 'tiagsspace' ),
+		'hide'           => __( 'Hide', 'tiagsspace' ),
+		'hideN'          => __( 'Hide %d', 'tiagsspace' ),
+		'tipHide'        => __( 'Hide from gallery  H · undo  U', 'tiagsspace' ),
+		'tipHideBar'     => __( 'Hide the selected from the gallery  H · undo  U', 'tiagsspace' ),
+		'delete'         => __( 'Delete', 'tiagsspace' ),
+		'tipDelete'      => __( 'Delete permanently…', 'tiagsspace' ),
+		'nextHidden'     => __( 'Next hidden', 'tiagsspace' ),
+		'tipNextHidden'  => __( 'Show the next hidden image here  N', 'tiagsspace' ),
+		'tipSmaller'     => __( 'Smaller', 'tiagsspace' ),
+		'tipBigger'      => __( 'Bigger', 'tiagsspace' ),
+		'margins'        => __( 'Margins', 'tiagsspace' ),
+		'tipMargins'     => __( 'Margins and stacking', 'tiagsspace' ),
+		'marginAll'      => __( 'All', 'tiagsspace' ),
+		'marginLeft'     => __( 'Left', 'tiagsspace' ),
+		'marginRight'    => __( 'Right', 'tiagsspace' ),
+		'marginTop'      => __( 'Top', 'tiagsspace' ),
+		'marginBottom'   => __( 'Bottom', 'tiagsspace' ),
+		'stack'          => __( 'Stack', 'tiagsspace' ),
+		'less'           => __( 'less', 'tiagsspace' ),
+		'more'           => __( 'more', 'tiagsspace' ),
+		'reset'          => __( 'reset', 'tiagsspace' ),
+		'movedTo'        => __( '%d moved to %s', 'tiagsspace' ),
+		'movedToCopy'    => __( '%d moved to a new draft', 'tiagsspace' ),
+		'open'           => __( 'Open', 'tiagsspace' ),
+	);
+}
+
+/**
+ * window.tiagsspaceGalleryEditCfg for library/js/gallery-edit/*.js: ids, the
+ * nonces of the media modal's own AJAX handlers, and the modal's word tables.
+ *
+ * @param int $post_id The gallery's post.
+ * @param int $loop_id The id the grid is printed with (#gallery-<id>).
+ */
+function tiagsspace_gallery_edit_config( $post_id, $loop_id ) {
+	return array(
+		'postId' => (int) $post_id,
+		'gridId' => 'gallery-' . (int) $loop_id,
+		'poolId' => 'gallery-hidden-pool-' . (int) $loop_id,
+		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		'nonces' => array(
+			'reorder'        => wp_create_nonce( 'gallery_reorder_attachments' ),
+			'hidden'         => wp_create_nonce( 'gallery_hidden_check' ),
+			'deleteSelected' => wp_create_nonce( 'tiagsspace_delete_attachments' ),
+			'duplicate'      => wp_create_nonce( 'tiagsspace_duplicate_to_post' ),
+			'attachSearch'   => wp_create_nonce( 'tiagsspace_media_attach_search' ),
+			'attach'         => wp_create_nonce( 'tiagsspace_media_attach_attach' ),
+		),
+		'i18n' => array(
+			'toolbar'   => tiagsspace_media_toolbar_i18n(),
+			'gallery'   => tiagsspace_media_gallery_actions_i18n(),
+			'duplicate' => tiagsspace_media_duplicate_i18n(),
+			'attach'    => tiagsspace_media_attach_i18n(),
+			'edit'      => tiagsspace_gallery_edit_i18n(),
+		),
+	);
+}
+
+/** <link> + <script> tags for the editor, printed inside the gallery's edit block. */
+function tiagsspace_gallery_edit_assets( $post_id, $loop_id ) {
+	$base = get_template_directory_uri();
+	printf(
+		'<link rel="stylesheet" href="%s">' . "\n",
+		esc_url( $base . '/library/styles/gallery-edit.css?v=' . tiagsspace_asset_ver( '/library/styles/gallery-edit.css' ) )
+	);
+	printf(
+		'<script>window.tiagsspaceGalleryEditCfg = %s;</script>' . "\n",
+		wp_json_encode( tiagsspace_gallery_edit_config( $post_id, $loop_id ) )
+	);
+	foreach ( array( 'tips', 'selection', 'toolbar', 'actions' ) as $file ) {
+		$path = '/library/js/gallery-edit/' . $file . '.js';
+		printf( '<script src="%s"></script>' . "\n", esc_url( $base . $path . '?v=' . tiagsspace_asset_ver( $path ) ) );
+	}
+}
+
+/**
+ * Nonce + capability check shared by the per-item AJAX handlers (order, size,
+ * margins). The edit page prints the nonce as window.galleryHideNonce.
+ */
+function tiagsspace_gallery_edit_guard( $attachment_id ) {
+	check_ajax_referer( 'gallery_hide_attachment', '_nonce' );
+	if ( ! $attachment_id || ! current_user_can( 'edit_post', $attachment_id ) ) {
+		wp_die( 'Permission denied.', 403 );
+	}
+}
+
+/**
+ * After a gallery change on a published post, drop its cached copies so
+ * visitors see it: the object cache and W3TC's page cache for the parent post.
+ * The order save sends one request per item, so the page-cache flush runs at
+ * most once per post every few seconds (the last request of a burst still
+ * lands inside a later window or the logged-in view, which W3TC never caches).
+ */
+function tiagsspace_gallery_touch_parent( $attachment_or_post_id, $is_parent = false ) {
+	$parent = $is_parent ? (int) $attachment_or_post_id : (int) wp_get_post_parent_id( $attachment_or_post_id );
+	if ( ! $parent || 'publish' !== get_post_status( $parent ) ) {
+		return;
+	}
+	clean_post_cache( $parent );
+
+	$lock = 'tiagsspace_gallery_flush_' . $parent;
+	if ( get_transient( $lock ) ) {
+		// A flush already ran in this window: run one more after it ends.
+		if ( ! wp_next_scheduled( 'tiagsspace_gallery_flush_post', array( $parent ) ) ) {
+			wp_schedule_single_event( time() + 6, 'tiagsspace_gallery_flush_post', array( $parent ) );
+		}
+		return;
+	}
+	set_transient( $lock, 1, 5 );
+	add_action( 'shutdown', function () use ( $parent ) {
+		tiagsspace_gallery_flush_post( $parent );
+	} );
+}
+
+// Deleting or re-parenting an attachment (per-image DELETE, Delete ▾, Move to ▾)
+// changes the parent's gallery too; for a move, both posts.
+add_action( 'delete_attachment', 'tiagsspace_gallery_touch_parent' );
+add_action( 'attachment_updated', function ( $id, $after, $before ) {
+	if ( (int) $after->post_parent !== (int) $before->post_parent ) {
+		tiagsspace_gallery_touch_parent( $before->post_parent, true );
+		tiagsspace_gallery_touch_parent( $after->post_parent, true );
+	}
+}, 10, 3 );
+
+add_action( 'tiagsspace_gallery_flush_post', 'tiagsspace_gallery_flush_post' );
+function tiagsspace_gallery_flush_post( $post_id ) {
+	if ( function_exists( 'w3tc_flush_post' ) ) {
+		w3tc_flush_post( (int) $post_id );
+	}
+}
+
 /************* Gallery Functions *************/
 
 
-// Edit atachment media (image/video/etc) -- hide, delete and save gallery order
+// Edit attachment media (image/video/etc): the controls drawn on each image in
+// gallery edit mode. Top-left: what happens to the image (Hide, Delete, Next
+// hidden). Bottom-left: how it sits in the grid (smaller, bigger, margins).
+// The check box (top-right) is added by library/js/gallery-edit/selection.js.
+// Styles: library/styles/gallery-edit.css. Classes .remove, .delete and
+// .nexthidden are hooks for gallery-keyboard-reorder.js and entry-gallery.php.
 function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachment_id) {
 
-	// This function runs once per attachment, but the script blocks below are
-	// shared — print them only on the first call to avoid stacked handlers.
+	// This function runs once per attachment, but the script block below is
+	// shared — print it only on the first call to avoid stacked handlers.
 	static $scripts_printed = false;
 
-	// HIDE based on: https://stackoverflow.com/questions/40144638/how-to-remove-the-div-that-a-button-is-contained-in-when-the-button-is-clicked
+	$w             = tiagsspace_gallery_edit_i18n();
+	$attachment_id = (int) $attachment_id;
 
 	if ( ! $scripts_printed ) {
-		echo '
-			<script type="text/javascript">
-				function removeDiv(btn){
-					((btn.parentNode).parentNode).removeChild(btn.parentNode);
+		?>
+		<script type="text/javascript">
+			// Take an image's item out of the grid (after a delete) and relayout.
+			function removeDiv(btn){
+				var item = btn.closest ? btn.closest('.item') : null;
+				if (!item || !item.parentNode) return;
+				item.parentNode.removeChild(item);
 
-					if (typeof window.galleryKeyboardReorderReset === "function") {
-						window.galleryKeyboardReorderReset();
-					}
-
-					// relayout masonry
-					$("#gallery-'.$gallery_id.'").masonry(\'reloadItems\').masonry(\'layout\');
+				if (typeof window.galleryKeyboardReorderReset === "function") {
+					window.galleryKeyboardReorderReset();
 				}
-			</script>
-		';
 
-		// DELETE based on: https://stackoverflow.com/questions/15729334/how-to-trigger-a-link-with-jquery-without-refreshing-the-page
+				// relayout masonry
+				var $grid = jQuery("#gallery-<?php echo (int) $gallery_id; ?>");
+				if ($grid.data('masonry')) { $grid.masonry('reloadItems').masonry('layout'); }
+			}
 
-		echo '
-			<script type="text/javascript">
-				$(document).on("click", ".delete", function(e){
-					e.preventDefault();
-					var targetUrl = $(this).attr("rel");
-					$.ajax({
+			// Per-image Delete: ask first (shared confirm panel), then delete
+			// through core's nonced post.php link and take the item away.
+			jQuery(document).on("click", ".delete", function(e){
+				e.preventDefault();
+				var link = this;
+				var targetUrl = jQuery(link).attr("rel");
+				var ge = window.tiagsspaceGalleryEdit;
+				var words = (window.tiagsspaceGalleryEditCfg && window.tiagsspaceGalleryEditCfg.i18n && window.tiagsspaceGalleryEditCfg.i18n.duplicate) || {};
+				var title = words.deleteTitle1 || 'Delete one attachment permanently?';
+
+				function go() {
+					jQuery.ajax({
 						url: targetUrl,
 						type: "GET",
-						success:function(data) {
-							// This outputs the result of the ajax request
-							console.log(data);
-						},
-						error: function(errorThrown){
-							console.log(errorThrown);
-						}
+						success: function(data) { console.log('Attachment deleted.'); },
+						error: function(errorThrown) { console.log(errorThrown); }
 					});
-				});
-			</script>
-		';
+					removeDiv(link);
+				}
 
+				if (ge && typeof ge.confirm === 'function') {
+					ge.confirm({
+						title:        title,
+						text:         words.deleteText || 'It is removed from the Media Library and from disk. This cannot be undone.',
+						confirmLabel: words.deleteConfirm1 || 'Delete one',
+						danger:       true
+					}).then(function (ok) { if (ok) go(); });
+				} else if (window.confirm(title)) {
+					go();
+				}
+			});
+		</script>
+		<?php
 		$scripts_printed = true;
 	}
 
-	echo '
-		<button class="remove" onclick="removeDiv(this);">HIDE (H/U)</button>
-	';
-
-	echo '
-		<a class="delete" href="javascript:;" rel="' . wp_nonce_url( get_bloginfo('url') . '/wp-admin/post.php?action=delete&amp;post=' . $attachment_id, 'delete-post_' . $attachment_id) . '" onclick="removeDiv(this);">DELETE</a>
-	';
-
-	// Reveal the next hidden attachment right after this one. Order now
-	// auto-saves on every drag (see entry-gallery.php onSort), so the old
-	// "SAVE ORDER (S)" button is gone. Only render this when the post actually
-	// has hidden attachments (count computed once per request per gallery).
+	// "Next hidden" only when the post has hidden attachments (once per gallery).
 	static $has_hidden_by_gallery = array();
 	if ( ! isset( $has_hidden_by_gallery[ $gallery_id ] ) ) {
 		$hidden_ids = get_posts( array(
@@ -90,53 +341,52 @@ function gallery_edit_atachement_options($gallery_id,$attachment_count, $attachm
 		) );
 		$has_hidden_by_gallery[ $gallery_id ] = ! empty( $hidden_ids );
 	}
+
+	$delete_url = wp_nonce_url( admin_url( 'post.php?action=delete&post=' . $attachment_id ), 'delete-post_' . $attachment_id );
+
+	// What happens to the image.
+	echo '<div class="tge-item-actions">';
+	printf( '<button type="button" class="remove tge-chip" data-tip="%s">%s</button>', esc_attr( $w['tipHide'] ), esc_html( $w['hide'] ) );
+	printf( '<a class="delete tge-chip" href="#" role="button" rel="%s" data-tip="%s">%s</a>', esc_url( $delete_url ), esc_attr( $w['tipDelete'] ), esc_html( $w['delete'] ) );
 	if ( $has_hidden_by_gallery[ $gallery_id ] ) {
-		echo '
-	<button class="nexthidden" onclick="revealNextHidden(this);">NEXT HIDDEN (N)</button>
-	';
+		printf( '<button type="button" class="nexthidden tge-chip" onclick="revealNextHidden(this);" data-tip="%s">%s</button>', esc_attr( $w['tipNextHidden'] ), esc_html( $w['nextHidden'] ) );
 	}
+	echo '</div>';
 
-	// Change Atachement Grid Size
-	echo '
-		<div class="itemPosition">
-			<div class="GridSize">
-				<button class="GridSizePlus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'increase\');">+ </button>
-				<button class="GridSizeMinus" onclick="atachementGridSizeChange('.$attachment_id.', changeSize=\'decrease\');">- </button>
-			</div>
+	// How it sits in the grid: size steps, then one panel for the margins.
+	echo '<div class="tge-item-layout">';
+	printf( '<button type="button" class="tge-chip tge-chip--square" onclick="atachementGridSizeChange(%d, \'decrease\');" data-tip="%s" aria-label="%s">&minus;</button>', $attachment_id, esc_attr( $w['tipSmaller'] ), esc_attr( $w['tipSmaller'] ) );
+	printf( '<button type="button" class="tge-chip tge-chip--square" onclick="atachementGridSizeChange(%d, \'increase\');" data-tip="%s" aria-label="%s">+</button>', $attachment_id, esc_attr( $w['tipBigger'] ), esc_attr( $w['tipBigger'] ) );
+	printf( '<button type="button" class="tge-chip tge-margins-toggle" aria-expanded="false" data-tip="%s">%s <span aria-hidden="true">▾</span></button>', esc_attr( $w['tipMargins'] ), esc_html( $w['margins'] ) );
 
-			<div class="attachmentPosition">
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=1);">M+ </button>
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=\'clear\');">Mc</button>
-				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin\', changeSize=-1);">M- </button>
-			</div>
-
-			<div class="attachmentPositionX">
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=1);">ML+ </button>
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=\'clear\');">MLc</button>
-				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-left\', changeSize=-1);">ML- </button>
-				<-->
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=1);">MR+ </button>
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=\'clear\');">MRc</button>
-				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-right\', changeSize=-1);">MR- </button>
-			</div>
-
-			<div class="attachmentPositionY">
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=1);">MT+ </button>
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=\'clear\');">MTc</button>
-				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-top\', changeSize=-1);">MT- </button>
-				/--/
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=1);">MB+ </button>
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=\'clear\');">MBc</button>
-				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'margin-bottom\', changeSize=-1);">MB- </button>
-			</div>
-
-			<div class="attachmentPositionZ">
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'z-index\', changeSize=1);">Z+ </button>
-				<button class="GridSizePlus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'z-index\', changeSize=\'clear\');">Zc</button>
-				<button class="GridSizeMinus" onclick="atachementChangeMargin('.$attachment_id.', marginName=\'z-index\', changeSize=-1);">Z- </button>
-			</div>
-		</div>
-	';
+	echo '<div class="tge-margins" role="group" aria-label="' . esc_attr( $w['tipMargins'] ) . '" hidden>';
+	$rows = array(
+		'margin'        => $w['marginAll'],
+		'margin-left'   => $w['marginLeft'],
+		'margin-right'  => $w['marginRight'],
+		'margin-top'    => $w['marginTop'],
+		'margin-bottom' => $w['marginBottom'],
+		'z-index'       => $w['stack'],
+	);
+	foreach ( $rows as $name => $label ) {
+		if ( 'z-index' === $name ) {
+			echo '<div class="tge-margins-sep" role="separator"></div>';
+		}
+		echo '<div class="tge-margins-row"><span class="tge-margins-label">' . esc_html( $label ) . '</span>';
+		foreach ( array( array( -1, '&minus;', $w['less'] ), array( "'clear'", '0', $w['reset'] ), array( 1, '+', $w['more'] ) ) as $step ) {
+			printf(
+				'<button type="button" class="tge-chip tge-chip--square" onclick="atachementChangeMargin(%d, \'%s\', %s);" aria-label="%s">%s</button>',
+				$attachment_id,
+				esc_attr( $name ),
+				$step[0],
+				esc_attr( $label . ': ' . $step[2] ),
+				$step[1]
+			);
+		}
+		echo '</div>';
+	}
+	echo '</div>';
+	echo '</div>';
 }
 
 // Make ajax_url available on the frontend for gallery AJAX calls
@@ -225,6 +475,82 @@ function enqueue_media_library_default_uploaded() {
 add_action( 'admin_enqueue_scripts', 'enqueue_media_library_default_uploaded' );
 
 /**
+ * Media toolbar words: buttons, menu headers, dialog buttons.
+ * Shared by the wp-admin media modal and the front-end gallery toolbar
+ * (tiagsspace_gallery_edit_config()), so both read the same words.
+ */
+function tiagsspace_media_toolbar_i18n() {
+	return array(
+		'groupLabel'      => __( 'Gallery actions', 'tiagsspace' ),
+		// Buttons
+		'delete'          => __( 'Delete', 'tiagsspace' ),
+		'select'          => __( 'Select', 'tiagsspace' ),
+		'selectN'         => __( 'Select (%d)', 'tiagsspace' ),
+		'sort'            => __( 'Sort', 'tiagsspace' ),
+		'move'            => __( 'Move to', 'tiagsspace' ),
+		'moveN'           => __( 'Move %d to', 'tiagsspace' ),
+		'actions'         => __( 'Actions', 'tiagsspace' ),
+		'actionsN'        => __( 'Actions (%d)', 'tiagsspace' ),
+		// Menu headers
+		'cannotUndo'      => __( 'Cannot be undone', 'tiagsspace' ),
+		'shiftAdds'       => __( 'Shift-click adds to the selection', 'tiagsspace' ),
+		'sortAll'         => __( 'Sort all attachments', 'tiagsspace' ),
+		'sortAllN'        => __( 'Sort all %d attachments', 'tiagsspace' ),
+		'sortSelectedN'   => __( 'Sort the %d selected', 'tiagsspace' ),
+		'sortKeepSlots'   => __( 'They keep their slots', 'tiagsspace' ),
+		'sortOneSelected' => __( 'One item selected: nothing to sort', 'tiagsspace' ),
+		'moveSelectedN'   => __( 'Move the %d selected', 'tiagsspace' ),
+		'moveLeave'       => __( 'They leave this post', 'tiagsspace' ),
+		'moveNone'        => __( 'Select items to move', 'tiagsspace' ),
+		'nothingHere'     => __( 'Nothing registered', 'tiagsspace' ),
+		'loading'         => __( 'Loading…', 'tiagsspace' ),
+		// Dialogs
+		'close'           => __( 'Close', 'tiagsspace' ),
+		'cancel'          => __( 'Cancel', 'tiagsspace' ),
+		'ok'              => __( 'OK', 'tiagsspace' ),
+	);
+}
+
+/**
+ * Select ▾ / Sort ▾ / Delete ▾ hidden words.
+ * Shared by the wp-admin media modal and the front-end gallery toolbar
+ * (tiagsspace_gallery_edit_config()), so both read the same words.
+ */
+function tiagsspace_media_gallery_actions_i18n() {
+	return array(
+		'postError'         => __( 'Could not determine the current post.', 'tiagsspace' ),
+		// Select ▾
+		'selectAll'         => __( 'All', 'tiagsspace' ),
+		'selectNone'        => __( 'None', 'tiagsspace' ),
+		'portrait'          => __( 'Portrait', 'tiagsspace' ),
+		'landscape'         => __( 'Landscape', 'tiagsspace' ),
+		'images'            => __( 'Images', 'tiagsspace' ),
+		'videos'            => __( 'Videos', 'tiagsspace' ),
+		'audio'             => __( 'Audio', 'tiagsspace' ),
+		'hidden'            => __( 'Hidden from gallery', 'tiagsspace' ),
+		'visible'           => __( 'In the gallery', 'tiagsspace' ),
+		// Sort ▾
+		'byCapture'         => __( 'By capture time (EXIF)', 'tiagsspace' ),
+		'byUpload'          => __( 'By upload date', 'tiagsspace' ),
+		'shuffle'           => __( 'Shuffle', 'tiagsspace' ),
+		'sortAllTitle'      => __( 'Sort all %d attachments?', 'tiagsspace' ),
+		'sortAllTitleNoCount' => __( 'Sort all attachments?', 'tiagsspace' ),
+		'sortAllText'       => __( 'The current order of the gallery is replaced.', 'tiagsspace' ),
+		'sortConfirm'       => __( 'Sort', 'tiagsspace' ),
+		'sortError'         => __( 'Could not sort the gallery.', 'tiagsspace' ),
+		// Delete ▾ hidden
+		'hiddenItem'        => __( 'Hidden from gallery (%d)…', 'tiagsspace' ),
+		'hiddenTitle'       => __( 'Delete %d hidden attachments permanently?', 'tiagsspace' ),
+		'hiddenTitle1'      => __( 'Delete one hidden attachment permanently?', 'tiagsspace' ),
+		'hiddenText'        => __( 'They are the attachments flagged “remove from default gallery”.', 'tiagsspace' ),
+		'deleteText'        => __( 'They are removed from the Media Library and from disk. This cannot be undone.', 'tiagsspace' ),
+		'deleteConfirm'     => __( 'Delete %d', 'tiagsspace' ),
+		'deleteConfirm1'    => __( 'Delete one', 'tiagsspace' ),
+		'deleteError'       => __( 'Could not delete the hidden attachments.', 'tiagsspace' ),
+	);
+}
+
+/**
  * Media-modal toolbar: Delete ▾ · Select ▾ · Sort ▾ · Move to ▾ before
  * "Insert into post" (library/js/media-toolbar.js). The buttons and their
  * menu headers are here; the items are registered by the three provider
@@ -249,35 +575,7 @@ function tiagsspace_enqueue_media_toolbar() {
 		'media-toolbar',
 		'tiagsspaceMediaToolbarCfg',
 		array(
-			'i18n' => array(
-				'groupLabel'      => __( 'Gallery actions', 'tiagsspace' ),
-				// Buttons
-				'delete'          => __( 'Delete', 'tiagsspace' ),
-				'select'          => __( 'Select', 'tiagsspace' ),
-				'selectN'         => __( 'Select (%d)', 'tiagsspace' ),
-				'sort'            => __( 'Sort', 'tiagsspace' ),
-				'move'            => __( 'Move to', 'tiagsspace' ),
-				'moveN'           => __( 'Move %d to', 'tiagsspace' ),
-				'actions'         => __( 'Actions', 'tiagsspace' ),
-				'actionsN'        => __( 'Actions (%d)', 'tiagsspace' ),
-				// Menu headers
-				'cannotUndo'      => __( 'Cannot be undone', 'tiagsspace' ),
-				'shiftAdds'       => __( 'Shift-click adds to the selection', 'tiagsspace' ),
-				'sortAll'         => __( 'Sort all attachments', 'tiagsspace' ),
-				'sortAllN'        => __( 'Sort all %d attachments', 'tiagsspace' ),
-				'sortSelectedN'   => __( 'Sort the %d selected', 'tiagsspace' ),
-				'sortKeepSlots'   => __( 'They keep their slots', 'tiagsspace' ),
-				'sortOneSelected' => __( 'One item selected: nothing to sort', 'tiagsspace' ),
-				'moveSelectedN'   => __( 'Move the %d selected', 'tiagsspace' ),
-				'moveLeave'       => __( 'They leave this post', 'tiagsspace' ),
-				'moveNone'        => __( 'Select items to move', 'tiagsspace' ),
-				'nothingHere'     => __( 'Nothing registered', 'tiagsspace' ),
-				'loading'         => __( 'Loading…', 'tiagsspace' ),
-				// Dialogs
-				'close'           => __( 'Close', 'tiagsspace' ),
-				'cancel'          => __( 'Cancel', 'tiagsspace' ),
-				'ok'              => __( 'OK', 'tiagsspace' ),
-			),
+			'i18n' => tiagsspace_media_toolbar_i18n(),
 		)
 	);
 }
@@ -306,37 +604,7 @@ function enqueue_media_gallery_actions() {
 			'ajaxurl'      => admin_url( 'admin-ajax.php' ),
 			'reorderNonce' => wp_create_nonce( 'gallery_reorder_attachments' ),
 			'hiddenNonce'  => wp_create_nonce( 'gallery_hidden_check' ),
-			'i18n'         => array(
-				'postError'         => __( 'Could not determine the current post.', 'tiagsspace' ),
-				// Select ▾
-				'selectAll'         => __( 'All', 'tiagsspace' ),
-				'selectNone'        => __( 'None', 'tiagsspace' ),
-				'portrait'          => __( 'Portrait', 'tiagsspace' ),
-				'landscape'         => __( 'Landscape', 'tiagsspace' ),
-				'images'            => __( 'Images', 'tiagsspace' ),
-				'videos'            => __( 'Videos', 'tiagsspace' ),
-				'audio'             => __( 'Audio', 'tiagsspace' ),
-				'hidden'            => __( 'Hidden from gallery', 'tiagsspace' ),
-				'visible'           => __( 'In the gallery', 'tiagsspace' ),
-				// Sort ▾
-				'byCapture'         => __( 'By capture time (EXIF)', 'tiagsspace' ),
-				'byUpload'          => __( 'By upload date', 'tiagsspace' ),
-				'shuffle'           => __( 'Shuffle', 'tiagsspace' ),
-				'sortAllTitle'      => __( 'Sort all %d attachments?', 'tiagsspace' ),
-				'sortAllTitleNoCount' => __( 'Sort all attachments?', 'tiagsspace' ),
-				'sortAllText'       => __( 'The current order of the gallery is replaced.', 'tiagsspace' ),
-				'sortConfirm'       => __( 'Sort', 'tiagsspace' ),
-				'sortError'         => __( 'Could not sort the gallery.', 'tiagsspace' ),
-				// Delete ▾ hidden
-				'hiddenItem'        => __( 'Hidden from gallery (%d)…', 'tiagsspace' ),
-				'hiddenTitle'       => __( 'Delete %d hidden attachments permanently?', 'tiagsspace' ),
-				'hiddenTitle1'      => __( 'Delete one hidden attachment permanently?', 'tiagsspace' ),
-				'hiddenText'        => __( 'They are the attachments flagged “remove from default gallery”.', 'tiagsspace' ),
-				'deleteText'        => __( 'They are removed from the Media Library and from disk. This cannot be undone.', 'tiagsspace' ),
-				'deleteConfirm'     => __( 'Delete %d', 'tiagsspace' ),
-				'deleteConfirm1'    => __( 'Delete one', 'tiagsspace' ),
-				'deleteError'       => __( 'Could not delete the hidden attachments.', 'tiagsspace' ),
-			),
+			'i18n'         => tiagsspace_media_gallery_actions_i18n(),
 		)
 	);
 }
@@ -370,15 +638,16 @@ function gallery_media_order_change_request() {
     if ( isset($_REQUEST) ) {
 
 
-        $attachmentId = $_REQUEST['attachmentId'];
-        $attachmentOrder = $_REQUEST['attachmentOrder'];
+        $attachmentId = isset( $_REQUEST['attachmentId'] ) ? absint( $_REQUEST['attachmentId'] ) : 0;
+        $attachmentOrder = isset( $_REQUEST['attachmentOrder'] ) ? intval( $_REQUEST['attachmentOrder'] ) : 0;
+        tiagsspace_gallery_edit_guard( $attachmentId );
 
         // Let's take the data that was sent and do something with it
         if ( $attachmentId ) {
-			$debug_result = $attachmentId + $attachmentOrder;
-
 			global $wpdb;
-			$updated = $wpdb->update( 'wp_posts', array( 'menu_order'=>$attachmentOrder),array('ID'=>$attachmentId));
+			$updated = $wpdb->update( $wpdb->posts, array( 'menu_order'=>$attachmentOrder),array('ID'=>$attachmentId));
+			clean_post_cache( $attachmentId );
+			tiagsspace_gallery_touch_parent( $attachmentId );
 
 			if ( false === $updated ) {
 			    echo "There was an error tring to move the attachmente ".$attachmentId." to the menu position number ".$attachmentOrder;
@@ -458,6 +727,10 @@ function gallery_delete_hidden_attachments() {
 		}
 	}
 
+	if ( $deleted ) {
+		tiagsspace_gallery_touch_parent( $post_id, true );
+	}
+
 	wp_send_json_success( array( 'deleted' => $deleted ) );
 }
 add_action( 'wp_ajax_gallery_delete_hidden_attachments', 'gallery_delete_hidden_attachments' );
@@ -476,6 +749,7 @@ function gallery_toggle_hide_attachment() {
 	}
 
 	update_field( 'remove_from_default_gallery', $hide === '1' ? 1 : 0, $attachment_id );
+	tiagsspace_gallery_touch_parent( $attachment_id );
 
 	wp_send_json_success( array(
 		'attachment_id' => $attachment_id,
@@ -492,8 +766,9 @@ function change_attachment_field_diferent_size_on_gallery() {
     // The $_REQUEST contains all the data sent via ajax
     if ( isset($_REQUEST) ) {
 
-        $attachmentId = $_REQUEST['attachmentID'];
-        $changeSize = $_REQUEST['changeSize'];
+        $attachmentId = isset( $_REQUEST['attachmentID'] ) ? absint( $_REQUEST['attachmentID'] ) : 0;
+        $changeSize = isset( $_REQUEST['changeSize'] ) ? sanitize_key( $_REQUEST['changeSize'] ) : '';
+        tiagsspace_gallery_edit_guard( $attachmentId );
 
         // Let's take the data that was sent and do something with it
         if ( $attachmentId ) {
@@ -524,6 +799,7 @@ function change_attachment_field_diferent_size_on_gallery() {
 			if (!empty($GridScaleDenominatorNew)) {
 				update_field('diferent_size_on_gallery', $GridScaleDenominatorNew, $attachmentId);
 				$updated = true;
+				tiagsspace_gallery_touch_parent( $attachmentId );
 			}
 
 			// Output log message to the front end
@@ -551,9 +827,13 @@ function change_attachment_margin() {
     // The $_REQUEST contains all the data sent via ajax
     if ( isset($_REQUEST) ) {
 
-        $attachmentId = $_REQUEST['attachmentID'];
-        $marginName = $_REQUEST['marginName'];
-        $incrementalValue = $_REQUEST['incrementalValue'];
+        $attachmentId = isset( $_REQUEST['attachmentID'] ) ? absint( $_REQUEST['attachmentID'] ) : 0;
+        $marginName = isset( $_REQUEST['marginName'] ) ? sanitize_key( $_REQUEST['marginName'] ) : '';
+        $incrementalValue = isset( $_REQUEST['incrementalValue'] ) ? sanitize_key( $_REQUEST['incrementalValue'] ) : '';
+        if ( 'clear' !== $incrementalValue ) {
+            $incrementalValue = intval( $_REQUEST['incrementalValue'] );
+        }
+        tiagsspace_gallery_edit_guard( $attachmentId );
 
         // Let's take the data that was sent and do something with it
         if ( $attachmentId ) {
@@ -634,6 +914,10 @@ function change_attachment_margin() {
 					update_field('attachment_z_index', $zIndex, $attachmentId);
 					$updated = true;
 				}
+			}
+
+			if ( $updated ) {
+				tiagsspace_gallery_touch_parent( $attachmentId );
 			}
 
 			// Output log message to the front end
@@ -794,6 +1078,8 @@ function gallery_reorder_attachments() {
 	if ( empty( $order ) ) {
 		wp_send_json_error( array( 'message' => 'Nothing to reorder.' ) );
 	}
+
+	tiagsspace_gallery_touch_parent( $post_id, true );
 
 	wp_send_json_success( array( 'order' => $order ) );
 }

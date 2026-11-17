@@ -528,6 +528,35 @@ function tiagsspace_move_attachments_to_post( $attachment_ids, $dest_post_id, $s
 }
 
 /**
+ * Move to ▾ new duplicate / Delete ▾ selected words.
+ * Shared by the wp-admin media modal and the front-end gallery toolbar
+ * (tiagsspace_gallery_edit_config()), so both read the same words.
+ */
+function tiagsspace_media_duplicate_i18n() {
+	return array(
+		'postError'       => __( 'Could not determine the current post.', 'tiagsspace' ),
+		// Move to ▾
+		'duplicateItem'   => __( 'A new duplicate of this post…', 'tiagsspace' ),
+		'duplicateTitle'  => __( 'Move %d items to a new duplicate of this post?', 'tiagsspace' ),
+		'duplicateTitle1' => __( 'Move one item to a new duplicate of this post?', 'tiagsspace' ),
+		'duplicateText'   => __( 'A draft copy of this post is created and the selected items leave this post for it. The draft opens in a new tab.', 'tiagsspace' ),
+		'moveConfirm'     => __( 'Move %d', 'tiagsspace' ),
+		'moveConfirm1'    => __( 'Move one', 'tiagsspace' ),
+		'duplicateError'  => __( 'Could not duplicate the post.', 'tiagsspace' ),
+		// Delete ▾
+		'deleteItem0'     => __( 'The selected items…', 'tiagsspace' ),
+		'deleteItem'      => __( 'The %d selected…', 'tiagsspace' ),
+		'deleteItem1'     => __( 'The one selected…', 'tiagsspace' ),
+		'deleteTitle'     => __( 'Delete %d attachments permanently?', 'tiagsspace' ),
+		'deleteTitle1'    => __( 'Delete one attachment permanently?', 'tiagsspace' ),
+		'deleteText'      => __( 'They are removed from the Media Library and from disk. This cannot be undone.', 'tiagsspace' ),
+		'deleteConfirm'   => __( 'Delete %d', 'tiagsspace' ),
+		'deleteConfirm1'  => __( 'Delete one', 'tiagsspace' ),
+		'deleteError'     => __( 'Could not delete the selected media.', 'tiagsspace' ),
+	);
+}
+
+/**
  * Media-modal toolbar items on post screens: Move to ▾ "A new duplicate of
  * this post…" and Delete ▾ "The N selected…" (library/js/media-duplicate-to-post.js).
  */
@@ -553,27 +582,7 @@ function tiagsspace_enqueue_media_duplicate_to_post() {
 			'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 			'nonce'       => wp_create_nonce( 'tiagsspace_duplicate_to_post' ),
 			'deleteNonce' => wp_create_nonce( 'tiagsspace_delete_attachments' ),
-			'i18n'        => array(
-				'postError'       => __( 'Could not determine the current post.', 'tiagsspace' ),
-				// Move to ▾
-				'duplicateItem'   => __( 'A new duplicate of this post…', 'tiagsspace' ),
-				'duplicateTitle'  => __( 'Move %d items to a new duplicate of this post?', 'tiagsspace' ),
-				'duplicateTitle1' => __( 'Move one item to a new duplicate of this post?', 'tiagsspace' ),
-				'duplicateText'   => __( 'A draft copy of this post is created and the selected items leave this post for it. The draft opens in a new tab.', 'tiagsspace' ),
-				'moveConfirm'     => __( 'Move %d', 'tiagsspace' ),
-				'moveConfirm1'    => __( 'Move one', 'tiagsspace' ),
-				'duplicateError'  => __( 'Could not duplicate the post.', 'tiagsspace' ),
-				// Delete ▾
-				'deleteItem0'     => __( 'The selected items…', 'tiagsspace' ),
-				'deleteItem'      => __( 'The %d selected…', 'tiagsspace' ),
-				'deleteItem1'     => __( 'The one selected…', 'tiagsspace' ),
-				'deleteTitle'     => __( 'Delete %d attachments permanently?', 'tiagsspace' ),
-				'deleteTitle1'    => __( 'Delete one attachment permanently?', 'tiagsspace' ),
-				'deleteText'      => __( 'They are removed from the Media Library and from disk. This cannot be undone.', 'tiagsspace' ),
-				'deleteConfirm'   => __( 'Delete %d', 'tiagsspace' ),
-				'deleteConfirm1'  => __( 'Delete one', 'tiagsspace' ),
-				'deleteError'     => __( 'Could not delete the selected media.', 'tiagsspace' ),
-			),
+			'i18n'        => tiagsspace_media_duplicate_i18n(),
 		)
 	);
 }

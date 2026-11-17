@@ -38,6 +38,17 @@ linked to the entry; no date line, no footer.
       }
       if ( $can_edit ) {
           $footer_items[] = '<a class="post-edit-link" href="' . esc_url( get_edit_post_link( $post->ID ) ) . '">Edit</a>';
+          // Appearance → Theme Settings: published posts open in gallery edit mode;
+          // this switches it off / on for this one post (library/gallery-functions.php).
+          if ( function_exists( 'tiagsspace_gallery_edit_available' ) && tiagsspace_gallery_edit_available( $post->ID ) ) {
+              $gallery_edit_on = tiagsspace_gallery_edit_mode( $post->ID );
+              $footer_items[]  = sprintf(
+                  '<a class="gallery-edit-toggle" href="%s" title="%s">%s</a>',
+                  esc_url( tiagsspace_gallery_edit_toggle_url( $post->ID ) ),
+                  esc_attr( $gallery_edit_on ? __( 'Switch the gallery editor off for this post', 'tiagsspace' ) : __( 'Switch the gallery editor on for this post', 'tiagsspace' ) ),
+                  esc_html( $gallery_edit_on ? __( 'Gallery edit: on', 'tiagsspace' ) : __( 'Gallery edit: off', 'tiagsspace' ) )
+              );
+          }
           $attachments = get_posts( array(
               'post_type'   => 'attachment',
               'numberposts' => -1,
@@ -89,6 +100,11 @@ linked to the entry; no date line, no footer.
 <?php if ( $footer_items ) { ?>
 <footer class="collapse" id="<?php echo $toggle_id; ?>">
   <p class="footer-meta"><?php echo implode( ' • ', $footer_items ); ?></p>
+  <?php if ( $can_edit && function_exists( 'tiagsspace_gallery_edit_mode' ) && tiagsspace_gallery_edit_mode( $post->ID ) ) {
+      // The gallery toolbar (Delete / Select / Sort / Move to) mounts here: library/js/gallery-edit/toolbar.js.
+      ?>
+  <div class="gallery-edit-toolbar" data-tge-mount="<?php echo (int) $post->ID; ?>"></div>
+  <?php } ?>
   <?php if ( $attachments ) {
       // Editors: every attachment, and a zip of all of them (streamed via admin-ajax).
       $zip_url = add_query_arg( array(

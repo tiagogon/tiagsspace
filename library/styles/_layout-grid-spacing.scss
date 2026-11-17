@@ -4,157 +4,48 @@
 
 
 // --------------------------------------------------
-// Spacement 2px
+// Gallery gap
+//
+// One number per gallery, the gap, set by template-parts/entry-gallery.php:
+// class .gallery-gapped, plus an inline --gallery-gap when the editor chose a
+// value (2, 4, 8, 16 or 20px). With no inline value the gap is the page
+// gutter. No gap at all is the .row.no-pad path below.
+//
+//   - gap between images: the same horizontally and vertically, at every width
+//   - side margin: the theme's line, for Container and Full width alike
+//     (12px below lg, 16px from lg: the same tokens as .side-padding and the
+//     thumbnail grid), so the gallery starts where the header, Previous/Next
+//     and the related thumbnails start. A Container gallery with a gap is
+//     therefore not centred; only a no-gap Container gallery (.row.no-pad) is.
+//   - under the gallery: .container-gallery's padding-bottom + the gap
+//
+// Never add a per-value block here again: a new value is one more entry in
+// tiagsspace_gallery_gap_values() and in the ACF choices.
 // --------------------------------------------------
-$spacement-2: 2px;
-.container.spacement-2{
-  padding-left: $grid-gutter-width + 20 - ($spacement-2 / 2);
-  padding-right: $grid-gutter-width + 20 - ($spacement-2 / 2);
-  margin-bottom: $grid-gutter-width - $spacement-2;
-  .row > [class*='col-'] {
-    padding-left: ($spacement-2 / 2);
-    padding-right: ($spacement-2 / 2);
-    margin-bottom: $spacement-2;
+.container-gallery.gallery-gapped {
+  --gallery-gap: #{$grid-gutter-width};
+  @media (max-width: map-get($grid-breakpoints, lg) - 1) {
+    --gallery-gap: #{$grid-gutter-width-mobile}; // an inline value wins over this
   }
-}
-.container-fluid.spacement-2{
-  padding-left: $grid-gutter-width - ($spacement-2 / 2);
-  padding-right: $grid-gutter-width - ($spacement-2 / 2);
-  margin-bottom: $grid-gutter-width - $spacement-2;
-  .row > [class*='col-'] {
-    padding-left: ($spacement-2 / 2);
-    padding-right: ($spacement-2 / 2);
-    margin-bottom: $spacement-2;
-  }
-  .row-inverted {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
 
-// --------------------------------------------------
-// Spacement 4px
-// --------------------------------------------------
-$spacement-4: 4px;
-.container.spacement-4{
-  padding-left: $grid-gutter-width + 20 - ($spacement-4 / 2);
-  padding-right: $grid-gutter-width + 20 - ($spacement-4 / 2);
-  margin-bottom: $grid-gutter-width - $spacement-4;
-  .row > [class*='col-'] {
-    padding-left: ($spacement-4 / 2);
-    padding-right: ($spacement-4 / 2);
-    margin-bottom: $spacement-4;
+  padding-left: $grid-gutter-width-mobile;
+  padding-right: $grid-gutter-width-mobile;
+  @media (min-width: map-get($grid-breakpoints, lg)) {
+    padding-left: $grid-gutter-width;
+    padding-right: $grid-gutter-width;
   }
-}
-.container-fluid.spacement-4{
-  padding-left: $grid-gutter-width - ($spacement-4 / 2);
-  padding-right: $grid-gutter-width - ($spacement-4 / 2);
-  margin-bottom: $grid-gutter-width - $spacement-4;
-  .row > [class*='col-'] {
-    padding-left: ($spacement-4 / 2);
-    padding-right: ($spacement-4 / 2);
-    margin-bottom: $spacement-4;
+  &.container {
+    max-width: none; // start on the theme's line, not centred
   }
-  .row-inverted {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
 
-// --------------------------------------------------
-// Spacement 8px
-// --------------------------------------------------
-$spacement-8: 8px;
-.container.spacement-8{
-  padding-left: $grid-gutter-width + 20 - ($spacement-8 / 2);
-  padding-right: $grid-gutter-width + 20 - ($spacement-8 / 2);
-  margin-bottom: $grid-gutter-width - $spacement-8;
+  .row {
+    margin-left: calc(var(--gallery-gap) / -2);
+    margin-right: calc(var(--gallery-gap) / -2);
+  }
   .row > [class*='col-'] {
-    padding-left: ($spacement-8 / 2);
-    padding-right: ($spacement-8 / 2);
-    margin-bottom: $spacement-8;
-  }
-}
-.container-fluid.spacement-8{
-  padding-left: $grid-gutter-width - ($spacement-8 / 2);
-  padding-right: $grid-gutter-width - ($spacement-8 / 2);
-  margin-bottom: $grid-gutter-width - $spacement-8;
-  .row > [class*='col-'] {
-    padding-left: ($spacement-8 / 2);
-    padding-right: ($spacement-8 / 2);
-    margin-bottom: $spacement-8;
-  }
-  .row-inverted {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-
-// --------------------------------------------------
-// Spacement 16px
-// --------------------------------------------------
-$spacement-16: 16px;
-.container.spacement-16{
-  padding-left: $grid-gutter-width + 20 - ($spacement-16 / 2);
-  padding-right: $grid-gutter-width + 20 - ($spacement-16 / 2);
-  margin-bottom: $grid-gutter-width - $spacement-16;
-  .row > [class*='col-'] {
-    padding-left: ($spacement-16 / 2);
-    padding-right: ($spacement-16 / 2);
-    margin-bottom: $spacement-16;
-  }
-}
-.container-fluid.spacement-16{
-  padding-left: $grid-gutter-width - ($spacement-16 / 2);
-  padding-right: $grid-gutter-width - ($spacement-16 / 2);
-  margin-bottom: $grid-gutter-width - $spacement-16;
-  .row > [class*='col-'] {
-    padding-left: ($spacement-16 / 2);
-    padding-right: ($spacement-16 / 2);
-    margin-bottom: $spacement-16;
-  }
-  .row-inverted {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-
-// --------------------------------------------------
-// Spacement 20px
-// TODO: only this spacement works well on mobile — the others need mobile padding fixes
-// --------------------------------------------------
-$spacement-20: 20px;
-.container.spacement-20{
-  padding-left: 30px; // TODO: calculate from variables
-  padding-right: 30px;
-  @media (min-width: map-get($grid-breakpoints, sm)) {
-    padding-left: $grid-gutter-width + 20 - ($spacement-20 / 2);
-    padding-right: $grid-gutter-width + 20 - ($spacement-20 / 2);
-  }
-  margin-bottom: $grid-gutter-width - $spacement-20;
-  .row > [class*='col-'] {
-    padding-left: ($spacement-20 / 2);
-    padding-right: ($spacement-20 / 2);
-    margin-bottom: $spacement-20;
-  }
-}
-.container-fluid.spacement-20{
-  padding-left: 10px; // TODO: calculate from variables
-  padding-right: 10px;
-  @media (min-width: map-get($grid-breakpoints, sm)) {
-    padding-left: $grid-gutter-width - ($spacement-20 / 2);
-    padding-right: $grid-gutter-width - ($spacement-20 / 2);
-    margin-bottom: $spacement-20;
-  }
-  margin-bottom: $grid-gutter-width - $spacement-20;
-  .row > [class*='col-'] {
-    padding-left: ($spacement-20 / 2);
-    padding-right: ($spacement-20 / 2);
-    margin-bottom: $spacement-20;
-  }
-  .row-inverted {
-    margin-left: 0;
-    margin-right: 0;
+    padding-left: calc(var(--gallery-gap) / 2);
+    padding-right: calc(var(--gallery-gap) / 2);
+    margin-bottom: var(--gallery-gap);
   }
 }
 
@@ -162,21 +53,12 @@ $spacement-20: 20px;
 // Row utilities
 // --------------------------------------------------
 
-// Remove padding between columns
-.row.no-pad {
-  margin-right:-15;
-  margin-left:-15;
-}
+// No gap: images edge to edge (the container's padding is cancelled by the
+// row's own negative margin). The -1px hides sub-pixel seams between rows.
 .row.no-pad > [class*='col-'] {
   padding-right:0;
   padding-left:0;
   margin-bottom: -1px;
-}
-
-// Invert container side padding inside a row
-.row-inverted {
-  margin-left: ($grid-gutter-width / 2);
-  margin-right: ($grid-gutter-width / 2);
 }
 
 

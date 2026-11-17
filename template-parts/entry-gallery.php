@@ -48,7 +48,7 @@ if($attachmens){
 
     // Define Variables
     $item_max_heigh = '';
-    $spacement = '';
+    $gallery_gap = 'default'; // 0, 2, 4, 8, 16, 20 or 'default' (the page gutter): see tiagsspace_gallery_gap()
     $deactivat_masonry = false;
     $there_is_video = '';
     $there_is_3d = '';
@@ -64,8 +64,7 @@ if($attachmens){
             $number_of_columns_sm   = 3;
             $number_of_columns_md   = 3;
             $number_of_columns_lg   = 3;
-            $no_space               = 'no-pad';
-            $spacement              = '';
+            $gallery_gap            = 0;
             $light_box              = 'magnific_popup';
 
         }
@@ -77,7 +76,7 @@ if($attachmens){
             $number_of_columns_sm   = 4;
             $number_of_columns_md   = 4;
             $number_of_columns_lg   = 4;
-            $no_space               = 'no-pad';
+            $gallery_gap               = 0;
             $light_box              = 'intense-images';
             $deactivat_masonry      = true;
         }
@@ -89,8 +88,7 @@ if($attachmens){
             $number_of_columns_sm   = 1;
             $number_of_columns_md   = 3;
             $number_of_columns_lg   = 3;
-            $no_space               = '';
-            $spacement              = 'spacement-20';
+            $gallery_gap            = 'default'; // the theme's own spacing, as between thumbnails
             $light_box              = 'magnific_popup';
         }
 
@@ -102,7 +100,7 @@ if($attachmens){
                 $number_of_columns_sm   = 4;
                 $number_of_columns_md   = 4;
                 $number_of_columns_lg   = 4;
-                $no_space               = 'no-pad';
+                $gallery_gap               = 0;
                 $light_box              = 'none';
                 $deactivat_masonry      = true;
             } elseif (has_term( 'hrzn', 'log-branch' ) ) {
@@ -111,7 +109,7 @@ if($attachmens){
                 $number_of_columns_sm   = 1;
                 $number_of_columns_md   = 1;
                 $number_of_columns_lg   = 1;
-                $no_space               = 'no-pad';
+                $gallery_gap               = 0;
                 $light_box              = 'none';
                 $deactivat_masonry      = true;
             } elseif (has_term( 'still', 'log-branch' ) ) {
@@ -120,7 +118,7 @@ if($attachmens){
                   $number_of_columns_sm   = 1;
                   $number_of_columns_md   = 1;
                   $number_of_columns_lg   = 1;
-                  $no_space               = 'no-pad';
+                  $gallery_gap               = 0;
                   $light_box              = 'none';
                   $deactivat_masonry      = true;
               } else {
@@ -129,7 +127,7 @@ if($attachmens){
                 $number_of_columns_sm   = 1;
                 $number_of_columns_md   = 1;
                 $number_of_columns_lg   = 1;
-                $no_space               = '';
+                $gallery_gap            = 'default';
                 $light_box              = 'none';
             }
         }
@@ -264,15 +262,8 @@ if($attachmens){
             $number_of_columns_lg = $number_of_columns_md;
         }
 
-        // Space betwene images
-        $no_space           = '';
-        if ( get_field('no_space')) {
-            $no_space           = 'no-pad';
-        }
-
-        if (get_field('spacement')) {
-            $spacement = get_field('spacement');
-        }
+        // Space between images
+        $gallery_gap = tiagsspace_gallery_gap();
 
         $deactivat_masonry = get_field('deactivat_masonry');
 
@@ -286,10 +277,27 @@ if($attachmens){
     // -------------------------------
 
 
-    // Row -- add margin on the sides
-    $row = 'row';
-    if (($class_container == 'container-fluid') AND ($no_space == '')) {
-        $row = 'row row-inverted'; // add margin on the sides
+    // Container: only the two values the grid knows
+    $class_container = ( 'container' === $class_container ) ? 'container' : 'container-fluid';
+
+    // Space between images. One number, the gap, drives everything (see
+    // .gallery-gapped in _layout-grid-spacing.scss). No gap keeps the old
+    // edge-to-edge path (.row.no-pad).
+    $row            = 'row';
+    $no_space       = '';
+    $gapped_class   = '';
+    $gap_style_attr = '';
+    // Only a no-gap Container gallery is centred at a fixed max width; with a
+    // gap both container types run between the theme's side lines, so the
+    // image `sizes` in gallery-item.php must be viewport fractions.
+    $gallery_fixed_width = ( 'container' === $class_container && 0 === $gallery_gap );
+    if ( 0 === $gallery_gap ) {
+        $no_space = 'no-pad';
+    } else {
+        $gapped_class = 'gallery-gapped';
+        if ( 'default' !== $gallery_gap ) {
+            $gap_style_attr = ' style="--gallery-gap: ' . (int) $gallery_gap . 'px"';
+        }
     }
 
 
@@ -311,7 +319,7 @@ if($attachmens){
         ?><script src="<?php bloginfo('template_url'); ?>/library/js/Magnific-Popup/jquery.magnific-popup.min.js"></script>
     <?php } ?>
 
-    <div class="<?php echo $class_container; ?> <?php echo $spacement;?> container-gallery">
+    <div class="<?php echo trim( $class_container . ' container-gallery ' . $gapped_class ); ?>"<?php echo $gap_style_attr; ?>>
 
         <div id="gallery-<?php the_ID(); ?>" class="gallery clearfix <?php echo $magnific_popup;?>  <?php echo $row;?> <?php echo $no_space;?>" itemscope itemtype="http://schema.org/ImageGallery">
 
@@ -341,7 +349,7 @@ if($attachmens){
     // the live grid (gallery-item.php). The "NEXT HIDDEN" button then moves the
     // next node from here into the gallery with no page reload — so items hidden
     // in any past session are recoverable, unlike the in-memory Undo (U) stack.
-    if ( is_user_logged_in() && is_preview() && ! get_field('animation_number_of_attachment_shown') ) {
+    if ( tiagsspace_gallery_edit_mode( $gallery_post_id ) ) {
 
         $hidden_pool_items = get_posts( array(
             'numberposts' => -1,
@@ -397,7 +405,7 @@ if($attachmens){
                                     itemSelector: '.item',
                                     columnWidth: '.masonry-item-sizer',
                                     percentPosition: true,
-                                    transitionDuration: <?php echo (is_preview() && is_user_logged_in()) ? "'0'" : "'0.6s'"; ?>,
+                                    transitionDuration: <?php echo tiagsspace_gallery_edit_mode( $gallery_post_id ) ? "'0'" : "'0.6s'"; ?>,
                                     gutter: 0
                                 });
                             });
@@ -570,7 +578,7 @@ if($attachmens){
     <?php }
 
     // When previeweing posts
-    if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
+    if (tiagsspace_gallery_edit_mode( $gallery_post_id ) ) {
 
         // Manual order images ?>
         <style>
@@ -645,6 +653,9 @@ if($attachmens){
         </script>
         <script src="<?php bloginfo('template_url'); ?>/library/js/gallery-keyboard-reorder.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/gallery-keyboard-reorder.js' ) ); ?>"></script>
 
+        <!-- Selection, toolbar (Delete / Select / Sort / Move to), keyboard selection -->
+        <?php tiagsspace_gallery_edit_assets( $gallery_post_id, get_the_ID() ); ?>
+
         <!-- CUSTOM FUNCTIONS -->
         <script type="text/javascript">
 
@@ -694,6 +705,7 @@ if($attachmens){
                 sequence = sequence.concat(after[i]);
             });
 
+            var requests = [];
             sequence.forEach(function (el, idx) {
                 var attachmentId = el.getAttribute('attachmentId');
                 var attachmentOrder = idx + 1;
@@ -702,12 +714,13 @@ if($attachmens){
                 if (!attachmentId) return;
 
                 // This does the ajax request to change the menu_order value on the wp_db
-                $.ajax({
+                requests.push($.ajax({
                     url: example_ajax_obj.ajaxurl + '?t=' + new Date().getTime(), // Adds a timestamp to the request
                     data: {
                         'action': 'gallery_media_order_change_request',
                         'attachmentId' : attachmentId,
-                        'attachmentOrder' : attachmentOrder
+                        'attachmentOrder' : attachmentOrder,
+                        '_nonce' : window.galleryHideNonce
                     },
                     cache: false,  // Disable caching explicitly
                     success:function(data) {
@@ -716,20 +729,36 @@ if($attachmens){
                     error: function(errorThrown){
                         console.log(errorThrown);
                     }
-                });
+                }));
             });
+            // Settles when every item's request has (a failed one resolves too).
+            return $.when.apply($, requests.map(function (r) {
+                return r.then(null, function () { return $.Deferred().resolve(); });
+            }));
         }
 
         // Debounced wrapper around orderAttachmentesOnWpDb so drag auto-save and
         // reveal both coalesce rapid changes into a single save burst.
         var _galleryOrderSaveTimer = null;
+        var _galleryOrderSaveRunning = null;
         window.scheduleGalleryOrderSave = function () {
             clearTimeout(_galleryOrderSaveTimer);
             _galleryOrderSaveTimer = setTimeout(function () {
+                _galleryOrderSaveTimer = null;
                 if (typeof window.orderAttachmentesOnWpDb === 'function') {
-                    window.orderAttachmentesOnWpDb();
+                    _galleryOrderSaveRunning = window.orderAttachmentesOnWpDb();
                 }
             }, 400);
+        };
+        // Run a waiting save now and resolve once every save has landed (the
+        // toolbar's Sort ▾ waits on it, so it reads the order the page shows).
+        window.flushGalleryOrderSave = function () {
+            if (_galleryOrderSaveTimer) {
+                clearTimeout(_galleryOrderSaveTimer);
+                _galleryOrderSaveTimer = null;
+                _galleryOrderSaveRunning = window.orderAttachmentesOnWpDb();
+            }
+            return Promise.resolve(_galleryOrderSaveRunning);
         };
 
         // Shared tail of both reveal paths, once `node` sits in the grid:
@@ -864,7 +893,8 @@ if($attachmens){
                     data: {
                         'action': 'change_attachment_field_diferent_size_on_gallery',
                         'attachmentID' : attachmentID,
-                        'changeSize' : changeSize
+                        'changeSize' : changeSize,
+                        '_nonce' : window.galleryHideNonce
                     },
                     cache: false,  // Disable caching explicitly
                     success:function(data) {
@@ -914,7 +944,8 @@ if($attachmens){
                     'action': 'change_attachment_margin',
                     'attachmentID' : attachmentID,
                     'marginName' : marginName,
-                    'incrementalValue' : incrementalValue
+                    'incrementalValue' : incrementalValue,
+                    '_nonce' : window.galleryHideNonce
 
                 },
                 success:function(data) {

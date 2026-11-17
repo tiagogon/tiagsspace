@@ -3,7 +3,9 @@
  *
  * Left / Right  — move focus between items (no wrap)
  * Up / Down     — swap focused item with neighbor (wraps at edges)
- * H             — hide the focused item (node parks in the off-grid pool)
+ * H             — hide the selected items (gallery-edit/selection.js), or the
+ *                 focused item when nothing is selected (nodes park in the
+ *                 off-grid pool)
  * U             — undo this session's hides (in-memory stack); once that is
  *                 empty, restore pooled hidden items one per press, highest
  *                 saved menu_order first, each at its saved spot
@@ -163,6 +165,22 @@
         hideItemElement( items[ focusIdx ] );
     }
 
+    // ── Hide the selection (H with a selection, the bar's Hide) ──
+    // Last to first, so U (last in, first out) brings them back in reading order.
+    // Returns false when nothing is selected.
+
+    function hideSelected() {
+        var ge = window.tiagsspaceGalleryEdit;
+        if ( ! ge || ! ge.selection ) return false;
+        var els = ge.selection.items();
+        if ( ! els.length ) return false;
+        for ( var i = els.length - 1; i >= 0; i-- ) {
+            hideItemElement( els[ i ] );
+        }
+        ge.selection.clear();
+        return true;
+    }
+
     // ── Undo last hide (U) ──────────────────────────────────
 
     function undoHide() {
@@ -307,10 +325,12 @@
             return;
         }
 
-        // H = Hide focused item
+        // H = Hide the selection, or the focused item when nothing is selected
         if ( key === 'h' || key === 'H' ) {
             e.preventDefault();
-            hideCurrentItem();
+            if ( ! hideSelected() ) {
+                hideCurrentItem();
+            }
             return;
         }
 
@@ -430,6 +450,9 @@
     } );
 
     // ── Public reset for Sortable sync ───────────────────────
+
+    window.galleryKeyboardReorderHide = hideItemElement;
+    window.galleryKeyboardReorderHideSelected = hideSelected;
 
     window.galleryKeyboardReorderReset = function () {
         container.removeAttribute( 'data-kb-focus' );

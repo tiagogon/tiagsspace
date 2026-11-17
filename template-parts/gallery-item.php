@@ -7,7 +7,8 @@
  * inherits the enclosing scope: it expects $attachmen and $count_item plus the
  * gallery-level variables computed above the loop in entry-gallery.php
  * ($number_of_columns_*, $deactivat_masonry, $item_max_heigh, $light_box,
- * $intense, $class_container, the $post_video_* option vars, etc.).
+ * $intense, $class_container, $gallery_fixed_width, the $post_video_* option
+ * vars, etc.).
  *
  * Set $rendering_hidden_pool = true before including to suppress the Masonry
  * column sizer, which belongs only to the live grid.
@@ -199,7 +200,7 @@
                                         $attachmen_thumb_srcset;
                         // --- Sizes ---
                         // Compute sizes based on actual bootstrap grid fractions so browsers pick correct sources
-                        if ($class_container == 'container') {
+                        if ( ! empty( $gallery_fixed_width ) ) {
                             $container_size_lg = 1200;
                             // Use grid numbers WITHOUT factor to represent actual column widths at breakpoints
                             $lg_frac = isset($grid_number_lg_without_factor) ? ($grid_number_lg_without_factor / 48) : 1;
@@ -297,6 +298,23 @@
                         }
 
 
+                    // EDIT MODE: what the toolbar's Select ▾ filters read (kind + orientation)
+                        $item_edit_attrs = '';
+                        if ( tiagsspace_gallery_edit_mode( $gallery_post_id ) ) {
+                            $item_mime = (string) $attachmen->post_mime_type;
+                            $item_kind = 0 === strpos( $item_mime, 'video/' ) ? 'video'
+                                : ( 0 === strpos( $item_mime, 'audio/' ) ? 'audio'
+                                : ( 0 === strpos( $item_mime, 'image/' ) ? 'image' : 'other' ) );
+                            $item_ratio = isset( $intrinsic_ratio ) && is_numeric( $intrinsic_ratio ) ? (float) $intrinsic_ratio : 0;
+                            $item_orientation = 'audio' === $item_kind || ! $item_ratio ? '' : ( $item_ratio > 100 ? 'portrait' : ( $item_ratio < 100 ? 'landscape' : 'square' ) );
+                            $item_edit_attrs = sprintf(
+                                ' data-kind="%s" data-orientation="%s" data-title="%s"',
+                                esc_attr( $item_kind ),
+                                esc_attr( $item_orientation ),
+                                esc_attr( $attachmen->post_title )
+                            );
+                        }
+
                     // COMPILE VIDEO OPTIONS
 
                         // IF there are DEFAULT VIDEO PLAYER OPTIONS of the ATTACHEMENT
@@ -354,11 +372,11 @@
                     // AUDIO
                     if ( $attachmen->post_mime_type == "audio/wav" OR $attachmen->post_mime_type == "audio/mpeg" ) { ?>
 
-                        <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
+                        <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>"<?php echo $item_edit_attrs; ?>  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
                             <?php
                             // Edit atachment media -- hide and delete
-                            if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
+                            if (tiagsspace_gallery_edit_mode( $gallery_post_id ) ) {
                                 $gallery_id = get_the_ID();
                                 gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                             }
@@ -388,11 +406,11 @@
 
                         ?>
 
-                        <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>" data-should-autoplay="<?php echo $should_autoplay; ?>" attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
+                        <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>" data-should-autoplay="<?php echo $should_autoplay; ?>"<?php echo $item_edit_attrs; ?> attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
                             <?php
                             // Edit atachment media -- hide and delete
-                            if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
+                            if (tiagsspace_gallery_edit_mode( $gallery_post_id ) ) {
                                 $gallery_id = get_the_ID();
                                 gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                             }
@@ -427,11 +445,11 @@
                       $there_is_3d = true;
                       ?>
 
-                      <div class="thumbnail item <?php echo $class_thumbnail;?> media-3d 3d-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>"  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
+                      <div class="thumbnail item <?php echo $class_thumbnail;?> media-3d 3d-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>"<?php echo $item_edit_attrs; ?>  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
                           <?php
                           // Edit atachment media -- hide and delete
-                          if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
+                          if (tiagsspace_gallery_edit_mode( $gallery_post_id ) ) {
                               $gallery_id = get_the_ID();
                               gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                           }
@@ -491,7 +509,7 @@
                         <div class="thumbnail item
                           <?php echo $class_thumbnail;?>
                           attachmen-<?php echo $count_item;?>
-                          <?php if($item_max_heigh!=""){echo "max-heigh-90vh";} ?>"
+                          <?php if($item_max_heigh!=""){echo "max-heigh-90vh";} ?>"<?php echo $item_edit_attrs; ?>
                             attachmentId="<?php echo $attachmen->ID;?>"
                             attachmentOrder="<?php echo $attachmen->menu_order;?>"  attachment_field_diferent_size_on_gallery="<?php
                                 if (get_field('diferent_size_on_gallery',$attachmen->ID)) {
@@ -502,7 +520,7 @@
 
                             <?php
                             // Edit atachment media -- hide and delete
-                            if (is_user_logged_in() && is_preview() && !get_field('animation_number_of_attachment_shown') ) {
+                            if (tiagsspace_gallery_edit_mode( $gallery_post_id ) ) {
                                 $gallery_id = get_the_ID();
                                 gallery_edit_atachement_options($gallery_id, $count_item, $attachmen->ID );
                             }
@@ -524,7 +542,7 @@
                                         <?php
                                         // Build sizes map for picture sources (largest -> smallest)
                                         $sizes_map = array();
-                                        if ($class_container == 'container') {
+                                        if ( ! empty( $gallery_fixed_width ) ) {
                                             $sizes_map = array(
                                                 array('size' => 'large', 'media' => '(min-width: 1240px)'),
                                                 array('size' => 'medium', 'media' => '(min-width: 992px)'),

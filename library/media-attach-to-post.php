@@ -212,6 +212,26 @@ function tiagsspace_media_attach_ajax_attach() {
 add_action( 'wp_ajax_tiagsspace_media_attach_attach', 'tiagsspace_media_attach_ajax_attach' );
 
 /**
+ * Move to ▾ another post words.
+ * Shared by the wp-admin media modal and the front-end gallery toolbar
+ * (tiagsspace_gallery_edit_config()), so both read the same words.
+ */
+function tiagsspace_media_attach_i18n() {
+	return array(
+		'item'        => __( 'Another post…', 'tiagsspace' ),
+		'heading'     => __( 'Move %d items to another post', 'tiagsspace' ),
+		'heading1'    => __( 'Move one item to another post', 'tiagsspace' ),
+		'placeholder' => __( 'Search posts by title…', 'tiagsspace' ),
+		'hint'        => __( 'Type a title to search…', 'tiagsspace' ),
+		'searching'   => __( 'Searching…', 'tiagsspace' ),
+		'noMatches'   => __( 'No posts match “%s”.', 'tiagsspace' ),
+		'searchError' => __( 'Search failed. Try again.', 'tiagsspace' ),
+		'attachError' => __( 'Could not move the media to that post.', 'tiagsspace' ),
+		'cancel'      => __( 'Cancel', 'tiagsspace' ),
+	);
+}
+
+/**
  * Media-modal toolbar item on post screens: Move to ▾ "Another post…"
  * (library/js/media-attach-to-post.js).
  */
@@ -237,18 +257,7 @@ function tiagsspace_media_attach_enqueue() {
 			'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 			'searchNonce' => wp_create_nonce( 'tiagsspace_media_attach_search' ),
 			'attachNonce' => wp_create_nonce( 'tiagsspace_media_attach_attach' ),
-			'i18n'        => array(
-				'item'        => __( 'Another post…', 'tiagsspace' ),
-				'heading'     => __( 'Move %d items to another post', 'tiagsspace' ),
-				'heading1'    => __( 'Move one item to another post', 'tiagsspace' ),
-				'placeholder' => __( 'Search posts by title…', 'tiagsspace' ),
-				'hint'        => __( 'Type a title to search…', 'tiagsspace' ),
-				'searching'   => __( 'Searching…', 'tiagsspace' ),
-				'noMatches'   => __( 'No posts match “%s”.', 'tiagsspace' ),
-				'searchError' => __( 'Search failed. Try again.', 'tiagsspace' ),
-				'attachError' => __( 'Could not move the media to that post.', 'tiagsspace' ),
-				'cancel'      => __( 'Cancel', 'tiagsspace' ),
-			),
+			'i18n'        => tiagsspace_media_attach_i18n(),
 		)
 	);
 }

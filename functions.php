@@ -21,6 +21,7 @@ require_once('library/page-title/page-title.php'); // Page title: header line, e
 
 // Admin Functions
 require_once('library/admin.php');              // custom admin functions
+require_once('library/theme-settings.php');     // Appearance → Theme Settings (one option, schema-driven)
 
 // Theme modules
 require_once('library/custom-post-types.php');  // CPT registrations, main loop/feed/archive inclusion

@@ -1,0 +1,557 @@
+/**
+ * Front-end gallery editor: per-image controls, check box, selection ring, the
+ * edit bar, its menus and dialogs, tooltips (library/js/gallery-edit/*.js and
+ * gallery_edit_atachement_options() in library/gallery-functions.php).
+ *
+ * Plain CSS outside Koala (same precedent as admin-media.css), printed only in
+ * gallery edit mode by tiagsspace_gallery_edit_assets(), so visitors never load
+ * it.
+ *
+ * Two colours, nothing else: --tge-fg / --tge-bg, black on white, white on
+ * black under prefers-color-scheme: dark. Secondary text is the foreground at
+ * 60%, hairlines at 25%. Hover and open = inverted. Danger is said in words
+ * (headers, "…", the confirm panel), never in colour. Shapes follow wp-admin's
+ * small button.
+ *
+ * Sections: 1. tokens  2. chips (shared button)  3. per-image controls
+ *           4. check box + ring  5. margins panel  6. bar  7. menus
+ *           8. dialogs  9. tooltip
+ */
+
+/* 1. Tokens ------------------------------------------------------------- */
+:root {
+	--tge-fg: #000;
+	--tge-bg: #fff;
+	--tge-fg-60: rgba(0, 0, 0, .6);
+	--tge-fg-25: rgba(0, 0, 0, .25);
+	--tge-fg-08: rgba(0, 0, 0, .08);
+	--tge-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--tge-fg: #fff;
+		--tge-bg: #000;
+		--tge-fg-60: rgba(255, 255, 255, .6);
+		--tge-fg-25: rgba(255, 255, 255, .25);
+		--tge-fg-08: rgba(255, 255, 255, .1);
+	}
+}
+
+/* 2. Chips and buttons: one shape everywhere ----------------------------- */
+.tge-chip,
+.tge-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0 8px;
+	border: 1px solid var(--tge-fg);
+	border-radius: 3px;
+	background: var(--tge-bg);
+	color: var(--tge-fg);
+	font: 400 12px/1 var(--tge-font);
+	letter-spacing: 0;
+	text-transform: none;
+	text-decoration: none;
+	text-shadow: none;
+	white-space: nowrap;
+	cursor: pointer;
+	-webkit-font-smoothing: auto;
+	transition: none;
+}
+.tge-chip {
+	height: 24px;
+}
+.tge-button {
+	height: 28px;
+	padding: 0 10px;
+	font-size: 13px;
+}
+.tge-chip--square {
+	width: 24px;
+	padding: 0;
+	font-size: 14px;
+}
+.tge-chip:hover,
+.tge-button:hover,
+.tge-button[aria-expanded="true"],
+.tge-chip[aria-expanded="true"] {
+	background: var(--tge-fg);
+	color: var(--tge-bg);
+	text-decoration: none;
+}
+.tge-chip:focus-visible,
+.tge-button:focus-visible,
+.tge-link:focus-visible,
+.tge-menu-item:focus-visible,
+.tge-dialog-close:focus-visible,
+.tge-dialog-result:focus-visible {
+	outline: 2px solid var(--tge-fg);
+	outline-offset: 2px;
+}
+.tge-chip[disabled],
+.tge-button[disabled] {
+	opacity: .4;
+	cursor: default;
+	background: var(--tge-bg);
+	color: var(--tge-fg);
+}
+/* Solid: the confirm button in a panel (primary and destructive alike). */
+.tge-button--primary,
+.tge-button--danger {
+	background: var(--tge-fg);
+	color: var(--tge-bg);
+}
+.tge-button--primary:hover,
+.tge-button--danger:hover {
+	background: var(--tge-bg);
+	color: var(--tge-fg);
+}
+.tge-caret {
+	font-size: 9px;
+	line-height: 1;
+}
+.tge-link {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	cursor: pointer;
+}
+
+/* 3. Per-image controls: top-left actions, bottom-left layout ------------ */
+.tge-on .item .tge-item-actions,
+.tge-on .item .tge-item-layout {
+	position: absolute;
+	left: 6px;
+	z-index: 1001; /* above the fixed page title (1000), which covers the first row */
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+	max-width: calc(100% - 48px);
+	opacity: 0;
+	pointer-events: none;
+}
+.tge-on .item .tge-item-actions {
+	top: 6px;
+}
+.tge-on .item .tge-item-layout {
+	bottom: 6px;
+}
+/* All controls of an image appear together on hover, on keyboard focus inside
+   the image, while its margins panel is open, and always on touch screens. */
+.tge-on .item:hover > .tge-item-actions,
+.tge-on .item:hover > .tge-item-layout,
+.tge-on .item:focus-within > .tge-item-actions,
+.tge-on .item:focus-within > .tge-item-layout,
+.tge-on .item > .tge-item-layout.is-open,
+.tge-touch .item > .tge-item-actions,
+.tge-touch .item > .tge-item-layout {
+	opacity: 1;
+	pointer-events: auto;
+}
+.tge-on .item > .tge-item-layout.is-open {
+	z-index: 1002;
+}
+
+/* 4. Check box + selection ring ----------------------------------------- */
+.tge-on .item > .tge-check {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	z-index: 1001; /* above the fixed page title, like the chips */
+	width: 24px;
+	height: 24px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+	opacity: 0;
+}
+.tge-check-box {
+	position: absolute;
+	inset: 2px;
+	box-sizing: border-box;
+	border: 1px solid var(--tge-fg);
+	border-radius: 3px;
+	background: var(--tge-bg);
+}
+.tge-on .item:hover > .tge-check,
+.tge-on .item > .tge-check:focus-visible,
+.tge-on .item.tge-selected > .tge-check,
+.tge-touch .item > .tge-check {
+	opacity: 1;
+}
+.tge-on .item > .tge-check:focus-visible {
+	outline: 2px solid var(--tge-fg);
+	outline-offset: 1px;
+}
+.tge-on .item > .tge-check:hover .tge-check-box {
+	box-shadow: 0 0 0 1px var(--tge-bg);
+}
+.tge-selected > .tge-check .tge-check-box {
+	background: var(--tge-fg);
+	box-shadow: 0 0 0 1px var(--tge-bg);
+}
+/* The tick, and on hover over a selected box the "−" that means deselect. */
+.tge-selected > .tge-check .tge-check-box::after {
+	content: "";
+	position: absolute;
+	left: 6px;
+	top: 2px;
+	width: 5px;
+	height: 10px;
+	border: solid var(--tge-bg);
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+.tge-selected > .tge-check:hover .tge-check-box::after {
+	left: 4px;
+	top: 8px;
+	width: 10px;
+	height: 0;
+	border-width: 2px 0 0;
+	transform: none;
+}
+/* 3px of foreground with a 1px background hairline inside: visible on a dark
+   photo in light mode and on a bright one in dark mode. An overlay, because
+   the positioned image paints over its figure's outline. */
+.tge-on .item.tge-selected::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	box-shadow: inset 0 0 0 3px var(--tge-fg), inset 0 0 0 4px var(--tge-bg);
+	pointer-events: none;
+}
+.tge-on .sortable-ghost {
+	opacity: .5;
+}
+
+/* 5. Margins panel (opens upwards from "Margins ▾") ---------------------- */
+.tge-margins {
+	position: absolute;
+	left: 0;
+	bottom: calc(100% + 4px);
+	display: grid;
+	gap: 4px;
+	padding: 8px;
+	background: var(--tge-bg);
+	color: var(--tge-fg);
+	border: 1px solid var(--tge-fg);
+	border-radius: 3px;
+	font: 400 12px/1 var(--tge-font);
+}
+.tge-margins[hidden] {
+	display: none;
+}
+.tge-margins-row {
+	display: grid;
+	grid-template-columns: auto 24px 24px 24px;
+	column-gap: 4px;
+	align-items: center;
+	gap: 4px;
+}
+.tge-margins-label {
+	padding-right: 8px;
+	color: var(--tge-fg-60);
+}
+.tge-margins-sep {
+	margin: 2px 0;
+	border-top: 1px solid var(--tge-fg-25);
+}
+
+/* 6. Bar ---------------------------------------------------------------- */
+.tge-bar {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+	background: var(--tge-bg);
+	color: var(--tge-fg);
+	border-top: 1px solid var(--tge-fg);
+	font: 400 13px/1.4 var(--tge-font);
+	-webkit-font-smoothing: auto;
+}
+.tge-bar.is-busy {
+	cursor: progress;
+}
+.tge-status {
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	color: var(--tge-fg-60);
+}
+.tge-status a {
+	color: inherit;
+}
+.tge-groups {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex: none;
+}
+.tge-bar.is-overflow .tge-group:not(.tge-group--all),
+.tge-bar:not(.is-overflow) .tge-group--all {
+	display: none;
+}
+/* Inline in the entry footer (the usual place): part of the page, not a panel.
+   Buttons first, the status after them, both on the footer's own line. */
+.tge-bar--inline {
+	position: relative;
+	left: auto;
+	right: auto;
+	bottom: auto;
+	z-index: 5;
+	flex-direction: row-reverse;
+	justify-content: flex-end;
+	margin: .75rem 0 0;
+	padding: 0;
+	background: none;
+	border: 0;
+}
+/* Room under the page for the fixed bar (fallback only); the fixed lower header sits above it. */
+html.tge-has-bar body {
+	padding-bottom: var(--tge-bar-h, 56px);
+}
+html.tge-has-bar #lower-header {
+	bottom: var(--tge-bar-h, 56px);
+}
+
+/* 7. Menus (open upwards, anchored to their button) ---------------------- */
+.tge-menu {
+	position: absolute;
+	bottom: calc(100% + 4px);
+	min-width: 230px;
+	max-height: calc(100vh - 120px);
+	overflow: auto;
+	padding: 4px 0;
+	background: var(--tge-bg);
+	color: var(--tge-fg);
+	border: 1px solid var(--tge-fg);
+	border-radius: 3px;
+	text-align: left;
+}
+.tge-menu-header {
+	padding: 6px 12px 2px;
+	color: var(--tge-fg-60);
+	font-size: 12px;
+	white-space: nowrap;
+}
+.tge-menu-header + .tge-menu-header {
+	padding-top: 0;
+}
+.tge-menu-header + .tge-menu-item {
+	margin-top: 4px;
+}
+.tge-menu-title {
+	color: var(--tge-fg);
+	font-weight: 600;
+	font-size: 13px;
+}
+.tge-menu-sep {
+	margin: 4px 0;
+	border-top: 1px solid var(--tge-fg-25);
+}
+.tge-menu-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 7px 12px;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.tge-menu-item:hover,
+.tge-menu-item:focus {
+	background: var(--tge-fg);
+	color: var(--tge-bg);
+	outline: none;
+}
+.tge-menu-item[disabled] {
+	opacity: .4;
+	cursor: default;
+	background: none;
+	color: inherit;
+}
+.tge-menu-count {
+	opacity: .6;
+	font-variant-numeric: tabular-nums;
+}
+
+/* 8. Dialogs ------------------------------------------------------------ */
+.tge-dialog-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 100001;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, .6);
+	font: 400 13px/1.4 var(--tge-font);
+}
+.tge-dialog {
+	display: flex;
+	flex-direction: column;
+	width: 520px;
+	max-width: calc(100vw - 32px);
+	max-height: calc(100vh - 80px);
+	overflow: hidden;
+	background: var(--tge-bg);
+	color: var(--tge-fg);
+	border: 1px solid var(--tge-fg);
+	border-radius: 3px;
+	text-align: left;
+}
+.tge-dialog--confirm {
+	width: 440px;
+}
+.tge-dialog-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 16px;
+	border-bottom: 1px solid var(--tge-fg-25);
+}
+.tge-dialog-head h2 {
+	margin: 0;
+	color: var(--tge-fg);
+	font: 600 15px/1.3 var(--tge-font);
+}
+.tge-dialog-close {
+	padding: 4px;
+	border: 0;
+	background: none;
+	color: var(--tge-fg-60);
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+}
+.tge-dialog-close:hover {
+	color: var(--tge-fg);
+}
+.tge-dialog-body {
+	padding: 14px 16px;
+	overflow: auto;
+}
+.tge-dialog-body p {
+	margin: 0 0 8px;
+	font-size: 13px;
+}
+.tge-dialog-body p:last-child {
+	margin-bottom: 0;
+}
+.tge-dialog-foot {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	padding: 12px 16px;
+	border-top: 1px solid var(--tge-fg-25);
+}
+.tge-dialog-search {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 7px 10px;
+	border: 1px solid var(--tge-fg);
+	border-radius: 3px;
+	background: var(--tge-bg);
+	color: var(--tge-fg);
+	font: 14px var(--tge-font);
+}
+.tge-dialog-search:focus {
+	outline: 2px solid var(--tge-fg);
+	outline-offset: 1px;
+}
+.tge-dialog-results {
+	margin: 12px 0 0;
+	padding: 0;
+	max-height: 40vh;
+	overflow: auto;
+	list-style: none;
+	border: 1px solid var(--tge-fg-25);
+	border-radius: 3px;
+}
+.tge-dialog-results:empty {
+	display: none;
+}
+.tge-dialog-result {
+	padding: 9px 12px;
+	border-bottom: 1px solid var(--tge-fg-25);
+	cursor: pointer;
+}
+.tge-dialog-result:last-child {
+	border-bottom: 0;
+}
+.tge-dialog-result:hover,
+.tge-dialog-result:focus {
+	background: var(--tge-fg);
+	color: var(--tge-bg);
+	outline: none;
+}
+.tge-dialog-result-title {
+	font-weight: 600;
+}
+.tge-dialog-result-meta {
+	margin-top: 2px;
+	opacity: .6;
+	font-size: 12px;
+	text-transform: capitalize;
+}
+.tge-dialog-note {
+	margin: 12px 0 0;
+	color: var(--tge-fg-60);
+}
+
+/* 9. Tooltip (library/js/gallery-edit/tips.js) --------------------------- */
+.tge-tip {
+	position: fixed;
+	z-index: 100002;
+	max-width: 280px;
+	padding: 5px 8px;
+	border-radius: 3px;
+	background: var(--tge-fg);
+	color: var(--tge-bg);
+	font: 400 11px/1.35 var(--tge-font);
+	white-space: nowrap;
+	pointer-events: none;
+	-webkit-font-smoothing: auto;
+}
+.tge-tip[hidden] {
+	display: none;
+}
+.tge-tip kbd {
+	display: inline-block;
+	min-width: 14px;
+	margin: 0 1px;
+	padding: 0 4px;
+	border: 1px solid var(--tge-bg);
+	border-radius: 2px;
+	background: none;
+	color: inherit;
+	font: 600 10px/14px var(--tge-font);
+	text-align: center;
+	box-shadow: none;
+}

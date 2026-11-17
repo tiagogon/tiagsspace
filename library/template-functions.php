@@ -253,6 +253,8 @@ function color_background_parameters ($parameter) {
 			$background_color_class = 'white-darkmode';
 	} elseif (is_singular( 'dusk' )) {
 			$background_color_class = 'white-darkmode';
+	} elseif (is_singular( 'cidade' )) {
+			$background_color_class = 'white-darkmode';
 	} elseif (  is_singular( 'log' )
 							OR is_post_type_archive('log')
 							OR is_tax('log-branch')) {
@@ -423,6 +425,57 @@ function atachement_custom_margin($attachmentId) {
 		}
 
 		echo $marginEchoString;
+}
+
+// ------------------------------------------------------------
+// Gallery gap -- the one number the space between images comes from
+// ------------------------------------------------------------
+
+/**
+ * The gaps an editor can choose, in px. 'default' (the page gutter) is not in
+ * the list: it is what every other stored value falls back to.
+ */
+function tiagsspace_gallery_gap_values() {
+	return array( 0, 2, 4, 8, 16, 20 );
+}
+
+/**
+ * Turn what is stored in the `spacement` field (and the retired `no_space`
+ * tick) into a gap: one of tiagsspace_gallery_gap_values() or 'default'.
+ *
+ * Stored values over the years: 'spacement-N', the label
+ * ': 40px (Theme Gallery)' (the old first choice, meaning the theme's own
+ * gutter), an empty string, nothing. Anything not on the whitelist is
+ * 'default', so no field text can reach the markup.
+ *
+ * @param mixed $spacement Stored `spacement` value.
+ * @param mixed $no_space  Stored `no_space` value (retired field, still read).
+ * @return int|string
+ */
+function tiagsspace_gallery_gap_normalise( $spacement, $no_space = false ) {
+	if ( $no_space && '0' !== $no_space ) {
+		return 0;
+	}
+	if ( is_string( $spacement ) && preg_match( '/^spacement-(\d+)$/', $spacement, $m ) ) {
+		$px = (int) $m[1];
+		if ( in_array( $px, tiagsspace_gallery_gap_values(), true ) ) {
+			return $px;
+		}
+	}
+	return 'default';
+}
+
+/**
+ * The gap of the current post's alternative gallery. Reads the fields with no
+ * post id, as the gallery template does, so an ACF preview shows unsaved values.
+ *
+ * @return int|string One of tiagsspace_gallery_gap_values() or 'default'.
+ */
+function tiagsspace_gallery_gap() {
+	if ( ! function_exists( 'get_field' ) ) {
+		return 'default';
+	}
+	return tiagsspace_gallery_gap_normalise( get_field( 'spacement' ), get_field( 'no_space' ) );
 }
 
 // ------------------------------------------------------------
