@@ -237,7 +237,8 @@ if($attachmens){
 
         // Container or Full width
         $class_container = get_field('container');
-        $item_max_heigh = esc_html ( get_field('item_max_heigh'));
+        $item_max_heigh = get_field('item_max_heigh');
+        $item_max_heigh = in_array( $item_max_heigh, array( 'max-heigh-90vh-left', 'max-heigh-90vh-right' ), true ) ? $item_max_heigh : '';
 
         // Number of columns
         // Get the number of columns or set 1 as default
@@ -291,6 +292,26 @@ if($attachmens){
     // gap both container types run between the theme's side lines, so the
     // image `sizes` in gallery-item.php must be viewport fractions.
     $gallery_fixed_width = ( 'container' === $class_container && 0 === $gallery_gap );
+    // "Item max height" without Masonry: the row becomes a grid whose columns
+    // shrink with their capped images, so the images still touch (see
+    // .gallery-max-heigh-grid in _page-single-gallery.scss). The column counts
+    // travel as custom properties; Masonry galleries keep the old behaviour,
+    // because Masonry positions the items itself.
+    $row_style_attr = '';
+    $masonry_active = ( $number_of_columns_lg > 1 && $deactivat_masonry == false );
+    if ( '' !== $item_max_heigh && ! $masonry_active ) {
+        $row .= ' gallery-max-heigh-grid';
+        if ( 'max-heigh-90vh-right' === $item_max_heigh ) {
+            $row .= ' gallery-max-heigh-right';
+        }
+        $row_style_attr = sprintf(
+            ' style="--cols-xs: %d; --cols-sm: %d; --cols-md: %d; --cols-lg: %d"',
+            max( 1, (int) $number_of_columns_xs ),
+            max( 1, (int) $number_of_columns_sm ),
+            max( 1, (int) $number_of_columns_md ),
+            max( 1, (int) $number_of_columns_lg )
+        );
+    }
     if ( 0 === $gallery_gap ) {
         $no_space = 'no-pad';
     } else {
@@ -308,7 +329,7 @@ if($attachmens){
     $intense = '';
     if ($light_box == 'intense-images') {
         $intense = 'intense';?>
-        <script src='<?php bloginfo('template_url'); ?>/library/js/intense-images/intense.min.js'></script><?php
+        <script src='<?php bloginfo('template_url'); ?>/library/js/intense-images/intense.min.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/intense-images/intense.min.js' ) ); ?>'></script><?php
     }
 
     // Magnific Pop Up gallery
@@ -316,13 +337,13 @@ if($attachmens){
     if ($light_box == 'magnific_popup') {
         $magnific_popup = "magnific_popup-gallery-".$post->ID;
         // Magnific Popup core JS file
-        ?><script src="<?php bloginfo('template_url'); ?>/library/js/Magnific-Popup/jquery.magnific-popup.min.js"></script>
+        ?><script src="<?php bloginfo('template_url'); ?>/library/js/Magnific-Popup/jquery.magnific-popup.min.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/Magnific-Popup/jquery.magnific-popup.min.js' ) ); ?>"></script>
     <?php } ?>
 
     <div class="<?php echo trim( $class_container . ' container-gallery ' . $gapped_class ); ?>"<?php echo $gap_style_attr; ?>>
 
         <?php if ( tiagsspace_gallery_edit_mode( $gallery_post_id ) ) { tiagsspace_gallery_edit_style(); } // before the grid: see the function ?>
-        <div id="gallery-<?php the_ID(); ?>" class="gallery clearfix <?php echo $magnific_popup;?>  <?php echo $row;?> <?php echo $no_space;?>" itemscope itemtype="http://schema.org/ImageGallery">
+        <div id="gallery-<?php the_ID(); ?>" class="gallery clearfix <?php echo $magnific_popup;?>  <?php echo $row;?> <?php echo $no_space;?>"<?php echo $row_style_attr; ?> itemscope itemtype="http://schema.org/ImageGallery">
 
             <?php
             $count_item = 0;

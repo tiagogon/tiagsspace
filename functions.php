@@ -80,7 +80,7 @@ function tiagsspace_enqueue_assets() {
 
     // ----- CSS ----- (order matters)
     wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], tiagsspace_asset_ver('/library/js/plyr/plyr.css'));
-    wp_enqueue_style('swiper', $template_dir . '/library/js/swiper/swiper-bundle.min.css', [], null);
+    wp_enqueue_style('swiper', $template_dir . '/library/js/swiper/swiper-bundle.min.css', [], tiagsspace_asset_ver('/library/js/swiper/swiper-bundle.min.css'));
     // Versioned by filemtime: the server sends a 1-year Cache-Control on static files, so an
     // unversioned URL leaves visitors on a stale stylesheet after every recompile.
     wp_enqueue_style('theme-style', $template_dir . '/library/styles/main.min.css', [], tiagsspace_asset_ver('/library/styles/main.min.css'));
@@ -88,15 +88,15 @@ function tiagsspace_enqueue_assets() {
     // ----- jQuery -----
     // Use local jQuery to match existing theme expectations
     wp_deregister_script('jquery');
-    wp_register_script('jquery', $template_dir . '/library/js/jquery/jquery.min.js', [], null, false); // header
+    wp_register_script('jquery', $template_dir . '/library/js/jquery/jquery.min.js', [], tiagsspace_asset_ver('/library/js/jquery/jquery.min.js'), false); // header
     wp_enqueue_script('jquery');
 
     // ----- JS -----
     // Modernizr (must be in header)
-    wp_enqueue_script('modernizr', $template_dir . '/library/js/modernizr/modernizr.min.js', [], null, false);
+    wp_enqueue_script('modernizr', $template_dir . '/library/js/modernizr/modernizr.min.js', [], tiagsspace_asset_ver('/library/js/modernizr/modernizr.min.js'), false);
 
     // Picturefill (polyfill) for legacy browsers that need it
-    wp_enqueue_script('picturefill', $template_dir . '/library/js/picturefill/picturefill.min.js', [], null, true);
+    wp_enqueue_script('picturefill', $template_dir . '/library/js/picturefill/picturefill.min.js', [], tiagsspace_asset_ver('/library/js/picturefill/picturefill.min.js'), true);
     // HTML5 shiv for <picture> element creation (before polyfill execution)
     wp_add_inline_script('picturefill', 'document.createElement("picture");', 'before');
 
@@ -108,12 +108,12 @@ function tiagsspace_enqueue_assets() {
     wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.js', [], tiagsspace_asset_ver('/library/js/plyr/plyr.js'), true);
 
     // Bootstrap
-    wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], null, true);
+    wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], tiagsspace_asset_ver('/library/js/bootstrap.min.js'), true);
 
     // ImagesLoaded (ensures Masonry runs after images are loaded)
     wp_enqueue_script('imagesloaded');
     // Theme's Masonry package (load in header so inline init in template works)
-    wp_enqueue_script('masonry-pkgd', $template_dir . '/library/js/masonry/masonry.pkgd.min.js', ['jquery', 'imagesloaded'], null, false);
+    wp_enqueue_script('masonry-pkgd', $template_dir . '/library/js/masonry/masonry.pkgd.min.js', ['jquery', 'imagesloaded'], tiagsspace_asset_ver('/library/js/masonry/masonry.pkgd.min.js'), false);
 
 }
 

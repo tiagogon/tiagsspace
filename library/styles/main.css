@@ -6848,8 +6848,32 @@ li.masonry-item {
 
 div.gallery {
   margin-bottom: 0; }
-  div.gallery div.max-heigh-90vh {
-    max-height: 90vh; }
+  @supports (width: 1cqw) {
+    div.gallery.gallery-max-heigh-grid {
+      --cols: var(--cols-xs, 1);
+      container-type: inline-size;
+      display: grid;
+      grid-template-columns: repeat(var(--cols), max-content);
+      justify-content: start; }
+      @media (min-width: 576px) {
+        div.gallery.gallery-max-heigh-grid {
+          --cols: var(--cols-sm, 1); } }
+      @media (min-width: 768px) {
+        div.gallery.gallery-max-heigh-grid {
+          --cols: var(--cols-md, 1); } }
+      @media (min-width: 992px) {
+        div.gallery.gallery-max-heigh-grid {
+          --cols: var(--cols-lg, 1); } }
+      div.gallery.gallery-max-heigh-grid.gallery-max-heigh-right {
+        justify-content: end; }
+      div.gallery.gallery-max-heigh-grid > div.thumbnail {
+        float: none;
+        max-width: none;
+        width: calc(100cqw / var(--cols)); }
+      div.gallery.gallery-max-heigh-grid > div.thumbnail.max-heigh-90vh {
+        width: min(calc(100cqw / var(--cols)), calc(90vh * var(--item-ar, 1))); }
+    .gallery-gapped div.gallery.gallery-max-heigh-grid > div.thumbnail.max-heigh-90vh {
+      width: min(calc(100cqw / var(--cols)), calc(90vh * var(--item-ar, 1) + var(--gallery-gap))); } }
   div.gallery div.thumbnail {
     float: left;
     -webkit-box-sizing: border-box;

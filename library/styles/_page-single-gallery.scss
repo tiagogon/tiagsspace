@@ -13,8 +13,45 @@
 
 div.gallery {
 	margin-bottom: 0;
-	div.max-heigh-90vh{
-		max-height: 90vh;
+	// "Item max height" (ACF item_max_heigh): no image taller than 90vh.
+	// Capping only the image (img.max-heigh-90vh-left/right below) leaves it
+	// narrower than its column, so a strip of page shows between images in any
+	// window shorter than the column's image. Without Masonry the row is
+	// therefore a grid: the same number of columns per breakpoint (--cols-*,
+	// set inline by entry-gallery.php), each item as wide as the smaller of
+	// its share of the row and 90vh x its width/height (--item-ar, set inline
+	// by gallery-item.php) plus the gap it carries as padding. The columns
+	// shrink with the images and pack to the left (or right).
+	// cqw = 1% of the row's width; browsers without it keep the old look.
+	@supports (width: 1cqw) {
+		&.gallery-max-heigh-grid {
+			--cols: var(--cols-xs, 1);
+			@media (min-width: map-get($grid-breakpoints, sm)) { --cols: var(--cols-sm, 1); }
+			@media (min-width: map-get($grid-breakpoints, md)) { --cols: var(--cols-md, 1); }
+			@media (min-width: map-get($grid-breakpoints, lg)) { --cols: var(--cols-lg, 1); }
+			container-type: inline-size;
+			display: grid;
+			grid-template-columns: repeat(var(--cols), max-content);
+			justify-content: start;
+			&.gallery-max-heigh-right {
+				justify-content: end;
+			}
+			> div.thumbnail {
+				float: none;
+				max-width: none;
+				width: calc(100cqw / var(--cols));
+			}
+			> div.thumbnail.max-heigh-90vh {
+				// unquote(): this Sass would try to compute min() itself
+				width: unquote("min(calc(100cqw / var(--cols)), calc(90vh * var(--item-ar, 1)))");
+			}
+		}
+		// With a gap the item carries it as padding. A separate rule, not a
+		// var() fallback: the minifier turns "0px" into "0", which is invalid
+		// inside calc().
+		.gallery-gapped &.gallery-max-heigh-grid > div.thumbnail.max-heigh-90vh {
+			width: unquote("min(calc(100cqw / var(--cols)), calc(90vh * var(--item-ar, 1) + var(--gallery-gap)))");
+		}
 	}
   div.thumbnail{
   	float: left;

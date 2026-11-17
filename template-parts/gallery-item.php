@@ -509,7 +509,14 @@
                         <div class="thumbnail item
                           <?php echo $class_thumbnail;?>
                           attachmen-<?php echo $count_item;?>
-                          <?php if($item_max_heigh!=""){echo "max-heigh-90vh";} ?>"<?php echo $item_edit_attrs; ?>
+                          <?php if($item_max_heigh!=""){echo "max-heigh-90vh";} ?>"<?php
+                            // Item max height: the image's width/height, which
+                            // .gallery-max-heigh-grid (_page-single-gallery.scss) needs to
+                            // cap the column together with the image.
+                            if ( $item_max_heigh != "" && ! empty( $intrinsic_ratio ) ) {
+                                echo ' style="--item-ar: ' . esc_attr( round( 100 / $intrinsic_ratio, 5 ) ) . '"';
+                            }
+                            echo $item_edit_attrs; ?>
                             attachmentId="<?php echo $attachmen->ID;?>"
                             attachmentOrder="<?php echo $attachmen->menu_order;?>"  attachment_field_diferent_size_on_gallery="<?php
                                 if (get_field('diferent_size_on_gallery',$attachmen->ID)) {
@@ -561,7 +568,7 @@
                                         }
 
                                         // Compose class list for <img> fallback
-                                        $img_class = trim($intense . ' ' . esc_html(get_field('item_max_heigh')));
+                                        $img_class = trim($intense . ' ' . $item_max_heigh);
                                         $picture_html = tiagsspace_render_picture_from_attachment($attachmen->ID, $sizes_map, $fallback_sizes_attr, $img_class, $attachmen_alt);
                                         // Ensure Intense Images uses the full-resolution image by setting data-image on the <img>
                                         if ($light_box == 'intense-images' && !empty($attachmen_thumb_attributes[0])) {
