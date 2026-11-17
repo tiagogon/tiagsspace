@@ -329,6 +329,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Container',
 				'name' => 'container',
 				'type' => 'radio',
+				'instructions' => 'With space between images both options run the full width. Container only centres a gallery with no space.',
 				'required' => 1,
 				'conditional_logic' => array( array(
 					array( 'field' => 'field_544eabf7fc4e2', 'operator' => '==', 'value' => '1' ),
@@ -368,34 +369,29 @@ add_action( 'acf/include_fields', function() {
 				) ),
 			),
 			array(
-				'key' => 'field_5470962b25c59',
-				'label' => 'No space',
-				'name' => 'no_space',
-				'type' => 'true_false',
-				'instructions' => 'Check it to remove the space between images.',
+				// One control for the space between images. The retired "No space"
+				// tick (meta `no_space`) is still read: see tiagsspace_gallery_gap_normalise()
+				// and the two filters at the end of this file.
+				'key' => 'field_558b40147ee22',
+				'label' => 'Space between images',
+				'name' => 'spacement',
+				'type' => 'radio',
+				'instructions' => 'Horizontal and vertical. None runs the images edge to edge.',
 				'conditional_logic' => array( array(
 					array( 'field' => 'field_544eabf7fc4e2', 'operator' => '==', 'value' => '1' ),
 					array( 'field' => 'field_544eab85fc4e1', 'operator' => '!=', 'value' => '1' ),
-				) ),
-			),
-			array(
-				'key' => 'field_558b40147ee22',
-				'label' => 'Spacement',
-				'name' => 'spacement',
-				'type' => 'radio',
-				'instructions' => 'Not applied to Container Fluid',
-				'conditional_logic' => array( array(
-					array( 'field' => 'field_5470962b25c59', 'operator' => '!=', 'value' => '1' ),
-					array( 'field' => 'field_544eabf7fc4e2', 'operator' => '==', 'value' => '1' ),
+					array( 'field' => 'field_57e18ba7f5f27', 'operator' => '!=', 'value' => '1' ),
 				) ),
 				'choices' => array(
-					': 40px (Theme Gallery)' => ': 40px (Theme Gallery)',
+					'default' => 'Theme default (16px, 12px on small screens)',
+					'spacement-0' => 'None',
 					'spacement-2' => '2px',
 					'spacement-4' => '4px',
 					'spacement-8' => '8px',
 					'spacement-16' => '16px',
-					'spacement-20' => '20px (Bootstrap framework)',
+					'spacement-20' => '20px',
 				),
+				'default_value' => 'default',
 				'layout' => 'horizontal',
 			),
 			array(
@@ -880,3 +876,30 @@ add_action( 'acf/include_fields', function() {
 	) );
 
 } );
+
+// ------------------------------------------------------------
+// "Space between images" (field `spacement`): legacy values
+// ------------------------------------------------------------
+
+/**
+ * Show what is stored as one of the field's choices: the retired "No space"
+ * tick as None, the old ': 40px (Theme Gallery)' label and an empty value as
+ * Default. Nothing is written here; the post keeps its look until it is saved.
+ */
+add_filter( 'acf/load_value/key=field_558b40147ee22', function( $value, $post_id ) {
+	$no_space = is_numeric( $post_id ) ? get_metadata( 'post', (int) $post_id, 'no_space', true ) : false;
+	$gap      = tiagsspace_gallery_gap_normalise( $value, $no_space );
+	return 'default' === $gap ? 'default' : 'spacement-' . $gap;
+}, 10, 2 );
+
+/**
+ * On save the choice is the whole truth, so the retired tick is cleared on the
+ * same object. update_metadata(), not update_post_meta(): the latter sends a
+ * revision's meta to its parent, and a preview saves to the revision.
+ */
+add_filter( 'acf/update_value/key=field_558b40147ee22', function( $value, $post_id ) {
+	if ( is_numeric( $post_id ) && metadata_exists( 'post', (int) $post_id, 'no_space' ) ) {
+		update_metadata( 'post', (int) $post_id, 'no_space', '0' );
+	}
+	return $value;
+}, 10, 2 );
