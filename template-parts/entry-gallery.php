@@ -321,6 +321,7 @@ if($attachmens){
 
     <div class="<?php echo trim( $class_container . ' container-gallery ' . $gapped_class ); ?>"<?php echo $gap_style_attr; ?>>
 
+        <?php if ( tiagsspace_gallery_edit_mode( $gallery_post_id ) ) { tiagsspace_gallery_edit_style(); } // before the grid: see the function ?>
         <div id="gallery-<?php the_ID(); ?>" class="gallery clearfix <?php echo $magnific_popup;?>  <?php echo $row;?> <?php echo $no_space;?>" itemscope itemtype="http://schema.org/ImageGallery">
 
             <?php

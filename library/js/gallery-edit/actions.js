@@ -49,6 +49,18 @@
 		run:     function () { window.galleryKeyboardReorderHideSelected(); }
 	} );
 
+	// ── Restore hidden (a plain button, only while something is hidden) ──
+	// Every hidden image goes back to its saved place (the U key does one).
+
+	api.register( {
+		id:      'restore-hidden',
+		group:   'restore',
+		order:   10,
+		label:   function ( ctx ) { return format( tr( 'edit', 'restoreN', 'Restore hidden (%d)' ), ctx.hiddenCount ); },
+		enabled: function ( ctx ) { return ctx.hiddenCount > 0 && typeof window.galleryKeyboardReorderRestoreAll === 'function'; },
+		run:     function () { window.galleryKeyboardReorderRestoreAll(); }
+	} );
+
 	// ── Select ▾ ────────────────────────────────────────────
 
 	function idsWhere( ctx, test ) {

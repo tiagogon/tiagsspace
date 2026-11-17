@@ -124,6 +124,8 @@ function tiagsspace_gallery_edit_i18n() {
 		'hideN'          => __( 'Hide %d', 'tiagsspace' ),
 		'tipHide'        => __( 'Hide from gallery  H · undo  U', 'tiagsspace' ),
 		'tipHideBar'     => __( 'Hide the selected from the gallery  H · undo  U', 'tiagsspace' ),
+		'restoreN'       => __( 'Restore hidden (%d)', 'tiagsspace' ),
+		'tipRestore'     => __( 'Put every hidden image back in the gallery · one at a time  U', 'tiagsspace' ),
 		'delete'         => __( 'Delete', 'tiagsspace' ),
 		'tipDelete'      => __( 'Delete permanently…', 'tiagsspace' ),
 		'nextHidden'     => __( 'Next hidden', 'tiagsspace' ),
@@ -178,13 +180,28 @@ function tiagsspace_gallery_edit_config( $post_id, $loop_id ) {
 	);
 }
 
-/** <link> + <script> tags for the editor, printed inside the gallery's edit block. */
-function tiagsspace_gallery_edit_assets( $post_id, $loop_id ) {
-	$base = get_template_directory_uri();
+/**
+ * The editor's stylesheet. Printed BEFORE the grid (entry-gallery.php): the
+ * per-image controls are in each item's markup, and until this file applies
+ * they sit in the flow and make every item taller. A stylesheet ahead of the
+ * grid blocks the scripts after it, so Masonry never measures that state
+ * (it did on production, where the file arrived late: rows spaced far apart).
+ */
+function tiagsspace_gallery_edit_style() {
+	static $printed = false;
+	if ( $printed ) {
+		return;
+	}
+	$printed = true;
 	printf(
 		'<link rel="stylesheet" href="%s">' . "\n",
-		esc_url( $base . '/library/styles/gallery-edit.css?v=' . tiagsspace_asset_ver( '/library/styles/gallery-edit.css' ) )
+		esc_url( get_template_directory_uri() . '/library/styles/gallery-edit.css?v=' . tiagsspace_asset_ver( '/library/styles/gallery-edit.css' ) )
 	);
+}
+
+/** Config + <script> tags for the editor, printed inside the gallery's edit block. */
+function tiagsspace_gallery_edit_assets( $post_id, $loop_id ) {
+	$base = get_template_directory_uri();
 	printf(
 		'<script>window.tiagsspaceGalleryEditCfg = %s;</script>' . "\n",
 		wp_json_encode( tiagsspace_gallery_edit_config( $post_id, $loop_id ) )

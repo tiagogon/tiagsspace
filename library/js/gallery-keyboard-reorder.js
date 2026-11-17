@@ -451,6 +451,16 @@
 
     // ── Public reset for Sortable sync ───────────────────────
 
+    // Put every hidden image back at its saved spot (the bar's "Restore hidden").
+    // The undo stack only points at nodes that are about to be back in the grid.
+    window.galleryKeyboardReorderRestoreAll = function () {
+        hideStack = [];
+        if ( typeof window.revealGalleryHiddenRestore !== 'function' ) return 0;
+        var n = 0;
+        while ( n < 1000 && window.revealGalleryHiddenRestore() ) { n++; }
+        return n;
+    };
+
     window.galleryKeyboardReorderHide = hideItemElement;
     window.galleryKeyboardReorderHideSelected = hideSelected;
 

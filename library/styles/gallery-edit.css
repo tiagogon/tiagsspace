@@ -13,6 +13,9 @@
  * (headers, "…", the confirm panel), never in colour. Shapes follow wp-admin's
  * small button.
  *
+ * No rule may depend on a class added by script: the per-image controls must
+ * be out of the flow as soon as this file applies (Masonry measures the items).
+ *
  * Sections: 1. tokens  2. chips (shared button)  3. per-image controls
  *           4. check box + ring  5. margins panel  6. bar  7. menus
  *           8. dialogs  9. tooltip
@@ -91,6 +94,10 @@
 	outline: 2px solid var(--tge-fg);
 	outline-offset: 2px;
 }
+.tge-chip[hidden],
+.tge-button[hidden] {
+	display: none;
+}
 .tge-chip[disabled],
 .tge-button[disabled] {
 	opacity: .4;
@@ -126,8 +133,8 @@
 }
 
 /* 3. Per-image controls: top-left actions, bottom-left layout ------------ */
-.tge-on .item .tge-item-actions,
-.tge-on .item .tge-item-layout {
+.item .tge-item-actions,
+.item .tge-item-layout {
 	position: absolute;
 	left: 6px;
 	z-index: 1001; /* above the fixed page title (1000), which covers the first row */
@@ -139,30 +146,30 @@
 	opacity: 0;
 	pointer-events: none;
 }
-.tge-on .item .tge-item-actions {
+.item .tge-item-actions {
 	top: 6px;
 }
-.tge-on .item .tge-item-layout {
+.item .tge-item-layout {
 	bottom: 6px;
 }
 /* All controls of an image appear together on hover, on keyboard focus inside
    the image, while its margins panel is open, and always on touch screens. */
-.tge-on .item:hover > .tge-item-actions,
-.tge-on .item:hover > .tge-item-layout,
-.tge-on .item:focus-within > .tge-item-actions,
-.tge-on .item:focus-within > .tge-item-layout,
-.tge-on .item > .tge-item-layout.is-open,
+.item:hover > .tge-item-actions,
+.item:hover > .tge-item-layout,
+.item:focus-within > .tge-item-actions,
+.item:focus-within > .tge-item-layout,
+.item > .tge-item-layout.is-open,
 .tge-touch .item > .tge-item-actions,
 .tge-touch .item > .tge-item-layout {
 	opacity: 1;
 	pointer-events: auto;
 }
-.tge-on .item > .tge-item-layout.is-open {
+.item > .tge-item-layout.is-open {
 	z-index: 1002;
 }
 
 /* 4. Check box + selection ring ----------------------------------------- */
-.tge-on .item > .tge-check {
+.item > .tge-check {
 	position: absolute;
 	top: 6px;
 	right: 6px;
@@ -184,17 +191,17 @@
 	border-radius: 3px;
 	background: var(--tge-bg);
 }
-.tge-on .item:hover > .tge-check,
-.tge-on .item > .tge-check:focus-visible,
-.tge-on .item.tge-selected > .tge-check,
+.item:hover > .tge-check,
+.item > .tge-check:focus-visible,
+.item.tge-selected > .tge-check,
 .tge-touch .item > .tge-check {
 	opacity: 1;
 }
-.tge-on .item > .tge-check:focus-visible {
+.item > .tge-check:focus-visible {
 	outline: 2px solid var(--tge-fg);
 	outline-offset: 1px;
 }
-.tge-on .item > .tge-check:hover .tge-check-box {
+.item > .tge-check:hover .tge-check-box {
 	box-shadow: 0 0 0 1px var(--tge-bg);
 }
 .tge-selected > .tge-check .tge-check-box {
@@ -224,7 +231,7 @@
 /* 3px of foreground with a 1px background hairline inside: visible on a dark
    photo in light mode and on a bright one in dark mode. An overlay, because
    the positioned image paints over its figure's outline. */
-.tge-on .item.tge-selected::after {
+.item.tge-selected::after {
 	content: "";
 	position: absolute;
 	inset: 0;
@@ -232,7 +239,7 @@
 	box-shadow: inset 0 0 0 3px var(--tge-fg), inset 0 0 0 4px var(--tge-bg);
 	pointer-events: none;
 }
-.tge-on .sortable-ghost {
+.sortable-ghost {
 	opacity: .5;
 }
 

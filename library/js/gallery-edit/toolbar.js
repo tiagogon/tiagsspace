@@ -310,7 +310,7 @@
 
 	// ── Groups: button words and menu headers (as in media-toolbar.js) ──
 
-	var GROUPS = [ 'hide', 'delete', 'select', 'sort', 'move' ];
+	var GROUPS = [ 'hide', 'restore', 'delete', 'select', 'sort', 'move' ];
 
 	var IS_MAC = /Mac|iPhone|iPad/.test( navigator.platform || navigator.userAgent || '' );
 
@@ -323,6 +323,12 @@
 			},
 			headers: function () { return []; },
 			hint:    function () { return t( 'tipHideBar', 'Hide the selected from the gallery  H · undo  U' ); }
+		},
+		restore: {
+			direct:  true,
+			label:   function ( ctx ) { return format( t( 'restoreN', 'Restore hidden (%d)' ), ctx.hiddenCount ); },
+			headers: function () { return []; },
+			hint:    function () { return t( 'tipRestore', 'Put every hidden image back in the gallery · one at a time  U' ); }
 		},
 		'delete': {
 			danger:  true,
@@ -371,18 +377,32 @@
 
 	function menuItemsFor( group, ctx ) {
 		var list = groupDefs[ group ].headers( ctx ).slice();
-		groupActions( group ).forEach( function ( a, i ) {
-			if ( a.separatorBefore && i > 0 ) list.push( { separator: true } );
-			var enabled = a.enabled ? !! a.enabled( ctx ) : true;
+		var shown = 0;
+		// Only what can be used right now: an item that would do nothing is left out.
+		groupActions( group ).forEach( function ( a ) {
+			if ( a.enabled && ! a.enabled( ctx ) ) return;
+			if ( a.separatorBefore && shown > 0 ) list.push( { separator: true } );
+			shown++;
 			list.push( {
 				title:    a.label( ctx ),
 				count:    a.count ? a.count( ctx ) : null,
-				disabled: ! enabled,
+				disabled: false,
 				danger:   group === 'delete',
 				onClick:  function ( e ) { return a.run( buildCtx(), e ); }
 			} );
 		} );
 		return list;
+	}
+
+	// A group is on the bar only while at least one of its actions can be used.
+	function groupUsable( group, ctx ) {
+		return groupActions( group ).some( function ( a ) {
+			return a.enabled ? !! a.enabled( ctx ) : true;
+		} );
+	}
+
+	function usableGroups( ctx ) {
+		return GROUPS.filter( function ( g ) { return groupUsable( g, ctx ); } );
 	}
 
 	function prepareGroups( groups, ctx ) {
@@ -509,11 +529,23 @@
 			setLabel( buttons[ g ], groupDefs[ g ].label( ctx ) );
 			var hint = groupDefs[ g ].hint ? groupDefs[ g ].hint( ctx ) : '';
 			if ( hint ) buttons[ g ].setAttribute( 'data-tip', hint );
-			if ( groupDefs[ g ].direct && ! bar.classList.contains( 'is-busy' ) ) {
-				var a = groupActions( g )[ 0 ];
-				buttons[ g ].disabled = ! a || ( a.enabled ? ! a.enabled( ctx ) : false );
-			}
 		} );
+
+		// Show only the buttons that can be used. If the one with the keyboard
+		// focus goes away (Hide after hiding), the focus moves to the next one.
+		var hadFocus = row.contains( document.activeElement ) ? document.activeElement : null;
+		var usable = usableGroups( ctx );
+		GROUPS.forEach( function ( g ) {
+			buttons[ g ].hidden = usable.indexOf( g ) < 0;
+		} );
+		buttons.all.hidden = ! usable.length;
+		if ( hadFocus && hadFocus.hidden ) {
+			if ( openMenu && openMenu.button === hadFocus ) closeMenu( false );
+			var next = Array.prototype.filter.call( row.querySelectorAll( 'button' ), function ( b ) {
+				return ! b.hidden && b.offsetParent !== null;
+			} )[ 0 ];
+			if ( next ) next.focus();
+		}
 		setLabel( buttons.all, ctx.n ? format( t( 'actionsN', 'Actions (%d)' ), ctx.n ) : t( 'actions', 'Actions' ) );
 		renderStatus();
 		layout();
@@ -595,8 +627,8 @@
 		button.setAttribute( 'aria-expanded', 'true' );
 		document.addEventListener( 'mousedown', onDocDown, true );
 
-		var groups = key === 'all' ? GROUPS : [ key ];
 		var ctx = buildCtx();
+		var groups = key === 'all' ? usableGroups( ctx ) : [ key ];
 		renderMenu( menu, [ { header: t( 'loading', 'Loading…' ) } ] );
 		position( menu, button );
 
@@ -605,7 +637,7 @@
 			var fresh = buildCtx();
 			var list = [];
 			if ( key === 'all' ) {
-				groups.forEach( function ( g, i ) {
+				usableGroups( fresh ).forEach( function ( g, i ) {
 					if ( i > 0 ) list.push( { separator: true } );
 					// A direct group's item already says what it does: no title above it.
 					if ( ! groupDefs[ g ].direct ) {
@@ -700,6 +732,14 @@
 			} ).observe( bar );
 		}
 		window.addEventListener( 'resize', layout );
+
+		// Belt and braces for a late stylesheet or font: one relayout when the
+		// page has fully loaded.
+		if ( document.readyState === 'complete' ) {
+			relayout();
+		} else {
+			window.addEventListener( 'load', relayout );
+		}
 
 		api.selection.on( sync );
 		api.selection.on( revealFooter );
