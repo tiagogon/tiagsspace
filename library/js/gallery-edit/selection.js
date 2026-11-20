@@ -245,10 +245,19 @@
 		focusBefore = focusIndex();
 	}, true );
 
+	function lightboxOpen() {
+		return !! ( api.lightbox && api.lightbox.isOpen() );
+	}
+
 	document.addEventListener( 'keydown', function ( e ) {
 		if ( typing( e ) || api.modalOpen ) return;
 		var key = e.key;
 		var list;
+
+		// In the lightbox, Shift + ← / → is handled by gallery-edit/lightbox.js
+		// (the lightbox moves, then both images are selected) and Esc only
+		// closes the lightbox.
+		if ( lightboxOpen() && ( key === 'Escape' || ( e.shiftKey && ( key === 'ArrowLeft' || key === 'ArrowRight' ) ) ) ) return;
 
 		// S: toggle the focused image (the first one when nothing has focus yet).
 		if ( ( key === 's' || key === 'S' ) && ! e.metaKey && ! e.ctrlKey && ! e.altKey && ! e.shiftKey ) {

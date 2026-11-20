@@ -130,7 +130,7 @@ function tiagsspace_gallery_edit_i18n() {
 		'tipDelete'      => __( 'Delete permanently…', 'tiagsspace' ),
 		'feature'        => __( 'Feature', 'tiagsspace' ),
 		'featured'       => __( 'Featured', 'tiagsspace' ),
-		'tipFeature'     => __( 'Set as the featured image of this post', 'tiagsspace' ),
+		'tipFeature'     => __( 'Set as the featured image of this post  F', 'tiagsspace' ),
 		'tipFeatured'    => __( 'The featured image of this post', 'tiagsspace' ),
 		'nextHidden'     => __( 'Next hidden', 'tiagsspace' ),
 		'tipNextHidden'  => __( 'Show the next hidden image here  N', 'tiagsspace' ),
@@ -150,6 +150,22 @@ function tiagsspace_gallery_edit_i18n() {
 		'movedTo'        => __( '%d moved to %s', 'tiagsspace' ),
 		'movedToCopy'    => __( '%d moved to a new draft', 'tiagsspace' ),
 		'open'           => __( 'Open', 'tiagsspace' ),
+		// Inside the lightbox (gallery-edit/lightbox.js).
+		'lbSelected'     => __( 'Selected', 'tiagsspace' ),
+		'lbHidden'       => __( 'Hidden · U to undo', 'tiagsspace' ),
+		// The shortcut list after the counter on the bar: [ keys, word ] in
+		// order; %s is ⌘A or Ctrl+A, chosen in the browser. A new key is one row.
+		'keys'           => array(
+			array( '← →', __( 'move', 'tiagsspace' ) ),
+			array( '↑ ↓', __( 'swap', 'tiagsspace' ) ),
+			array( 'S', __( 'select', 'tiagsspace' ) ),
+			array( 'H', __( 'hide', 'tiagsspace' ) ),
+			array( 'U', __( 'undo', 'tiagsspace' ) ),
+			array( 'N', __( 'next hidden', 'tiagsspace' ) ),
+			array( 'F', __( 'featured', 'tiagsspace' ) ),
+			array( '%s', __( 'all', 'tiagsspace' ) ),
+			array( 'Esc', __( 'clear', 'tiagsspace' ) ),
+		),
 	);
 }
 
@@ -205,14 +221,38 @@ function tiagsspace_gallery_edit_style() {
 	);
 }
 
-/** Config + <script> tags for the editor, printed inside the gallery's edit block. */
-function tiagsspace_gallery_edit_assets( $post_id, $loop_id ) {
+/**
+ * Lightboxes the editor can work inside: the gallery's lightbox name (as
+ * entry-gallery.php sets $light_box) => its adapter in library/js/gallery-edit/.
+ * A lightbox without an entry keeps the editor out of its view, as before.
+ */
+function tiagsspace_gallery_edit_lightbox_adapters() {
+	return (array) apply_filters( 'tiagsspace_gallery_edit_lightbox_adapters', array(
+		'magnific_popup' => 'lightbox-magnific',
+	) );
+}
+
+/**
+ * Config + <script> tags for the editor, printed inside the gallery's edit block.
+ *
+ * @param int    $post_id   The gallery's post.
+ * @param int    $loop_id   The id the grid is printed with (#gallery-<id>).
+ * @param string $light_box The gallery's lightbox; with an adapter for it, the
+ *                          editor keys work inside it (gallery-edit/lightbox.js).
+ */
+function tiagsspace_gallery_edit_assets( $post_id, $loop_id, $light_box = '' ) {
 	$base = get_template_directory_uri();
 	printf(
 		'<script>window.tiagsspaceGalleryEditCfg = %s;</script>' . "\n",
 		wp_json_encode( tiagsspace_gallery_edit_config( $post_id, $loop_id ) )
 	);
-	foreach ( array( 'tips', 'selection', 'toolbar', 'actions' ) as $file ) {
+	$files    = array( 'tips', 'selection', 'toolbar', 'actions' );
+	$adapters = tiagsspace_gallery_edit_lightbox_adapters();
+	if ( $light_box && ! empty( $adapters[ $light_box ] ) && preg_match( '/^[a-z0-9-]+$/', $adapters[ $light_box ] ) ) {
+		$files[] = 'lightbox';
+		$files[] = $adapters[ $light_box ];
+	}
+	foreach ( $files as $file ) {
 		$path = '/library/js/gallery-edit/' . $file . '.js';
 		printf( '<script src="%s"></script>' . "\n", esc_url( $base . $path . '?v=' . tiagsspace_asset_ver( $path ) ) );
 	}

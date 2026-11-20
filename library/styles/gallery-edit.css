@@ -18,7 +18,7 @@
  *
  * Sections: 1. tokens  2. chips (shared button)  3. per-image controls
  *           4. check box + ring  5. margins panel  6. bar  7. menus
- *           8. dialogs  9. tooltip
+ *           8. dialogs  9. tooltip  10. lightbox status line
  */
 
 /* 1. Tokens ------------------------------------------------------------- */
@@ -313,6 +313,16 @@
 .tge-status a {
 	color: inherit;
 }
+/* The keyboard shortcuts after the counter: same type and colour; no keyboard
+   on a touch-only screen, so none there. */
+.tge-keys {
+	margin-left: .5em;
+}
+@media (hover: none) {
+	.tge-keys {
+		display: none;
+	}
+}
 .tge-groups {
 	display: flex;
 	align-items: center;
@@ -567,4 +577,23 @@ html.tge-has-bar #lower-header {
 	font: 600 10px/14px var(--tge-font);
 	text-align: center;
 	box-shadow: none;
+}
+
+/* 10. Lightbox status line (library/js/gallery-edit/lightbox.js) ---------- */
+/* Inside Magnific's .mfp-wrap (z-index 1043), above its content and arrows. */
+.tge-lb-status {
+	position: fixed;
+	left: 12px;
+	bottom: 12px;
+	z-index: 1046;
+	padding: 4px 8px;
+	border-radius: 3px;
+	background: var(--tge-bg);
+	color: var(--tge-fg);
+	font: 400 12px/1.4 var(--tge-font);
+	-webkit-font-smoothing: auto;
+	pointer-events: none;
+}
+.tge-lb-status[hidden] {
+	display: none;
 }

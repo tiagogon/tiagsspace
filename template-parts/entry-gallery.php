@@ -676,7 +676,7 @@ if($attachmens){
         <script src="<?php bloginfo('template_url'); ?>/library/js/gallery-keyboard-reorder.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/gallery-keyboard-reorder.js' ) ); ?>"></script>
 
         <!-- Selection, toolbar (Delete / Select / Sort / Move to), keyboard selection -->
-        <?php tiagsspace_gallery_edit_assets( $gallery_post_id, get_the_ID() ); ?>
+        <?php tiagsspace_gallery_edit_assets( $gallery_post_id, get_the_ID(), $light_box ); ?>
 
         <!-- CUSTOM FUNCTIONS -->
         <script type="text/javascript">

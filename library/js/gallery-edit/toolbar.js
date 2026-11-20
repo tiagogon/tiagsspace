@@ -512,6 +512,12 @@
 		}, 8000 );
 	}
 
+	// The keyboard shortcuts, after the counter (hidden during a notice, and on
+	// touch screens by the stylesheet). Rows come from tiagsspace_gallery_edit_i18n().
+	var keysText = ( Array.isArray( E.keys ) ? E.keys : [] ).map( function ( row ) {
+		return format( row[ 0 ], IS_MAC ? '⌘A' : 'Ctrl+A' ) + ' ' + row[ 1 ];
+	} ).join( ' · ' );
+
 	function renderStatus() {
 		var ctx = buildCtx();
 		status.textContent = '';
@@ -527,6 +533,9 @@
 		if ( noticeNode ) {
 			status.appendChild( document.createTextNode( ' — ' ) );
 			status.appendChild( noticeNode );
+		} else if ( keysText ) {
+			status.appendChild( document.createTextNode( ' ' ) );
+			status.appendChild( el( 'span', { 'class': 'tge-keys' }, keysText ) );
 		}
 	}
 
@@ -567,9 +576,13 @@
 	}
 
 	// Four buttons, or one "Actions ▾" when they would not fit beside the status.
+	// The shortcut list is not counted: it gives way (ellipsis), the buttons don't.
 	function layout() {
 		bar.classList.remove( 'is-overflow' );
+		var keys = status.querySelector( '.tge-keys' );
+		if ( keys ) keys.style.display = 'none';
 		var need = status.scrollWidth + row.scrollWidth + 48;
+		if ( keys ) keys.style.display = '';
 		if ( need > bar.clientWidth ) bar.classList.add( 'is-overflow' );
 	}
 

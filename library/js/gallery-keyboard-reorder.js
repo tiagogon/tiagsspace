@@ -12,6 +12,10 @@
  *                 (window.revealGalleryHiddenRestore, entry-gallery.php)
  * N             — reveal the next pooled hidden item after the focused one
  *
+ * While the lightbox is open (gallery-edit/lightbox.js) ← / → belong to the
+ * lightbox: it navigates and the focus follows it. Every other key acts on the
+ * focused item, which is the image on screen.
+ *
  * Requires: window.galleryKeyboardReorderTarget = 'gallery-{ID}'
  * set before this script loads.
  */
@@ -260,6 +264,11 @@
             if ( el ) container.appendChild( el );
         }
         masonryRelayout();
+        // Same debounced save as a drag (entry-gallery.php), so a burst of
+        // ↑ / ↓ presses is one save.
+        if ( typeof window.scheduleGalleryOrderSave === 'function' ) {
+            window.scheduleGalleryOrderSave();
+        }
     }
 
     // ── Reorder algorithm (same as Instagram carousel kbComputeReorder) ──
@@ -296,6 +305,11 @@
         }
 
         return { ids: arr, trackedIdx: trackedIdx };
+    }
+
+    function lightboxOpen() {
+        var ge = window.tiagsspaceGalleryEdit;
+        return !! ( ge && ge.lightbox && ge.lightbox.isOpen() );
     }
 
     // ── Keyboard handler ─────────────────────────────────────
@@ -342,6 +356,9 @@
         }
 
         if ( key !== 'ArrowUp' && key !== 'ArrowDown' && key !== 'ArrowLeft' && key !== 'ArrowRight' ) return;
+
+        // The lightbox moves between images itself; the focus follows it.
+        if ( ( key === 'ArrowLeft' || key === 'ArrowRight' ) && lightboxOpen() ) return;
 
         var items = getItems();
         if ( items.length < 2 ) return;
@@ -474,13 +491,16 @@
     // acting on the image that was just moved instead of falling back to the
     // first one. No scrollToFocused(): the item is already where the viewer
     // dropped it, and Masonry is still animating so rects would be stale.
-    window.galleryKeyboardReorderFocus = function ( el ) {
+    // opts.scroll: bring it into view (the lightbox asks for it, so closing the
+    // lightbox lands on the image that was on screen).
+    window.galleryKeyboardReorderFocus = function ( el, opts ) {
         var items = getItems();
         for ( var i = 0; i < items.length; i++ ) {
             if ( items[i] === el ) {
                 container.setAttribute( 'data-kb-focus', i );
                 container.setAttribute( 'data-kb-tracked-id', items[i].getAttribute( 'attachmentId' ) );
                 flashItem( items, i );
+                if ( opts && opts.scroll ) scrollToFocused( items, i );
                 return;
             }
         }

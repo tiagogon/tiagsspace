@@ -4,7 +4,8 @@
  * The same items as the media modal, calling the same AJAX handlers:
  *   Delete ▾  The N selected…          tiagsspace_delete_attachments       (library/duplicate-post.php)
  *             Hidden from gallery (N)… gallery_delete_hidden_attachments   (library/gallery-functions.php)
- *   Set as featured image (one image selected) and the per-image Feature chip
+ *   Set as featured image (one image selected), the per-image Feature chip and
+ *   the F key (the focused image)
  *                                      tiagsspace_set_featured_image       (library/gallery-functions.php)
  *   Select ▾  All · None · Portrait · Landscape · Images · Videos · Audio
  *   Sort ▾    By capture time (EXIF) · By upload date · Shuffle
@@ -57,13 +58,14 @@
 	// featured image reads "Featured".
 
 	var featuredId = parseInt( cfg.featuredId, 10 ) || 0;
+	var featuredListeners = [];
 
 	function paintFeatured() {
 		Array.prototype.forEach.call( document.querySelectorAll( '.tge-feature' ), function ( chip ) {
 			var on = parseInt( chip.getAttribute( 'data-attachment' ), 10 ) === featuredId;
 			chip.setAttribute( 'aria-pressed', on ? 'true' : 'false' );
 			chip.textContent = on ? tr( 'edit', 'featured', 'Featured' ) : tr( 'edit', 'feature', 'Feature' );
-			chip.setAttribute( 'data-tip', on ? tr( 'edit', 'tipFeatured', 'The featured image of this post' ) : tr( 'edit', 'tipFeature', 'Set as the featured image of this post' ) );
+			chip.setAttribute( 'data-tip', on ? tr( 'edit', 'tipFeatured', 'The featured image of this post' ) : tr( 'edit', 'tipFeature', 'Set as the featured image of this post  F' ) );
 		} );
 	}
 
@@ -77,6 +79,9 @@
 		} ).then( function () {
 			featuredId = id;
 			paintFeatured();
+			featuredListeners.forEach( function ( fn ) {
+				try { fn( featuredId ); } catch ( err ) { if ( window.console ) console.error( err ); }
+			} );
 			if ( api.notice ) api.notice( g( 'featuredDone', 'Featured image set' ) );
 			if ( api.refreshToolbar ) api.refreshToolbar();
 		}, function ( err ) {
@@ -84,12 +89,35 @@
 		} );
 	}
 
+	// The featured state, shaped like api.selection: the lightbox reads it.
+	api.featured = {
+		id:  function () { return featuredId; },
+		set: setFeatured,
+		on:  function ( fn ) { featuredListeners.push( fn ); }
+	};
+
 	document.addEventListener( 'click', function ( e ) {
 		var chip = e.target && e.target.closest ? e.target.closest( '.tge-feature' ) : null;
 		if ( ! chip ) return;
 		e.preventDefault();
 		e.stopPropagation();
 		setFeatured( chip.getAttribute( 'data-attachment' ) );
+	} );
+
+	// F: the keyboard-focused image (the one on screen in the lightbox) becomes
+	// the featured image. Images only; same guards as the S key.
+	document.addEventListener( 'keydown', function ( e ) {
+		if ( e.key !== 'f' && e.key !== 'F' ) return;
+		if ( e.metaKey || e.ctrlKey || e.altKey || e.shiftKey || api.modalOpen ) return;
+		var tag = e.target && e.target.tagName;
+		if ( tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || ( e.target && e.target.isContentEditable ) ) return;
+		var grid = api.grid;
+		var f = grid ? grid.getAttribute( 'data-kb-focus' ) : null;
+		if ( f === null ) return;
+		var item = api.items()[ parseInt( f, 10 ) || 0 ];
+		if ( ! item || item.getAttribute( 'data-kind' ) !== 'image' ) return;
+		e.preventDefault();
+		setFeatured( item.getAttribute( 'attachmentId' ) );
 	} );
 
 	function oneSelectedImage( ctx ) {
