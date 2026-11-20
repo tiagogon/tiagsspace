@@ -308,10 +308,12 @@
                             $item_ratio = isset( $intrinsic_ratio ) && is_numeric( $intrinsic_ratio ) ? (float) $intrinsic_ratio : 0;
                             $item_orientation = 'audio' === $item_kind || ! $item_ratio ? '' : ( $item_ratio > 100 ? 'portrait' : ( $item_ratio < 100 ? 'landscape' : 'square' ) );
                             $item_edit_attrs = sprintf(
-                                ' data-kind="%s" data-orientation="%s" data-title="%s"',
+                                ' data-kind="%s" data-orientation="%s" data-title="%s"%s',
                                 esc_attr( $item_kind ),
                                 esc_attr( $item_orientation ),
-                                esc_attr( $attachmen->post_title )
+                                esc_attr( $attachmen->post_title ),
+                                // Saved in black and white (library/gallery-bw.php): View ▾ leaves it out.
+                                get_post_meta( $attachmen->ID, '_tiagsspace_bw', true ) ? ' data-bw="saved"' : ''
                             );
                         }
 

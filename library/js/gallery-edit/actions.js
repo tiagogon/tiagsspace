@@ -12,7 +12,9 @@
  *                                      gallery_reorder_attachments         (library/gallery-functions.php)
  *   View ▾    Black and white · Back to colour (the selected) · All black and
  *             white · All back to colour, and the B key: a preview on this
- *             screen only, nothing saved (class tge-bw, gallery-edit.css)
+ *             screen only, nothing saved (class tge-bw, gallery-edit.css);
+ *             then "Save N in black and white…": the previewed images, for
+ *             everyone, colour files deleted  tiagsspace_save_bw (library/gallery-bw.php)
  *   Move to ▾ A new duplicate of this post…  tiagsspace_duplicate_to_post (library/duplicate-post.php)
  *             Another post…            tiagsspace_media_attach_search / _attach (library/media-attach-to-post.php)
  *
@@ -215,6 +217,125 @@
 		count:   function ( ctx ) { return ctx.items.filter( isBw ).length; },
 		enabled: function ( ctx ) { return ctx.items.some( isBw ); },
 		run:     function ( ctx ) { setBw( ctx.items, false ); }
+	} );
+
+	// ── View ▾ → Save for everyone (library/gallery-bw.php) ──
+	// What is saved is what is previewed: the images on screen in black and
+	// white that are not saved yet. Destructive, so "…", a confirm panel with
+	// Cancel focused, no key; one image per request with a running count; the
+	// colour files are deleted on the server; the page swaps in the new URLs.
+
+	function saveableEls( ctx ) {
+		return ctx.items.filter( function ( el ) {
+			return isBw( el ) && el.getAttribute( 'data-kind' ) === 'image' && el.getAttribute( 'data-bw' ) !== 'saved';
+		} );
+	}
+
+	// Every attribute of the item that holds an image URL (picture sources,
+	// img src / srcset, the lightbox link) gets the new file's URL.
+	function swapUrls( item, pairs ) {
+		var attrs = [ 'src', 'srcset', 'href', 'data-image', 'data-src', 'data-srcset' ];
+		Array.prototype.forEach.call( item.querySelectorAll( 'img, source, a' ), function ( node ) {
+			attrs.forEach( function ( name ) {
+				var v = node.getAttribute( name );
+				if ( ! v ) return;
+				var next = v;
+				( pairs || [] ).forEach( function ( p ) { next = next.split( p[ 0 ] ).join( p[ 1 ] ); } );
+				if ( next !== v ) node.setAttribute( name, next );
+			} );
+		} );
+	}
+
+	function saveBw( els, ctx ) {
+		var total = els.length;
+		var i = 0;
+		var saved = 0;
+		var failed = [];
+		var leaveMsg = tr( 'edit', 'saveBwLeave', 'Images are still being saved in black and white.' );
+		function onLeave( e ) {
+			e.preventDefault();
+			e.returnValue = leaveMsg;
+			return leaveMsg;
+		}
+		window.addEventListener( 'beforeunload', onLeave );
+		ctx.busy( true );
+
+		function finish() {
+			window.removeEventListener( 'beforeunload', onLeave );
+			ctx.busy( false );
+			if ( saved && api.notice ) api.notice( format( tr( 'edit', 'saveBwDone', '%d saved in black and white' ), saved ) );
+			// A failure stays on screen until read: a dialog, not the fading notice.
+			if ( failed.length && api.dialog ) {
+				var list = document.createElement( 'ul' );
+				failed.forEach( function ( line ) {
+					var li = document.createElement( 'li' );
+					li.textContent = line;
+					list.appendChild( li );
+				} );
+				var p = document.createElement( 'p' );
+				p.textContent = tr( 'edit', 'saveBwFailedText', 'These images keep their colour files:' );
+				api.dialog( {
+					title:   format( tr( 'edit', 'saveBwFailedTitle', '%d not saved in black and white' ), failed.length ),
+					body:    [ p, list ],
+					buttons: [ { label: tr( 'toolbar', 'ok', 'OK' ), primary: true } ]
+				} );
+			}
+			if ( api.refreshToolbar ) api.refreshToolbar();
+			document.dispatchEvent( new CustomEvent( 'tiagsspace:gallery-view' ) );
+		}
+
+		function next() {
+			if ( i >= total ) {
+				finish();
+				return;
+			}
+			var el = els[ i++ ];
+			if ( api.notice ) api.notice( format( tr( 'edit', 'saveBwProgress', 'Saving %d of %d in black and white…' ), i, total ) );
+			api.post( 'tiagsspace_save_bw', {
+				_nonce:        cfg.nonces.saveBw,
+				post_id:       cfg.postId,
+				attachment_id: el.getAttribute( 'attachmentId' )
+			} ).then( function ( res ) {
+				swapUrls( el, res.data && res.data.replace );
+				el.setAttribute( 'data-bw', 'saved' );
+				el.classList.remove( BW ); // the file itself is black and white now
+				saved++;
+			}, function ( err ) {
+				var name = el.getAttribute( 'data-title' ) || el.getAttribute( 'attachmentId' );
+				failed.push( name + ( err && err.message ? ' (' + err.message + ')' : '' ) );
+			} ).then( next );
+		}
+
+		next();
+	}
+
+	api.register( {
+		id:            'view-save-bw',
+		group:         'view',
+		order:         50,
+		danger:        true,
+		sectionHeader: function () { return tr( 'edit', 'saveBwHeader', 'Save for everyone · cannot be undone' ); },
+		label:         function ( ctx ) { return format( tr( 'edit', 'saveBwN', 'Save %d in black and white…' ), saveableEls( ctx ).length ); },
+		enabled:       function ( ctx ) { return !! ( cfg.nonces && cfg.nonces.saveBw ) && saveableEls( ctx ).length > 0; },
+		run: function ( ctx ) {
+			var els = saveableEls( ctx );
+			var n = els.length;
+			if ( ! n ) return;
+			ctx.confirm( {
+				title: n === 1
+					? tr( 'edit', 'saveBwTitleOne', 'Save 1 image in black and white?' )
+					: format( tr( 'edit', 'saveBwTitleN', 'Save %d images in black and white?' ), n ),
+				text: [
+					tr( 'edit', 'saveBwText1', 'New black and white files replace the colour ones everywhere: the gallery, the lightbox, share previews and downloads. Their names end in -bw.' ),
+					tr( 'edit', 'saveBwText2', 'The colour files are deleted. This cannot be undone.' ),
+					tr( 'edit', 'saveBwText3', 'The images are indexed again for the visual search.' )
+				],
+				confirmLabel: tr( 'edit', 'saveBwConfirm', 'Save in black and white' ),
+				danger:       true
+			} ).then( function ( ok ) {
+				if ( ok ) saveBw( els, ctx );
+			} );
+		}
 	} );
 
 	// B: toggle the selected images, or the focused one when nothing is

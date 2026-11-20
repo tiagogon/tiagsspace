@@ -161,6 +161,20 @@ function tiagsspace_gallery_edit_i18n() {
 		'colourSelected' => __( 'Back to colour', 'tiagsspace' ),
 		'bwAll'          => __( 'All black and white', 'tiagsspace' ),
 		'colourAll'      => __( 'All back to colour', 'tiagsspace' ),
+		// View ▾ → save for everyone (library/gallery-bw.php).
+		'saveBwHeader'   => __( 'Save for everyone · cannot be undone', 'tiagsspace' ),
+		'saveBwN'        => __( 'Save %d in black and white…', 'tiagsspace' ),
+		'saveBwTitleOne' => __( 'Save 1 image in black and white?', 'tiagsspace' ),
+		'saveBwTitleN'   => __( 'Save %d images in black and white?', 'tiagsspace' ),
+		'saveBwText1'    => __( 'New black and white files replace the colour ones everywhere: the gallery, the lightbox, share previews and downloads. Their names end in -bw.', 'tiagsspace' ),
+		'saveBwText2'    => __( 'The colour files are deleted. This cannot be undone.', 'tiagsspace' ),
+		'saveBwText3'    => __( 'The images are indexed again for the visual search.', 'tiagsspace' ),
+		'saveBwConfirm'  => __( 'Save in black and white', 'tiagsspace' ),
+		'saveBwProgress' => __( 'Saving %d of %d in black and white…', 'tiagsspace' ),
+		'saveBwDone'     => __( '%d saved in black and white', 'tiagsspace' ),
+		'saveBwFailedTitle' => __( '%d not saved in black and white', 'tiagsspace' ),
+		'saveBwFailedText'  => __( 'These images keep their colour files:', 'tiagsspace' ),
+		'saveBwLeave'    => __( 'Images are still being saved in black and white.', 'tiagsspace' ),
 		// The shortcut list after the counter on the bar: [ keys, word ] in
 		// order; %s is ⌘A or Ctrl+A, chosen in the browser. A new key is one row.
 		'keys'           => array(
@@ -200,6 +214,7 @@ function tiagsspace_gallery_edit_config( $post_id, $loop_id ) {
 			'attachSearch'   => wp_create_nonce( 'tiagsspace_media_attach_search' ),
 			'attach'         => wp_create_nonce( 'tiagsspace_media_attach_attach' ),
 			'featured'       => wp_create_nonce( 'tiagsspace_set_featured_image' ),
+			'saveBw'         => wp_create_nonce( 'tiagsspace_save_bw' ),
 		),
 		'i18n' => array(
 			'toolbar'   => tiagsspace_media_toolbar_i18n(),

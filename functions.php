@@ -30,6 +30,7 @@ require_once('library/template-functions.php'); // Template helpers (taxonomy li
 require_once('library/seo-and-feed.php');       // Share image, OG image, %%label%%, language, TDM reservation, RSS feed
 require_once('library/seo-schema.php');         // Yoast schema pieces: Person alternateName, films VideoObject
 require_once('library/gallery-functions.php');  // Gallery admin UI, AJAX handlers
+require_once('library/gallery-bw.php');         // Gallery editor: save images in black and white (-bw files, colour deleted)
 require_once('library/query-filters.php');      // Hide posts from archives, cache purge
 require_once('library/acf-fields.php');         // ACF field groups (registered via PHP)
 require_once('library/duplicate-post.php');     // Duplicate any post to a new draft (row/bulk/editor)

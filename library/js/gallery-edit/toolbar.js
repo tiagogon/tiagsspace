@@ -16,6 +16,9 @@
  *                        'hide' | 'feature' | 'restore' (plain buttons),
  *       order:           10,
  *       separatorBefore: false,
+ *       sectionHeader: function ( ctx ) {},  // optional: a header (after a
+ *                                         // separator) drawn before this item
+ *       danger:  false,                   // optional: said as danger, like Delete ▾
  *       label:   function ( ctx ) {},  // item text ("…" when it confirms)
  *       count:   function ( ctx ) {},  // optional number at the right
  *       enabled: function ( ctx ) {},  // optional, default true
@@ -393,13 +396,15 @@
 		// Only what can be used right now: an item that would do nothing is left out.
 		groupActions( group ).forEach( function ( a ) {
 			if ( a.enabled && ! a.enabled( ctx ) ) return;
-			if ( a.separatorBefore && shown > 0 ) list.push( { separator: true } );
+			var head = a.sectionHeader ? a.sectionHeader( ctx ) : '';
+			if ( ( a.separatorBefore || head ) && shown > 0 ) list.push( { separator: true } );
+			if ( head ) list.push( { header: head, danger: !! a.danger } );
 			shown++;
 			list.push( {
 				title:    a.label( ctx ),
 				count:    a.count ? a.count( ctx ) : null,
 				disabled: false,
-				danger:   group === 'delete',
+				danger:   group === 'delete' || !! a.danger,
 				onClick:  function ( e ) { return a.run( buildCtx(), e ); }
 			} );
 		} );
