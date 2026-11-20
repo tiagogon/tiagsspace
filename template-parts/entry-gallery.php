@@ -312,6 +312,50 @@ if($attachmens){
             max( 1, (int) $number_of_columns_lg )
         );
     }
+    // Hidden images (edit mode only): rendered into the pool below, and they
+    // count for the Masonry sizer, because N / U / Restore put them back into
+    // the grid without a reload.
+    $hidden_pool_items = array();
+    if ( tiagsspace_gallery_edit_mode( $gallery_post_id ) ) {
+        $hidden_pool_items = get_posts( array(
+            'numberposts' => -1,
+            'orderby'     => 'menu_order',
+            'order'       => 'ASC',
+            'post_parent' => $gallery_post_id,
+            'exclude'     => $self_host_film_id ? array( $self_host_film_id ) : array(),
+            'post_status' => null,
+            'post_type'   => 'attachment',
+            'meta_query'  => array(
+                array(
+                    'key'   => 'remove_from_default_gallery',
+                    'value' => '1',
+                ),
+            ),
+        ) );
+    }
+
+    // Masonry column: on each breakpoint the GCD of every item's span, so no
+    // item is rounded up to a wider slot (see tiagsspace_gallery_sizer_spans()).
+    $masonry_sizer_class = '';
+    if ( $masonry_active ) {
+        $sizer_spans = tiagsspace_gallery_sizer_spans(
+            array_merge( $attachmens, $hidden_pool_items ),
+            array( $number_of_columns_xs, $number_of_columns_sm, $number_of_columns_md, $number_of_columns_lg )
+        );
+        $masonry_sizer_class = vsprintf( 'col-%d col-sm-%d col-md-%d col-lg-%d', $sizer_spans );
+    }
+
+    // Image loading, one decision per request: only the first gallery on the
+    // page (not on Infinite Scroll pages) loads its first row at once, and its
+    // first image gets fetchpriority="high" unless a film player sits above it.
+    // Everything else is lazy: later rows, the galleries after the first (one
+    // per entry on the Log listing), the hidden pool. Animation galleries show
+    // their images on a timer, so they load them all at once.
+    $gallery_is_animated   = ( get_field( 'animation' ) == 'swap-randomly-positions-constant-frequency' );
+    $gallery_is_lead       = tiagsspace_once( 'lead-gallery' ) && ! is_paged();
+    $gallery_eager_items   = $gallery_is_animated ? PHP_INT_MAX : ( $gallery_is_lead ? max( 1, (int) $number_of_columns_lg ) : 0 );
+    $gallery_high_priority = $gallery_is_lead && ! $self_host_film_id;
+
     if ( 0 === $gallery_gap ) {
         $no_space = 'no-pad';
     } else {
@@ -328,17 +372,21 @@ if($attachmens){
     // Intense Images
     $intense = '';
     if ($light_box == 'intense-images') {
-        $intense = 'intense';?>
+        $intense = 'intense';
+        if ( tiagsspace_once( 'intense-js' ) ) { ?>
         <script src='<?php bloginfo('template_url'); ?>/library/js/intense-images/intense.min.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/intense-images/intense.min.js' ) ); ?>'></script><?php
+        }
     }
 
     // Magnific Pop Up gallery
     $magnific_popup = "";
     if ($light_box == 'magnific_popup') {
         $magnific_popup = "magnific_popup-gallery-".$post->ID;
-        // Magnific Popup core JS file
+        // Magnific Popup core JS file, once per page
+        if ( tiagsspace_once( 'magnific-js' ) ) {
         ?><script src="<?php bloginfo('template_url'); ?>/library/js/Magnific-Popup/jquery.magnific-popup.min.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/Magnific-Popup/jquery.magnific-popup.min.js' ) ); ?>"></script>
-    <?php } ?>
+    <?php }
+    } ?>
 
     <div class="<?php echo trim( $class_container . ' container-gallery ' . $gapped_class ); ?>"<?php echo $gap_style_attr; ?>>
 
@@ -373,22 +421,7 @@ if($attachmens){
     // in any past session are recoverable, unlike the in-memory Undo (U) stack.
     if ( tiagsspace_gallery_edit_mode( $gallery_post_id ) ) {
 
-        $hidden_pool_items = get_posts( array(
-            'numberposts' => -1,
-            'orderby'     => 'menu_order',
-            'order'       => 'ASC',
-            'post_parent' => $gallery_post_id,
-            'exclude'     => $self_host_film_id ? array( $self_host_film_id ) : array(),
-            'post_status' => null,
-            'post_type'   => 'attachment',
-            'meta_query'  => array(
-                array(
-                    'key'   => 'remove_from_default_gallery',
-                    'value' => '1',
-                ),
-            ),
-        ) );
-
+        // $hidden_pool_items was fetched with the Masonry sizer, above.
         // The pool is always present in preview mode, even when empty: H parks
         // hidden nodes here and orderAttachmentesOnWpDb() reads it to keep
         // hidden items at their spot in menu_order.
@@ -420,18 +453,14 @@ if($attachmens){
     // --- Masonry ----
         if ($number_of_columns_lg > 1 && $deactivat_masonry == false) { ?>
                 <script type="text/javascript">
-                        (function($){
-                            var $grid = $('#gallery-<?php the_ID(); ?>');
-                            $grid.imagesLoaded(function(){
-                                $grid.masonry({
-                                    itemSelector: '.item',
-                                    columnWidth: '.masonry-item-sizer',
-                                    percentPosition: true,
-                                    transitionDuration: <?php echo tiagsspace_gallery_edit_mode( $gallery_post_id ) ? "'0'" : "'0.6s'"; ?>,
-                                    gutter: 0
-                                });
-                            });
-                        })(jQuery);
+                        // Lays out at once: the items reserve their height (library/js/masonry-grid.js)
+                        tiagsspaceMasonry(document.getElementById('gallery-<?php the_ID(); ?>'), {
+                            itemSelector: '.item',
+                            columnWidth: '.masonry-item-sizer',
+                            percentPosition: true,
+                            transitionDuration: <?php echo tiagsspace_gallery_edit_mode( $gallery_post_id ) ? "'0'" : "'0.6s'"; ?>,
+                            gutter: 0
+                        });
                 </script>
         <?php }
 
@@ -492,7 +521,7 @@ if($attachmens){
     }
 
     // VIDEO - Intersection Observer for smart autoplay
-    if ($there_is_video == true) { ?>
+    if ($there_is_video == true && tiagsspace_once( 'gallery-video-observer' )) { ?>
         <script type="text/javascript">
             (function() {
                 // Intersection Observer for viewport-based autoplay
@@ -501,7 +530,9 @@ if($attachmens){
                     return; // Graceful degradation for old browsers
                 }
 
-                const videoObserver = new IntersectionObserver(function(entries) {
+                // One observer per page: this script is printed with every gallery
+                // that has a video (Log listings, Infinite Scroll pages).
+                const videoObserver = window.tiagsspaceGalleryVideoObserver = window.tiagsspaceGalleryVideoObserver || new IntersectionObserver(function(entries) {
                     entries.forEach(function(entry) {
                         const container = entry.target;
                         const shouldAutoplay = container.getAttribute('data-should-autoplay') === 'true';
@@ -542,8 +573,9 @@ if($attachmens){
 
                 // Wait for Video.js to initialize, then observe all video containers
                 setTimeout(function() {
-                    const videoContainers = document.querySelectorAll('.media-video[data-should-autoplay="true"]');
+                    const videoContainers = document.querySelectorAll('.media-video[data-should-autoplay="true"]:not([data-video-observed])');
                     videoContainers.forEach(function(container) {
+                        container.setAttribute('data-video-observed', '');
                         videoObserver.observe(container);
                     });
                 }, 1000); // Give Video.js time to initialize
@@ -551,7 +583,7 @@ if($attachmens){
         </script><?php
     }
     // 3d
-    if ($there_is_3d == true) { ?>
+    if ($there_is_3d == true && tiagsspace_once( 'model-viewer-js' )) { ?>
         <script type="module" src="<?php bloginfo('template_url'); ?>/library/js/model-viewer/model-viewer.min.js"></script>
         <?php
     }

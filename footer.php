@@ -42,6 +42,32 @@
         }
     }
 
+    // Play / pause: ONE observer for every teaser on the page (it was one per
+    // video, which added up over many Infinite Scroll pages).
+    let thumbPlayObserver;
+    function observeThumbPlayback(media) {
+        if (!('IntersectionObserver' in window)) {
+            media.dataset.inView = '1';
+            return;
+        }
+        if (!thumbPlayObserver) {
+            thumbPlayObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    video.dataset.inView = entry.isIntersecting ? '1' : '';
+                    if (entry.isIntersecting) {
+                        if (video.paused) {
+                            video.play().catch(() => {});
+                        }
+                    } else if (!video.paused) {
+                        video.pause();
+                    }
+                });
+            }, { threshold: 0.15 });
+        }
+        thumbPlayObserver.observe(media);
+    }
+
     function initializePlyrElementsThumnails(scope = document) {
         scope.querySelectorAll('.plyr-thumbnail-front').forEach(media => {
             if (media.dataset.plyrInitialized === 'true') return;
@@ -54,15 +80,18 @@
             media.setAttribute('muted', '');
             media.muted = true;
             media.defaultMuted = true;
-            media.autoplay = true;
+            // No `autoplay`: it would start a teaser wherever it is once loaded
+            // (600px ahead of the viewport). observeThumbPlayback() plays it in view.
             media.loop = true;
 
             new Plyr(media, {
                 controls: [],
             });
 
+            // Only while on screen: a teaser that finishes loading off screen
+            // (canplay) must not start decoding there.
             const tryPlay = () => {
-                if (media.paused) {
+                if (media.paused && media.dataset.inView === '1') {
                     media.play().catch(err => {
                         if (window.console && console.debug) {
                             console.debug('Thumb video autoplay blocked', err);
@@ -90,18 +119,7 @@
                 tryPlay();
             });
 
-            if ('IntersectionObserver' in window) {
-                const observer = new IntersectionObserver(entries => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            tryPlay();
-                        } else {
-                            media.pause();
-                        }
-                    });
-                }, { threshold: 0.15 });
-                observer.observe(media);
-            }
+            observeThumbPlayback(media);
 
             media.dataset.plyrInitialized = 'true';
         });
@@ -112,22 +130,7 @@
         queueInitializePlyrOnIntersect();
     });
 
-    // Infinite scroll integration
-    if (typeof $container !== 'undefined') {
-        $container.on('append.infiniteScroll', function(event, response, path, items) {
-            const work = () => {
-                items.forEach(item => {
-                    // Lazily initialize Plyr only when elements approach viewport
-                    queueInitializePlyrOnIntersect(item);
-                });
-            };
-            if (window.requestAnimationFrame) {
-                requestAnimationFrame(work);
-            } else {
-                setTimeout(work, 0);
-            }
-        });
-    }
+    // Infinite Scroll pages: archive-grid.php calls queueInitializePlyrOnIntersect() on append.
 </script>
 
 </html>

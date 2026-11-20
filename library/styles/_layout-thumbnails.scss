@@ -38,7 +38,10 @@ figure[style*="position: fixed"] img {
 .thumbnail {
   display: block;
   margin-bottom: $grid-gutter-width;
-  @include transition(all .2s ease-in-out);
+  // Never `all`: width, padding and margin must change at once, because Masonry
+  // measures the items right after a breakpoint change (a 0.2s width animation
+  // gave it mid-animation sizes: wrong spans, overlaps or holes until the next resize).
+  @include transition(opacity .2s ease-in-out, box-shadow .2s ease-in-out);
 
   > img,
   a > img {

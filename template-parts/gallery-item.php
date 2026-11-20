@@ -17,89 +17,26 @@
  */
                     $count_item++;
 
-                    // Gallery item size factor
-                    $size_on_gallery_factor = 1;
+                    // Gallery item spans (48-column grid), from the gallery's
+                    // column counts and the attachment's size factor; the
+                    // Masonry sizer in entry-gallery.php uses the same maths.
+                    $size_on_gallery_factor = tiagsspace_gallery_item_factor( $attachmen->ID );
+                    list( $grid_number_xs, $grid_number_sm, $grid_number_md, $grid_number_lg ) = tiagsspace_gallery_item_spans(
+                        $size_on_gallery_factor,
+                        array( $number_of_columns_xs, $number_of_columns_sm, $number_of_columns_md, $number_of_columns_lg )
+                    );
 
-                    // Diferent image size factor
-                    if (get_field('diferent_size_on_gallery',$attachmen->ID)) {
-                        $size_on_gallery_factor = get_field('diferent_size_on_gallery',$attachmen->ID);
+                    // Bootstrap classes: a breakpoint is written only when it changes
+                    $class_thumbnail = "col-".$grid_number_xs." ";
+                    if ($grid_number_sm != $grid_number_xs) {
+                        $class_thumbnail .= "col-sm-".$grid_number_sm." ";
                     }
-
-                    // If Gallery item size factor is making item smaller, deactivate it on mobile
-                    if ($size_on_gallery_factor > 1) {
-                        $number_of_columns_item_xs   = $number_of_columns_xs; // deactiave on mobile //* $size_on_gallery_factor;
-                    } else {
-                        $number_of_columns_item_xs   = $number_of_columns_xs * $size_on_gallery_factor;
+                    if ($grid_number_md != $grid_number_sm) {
+                        $class_thumbnail .= "col-md-".$grid_number_md." ";
                     }
-
-
-                    if ($number_of_columns_item_xs < 1) {
-                        $number_of_columns_item_xs = 1;
-                    } elseif(
-                        $number_of_columns_item_xs > 12) { $number_of_columns_item_xs = 12;
+                    if ($grid_number_lg != $grid_number_md) {
+                        $class_thumbnail .= "col-lg-".$grid_number_lg." ";
                     }
-
-                    $number_of_columns_item_sm   = $number_of_columns_sm * $size_on_gallery_factor;
-                    if ($number_of_columns_item_sm < 1) {
-                        $number_of_columns_item_sm = 1;
-                    } elseif(
-                        $number_of_columns_item_sm > 12) { $number_of_columns_item_sm = 12;
-                    }
-
-                    $number_of_columns_item_md   = $number_of_columns_md * $size_on_gallery_factor;
-                    if ($number_of_columns_item_md < 1) {
-                        $number_of_columns_item_md = 1;
-                    } elseif(
-                        $number_of_columns_item_md > 12) { $number_of_columns_item_md = 12;
-                    }
-
-                    $number_of_columns_item_lg   = $number_of_columns_lg * $size_on_gallery_factor;
-                    if ($number_of_columns_item_lg < 1) {
-                        $number_of_columns_item_lg = 1;
-                    } elseif(
-                        $number_of_columns_item_lg > 12) { $number_of_columns_item_lg = 12;
-                    }
-
-
-                    // calculate bootstrap responsive classes from the number of columns WITH FACTOR
-                    $class_thumbnail_xs = "";
-                    $class_thumbnail_sm = "";
-                    $class_thumbnail_md = "";
-                    $class_thumbnail_lg = "";
-
-
-                    if ($number_of_columns_item_xs) {
-                        $grid_number_xs        = (int) (48 / $number_of_columns_item_xs);
-                        // If its 48, so its just one colum and thats not necessary
-                            $class_thumbnail_xs    = "col-".$grid_number_xs." ";
-                    }
-
-                    if ($number_of_columns_item_sm) {
-                        $grid_number_sm        = (int) (48 / $number_of_columns_item_sm);
-                        // If is not the same columns for the smaller size before
-                        if ($grid_number_sm != $grid_number_xs) {
-                            $class_thumbnail_sm    = "col-sm-".$grid_number_sm." ";
-                        }
-                    }
-
-                    if ($number_of_columns_item_md) {
-                        $grid_number_md        = (int) (48 / $number_of_columns_item_md);
-                        // If is not the same columns for the smaller size before
-                        if ($grid_number_md != $grid_number_sm) {
-                            $class_thumbnail_md    = "col-md-".$grid_number_md." ";
-                        }
-                    }
-
-                    if ($number_of_columns_item_lg) {
-                        $grid_number_lg        = (int) (48 / $number_of_columns_item_lg);
-                        // If is not the same columns for the smaller size before
-                        if ($grid_number_lg != $grid_number_md) {
-                            $class_thumbnail_lg    = "col-lg-".$grid_number_lg." ";
-                        }
-                    }
-
-                    $class_thumbnail = "";
-                    $class_thumbnail = $class_thumbnail_xs.$class_thumbnail_sm.$class_thumbnail_md.$class_thumbnail_lg;
 
 
 
@@ -360,7 +297,7 @@
                     // add masonry-item-sizer for Masonry responsive calculations
                     if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false AND empty($rendering_hidden_pool)) { ?>
 
-                        <div class="masonry-item-sizer <?php //echo $class_thumbnail_without_factor;?> col-4"></div>
+                        <div class="masonry-item-sizer <?php echo esc_attr( $masonry_sizer_class ); ?>"></div>
 
                     <?php }?>
 
@@ -571,7 +508,17 @@
 
                                         // Compose class list for <img> fallback
                                         $img_class = trim($intense . ' ' . $item_max_heigh);
-                                        $picture_html = tiagsspace_render_picture_from_attachment($attachmen->ID, $sizes_map, $fallback_sizes_attr, $img_class, $attachmen_alt);
+                                        // Loading: see $gallery_eager_items in entry-gallery.php
+                                        $img_attrs = array();
+                                        if ( empty( $rendering_hidden_pool ) && isset( $gallery_eager_items ) && $count_item <= $gallery_eager_items ) {
+                                            if ( 1 === $count_item && ! empty( $gallery_high_priority ) ) {
+                                                $img_attrs['fetchpriority'] = 'high';
+                                            }
+                                        } else {
+                                            $img_attrs['loading']  = 'lazy';
+                                            $img_attrs['decoding'] = 'async';
+                                        }
+                                        $picture_html = tiagsspace_render_picture_from_attachment($attachmen->ID, $sizes_map, $fallback_sizes_attr, $img_class, $attachmen_alt, $img_attrs);
                                         // Ensure Intense Images uses the full-resolution image by setting data-image on the <img>
                                         if ($light_box == 'intense-images' && !empty($attachmen_thumb_attributes[0])) {
                                             $picture_html = str_replace('<img ', '<img data-image="'.$attachmen_thumb_attributes[0].'" ', $picture_html);

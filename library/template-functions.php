@@ -622,3 +622,85 @@ function tiagsspace_versioned_media_url($url) {
 
 	return add_query_arg('v', filemtime($path), $url);
 }
+
+
+/*
+ * Gallery grid spans.
+ *
+ * An item's width on each breakpoint, in columns of the theme's 48-column
+ * grid, from the gallery's column counts and the attachment's "Diferent size
+ * on Gallery" factor (0.25 = 4x … 1 = same … 5 = 1/5). A factor that makes
+ * the item smaller is ignored on phones (xs). Each column count is held
+ * between 1 and 12, as gallery-item.php always did.
+ *
+ * $cols = [ xs, sm, md, lg ] column counts. Returns [ xs, sm, md, lg ] spans.
+ */
+function tiagsspace_gallery_item_spans( $factor, $cols ) {
+	$factor = (float) $factor; // the '5: 1/5' choice reads as 5
+	if ( $factor <= 0 ) {
+		$factor = 1;
+	}
+	$spans = array();
+	foreach ( array_values( $cols ) as $i => $count ) {
+		$count = (float) $count;
+		$n     = ( 0 === $i && $factor > 1 ) ? $count : $count * $factor;
+		$n     = min( 12, max( 1, $n ) );
+		$spans[] = (int) ( 48 / $n );
+	}
+	return $spans;
+}
+
+/*
+ * The attachment's size factor, as stored ('' or null = same size).
+ */
+function tiagsspace_gallery_item_factor( $attachment_id ) {
+	$factor = get_field( 'diferent_size_on_gallery', $attachment_id );
+	return $factor ? $factor : 1;
+}
+
+/*
+ * Masonry column for a gallery: on each breakpoint, the greatest common
+ * divisor of every item's span. Masonry rounds an item's span UP to whole
+ * sizer columns, so an item that is not a multiple of the sizer leaves a hole
+ * beside it (a 1.5x image, 21/48, on a 4/48 sizer took 24/48). A sizer of 1/48
+ * everywhere would fix that, but Masonry measures the sizer to 1/64 px and the
+ * error grows with every column (up to ~0.25px at the right edge), which shows
+ * as hairlines in edge-to-edge galleries. The GCD keeps uniform galleries on
+ * their own columns (16/48 for three) and goes finer only when sizes mix.
+ *
+ * Returns [ xs, sm, md, lg ] spans.
+ */
+function tiagsspace_gallery_sizer_spans( $attachments, $cols ) {
+	$gcd = array( 0, 0, 0, 0 );
+	foreach ( $attachments as $attachment ) {
+		$spans = tiagsspace_gallery_item_spans( tiagsspace_gallery_item_factor( $attachment->ID ), $cols );
+		foreach ( $spans as $i => $span ) {
+			$a = $gcd[ $i ];
+			$b = $span;
+			while ( $b ) {
+				$t = $b;
+				$b = $a % $b;
+				$a = $t;
+			}
+			$gcd[ $i ] = $a;
+		}
+	}
+	foreach ( $gcd as $i => $value ) {
+		$gcd[ $i ] = $value ? $value : 48;
+	}
+	return $gcd;
+}
+
+/*
+ * True the first time a key is seen in this request. For assets a template part
+ * prints inline and that must appear once per page even when the part renders
+ * many times (one gallery per entry on the Log listing).
+ */
+function tiagsspace_once( $key ) {
+	static $seen = array();
+	if ( isset( $seen[ $key ] ) ) {
+		return false;
+	}
+	$seen[ $key ] = true;
+	return true;
+}

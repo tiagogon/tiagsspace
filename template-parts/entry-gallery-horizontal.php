@@ -6,6 +6,10 @@ Gallery template for single pages
 
 
 
+    // This gallery is the page's first one when it comes first: no later
+    // gallery may take the eager first row (see entry-gallery.php).
+    tiagsspace_once( 'lead-gallery' );
+
     // get images atached to the post
     $args = array(
         'numberposts'       => -1, // Using -1 loads all posts

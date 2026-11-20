@@ -66,56 +66,28 @@
 
 	<?php endif;  ?>
 
-	<script type="text/javascript"  src="<?php bloginfo('template_url'); ?>/library/js/infinite-scroll/infinite-scroll.pkgd.min.js"></script>
+	<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() . '/library/js/infinite-scroll/infinite-scroll.pkgd.min.js?v=' . tiagsspace_asset_ver( '/library/js/infinite-scroll/infinite-scroll.pkgd.min.js' ) ); ?>"></script>
 
 	<script type="text/javascript">
-
-			let $container = $('.archive-wrapper').infiniteScroll({
-			  // options...
+		(function ($) {
+			// Each appended entry carries its own gallery scripts, which Infinite Scroll
+			// runs: Masonry lays the gallery out at once (library/js/masonry-grid.js) and
+			// the gallery video observer picks up its autoplay videos (entry-gallery.php).
+			// No `outlayer`, so no imagesLoaded wait before a page is inserted.
+			var $container = $('.archive-wrapper').infiniteScroll({
 				path: 'page/{{#}}/',
 				append: '.type-log',
-				//outlayer: msnry,
 				history: false,
-			  button: '.view-more-button',
+				button: '.view-more-button'
 			});
 
-			let $viewMoreButton = $('.view-more-button');
-
-			// get Infinite Scroll instance
-			let infScroll = $container.data('infiniteScroll');
-
-			$container.on( 'load.infiniteScroll', onPageLoad );
-
-			// // Use More button agter X number of loads - 5
-			// function onPageLoad() {
-			//   if ( infScroll.loadCount == 5 ) {
-			//     // after 2nd page loaded
-			//     // disable loading on scroll
-			//     $container.infiniteScroll( 'option', {
-			//       loadOnScroll: false,
-			//     });
-			//     // show button
-			//     $viewMoreButton.show();
-			//     // remove event listener
-			//     $container.off( 'load.infiniteScroll', onPageLoad );
-			//   }
-			// }
-
-			// Safari not loading srset issue
-			// https://github.com/metafizzy/infinite-scroll/issues/770
-			$container.on( 'append.infiniteScroll', function( event, response, path, items ) {
-				$( items ).find('img[srcset]').each( function( i, img ) {
+			// Safari srcset (metafizzy/infinite-scroll#770): re-parse once
+			$container.on('append.infiniteScroll', function (event, body, path, items) {
+				$(items).find('img[srcset]').each(function (i, img) {
 					img.outerHTML = img.outerHTML;
 				});
 			});
-
-			// jQuery VIDEO fix
-			// https://github.com/metafizzy/infinite-scroll/issues/926
-			$container.on( 'append.infiniteScroll', function( event, response, path, items ) {
-				$(items).find('video').each((i, video) => video.play())
-			});
-
-
+		})(jQuery);
 	</script>
 
 <?php get_footer(); ?>

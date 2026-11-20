@@ -5520,7 +5520,7 @@ figure[style*="position: fixed"] img {
 .thumbnail {
   display: block;
   margin-bottom: 16px;
-  transition: all 0.2s ease-in-out; }
+  transition: opacity 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
   @media screen and (prefers-reduced-motion: reduce) {
     .thumbnail {
       transition: none; } }

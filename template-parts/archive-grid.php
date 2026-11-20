@@ -335,6 +335,16 @@ Index of posts for Home and Archives
                       }
                   } ?>
 
+                  <?php
+                  // Loading: the first thumbnails of an archive's first page load at once,
+                  // the rest lazily (also every related thumbnail under a set, and every
+                  // Infinite Scroll page). Infinite Scroll appends without imagesLoaded, so
+                  // lazy images are safe there.
+                  $thumb_img_attrs = ( ! $is_sugested_posts && ! is_paged() && $count <= 8 )
+                      ? array()
+                      : array( 'loading' => 'lazy', 'decoding' => 'async' );
+                  $thumb_img_attr_html = $thumb_img_attrs ? ' loading="lazy" decoding="async"' : '';
+                  ?>
                   <li id="post-<?php the_ID(); ?>" class="masonry-item <?php echo $grid; ?> <?php echo $post_type; ?>-item <?php if ($intrinsic_ratio >= 56.25) { /* 16:9 percentage ratio (9/16*100)*/ echo "wide-ratio"; }  ?> item-numb-<?php echo $count; ?> " <?php post_class('clearfix'); ?> role="article">
 
                       <?php
@@ -443,13 +453,13 @@ Index of posts for Home and Archives
                                     // Output the Plyr-compatible <video> tag
                                     if (!empty($sources)) {
                                     ?>
-                                    <video 
-                                         class="plyr-thumbnail-front"
-                                        autoplay
+                                    <?php // preload="none", no autoplay: footer.php loads and plays it near the viewport ?>
+                                    <video
+                                        class="plyr-thumbnail-front"
                                         muted
                                         playsinline
                                         webkit-playsinline
-                                        preload="auto"
+                                        preload="none"
                                         loop
                                         data-loop-mode="seamless"
                                         poster="<?php echo esc_url($poster_url); ?>">
@@ -458,7 +468,7 @@ Index of posts for Home and Archives
                                     </video>
                                     <?php
                                     } elseif ($poster_url) {
-                                        echo '<img src="' . esc_url($poster_url) . '" style="width:100%;" alt="' . esc_attr(get_the_title()) . '" />';
+                                        echo '<img src="' . esc_url($poster_url) . '" style="width:100%;" alt="' . esc_attr(get_the_title()) . '"' . $thumb_img_attr_html . ' />';
                                     }
 
                                         } else { ?>
@@ -466,12 +476,12 @@ Index of posts for Home and Archives
                                             <?php
                                             if (!empty($animated_thumbnail_array) && empty($video_thumbnail_id)) {
                                                     // animated thumbnail path handled above via $source, keep simple <img>
-                                                    echo '<img src="'.esc_url($animated_thumbnail_array['url']).'" style="width:100%;" alt="'.esc_attr(get_the_title()).'" />';
+                                                    echo '<img src="'.esc_url($animated_thumbnail_array['url']).'" style="width:100%;" alt="'.esc_attr(get_the_title()).'"'.$thumb_img_attr_html.' />';
                                             } else {
                                                     $thumb_id = get_post_thumbnail_id($post->ID);
                                                     $img_class = '';
                                                     $alt_text = esc_attr(get_the_title());
-                                                    echo tiagsspace_render_picture_from_attachment($thumb_id, $index_sizes_map, $fallback_sizes_attr, $img_class, $alt_text);
+                                                    echo tiagsspace_render_picture_from_attachment($thumb_id, $index_sizes_map, $fallback_sizes_attr, $img_class, $alt_text, $thumb_img_attrs);
                                             }
                                             ?>
 
@@ -534,126 +544,71 @@ Index of posts for Home and Archives
     <?php } ?>
 
 
-    <?php  // --- Masory  ?>
+    <?php // --- Masonry: lays out at once, the items reserve their height (library/js/masonry-grid.js) ?>
     <script>
-        // $('#masonry-container').masonry({
-        //   itemSelector: '.item',
-        //   columnWidth: '.masonry-item-sizer',
-        //   percentPosition: true,
-        //   transitionDuration: '0.6s'
-        // })
-
-
-        jQuery(document).ready(function($) {
-            var $grid = $('#masonry-container');
-            if ($grid.length && typeof $grid.masonry === 'function') {
-                $grid.imagesLoaded(function() {
-                    $grid.masonry({
-                        itemSelector: '.masonry-item',
-                        columnWidth: '.masonry-item-sizer',
-                        percentPosition: true,
-                        transitionDuration: '0.6s',
-                        stagger: 30
-                    });
-                    // Dispatch event so infinite scroll can initialize after Masonry is ready
-                    $(document).trigger('masonry:ready');
-                });
-            } else {
-                console.warn('Masonry not available');
-            }
+        tiagsspaceMasonry(document.getElementById('masonry-container'), {
+            itemSelector: '.masonry-item',
+            columnWidth: '.masonry-item-sizer',
+            percentPosition: true,
+            transitionDuration: '0.6s',
+            stagger: 30
         });
-        </script>
+    </script>
     <?php
 
-    // Thumbnail videos play in view / pause out of view via the IntersectionObserver in
-    // footer.php (initializePlyrElementsThumnails). No scroll handler here: the old jQuery
-    // one forced a layout per video per scroll event and fought the observer.
+    // Thumbnail videos load and play only near the viewport, through the observers in
+    // footer.php (queueInitializePlyrOnIntersect). The <video> markup above carries
+    // preload="none" and no autoplay, so the browser does not fetch them all at load.
     ?>
 
     <?php if (is_singular() == false ) { ?>
 
-        <script type="text/javascript"  src="<?php bloginfo('template_url'); ?>/library/js/infinite-scroll/infinite-scroll.pkgd.min.js"></script>
+        <script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() . '/library/js/infinite-scroll/infinite-scroll.pkgd.min.js?v=' . tiagsspace_asset_ver( '/library/js/infinite-scroll/infinite-scroll.pkgd.min.js' ) ); ?>"></script>
 
         <script type="text/javascript">
-             jQuery(document).ready(function($) {
-                // Wait for Masonry to be fully initialized (it's async inside imagesLoaded)
-                $(document).on('masonry:ready', function() {
-                    // get Masonry instance — now guaranteed to exist
-                    var msnry = $('#masonry-container').data('masonry');
+            (function ($) {
+                var msnry = $('#masonry-container').data('masonry');
+                if (!msnry || !$.fn.infiniteScroll) return;
 
-                    var $container = $('.loadcontainer').infiniteScroll({
-                        // options
-                        path: 'page/{{#}}/',
-                        append: '.masonry-item',
-                        outlayer: msnry,
-                        history: false,
-                        button: '.view-more-button',
-                        scrollThreshold: 800, // Load earlier (distance from bottom in px)
-                    });
+                // No `outlayer` option: with it Infinite Scroll runs its bundled imagesLoaded
+                // on each new page BEFORE inserting it, and lazy images in that detached page
+                // never load, so the page would never come. The items reserve their height,
+                // so they go to Masonry as soon as they are in the page.
+                var $container = $('.loadcontainer').infiniteScroll({
+                    path: 'page/{{#}}/',
+                    append: '.masonry-item',
+                    history: false,
+                    button: '.view-more-button',
+                    scrollThreshold: 800 // load earlier (distance from bottom in px)
+                });
+                var infScroll = $container.data('infiniteScroll');
+                var $viewMoreButton = $('.view-more-button');
 
-                    // -- Scroll 2 pages, then load with button -- https://infinite-scroll.com/extras.html#scroll-2-pages-then-load-with-button
-                    var $viewMoreButton = $('.view-more-button');
-
-                    // get Infinite Scroll instance
-                    var infScroll = $container.data('infiniteScroll');
-
-                    $container.on( 'load.infiniteScroll', onPageLoad );
-
-                    function onPageLoad() {
-                        if ( infScroll.loadCount == 15 ) {
-                        // after 2nd page loaded
-                        // disable loading on scroll
-                        $container.infiniteScroll( 'option', {
-                            loadOnScroll: false,
-                        });
-                        // show button
+                // Scroll 15 pages, then load with the button
+                // https://infinite-scroll.com/extras.html#scroll-2-pages-then-load-with-button
+                function onPageLoad() {
+                    if (infScroll.loadCount == 15) {
+                        $container.infiniteScroll('option', { loadOnScroll: false });
                         $viewMoreButton.show();
-                        // remove event listener
-                        $container.off( 'load.infiniteScroll', onPageLoad );
-                        }
+                        $container.off('load.infiniteScroll', onPageLoad);
                     }
+                }
+                $container.on('load.infiniteScroll', onPageLoad);
 
-                    // Safari not loading srset issue
-                    // https://github.com/metafizzy/infinite-scroll/issues/770
-                    $container.on( 'append.infiniteScroll', function( event, response, path, items ) {
-                        $( items ).find('img[srcset]').each( function( i, img ) {
-                        img.outerHTML = img.outerHTML;
-                        });
-                    });
-
-                    // jQuery VIDEO fix
-                    // https://github.com/metafizzy/infinite-scroll/issues/926
-                    $container.on( 'append.infiniteScroll', function( event, response, path, items ) {
-                        $(items).find('video').each((i, video) => video.play())
-                    });
-
-                    $container.on('append.infiniteScroll', function(event, response, path, items) {
-                        items.forEach(item => {
-                            // Fix for Safari bug (srcset)
-                            item.querySelectorAll('img[srcset]').forEach(img => {
+                $container.on('append.infiniteScroll', function (event, body, path, items) {
+                    items.forEach(function (item) {
+                        // Safari srcset (metafizzy/infinite-scroll#770): re-parse once
+                        item.querySelectorAll('img[srcset]').forEach(function (img) {
                             img.outerHTML = img.outerHTML;
-                            });
                         });
-                        
                     });
-
-                    // play videos on append infinite scroll
-                    if (typeof $container !== 'undefined') {
-                        $container.on('append.infiniteScroll', function(event, response, path, items) {
-                            items.forEach(item => {
-                                // Fix for Safari srcset bug
-                                item.querySelectorAll('img[srcset]').forEach(img => {
-                                    img.outerHTML = img.outerHTML;
-                                });
-
-                                // ✅ Pass actual DOM element
-                                initializePlyrElementsThumnails(item);
-                            });
-                        });
+                    msnry.appended(items);
+                    // Teaser videos: set up when they come near the viewport (footer.php)
+                    if (typeof window.queueInitializePlyrOnIntersect === 'function') {
+                        items.forEach(function (item) { window.queueInitializePlyrOnIntersect(item); });
                     }
                 });
-                
-            });
+            })(jQuery);
         </script>
-        
+
     <?php } ?>

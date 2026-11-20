@@ -111,10 +111,12 @@ function tiagsspace_enqueue_assets() {
     // Bootstrap
     wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], tiagsspace_asset_ver('/library/js/bootstrap.min.js'), true);
 
-    // ImagesLoaded (ensures Masonry runs after images are loaded)
-    wp_enqueue_script('imagesloaded');
-    // Theme's Masonry package (load in header so inline init in template works)
-    wp_enqueue_script('masonry-pkgd', $template_dir . '/library/js/masonry/masonry.pkgd.min.js', ['jquery', 'imagesloaded'], tiagsspace_asset_ver('/library/js/masonry/masonry.pkgd.min.js'), false);
+    // Theme's Masonry package + the theme's setup around it (tiagsspaceMasonry(): lays out at
+    // once, exact columns, relayout on height changes). In the header so the inline init right
+    // after each grid runs before the first paint. No imagesLoaded: every grid item reserves its
+    // height, so Masonry does not wait for images (Infinite Scroll bundles its own copy).
+    wp_enqueue_script('masonry-pkgd', $template_dir . '/library/js/masonry/masonry.pkgd.min.js', ['jquery'], tiagsspace_asset_ver('/library/js/masonry/masonry.pkgd.min.js'), false);
+    wp_enqueue_script('tiagsspace-masonry', $template_dir . '/library/js/masonry-grid.js', ['jquery', 'masonry-pkgd'], tiagsspace_asset_ver('/library/js/masonry-grid.js'), false);
 
 }
 
@@ -135,14 +137,22 @@ add_action('wp_head', function () {
 
 // Helper: render responsive image with full srcset so browser can pick optimal size
 // Uses <img> with srcset/sizes instead of <picture> for better resolution selection
-function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $fallback_sizes_attr, $img_class = '', $img_alt = '') {
+// $img_attrs: extra attributes for the <img>, e.g. loading / decoding / fetchpriority (escaped here).
+function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $fallback_sizes_attr, $img_class = '', $img_alt = '', $img_attrs = array()) {
     // Build a comprehensive srcset with all available image sizes
     $srcset_parts = array();
     $fallback_src = ''; // Will be set to smallest available size
     
-    // Add all registered sizes to srcset (thumbnail, small, medium, large)
-    $all_sizes = array('thumbnail', 'small', 'medium', 'large');
+    // Add the registered sizes to srcset (thumbnail, small, medium, large, xlarge), each only when
+    // its file exists: for a missing size WordPress returns the ORIGINAL under the size's width,
+    // which would let the browser fetch the full upload for a 1200-1920px slot. xlarge (1920w)
+    // stops retina screens from downloading originals for slots up to 1920 device px.
+    $meta = wp_get_attachment_metadata($attachment_id);
+    $all_sizes = array('thumbnail', 'small', 'medium', 'large', 'xlarge');
     foreach ($all_sizes as $size) {
+        if ('xlarge' === $size && empty($meta['sizes']['xlarge'])) {
+            continue;
+        }
         $attrs = wp_get_attachment_image_src($attachment_id, $size);
         if ($attrs && !empty($attrs[0]) && !empty($attrs[1])) {
             $srcset_parts[] = esc_url($attrs[0]) . ' ' . intval($attrs[1]) . 'w';
@@ -171,7 +181,12 @@ function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $
     $class_attr = $img_class ? ' class="' . esc_attr($img_class) . '"' : '';
     
     // Return <img> with smallest size as src (fallback) and full srcset - browser will choose optimal image
-    return '<img src="' . $fallback_src . '" srcset="' . $srcset_attr . '" sizes="' . esc_attr($fallback_sizes_attr) . '"' . $class_attr . ' alt="' . $alt . '">';
+    $extra_attr = '';
+    foreach ((array) $img_attrs as $name => $value) {
+        $extra_attr .= ' ' . preg_replace('/[^a-z-]/', '', strtolower($name)) . '="' . esc_attr($value) . '"';
+    }
+
+    return '<img src="' . $fallback_src . '" srcset="' . $srcset_attr . '" sizes="' . esc_attr($fallback_sizes_attr) . '"' . $class_attr . ' alt="' . $alt . '"' . $extra_attr . '>';
 }
 
 
