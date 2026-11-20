@@ -19,6 +19,7 @@
  * Sections: 1. tokens  2. chips (shared button)  3. per-image controls
  *           4. check box + ring  5. margins panel  6. bar  7. menus
  *           8. dialogs  9. tooltip  10. lightbox status line
+ *           11. black and white preview
  */
 
 /* 1. Tokens ------------------------------------------------------------- */
@@ -596,4 +597,13 @@ html.tge-has-bar #lower-header {
 }
 .tge-lb-status[hidden] {
 	display: none;
+}
+
+/* 11. Black and white preview (View ▾, the B key; actions.js) -------------
+   On this screen only, never saved. A filter does not change layout, so this
+   script-added class cannot upset Masonry's heights. */
+.tge-bw img,
+.tge-bw video,
+.tge-lb-bw .mfp-content img {
+	filter: grayscale(1);
 }

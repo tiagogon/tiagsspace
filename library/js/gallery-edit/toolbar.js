@@ -12,7 +12,7 @@
  *
  *   tiagsspaceGalleryEdit.register( {
  *       id:              'unique-id',
- *       group:           'delete' | 'select' | 'sort' | 'move' (menus),
+ *       group:           'delete' | 'select' | 'sort' | 'view' | 'move' (menus),
  *                        'hide' | 'feature' | 'restore' (plain buttons),
  *       order:           10,
  *       separatorBefore: false,
@@ -311,7 +311,7 @@
 
 	// ── Groups: button words and menu headers (as in media-toolbar.js) ──
 
-	var GROUPS = [ 'hide', 'feature', 'restore', 'delete', 'select', 'sort', 'move' ];
+	var GROUPS = [ 'hide', 'feature', 'restore', 'delete', 'select', 'sort', 'view', 'move' ];
 
 	var IS_MAC = /Mac|iPhone|iPad/.test( navigator.platform || navigator.userAgent || '' );
 
@@ -365,6 +365,11 @@
 				}
 				return [ { header: ctx.total ? format( t( 'sortAllN', 'Sort all %d attachments' ), ctx.total ) : t( 'sortAll', 'Sort all attachments' ) } ];
 			}
+		},
+		view: {
+			label:   function () { return t( 'view', 'View' ); },
+			headers: function () { return [ { header: t( 'viewHeader', 'Only on your screen · reload brings colour back' ) } ]; },
+			hint:    function () { return t( 'tipView', 'Preview in black and white  B' ); }
 		},
 		move: {
 			label: function ( ctx ) {

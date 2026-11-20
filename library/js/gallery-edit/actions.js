@@ -10,6 +10,9 @@
  *   Select ▾  All · None · Portrait · Landscape · Images · Videos · Audio
  *   Sort ▾    By capture time (EXIF) · By upload date · Shuffle
  *                                      gallery_reorder_attachments         (library/gallery-functions.php)
+ *   View ▾    Black and white · Back to colour (the selected) · All black and
+ *             white · All back to colour, and the B key: a preview on this
+ *             screen only, nothing saved (class tge-bw, gallery-edit.css)
  *   Move to ▾ A new duplicate of this post…  tiagsspace_duplicate_to_post (library/duplicate-post.php)
  *             Another post…            tiagsspace_media_attach_search / _attach (library/media-attach-to-post.php)
  *
@@ -152,6 +155,84 @@
 		label:   function ( ctx ) { return format( tr( 'edit', 'restoreN', 'Restore hidden (%d)' ), ctx.hiddenCount ); },
 		enabled: function ( ctx ) { return ctx.hiddenCount > 0 && typeof window.galleryKeyboardReorderRestoreAll === 'function'; },
 		run:     function () { window.galleryKeyboardReorderRestoreAll(); }
+	} );
+
+	// ── View ▾: black and white preview ─────────────────────
+	// Only on this screen: a class on the grid item (grayscale filter in
+	// gallery-edit.css), nothing saved; a reload brings colour back. A hidden
+	// image keeps the class in the pool, so U / N bring it back as it was.
+
+	var BW = 'tge-bw';
+
+	function isBw( el ) { return el.classList.contains( BW ); }
+	function setBw( els, on ) {
+		els.forEach( function ( el ) { el.classList.toggle( BW, on ); } );
+		if ( api.refreshToolbar ) api.refreshToolbar();
+		document.dispatchEvent( new CustomEvent( 'tiagsspace:gallery-view' ) );
+	}
+	function selectedEls( ctx ) {
+		var ids = {};
+		ctx.ids.forEach( function ( id ) { ids[ String( id ) ] = true; } );
+		return ctx.items.filter( function ( el ) { return ids[ String( el.getAttribute( 'attachmentId' ) ) ]; } );
+	}
+	function not( fn ) { return function ( el ) { return ! fn( el ); }; }
+
+	api.register( {
+		id:      'view-bw-selected',
+		group:   'view',
+		order:   10,
+		label:   function () { return tr( 'edit', 'bwSelected', 'Black and white' ); },
+		count:   function ( ctx ) { return selectedEls( ctx ).filter( not( isBw ) ).length; },
+		enabled: function ( ctx ) { return selectedEls( ctx ).some( not( isBw ) ); },
+		run:     function ( ctx ) { setBw( selectedEls( ctx ), true ); }
+	} );
+
+	api.register( {
+		id:      'view-colour-selected',
+		group:   'view',
+		order:   20,
+		label:   function () { return tr( 'edit', 'colourSelected', 'Back to colour' ); },
+		count:   function ( ctx ) { return selectedEls( ctx ).filter( isBw ).length; },
+		enabled: function ( ctx ) { return selectedEls( ctx ).some( isBw ); },
+		run:     function ( ctx ) { setBw( selectedEls( ctx ), false ); }
+	} );
+
+	api.register( {
+		id:              'view-bw-all',
+		group:           'view',
+		order:           30,
+		separatorBefore: true,
+		label:   function () { return tr( 'edit', 'bwAll', 'All black and white' ); },
+		enabled: function ( ctx ) { return ctx.items.some( not( isBw ) ); },
+		run:     function ( ctx ) { setBw( ctx.items, true ); }
+	} );
+
+	api.register( {
+		id:      'view-colour-all',
+		group:   'view',
+		order:   40,
+		label:   function () { return tr( 'edit', 'colourAll', 'All back to colour' ); },
+		count:   function ( ctx ) { return ctx.items.filter( isBw ).length; },
+		enabled: function ( ctx ) { return ctx.items.some( isBw ); },
+		run:     function ( ctx ) { setBw( ctx.items, false ); }
+	} );
+
+	// B: toggle the selected images, or the focused one when nothing is
+	// selected (the H rule). Mixed selection: all go black and white first.
+	document.addEventListener( 'keydown', function ( e ) {
+		if ( e.key !== 'b' && e.key !== 'B' ) return;
+		if ( e.metaKey || e.ctrlKey || e.altKey || e.shiftKey || api.modalOpen ) return;
+		var tag = e.target && e.target.tagName;
+		if ( tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || ( e.target && e.target.isContentEditable ) ) return;
+		var els = api.selection ? api.selection.items() : [];
+		if ( ! els.length ) {
+			var f = api.grid ? api.grid.getAttribute( 'data-kb-focus' ) : null;
+			var item = f === null ? null : api.items()[ parseInt( f, 10 ) || 0 ];
+			if ( item ) els = [ item ];
+		}
+		if ( ! els.length ) return;
+		e.preventDefault();
+		setBw( els, ! els.every( isBw ) );
 	} );
 
 	// ── Select ▾ ────────────────────────────────────────────

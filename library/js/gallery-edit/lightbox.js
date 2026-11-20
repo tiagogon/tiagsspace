@@ -39,6 +39,8 @@
  *
  * A status line in the lightbox says what the grid shows but the overlay
  * hides: Selected · Featured, and a short "Hidden · U to undo" after H.
+ * An image previewed in black and white (View ▾, B: class tge-bw) shows so in
+ * the lightbox too (class tge-lb-bw on the mount point).
  *
  * Exposes tiagsspaceGalleryEdit.lightbox: use( adapter ), isOpen().
  * Loaded only in gallery edit mode, and only with an adapter for the
@@ -94,6 +96,8 @@
 		if ( noteText ) parts.push( noteText );
 		status.textContent = parts.join( ' · ' );
 		status.hidden = ! parts.length;
+		// The black and white preview (View ▾, B) follows the image on screen.
+		if ( mount ) mount.classList.toggle( 'tge-lb-bw', !! ( item && item.classList.contains( 'tge-bw' ) ) );
 	}
 
 	function note( text ) {
@@ -198,7 +202,10 @@
 		shiftFrom = null;
 		noteText = '';
 		clearTimeout( noteTimer );
-		if ( status.parentNode ) status.parentNode.removeChild( status );
+		if ( status.parentNode ) {
+			status.parentNode.classList.remove( 'tge-lb-bw' );
+			status.parentNode.removeChild( status );
+		}
 	}
 
 	// A letter key (S, H, N, F…) acts on the focused item. After ↑ / ↓ the grid's
@@ -231,6 +238,7 @@
 	}, true );
 
 	if ( api.selection && api.selection.on ) api.selection.on( renderStatus );
+	document.addEventListener( 'tiagsspace:gallery-view', renderStatus );
 	if ( api.featured && api.featured.on ) api.featured.on( renderStatus );
 
 	api.lightbox = {

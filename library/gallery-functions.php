@@ -153,6 +153,14 @@ function tiagsspace_gallery_edit_i18n() {
 		// Inside the lightbox (gallery-edit/lightbox.js).
 		'lbSelected'     => __( 'Selected', 'tiagsspace' ),
 		'lbHidden'       => __( 'Hidden · U to undo', 'tiagsspace' ),
+		// View ▾: black and white preview, on this screen only.
+		'view'           => __( 'View', 'tiagsspace' ),
+		'viewHeader'     => __( 'Only on your screen · reload brings colour back', 'tiagsspace' ),
+		'tipView'        => __( 'Preview in black and white  B', 'tiagsspace' ),
+		'bwSelected'     => __( 'Black and white', 'tiagsspace' ),
+		'colourSelected' => __( 'Back to colour', 'tiagsspace' ),
+		'bwAll'          => __( 'All black and white', 'tiagsspace' ),
+		'colourAll'      => __( 'All back to colour', 'tiagsspace' ),
 		// The shortcut list after the counter on the bar: [ keys, word ] in
 		// order; %s is ⌘A or Ctrl+A, chosen in the browser. A new key is one row.
 		'keys'           => array(
@@ -163,6 +171,7 @@ function tiagsspace_gallery_edit_i18n() {
 			array( 'U', __( 'undo', 'tiagsspace' ) ),
 			array( 'N', __( 'next hidden', 'tiagsspace' ) ),
 			array( 'F', __( 'featured', 'tiagsspace' ) ),
+			array( 'B', __( 'b&w', 'tiagsspace' ) ),
 			array( '%s', __( 'all', 'tiagsspace' ) ),
 			array( 'Esc', __( 'clear', 'tiagsspace' ) ),
 		),
