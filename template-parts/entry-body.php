@@ -38,8 +38,8 @@ linked to the entry; no date line, no footer.
       }
       if ( $can_edit ) {
           $footer_items[] = '<a class="post-edit-link" href="' . esc_url( get_edit_post_link( $post->ID ) ) . '">Edit</a>';
-          // Appearance → Theme Settings: published posts open in gallery edit mode;
-          // this switches it off / on for this one post (library/gallery-functions.php).
+          // Switches the front-end gallery editor on / off for this one post; Theme
+          // Settings only sets the default (library/gallery-functions.php).
           if ( function_exists( 'tiagsspace_gallery_edit_available' ) && tiagsspace_gallery_edit_available( $post->ID ) ) {
               $gallery_edit_on = tiagsspace_gallery_edit_mode( $post->ID );
               $footer_items[]  = sprintf(
@@ -49,7 +49,9 @@ linked to the entry; no date line, no footer.
                   esc_html( $gallery_edit_on ? __( 'Gallery edit: on', 'tiagsspace' ) : __( 'Gallery edit: off', 'tiagsspace' ) )
               );
           }
-          $attachments = get_posts( array(
+          // In gallery edit mode the editor bar has the Download button (all, or
+          // the selected), so the footer link and its list are left out.
+          $attachments = ( function_exists( 'tiagsspace_gallery_edit_mode' ) && tiagsspace_gallery_edit_mode( $post->ID ) ) ? array() : get_posts( array(
               'post_type'   => 'attachment',
               'numberposts' => -1,
               'post_parent' => $post->ID,

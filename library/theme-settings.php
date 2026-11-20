@@ -34,7 +34,7 @@ function tiagsspace_settings_schema() {
 					'default'        => false,
 					'label'          => __( 'Edit galleries on published posts', 'tiagsspace' ),
 					'checkbox_label' => __( 'Open published posts in gallery edit mode', 'tiagsspace' ),
-					'description'    => __( 'When you are logged in, every published post you can edit opens with the gallery editor on, as a preview does. Changes (order, hide, size, margins, delete, move) are saved to the live page at once. A “Gallery edit” link next to “Edit” switches it off or on for a single post. Visitors never see the editor.', 'tiagsspace' ),
+					'description'    => __( 'Ticked: when you are logged in, every published post you can edit opens with the gallery editor on, as a preview does. Unticked: posts open as visitors see them. Either way, the “Gallery edit” link next to “Edit” switches the editor on or off for a single post. Changes (order, hide, size, margins, delete, move) are saved to the live page at once. Visitors never see the editor.', 'tiagsspace' ),
 				),
 			),
 		),

@@ -51,7 +51,7 @@
 		group:   'hide',
 		order:   10,
 		label:   function ( ctx ) {
-			return ctx.n ? format( tr( 'edit', 'hideN', 'Hide %d' ), ctx.n ) : tr( 'edit', 'hide', 'Hide' );
+			return ctx.n ? format( tr( 'edit', 'hideN', 'Hide %d (H)' ), ctx.n ) : tr( 'edit', 'hide', 'Hide (H)' );
 		},
 		enabled: function ( ctx ) { return ctx.n > 0 && typeof window.galleryKeyboardReorderHideSelected === 'function'; },
 		run:     function () { window.galleryKeyboardReorderHideSelected(); }
@@ -69,7 +69,7 @@
 		Array.prototype.forEach.call( document.querySelectorAll( '.tge-feature' ), function ( chip ) {
 			var on = parseInt( chip.getAttribute( 'data-attachment' ), 10 ) === featuredId;
 			chip.setAttribute( 'aria-pressed', on ? 'true' : 'false' );
-			chip.textContent = on ? tr( 'edit', 'featured', 'Featured' ) : tr( 'edit', 'feature', 'Feature' );
+			chip.textContent = on ? tr( 'edit', 'featured', 'Featured' ) : tr( 'edit', 'feature', 'Feature (F)' );
 			chip.setAttribute( 'data-tip', on ? tr( 'edit', 'tipFeatured', 'The featured image of this post' ) : tr( 'edit', 'tipFeature', 'Set as the featured image of this post  F' ) );
 		} );
 	}
@@ -136,7 +136,7 @@
 		id:      'set-featured',
 		group:   'feature',
 		order:   10,
-		label:   function () { return tr( 'toolbar', 'setFeatured', 'Set as featured image' ); },
+		label:   function () { return tr( 'edit', 'setFeaturedKey', 'Set as featured image (F)' ); },
 		enabled: function ( ctx ) {
 			var id = oneSelectedImage( ctx );
 			return id > 0 && id !== featuredId;
@@ -217,6 +217,36 @@
 		count:   function ( ctx ) { return ctx.items.filter( isBw ).length; },
 		enabled: function ( ctx ) { return ctx.items.some( isBw ); },
 		run:     function ( ctx ) { setBw( ctx.items, false ); }
+	} );
+
+	// ── Download (a plain button) ───────────────────────────
+	// A zip of the original files from download_all_attachments(): the
+	// selected, or every attachment of the post (hidden ones too) when nothing
+	// is selected. The response is an attachment, so the page stays.
+
+	api.register( {
+		id:      'download',
+		group:   'download',
+		order:   10,
+		label:   function ( ctx ) {
+			return ctx.n ? format( tr( 'edit', 'downloadN', 'Download %d' ), ctx.n ) : tr( 'edit', 'downloadAll', 'Download all' );
+		},
+		enabled: function ( ctx ) { return !! ( cfg.nonces && cfg.nonces.download ) && ( ctx.n > 0 || ctx.total > 0 ); },
+		run:     function ( ctx ) {
+			var q = [
+				'action=download_all_attachments',
+				'post_id=' + encodeURIComponent( cfg.postId ),
+				'_nonce=' + encodeURIComponent( cfg.nonces.download )
+			];
+			if ( ctx.n ) q.push( 'ids=' + encodeURIComponent( ctx.ids.join( ',' ) ) );
+			ctx.notice( tr( 'edit', 'downloadBusy', 'Preparing the zip…' ) );
+			var link = document.createElement( 'a' );
+			link.href = cfg.ajaxUrl + '?' + q.join( '&' );
+			link.setAttribute( 'download', '' );
+			document.body.appendChild( link );
+			link.click();
+			link.remove();
+		}
 	} );
 
 	// ── View ▾ → Save for everyone (library/gallery-bw.php) ──

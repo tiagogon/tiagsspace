@@ -13,7 +13,7 @@
  *   tiagsspaceGalleryEdit.register( {
  *       id:              'unique-id',
  *       group:           'delete' | 'select' | 'sort' | 'view' | 'move' (menus),
- *                        'hide' | 'feature' | 'restore' (plain buttons),
+ *                        'hide' | 'feature' | 'restore' | 'download' (plain buttons),
  *       order:           10,
  *       separatorBefore: false,
  *       sectionHeader: function ( ctx ) {},  // optional: a header (after a
@@ -314,7 +314,7 @@
 
 	// ── Groups: button words and menu headers (as in media-toolbar.js) ──
 
-	var GROUPS = [ 'hide', 'feature', 'restore', 'delete', 'select', 'sort', 'view', 'move' ];
+	var GROUPS = [ 'hide', 'feature', 'restore', 'delete', 'select', 'sort', 'view', 'download', 'move' ];
 
 	var IS_MAC = /Mac|iPhone|iPad/.test( navigator.platform || navigator.userAgent || '' );
 
@@ -323,14 +323,14 @@
 		hide: {
 			direct:  true,
 			label:   function ( ctx ) {
-				return ctx.n ? format( t( 'hideN', 'Hide %d' ), ctx.n ) : t( 'hide', 'Hide' );
+				return ctx.n ? format( t( 'hideN', 'Hide %d (H)' ), ctx.n ) : t( 'hide', 'Hide (H)' );
 			},
 			headers: function () { return []; },
 			hint:    function () { return t( 'tipHideBar', 'Hide the selected from the gallery  H · undo  U' ); }
 		},
 		feature: {
 			direct:  true,
-			label:   function () { return t( 'setFeatured', 'Set as featured image' ); },
+			label:   function () { return t( 'setFeaturedKey', 'Set as featured image (F)' ); },
 			headers: function () { return []; },
 			hint:    function () { return t( 'tipFeature', 'Set as the featured image of this post' ); }
 		},
@@ -373,6 +373,14 @@
 			label:   function () { return t( 'view', 'View' ); },
 			headers: function () { return [ { header: t( 'viewHeader', 'Only on your screen · reload brings colour back' ) } ]; },
 			hint:    function () { return t( 'tipView', 'Preview in black and white  B' ); }
+		},
+		download: {
+			direct:  true,
+			label:   function ( ctx ) {
+				return ctx.n ? format( t( 'downloadN', 'Download %d' ), ctx.n ) : t( 'downloadAll', 'Download all' );
+			},
+			headers: function () { return []; },
+			hint:    function () { return t( 'tipDownload', 'A zip of the original files: the selected, or every attachment when nothing is selected' ); }
 		},
 		move: {
 			label: function ( ctx ) {

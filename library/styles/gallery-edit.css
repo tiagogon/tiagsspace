@@ -140,35 +140,51 @@
 }
 
 /* 3. Per-image controls: top-left actions, bottom-left layout ------------ */
+/* Each row is its own hover zone, reaching the image's corner: the chips show
+   only while the pointer is over that corner (not anywhere on the image), on
+   keyboard focus inside the row, while the margins panel is open, and always
+   on touch screens. While hidden the zone takes the hover but its chips take
+   no clicks, so an invisible chip can never be pressed. */
 .item .tge-item-actions,
 .item .tge-item-layout {
 	position: absolute;
-	left: 6px;
+	left: 0;
 	z-index: 1001; /* above the fixed page title (1000), which covers the first row */
+	box-sizing: border-box;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 4px;
-	max-width: calc(100% - 48px);
+	max-width: calc(100% - 42px);
+	padding: 6px;
 	opacity: 0;
-	pointer-events: none;
 }
 .item .tge-item-actions {
-	top: 6px;
+	top: 0;
 }
 .item .tge-item-layout {
-	bottom: 6px;
+	bottom: 0;
 }
-/* All controls of an image appear together on hover, on keyboard focus inside
-   the image, while its margins panel is open, and always on touch screens. */
-.item:hover > .tge-item-actions,
-.item:hover > .tge-item-layout,
-.item:focus-within > .tge-item-actions,
-.item:focus-within > .tge-item-layout,
+.item .tge-item-actions > *,
+.item .tge-item-layout > * {
+	pointer-events: none;
+}
+.item > .tge-item-actions:hover,
+.item > .tge-item-layout:hover,
+.item > .tge-item-actions:focus-within,
+.item > .tge-item-layout:focus-within,
 .item > .tge-item-layout.is-open,
 .tge-touch .item > .tge-item-actions,
 .tge-touch .item > .tge-item-layout {
 	opacity: 1;
+}
+.item > .tge-item-actions:hover > *,
+.item > .tge-item-layout:hover > *,
+.item > .tge-item-actions:focus-within > *,
+.item > .tge-item-layout:focus-within > *,
+.item > .tge-item-layout.is-open > *,
+.tge-touch .item > .tge-item-actions > *,
+.tge-touch .item > .tge-item-layout > * {
 	pointer-events: auto;
 }
 .item > .tge-item-layout.is-open {
@@ -176,13 +192,15 @@
 }
 
 /* 4. Check box + selection ring ----------------------------------------- */
+/* A 36px hit area in the corner around the 20px box, which keeps its place
+   (6px + 2px inset from the edges); shown only while the pointer is over it. */
 .item > .tge-check {
 	position: absolute;
-	top: 6px;
-	right: 6px;
+	top: 0;
+	right: 0;
 	z-index: 1001; /* above the fixed page title, like the chips */
-	width: 24px;
-	height: 24px;
+	width: 36px;
+	height: 36px;
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -192,13 +210,16 @@
 }
 .tge-check-box {
 	position: absolute;
-	inset: 2px;
+	top: 8px;
+	right: 8px;
+	width: 20px;
+	height: 20px;
 	box-sizing: border-box;
 	border: 1px solid var(--tge-fg);
 	border-radius: 3px;
 	background: var(--tge-bg);
 }
-.item:hover > .tge-check,
+.item > .tge-check:hover,
 .item > .tge-check:focus-visible,
 .item.tge-selected > .tge-check,
 .tge-touch .item > .tge-check {

@@ -10,20 +10,37 @@
 
 /************* Gallery edit mode: where the front-end editor runs *************/
 
-// Post meta that switches edit mode off for one published post (the "Gallery
-// edit: on/off" link in the entry footer). Absent = the site-wide default.
+// One published post's own choice, made with the "Gallery edit: on/off" link in
+// the entry footer: 'on' or 'off'. Absent = follow Appearance → Theme Settings.
+const TIAGSSPACE_GALLERY_EDIT_META = '_tiagsspace_gallery_edit';
+// Before Nov 2026 the link could only switch the editor off: 1 here = 'off'.
 const TIAGSSPACE_GALLERY_EDIT_OFF_META = '_tiagsspace_gallery_edit_off';
+
+/** Does Theme Settings open published posts in the editor by default? */
+function tiagsspace_gallery_edit_default_on() {
+	return function_exists( 'tiagsspace_setting' ) && (bool) tiagsspace_setting( 'gallery_edit_published' );
+}
+
+/**
+ * The post's own choice: 'on', 'off', or '' (follow the site default).
+ */
+function tiagsspace_gallery_edit_post_choice( $post_id ) {
+	$choice = get_post_meta( (int) $post_id, TIAGSSPACE_GALLERY_EDIT_META, true );
+	if ( 'on' === $choice || 'off' === $choice ) {
+		return $choice;
+	}
+	return get_post_meta( (int) $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META, true ) ? 'off' : '';
+}
 
 /**
  * May the published post's gallery be edited on the front end at all?
- * (Flag on, published, not an animation gallery, current user can edit it.)
- * Says nothing about the per-post off switch; see tiagsspace_gallery_edit_mode().
+ * (Published, not an animation gallery, current user can edit it.) The footer
+ * link shows whenever this is true, whatever Theme Settings says; whether the
+ * editor is on is tiagsspace_gallery_edit_mode().
  */
 function tiagsspace_gallery_edit_available( $post_id ) {
 	$post_id = (int) $post_id;
 	return $post_id
-		&& function_exists( 'tiagsspace_setting' )
-		&& tiagsspace_setting( 'gallery_edit_published' )
 		&& 'publish' === get_post_status( $post_id )
 		&& ! get_field( 'animation_number_of_attachment_shown', $post_id )
 		&& current_user_can( 'edit_post', $post_id );
@@ -33,8 +50,9 @@ function tiagsspace_gallery_edit_available( $post_id ) {
  * The one gate for the front-end gallery editor (per-item controls, Sortable,
  * keyboard keys, selection and toolbar). True on:
  *   - a preview, for a logged-in user (as it has always been), or
- *   - a single published post when Appearance → Theme Settings allows it, the
- *     user can edit it and it has not been switched off with the footer link.
+ *   - a single published post the user can edit, when the post was switched on
+ *     with the footer link, or Theme Settings opens posts in the editor and the
+ *     post was not switched off.
  * Never on listings, never for an animation gallery. On a published post it also
  * keeps W3TC from caching the page (it carries nonces and edit controls).
  *
@@ -56,10 +74,10 @@ function tiagsspace_gallery_edit_mode( $post_id = 0 ) {
 		if ( is_preview() && is_user_logged_in() ) {
 			$on = true;
 		} elseif ( is_singular() && (int) get_queried_object_id() === $post_id
-			&& tiagsspace_gallery_edit_available( $post_id )
-			&& ! get_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META, true ) ) {
-			$on = true;
-			if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+			&& tiagsspace_gallery_edit_available( $post_id ) ) {
+			$choice = tiagsspace_gallery_edit_post_choice( $post_id );
+			$on     = 'on' === $choice || ( 'off' !== $choice && tiagsspace_gallery_edit_default_on() );
+			if ( $on && ! defined( 'DONOTCACHEPAGE' ) ) {
 				define( 'DONOTCACHEPAGE', true );
 			}
 		}
@@ -90,10 +108,18 @@ function tiagsspace_handle_gallery_edit_toggle() {
 		wp_die( esc_html__( 'You cannot edit this post.', 'tiagsspace' ), 403 );
 	}
 
-	if ( get_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META, true ) ) {
-		delete_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META );
+	// Flip what the post shows now. Store the choice only when it differs from
+	// the site default; otherwise the post simply follows the default again.
+	$default = tiagsspace_gallery_edit_default_on();
+	$choice  = tiagsspace_gallery_edit_post_choice( $post_id );
+	$now_on  = 'on' === $choice || ( 'off' !== $choice && $default );
+	$want_on = ! $now_on;
+
+	delete_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META );
+	if ( $want_on === $default ) {
+		delete_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_META );
 	} else {
-		update_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_OFF_META, 1 );
+		update_post_meta( $post_id, TIAGSSPACE_GALLERY_EDIT_META, $want_on ? 'on' : 'off' );
 	}
 
 	wp_safe_redirect( get_permalink( $post_id ) );
@@ -102,6 +128,7 @@ function tiagsspace_handle_gallery_edit_toggle() {
 
 // A duplicate starts with the site default, not the source's switch.
 add_filter( 'tiagsspace_duplicate_meta_denylist', function ( $keys ) {
+	$keys[] = TIAGSSPACE_GALLERY_EDIT_META;
 	$keys[] = TIAGSSPACE_GALLERY_EDIT_OFF_META;
 	return $keys;
 } );
@@ -120,19 +147,25 @@ function tiagsspace_gallery_edit_i18n() {
 		'clear'          => __( 'Clear', 'tiagsspace' ),
 		'selectKeys'     => __( 'Select  S · Shift+arrows extend · %s all · Esc clears', 'tiagsspace' ),
 		'tipSelect'      => __( 'Select  S · Shift-click a range', 'tiagsspace' ),
-		'hide'           => __( 'Hide', 'tiagsspace' ),
-		'hideN'          => __( 'Hide %d', 'tiagsspace' ),
+		'hide'           => __( 'Hide (H)', 'tiagsspace' ),
+		'hideN'          => __( 'Hide %d (H)', 'tiagsspace' ),
 		'tipHide'        => __( 'Hide from gallery  H · undo  U', 'tiagsspace' ),
 		'tipHideBar'     => __( 'Hide the selected from the gallery  H · undo  U', 'tiagsspace' ),
 		'restoreN'       => __( 'Restore hidden (%d)', 'tiagsspace' ),
 		'tipRestore'     => __( 'Put every hidden image back in the gallery · one at a time  U', 'tiagsspace' ),
 		'delete'         => __( 'Delete', 'tiagsspace' ),
 		'tipDelete'      => __( 'Delete permanently…', 'tiagsspace' ),
-		'feature'        => __( 'Feature', 'tiagsspace' ),
+		'feature'        => __( 'Feature (F)', 'tiagsspace' ),
 		'featured'       => __( 'Featured', 'tiagsspace' ),
 		'tipFeature'     => __( 'Set as the featured image of this post  F', 'tiagsspace' ),
 		'tipFeatured'    => __( 'The featured image of this post', 'tiagsspace' ),
-		'nextHidden'     => __( 'Next hidden', 'tiagsspace' ),
+		'setFeaturedKey' => __( 'Set as featured image (F)', 'tiagsspace' ),
+		'nextHidden'     => __( 'Next hidden (N)', 'tiagsspace' ),
+		// Download: a zip of the original files (download_all_attachments()).
+		'downloadAll'    => __( 'Download all', 'tiagsspace' ),
+		'downloadN'      => __( 'Download %d', 'tiagsspace' ),
+		'tipDownload'    => __( 'A zip of the original files: the selected, or every attachment when nothing is selected', 'tiagsspace' ),
+		'downloadBusy'   => __( 'Preparing the zip…', 'tiagsspace' ),
 		'tipNextHidden'  => __( 'Show the next hidden image here  N', 'tiagsspace' ),
 		'tipSmaller'     => __( 'Smaller', 'tiagsspace' ),
 		'tipBigger'      => __( 'Bigger', 'tiagsspace' ),
@@ -215,6 +248,7 @@ function tiagsspace_gallery_edit_config( $post_id, $loop_id ) {
 			'attach'         => wp_create_nonce( 'tiagsspace_media_attach_attach' ),
 			'featured'       => wp_create_nonce( 'tiagsspace_set_featured_image' ),
 			'saveBw'         => wp_create_nonce( 'tiagsspace_save_bw' ),
+			'download'       => wp_create_nonce( 'download_all_attachments' ),
 		),
 		'i18n' => array(
 			'toolbar'   => tiagsspace_media_toolbar_i18n(),
@@ -1231,7 +1265,10 @@ add_action( 'wp_ajax_gallery_reorder_attachments', 'gallery_reorder_attachments'
 
 
 // ----------------------
-// AJAX: Download all of a post's attachments as a single zip
+// AJAX: Download a post's attachments as a single zip: all of them (the footer
+// link, the editor bar's "Download all"), or only `ids` (comma-separated, the
+// bar's "Download N" with a selection). Names keep each file's position in the
+// whole gallery either way.
 // ----------------------
 function download_all_attachments() {
 	check_ajax_referer( 'download_all_attachments', '_nonce' );
@@ -1259,6 +1296,11 @@ function download_all_attachments() {
 		wp_die( 'No attachments found for this post.', 'Download error', array( 'response' => 404 ) );
 	}
 
+	$only = array();
+	if ( ! empty( $_REQUEST['ids'] ) ) {
+		$only = array_flip( array_filter( array_map( 'absint', explode( ',', (string) wp_unslash( $_REQUEST['ids'] ) ) ) ) );
+	}
+
 	$post_title = get_the_title( $post_id );
 
 	$tmp_file = wp_tempnam( 'attachments-' . $post_id . '.zip' );
@@ -1274,6 +1316,9 @@ function download_all_attachments() {
 
 	foreach ( $attachments as $attachment ) {
 		$position++; // Menu-order position; incremented before any skip to stay in sync with the list.
+		if ( $only && ! isset( $only[ $attachment->ID ] ) ) {
+			continue; // Not in the selection.
+		}
 		$file_path = get_attached_file( $attachment->ID );
 		if ( ! $file_path || ! is_readable( $file_path ) ) {
 			continue; // Skip files missing on disk.
@@ -1302,7 +1347,7 @@ function download_all_attachments() {
 		wp_die( 'None of the attachment files could be read.', 'Download error', array( 'response' => 404 ) );
 	}
 
-	$download_name = sanitize_file_name( ( get_post_field( 'post_name', $post_id ) ?: 'attachments-' . $post_id ) . '.zip' );
+	$download_name = sanitize_file_name( ( get_post_field( 'post_name', $post_id ) ?: 'attachments-' . $post_id ) . ( $only ? '-' . $added : '' ) . '.zip' );
 
 	nocache_headers();
 	header( 'Content-Type: application/zip' );
