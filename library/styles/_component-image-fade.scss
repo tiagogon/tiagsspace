@@ -38,3 +38,20 @@ $teaser-fade-duration: .9s;
     opacity: 1;
   }
 }
+
+// Lightbox (PhotoSwipe, library/js/lightbox.js): the sharp image stays hidden
+// over the grid thumbnail (the placeholder) until lightbox.js adds is-loaded,
+// once it is loaded and decoded; PhotoSwipe would otherwise paint it while it
+// arrives. Not gated on html.tg-fade: the lightbox only exists with script.
+.pswp .pswp__img:not(.pswp__img--placeholder) {
+  opacity: 0;
+  @include transition(opacity $image-fade-duration $image-fade-easing);
+
+  &.is-loaded {
+    opacity: 1;
+  }
+  // Already in the browser's cache: simply there.
+  &.is-instant {
+    transition: none;
+  }
+}

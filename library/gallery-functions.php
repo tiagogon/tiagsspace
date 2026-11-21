@@ -286,7 +286,7 @@ function tiagsspace_gallery_edit_style() {
  */
 function tiagsspace_gallery_edit_lightbox_adapters() {
 	return (array) apply_filters( 'tiagsspace_gallery_edit_lightbox_adapters', array(
-		'magnific_popup' => 'lightbox-magnific',
+		'lightbox' => 'lightbox-photoswipe',
 	) );
 }
 

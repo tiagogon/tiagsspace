@@ -40,7 +40,7 @@ Gallery template for single pages
 
             $no_space               = '';
             $spacement              = 'spacement-20';
-            $light_box              = 'magnific_popup';
+            $light_box              = 'lightbox';
         }
 
 

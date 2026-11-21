@@ -602,12 +602,12 @@ html.tge-has-bar #lower-header {
 }
 
 /* 10. Lightbox status line (library/js/gallery-edit/lightbox.js) ---------- */
-/* Inside Magnific's .mfp-wrap (z-index 1043), above its content and arrows. */
+/* Inside PhotoSwipe's root (.pswp, z-index 100000), above its slides. */
 .tge-lb-status {
 	position: fixed;
 	left: 12px;
 	bottom: 12px;
-	z-index: 1046;
+	z-index: 20;
 	padding: 4px 8px;
 	border-radius: 3px;
 	background: var(--tge-bg);
@@ -625,6 +625,6 @@ html.tge-has-bar #lower-header {
    script-added class cannot upset Masonry's heights. */
 .tge-bw img,
 .tge-bw video,
-.tge-lb-bw .mfp-content img {
+.tge-lb-bw .pswp__img {
 	filter: grayscale(1);
 }

@@ -407,7 +407,7 @@ add_action( 'acf/include_fields', function() {
 				) ),
 				'choices' => array(
 					'none' => 'None',
-					'magnific_popup' => 'Magnific Popup',
+					'magnific_popup' => 'Lightbox', // PhotoSwipe since Nov 2026; the stored value keeps its old name
 					'intense-images' => 'Intense Images',
 				),
 				'default_value' => 'magnific_popup',

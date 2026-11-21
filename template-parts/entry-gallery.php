@@ -65,7 +65,7 @@ if($attachmens){
             $number_of_columns_md   = 3;
             $number_of_columns_lg   = 3;
             $gallery_gap            = 0;
-            $light_box              = 'magnific_popup';
+            $light_box              = 'lightbox';
 
         }
 
@@ -89,7 +89,7 @@ if($attachmens){
             $number_of_columns_md   = 3;
             $number_of_columns_lg   = 3;
             $gallery_gap            = 'default'; // the theme's own spacing, as between thumbnails
-            $light_box              = 'magnific_popup';
+            $light_box              = 'lightbox';
         }
 
         // Others
@@ -268,8 +268,12 @@ if($attachmens){
 
         $deactivat_masonry = get_field('deactivat_masonry');
 
-        // Image Box
+        // Image Box. The field still stores 'magnific_popup' for "Lightbox" (no
+        // database change since the switch to PhotoSwipe, Nov 2026).
         $light_box = get_field('light_box');
+        if ( 'magnific_popup' === $light_box ) {
+            $light_box = 'lightbox';
+        }
     }
 
 
@@ -378,20 +382,23 @@ if($attachmens){
         }
     }
 
-    // Magnific Pop Up gallery
-    $magnific_popup = "";
-    if ($light_box == 'magnific_popup') {
-        $magnific_popup = "magnific_popup-gallery-".$post->ID;
-        // Magnific Popup core JS file, once per page
-        if ( tiagsspace_once( 'magnific-js' ) ) {
-        ?><script src="<?php bloginfo('template_url'); ?>/library/js/Magnific-Popup/jquery.magnific-popup.min.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/Magnific-Popup/jquery.magnific-popup.min.js' ) ); ?>"></script>
+    // Lightbox (PhotoSwipe): one site-wide module, printed once per page; it opens
+    // any .gallery-lightbox on the page, Infinite Scroll ones included. The gallery
+    // carries the title the lightbox shows on dark pages.
+    $lightbox_class = '';
+    $lightbox_attr  = '';
+    if ($light_box == 'lightbox') {
+        $lightbox_class = 'gallery-lightbox';
+        $lightbox_attr  = ' data-lightbox-title="' . esc_attr( taxonomy_list_w_numbers( $post->ID, 'log-branch', '', ', ', ', ', ' & ', 'link' ) . get_the_title() ) . '"';
+        if ( tiagsspace_once( 'lightbox-js' ) ) {
+        ?><script type="module" src="<?php bloginfo('template_url'); ?>/library/js/lightbox.js?v=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/lightbox.js' ) . '-' . tiagsspace_asset_ver( '/library/js/photoswipe/photoswipe.esm.min.js' ) ); ?>"></script>
     <?php }
     } ?>
 
     <div class="<?php echo trim( $class_container . ' container-gallery ' . $gapped_class ); ?>"<?php echo $gap_style_attr; ?>>
 
         <?php if ( tiagsspace_gallery_edit_mode( $gallery_post_id ) ) { tiagsspace_gallery_edit_style(); } // before the grid: see the function ?>
-        <div id="gallery-<?php the_ID(); ?>" class="gallery clearfix <?php echo $magnific_popup;?>  <?php echo $row;?> <?php echo $no_space;?>"<?php echo $row_style_attr; ?> itemscope itemtype="http://schema.org/ImageGallery">
+        <div id="gallery-<?php the_ID(); ?>" class="gallery clearfix <?php echo $lightbox_class;?>  <?php echo $row;?> <?php echo $no_space;?>"<?php echo $row_style_attr; echo $lightbox_attr; ?> itemscope itemtype="http://schema.org/ImageGallery">
 
             <?php
             $count_item = 0;
@@ -466,51 +473,8 @@ if($attachmens){
 
 
 
-    // --- Magnific Popup
-    if ($light_box == 'magnific_popup') {?>
-
-        <script type="text/javascript">
-            // $(document).ready(function() {
-                $('.magnific_popup-gallery-<?php the_ID(); ?>').magnificPopup({
-                  delegate: 'a.magnific-popup-link',
-                  type: 'image',
-                  tLoading: '...',
-                  mainClass: 'mfp-fade',
-                  midClick: true,
-                  gallery: {
-                    enabled: true,
-                    navigateByImgClick: true,
-                    preload: [1,2], // Will preload 0 - before current, and 1 after the current image
-                    tCounter: '' // no "6/8" counter under the image (Nov 2026)
-                  },
-                  image: {
-                    tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
-                    titleSrc: function(item) {
-                      return '<?php echo taxonomy_list_w_numbers($post->ID,'log-branch','',', ',', ', ' & ', 'link');?><?php the_title(); ?>' + item.el.attr('caption');
-                    }
-                  },
-                  zoom: {
-                      enabled: true, // By default it's false, so don't forget to enable it
-
-                      duration: 500, // duration of the effect, in milliseconds
-                      easing: 'ease-in-out', // CSS transition easing function
-
-                      // The "opener" function should return the element from which popup will be zoomed in
-                      // and to which popup will be scaled down
-                      // By defailt it looks for an image tag:
-                      opener: function(openerElement) {
-                        // openerElement is the element on which popup was initialized, in this case its <a> tag
-                        // you don't need to add "opener" option if this code matches your needs, it's defailt one.
-                        return openerElement.is('img') ? openerElement : openerElement.find('img');
-                      }
-                    }
-                });
-            // });
-        </script><?php
-
-
-    // --- Intense Images
-    } elseif ($light_box == 'intense-images') { ?>
+    // --- Intense Images (the PhotoSwipe lightbox needs no per-gallery script)
+    if ($light_box == 'intense-images') { ?>
         <script type="text/javascript">
         window.onload = function() {
             // Intensify all images with the 'intense' classname.
@@ -646,7 +610,7 @@ if($attachmens){
             // documentation here: https://github.com/RubaXa/Sortable
             var el = document.getElementById('gallery-<?php the_ID(); ?>');
 
-            // Prevent lightbox (Intense Images / Magnific Popup) from opening after a drag
+            // Prevent the lightbox (Intense Images / PhotoSwipe) from opening after a drag
             var wasDragging = false;
             el.addEventListener('click', function(e) {
                 if (wasDragging) {
