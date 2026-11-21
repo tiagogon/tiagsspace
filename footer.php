@@ -115,6 +115,10 @@
                 }
             };
 
+            // Cross-fade over the poster <img> (_component-image-fade.scss); the
+            // Firefox parking below takes the class off again.
+            media.addEventListener('playing', () => media.classList.add('is-playing'));
+
             media.addEventListener('loadeddata', tryPlay, { once: true });
             media.addEventListener('canplay', tryPlay);
             media.addEventListener('timeupdate', handleTimeUpdate);
@@ -185,6 +189,7 @@
                 const sources = Array.from(media.querySelectorAll('source'));
                 media._parked = { sources: sources, time: media.currentTime || 0 };
                 media.pause();
+                media.classList.remove('is-playing');
                 sources.forEach(source => source.remove());
                 media.removeAttribute('src');
                 media.load();

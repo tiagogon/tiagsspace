@@ -152,6 +152,18 @@ li.masonry-item {
           width: 100%;
           margin: 0px;
         }
+        // Teaser poster (archive-grid.php): fills the box under the video, which
+        // is positioned so it paints above it (Plyr's wrapper already is).
+        img.thumb-poster {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          object-fit: cover;
+        }
+        video.teaser-over-poster {
+          position: relative;
+        }
         .kgvid_wrapper_inline_left {
             float: left;
             margin: 0;

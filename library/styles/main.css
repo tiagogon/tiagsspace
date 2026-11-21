@@ -6256,11 +6256,21 @@ img.mfp-img {
   color: #000; }
 
 img.mfp-img {
-  padding: 12px 0 24px;
-  padding-bottom: 40px; }
+  padding: 12px 0; }
   @media (min-width: 992px) {
     img.mfp-img {
-      padding: 16px 0 32px; } }
+      padding: 16px 0; } }
+
+.mfp-figure:after {
+  top: 12px;
+  bottom: 12px; }
+  @media (min-width: 992px) {
+    .mfp-figure:after {
+      top: 16px;
+      bottom: 16px; } }
+
+.background-w-dark-color img.mfp-img {
+  padding-bottom: 40px; }
 
 .video-js.video-skin-trouble {
   font-size: 1rem;
@@ -6399,6 +6409,26 @@ img.mfp-img {
 
 .video-js.video-skin-trouble.vjs-has-started .vjs-big-play-button {
   display: none !important; }
+
+.tg-fade .imgcontainer img {
+  opacity: 0;
+  transition: opacity 0.6s ease-out; }
+  @media screen and (prefers-reduced-motion: reduce) {
+    .tg-fade .imgcontainer img {
+      transition: none; } }
+  .tg-fade .imgcontainer img.is-loaded {
+    opacity: 1; }
+  .tg-fade .imgcontainer img.is-instant {
+    transition: none; }
+
+.tg-fade .imgcontainer video.teaser-over-poster {
+  opacity: 0;
+  transition: opacity 0.9s ease-out; }
+  @media screen and (prefers-reduced-motion: reduce) {
+    .tg-fade .imgcontainer video.teaser-over-poster {
+      transition: none; } }
+  .tg-fade .imgcontainer video.teaser-over-poster.is-playing {
+    opacity: 1; }
 
 #collapseMenu {
   position: fixed;
@@ -6687,6 +6717,14 @@ li.masonry-item {
           max-width: 100%;
           width: 100%;
           margin: 0px; }
+        li.masonry-item figure a .imgcontainer img.thumb-poster {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          object-fit: cover; }
+        li.masonry-item figure a .imgcontainer video.teaser-over-poster {
+          position: relative; }
         li.masonry-item figure a .imgcontainer .kgvid_wrapper_inline_left {
           float: left;
           margin: 0; }
@@ -6986,9 +7024,6 @@ div.gallery {
 
 .container-fluid {
   overflow: visible; }
-  .container-fluid div.no-pad div.thumbnail figure img {
-    -webkit-transition: all 1s;
-    transition: all 1s; }
 
 div.thumbnail figure img.intense--loading {
   background: red;

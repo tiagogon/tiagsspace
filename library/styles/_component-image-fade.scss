@@ -1,0 +1,40 @@
+// --------------------------------------------------
+// Image fade-in (Nov 2026)
+// --------------------------------------------------
+// Every image in an .imgcontainer stays transparent in its reserved box until
+// it is downloaded and decoded, then fades in. The class is set by
+// library/js/image-fade.js (inline in <head>); html.tg-fade only exists when
+// that script ran, so without it images show as they always did.
+// Opacity only: no layout change, Masonry never re-measures. No will-change
+// (a GPU layer per image on a long archive page).
+// Reduced motion: the transition mixin drops the animation, the image still
+// waits until it can be painted whole.
+
+$image-fade-duration: .6s;
+$image-fade-easing: ease-out;
+$teaser-fade-duration: .9s;
+
+.tg-fade .imgcontainer img {
+  opacity: 0;
+  @include transition(opacity $image-fade-duration $image-fade-easing);
+
+  &.is-loaded {
+    opacity: 1;
+  }
+  // Ready before the first frame: simply there.
+  &.is-instant {
+    transition: none;
+  }
+}
+
+// Archive teasers: the poster is an <img> under the video (archive-grid.php),
+// which fades in like any image; the video cross-fades in over it once it
+// plays (footer.php adds is-playing, and removes it when Firefox parks it).
+.tg-fade .imgcontainer video.teaser-over-poster {
+  opacity: 0;
+  @include transition(opacity $teaser-fade-duration $image-fade-easing);
+
+  &.is-playing {
+    opacity: 1;
+  }
+}

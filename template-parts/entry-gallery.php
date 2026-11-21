@@ -481,7 +481,7 @@ if($attachmens){
                     enabled: true,
                     navigateByImgClick: true,
                     preload: [1,2], // Will preload 0 - before current, and 1 after the current image
-                    tCounter: '<span class="mfp-counter">%curr%/%total%</span>' // markup of counter
+                    tCounter: '' // no "6/8" counter under the image (Nov 2026)
                   },
                   image: {
                     tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',

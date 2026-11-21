@@ -452,17 +452,27 @@ Index of posts for Home and Archives
 
                                     // Output the Plyr-compatible <video> tag
                                     if (!empty($sources)) {
+                                        // Poster: the featured image as a srcset <img> UNDER the video (same
+                                        // sizes and lazy rule as an image thumbnail, not the full original),
+                                        // which fades in like any image (image-fade.js); the video, with no
+                                        // poster attribute, cross-fades in over it once it plays
+                                        // (.teaser-over-poster, footer.php). Without a featured image the
+                                        // video keeps its poster attribute and shows as before.
+                                        $poster_thumb_id = get_post_thumbnail_id($post->ID);
+                                        if ($poster_thumb_id) {
+                                            echo tiagsspace_render_picture_from_attachment($poster_thumb_id, $index_sizes_map, $fallback_sizes_attr, 'thumb-poster', esc_attr(get_the_title()), $thumb_img_attrs);
+                                        }
                                     ?>
                                     <?php // preload="none", no autoplay: footer.php loads and plays it near the viewport ?>
                                     <video
-                                        class="plyr-thumbnail-front"
+                                        class="plyr-thumbnail-front<?php echo $poster_thumb_id ? ' teaser-over-poster' : ''; ?>"
                                         muted
                                         playsinline
                                         webkit-playsinline
                                         preload="none"
                                         loop
-                                        data-loop-mode="seamless"
-                                        poster="<?php echo esc_url($poster_url); ?>">
+                                        data-loop-mode="seamless"<?php if (!$poster_thumb_id) { ?>
+                                        poster="<?php echo esc_url($poster_url); ?>"<?php } ?>>
                                         <?php echo $sources; ?>
                                         Your browser does not support the video tag.
                                     </video>
