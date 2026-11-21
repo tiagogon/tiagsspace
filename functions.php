@@ -81,7 +81,6 @@ function tiagsspace_enqueue_assets() {
 
     // ----- CSS ----- (order matters)
     wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], tiagsspace_asset_ver('/library/js/plyr/plyr.css'));
-    wp_enqueue_style('swiper', $template_dir . '/library/js/swiper/swiper-bundle.min.css', [], tiagsspace_asset_ver('/library/js/swiper/swiper-bundle.min.css'));
     // Versioned by filemtime: the server sends a 1-year Cache-Control on static files, so an
     // unversioned URL leaves visitors on a stale stylesheet after every recompile.
     wp_enqueue_style('theme-style', $template_dir . '/library/styles/main.min.css', [], tiagsspace_asset_ver('/library/styles/main.min.css'));

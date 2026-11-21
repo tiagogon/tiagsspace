@@ -294,7 +294,6 @@ add_action( 'acf/include_fields', function() {
 				'conditional_logic' => array( array( array( 'field' => 'field_57e18ba7f5f27', 'operator' => '==', 'value' => '1' ) ) ),
 				'choices' => array(
 					'still' => 'still',
-					'insta' => 'insta',
 					'classic' => 'classic',
 				),
 				'default_value' => 'still',
@@ -306,7 +305,6 @@ add_action( 'acf/include_fields', function() {
 				'type' => 'number',
 				'conditional_logic' => array(
 					array( array( 'field' => 'field_6481d1e5c4c43', 'operator' => '==', 'value' => 'still' ) ),
-					array( array( 'field' => 'field_6481d1e5c4c43', 'operator' => '==', 'value' => 'insta' ) ),
 				),
 				'min' => 400,
 				'placeholder' => '1800 when empety - min should be 400',

@@ -89,7 +89,7 @@ Categories are disabled.
 │       └── (third-party libraries — do not edit)
 │           ├── jquery/        ├── masonry/
 │           ├── modernizr/     ├── Magnific-Popup/
-│           ├── picturefill/   ├── swiper/
+│           ├── picturefill/   ├── photoswipe/
 │           ├── plyr/          ├── hls/         # vendored hls.js
 │           ├── intense-images/├── Sortable-master/
 │           └── model-viewer/  └── infinite-scroll/
@@ -102,7 +102,7 @@ Categories are disabled.
     ├── archive-table.php             # Table layout
     ├── entry-body.php                # Post content
     ├── entry-gallery.php             # Vertical gallery
-    ├── entry-gallery-horizontal.php  # Horizontal gallery (Swiper)
+    ├── entry-gallery-horizontal.php  # Horizontal gallery (native scroller)
     └── entry-video-player.php        # Video player embed
 ```
 

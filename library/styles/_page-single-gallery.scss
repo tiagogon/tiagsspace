@@ -144,82 +144,107 @@ div.gallery {
   }
 }
 // --------------------------------------------------
-// Horizontal gallery (classic style)
+// Horizontal gallery (template-parts/entry-gallery-horizontal.php,
+// library/js/horizontal-gallery.js). No library since Nov 2026.
 // --------------------------------------------------
 
-.container-gallery.swiper-container.horizontal-gallery-style-,
-.container-gallery.swiper-container.horizontal-gallery-style-classic {
-	padding-left: 20px;
-	padding-right: 0px;
+.container-gallery.hgallery {
+	padding-left: 0;
+	padding-right: 0;
 	padding-bottom: 0;
+}
+
+// classic: a native scroller. The browser scrolls it (trackpad and touch inertia,
+// Shift+wheel); a vertical wheel always scrolls the page. No snapping (Tiago).
+.container-gallery.hgallery--classic {
 	margin-bottom: 40px;
-	div.gallery-horizontal{
-	  div.thumbnail{
-	  		margin-bottom: 0;
-	  		margin-right: 20px;
-			figure{
-				display: inline-block;
-					img{
-						max-height: 65vh;
 
-						// Horizontal devices
-						@media all and (orientation:landscape) {
-							max-height: 100%;
-							max-width: 100%;
-							@media (min-width: map-get($grid-breakpoints, sm)) {
-								max-height: 85vh;
-							}
-							@media (min-width: map-get($grid-breakpoints, md)) {
-								max-height: 80vh;
-							}
-						}
-					}
+	.hgallery__track {
+		position: relative; // offsetLeft of the items, for ←/→
+		display: flex;
+		align-items: flex-start;
+		gap: 20px;
+		padding-left: 20px;
+		padding-right: 20px; // the space after the last picture
+		overflow-x: auto;
+		overflow-y: hidden;
+		// No back / forward page swipe when the strip reaches an end
+		overscroll-behavior-x: contain;
+		scroll-behavior: auto; // the drag glide sets scrollLeft every frame
+		scrollbar-width: none;
+		-webkit-user-select: none;
+		user-select: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		&:focus-visible {
+			outline-offset: -2px;
+		}
+	}
+
+	.hgallery__item {
+		flex: 0 0 auto;
+		margin: 0;
+
+		figure {
+			display: block;
+		}
+
+		// A fixed height and width from the width/height attributes: the strip
+		// knows its whole length before the lazy pictures arrive.
+		img {
+			display: block;
+			height: 65vh;
+			width: auto;
+			max-width: none;
+			-webkit-user-drag: none;
+
+			@media all and (orientation: landscape) {
+				height: 85vh;
+				@media (min-width: map-get($grid-breakpoints, md)) {
+					height: 80vh;
+				}
 			}
-	  }
-	  .swiper-slide {
-			width: initial;
-	  }
+		}
 	}
 }
 
-// --------------------------------------------------
-// Horizontal gallery (still/insta style)
-// --------------------------------------------------
-
-.container-gallery.swiper-container.horizontal-gallery-style-still,
-.container-gallery.swiper-container.horizontal-gallery-style-insta {
-	padding-left: 0px;
-	padding-right: 0px;
-	padding-bottom: 0;
+// still: the pictures stacked in one cell, one shown at a time (.is-current, moved
+// by the script on a timer); a click shows the next one.
+.container-gallery.hgallery--still {
 	margin-bottom: $grid-gutter-width;
-	div.gallery-horizontal{
-	  div.thumbnail{
-	  		margin-bottom: 0;
-			figure{
-				display: inline-block;
-					img{
-						width: 100vw;
-					}
-			}
-	  }
-	  .swiper-slide {
-		width: initial;
 
-	  }
+	.hgallery__track {
+		display: grid;
 	}
-}
-// --------------------------------------------------
-// Swiper scrollbar
-// --------------------------------------------------
 
-.swiper-scrollbar {
-	position: relative;
-    left: 0%;
-    bottom: 0px;
-    z-index: 50;
-    height: 5px;
-    width: 100%;
-    margin-top: 20px;
+	.hgallery__item {
+		grid-area: 1 / 1;
+		align-self: start;
+		margin: 0;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity .1s linear, visibility 0s linear .1s;
+
+		&.is-current {
+			opacity: 1;
+			visibility: visible;
+			transition: opacity .1s linear;
+		}
+
+		figure {
+			display: block;
+		}
+
+		img {
+			display: block;
+			width: 100vw;
+			max-width: none;
+			height: auto;
+		}
+	}
 }
 
 // --------------------------------------------------

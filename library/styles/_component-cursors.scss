@@ -110,15 +110,18 @@ $cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, 
     @include cursor($set, single, $mode);
   }
 
-  // A gallery dragged sideways (Swiper, template-parts/entry-gallery-horizontal.php):
-  // an open hand over it, a closed hand while dragging (.is-grabbing, set from
-  // Swiper's touchStart / touchEnd: Swiper prevents pointerdown's default, so
-  // :active never applies). Swiper's own grabCursor is off, so no inline cursor.
-  .swiper {
+  // A gallery dragged sideways (template-parts/entry-gallery-horizontal.php, classic):
+  // an open hand over it, a closed hand while dragging (.is-grabbing, set by
+  // library/js/horizontal-gallery.js once a press moves; :active would also show
+  // on a plain click). A still gallery shows the next picture on a click: next.
+  .hgallery--classic .hgallery__track {
     @include cursor($set, grab, $mode);
   }
-  .swiper.is-grabbing {
+  .hgallery--classic .hgallery__track.is-grabbing {
     @include cursor($set, grabbing, $mode);
+  }
+  .hgallery--still .hgallery__track {
+    @include cursor($set, next, $mode);
   }
 
   // A picture that opens: the lightbox, Hyper's Intense images

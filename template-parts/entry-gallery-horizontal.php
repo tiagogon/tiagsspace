@@ -1,461 +1,129 @@
 <?php
 /*
-Gallery template for single pages
-*/
+ * Horizontal gallery (single works, and each entry of the Log listing).
+ *
+ * Two styles, from the ACF select `horizontal_gallery_style`:
+ * - classic (or nothing stored): a row of pictures the visitor scrolls sideways. A real
+ *   native scroller (overflow-x), so trackpads, touch screens and Shift+wheel use the
+ *   system's own inertia; library/js/horizontal-gallery.js adds mouse dragging and ←/→.
+ * - still: one picture at a time, swapped on a timer while the gallery is on screen;
+ *   a click shows the next one. Any other stored value (the retired `insta`) is `still`.
+ *
+ * No library: Swiper was removed in Nov 2026 (its imitation of scrolling fought the
+ * trackpad's inertia). Styles in _page-single-gallery.scss (.hgallery), cursors in
+ * _component-cursors.scss.
+ */
 
+// This gallery is the page's first one when it comes first: no later gallery may take
+// the eager first row (see entry-gallery.php).
+$hgallery_is_lead = tiagsspace_once( 'lead-gallery' ) && ! is_paged();
 
+$images = get_children( array(
+    'numberposts'    => -1,
+    'orderby'        => 'menu_order', // set in the page media manager
+    'order'          => 'ASC',
+    'post_mime_type' => 'image',
+    'post_parent'    => $post->ID,
+    'post_type'      => 'attachment',
+) );
 
+$images = array_values( array_filter( (array) $images, function ( $image ) {
+    return ! get_field( 'remove_from_default_gallery', $image->ID );
+} ) );
 
-    // This gallery is the page's first one when it comes first: no later
-    // gallery may take the eager first row (see entry-gallery.php).
-    tiagsspace_once( 'lead-gallery' );
+if ( ! $images ) {
+    return;
+}
 
-    // get images atached to the post
-    $args = array(
-        'numberposts'       => -1, // Using -1 loads all posts
-        'orderby'           => 'menu_order', // set in the page media manager
-        'order'             => 'ASC',
-        'post_mime_type'    => 'image', // Make sure it doesn't pull other resources, like videos
-        'post_parent'       => $post->ID, // Important part - ensures the associated images are loaded
-        //'post_status'       => null,
-        'post_type'         => 'attachment'
-    );
-    $images = get_children( $args );
+$hgallery_style = get_field( 'horizontal_gallery_style' );
+$hgallery_style = ( 'classic' === $hgallery_style || ! $hgallery_style ) ? 'classic' : 'still';
 
-    // if there are images atached to the post
-    if($images){
+$hgallery_title = get_the_title();
+$hgallery_id    = 'gallery-' . get_the_ID();
 
-        // -------------------------------
-        // --- Sefault Galerry Settings ---
-        // --------------------------------
+$track_attrs = '';
+if ( 'classic' === $hgallery_style ) {
+    // Focusable, so the keyboard can scroll it natively once it has focus
+    $track_attrs = ' tabindex="0" role="region" aria-label="' . esc_attr( $hgallery_title . ', gallery' ) . '"';
+} else {
+    $still_delay = (int) get_field( 'still_duration' );
+    $still_delay = $still_delay > 0 ? $still_delay : 1800;
+    $track_attrs = ' data-hgallery-delay="' . (int) ( $still_delay + rand( -100, 100 ) ) . '"';
+}
 
-        // Define Variables
-        $spacement = '';
-        $deactivat_masonry = false;
+if ( tiagsspace_once( 'hgallery-js' ) ) { ?>
+    <script src="<?php echo esc_url( get_template_directory_uri() . '/library/js/horizontal-gallery.js' ); ?>?ver=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/horizontal-gallery.js' ) ); ?>"></script>
+<?php } ?>
 
-         $class_container  = 'container-fluid';
+<div class="container-fluid container-gallery hgallery hgallery--<?php echo $hgallery_style; ?>">
 
-        if ( !get_field('alternative_gallery')) {
+    <div id="<?php echo esc_attr( $hgallery_id ); ?>" class="gallery gallery-horizontal hgallery__track" data-hgallery="<?php echo $hgallery_style; ?>"<?php echo $track_attrs; ?> itemscope itemtype="http://schema.org/ImageGallery">
 
-
-            $no_space               = '';
-            $spacement              = 'spacement-20';
-            $light_box              = 'lightbox';
-        }
-
-
-
-        // -------------------------------
-        // --- Alternative Settings gallery checked
-        // -------------------------------
-        if ( get_field('alternative_gallery')) {
-
-            // Space betwene images
-            $no_space           = '';
-            if ( get_field('no_space')) {
-                $no_space           = 'no-pad';
-            }
-
-            if (get_field('spacement')) {
-                $spacement = get_field('spacement');
-            }
-
-        }
-
-
-        // -------------------------------
-        // --- Final calculations
-        // -------------------------------
-
-
-        // Row -- add margin on the sides
-            // $row = 'row';
-            // if (($class_container == 'container-fluid') AND ($no_space == '')) {
-            //     $row = 'row row-inverted'; // add margin on the sides
-            // }
-
-        ?>
         <?php
-        // Swipper style
-        $horizontal_gallery_style = "horizontal-gallery-style-".get_field( 'horizontal_gallery_style' ); ?>
+        foreach ( $images as $index => $image ) {
+            $count_item = $index + 1;
 
-       <?php // Slider Swiper ?>
-      <link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.css?ver=<?php echo esc_attr( tiagsspace_asset_ver( '/library/js/swiper/swiper-bundle.min.css' ) ); ?>">
-      <script type="text/javascript" src="<?php bloginfo('template_url'); ?>/library/js/swiper/swiper-bundle.min.js"></script>
+            $full   = wp_get_attachment_image_src( $image->ID, false );
+            $width  = $full ? (int) $full[1] : 0;
+            $height = $full ? (int) $full[2] : 0;
 
-        <div class="<?php echo $class_container; ?> container-gallery swiper swiper-container swiper-container-<?php the_ID(); ?> <?php echo $horizontal_gallery_style; ?>">
+            // --- Source ---
+            if ( get_field( 'insert_src_of_higher_resolution', $image->ID ) && $full ) {
+                $source = 'src="' . esc_url( $full[0] ) . '"';
+            } else {
+                $set = tiagsspace_attachment_srcset( $image->ID );
+                if ( 'classic' === $hgallery_style && $width && $height ) {
+                    // Shown at most 85vh tall: as wide as that height times the ratio
+                    $sizes = 'calc(' . round( 85 * $width / $height, 1 ) . 'vh)';
+                } else {
+                    $sizes = '100vw';
+                }
+                $source = 'src="' . $set['smallest'] . '" srcset="' . $set['srcset'] . '" sizes="' . $sizes . '"';
+            }
 
-            <div id="gallery-<?php the_ID(); ?>" class="gallery gallery-horizontal swiper-wrapper" itemscope itemtype="http://schema.org/ImageGallery">
+            // --- Loading: the lead gallery shows its first two at once ---
+            if ( $hgallery_is_lead && $count_item <= 2 ) {
+                $loading = 1 === $count_item ? 'fetchpriority="high"' : '';
+            } else {
+                $loading = 'loading="lazy" decoding="async"';
+            }
 
-                <?php
-                $count_item = 0;
+            // --- Alt ---
+            $alt     = get_post_meta( $image->ID, '_wp_attachment_image_alt', true );
+            $caption = $image->post_excerpt;
+            if ( $alt ) {
+                $image_alt = $alt;
+            } elseif ( $caption ) {
+                $image_alt = $caption . ' – ' . $hgallery_title;
+            } else {
+                $image_alt = $hgallery_title . ' – ' . $count_item;
+            }
 
-                // loop the atached images
-                foreach($images as $image){
-
-                	//Check IF image is not to be removed
-                	if (!get_field('remove_from_default_gallery',$image->ID)) {
-
-                        $count_item++;
-
-
-                        // --- SRC calculation ---
-                            // Original image File
-    	                    $image_thumb_attributes = wp_get_attachment_image_src($image->ID, false);
-    	                    $image_thumb_srcset = $image_thumb_attributes[0]." ".$image_thumb_attributes[1]."w";
-
-                            // IF diferent sizes exist
-
-                            // thumbnail
-                            $image_thumb_thumbnail_srcset ="";
-                            $image_thumb_thumbnail_attributes = wp_get_attachment_image_src($image->ID, "thumbnail");
-                            if ($image_thumb_thumbnail_attributes[3]) {
-                                $image_thumb_thumbnail_srcset = $image_thumb_thumbnail_attributes[0]." ".$image_thumb_thumbnail_attributes[1]."w, ";
-                            }
-
-                            // small
-                            $image_thumb_small_srcset ="";
-                            $image_thumb_small_attributes = wp_get_attachment_image_src($image->ID, "small");
-                            if ($image_thumb_small_attributes[3]) {
-                                $image_thumb_small_srcset = $image_thumb_small_attributes[0]." ".$image_thumb_small_attributes[1]."w, ";
-                            }
-
-                            // medium
-                            $image_thumb_medium_srcset ="";
-                            $image_thumb_medium_attributes = wp_get_attachment_image_src($image->ID, "medium");
-                            if ($image_thumb_medium_attributes[3]) {
-                                $image_thumb_medium_srcset = $image_thumb_medium_attributes[0]." ".$image_thumb_medium_attributes[1]."w, ";
-                            }
-
-                            // large
-                            $image_thumb_large_srcset ="";
-                            $image_thumb_large_attributes = wp_get_attachment_image_src($image->ID, "large");
-                            if ($image_thumb_large_attributes[3]) {
-                                $image_thumb_large_srcset = $image_thumb_large_attributes[0]." ".$image_thumb_large_attributes[1]."w, ";
-                            }
-
-                            // HD
-                            $image_thumb_HD_srcset ="";
-                            $image_thumb_HD_attributes = wp_get_attachment_image_src($image->ID, "HD");
-                            if ($image_thumb_HD_attributes[3]) {
-                                $image_thumb_HD_srcset = $image_thumb_HD_attributes[0]." ".$image_thumb_HD_attributes[1]."w, ";
-                            }
-
-                            // FINAL SRCSET
-                            $image_srcset = $image_thumb_thumbnail_srcset.
-                                            $image_thumb_small_srcset.
-                                            $image_thumb_medium_srcset.
-                                            $image_thumb_large_srcset.
-                                            $image_thumb_HD_srcset.
-                                            $image_thumb_srcset;
-                            // --- Sizes ---
-                            //Container or Full width?
-                            // if ($class_container == 'container') {
-                            //     $container_size_lg = 1200;
-                            //     $container_size_md = 940;
-                            //     $container_size_sm = 720;
-
-                            //     $size_lg = $container_size_lg."px";
-                            //     $size_md = $container_size_md."px";
-                            //     $size_sm = $container_size_sm."px";
-                            //     $size_xs = "100vw";
-
-                            //     $image_sizes = "(min-width: 1240px) ".$size_lg.",
-                            //                     (min-width: 992px) ".$size_md.",
-                            //                     (min-width: 768px) ".$size_sm.",
-                            //                      ".$size_xs;
-                            // } else {
-                                // $size_lg = "100vw";
-                                // $size_md = "100vw";
-                                // $size_sm = "100vw";
-                                // $size_xs = "100vw";
-
-                                // $image_sizes = "(min-width: 1240px) ".$size_lg.",
-                                //                 (min-width: 992px) ".$size_md.",
-                                //                 (min-width: 768px) ".$size_sm.",
-                                //                  ".$size_xs;
-                                $image_sizes = "130vh";
-                            // }
-
-                            // Source code
-                            if (!get_field('insert_src_of_higher_resolution',$image->ID)) {
-                                $source = 'srcset="'.$image_srcset.'" sizes="'.$image_sizes.'" ';
-                            } else {
-                                $source = 'src="'.$image_thumb_attributes[0].'"';
-                            }
-
-                        // --- AlT ---
-                            $alt = get_post_meta($image->ID, '_wp_attachment_image_alt', true);
-                            $caption = $image->post_excerpt;
-                            $image_post_title = get_the_title();
-                            if ($alt) {
-                                $image_alt = $alt;
-                            } elseif($caption) {
-                                $image_alt = $caption." – ".$image_post_title;
-                            }else{
-                                $image_alt = $image_post_title." – ".$count_item;
-                            }
-
-                        // Imgcontainer-gallery< calculations -- intrinsic ratio
-                            $intrinsic_ratio = $image_thumb_attributes[2] * 100 / $image_thumb_attributes[1];
-
-                        ?>
-
-                        <div class="thumbnail item swiper-slide swiper-slide-<?php the_ID(); ?>" >
-
-                            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" >
-
-	                            <img    <?php echo $source; ?>
-                                      loading="lazy"
-                                      alt="<?php echo $image_alt; ?>"
-                                        class=""/>
-
-                                <?php //Caption
-                                if ($caption) { ?>
-                                <figcaption itemprop="caption description">
-                                    <?php echo $caption; ?>
-                                </figcaption>
-                                <?php } ?>
-
-                            </figure>
-                        </div>
-
-                    <?php } // end IF image is not to be removed ?>
-
-                <?php } // end loop ?>
-
+            $item_class = 'thumbnail item hgallery__item';
+            if ( 'still' === $hgallery_style && 0 === $index ) {
+                $item_class .= ' is-current'; // shown before (and without) the script
+            }
+            ?>
+            <div class="<?php echo $item_class; ?>">
+                <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+                    <img <?php echo $source; ?>
+                        <?php if ( $width && $height ) { ?>width="<?php echo $width; ?>" height="<?php echo $height; ?>"<?php } ?>
+                        <?php echo $loading; ?>
+                        draggable="false"
+                        alt="<?php echo esc_attr( $image_alt ); ?>">
+                    <?php if ( $caption ) { ?>
+                        <figcaption itemprop="caption description"><?php echo wp_kses_post( $caption ); ?></figcaption>
+                    <?php } ?>
+                </figure>
             </div>
+        <?php } ?>
 
-        <div class="swiper-pagination"></div>
+    </div>
 
-        </div>
+</div>
 
-        <?php
-        // ---------------
-        // --- Scripts ---
-        // ---------------
-        ?>
-
-
-
-        <!-- Slider main container -->
-
-        <?php if (get_field('horizontal_gallery_style') == 'classic' or get_field('horizontal_gallery_style') == ''): ?>
-
-          <script type="text/javascript">
-
-            var swiper<?php the_ID(); ?> = new Swiper('.swiper-container-<?php the_ID(); ?>', {
-                  freeMode: {
-                    enabled: true,
-                    sticky: true,
-                  },
-
-                  speed: 800,
-
-                  grabCursor: false, // the open / closed hand cursors come from _component-cursors.scss
-              // The closed hand while dragging: Swiper prevents pointerdown's default,
-              // which keeps :active from being set, so the class marks the drag instead.
-              on: {
-                touchStart: function (s) { s.el.classList.add('is-grabbing'); },
-                touchEnd: function (s) { s.el.classList.remove('is-grabbing'); },
-              },
-
-                  mousewheel: {
-                    //invert: true,
-                    forceToAxis: true,
-                  },
-
-                  keyboard: {
-                    enabled: true,
-                    onlyInViewport: false,
-                  },
-
-                  // No scrollbar: the markup has no .swiper-scrollbar (removed long ago), and
-                  // asking for one made Swiper throw on init.
-
-                 slidesPerView: 'auto',
-                 spaceBetween: 0,
-
-                //updateTranslate: true,
-
-            });
-
-          </script>
-
-        <?php endif; ?>
-
-
-        <?php if (get_field('horizontal_gallery_style') == 'still'): ?>
-
-          <script type="text/javascript">
-
-            var swiper<?php the_ID(); ?> = new Swiper('.swiper-container-<?php the_ID(); ?>', {
-              keyboard: {
-                enabled: true,
-                onlyInViewport: false,
-              },
-              navigation: {
-                nextEl: '.swiper-slide-<?php the_ID(); ?>'
-              },
-              grabCursor: false, // the open / closed hand cursors come from _component-cursors.scss
-              // The closed hand while dragging: Swiper prevents pointerdown's default,
-              // which keeps :active from being set, so the class marks the drag instead.
-              on: {
-                touchStart: function (s) { s.el.classList.add('is-grabbing'); },
-                touchEnd: function (s) { s.el.classList.remove('is-grabbing'); },
-              },
-             slidesPerView: 'auto',
-             lazy: true,
-             spaceBetween: 0,
-             effect: "fade",
-             fadeEffect: {
-              crossFade: false
-             },
-             speed: 100, //needs to be >1
-             loop: true,
-             autoplay: {
-               delay: <?php
-                    if (get_field('still_duration')) {
-                        echo get_field('still_duration')+rand(-100, 100);
-                   } else {
-                     echo 1800+rand(-100, 100);
-                   }
-                ?>, // defaul is 3000ms = 4 heart beats
-               disableOnInteraction: false,
-             },
-
-            });
-
-            // Triger Autoplay just when on the onlyInViewport
-            // Via chat GTP :D
-
-              //Stop autoplay
-              swiper<?php the_ID(); ?>.autoplay.stop();
-
-              // Select the target element with class 'class-x'
-              const targetElement<?php the_ID(); ?> = document.querySelector('.swiper-container-<?php the_ID(); ?>');
-
-              // Options for the IntersectionObserver
-              const options<?php the_ID(); ?> = {
-                root: null, // use the viewport as the root
-                threshold: 0.5 // trigger when 50% of the target is visible
-              };
-
-              // Callback function to handle the intersection
-              const callback<?php the_ID(); ?> = (entries, observer) => {
-                entries.forEach(entry => {
-                  if (entry.isIntersecting) {
-                    swiper<?php the_ID(); ?>.autoplay.start(); // Trigger the method when the element enters the viewport
-                  } else {
-                    swiper<?php the_ID(); ?>.autoplay.stop(); // Trigger the method when the element leaves the viewport
-                  }
-                });
-              };
-
-              // Create the IntersectionObserver instance
-              const observer<?php the_ID(); ?> = new IntersectionObserver(callback<?php the_ID(); ?>, options<?php the_ID(); ?>);
-
-              // Start observing the target element
-              observer<?php the_ID(); ?>.observe(targetElement<?php the_ID(); ?>);
-
-          </script>
-
-        <?php endif; ?>
-
-        <?php if (get_field('horizontal_gallery_style') == 'insta'): ?>
-
-          <script type="text/javascript">
-
-            var swiper<?php the_ID(); ?> = new Swiper('.swiper-container-<?php the_ID(); ?>', {
-
-              keyboard: {
-                enabled: true,
-                onlyInViewport: false,
-              },
-              navigation: {
-                nextEl: '.swiper-slide-<?php the_ID(); ?>'
-              },
-
-              grabCursor: false, // the open / closed hand cursors come from _component-cursors.scss
-              // The closed hand while dragging: Swiper prevents pointerdown's default,
-              // which keeps :active from being set, so the class marks the drag instead.
-              on: {
-                touchStart: function (s) { s.el.classList.add('is-grabbing'); },
-                touchEnd: function (s) { s.el.classList.remove('is-grabbing'); },
-              },
-
-             spaceBetween: 0,
-             lazy: true,
-             lazyPreloadPrevNext: 1,
-
-             loop: true,
-             speed: 1200,
-
-             autoplay: {
-               delay: <?php
-                    if (get_field('still_duration')) {
-                        echo get_field('still_duration')+rand(-1000, 1000);
-                   } else {
-                     echo 1800+rand(-100, 100);
-                   }
-                ?>, // defaul is 3000ms = 4 heart beats
-               disableOnInteraction: false,
-             },
-
-            });
-
-            // Triger Autoplay just when on the onlyInViewport
-            // Via chat GTP :D
-
-              //Stop autoplay
-              swiper<?php the_ID(); ?>.autoplay.stop();
-
-              // Select the target element with class 'class-x'
-              const targetElement<?php the_ID(); ?> = document.querySelector('.swiper-container-<?php the_ID(); ?>');
-
-              // Options for the IntersectionObserver
-              const options<?php the_ID(); ?> = {
-                root: null, // use the viewport as the root
-                threshold: 0.5 // trigger when 50% of the target is visible
-              };
-
-              // Callback function to handle the intersection
-              const callback<?php the_ID(); ?> = (entries, observer) => {
-                entries.forEach(entry => {
-                  if (entry.isIntersecting) {
-                    swiper<?php the_ID(); ?>.autoplay.start(); // Trigger the method when the element enters the viewport
-                  } else {
-                    swiper<?php the_ID(); ?>.autoplay.stop(); // Trigger the method when the element leaves the viewport
-                  }
-                });
-              };
-
-              // Create the IntersectionObserver instance
-              const observer<?php the_ID(); ?> = new IntersectionObserver(callback<?php the_ID(); ?>, options<?php the_ID(); ?>);
-
-              // Start observing the target element
-              observer<?php the_ID(); ?>.observe(targetElement<?php the_ID(); ?>);
-
-          </script>
-
-        <?php endif; ?>
-
-
-
-    <?php } // if there are images
-
-
-
-
-
-// _______________________________
-// NOTES:
-
-// via http://code.tutsplus.com/articles/creating-your-own-image-gallery-page-template-in-wordpress--wp-23721
-// more info with video integration an so on:  http://codex.wordpress.org/Function_Reference/get_children
-// for video use MediaElement.js at http://mediaelementjs.com/
-// probably alredy native: http://make.wordpress.org/core/2013/04/08/audio-video-support-in-core/
-
-// this one makes the houver tittle appear:
-// title="<?php echo $image->post_title;
+<?php
+// A queue rather than a direct call: on an Infinite Scroll page the script tag above is
+// inserted by script, which makes it async, so it may arrive after this line runs.
 ?>
+<script>(window.tiagsspaceHGalleryQueue = window.tiagsspaceHGalleryQueue || []).push(document.getElementById(<?php echo wp_json_encode( $hgallery_id ); ?>));</script>
