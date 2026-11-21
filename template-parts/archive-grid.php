@@ -375,7 +375,7 @@ Index of posts for Home and Archives
                       <?php // mouseenter/mouseleave, not mouseover/mouseout: those bubble from every child
                             // (link, container, img/video) and re-wrote the fixed header blocks on each crossing.
                             // Keyboard focus shows the same label: header-helpers.js reads data-label / data-year. ?>
-                      <figure data-label="<?php echo esc_attr( $post_title ); ?>" data-year="<?php echo esc_attr( get_the_date( 'Y-m' ) ); ?>" onmouseenter="showText(this.dataset.label); showYear(this.dataset.year)" onmouseleave="hide(); hideYear();">
+                      <figure data-label="<?php echo esc_attr( $post_title ); ?>" data-year="<?php echo esc_attr( get_the_date( 'Y-m-d' ) ); ?>" onmouseenter="showText(this.dataset.label); showYear(this.dataset.year)" onmouseleave="hide(); hideYear();">
 
                           <a href="<?php echo get_permalink(); ?>">
 

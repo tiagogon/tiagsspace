@@ -1,7 +1,7 @@
 <?php
 /*
 Header >> Lower header (fixed bottom bar, desktop only)
-Shows post year-month on thumbnail hover via showYear()/hideYear() in header-helpers.js.
+Shows post date (Y-m-d) on thumbnail hover via showYear()/hideYear() in header-helpers.js.
 Only rendered on home, paginated, and archive pages.
 */
 
