@@ -551,7 +551,11 @@ Index of posts for Home and Archives
             columnWidth: '.masonry-item-sizer',
             percentPosition: true,
             transitionDuration: '0.6s',
-            stagger: 30
+            // Items added by Infinite Scroll fade in (Masonry's default also scales
+            // them up from nothing, a pop that read as a jolt on every page).
+            hiddenStyle: { opacity: 0 },
+            visibleStyle: { opacity: 1 },
+            stagger: 10
         });
     </script>
     <?php
@@ -564,33 +568,27 @@ Index of posts for Home and Archives
     <?php if (is_singular() == false ) { ?>
 
         <script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() . '/library/js/infinite-scroll/infinite-scroll.pkgd.min.js?v=' . tiagsspace_asset_ver( '/library/js/infinite-scroll/infinite-scroll.pkgd.min.js' ) ); ?>"></script>
+        <script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() . '/library/js/infinite-scroll-setup.js?v=' . tiagsspace_asset_ver( '/library/js/infinite-scroll-setup.js' ) ); ?>"></script>
 
         <script type="text/javascript">
             (function ($) {
                 var msnry = $('#masonry-container').data('masonry');
-                if (!msnry || !$.fn.infiniteScroll) return;
+                if (!msnry || !window.tiagsspaceInfiniteScroll) return;
 
                 // No `outlayer` option: with it Infinite Scroll runs its bundled imagesLoaded
                 // on each new page BEFORE inserting it, and lazy images in that detached page
                 // never load, so the page would never come. The items reserve their height,
                 // so they go to Masonry as soon as they are in the page.
-                var $container = $('.loadcontainer').infiniteScroll({
+                // Load distance, no page limit and the Safari srcset fix:
+                // library/js/infinite-scroll-setup.js
+                var $container = tiagsspaceInfiniteScroll('.loadcontainer', {
                     path: 'page/{{#}}/',
                     append: '.masonry-item',
                     history: false,
-                    button: '.view-more-button',
-                    scrollThreshold: 800 // load earlier (distance from bottom in px)
+                    button: '.view-more-button'
                 });
-                // Loads on scroll with no page limit, until the last page (Nov 2026:
-                // the "More" button after 15 pages is gone).
 
                 $container.on('append.infiniteScroll', function (event, body, path, items) {
-                    items.forEach(function (item) {
-                        // Safari srcset (metafizzy/infinite-scroll#770): re-parse once
-                        item.querySelectorAll('img[srcset]').forEach(function (img) {
-                            img.outerHTML = img.outerHTML;
-                        });
-                    });
                     msnry.appended(items);
                     // Teaser videos: set up when they come near the viewport (footer.php)
                     if (typeof window.queueInitializePlyrOnIntersect === 'function') {

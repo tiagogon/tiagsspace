@@ -67,6 +67,7 @@
 	<?php endif;  ?>
 
 	<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() . '/library/js/infinite-scroll/infinite-scroll.pkgd.min.js?v=' . tiagsspace_asset_ver( '/library/js/infinite-scroll/infinite-scroll.pkgd.min.js' ) ); ?>"></script>
+	<script type="text/javascript" src="<?php echo esc_url( get_template_directory_uri() . '/library/js/infinite-scroll-setup.js?v=' . tiagsspace_asset_ver( '/library/js/infinite-scroll-setup.js' ) ); ?>"></script>
 
 	<script type="text/javascript">
 		(function ($) {
@@ -74,18 +75,14 @@
 			// runs: Masonry lays the gallery out at once (library/js/masonry-grid.js) and
 			// the gallery video observer picks up its autoplay videos (entry-gallery.php).
 			// No `outlayer`, so no imagesLoaded wait before a page is inserted.
-			var $container = $('.archive-wrapper').infiniteScroll({
+			// Load distance, no page limit and the Safari srcset fix:
+			// library/js/infinite-scroll-setup.js
+			if (!window.tiagsspaceInfiniteScroll) return;
+			tiagsspaceInfiniteScroll('.archive-wrapper', {
 				path: 'page/{{#}}/',
 				append: '.type-log',
 				history: false,
 				button: '.view-more-button'
-			});
-
-			// Safari srcset (metafizzy/infinite-scroll#770): re-parse once
-			$container.on('append.infiniteScroll', function (event, body, path, items) {
-				$(items).find('img[srcset]').each(function (i, img) {
-					img.outerHTML = img.outerHTML;
-				});
 			});
 		})(jQuery);
 	</script>
