@@ -340,6 +340,10 @@
 			}
 			// After the page's own append handlers have laid the new items out.
 			window.requestAnimationFrame( function () {
+				// Images inserted already complete fire no load event (image-fade.js).
+				if ( window.tiagsspaceImageFadeSweep ) {
+					window.tiagsspaceImageFadeSweep();
+				}
 				if ( infScroll.options.loadOnScroll && infScroll.getBottomDistance() <= infScroll.options.scrollThreshold ) {
 					infScroll.loadNextPage();
 				}

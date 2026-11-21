@@ -135,6 +135,15 @@ add_action('wp_head', function () {
     echo '<link rel="preload" href="' . esc_url(get_template_directory_uri() . '/library/fonts/lora/lora-latin-400-normal.woff2') . '" as="font" type="font/woff2" crossorigin>' . "\n";
 }, 1);
 
+// Image fade-in: printed inline at the top of <head> (no request) so its one load
+// listener exists before the first <img> is parsed. See library/js/image-fade.js.
+add_action('wp_head', function () {
+    $file = get_template_directory() . '/library/js/image-fade.js';
+    if (is_readable($file)) {
+        echo "<script>\n" . file_get_contents($file) . "</script>\n";
+    }
+}, 1);
+
 // Helper: render responsive image with full srcset so browser can pick optimal size
 // Uses <img> with srcset/sizes instead of <picture> for better resolution selection
 // $img_attrs: extra attributes for the <img>, e.g. loading / decoding / fetchpriority (escaped here).

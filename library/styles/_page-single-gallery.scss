@@ -226,18 +226,11 @@ div.gallery {
 // Container fluid: full-width gallery
 // --------------------------------------------------
 
+// Images here had `transition: all 1s` until Nov 2026: it overrode the image
+// fade-in (_component-image-fade.scss) and animated every size change. Never
+// put an `all` transition on gallery images (see .thumbnail in _layout-thumbnails).
 .container-fluid {
 	overflow: visible;
-	div.no-pad {
-		div.thumbnail {
-  		figure {
-		    img {
-		    	-webkit-transition: all 1s;
-		    	transition: all 1s;
-		    }
-			}
-		}
-	}
 }
 
 

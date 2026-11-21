@@ -212,10 +212,25 @@
 // Image padding
 // --------------------------------------------------
 
+// The theme margin on every side (Nov 2026): 12px below lg, 16px from lg,
+// top and bottom here, the sides on .mfp-container above. The bottom was a
+// fixed 40px. The figure's backing box (:after) follows the same edges.
 img.mfp-img {
-    padding: $grid-gutter-width-mobile 0 ($grid-gutter-width-mobile * 2);
+    padding: $grid-gutter-width-mobile 0;
     @media (min-width: map-get($grid-breakpoints, lg)) {
-        padding: $grid-gutter-width 0 ($grid-gutter-width * 2);
+        padding: $grid-gutter-width 0;
     }
+}
+.mfp-figure:after {
+    top: $grid-gutter-width-mobile;
+    bottom: $grid-gutter-width-mobile;
+    @media (min-width: map-get($grid-breakpoints, lg)) {
+        top: $grid-gutter-width;
+        bottom: $grid-gutter-width;
+    }
+}
+// Dark backgrounds show the title under the image (light ones hide it):
+// keep room for it there so it does not sit on the photograph.
+.background-w-dark-color img.mfp-img {
     padding-bottom: 40px;
 }
