@@ -140,12 +140,10 @@ li.masonry-item {
       .imgcontainer{
         margin-bottom: 0px;
         overflow: hidden; // clip 100.3% image overflow so it doesn't eat into column gutters
-        background: $tiagsssss-color;
-        @media (prefers-color-scheme: dark) {
-              background-color: $tiagsssss-color-darkmode;
-        }
-
-        @include transition(background-color 1s ease-in-out);
+        // No fill while the image loads: the page is a gradient (lavender at the
+        // top, cream further down), so a flat colour stood out as a block wherever
+        // a thumbnail had not arrived yet (Nov 2026). The box only reserves height.
+        background: transparent;
         img{
           outline: none;
           border: none;
@@ -161,6 +159,11 @@ li.masonry-item {
         // Plyr video — hide controls in thumbnail previews
         .plyr__controls, .plyr__control--overlaid {
             display: none;
+        }
+        // No black box before a teaser's poster arrives (Plyr paints its wrapper
+        // #000): the page background, like the image thumbnails. Films untouched.
+        .plyr, .plyr__video-wrapper {
+            background: transparent;
         }
 
         // Video JS (video pack plugin)
