@@ -264,7 +264,7 @@
 	// Every attribute of the item that holds an image URL (picture sources,
 	// img src / srcset, the lightbox link) gets the new file's URL.
 	function swapUrls( item, pairs ) {
-		var attrs = [ 'src', 'srcset', 'href', 'data-image', 'data-src', 'data-srcset' ];
+		var attrs = [ 'src', 'srcset', 'href', 'data-image', 'data-src', 'data-srcset', 'data-pswp-srcset' ];
 		Array.prototype.forEach.call( item.querySelectorAll( 'img, source, a' ), function ( node ) {
 			attrs.forEach( function ( name ) {
 				var v = node.getAttribute( name );

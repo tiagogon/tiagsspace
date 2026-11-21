@@ -1,0 +1,5 @@
+PhotoSwipe 5.4.4 (MIT), https://photoswipe.com
+Files copied unchanged from the npm package photoswipe@5.4.4 (dist/).
+Never edit these files: theme changes go in library/js/lightbox.js and
+library/styles/_component-lightbox.scss. To update: npm pack photoswipe@<version>
+and replace the four files.

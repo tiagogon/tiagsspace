@@ -480,9 +480,16 @@
                                 <?php //} ?>
                                     <?php
                                     // Image Link
-                                    if ($light_box == 'magnific_popup') { // print thumbnails with a link ?>
-                                    <a href="<?php echo wp_get_attachment_url($attachmen->ID); ?>"
-                                            class="magnific-popup-link" caption="<?php if ($caption) { echo " – <i>".$caption."</i>";} ?>"
+                                    // PhotoSwipe (library/js/lightbox.js): the original as href (no-JS
+                                    // fallback, schema contentUrl), its size, and the same srcset as the
+                                    // grid, so the lightbox loads the file the screen needs, not the original.
+                                    if ($light_box == 'lightbox') { // print thumbnails with a link
+                                        $lightbox_set = tiagsspace_attachment_srcset( $attachmen->ID ); ?>
+                                    <a href="<?php echo esc_url( wp_get_attachment_url( $attachmen->ID ) ); ?>"
+                                            class="lightbox-link" caption="<?php if ($caption) { echo esc_attr( " – <i>".$caption."</i>" );} ?>"
+                                            data-pswp-width="<?php echo (int) ( $attachmen_thumb_attributes[1] ?? 0 ); ?>"
+                                            data-pswp-height="<?php echo (int) ( $attachmen_thumb_attributes[2] ?? 0 ); ?>"
+                                            data-pswp-srcset="<?php echo esc_attr( $lightbox_set['srcset'] ); ?>"
                                     itemprop="contentUrl">
                                     <?php }?>
                                         <?php
@@ -531,7 +538,7 @@
 
                                     <?php
                                     // Image Link
-                                    if ($light_box == 'magnific_popup') {?>
+                                    if ($light_box == 'lightbox') {?>
                                         </a>
                                     <?php }?>
 

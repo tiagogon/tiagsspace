@@ -147,15 +147,22 @@ add_action('wp_head', function () {
 // Helper: render responsive image with full srcset so browser can pick optimal size
 // Uses <img> with srcset/sizes instead of <picture> for better resolution selection
 // $img_attrs: extra attributes for the <img>, e.g. loading / decoding / fetchpriority (escaped here).
-function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $fallback_sizes_attr, $img_class = '', $img_alt = '', $img_attrs = array()) {
-    // Build a comprehensive srcset with all available image sizes
+/**
+ * The srcset of an attachment, smallest first: thumbnail, small, medium, large, xlarge,
+ * then the original. One list for the grid (tiagsspace_render_picture_from_attachment())
+ * and the lightbox links (gallery-item.php), so both offer the same files.
+ *
+ * Each size only when its file exists: for a missing size WordPress returns the ORIGINAL
+ * under the size's width, which would let the browser fetch the full upload for a
+ * 1200-1920px slot. xlarge (1920w) stops retina screens from downloading originals for
+ * slots up to 1920 device px.
+ *
+ * @return array { srcset: string (URLs escaped), smallest: string (escaped URL, '' if none) }
+ */
+function tiagsspace_attachment_srcset($attachment_id) {
     $srcset_parts = array();
-    $fallback_src = ''; // Will be set to smallest available size
-    
-    // Add the registered sizes to srcset (thumbnail, small, medium, large, xlarge), each only when
-    // its file exists: for a missing size WordPress returns the ORIGINAL under the size's width,
-    // which would let the browser fetch the full upload for a 1200-1920px slot. xlarge (1920w)
-    // stops retina screens from downloading originals for slots up to 1920 device px.
+    $smallest = '';
+
     $meta = wp_get_attachment_metadata($attachment_id);
     $all_sizes = array('thumbnail', 'small', 'medium', 'large', 'xlarge');
     foreach ($all_sizes as $size) {
@@ -165,26 +172,33 @@ function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $
         $attrs = wp_get_attachment_image_src($attachment_id, $size);
         if ($attrs && !empty($attrs[0]) && !empty($attrs[1])) {
             $srcset_parts[] = esc_url($attrs[0]) . ' ' . intval($attrs[1]) . 'w';
-            // Set fallback_src to first available (smallest) size to avoid downloading full-size in Firefox
-            if (empty($fallback_src)) {
-                $fallback_src = esc_url($attrs[0]);
+            if (empty($smallest)) {
+                $smallest = esc_url($attrs[0]);
             }
         }
     }
-    
-    // Add full-size image as final option in srcset
+
+    // The original as the last option
     $full = wp_get_attachment_image_src($attachment_id, false);
     if ($full && !empty($full[0]) && !empty($full[1])) {
         $srcset_parts[] = esc_url($full[0]) . ' ' . intval($full[1]) . 'w';
-        // Only use full as fallback if no other sizes exist
-        if (empty($fallback_src)) {
-            $fallback_src = esc_url($full[0]);
+        if (empty($smallest)) {
+            $smallest = esc_url($full[0]);
         }
     }
-    
-    // Combine all srcset entries
-    $srcset_attr = implode(', ', $srcset_parts);
-    
+
+    return array(
+        'srcset'   => implode(', ', array_unique($srcset_parts)),
+        'smallest' => $smallest,
+    );
+}
+
+function tiagsspace_render_picture_from_attachment($attachment_id, $sizes_map, $fallback_sizes_attr, $img_class = '', $img_alt = '', $img_attrs = array()) {
+    // Full srcset; the smallest size as src, so Firefox never falls back to the full-size file
+    $set = tiagsspace_attachment_srcset($attachment_id);
+    $srcset_attr  = $set['srcset'];
+    $fallback_src = $set['smallest'];
+
     // Build alt attribute
     $alt = $img_alt ? esc_attr($img_alt) : esc_attr(get_post_meta($attachment_id, '_wp_attachment_image_alt', true));
     $class_attr = $img_class ? ' class="' . esc_attr($img_class) . '"' : '';

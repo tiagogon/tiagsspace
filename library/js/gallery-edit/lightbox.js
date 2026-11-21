@@ -9,10 +9,10 @@
  * any change it shows the tracked image again, from the grid's current order.
  *
  * This file knows nothing about a particular lightbox. A lightbox plugs in
- * through an adapter (gallery-edit/lightbox-magnific.js is the only one):
+ * through an adapter (gallery-edit/lightbox-photoswipe.js is the only one):
  *
  *   tiagsspaceGalleryEdit.lightbox.use( {
- *       name:        'magnific_popup',
+ *       name:        'lightbox',
  *       isOpen:      function () {},        // this gallery's lightbox is open
  *       current:     function () {},        // the grid .item on screen, or null
  *       canShow:     function ( item ) {},  // the lightbox can show this .item
