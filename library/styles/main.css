@@ -5528,8 +5528,6 @@ figure[style*="position: fixed"] img {
   .thumbnail a > img {
     margin-left: auto;
     margin-right: auto; }
-  .thumbnail .intense {
-    cursor: url("../js/intense-images/img/plus_cursor.png") 25 25, pointer; }
 
 @media (max-width: 576px) {
   .thumbnail {
@@ -6138,12 +6136,6 @@ div.pswp__img--placeholder,
 
 .pswp {
   --pswp-placeholder-bg: transparent; }
-  .pswp .pswp__img {
-    cursor: pointer; }
-  .pswp .pswp__scroll-wrap,
-  .pswp .pswp__item,
-  .pswp .pswp__zoom-wrap {
-    cursor: zoom-out; }
 
 .pswp .pswp__preloader {
   position: fixed;
@@ -6361,6 +6353,243 @@ div.pswp__img--placeholder,
     opacity: 1; }
   .pswp .pswp__img:not(.pswp__img--placeholder).is-instant {
     transition: none; }
+
+:where(tr[data-href], .entry-date-toggle) {
+  cursor: pointer; }
+
+.intense {
+  cursor: zoom-in; }
+
+.pswp .pswp__img {
+  cursor: pointer; }
+
+.pswp .pswp__scroll-wrap,
+.pswp .pswp__item,
+.pswp .pswp__zoom-wrap {
+  cursor: zoom-out; }
+
+@media (hover: hover) and (pointer: fine) {
+  :where(body) {
+    cursor: url("../images/cursors/straight/light/arrow.svg?v=b45d6895ac") 2 2, auto; }
+  :where(body) a,
+  :where(body) button,
+  :where(body) summary,
+  :where(body) label[for],
+  :where(body) [role="button"],
+  :where(body) tr[data-href] {
+    cursor: url("../images/cursors/straight/light/hand.svg?v=b45d6895ac") 5 3, pointer; }
+  :where(body) #collapseMenu a:not([data-toggle]):not([target]),
+  :where(body) .site-title a,
+  :where(body) .footer-meta a:not(.post-edit-link):not(.gallery-edit-toggle):not([id^="download-all"]) {
+    cursor: url("../images/cursors/straight/light/folder.svg?v=b45d6895ac") 3 5, pointer; }
+  :where(body) a[target="_blank"],
+  :where(body) a[href^="mailto:"],
+  :where(body) a[rel~="external"] {
+    cursor: url("../images/cursors/straight/light/external.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body) a[rel="prev"],
+  :where(body) a.pagination__previous {
+    cursor: url("../images/cursors/straight/light/previous.svg?v=b45d6895ac") 2 14, pointer; }
+  :where(body) a[rel="next"],
+  :where(body) a.pagination__next {
+    cursor: url("../images/cursors/straight/light/next.svg?v=b45d6895ac") 26 14, pointer; }
+  :where(body) a[data-opens="film"],
+  :where(body) tr[data-opens="film"] {
+    cursor: url("../images/cursors/straight/light/play.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body) a[data-opens="mix"],
+  :where(body) tr[data-opens="mix"] {
+    cursor: url("../images/cursors/straight/light/mix.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body) a[data-opens="set"],
+  :where(body) tr[data-opens="set"],
+  :where(body) .single-title-heading a {
+    cursor: url("../images/cursors/straight/light/stack.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body) a[data-opens="single"],
+  :where(body) tr[data-opens="single"] {
+    cursor: url("../images/cursors/straight/light/single.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body) .swiper {
+    cursor: url("../images/cursors/straight/light/grab.svg?v=b45d6895ac") 14 15, grab; }
+  :where(body) .swiper.is-grabbing {
+    cursor: url("../images/cursors/straight/light/grabbing.svg?v=b45d6895ac") 13 13, grabbing; }
+  :where(body) .gallery-lightbox a.lightbox-link,
+  :where(body) .intense {
+    cursor: url("../images/cursors/straight/light/magnify.svg?v=b45d6895ac") 14 14, zoom-in; }
+  :where(body) textarea,
+  :where(body) [contenteditable],
+  :where(body) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
+  :where(body) section.post-content p,
+  :where(body) section.post-content li,
+  :where(body) section.post-content blockquote,
+  :where(body) section.post-content h1, :where(body) section.post-content h2, :where(body) section.post-content h3,
+  :where(body) section.post-content h4, :where(body) section.post-content h5, :where(body) section.post-content h6 {
+    cursor: text; }
+
+  :where(body.background-w-dark-color) {
+    cursor: url("../images/cursors/straight/dark/arrow.svg?v=b45d6895ac") 2 2, auto; }
+  :where(body.background-w-dark-color) a,
+  :where(body.background-w-dark-color) button,
+  :where(body.background-w-dark-color) summary,
+  :where(body.background-w-dark-color) label[for],
+  :where(body.background-w-dark-color) [role="button"],
+  :where(body.background-w-dark-color) tr[data-href] {
+    cursor: url("../images/cursors/straight/dark/hand.svg?v=b45d6895ac") 5 3, pointer; }
+  :where(body.background-w-dark-color) #collapseMenu a:not([data-toggle]):not([target]),
+  :where(body.background-w-dark-color) .site-title a,
+  :where(body.background-w-dark-color) .footer-meta a:not(.post-edit-link):not(.gallery-edit-toggle):not([id^="download-all"]) {
+    cursor: url("../images/cursors/straight/dark/folder.svg?v=b45d6895ac") 3 5, pointer; }
+  :where(body.background-w-dark-color) a[target="_blank"],
+  :where(body.background-w-dark-color) a[href^="mailto:"],
+  :where(body.background-w-dark-color) a[rel~="external"] {
+    cursor: url("../images/cursors/straight/dark/external.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.background-w-dark-color) a[rel="prev"],
+  :where(body.background-w-dark-color) a.pagination__previous {
+    cursor: url("../images/cursors/straight/dark/previous.svg?v=b45d6895ac") 2 14, pointer; }
+  :where(body.background-w-dark-color) a[rel="next"],
+  :where(body.background-w-dark-color) a.pagination__next {
+    cursor: url("../images/cursors/straight/dark/next.svg?v=b45d6895ac") 26 14, pointer; }
+  :where(body.background-w-dark-color) a[data-opens="film"],
+  :where(body.background-w-dark-color) tr[data-opens="film"] {
+    cursor: url("../images/cursors/straight/dark/play.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.background-w-dark-color) a[data-opens="mix"],
+  :where(body.background-w-dark-color) tr[data-opens="mix"] {
+    cursor: url("../images/cursors/straight/dark/mix.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.background-w-dark-color) a[data-opens="set"],
+  :where(body.background-w-dark-color) tr[data-opens="set"],
+  :where(body.background-w-dark-color) .single-title-heading a {
+    cursor: url("../images/cursors/straight/dark/stack.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.background-w-dark-color) a[data-opens="single"],
+  :where(body.background-w-dark-color) tr[data-opens="single"] {
+    cursor: url("../images/cursors/straight/dark/single.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.background-w-dark-color) .swiper {
+    cursor: url("../images/cursors/straight/dark/grab.svg?v=b45d6895ac") 14 15, grab; }
+  :where(body.background-w-dark-color) .swiper.is-grabbing {
+    cursor: url("../images/cursors/straight/dark/grabbing.svg?v=b45d6895ac") 13 13, grabbing; }
+  :where(body.background-w-dark-color) .gallery-lightbox a.lightbox-link,
+  :where(body.background-w-dark-color) .intense {
+    cursor: url("../images/cursors/straight/dark/magnify.svg?v=b45d6895ac") 14 14, zoom-in; }
+  :where(body.background-w-dark-color) textarea,
+  :where(body.background-w-dark-color) [contenteditable],
+  :where(body.background-w-dark-color) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
+  :where(body.background-w-dark-color) section.post-content p,
+  :where(body.background-w-dark-color) section.post-content li,
+  :where(body.background-w-dark-color) section.post-content blockquote,
+  :where(body.background-w-dark-color) section.post-content h1, :where(body.background-w-dark-color) section.post-content h2, :where(body.background-w-dark-color) section.post-content h3,
+  :where(body.background-w-dark-color) section.post-content h4, :where(body.background-w-dark-color) section.post-content h5, :where(body.background-w-dark-color) section.post-content h6 {
+    cursor: text; } }
+@media (hover: hover) and (pointer: fine) and (prefers-color-scheme: dark) {
+  :where(body.white-darkmode),
+  :where(body.tiagsssss-color) {
+    cursor: url("../images/cursors/straight/dark/arrow.svg?v=b45d6895ac") 2 2, auto; }
+  :where(body.white-darkmode) a,
+  :where(body.white-darkmode) button,
+  :where(body.white-darkmode) summary,
+  :where(body.white-darkmode) label[for],
+  :where(body.white-darkmode) [role="button"],
+  :where(body.white-darkmode) tr[data-href],
+  :where(body.tiagsssss-color) a,
+  :where(body.tiagsssss-color) button,
+  :where(body.tiagsssss-color) summary,
+  :where(body.tiagsssss-color) label[for],
+  :where(body.tiagsssss-color) [role="button"],
+  :where(body.tiagsssss-color) tr[data-href] {
+    cursor: url("../images/cursors/straight/dark/hand.svg?v=b45d6895ac") 5 3, pointer; }
+  :where(body.white-darkmode) #collapseMenu a:not([data-toggle]):not([target]),
+  :where(body.white-darkmode) .site-title a,
+  :where(body.white-darkmode) .footer-meta a:not(.post-edit-link):not(.gallery-edit-toggle):not([id^="download-all"]),
+  :where(body.tiagsssss-color) #collapseMenu a:not([data-toggle]):not([target]),
+  :where(body.tiagsssss-color) .site-title a,
+  :where(body.tiagsssss-color) .footer-meta a:not(.post-edit-link):not(.gallery-edit-toggle):not([id^="download-all"]) {
+    cursor: url("../images/cursors/straight/dark/folder.svg?v=b45d6895ac") 3 5, pointer; }
+  :where(body.white-darkmode) a[target="_blank"],
+  :where(body.white-darkmode) a[href^="mailto:"],
+  :where(body.white-darkmode) a[rel~="external"],
+  :where(body.tiagsssss-color) a[target="_blank"],
+  :where(body.tiagsssss-color) a[href^="mailto:"],
+  :where(body.tiagsssss-color) a[rel~="external"] {
+    cursor: url("../images/cursors/straight/dark/external.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.white-darkmode) a[rel="prev"],
+  :where(body.white-darkmode) a.pagination__previous,
+  :where(body.tiagsssss-color) a[rel="prev"],
+  :where(body.tiagsssss-color) a.pagination__previous {
+    cursor: url("../images/cursors/straight/dark/previous.svg?v=b45d6895ac") 2 14, pointer; }
+  :where(body.white-darkmode) a[rel="next"],
+  :where(body.white-darkmode) a.pagination__next,
+  :where(body.tiagsssss-color) a[rel="next"],
+  :where(body.tiagsssss-color) a.pagination__next {
+    cursor: url("../images/cursors/straight/dark/next.svg?v=b45d6895ac") 26 14, pointer; }
+  :where(body.white-darkmode) a[data-opens="film"],
+  :where(body.white-darkmode) tr[data-opens="film"],
+  :where(body.tiagsssss-color) a[data-opens="film"],
+  :where(body.tiagsssss-color) tr[data-opens="film"] {
+    cursor: url("../images/cursors/straight/dark/play.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.white-darkmode) a[data-opens="mix"],
+  :where(body.white-darkmode) tr[data-opens="mix"],
+  :where(body.tiagsssss-color) a[data-opens="mix"],
+  :where(body.tiagsssss-color) tr[data-opens="mix"] {
+    cursor: url("../images/cursors/straight/dark/mix.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.white-darkmode) a[data-opens="set"],
+  :where(body.white-darkmode) tr[data-opens="set"],
+  :where(body.white-darkmode) .single-title-heading a,
+  :where(body.tiagsssss-color) a[data-opens="set"],
+  :where(body.tiagsssss-color) tr[data-opens="set"],
+  :where(body.tiagsssss-color) .single-title-heading a {
+    cursor: url("../images/cursors/straight/dark/stack.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.white-darkmode) a[data-opens="single"],
+  :where(body.white-darkmode) tr[data-opens="single"],
+  :where(body.tiagsssss-color) a[data-opens="single"],
+  :where(body.tiagsssss-color) tr[data-opens="single"] {
+    cursor: url("../images/cursors/straight/dark/single.svg?v=b45d6895ac") 14 14, pointer; }
+  :where(body.white-darkmode) .swiper,
+  :where(body.tiagsssss-color) .swiper {
+    cursor: url("../images/cursors/straight/dark/grab.svg?v=b45d6895ac") 14 15, grab; }
+  :where(body.white-darkmode) .swiper.is-grabbing,
+  :where(body.tiagsssss-color) .swiper.is-grabbing {
+    cursor: url("../images/cursors/straight/dark/grabbing.svg?v=b45d6895ac") 13 13, grabbing; }
+  :where(body.white-darkmode) .gallery-lightbox a.lightbox-link,
+  :where(body.white-darkmode) .intense,
+  :where(body.tiagsssss-color) .gallery-lightbox a.lightbox-link,
+  :where(body.tiagsssss-color) .intense {
+    cursor: url("../images/cursors/straight/dark/magnify.svg?v=b45d6895ac") 14 14, zoom-in; }
+  :where(body.white-darkmode) textarea,
+  :where(body.white-darkmode) [contenteditable],
+  :where(body.white-darkmode) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
+  :where(body.white-darkmode) section.post-content p,
+  :where(body.white-darkmode) section.post-content li,
+  :where(body.white-darkmode) section.post-content blockquote,
+  :where(body.white-darkmode) section.post-content h1, :where(body.white-darkmode) section.post-content h2, :where(body.white-darkmode) section.post-content h3,
+  :where(body.white-darkmode) section.post-content h4, :where(body.white-darkmode) section.post-content h5, :where(body.white-darkmode) section.post-content h6,
+  :where(body.tiagsssss-color) textarea,
+  :where(body.tiagsssss-color) [contenteditable],
+  :where(body.tiagsssss-color) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
+  :where(body.tiagsssss-color) section.post-content p,
+  :where(body.tiagsssss-color) section.post-content li,
+  :where(body.tiagsssss-color) section.post-content blockquote,
+  :where(body.tiagsssss-color) section.post-content h1,
+  :where(body.tiagsssss-color) section.post-content h2,
+  :where(body.tiagsssss-color) section.post-content h3,
+  :where(body.tiagsssss-color) section.post-content h4,
+  :where(body.tiagsssss-color) section.post-content h5,
+  :where(body.tiagsssss-color) section.post-content h6 {
+    cursor: text; } }
+@media (hover: hover) and (pointer: fine) {
+  body > figure[style*="z-index: 999999"],
+  body > figure[style*="z-index: 999999"] * {
+    cursor: url("../images/cursors/straight/dark/close.svg?v=b45d6895ac") 14 14, zoom-out !important; }
+  body .pswp .pswp__scroll-wrap,
+  body .pswp .pswp__item,
+  body .pswp .pswp__zoom-wrap {
+    cursor: url("../images/cursors/straight/light/close.svg?v=b45d6895ac") 14 14, zoom-out; }
+  body .pswp .pswp__img {
+    cursor: url("../images/cursors/straight/light/next.svg?v=b45d6895ac") 26 14, pointer; }
+  body .pswp.pswp--img-left .pswp__img {
+    cursor: url("../images/cursors/straight/light/previous.svg?v=b45d6895ac") 2 14, pointer; } }
+@media (hover: hover) and (pointer: fine) and (prefers-color-scheme: dark) {
+  body .pswp .pswp__scroll-wrap,
+  body .pswp .pswp__item,
+  body .pswp .pswp__zoom-wrap {
+    cursor: url("../images/cursors/straight/dark/close.svg?v=b45d6895ac") 14 14, zoom-out; }
+  body .pswp .pswp__img {
+    cursor: url("../images/cursors/straight/dark/next.svg?v=b45d6895ac") 26 14, pointer; }
+  body .pswp.pswp--img-left .pswp__img {
+    cursor: url("../images/cursors/straight/dark/previous.svg?v=b45d6895ac") 2 14, pointer; } }
 
 #collapseMenu {
   position: fixed;
@@ -7049,8 +7278,7 @@ div.thumbnail figure img.intense--loading {
   background: none;
   font: inherit;
   line-height: inherit;
-  color: inherit;
-  cursor: pointer; }
+  color: inherit; }
   .single-content .page-header .entry-date .entry-date-toggle:hover {
     text-decoration: none; }
   .single-content .page-header .entry-date .entry-date-toggle:focus {
@@ -7390,8 +7618,6 @@ div.thumbnail figure img.intense--loading {
     white-space: nowrap; }
   .table-index thead {
     display: none; }
-  .table-index tbody tr[data-href] {
-    cursor: pointer; }
   .table-index tbody tr:hover {
     text-decoration: underline; }
   .table-index a {

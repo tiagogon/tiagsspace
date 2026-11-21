@@ -226,8 +226,6 @@ Gallery template for single pages
 
             </div>
 
-            <!-- Add Scrollbar -->
-
         <div class="swiper-pagination"></div>
 
         </div>
@@ -254,7 +252,13 @@ Gallery template for single pages
 
                   speed: 800,
 
-                  grabCursor: true,
+                  grabCursor: false, // the open / closed hand cursors come from _component-cursors.scss
+              // The closed hand while dragging: Swiper prevents pointerdown's default,
+              // which keeps :active from being set, so the class marks the drag instead.
+              on: {
+                touchStart: function (s) { s.el.classList.add('is-grabbing'); },
+                touchEnd: function (s) { s.el.classList.remove('is-grabbing'); },
+              },
 
                   mousewheel: {
                     //invert: true,
@@ -266,11 +270,8 @@ Gallery template for single pages
                     onlyInViewport: false,
                   },
 
-                  scrollbar: {
-                   el: '.swiper-scrollbar',
-                   draggable: true,
-                   hide: false,
-                 },
+                  // No scrollbar: the markup has no .swiper-scrollbar (removed long ago), and
+                  // asking for one made Swiper throw on init.
 
                  slidesPerView: 'auto',
                  spaceBetween: 0,
@@ -296,7 +297,13 @@ Gallery template for single pages
               navigation: {
                 nextEl: '.swiper-slide-<?php the_ID(); ?>'
               },
-              grabCursor: true,
+              grabCursor: false, // the open / closed hand cursors come from _component-cursors.scss
+              // The closed hand while dragging: Swiper prevents pointerdown's default,
+              // which keeps :active from being set, so the class marks the drag instead.
+              on: {
+                touchStart: function (s) { s.el.classList.add('is-grabbing'); },
+                touchEnd: function (s) { s.el.classList.remove('is-grabbing'); },
+              },
              slidesPerView: 'auto',
              lazy: true,
              spaceBetween: 0,
@@ -369,7 +376,13 @@ Gallery template for single pages
                 nextEl: '.swiper-slide-<?php the_ID(); ?>'
               },
 
-              grabCursor: true,
+              grabCursor: false, // the open / closed hand cursors come from _component-cursors.scss
+              // The closed hand while dragging: Swiper prevents pointerdown's default,
+              // which keeps :active from being set, so the class marks the drag instead.
+              on: {
+                touchStart: function (s) { s.el.classList.add('is-grabbing'); },
+                touchEnd: function (s) { s.el.classList.remove('is-grabbing'); },
+              },
 
              spaceBetween: 0,
              lazy: true,

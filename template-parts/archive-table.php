@@ -48,6 +48,8 @@ $total = $table_query->found_posts;
                 </tr>
             </thead>
             <tbody>
+            <?php // One query for every row's attachment count (the stack or single-picture cursor, tiagsspace_opens_attr())
+            tiagsspace_prime_attachment_counts( wp_list_pluck( $table_query->posts, 'ID' ) ); ?>
             <?php if ( $table_query->have_posts() ) : while ( $table_query->have_posts() ) : $table_query->the_post();
 
                 $post_id   = get_the_ID();
@@ -119,7 +121,7 @@ $total = $table_query->found_posts;
                 }
 
             ?>
-                <tr data-href="<?php echo esc_url( $permalink ); ?>"<?php if ( $thumb_url ) echo ' data-thumb="' . esc_url( $thumb_url ) . '"'; ?><?php if ( $video_url ) echo ' data-video="' . esc_url( $video_url ) . '"'; ?>>
+                <tr data-href="<?php echo esc_url( $permalink ); ?>"<?php echo tiagsspace_opens_attr( $post_id ); ?><?php if ( $thumb_url ) echo ' data-thumb="' . esc_url( $thumb_url ) . '"'; ?><?php if ( $video_url ) echo ' data-video="' . esc_url( $video_url ) . '"'; ?>>
                     <td class="ti-col-published"><?php echo esc_html( $year_display ); ?></td>
                     <td class="ti-col-type"><?php
                         $current_type = get_post_type();

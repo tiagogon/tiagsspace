@@ -48,11 +48,7 @@ figure[style*="position: fixed"] img {
     margin-left: auto;
     margin-right: auto;
   }
-
-
-  .intense {
-  cursor: url("../js/intense-images/img/plus_cursor.png") 25 25, pointer;
-  }
+  // .intense (Hyper) gets the lens cursor in _component-cursors.scss
 }
 
 @media (max-width: map-get($grid-breakpoints, sm)) {

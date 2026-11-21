@@ -377,7 +377,7 @@ Index of posts for Home and Archives
                             // Keyboard focus shows the same label: header-helpers.js reads data-label / data-year. ?>
                       <figure data-label="<?php echo esc_attr( $post_title ); ?>" data-year="<?php echo esc_attr( get_the_date( 'Y-m-d' ) ); ?>" onmouseenter="showText(this.dataset.label); showYear(this.dataset.year)" onmouseleave="hide(); hideYear();">
 
-                          <a href="<?php echo get_permalink(); ?>">
+                          <a href="<?php echo get_permalink(); ?>"<?php echo tiagsspace_opens_attr(); ?>>
 
                               <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
 

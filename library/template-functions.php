@@ -692,6 +692,80 @@ function tiagsspace_gallery_sizer_spans( $attachments, $cols ) {
 }
 
 /*
+ * How many attachments a post shows in its default gallery: the ones not flagged
+ * remove_from_default_gallery, as tiagsspace_post_gallery_ids() counts them.
+ * Counted for a whole list of posts in one query and remembered for the request:
+ * call tiagsspace_prime_attachment_counts() with a loop's post IDs first; a post
+ * not primed is counted with the posts of the current main loop around it.
+ */
+function tiagsspace_prime_attachment_counts( $post_ids ) {
+	global $wpdb;
+	$counts  = &tiagsspace_attachment_counts_store();
+	$missing = array_values( array_diff( array_unique( array_map( 'intval', (array) $post_ids ) ), array_keys( $counts ) ) );
+	$missing = array_filter( $missing );
+	if ( ! $missing ) {
+		return;
+	}
+	foreach ( $missing as $id ) {
+		$counts[ $id ] = 0;
+	}
+	$in   = implode( ',', $missing );   // integers only
+	$rows = $wpdb->get_results(
+		"SELECT p.post_parent AS parent, COUNT(DISTINCT p.ID) AS n
+		 FROM {$wpdb->posts} p
+		 LEFT JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = 'remove_from_default_gallery'
+		 WHERE p.post_type = 'attachment'
+		   AND p.post_status NOT IN ('trash', 'auto-draft')
+		   AND p.post_parent IN ($in)
+		   AND ( m.meta_value IS NULL OR m.meta_value <> '1' )
+		 GROUP BY p.post_parent"
+	);
+	foreach ( (array) $rows as $row ) {
+		$counts[ (int) $row->parent ] = (int) $row->n;
+	}
+}
+
+function &tiagsspace_attachment_counts_store() {
+	static $counts = array();
+	return $counts;
+}
+
+function tiagsspace_visible_attachment_count( $post_id ) {
+	$post_id = (int) $post_id;
+	$counts  = &tiagsspace_attachment_counts_store();
+	if ( ! isset( $counts[ $post_id ] ) ) {
+		global $wp_query;
+		$ids = ( $wp_query && $wp_query->posts ) ? wp_list_pluck( $wp_query->posts, 'ID' ) : array();
+		$ids[] = $post_id;
+		tiagsspace_prime_attachment_counts( $ids );
+	}
+	return $counts[ $post_id ] ?? 0;
+}
+
+/*
+ * What a link to a post opens, for its cursor (_component-cursors.scss): a film
+ * plays (data-opens="film", the play cursor), a 4K Lento mix plays its sound
+ * (data-opens="mix", the waveform), any other post type except pages opens its
+ * pictures: a stack of photographs when the gallery shows two or more
+ * (data-opens="set"), one picture when it shows one or none (data-opens="single").
+ * Returns the attribute with a leading space, or '' (pages, attachments).
+ */
+function tiagsspace_opens_attr( $post = null ) {
+	$post = get_post( $post );
+	$type = $post ? $post->post_type : '';
+	if ( ! $type || in_array( $type, array( 'page', 'attachment' ), true ) ) {
+		return '';
+	}
+	$opens = array( 'films' => 'film', '4k-lento' => 'mix' );
+	if ( isset( $opens[ $type ] ) ) {
+		$what = $opens[ $type ];
+	} else {
+		$what = tiagsspace_visible_attachment_count( $post->ID ) > 1 ? 'set' : 'single';
+	}
+	return ' data-opens="' . $what . '"';
+}
+
+/*
  * True the first time a key is seen in this request. For assets a template part
  * prints inline and that must appear once per page even when the part renders
  * many times (one gallery per entry on the Log listing).
