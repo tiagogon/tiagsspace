@@ -44,10 +44,7 @@
         display: none;
     }
 
-    // Body rows — clickable
-    tbody tr[data-href] {
-        cursor: pointer;
-    }
+    // Body rows are clickable: their cursor (the hand) is in _component-cursors.scss
 
     tbody tr {
         &:hover {

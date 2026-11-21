@@ -3,8 +3,8 @@
 // --------------------------------------------------
 // PhotoSwipe replaced Magnific Popup in Nov 2026 and copies its look exactly:
 // the image alone on the theme background at 0.95, no arrows, no close
-// button, no counter (lightbox.js turns them off), a pointer over the image
-// (click = next) and zoom-out beside it (click = closes), "..." while a slow
+// button, no counter (lightbox.js turns them off), a click on the image's right
+// half = next, on its left half = previous, beside it = close, "..." while a slow
 // image loads, the title only on dark pages. The theme margins on every side
 // come from lightbox.js (paddingFn). The image fade-in is in
 // _component-image-fade.scss. Vendor CSS: _vendor-photoswipe.scss (never edit).
@@ -30,21 +30,14 @@
 
 
 // --------------------------------------------------
-// Images and cursors
+// Images
 // --------------------------------------------------
+// Cursors (next on the right half of the image, previous on the left half,
+// close beside it) are in _component-cursors.scss.
 
 .pswp {
   // No dark box behind a slide whose thumbnail is missing: the page background.
   --pswp-placeholder-bg: transparent;
-
-  .pswp__img {
-    cursor: pointer; // click = next image
-  }
-  .pswp__scroll-wrap,
-  .pswp__item,
-  .pswp__zoom-wrap {
-    cursor: zoom-out; // click beside the image = close
-  }
 }
 
 

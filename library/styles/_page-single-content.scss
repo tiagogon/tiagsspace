@@ -93,8 +93,7 @@
       background: none;
       font: inherit;
       line-height: inherit;
-      color: inherit;
-      cursor: pointer;
+      color: inherit; // cursor: the hand, from _component-cursors.scss (it is a button)
       &:hover {
         text-decoration: none;
       }

@@ -1,0 +1,219 @@
+// --------------------------------------------------
+// Cursors: the theme's drawn set (library/images/cursors/)
+// --------------------------------------------------
+// Native CSS cursors (the system draws them, so they never lag the hand).
+// The site uses the "straight" set, 1.5px line, 28px (Tiago, Nov 2026; a grease-pencil
+// "contact sheet" set was tried and dropped). $cursor-set names it: a new set
+// is a folder beside straight/ and an entry in $cursor-hotspots.
+//
+// Each set has a light/ and a dark/ version: the outer line always contrasts
+// with the page (black outline on light pages, white outline on dark ones).
+// Drawing rules, hotspots and how to add a cursor:
+// library/images/cursors/README.md.
+//
+// Specificity: the general rules sit inside :where(body…), so they
+// weigh no more than a bare element. Any component that sets its own cursor
+// on a class (Plyr's controls, the front-end gallery editor) keeps its own.
+// Mouse and trackpad only: touch screens get nothing.
+
+@import "component-cursors-version"; // $cursor-version, written by bin/cursors-derive.py
+
+$cursor-path: "../images/cursors";
+$cursor-set: straight;
+
+// Hotspot of each cursor in px. The cursors are 28px (Tiago, Nov 2026), drawn on a
+// 36-unit square: px = unit × 28/36, rounded.
+$cursor-hotspots: (
+  straight: (arrow: 2 2, hand: 5 3, folder: 3 5, external: 14 14, magnify: 14 14, close: 14 14, previous: 2 14, next: 26 14, grab: 14 15, grabbing: 13 13, play: 14 14, stack: 14 14, single: 14 14, mix: 14 14)
+);
+
+// System cursor if the file fails to load.
+$cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, grabbing: grabbing);
+
+@mixin cursor($set, $name, $mode, $important: false) {
+  $hs: map-get(map-get($cursor-hotspots, $set), $name);
+  $fallback: pointer;
+  @if map-has-key($cursor-fallbacks, $name) {
+    $fallback: map-get($cursor-fallbacks, $name);
+  }
+  @if $important {
+    cursor: url("#{$cursor-path}/#{$set}/#{$mode}/#{$name}.svg?v=#{$cursor-version}") nth($hs, 1) nth($hs, 2), $fallback !important;
+  } @else {
+    cursor: url("#{$cursor-path}/#{$set}/#{$mode}/#{$name}.svg?v=#{$cursor-version}") nth($hs, 1) nth($hs, 2), $fallback;
+  }
+}
+
+// Where each cursor shows. Written inside a :where(body…) block.
+@mixin cursor-contexts($set, $mode) {
+  & {
+    @include cursor($set, arrow, $mode);
+  }
+
+  // Anything that opens something
+  a,
+  button,
+  summary,
+  label[for],
+  [role="button"],
+  tr[data-href] {
+    @include cursor($set, hand, $mode);
+  }
+
+  // Links to an archive: the menu (not its collapse toggles), the header
+  // crumbs, the terms in an entry's footer (not Edit / Gallery edit / Download)
+  #collapseMenu a:not([data-toggle]):not([target]),
+  .site-title a,
+  .footer-meta a:not(.post-edit-link):not(.gallery-edit-toggle):not([id^="download-all"]) {
+    @include cursor($set, folder, $mode);
+  }
+
+  // Links that leave the site
+  a[target="_blank"],
+  a[href^="mailto:"],
+  a[rel~="external"] {
+    @include cursor($set, external, $mode);
+  }
+
+  // Previous / Next: the adjacent set on a single work (WordPress's rel="prev"
+  // and rel="next"), the previous / next page of an archive (classes from
+  // the *_posts_link_attributes filters in functions.php)
+  a[rel="prev"],
+  a.pagination__previous {
+    @include cursor($set, previous, $mode);
+  }
+  a[rel="next"],
+  a.pagination__next {
+    @include cursor($set, next, $mode);
+  }
+
+  // A link that opens a work: a film plays, a 4K Lento mix plays its sound
+  // (the waveform), any other post opens its pictures (a stack for two or more,
+  // one picture for one or none).
+  // data-opens comes from tiagsspace_opens_attr() (archive and related
+  // thumbnails, Index rows); the Log listing's entry titles open an entry.
+  a[data-opens="film"],
+  tr[data-opens="film"] {
+    @include cursor($set, play, $mode);
+  }
+  a[data-opens="mix"],
+  tr[data-opens="mix"] {
+    @include cursor($set, mix, $mode);
+  }
+  a[data-opens="set"],
+  tr[data-opens="set"],
+  .single-title-heading a {
+    @include cursor($set, stack, $mode);
+  }
+  // A work whose gallery shows one picture or none: a single picture
+  a[data-opens="single"],
+  tr[data-opens="single"] {
+    @include cursor($set, single, $mode);
+  }
+
+  // A gallery dragged sideways (Swiper, template-parts/entry-gallery-horizontal.php):
+  // an open hand over it, a closed hand while dragging (.is-grabbing, set from
+  // Swiper's touchStart / touchEnd: Swiper prevents pointerdown's default, so
+  // :active never applies). Swiper's own grabCursor is off, so no inline cursor.
+  .swiper {
+    @include cursor($set, grab, $mode);
+  }
+  .swiper.is-grabbing {
+    @include cursor($set, grabbing, $mode);
+  }
+
+  // A picture that opens: the lightbox, Hyper's Intense images
+  .gallery-lightbox a.lightbox-link,
+  .intense {
+    @include cursor($set, magnify, $mode);
+  }
+
+  // Text stays an I-beam: fields and the prose of a post
+  textarea,
+  [contenteditable],
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
+  section.post-content p,
+  section.post-content li,
+  section.post-content blockquote,
+  section.post-content h1, section.post-content h2, section.post-content h3,
+  section.post-content h4, section.post-content h5, section.post-content h6 {
+    cursor: text;
+  }
+}
+
+// Lightbox (PhotoSwipe, library/js/lightbox.js): on the image, the right half
+// goes to the next picture and the left half (.pswp--img-left, set by
+// lightbox.js) to the previous; beside the image, a click closes.
+@mixin cursor-lightbox($set, $mode) {
+  .pswp .pswp__scroll-wrap,
+  .pswp .pswp__item,
+  .pswp .pswp__zoom-wrap {
+    @include cursor($set, close, $mode);
+  }
+  .pswp .pswp__img {
+    @include cursor($set, next, $mode);
+  }
+  .pswp.pswp--img-left .pswp__img {
+    @include cursor($set, previous, $mode);
+  }
+}
+
+// Hyper's viewer (Intense, library/js/intense-images/, vendored: never edited):
+// while a picture is open it is a fixed <figure> on body, z-index 999999, on
+// an 80% black backdrop, and a click anywhere closes it. Intense writes its own
+// PNG cursor inline on the picture, so this is the one place that needs
+// !important. Always the dark version: the backdrop is always black.
+@mixin cursor-intense($set) {
+  > figure[style*="z-index: 999999"],
+  > figure[style*="z-index: 999999"] * {
+    @include cursor($set, close, dark, true);
+  }
+}
+
+// Base: plain system cursors, for every device. Where the drawn set applies
+// (mouse and trackpad, below) it overrides these; elsewhere (a touch laptop or
+// a tablet with a mouse, whose primary pointer reports coarse) clickable things
+// still look clickable. Weights matter: the :where() rules weigh nothing, so the
+// drawn rules win; the lightbox rules (0,2,0) beat PhotoSwipe's own
+// `.pswp__img { cursor: zoom-out }` (0,1,0) and lose to the drawn (0,2,1).
+:where(tr[data-href], .entry-date-toggle) {
+  cursor: pointer;
+}
+.intense {
+  cursor: zoom-in;
+}
+.pswp .pswp__img {
+  cursor: pointer;   // click = next
+}
+.pswp .pswp__scroll-wrap,
+.pswp .pswp__item,
+.pswp .pswp__zoom-wrap {
+  cursor: zoom-out;  // click beside the image = close
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+  // Light pages
+  :where(body) {
+    @include cursor-contexts($cursor-set, light);
+  }
+  // Pages that are always dark (Films, 4K Lento)
+  :where(body.background-w-dark-color) {
+    @include cursor-contexts($cursor-set, dark);
+  }
+  // Pages that turn dark with the system (plain .white pages stay light)
+  @media (prefers-color-scheme: dark) {
+    :where(body.white-darkmode),
+    :where(body.tiagsssss-color) {
+      @include cursor-contexts($cursor-set, dark);
+    }
+  }
+
+  // The lightbox background follows the system scheme only
+  body {
+    @include cursor-intense($cursor-set);
+    @include cursor-lightbox($cursor-set, light);
+    @media (prefers-color-scheme: dark) {
+      @include cursor-lightbox($cursor-set, dark);
+    }
+  }
+}

@@ -7,3 +7,6 @@
 
 # Tumblr theme preview pages (built by tumblr/preview.js from live posts)
 tumblr/preview/
+
+# Cursor preview page: a local tool (opened through MAMP), never deployed
+library/images/cursors/test.html

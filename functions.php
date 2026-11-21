@@ -419,6 +419,12 @@ function posts_link_attributes() {
     return 'class="pagination__next view-more-button"';
 }
 
+// The link to the previous page of an archive: a class of its own, so it gets
+// the "previous" cursor (_component-cursors.scss), as .pagination__next gets "next".
+add_filter( 'previous_posts_link_attributes', function () {
+    return 'class="pagination__previous"';
+} );
+
 
 // Used for log grouping posts
 // ID of the next post on index
