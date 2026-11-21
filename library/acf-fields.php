@@ -903,3 +903,42 @@ add_filter( 'acf/update_value/key=field_558b40147ee22', function( $value, $post_
 	}
 	return $value;
 }, 10, 2 );
+
+// ------------------------------------------------------------
+// Previews: never read fields from a revision that has none
+// ------------------------------------------------------------
+
+/**
+ * On any preview URL (`?preview=true&p=<id>`) ACF reads every field from the
+ * post's newest revision, autosaves included (acf_revisions::acf_validate_post_id(),
+ * priority 10). The editor's own Preview button copies the fields into that
+ * autosave first, but an autosave made in the background, or a preview link
+ * opened from elsewhere (Queue Posts' `queue-preview`), leaves a revision with
+ * no ACF values at all: every get_field() comes back empty and the post renders
+ * with the theme defaults (Nov 2026: Hyper "Arena", Alternative gallery on,
+ * shown as Hyper's four-column grid). When the revision ACF picked carries no
+ * field reference (`_name` => `field_…`), read the post itself instead.
+ */
+add_filter( 'acf/validate_post_id', function( $post_id, $_post_id ) {
+	static $cache = array();
+
+	if ( ! is_numeric( $post_id ) || ! is_preview() ) {
+		return $post_id;
+	}
+	$post_id = (int) $post_id;
+	$parent  = wp_is_post_revision( $post_id );
+	if ( ! $parent ) {
+		return $post_id;
+	}
+	if ( ! isset( $cache[ $post_id ] ) ) {
+		$has_fields = false;
+		foreach ( get_post_meta( $post_id ) as $key => $values ) {
+			if ( '_' === $key[0] && isset( $values[0] ) && 0 === strpos( $values[0], 'field_' ) ) {
+				$has_fields = true;
+				break;
+			}
+		}
+		$cache[ $post_id ] = $has_fields ? $post_id : (int) $parent;
+	}
+	return $cache[ $post_id ];
+}, 11, 2 );

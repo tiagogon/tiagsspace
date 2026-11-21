@@ -122,6 +122,8 @@ The theme uses ACF for custom fields. For example, `get_field('is_archived', $te
 
 When querying posts that use an ACF true/false field to hide from archives (e.g. `hide_post_from_main_page_archives_and_feed`), always use an OR meta_query with both `NOT EXISTS` and `!= '1'`. ACF true/false may store '0' when unchecked (row exists) or have no row at all — checking only one condition will miss posts.
 
+**Previews read the newest revision.** On any `?preview=true&p=<id>` URL ACF reads every field from the post's newest revision, autosaves included. The editor's Preview button copies the fields into that autosave first; a background autosave or a preview link opened from elsewhere (Queue Posts' `queue-preview`) leaves one with no fields, and the post rendered with the theme defaults (Nov 2026, Hyper "Arena": Alternative gallery shown as Hyper's grid). A filter at the end of `library/acf-fields.php` (`acf/validate_post_id`, priority 11) sends ACF back to the post when the chosen revision carries no field reference. So a template must read fields with `get_field()` (no post id) for previews to work; never read them from `get_post_meta()` on the global post.
+
 ## Header logic
 The fixed top-left line (`template-parts/header-title.php`) is the page's title everywhere, built by `library/page-title/` from a list of crumbs (`tiagsspace_page_crumbs()`):
 - Home, search, 404: "Tiags' Space" (never shortened).
