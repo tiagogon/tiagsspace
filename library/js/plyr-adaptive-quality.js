@@ -22,6 +22,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Plyr configuration for self-hosted videos
     const plyrOptions = {
+        // Nothing kept in the visitor's browser; the element's data-plyr-config
+        // (library/video/player.php) also sets the theme's own icon sprite.
+        storage: { enabled: false },
         fullscreen: { enabled: true, fallback: true, iosNative: true, container: null },
         captions: {
             active: true,

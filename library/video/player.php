@@ -201,6 +201,14 @@ if (!function_exists('tiagsspace_video_build_config')) {
             'previewThumbnails' => ['enabled' => false],
             'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => true, 'container' => null],
             'pip'      => ['enabled' => false],
+            // Nothing kept in the visitor's browser (Nov 2026: the site has no cookie
+            // policy and stores nothing that outlives a visit). Plyr would otherwise
+            // save volume / mute / captions / speed / quality in localStorage ("plyr"),
+            // and fetch its icon sprite from cdn.plyr.io (a third party) and keep a
+            // copy in localStorage ("cache-sprite-plyr"). A same-origin iconUrl is used
+            // in place (<use href>), never fetched into storage.
+            'storage'  => ['enabled' => false],
+            'iconUrl'  => get_template_directory_uri() . '/library/js/plyr/plyr.svg?ver=' . tiagsspace_asset_ver('/library/js/plyr/plyr.svg'),
         ];
 
         // Controls: a fixed set when enabled, otherwise none (background videos).
