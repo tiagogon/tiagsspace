@@ -581,19 +581,8 @@ Index of posts for Home and Archives
                     button: '.view-more-button',
                     scrollThreshold: 800 // load earlier (distance from bottom in px)
                 });
-                var infScroll = $container.data('infiniteScroll');
-                var $viewMoreButton = $('.view-more-button');
-
-                // Scroll 15 pages, then load with the button
-                // https://infinite-scroll.com/extras.html#scroll-2-pages-then-load-with-button
-                function onPageLoad() {
-                    if (infScroll.loadCount == 15) {
-                        $container.infiniteScroll('option', { loadOnScroll: false });
-                        $viewMoreButton.show();
-                        $container.off('load.infiniteScroll', onPageLoad);
-                    }
-                }
-                $container.on('load.infiniteScroll', onPageLoad);
+                // Loads on scroll with no page limit, until the last page (Nov 2026:
+                // the "More" button after 15 pages is gone).
 
                 $container.on('append.infiniteScroll', function (event, body, path, items) {
                     items.forEach(function (item) {
