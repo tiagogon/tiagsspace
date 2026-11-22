@@ -24,7 +24,7 @@ $cursor-set: straight;
 // Hotspot of each cursor in px. The cursors are 28px (Tiago, Nov 2026), drawn on a
 // 36-unit square: px = unit × 28/36, rounded.
 $cursor-hotspots: (
-  straight: (arrow: 2 2, hand: 5 3, folder: 3 5, external: 14 14, magnify: 14 14, close: 14 14, previous: 2 14, next: 26 14, grab: 14 15, grabbing: 13 13, play: 14 14, stack: 14 14, single: 14 14, mix: 14 14)
+  straight: (arrow: 2 2, hand: 5 3, folder: 3 5, external: 14 14, magnify: 14 14, close: 14 14, previous: 2 14, next: 26 14, grab: 14 15, grabbing: 13 13, play: 14 14, pause: 14 14, stack: 14 14, single: 14 14, mix: 14 14)
 );
 
 // System cursor if the file fails to load.
@@ -122,6 +122,24 @@ $cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, 
   }
   .hgallery--still .hgallery__track {
     @include cursor($set, next, $mode);
+  }
+
+  // The film player (template-parts/entry-video-player.php; a click on the picture
+  // plays or pauses, Plyr's clickToPlay): play while paused, also on the big centre
+  // button, pause while it plays. In fullscreen, when the mouse rests and Plyr
+  // hides its controls, the cursor goes too (Plyr's own cursor: none sits on the
+  // container, which this wrapper rule would otherwise override); inline it stays.
+  // Archive teasers are outside .container-video and keep their link's play.
+  .container-video .plyr--paused .plyr__video-wrapper,
+  .container-video .plyr--paused .plyr__control--overlaid {
+    @include cursor($set, play, $mode);
+  }
+  .container-video .plyr--playing .plyr__video-wrapper {
+    @include cursor($set, pause, $mode);
+  }
+  .container-video .plyr--hide-controls:fullscreen .plyr__video-wrapper,
+  .container-video .plyr--fullscreen-fallback.plyr--hide-controls .plyr__video-wrapper {
+    cursor: none;
   }
 
   // A picture that opens: the lightbox, Hyper's Intense images
