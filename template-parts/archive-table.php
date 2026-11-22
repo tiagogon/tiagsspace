@@ -157,7 +157,7 @@ $total = $table_query->found_posts;
 
     <div class="ti-hover-preview" aria-hidden="true">
         <img src="" alt="">
-        <video class="ti-hover-preview-video" muted loop playsinline preload="none" aria-hidden="true"></video>
+        <video class="ti-hover-preview-video" muted loop playsinline disablepictureinpicture preload="none" aria-hidden="true"></video>
     </div>
 
 </div>

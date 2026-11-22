@@ -234,3 +234,10 @@ $background_color_4: rgba(255, 255, 255, 0.2);
 	}
 }
 
+
+// No Picture-in-Picture (functions.php adds disablepictureinpicture to the
+// <video>): Video.js only re-checks its own PiP button on loadedmetadata, so on
+// a video with controls the button would stay in the bar. Hide it outright.
+.video-js .vjs-picture-in-picture-control {
+	display: none;
+}

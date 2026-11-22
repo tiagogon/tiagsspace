@@ -424,6 +424,23 @@ add_filter( 'previous_posts_link_attributes', function () {
     return 'class="pagination__previous"';
 } );
 
+// No Picture-in-Picture on any video: Firefox's overlay button, Safari's and
+// Chrome's control/menu entry and iOS's automatic PiP all honour the
+// `disablepictureinpicture` attribute. The theme prints it on its own <video>
+// tags (films, archive teasers, the Index preview); Videopack (gallery videos,
+// [KGVID]) writes its own markup, so it is added here, plugin untouched.
+// On `kgvid_shortcode`, the last step: Videopack runs wp_kses() over its code
+// after `kgvid_single_video_code`, which would strip the attribute again.
+add_filter( 'kgvid_shortcode', 'tiagsspace_videopack_disable_pip' );
+function tiagsspace_videopack_disable_pip( $code ) {
+    return preg_replace_callback( '/<video\b[^>]*>/i', function ( $m ) {
+        if ( stripos( $m[0], 'disablepictureinpicture' ) !== false ) {
+            return $m[0];
+        }
+        return preg_replace( '/^<video\b/i', '<video disablepictureinpicture', $m[0] );
+    }, $code );
+}
+
 
 // Used for log grouping posts
 // ID of the next post on index

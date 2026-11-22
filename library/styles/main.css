@@ -6323,6 +6323,9 @@ div.pswp__img--placeholder,
 .video-js.video-skin-trouble.vjs-has-started .vjs-big-play-button {
   display: none !important; }
 
+.video-js .vjs-picture-in-picture-control {
+  display: none; }
+
 .tg-fade .imgcontainer img {
   opacity: 0;
   transition: opacity 0.6s ease-out; }

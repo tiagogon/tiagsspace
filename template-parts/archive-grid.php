@@ -468,6 +468,7 @@ Index of posts for Home and Archives
                                         class="plyr-thumbnail-front<?php echo $poster_thumb_id ? ' teaser-over-poster' : ''; ?>"
                                         muted
                                         playsinline
+                                        disablepictureinpicture
                                         webkit-playsinline
                                         preload="none"
                                         loop
