@@ -5755,6 +5755,176 @@ video.plyr-thumbnail-front {
   background: transparent;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 0 8px rgba(0, 0, 0, 0.55); }
 
+:where(body) {
+  --tg-ink: #000;
+  --tg-paper-bottom: #F2EFE3;
+  --tg-paper-top: #E3E5F2; }
+
+:where(body.background-w-dark-color) {
+  --tg-ink: #fff;
+  --tg-paper-bottom: #1d1a17;
+  --tg-paper-top: #16161b; }
+
+@media (prefers-color-scheme: dark) {
+  :where(body.white-darkmode),
+  :where(body.tiagsssss-color) {
+    --tg-ink: #fff;
+    --tg-paper-bottom: #1d1a17;
+    --tg-paper-top: #16161b; } }
+.media {
+  position: relative;
+  container-type: inline-size; }
+
+.media__frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  --p-line: 1.5px;
+  --p-time: 23px;
+  --p-icon: 24px;
+  --p-sound: 24px;
+  --p-gutter: 12px;
+  --p-lens: 40px;
+  --playmark: 40px;
+  --p-lensmark: 56px;
+  --p-rise: cubic-bezier(.2, .8, .2, 1); }
+
+@supports (width: 1cqw) {
+  .media__frame {
+    --p-time: clamp(23px, (100cqw - 767.5px) * 1000, 36px);
+    --p-icon: clamp(24px, (100cqw - 767.5px) * 1000, 32px);
+    --p-sound: clamp(24px, (100cqw - 767.5px) * 1000, 32px);
+    --p-lens: clamp(40px, (100cqw - 767.5px) * 1000, 48px);
+    --playmark: clamp(40px, (100cqw - 767.5px) * 1000, 48px);
+    --p-lensmark: clamp(56px, (100cqw - 767.5px) * 1000, 72px);
+    --p-gutter: clamp(12px, (100cqw - 991.5px) * 1000, 16px); } }
+.media__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity .3s; }
+
+.media.is-started .media__poster {
+  opacity: 0; }
+
+html.tg-media .media:not(.is-mounted) video,
+html.tg-media .media:not(.is-mounted) audio {
+  opacity: 0;
+  pointer-events: none; }
+
+.media video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none; }
+
+.media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateZ(0); }
+
+.media .plyr {
+  min-width: 0;
+  background: transparent;
+  --plyr-color-main: var(--tg-ink); }
+
+.media .plyr__video-wrapper,
+.media .plyr__poster {
+  background: transparent; }
+
+.media .plyr__poster {
+  display: none; }
+
+.media .ico {
+  width: var(--p-icon);
+  height: var(--p-icon);
+  color: var(--tg-ink);
+  display: block; }
+
+.media-btn {
+  appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; }
+
+.media-btn:focus {
+  outline: none; }
+
+.media-btn:focus-visible {
+  outline: var(--p-line) solid currentColor;
+  outline-offset: 3px; }
+
+.media-btn::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%); }
+
+.media__playmark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--playmark);
+  height: var(--playmark);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  display: none;
+  z-index: 2; }
+
+.media__playmark svg {
+  width: 100%;
+  height: 100%;
+  display: block; }
+
+.media__playmark--large {
+  width: var(--p-lensmark);
+  height: var(--p-lensmark); }
+
+html.tg-touch .media:not(.is-playing) .media__playmark {
+  display: block; }
+
+.media__loading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  pointer-events: none;
+  display: none;
+  color: var(--tg-ink); }
+
+.media.is-waiting .media__loading {
+  display: block; }
+
+.media__loading svg {
+  width: 56px;
+  height: 56px;
+  display: block; }
+
+.media__loading .arc {
+  stroke-dasharray: 28 72;
+  transform-origin: 18px 18px;
+  animation: tg-sweep 1.2s linear infinite; }
+
+@keyframes tg-sweep {
+  to {
+    transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .media__loading .arc {
+    animation: none; } }
 /*! PhotoSwipe main CSS by Dmytro Semenov | photoswipe.com */
 .pswp {
   --pswp-bg: #000;

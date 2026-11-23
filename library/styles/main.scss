@@ -32,6 +32,7 @@
 // ----- Components (vendor + overrides) -----
 
 @import "component-plyr";
+@import "component-player-base"; // media players: tokens, sizes, play mark, loading wheel
 @import "vendor-photoswipe";
 @import "component-lightbox";
 @import "component-videojs";

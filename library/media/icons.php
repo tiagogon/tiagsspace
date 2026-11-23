@@ -44,6 +44,15 @@ function tiagsspace_player_sprite_markup() {
 }
 
 /**
+ * The sprite, the first time it is asked for on a page; '' after that.
+ *
+ * @return string
+ */
+function tiagsspace_player_sprite_once() {
+	return tiagsspace_once( 'player-icon-sprite' ) ? tiagsspace_player_sprite_markup() : '';
+}
+
+/**
  * One player icon, drawn from the inline sprite.
  *
  * @param string $name  Icon name, the file name in src/ without .svg (e.g. 'play', 'captions-on').
@@ -52,8 +61,7 @@ function tiagsspace_player_sprite_markup() {
  */
 function tiagsspace_player_icon( $name, $class = 'ico' ) {
 	$name   = sanitize_key( $name );
-	$sprite = tiagsspace_once( 'player-icon-sprite' ) ? tiagsspace_player_sprite_markup() : '';
-	return $sprite . sprintf(
+	return tiagsspace_player_sprite_once() . sprintf(
 		'<svg class="%1$s" aria-hidden="true" focusable="false"><use href="#tg-%2$s"></use></svg>',
 		esc_attr( $class ),
 		esc_attr( $name )
