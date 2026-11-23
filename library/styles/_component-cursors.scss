@@ -137,6 +137,14 @@ $cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, 
   .container-video .plyr--playing .plyr__video-wrapper {
     @include cursor($set, pause, $mode);
   }
+  // The media players (library/media/README.md): a picture that plays and pauses
+  // (gallery videos), play at rest, pause while it plays.
+  .media .media__hit {
+    @include cursor($set, play, $mode);
+  }
+  .media.is-playing .media__hit {
+    @include cursor($set, pause, $mode);
+  }
   .container-video .plyr--hide-controls:fullscreen .plyr__video-wrapper,
   .container-video .plyr--fullscreen-fallback.plyr--hide-controls .plyr__video-wrapper {
     cursor: none;

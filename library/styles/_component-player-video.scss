@@ -1,0 +1,39 @@
+// --------------------------------------------------
+// Player skin: video (gallery videos; films join in Phase 6).
+// Tokens from _component-player-base.scss; the look is decided on library/players/test.html.
+// --------------------------------------------------
+
+// ----- Gallery video: the picture alone -----
+// The gallery item's .imgcontainer reserves the ratio (padding-bottom), so Masonry lays out once;
+// the player fills that box. Nothing is drawn on the picture: no progress line, no sound control.
+.media[data-media-kind="gallery-video"] {
+  position: absolute;
+  inset: 0;
+}
+.media--video .media__frame {
+  overflow: hidden;
+}
+// The whole picture is the button: play / pause (the cursors are in _component-cursors.scss).
+.media__hit {
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+.media__hit:focus {
+  outline: none;
+}
+.media__hit:focus-visible {
+  outline: var(--p-line) solid #fff;
+  outline-offset: -4px;
+}
+// The browser's own controls, only when the module could not start (.is-native)
+.media.is-native .media__hit,
+.media.is-native .media__playmark {
+  display: none;
+}

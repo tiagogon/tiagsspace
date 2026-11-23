@@ -164,10 +164,6 @@ li.masonry-item {
         video.teaser-over-poster {
           position: relative;
         }
-        .kgvid_wrapper_inline_left {
-            float: left;
-            margin: 0;
-        }
         // Plyr video — hide controls in thumbnail previews
         .plyr__controls, .plyr__control--overlaid {
             display: none;
@@ -176,20 +172,6 @@ li.masonry-item {
         // #000): the page background, like the image thumbnails. Films untouched.
         .plyr, .plyr__video-wrapper {
             background: transparent;
-        }
-
-        // Video JS (video pack plugin)
-        .kgvid_wrapper_inline {
-            display: contents;
-        }
-        .video-js {
-            background-color: transparent;
-        }
-        .vjs-no-js {
-            background-color: transparent;
-        }
-        .vjs-poster {
-            background-color: transparent
         }
 
         video {

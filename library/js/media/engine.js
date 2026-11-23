@@ -13,6 +13,7 @@
  *     options are Plyr options merged over PLYR_BASE, plus `ambient: true` for a player that
  *     plays by itself and never pauses the others (gallery Ambient videos).
  *   play() tells the bus; every other non-ambient player pauses (one sound at a time).
+ *   play( { quiet: true } ) for a player starting by itself: it does not tell the bus.
  *   wait() is set by wait.js (watchWaiting) to wake its check at once.
  *
  * Do not
@@ -53,10 +54,12 @@ export function engine( media, options = {} ) {
 		plyr,
 		media,
 		ambient,
-		play() {
+		// play( { quiet: true } ): a player starting by itself (muted, in view) does not stop
+		// the others; only a play the visitor asked for does.
+		play( { quiet = false } = {} ) {
 			const p = plyr.play();
 			if ( p && p.catch ) p.catch( () => {} );   // a refused autoplay is not an error
-			if ( ! ambient ) document.dispatchEvent( new CustomEvent( EVENT, { detail: e } ) );
+			if ( ! ambient && ! quiet ) document.dispatchEvent( new CustomEvent( EVENT, { detail: e } ) );
 		},
 		pause() { plyr.pause(); },
 		toggle() { media.paused ? e.play() : e.pause(); },

@@ -73,7 +73,7 @@ const view = new IntersectionObserver( entries => entries.forEach( en => {
 	if ( el.dataset.inView === ( inView ? '1' : '0' ) ) return;
 	el.dataset.inView = inView ? '1' : '0';
 	el.dispatchEvent( new CustomEvent( 'tiagsspace:media-view', { detail: { inView } } ) );
-} ) );
+} ), { threshold: 0.15 } );   // in view = at least 15% of it on screen (the design page's rule)
 
 function scan( root = document ) {
 	const found = root.matches && root.matches( '.media' ) ? [ root ] : [];

@@ -32,6 +32,22 @@ add_action(
 	1
 );
 
+// Videopack (video-embed-thumbnail-generator) only encodes now: its player (Video.js) is no longer
+// printed anywhere, so its stylesheets stop loading on the front end. A post that still has a
+// [KGVID] shortcode in its text keeps them.
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( is_singular() && false !== strpos( (string) get_post_field( 'post_content', get_queried_object_id() ), '[KGVID' ) ) {
+			return;
+		}
+		foreach ( array( 'video-js', 'video-js-kg-skin', 'kgvid_video_styles' ) as $handle ) {
+			wp_dequeue_style( $handle );
+		}
+	},
+	20
+);
+
 /**
  * One version for the whole module folder: changes when any media module changes.
  *
