@@ -17,6 +17,7 @@ require_once('library/video/enqueues.php');   // conditional player asset regist
 require_once('library/video/hls-import.php'); // Media Library .hlspack.zip → HLS attachment
 require_once('library/video/hls-subtitles.php'); // EXT-X-MEDIA subtitle renditions in a bundle
 require_once('library/film-captions.php');    // ACF glue: caption rows → subtitle renditions
+require_once('library/audio/peaks.php');      // Audio peaks: loudness shape per file, ffmpeg on upload (cron) + wp tiagsspace audio-peaks
 require_once('library/media/icons.php');      // Player icons: the one inline sprite + tiagsspace_player_icon()
 require_once('library/media/registry.php');   // Player kinds + tiagsspace_media_open() (the outer element, the loader once)
 require_once('library/media/enqueue.php');    // <html> tg-media / tg-touch, the module loader and its version
