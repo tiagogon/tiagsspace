@@ -7,8 +7,8 @@
  * inherits the enclosing scope: it expects $attachmen and $count_item plus the
  * gallery-level variables computed above the loop in entry-gallery.php
  * ($number_of_columns_*, $deactivat_masonry, $item_max_heigh, $light_box,
- * $intense, $class_container, $gallery_fixed_width, the $post_video_* option
- * vars, etc.).
+ * $intense, $class_container, $gallery_fixed_width, etc.). Gallery videos read their own
+ * behaviour (library/media/behaviour.php).
  *
  * Set $rendering_hidden_pool = true before including to suppress the Masonry
  * column sizer, which belongs only to the live grid.
@@ -200,13 +200,16 @@
                     // INTRINSTIC RATIO
 
                         // AUDIO or 3D
-                        if ( $attachmen->post_mime_type == "audio/wav" OR $attachmen->post_mime_type == "audio/mpeg") {
+                        if ( 0 === strpos( (string) $attachmen->post_mime_type, 'audio/' ) ) {
 
-                            // TO CODE
-                            // $intrinsic_ratio of audio container
+                            // The audio tile's cell: its cover's ratio when it has one, else 3:4
+                            // (the Hyper galleries' portrait cells, the design page's tiles).
+                            // Before Nov 2026 this was a stub and the previous item's ratio leaked in.
+                            $audio_cover = wp_get_attachment_image_src( get_post_thumbnail_id( $attachmen->ID ), 'thumbnail' );
+                            $intrinsic_ratio = ( $audio_cover && ! empty( $audio_cover[1] ) ) ? $audio_cover[2] * 100 / $audio_cover[1] : 400 / 3;
 
                         // VIDEO
-                        } elseif ( $attachmen->post_mime_type == "video/mpeg" OR $attachmen->post_mime_type == "video/mp4" OR $attachmen->post_mime_type == "video/quicktime" ) {
+                        } elseif ( 0 === strpos( (string) $attachmen->post_mime_type, 'video/' ) ) {
 
                           // --- Videopacl bug does not make this work:
                           // $video_metadata = wp_get_attachment_metadata( $attachmen->ID );
@@ -254,46 +257,6 @@
                             );
                         }
 
-                    // COMPILE VIDEO OPTIONS
-
-                        // IF there are DEFAULT VIDEO PLAYER OPTIONS of the ATTACHEMENT
-                        if (get_field('alternative_video_player_options',$attachmen->ID)) {
-                            // need to convert boleans into true/false strings >> https://stackoverflow.com/questions/2795177/how-to-convert-boolean-to-string
-                            $video_controls = (get_field('video_controls',$attachmen->ID)) ? 'true' : 'false';
-                            $video_mute = (get_field('video_mute',$attachmen->ID)) ? 'true' : 'false';
-                            $video_loop = (get_field('video_loop',$attachmen->ID)) ? 'true' : 'false';
-                            $video_autoplay = (get_field('video_autoplay',$attachmen->ID)) ? 'true' : 'false';
-                            $video_pauseothervideos = (get_field('video_pauseothervideos',$attachmen->ID)) ? 'true' : 'false';
-                            $video_preload = get_field('video_preload',$attachmen->ID); // NOT A BOLEAN - string
-                            $post_video_schema = get_field('video_schema',$attachmen->ID);
-
-                        // Else use them on the post level
-                        } else {
-                            $video_controls = ($post_video_controls) ? 'true' : 'false';
-                            $video_mute = ($post_video_mute) ? 'true' : 'false';
-                            $video_loop = ($post_video_loop) ? 'true' : 'false';
-                            $video_autoplay = ($post_video_autoplay) ? 'true' : 'false';
-                            $video_pauseothervideos = ($post_video_pauseothervideos) ? 'true' : 'false';
-                            $video_preload = $post_video_preload; // NOT A BOLEAN - string
-                            $video_schema = ($post_video_schema) ? 'true' : 'false';
-                        }
-
-                        // COMPILE VIDEO OPTIONS STRING
-                        // Disable autoplay initially - Intersection Observer will handle it
-                        $video_otions = '
-                            controls="'.$video_controls.'"
-                            mute="'.$video_mute.'"
-                            loop="'.$video_loop.'"
-                            autoplay="false"
-                            playsinline="true"
-                            pauseothervideos="'.$video_pauseothervideos.'"
-                            preload="'.$video_preload.'"
-                            Schema="'.$video_schema.'"';
-                        
-                        // Store original autoplay setting for Intersection Observer
-                        $should_autoplay = $video_autoplay;
-
-
                     // add masonry-item-sizer for Masonry responsive calculations
                     if ($count_item == 1 AND $number_of_columns_lg > 1 AND $deactivat_masonry == false AND empty($rendering_hidden_pool)) { ?>
 
@@ -309,7 +272,7 @@
                     // ----------------------------------------
 
                     // AUDIO
-                    if ( $attachmen->post_mime_type == "audio/wav" OR $attachmen->post_mime_type == "audio/mpeg" ) { ?>
+                    if ( 0 === strpos( (string) $attachmen->post_mime_type, 'audio/' ) ) { ?>
 
                         <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>"<?php echo $item_edit_attrs; ?>  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
@@ -321,31 +284,40 @@
                             }
                             ?>
 
-                            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" style="<?php atachement_custom_margin($attachmen->ID); ?>">
+                            <figure style="<?php atachement_custom_margin($attachmen->ID); ?>">
                                 <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
-
-                                        <?php
-
-                                        $audio_url = wp_get_attachment_url( $attachmen->ID );?>
-
-                                        <audio class="plyr" controls>
-                                              <source src="<?php echo $audio_url;?>" type="audio/mpeg">
-                                            Your browser does not support the audio element.
-                                        </audio>
-
-
-
-
+                                    <?php
+                                    // The envelope fills the cell (library/audio/player.php)
+                                    echo render_audio_player( array(
+                                        'attachment_id' => $attachmen->ID,
+                                        'src'           => wp_get_attachment_url( $attachmen->ID ),
+                                        'mime'          => $attachmen->post_mime_type,
+                                        'title'         => $attachmen->post_title,
+                                        'context'       => 'gallery',
+                                    ) );
+                                    ?>
                                 </div>
                             </figure>
                         </div><?php
 
                     // VIDEO
-                    } elseif ( $attachmen->post_mime_type == "video/mpeg" OR $attachmen->post_mime_type == "video/mp4" OR $attachmen->post_mime_type == "video/quicktime" ) {
+                    } elseif ( 0 === strpos( (string) $attachmen->post_mime_type, 'video/' ) ) {
 
+                        // The media players' gallery video (library/video/player-gallery.php): poster,
+                        // native <video>, nothing on the picture. Its behaviour (Ambient / Player /
+                        // Custom) comes from library/media/behaviour.php.
+                        $video_behaviour = tiagsspace_gallery_video_behaviour( $attachmen->ID, $gallery_post_id );
+                        $video_poster_attrs = array();
+                        if ( empty( $rendering_hidden_pool ) && isset( $gallery_eager_items ) && $count_item <= $gallery_eager_items ) {
+                            if ( 1 === $count_item && ! empty( $gallery_high_priority ) ) {
+                                $video_poster_attrs['fetchpriority'] = 'high';
+                            }
+                        } else {
+                            $video_poster_attrs = array( 'loading' => 'lazy', 'decoding' => 'async' );
+                        }
                         ?>
 
-                        <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>" data-should-autoplay="<?php echo $should_autoplay; ?>"<?php echo $item_edit_attrs; ?> attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
+                        <div class="thumbnail item <?php echo $class_thumbnail;?> media-video video-id-<?php echo $attachmen->ID;?> attachmen-<?php echo $count_item;?>"<?php echo $item_edit_attrs; ?> attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
                             <?php
                             // Edit atachment media -- hide and delete
@@ -355,26 +327,17 @@
                             }
                             ?>
 
-                            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/VideoObject" style="<?php atachement_custom_margin($attachmen->ID); ?>">
+                            <figure style="<?php atachement_custom_margin($attachmen->ID); ?>">
                                 <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
-
-                                        <?php
-
-                                        echo do_shortcode('[KGVID id="'.$attachmen->ID.'" '.$video_otions.' ]');
-
-                                        echo "<style>
-                                                    .video-id-".$attachmen->ID." .vjs-fluid {padding-top: ".$intrinsic_ratio."%!important;
-                                                    }
-                                                </style>";
-                                        if ($video_mute == "true") {
-                                            echo "<style>
-                                                .video-id-".$attachmen->ID." .vjs-volume-menu-button {display: none!important;}
-                                            </style>";
-                                        }
-
-                                        // To activate scripts on the bootom
-                                        $there_is_video = true;
-                                         ?>
+                                    <?php
+                                    echo tiagsspace_render_gallery_video( $attachmen->ID, array(
+                                        'behaviour' => $video_behaviour,
+                                        'poster_id' => (int) get_post_thumbnail_id( $attachmen->ID ),
+                                        'sizes'     => isset( $attachmen_sizes ) ? $attachmen_sizes : '100vw',
+                                        'img_attrs' => $video_poster_attrs,
+                                        'title'     => $attachmen->post_title,
+                                    ) );
+                                    ?>
                                 </div>
                             </figure>
                         </div><?php

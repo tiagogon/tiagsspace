@@ -17,6 +17,13 @@ require_once('library/video/enqueues.php');   // conditional player asset regist
 require_once('library/video/hls-import.php'); // Media Library .hlspack.zip → HLS attachment
 require_once('library/video/hls-subtitles.php'); // EXT-X-MEDIA subtitle renditions in a bundle
 require_once('library/film-captions.php');    // ACF glue: caption rows → subtitle renditions
+require_once('library/audio/peaks.php');      // Audio peaks: loudness shape per file, ffmpeg on upload (cron) + wp tiagsspace audio-peaks
+require_once('library/audio/player.php');     // Audio player: the envelope (gallery tiles, mixes), render_audio_player()
+require_once('library/media/icons.php');      // Player icons: the one inline sprite + tiagsspace_player_icon()
+require_once('library/media/behaviour.php');  // Gallery videos: Ambient / Player / Custom from ACF + post type (legacy ticks read)
+require_once('library/media/content.php');    // <audio> in post text -> the mix player, at render time (singular views only)
+require_once('library/media/registry.php');   // Player kinds + tiagsspace_media_open() (the outer element, the loader once)
+require_once('library/media/enqueue.php');    // <html> tg-media / tg-touch, the module loader and its version
 require_once('library/page-title/page-title.php'); // Page title: header line, entry titles, hover labels (crumbs + renderer)
 
 // Admin Functions

@@ -32,9 +32,11 @@
 // ----- Components (vendor + overrides) -----
 
 @import "component-plyr";
+@import "component-player-base"; // media players: tokens, sizes, play mark, loading wheel
+@import "component-player-video"; // media players: gallery videos (films later)
+@import "component-player-audio"; // media players: the envelope (gallery tiles, mixes)
 @import "vendor-photoswipe";
 @import "component-lightbox";
-@import "component-videojs";
 @import "component-image-fade";
 @import "component-cursors"; // the drawn cursor set, lightbox cursors included
 

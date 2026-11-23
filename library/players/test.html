@@ -1,0 +1,1238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Players: design test</title>
+<!--
+  THE PLAYERS' DESIGN PAGE, kept in the repo to adjust and iterate (Tiago, 22 Nov 2026).
+  Locally through MAMP:
+  http://localhost:8888/tiagsspace/wp-content/themes/tiagsspace/library/players/test.html
+  Deployed with the theme, it also opens on production, with production's files:
+  https://tiags.space/wp-content/themes/tiagsspace/library/players/test.html
+
+  Every decided look and behaviour, on real files from the site's uploads (see the media
+  block at the top of the script). Plyr is only the engine here: every player
+  is built with Plyr's controls switched off, and the visible layer is ours.
+  Icons: library/images/player-icons/sprite.svg (bin/player-icons-build.py).
+  Peaks: library/players/test-data/*.json (bin/audio-peaks.py).
+-->
+<link rel="stylesheet" href="../js/plyr/plyr.css">
+<style>
+/* ---------- Lora, the site's two faces used here ---------- */
+@font-face { font-family: "Lora"; font-weight: 400; font-style: normal; font-display: swap; src: url("../fonts/lora/lora-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Lora"; font-weight: 400; font-style: italic; font-display: swap; src: url("../fonts/lora/lora-latin-400-italic.woff2") format("woff2"); }
+
+/* ---------- Tokens: the cursors' colours ---------- */
+:root {
+  --font: "Lora", serif;
+  --fs-heading: 36px;   /* $font-size: header, titles */
+  --fs-content: 23px;   /* $font-size-content: post paragraphs */
+  --line: 1.5px;
+  --photo: url("../../../../uploads/2022/09/MIna-H264-High-Profile-25000mkbs_thumb2-940x529.jpg");   /* 32 Sec Brush's poster, behind the demos; production's file is set by the media block in the script */
+  --icon: 32px;        /* player icons: 32px (decided) */
+  --edge-band: 12px;
+  --gutter: 16px;       /* the theme's side line: 16px from lg, 12px below (.side-padding) */
+  --sound-h: 32px;      /* the film's sound edge */
+  --rise: cubic-bezier(.2, .8, .2, 1);
+}
+@media (max-width: 991.98px) { :root { --gutter: 12px; } }
+body.scheme-light { --tg-ink: #000; --tg-paper-bottom: #F2EFE3; --tg-paper-top: #E3E5F2; --text: #000; }
+body.scheme-dark  { --tg-ink: #fff; --tg-paper-bottom: #1d1a17; --tg-paper-top: #16161b; --text: #fff; }
+body.page-gradient.scheme-light { background: linear-gradient(to top, #F2EFE3, #E3E5F2) fixed; }
+body.page-gradient.scheme-dark  { background: linear-gradient(to top, #1d1a17, #16161b) fixed; }
+body.page-white  { background: #fff; }
+
+html { background: #888; }
+body {
+  margin: 0; font-family: var(--font); font-weight: 400; color: var(--text);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  font-size: var(--fs-content); line-height: 1.4;
+}
+.tabular .tnum { font-variant-numeric: tabular-nums; }
+
+/* ---------- Cursors (the real files) ---------- */
+body.scheme-light { --c: light; }
+.cur-play   { cursor: url("../images/cursors/straight/light/play.svg") 14 14, pointer; }
+.cur-pause  { cursor: url("../images/cursors/straight/light/pause.svg") 14 14, pointer; }
+.cur-scrub  { cursor: url("../images/cursors/straight/light/scrub.svg") 14 14, ew-resize; }
+.scheme-dark .cur-play  { cursor: url("../images/cursors/straight/dark/play.svg") 14 14, pointer; }
+.scheme-dark .cur-pause { cursor: url("../images/cursors/straight/dark/pause.svg") 14 14, pointer; }
+.scheme-dark .cur-scrub { cursor: url("../images/cursors/straight/dark/scrub.svg") 14 14, ew-resize; }
+body { cursor: url("../images/cursors/straight/light/arrow.svg") 2 2, auto; }
+body.scheme-dark { cursor: url("../images/cursors/straight/dark/arrow.svg") 2 2, auto; }
+button, label, select, input { cursor: url("../images/cursors/straight/light/hand.svg") 5 3, pointer; }
+.scheme-dark button, .scheme-dark label, .scheme-dark select, .scheme-dark input { cursor: url("../images/cursors/straight/dark/hand.svg") 5 3, pointer; }
+
+/* ---------- Page ---------- */
+.panel {
+  position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center;
+  padding: 10px 16px; font-size: 15px; font-family: -apple-system, system-ui, sans-serif;
+  background: rgba(255,255,255,.92); color: #000; border-bottom: 1px solid #0002;
+}
+.panel label { display: inline-flex; gap: 6px; align-items: center; }
+.panel b { font-weight: 600; }
+.switch { display: inline-flex; align-items: center; gap: 0; }
+.switch b { margin-right: 6px; }
+.switch button { font: inherit; padding: 3px 10px; border: 1px solid currentColor; background: transparent; color: inherit; }
+.switch button + button { border-left: 0; }
+.switch button[aria-pressed="true"] { background: #000; color: #fff; }
+.panel kbd { font: 12px ui-monospace, monospace; border: 1px solid #0004; border-radius: 3px; padding: 0 4px; margin-left: 6px; }
+.switch-inline .switch { margin-right: 10px; margin-bottom: 6px; }
+.switch-inline { margin: -8px 0 20px; font-size: 15px; font-family: -apple-system, system-ui, sans-serif; }
+.switch-inline .hint { opacity: .6; margin-left: 8px; }
+.scheme-dark .switch button[aria-pressed="true"] { background: #fff; color: #000; }
+main { padding: 24px 16px 120px; max-width: 1240px; margin: 0 auto; }
+h1.page { font-size: var(--fs-heading); font-weight: 400; margin: 12px 0 4px; }
+section { margin: 64px 0 0; }
+section > h2 { font-size: var(--fs-heading); font-weight: 400; margin: 0 0 6px; }
+section > p.note { margin: 0 0 22px; max-width: 46em; opacity: .75; font-size: 18px; }
+.tag { font-size: 15px; font-family: -apple-system, system-ui, sans-serif; opacity: .6; letter-spacing: .02em; margin: 0 0 8px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px 16px; }
+
+/* ---------- Icons sheet ---------- */
+.icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.icons figure { margin: 0; text-align: center; font-size: 13px; font-family: -apple-system, system-ui, sans-serif; }
+.icons figcaption { padding: 5px 0 6px; opacity: .7; }
+.icons svg { margin: 0 auto !important; }
+.icons .on-light { --tg-ink: #000; --tg-paper-bottom: #F2EFE3; --tg-paper-top: #E3E5F2; color: #000; background: linear-gradient(to top, #F2EFE3, #E3E5F2); }
+.icons .on-dark  { --tg-ink: #fff; --tg-paper-bottom: #1d1a17; --tg-paper-top: #16161b; color: #fff; background: linear-gradient(to top, #1d1a17, #16161b); }
+.icons .on-photo { background: center / cover var(--photo); color: #000; }
+.icons svg { width: var(--icon); height: var(--icon); display: block; margin: 0 auto 8px; }
+.icons .big svg { width: calc(var(--icon) * 2.5); height: calc(var(--icon) * 2.5); }
+.icons .wheel .loading { display: block; position: static; }
+.icons .wheel > div { height: calc(var(--icon) * 2.5); display: grid; place-items: center; }
+.ico { width: var(--icon); height: var(--icon); color: var(--tg-ink); display: block; }
+
+/* ---------- Shared player bits ---------- */
+.media { position: relative; }
+.media .plyr { --plyr-color-main: var(--tg-ink); min-width: 0; background: transparent; }
+.media .plyr__video-wrapper { background: transparent; }
+.media video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.box { position: relative; width: 100%; overflow: hidden; background: #0001; }
+/* ---------- Player sizes: by the player's own width, at Bootstrap's breakpoints (Tiago, 22 Nov) ----------
+   Each player box is a container; its parts read these tokens. Below md (768px of player, not
+   screen) the compact set, matched to the paragraph size: time 23px, icons 24px (44px tap
+   area), sound line 24px, play mark 40px. From md the wide set, matched to the header size:
+   36px, 32px, 32px, 48px. Margins follow the theme's gutter at lg: 12px below 992px, 16px from.
+   A film in a narrow column on a wide screen is still a small player. */
+.box, .env-host { container-type: inline-size; }
+.box.film-v1 { container-type: size; }   /* captions read the picture's height (cqh) */
+.media, .env { --p-time: var(--fs-content); --p-icon: 24px; --p-sound: 24px; --p-gutter: 12px; --p-lens: 40px; --playmark: 40px; --p-lensmark: 56px; }
+@container (min-width: 768px) { .media, .env { --p-time: var(--fs-heading); --p-icon: var(--icon); --p-sound: var(--sound-h); --p-lens: 48px; --playmark: 48px; --p-lensmark: 72px; } }
+@container (min-width: 992px) { .media, .env { --p-gutter: 16px; } }
+/* 44 x 44 tap area around every small control, without changing the row's layout */
+.edge .chrome button, .env .foot button { position: relative; }
+.edge .chrome button::after, .env .foot button::after { content: ''; position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; transform: translate(-50%, -50%); }
+.box > .poster, .box > .media, .box > .media .plyr, .box > .media .plyr__video-wrapper { position: absolute; inset: 0; width: 100%; height: 100%; }
+.box > .poster { object-fit: cover; display: block; transition: opacity .3s; }
+.box.is-started > .poster { opacity: 0; }
+.media:not(.is-mounted) video, .media:not(.is-mounted) audio { opacity: 0; pointer-events: none; }
+video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+.btn-reset { all: unset; display: inline-flex; align-items: center; justify-content: center; }
+.btn-reset:focus-visible { outline: var(--line) solid currentColor; outline-offset: 3px; }
+.sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Fullscreen preview: the film box, real (:fullscreen) or filling the window (.sim-fs) */
+.film-v1:fullscreen, .film-v1.sim-fs { background: #000; }
+.film-v1.sim-fs { position: fixed !important; inset: 0; z-index: 10000; width: auto; aspect-ratio: auto !important; }
+.film-v1:fullscreen > .poster, .film-v1.sim-fs > .poster, .film-v1:fullscreen video, .film-v1.sim-fs video { object-fit: contain; }
+
+/* ---------- V1 Edge ---------- */
+.edge .layer { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.edge .hit { position: absolute; inset: 0 0 var(--edge-band) 0; pointer-events: auto; outline: none; }
+/* The time and icons sit the theme's gutter in from the left, right and bottom. When the
+   pointer reaches the bottom edge (.edge-open) they slide up by the sound's height, and the
+   sound line rises from the edge into its place a beat later; on leaving, the line sinks
+   first and the row comes back down after it. */
+.edge .chrome { position: absolute; left: var(--p-gutter); right: var(--p-gutter); bottom: var(--p-gutter); display: flex; align-items: flex-end; gap: 14px; opacity: 0; transition: opacity .25s, transform .5s var(--rise) .08s; pointer-events: none; }
+.edge.prog-sound.edge-open .chrome { transform: translateY(calc(-1 * var(--p-sound))); transition: opacity .25s, transform .5s var(--rise); }
+.edge.is-paused .chrome, .edge.is-active .chrome { opacity: 1; pointer-events: auto; }
+/* The time is always the heading size (36px), playing or paused, whatever it shows */
+.edge .time { color: #fff; mix-blend-mode: difference; font-size: var(--p-time); line-height: 1; flex: 1; white-space: nowrap; }
+/* Touch: when a tap shows the sound line, the row rises above it as it does on a mouse */
+.touch .edge.prog-sound.is-active:not(.at-start) .chrome { transform: translateY(calc(-1 * var(--p-sound))); }
+.touch .edge.prog-sound.is-active:not(.at-start) .cc-text { --cc-lift: calc(-1 * (var(--p-time) + var(--p-gutter) + var(--p-sound))); }
+.edge .rail { position: absolute; left: 0; right: 0; bottom: 0; height: var(--edge-band); pointer-events: auto; display: flex; align-items: flex-end; }
+/* Art film player: the progress line does not exist until the pointer is on the frame's
+   bottom edge (the 12px rail is the hit zone; the line itself stays 1.5px). Also shown
+   while dragging, on keyboard focus, and on touch for the few seconds after a tap. */
+.edge .rail .track { position: relative; width: 100%; height: var(--line); opacity: 0; transition: opacity .2s; mix-blend-mode: difference; }
+.edge .rail:hover .track, .edge .rail.drag .track, .edge .rail:focus-visible .track, .touch .edge.is-active .rail .track { opacity: 1; }
+.edge .rail:focus-visible { outline: none; }
+/* Progress as the film's sound: one-sided shape rising from the bottom edge, 32px tall,
+   hidden at rest like the line; played part filled, the rest the 1.5px outline. */
+.edge .rail .snd { display: none; }
+.edge.prog-sound .rail .track { display: none; }
+.edge.prog-sound .rail .snd { display: block; position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: var(--p-sound); overflow: visible; opacity: 0; transform: scaleY(0); transform-origin: 50% 100%; transition: transform .45s var(--rise), opacity .2s; mix-blend-mode: difference; pointer-events: none; }
+.edge.prog-sound.edge-open .rail .snd, .touch .edge.prog-sound.is-active:not(.at-start) .rail .snd { opacity: 1; transform: scaleY(1); transition: transform .55s var(--rise) .08s, opacity .2s .08s; }
+.edge.prog-sound.edge-open .rail { height: var(--p-sound); }
+/* At 00:00, untouched: no progress at all; the bottom band belongs to the picture (play) */
+.edge.at-start .rail { pointer-events: none; }
+.edge.at-start .hit { bottom: 0; }
+.edge.prog-sound .rail .pointer { height: calc(var(--p-sound) + 6px); }
+.edge .snd-hollow { fill: none; stroke: #fff; stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.edge .snd-filled { fill: #fff; stroke: none; clip-path: inset(0 calc(100% - var(--p, 0%)) 0 0); }
+.edge .rail .rest { position: absolute; inset: 0; background: #fff; opacity: .32; }
+.edge .rail .played { position: absolute; inset: 0; background: #fff; transform: scaleX(0); transform-origin: 0 50%; }
+/* Where a click would land: a fine vertical line at the pointer; the time field says the time there */
+.edge .rail .pointer { position: absolute; bottom: 0; height: calc(var(--edge-band) + 6px); width: var(--line); margin-left: calc(var(--line) / -2); background: #fff; mix-blend-mode: difference; opacity: 0; pointer-events: none; }
+.edge .rail:hover .pointer, .edge .rail.drag .pointer { opacity: 1; }
+/* Idle while playing (3s, no pointer movement, no key): the pointer line goes too, and in
+   fullscreen the cursor is hidden (inline it stays, as with Plyr) */
+.edge.is-idle .rail .pointer { opacity: 0; }
+.film-v1:fullscreen .edge.is-idle .hit, .film-v1:fullscreen .edge.is-idle .rail,
+.film-v1.sim-fs .edge.is-idle .hit, .film-v1.sim-fs .edge.is-idle .rail { cursor: none; }
+/* Pointer switch: holds the film in its "pointer on the bottom edge" state */
+.sim-edge .edge .rail .track, .sim-edge .edge .rail .pointer { opacity: 1; }
+.sim-edge .edge .chrome { opacity: 1; pointer-events: auto; }
+/* Mobile preview frame (test page only) */
+.phone-shade { position: fixed; inset: 0; z-index: 20000; background: rgba(0, 0, 0, .55); display: flex; align-items: center; justify-content: center; gap: 16px; }
+.phone { width: 390px; height: min(844px, calc(100vh - 48px)); border-radius: 36px; border: 10px solid #111; overflow: hidden; background: #fff; box-shadow: 0 20px 60px rgba(0, 0, 0, .4); }
+.phone iframe { width: 100%; height: 100%; border: 0; display: block; }
+.phone-close { align-self: flex-start; margin-top: 24px; }
+.is-mobile-preview #opt-mobile { display: none; }
+.is-mobile-preview .panel { position: static; }   /* in the phone the switches scroll away with the page */
+/* Touch (Tiago, 22 Nov): a plain play mark in the middle (the play icon, no lens circle) while
+   paused; nothing at all while playing; a tap anywhere on the player plays or pauses. Films,
+   gallery videos and gallery audio tiles alike. On a mouse the cursor says play / pause. */
+.playmark { position: absolute; left: 50%; top: 50%; width: var(--playmark, 48px); height: var(--playmark, 48px); transform: translate(-50%, -50%); pointer-events: none; display: none; z-index: 2; }
+.playmark svg { width: 100%; height: 100%; display: block; }
+/* Paused videos (films, gallery videos) show the lens: play-large, the triangle in the cursor's
+   disc (Tiago, 22 Nov, chosen over the plain triangle), drawn bigger so the disc reads: 72px on
+   wide players, 56px on compact ones. Audio tiles keep the plain triangle. */
+.box .playmark { width: var(--p-lensmark); height: var(--p-lensmark); }
+.touch .edge.is-paused .playmark, .touch .gv:not(.is-playing) .playmark, .touch .env.is-tile:not(.is-playing) .playmark { display: block; }
+.edge .chrome .ico { width: var(--p-icon); height: var(--p-icon); }
+.edge.menu-open .chrome { opacity: 1; pointer-events: auto; }
+/* Caption choice: the languages as words, Lora at the prose size, white with
+   difference like the header line; the chosen one underlined with the 1.5px line. */
+.cc-wrap { position: relative; display: inline-flex; --u: calc(var(--p-icon) / 36); }
+.cc-wrap .cc-menu { position: absolute; right: 0; bottom: calc(100% + 14px); display: none; flex-direction: column; align-items: flex-end; gap: 4px; }
+.cc-wrap .cc-menu.open { display: flex; }
+.cc-menu button { color: #fff; mix-blend-mode: difference; font-family: var(--font); font-size: var(--fs-content); line-height: 1.25; white-space: nowrap; display: inline-flex; align-items: center; gap: .45em; outline: none; }
+/* The chosen language: R1 (Tiago, 22 Nov), replacing the underline. Every language has a
+   1.5px ring right of the word, so the rings make one column under the captions icon; the
+   chosen one has the lens rim (thick and thin, as on play-large) with a dot in it. Hover and
+   keyboard focus show the dot at half strength. */
+.cc-menu .mk { width: .85em; height: .85em; flex: none; display: block; overflow: visible; }
+.cc-menu .mk > * { opacity: 0; }
+.cc-menu .mk-ring { stroke-width: var(--line); opacity: 1; }
+.cc-menu button:is(:hover, :focus-visible) .mk-dot { opacity: .5; }
+.cc-menu button[aria-checked="true"] .mk-ring { opacity: 0; }
+.cc-menu button[aria-checked="true"] :is(.mk-lens, .mk-dot) { opacity: 1; }
+.cc-list { display: contents; }
+/* The box (Tiago, 22 Nov): a click on the captions icon grows the icon's own rectangle up and
+   to the left into a box, and the languages appear inside it where the icon's caption lines
+   were. Closing shrinks it back onto the icon. The closed size is the icon's rectangle exactly:
+   x 3-33 and y 8-28 on the 36 grid, plus the line. One look on light and dark pages, like
+   captions on a film: the dark page's gradient inside, white words, marks and line. The line
+   starts dark (the icon has none) and turns white as the box opens. */
+.cc-wrap .cc-menu.as-box { right: calc(var(--u) * 2.036); bottom: calc(var(--u) * 7.036); width: calc(var(--u) * 31.93); height: calc(var(--u) * 21.93); box-sizing: border-box; border: calc(var(--u) * 1.9286) solid #16161b; background: linear-gradient(to top, #1d1a17, #16161b); color: #fff; overflow: hidden; z-index: 3; transition: width .34s var(--rise), height .34s var(--rise), border-color .2s; }
+.cc-wrap .cc-menu.as-box.grown { border-color: #fff; transition: width .34s var(--rise), height .34s var(--rise), border-color .2s .1s; }
+.cc-menu.as-box .cc-list { position: absolute; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding: .4em .55em .45em 1em; font-size: var(--fs-content); opacity: 0; transition: opacity .12s; }
+.cc-menu.as-box.grown .cc-list { opacity: 1; transition: opacity .2s .16s; }
+.cc-menu.as-box button { color: inherit; mix-blend-mode: normal; }
+.cc-demo { position: relative; height: 170px; display: grid; place-items: center; background: center / cover var(--photo); }
+.cc-demo > .cc-menu { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.cc-demo { --p-icon: var(--icon); }
+.cc-demo .cc-wrap { position: absolute; right: 24px; bottom: 24px; }
+.cc-demo .cc .ico { width: var(--p-icon); height: var(--p-icon); }
+/* The caption: production's look, as on the live films (_component-plyr.scss: the
+   tiagsspace-caption-sizes mixin and .plyr__caption; plyr.css underneath). Lora 400 (Plyr
+   inherits the page font), white on a 27% black box, square. Per film: the text colour (white /
+   yellow #ffe100 / custom, --cc-color) and box or shadow (.cc-shadow), from the film's ACF fields.
+   Size (Tiago, 22 Nov): a ratio of the picture, not screen breakpoints, and of its WIDTH:
+   caption standards count characters per line (about 42), which is a matter of width. The text
+   is 3.1% of the picture's width (= 5.5% of a 16:9 picture's height), never under 15px, never
+   over 54px, and never more than 7.5% of the picture's height (a very wide film). So a 2.39:1
+   film gets the same text as a 16:9 one of the same width, and a vertical video is not given
+   a few words per line. It sits 5% of the picture's height above the picture's bottom; lines
+   wrap at 80% of the picture's width. Inline, fullscreen, any window. (Production's steps read
+   the screen, so a short fullscreen window got text far too big.) The time row lifts the
+   caption while it shows; the open edge lifts it by the sound's height again.
+   The picture is the film box (a size container: cqw / cqh), or smaller when fullscreen
+   letterboxes or pillarboxes it: --ar is the film's height / width, set from the video. */
+.edge { --pic-h: min(100cqh, 100cqw * var(--ar, .5625)); --pic-w: min(100cqw, 100cqh / var(--ar, .5625)); }
+.edge .cc-text { position: absolute; left: calc((100cqw - var(--pic-w)) / 2); right: calc((100cqw - var(--pic-w)) / 2); bottom: calc((100cqh - var(--pic-h)) / 2 + var(--pic-h) * .05); padding: 0 calc(var(--pic-w) * .1); text-align: center; font-family: var(--font); font-weight: 400; font-size: clamp(15px, min(var(--pic-w) * .031, var(--pic-h) * .075), 54px); line-height: 1.4; pointer-events: none; z-index: 2; transform: translateY(var(--cc-lift, 0px)); transition: transform .5s var(--rise); }
+.edge .cc-text span { background: #00000045; color: var(--cc-color, #fff); border-radius: 0; line-height: 1.6; padding: .1em .5em; white-space: pre-wrap; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.cc-shadow .edge .cc-text span { background: transparent; text-shadow: 0 1px 2px rgba(0,0,0,.55), 0 0 8px rgba(0,0,0,.55); }
+.edge.is-paused .cc-text, .edge.is-active .cc-text { --cc-lift: calc(-1 * (var(--p-time) + var(--p-gutter))); }
+.edge.prog-sound.edge-open .cc-text { --cc-lift: calc(-1 * (var(--p-time) + var(--p-gutter) + var(--p-sound))); }
+.media .plyr__captions { display: none !important; }
+.edge .plyr--fullscreen-enabled:fullscreen .layer { position: absolute; }
+
+
+/* ---------- Gallery video: Player preset ---------- */
+/* No progress line in galleries (Tiago, 22 Nov): play / pause only, nothing drawn on the
+   picture. Safari stopped painting a paused <video> under the old blended edge line (the paused
+   gallery video went blank); the video keeps its own compositing layer as a guard. */
+.box > .media video { transform: translateZ(0); }
+
+/* ---------- Envelope (A2) ---------- */
+.env { position: relative; }
+.env .time { font-size: var(--fs-content); white-space: nowrap; }
+.env .wave { position: relative; height: var(--env-h, 120px); touch-action: none; }
+.env svg.shape { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.env .filled { clip-path: inset(0 calc(100% - var(--progress, 0%)) 0 0); }
+/* Where a click would land: a fine vertical line at the pointer (difference, so it reads over the
+   filled ink and over the page gradient alike); the time field says the time there */
+.env .pointer { position: absolute; top: -6px; bottom: -6px; width: var(--line); margin-left: calc(var(--line) / -2); background: #fff; mix-blend-mode: difference; opacity: 0; pointer-events: none; }
+/* The fine line shows only on the playhead's edge (hover near it, or while dragging it), mix and tiles alike */
+.env .wave:not(.on-edge):not(.dragging) .pointer { opacity: 0; }
+.env .wave.on-edge .pointer, .env .wave.dragging .pointer { opacity: 1; }
+.env .foot { display: flex; align-items: center; gap: 14px; margin-top: 12px; }
+.env .foot .spacer { flex: 1; }
+.env .lensbtn svg { width: var(--p-lens); height: var(--p-lens); }
+/* The mix's play button only on touch (Tiago, 22 Nov): with a mouse the wave is the button */
+.env .foot .lensbtn { display: none; }
+.touch .env .foot .lensbtn { display: flex; }
+/* AirPlay: only where the browser can send to a device (Safari), see airplay() */
+.edge .chrome .airplay[hidden], .env .foot .airplay[hidden] { display: none; }
+.airplay.is-on { opacity: .55; }
+.env .foot .ico { width: var(--p-icon); height: var(--p-icon); }
+.env .marks { position: absolute; left: 0; right: 0; top: 50%; height: 0; pointer-events: none; }
+.env .marks i { position: absolute; top: -5px; width: var(--line); height: 10px; background: var(--tg-ink); }
+@media (max-width: 600px) { .env .wave { height: calc(var(--env-h, 120px) / 2); } }
+/* A Hyper gallery row: 48-column grid, audio at col-24 col-sm-12 (half / quarter), no gap */
+.hyper-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+@media (min-width: 576px) { .hyper-row { grid-template-columns: repeat(4, 1fr); } }
+.hyper-row > img { display: block; width: 100%; aspect-ratio: 3/4; object-fit: cover; }
+.hyper-row .tile-env { outline-offset: -1px; }
+/* The waveform fills the cell (Tiago, 22 Nov; "centred" and "on the bottom" dropped): the same
+   padding on all four sides, the wave takes every pixel inside it. */
+.tile-env { aspect-ratio: 3/4; display: flex; flex-direction: column; justify-content: stretch; padding: 18px; box-sizing: border-box; background: transparent; outline: var(--line) dashed #0003; }
+.scheme-dark .tile-env { outline-color: #fff3; }
+.tile-env .env-host, .tile-env .env { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+.tile-env .env .wave { flex: 1 1 0; height: auto !important; min-height: 0; }
+/* Gallery tile (Tiago, 22 Nov): quiet. No time at all, no icon on desktop: a click on the wave
+   plays or pauses (play / pause cursor). Only the playhead's edge (the line between the filled
+   and the hollow parts) can be dragged: within 8px of it (22px for a finger) the cursor turns to
+   scrub and the fine line shows on the edge. Touch: the plain play mark while paused, and the
+   wave fills the cell whatever the placement. No row under the wave: equal padding all round. */
+
+
+
+/* ---------- Loading: L1 "Lens" (chosen, Tiago 22 Nov; L2–L5 dropped) ----------
+   The lens disc of the play cursor (page gradient inside, ink line) with a 1.5px arc sweeping
+   once per 1.2s turn, in the middle of the picture. Videos only: audio never shows a wheel. */
+.loading { position: absolute; z-index: 6; pointer-events: none; display: none; }
+.is-waiting .loading { display: block; }
+.box .loading.l1 { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.loading.l1 svg { width: 56px; height: 56px; display: block; }
+.loading.l1 .arc { stroke-dasharray: 28 72; animation: tg-sweep 1.2s linear infinite; transform-origin: 18px 18px; }
+@keyframes tg-sweep { to { transform: rotate(360deg); } }
+.l-demo { position: relative; height: 150px; display: grid; place-items: center; }
+.l-demo.on-photo { background: center / cover var(--photo); }
+.l-demo .loading { display: block; position: static; }
+@media (prefers-reduced-motion: reduce) {
+  .loading *, .loading::before { animation: none !important; }
+  .edge .chrome, .edge .rail .snd { transition: opacity .2s !important; }
+  .cc-menu.as-box, .cc-menu.as-box .cc-list { transition: none !important; }   /* no slide, no rise: they just appear */
+}
+</style>
+</head>
+<body class="scheme-light page-gradient">
+
+<div class="panel">
+  <b>Players · design test</b>
+  <label>Page
+    <select id="opt-page">
+      <option value="gradient-light">Gradient, light (Dusk, Hyper, Cidade, Log)</option>
+      <option value="gradient-dark">Gradient, dark (same, dark scheme)</option>
+      <option value="dark">Dark (Films, 4K Lento)</option>
+      <option value="white">White</option>
+    </select></label>
+  <label>Icon <input id="opt-icon" type="range" min="18" max="40" value="32"> <span id="opt-icon-v">32px</span></label>
+  <span class="switch" role="group" aria-label="Audio measure"><b>Audio</b> <button type="button" data-audio="peak" aria-pressed="false">Peak</button><button type="button" data-audio="rms" aria-pressed="false">RMS</button><button type="button" data-audio="db" aria-pressed="true">dB</button> <kbd>A</kbd></span>
+  <span class="switch" role="group" aria-label="Sides"><b>Sides</b> <button type="button" data-sides="mirror" aria-pressed="false">Mirrored</button><button type="button" data-sides="stereo" aria-pressed="true">Stereo L/R</button> <kbd>S</kbd></span>
+  <span class="switch" role="group" aria-label="Film measure"><b>Film</b> <button type="button" data-film="peak" aria-pressed="false">Peak</button><button type="button" data-film="rms" aria-pressed="false">RMS</button><button type="button" data-film="db" aria-pressed="true">dB</button><button type="button" data-film="lufs" aria-pressed="false">LUFS</button> <kbd>F</kbd></span>
+  <span class="switch" role="group" aria-label="Detail"><b>Detail</b> <button type="button" data-detail="fine" aria-pressed="false">Fine</button><button type="button" data-detail="finer" aria-pressed="true">Finer</button> <kbd>D</kbd></span>
+  <span class="switch" role="group" aria-label="Simulate the pointer on the film's edge"><b>Pointer</b> <button type="button" data-edge="off" aria-pressed="true">Off</button><button type="button" data-edge="on" aria-pressed="false">On the edge</button> <kbd>H</kbd></span>
+  <label>Contrast <input id="opt-contrast" type="range" min="0" max="100" value="80"> <span id="opt-contrast-v">80%</span></label>
+  <label><input id="opt-slow" type="checkbox"> Slow network</label>
+  <button id="opt-stall" type="button">Stall now</button>
+  <label><input id="opt-touch" type="checkbox"> Simulate touch</label>
+  <button id="opt-mobile" type="button" title="The page in a 390 × 844 phone frame, touch on (or open test.html?mobile)">Mobile preview</button>
+  <label><input id="opt-tnum" type="checkbox"> Tabular figures</label>
+  <label>Mount after <select id="opt-mount"><option value="0">0 s</option><option value="1500">1.5 s</option><option value="4000">4 s</option></select></label>
+</div>
+
+<main>
+<h1 class="page">Players</h1>
+<p class="note" style="font-size:18px;opacity:.75;max-width:46em">Rough drafts of every concept. Plyr is the engine only (its controls are off); everything you see is drawn here. The loading choice in the bar applies everywhere; "Slow network" makes play wait 2.5 s; "Mount after" delays the hand-over to show the first paint is already the final look.</p>
+
+<!-- ======================= ICONS ======================= -->
+<section id="icons">
+  <h2>Icons</h2>
+  <p class="note">Drawn like the cursors: 36-unit grid, 1.5px line, inside = page gradient, outline = ink; dark swaps them. One sprite, colours from CSS. On a picture they read as a cursor does.</p>
+  <div class="icons" id="icon-sheet"></div>
+</section>
+
+<!-- ======================= FILM ======================= -->
+<section id="film">
+  <h2>Film</h2>
+  <p class="note">32 Sec Brush, the local HLS test bundle (attachment 38440). An art film player: the picture alone. The cursor plays and pauses. The progress is the film's own soundtrack, rising from the bottom edge; it exists only while the pointer is on that edge (a film without sound keeps a flat 1.5px line). The time and icons show while paused or while the mouse moves.</p>
+  <p class="tag">V1 · EDGE (chosen) · PROGRESS = SOUND (chosen)</p>
+  <p class="switch-inline"><span class="switch" role="group" aria-label="Film measure"><button type="button" data-film="peak" aria-pressed="false">Peak</button><button type="button" data-film="rms" aria-pressed="false">RMS</button><button type="button" data-film="db" aria-pressed="true">dB</button><button type="button" data-film="lufs" aria-pressed="false">LUFS (loudness as heard)</button></span> <span class="hint">or press F</span> &nbsp; <span class="switch" role="group" aria-label="Simulate the pointer on the film's edge"><b>Pointer</b> <button type="button" data-edge="off" aria-pressed="true">Off</button><button type="button" data-edge="on" aria-pressed="false">On the edge</button></span> <span class="hint">or press H · or move the pointer onto the bottom edge</span></p>
+  <p class="switch-inline"><span class="switch" role="group" aria-label="Captions"><b>Captions</b> <button type="button" data-cc="off" aria-pressed="true">Off</button><button type="button" data-cc="en" aria-pressed="false">English</button><button type="button" data-cc="pt" aria-pressed="false">Português</button></span> <span class="hint">or press C · test captions; while paused it stops on a caption</span> &nbsp; <span class="switch" role="group" aria-label="Caption colour"><b>Colour</b> <button type="button" data-cccolor="white" aria-pressed="true">White</button><button type="button" data-cccolor="yellow" aria-pressed="false">Yellow</button></span> <span class="switch" role="group" aria-label="Caption contrast"><b>Contrast</b> <button type="button" data-ccstyle="box" aria-pressed="true">Box</button><button type="button" data-ccstyle="shadow" aria-pressed="false">Shadow</button></span> <span class="hint">per film, as in production</span> &nbsp; <span class="switch"><button type="button" id="opt-fullscreen">Fullscreen</button></span> <span class="hint">Esc to leave · the switches above still work inside it (H, C, F)</span></p>
+  <p class="switch-inline"><span class="switch" role="group" aria-label="Hold waiting"><b>Waiting</b> <button type="button" data-hold="off" aria-pressed="true">Off</button><button type="button" data-hold="on" aria-pressed="false">Hold</button></span> <span class="hint">or press W · holds every player in its waiting state: the part still to come dances with the wheel (the film needs Pointer on the edge, H)</span></p>
+  <div class="box film-v1" style="aspect-ratio:16/9" data-peaks="test-data/brush.json" data-src="../../../../uploads/hls/38440/32-seconds-brush-test.m3u8" data-poster="../../../../uploads/2022/09/MIna-H264-High-Profile-25000mkbs_thumb2-940x529.jpg"></div>
+</section>
+
+<!-- ======================= GALLERY VIDEO ======================= -->
+<section id="gallery-video">
+  <h2>Gallery video</h2>
+  <p class="note">Ambient: nothing to see, nothing to click; plays muted while in view. Player: play / pause only (the play / pause cursor; on touch the plain play mark while paused), nothing drawn on the picture, no progress line. No sound control on any player: the visitor's system sets the level, and pausing silences.</p>
+  <p class="note">Cells as on the Hyper pages: every gallery video is the full width of the gallery (col-48), at its own ratio, edge to edge.</p>
+  <p class="tag">AMBIENT · EMOTIONAL AGENDA · FULL WIDTH, 1920 × 696</p>
+  <div class="box gv-ambient" style="aspect-ratio:1920/696" data-src="../../../../uploads/2018/12/17D97E40-22EE-4FC3-8BDF-202CBE05B4E9.mp4" data-poster="../../../../uploads/2018/12/17D97E40-22EE-4FC3-8BDF-202CBE05B4E9_thumb0-940x341.jpg"></div>
+  <p class="tag" style="margin-top:32px">PLAYER · WITH SOUND · POSSÍVEL · FULL WIDTH, 16:9 (Possível's two videos, one under the other, as on its page)</p>
+  <div class="box gv-player" style="aspect-ratio:16/9" data-sound="1" data-loop="1" data-src="../../../../uploads/2017/10/napoleon-bonaparte-chicken.mp4" data-poster="../../../../uploads/2017/10/napoleon-bonaparte-chicken_thumb0-940x529.jpg"></div>
+  <div class="box gv-player" style="aspect-ratio:16/9" data-sound="0" data-loop="1" data-src="../../../../uploads/2017/10/IMG_4137.mp4" data-poster="../../../../uploads/2017/10/IMG_4137_thumb0-940x529.jpg"></div>
+</section>
+
+<!-- ======================= MIX ======================= -->
+<section id="mix">
+  <h2>Mix</h2>
+  <p class="switch-inline">
+    <span class="switch" role="group" aria-label="Audio measure"><button type="button" data-audio="peak" aria-pressed="false">Peak</button><button type="button" data-audio="rms" aria-pressed="false">RMS</button><button type="button" data-audio="db" aria-pressed="true">dB</button></span>
+    <span class="switch" role="group" aria-label="Sides"><button type="button" data-sides="mirror" aria-pressed="false">Mirrored</button><button type="button" data-sides="stereo" aria-pressed="true">Stereo L/R</button></span>
+    <span class="switch" role="group" aria-label="Detail"><button type="button" data-detail="fine" aria-pressed="false">Fine (4px mix · 6px tiles)</button><button type="button" data-detail="finer" aria-pressed="true">Finer (2px mix · 3px tiles)</button></span>
+    <span class="hint">keys A · S · D</span></p>
+  <p class="note">Untouched (4K Lento, 46 minutes). The envelope is the file's real loudness, drawn like the <code>mix</code> cursor: one closed polygon of straight segments. Mirrored = the same loudness above and below the spine; Stereo L/R = the left channel above, the right below (each in the chosen measure). Played = filled with ink. A click plays or pauses (the play / pause cursor); drag the playhead's edge to move through it; ←/→ ±10 s, Shift ±60 s once focused. The play button shows on touch only; AirPlay only where Safari finds a device.</p>
+  <p class="tag">A2 · ENVELOPE (chosen)</p>
+  <div class="env-host" data-kind="mix" data-title="Untouched" data-src="../../../../uploads/2025/04/Untouched-4kL31-Mastered.mp3" data-peaks="test-data/untouched.json" data-artwork="../../../../uploads/2025/04/4kl-untouched-couver_2_2025_at_tiags_dot_space-940x940.jpg"></div>
+</section>
+
+<!-- ======================= GALLERY AUDIO ======================= -->
+<section id="gallery-audio">
+  <h2>Gallery audio</h2>
+  <p class="switch-inline">
+    <span class="switch" role="group" aria-label="Audio measure"><button type="button" data-audio="peak" aria-pressed="false">Peak</button><button type="button" data-audio="rms" aria-pressed="false">RMS</button><button type="button" data-audio="db" aria-pressed="true">dB</button></span>
+    <span class="switch" role="group" aria-label="Sides"><button type="button" data-sides="mirror" aria-pressed="false">Mirrored</button><button type="button" data-sides="stereo" aria-pressed="true">Stereo L/R</button></span>
+    <span class="switch" role="group" aria-label="Detail"><button type="button" data-detail="fine" aria-pressed="false">Fine (4px mix · 6px tiles)</button><button type="button" data-detail="finer" aria-pressed="true">Finer (2px mix · 3px tiles)</button></span>
+    <span class="hint">keys A · S · D</span></p>
+  <p class="note">Cells as on the Hyper pages (Summer w/ Erich, Contempt, Empathic Therapy): portrait 3:4, a quarter of the row from tablet width up and half on phones, edge to edge, beside Summer w/ Erich's own pictures. The dashed line marks the audio cell here only. The waveform fills the cell (chosen).</p>
+
+  <div class="hyper-row">
+    <img src="../../../../uploads/2017/07/IMG_1205-480x640.jpg" alt="">
+    <div class="tile-env"><div class="env-host" data-kind="tile" data-title="Thunderstorm" data-src="../../../../uploads/2017/08/thunderstorm.mp3" data-peaks="test-data/thunderstorm.json"></div></div>
+    <img src="../../../../uploads/2017/07/IMG_1186-480x640.jpg" alt="">
+    <div class="tile-env"><div class="env-host" data-kind="tile" data-title="Twice there was a poet" data-src="../../../../uploads/2017/08/twice-there-was-a-poet.mp3" data-peaks="test-data/poet.json"></div></div>
+  </div>
+</section>
+
+<!-- ======================= CAPTION MENU ======================= -->
+<section id="cc-marks">
+  <h2>Caption menu</h2>
+  <p class="note">Decided (22 Nov): a click on the captions icon grows its rectangle up and to the left into a box, and the languages appear inside it, the chosen one marked R1 (a ring beside each word, the lens with its dot on the chosen one). Click the icon, then a language. The film above works the same way.</p>
+  <div class="grid2" id="cc-mark-demos"></div>
+</section>
+
+<!-- ======================= LOADING ======================= -->
+<section id="loading">
+  <h2>Loading</h2>
+  <p class="note">L1 · Lens (chosen), always on here. On a video it shows only when you asked for playback and the picture has not moved for 400 ms, so a fast load shows nothing. Audio never shows it: the line's dance is its only sign of waiting. Try "Slow network" and press play anywhere above.</p>
+  <div class="grid2">
+    <div><p class="tag">L1 · LENS (on a picture)</p><div class="l-demo on-photo"><div class="loading l1"></div></div></div>
+  </div>
+</section>
+
+<!-- ======================= TEASER ======================= -->
+<section id="teaser">
+  <h2>Archive teaser</h2>
+  <p class="note">Unchanged: no UI, no cursor of its own, muted loop in view.</p>
+  <div style="max-width:420px"><div class="box gv-ambient" style="aspect-ratio:16/9" data-src="../../../../uploads/2017/10/IMG_4137.mp4" data-poster="../../../../uploads/2017/10/IMG_4137_thumb0-940x529.jpg"></div></div>
+</section>
+</main>
+
+<script src="../js/plyr/plyr.js"></script>
+<script src="../js/hls/hls.min.js"></script>
+<script type="module">
+/* ============================================================
+   Shared
+   ============================================================ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+// Media by host. The page reads the site's own uploads (../../../../uploads/ is wp-content/uploads
+// on MAMP and on tiags.space alike), so it plays local files locally and production's files in
+// production. Every file is at the same path on both, except 32 Sec Brush: the local database is
+// behind production, and its HLS bundle and poster are other files there.
+const LOCAL_HOST = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || /\.(test|localhost)$/.test(location.hostname);
+if (!LOCAL_HOST) {
+  const film = document.querySelector('.film-v1');
+  film.dataset.src = '../../../../uploads/hls/39579/32-sec-brush.m3u8';
+  film.dataset.poster = '../../../../uploads/2026/01/Mina-Teaser-4-website-Timeline-1-H264-rec709-a-720p-mute-7mbs_thumb2-940x529.jpg';
+  document.documentElement.style.setProperty('--photo', `url("${film.dataset.poster}")`);
+}
+
+const opt = { slow: new URLSearchParams(location.search).has('slow'), audio: 'db', film: 'db', sides: 'stereo', mountDelay: 0, contrast: 0.8, detail: 'finer', edge: 'off', cc: 'off', hold: 'off', cccolor: 'white', ccstyle: 'box' };
+const PLYR_BASE = { controls: [], storage: { enabled: false }, loadSprite: false, iconUrl: '', tooltips: { controls: false, seek: false }, pip: false, keyboard: { focused: false, global: false }, fullscreen: { enabled: true, fallback: true, iosNative: true } };
+const all = [];   // every mounted engine, for pause-the-others and the stall button
+
+// The sprite, inline (so CSS variables reach the gradient stops)
+const spriteText = await (await fetch('../images/player-icons/sprite.svg')).text();
+document.body.insertAdjacentHTML('afterbegin', spriteText);
+const ICONS = $$('symbol[id^="tg-"]').map(s => s.id.slice(3));
+const icon = (name, cls = 'ico') => `<svg class="${cls}" aria-hidden="true"><use href="#tg-${name}"></use></svg>`;
+
+const two = n => String(Math.floor(n)).padStart(2, '0');
+const clock = s => { s = Math.max(0, s || 0); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return (h ? two(h) + ':' : '') + two(m) + ':' + two(s % 60); };
+const minutes = s => Math.round((s || 0) / 60);
+const WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
+const spell = n => n <= 12 ? WORDS[n] : String(n);   // the site's copy rule: one to twelve spelled out
+
+// One play bus: a player that starts pauses the others
+document.addEventListener('tg:play', e => all.forEach(p => p !== e.detail && !p.ambient && p.pause()));
+
+// Caption menu item: the word and its R1 mark (ring; lens and dot when chosen).
+// LENS_RIM: the play-large lens (disc with an ellipse turned -25 degrees cut out), its rim a
+// little thicker so the thin side stays near 1.5px at the word's size.
+const LENS_RIM = 'M2 18a16 16 0 1 0 32 0a16 16 0 1 0-32 0ZM7.58 23.86A11.5 13.3 -25 1 0 28.42 12.14A11.5 13.3 -25 1 0 7.58 23.86Z';
+function ccItem(label, i) {
+  return `<button class="btn-reset" role="menuitemradio" aria-checked="false" data-i="${i}"><span class="w">${label}</span><svg class="mk" viewBox="0 0 36 36" aria-hidden="true"><circle class="mk-ring" cx="18" cy="18" r="16" fill="none" stroke="currentColor" vector-effect="non-scaling-stroke"/><path class="mk-lens" fill="currentColor" fill-rule="evenodd" d="${LENS_RIM}"/><circle class="mk-dot" cx="18" cy="18" r="6.5" fill="currentColor"/></svg></button>`;
+}
+
+// Open or close a captions menu. Words: shown or hidden. Box: grows from the icon's rectangle
+// to the size of the list, then the list fades in; closing fades it and shrinks the box back.
+const ccIsOpen = menu => menu.classList.contains(menu.classList.contains('as-box') ? 'grown' : 'open');
+function ccOpen(menu, open) {
+  clearTimeout(menu._t);
+  if (!menu.classList.contains('as-box')) { menu.classList.toggle('open', open); return; }
+  if (open) {
+    menu.style.width = menu.style.height = '';
+    menu.classList.add('open');
+    const list = $('.cc-list', menu), line = parseFloat(getComputedStyle(menu).borderTopWidth) * 2;
+    const w = list.offsetWidth + line, h = list.offsetHeight + line;
+    void menu.offsetWidth;
+    menu.style.width = w + 'px'; menu.style.height = h + 'px';
+    menu.classList.add('grown');
+  } else if (menu.classList.contains('open')) {
+    menu.classList.remove('grown');
+    menu.style.width = menu.style.height = '';
+    menu._t = setTimeout(() => menu.classList.remove('open'), 360);
+  }
+}
+
+// Loading: show only after 400 ms of waiting
+function loadingMarkup() {
+  return `<div class="loading l1"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="url(#tg-pagefill)" stroke="currentColor" stroke-width="1.9286" opacity=".9"/><circle class="arc" cx="18" cy="18" r="11" fill="none" stroke="currentColor" stroke-width="1.9286" stroke-linecap="round" pathLength="100"/></svg></div>`;
+}
+function attachLoading(engine, host, kind) {
+  // audio ('sound') gets no wheel; videos get the lens, ink coloured
+  if (kind !== 'sound') { host.insertAdjacentHTML('beforeend', loadingMarkup()); $('.loading', host).style.color = 'var(--tg-ink)'; }
+  // The wheel means one thing: the visitor asked for playback (or a seek) and time is not moving
+  // because data is missing. It is read from the playhead itself, never from events alone:
+  //   show: playback wanted and the playhead has not moved for 400ms, or a seek has taken 400ms;
+  //   hide: the frame the playhead moves again, on pause, at the end.
+  // `stalled` is NOT a reason: it only says no bytes came for 3s, and Safari sends it while
+  // playing happily from its buffer (it had left the wheel turning over a playing film).
+  // `waiting`, `play`, `seeking` only wake the check. The page's Hold switch keeps it on.
+  const m = engine.media;
+  let raf = 0, lastT = -1, movedAt = 0, seekSince = 0;
+  const wanted = () => engine.fake || (!m.paused && !m.ended);
+  const check = now => {
+    if (m.currentTime !== lastT) { lastT = m.currentTime; if (!m.seeking) movedAt = now; }
+    const starving = (wanted() && now - movedAt > 400) || (m.seeking && now - seekSince > 400);
+    host.classList.toggle('is-waiting', starving || opt.hold === 'on');
+    raf = wanted() || m.seeking ? requestAnimationFrame(check) : 0;
+  };
+  const wake = () => { if (!raf) { movedAt = performance.now(); lastT = m.currentTime; raf = requestAnimationFrame(check); } };
+  engine.wait = wake;
+  ['play', 'waiting', 'timeupdate'].forEach(t => m.addEventListener(t, wake));
+  m.addEventListener('seeking', () => { seekSince = performance.now(); wake(); });
+  ['pause', 'ended', 'seeked'].forEach(t => m.addEventListener(t, () => { if (!raf) raf = requestAnimationFrame(check); }));
+}
+
+// A thin engine over Plyr: the visible layer talks only to this
+function engine(media, extra = {}) {
+  const p = new Plyr(media, { ...PLYR_BASE, ...extra });
+  const e = {
+    plyr: p, media, ambient: !!extra.ambient, fake: false,
+    play() {
+      if (opt.slow && media.paused) {
+        e.fake = true; e.wait(true);
+        setTimeout(() => { e.fake = false; p.play(); }, 2500);
+      } else p.play();
+      document.dispatchEvent(new CustomEvent('tg:play', { detail: e }));
+    },
+    pause() { p.pause(); },
+    toggle() { media.paused ? e.play() : e.pause(); },
+    seek(t) { p.currentTime = Math.max(0, Math.min(t, (p.duration || 0) - 0.05)); },
+    stall() { if (media.paused) return; p.pause(); e.fake = true; e.wait(true); setTimeout(() => { e.fake = false; p.play(); }, 2200); },
+    wait() {}
+  };
+  all.push(e);
+  return e;
+}
+
+const mountLater = fn => setTimeout(fn, opt.mountDelay);
+const slowBuffer = h => Object.assign(h.config, opt.slow ? { maxBufferLength: 6, maxMaxBufferLength: 6 } : { maxBufferLength: 30, maxMaxBufferLength: 600 });
+
+/* ============================================================
+   Icon sheet
+   ============================================================ */
+// The sheet shows light and dark side by side, so each tile gets its own copy of the
+// drawing with a local gradient (on a real page one scheme covers the whole page and
+// the shared sprite gradient is enough).
+const SHEET = { 'on-light': ['#F2EFE3', '#E3E5F2', '#000'], 'on-dark': ['#1d1a17', '#16161b', '#fff'], 'on-photo': ['#F2EFE3', '#E3E5F2', '#000'] };
+let gid = 0;
+$('#icon-sheet').innerHTML = ICONS.map(n => {
+  const big = n.endsWith('-large') ? ' big' : '';
+  const inner = $('#tg-' + n).innerHTML;
+  return Object.entries(SHEET).map(([bg, [b, t, ink]]) => {
+    const id = 'sg' + (++gid);
+    return `<figure class="${big}"><div class="${bg}" style="color:${ink};padding:14px 0"><svg viewBox="0 0 36 36"><defs><linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="0" y1="36" x2="0" y2="0"><stop offset="0" stop-color="${b}"/><stop offset="1" stop-color="${t}"/></linearGradient></defs>${inner.replaceAll('#tg-pagefill', '#' + id)}</svg></div><figcaption>${n}${bg === 'on-light' ? '' : ' · ' + bg.slice(3)}</figcaption></figure>`;
+  }).join('');
+}).join('') + Object.entries(SHEET).map(([bg, [b, t, ink]]) => {
+  // the loading wheel (L1 Lens), turning, on each background
+  const id = 'sg' + (++gid);
+  const wheel = loadingMarkup().replace('<svg viewBox="0 0 36 36">', `<svg viewBox="0 0 36 36"><defs><linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="0" y1="36" x2="0" y2="0"><stop offset="0" stop-color="${b}"/><stop offset="1" stop-color="${t}"/></linearGradient></defs>`).replace('#tg-pagefill', '#' + id);
+  return `<figure class="wheel"><div class="${bg}" style="color:${ink};padding:14px 0">${wheel}</div><figcaption>loading${bg === 'on-light' ? '' : ' · ' + bg.slice(3)}</figcaption></figure>`;
+}).join('');
+
+/* ============================================================
+   Film V1: Edge
+   ============================================================ */
+// hls.js tells the wait motion when a fragment is loading (video._fragLoading). Test page only:
+// with Slow network on, each fragment arrives 1.5s late and the film buffers only 6s ahead, so
+// the stretches still to download (and their dance) can be watched on a local server.
+function hlsInto(video, src) {
+  if (window.Hls && Hls.isSupported()) {
+    class SlowLoader extends Hls.DefaultConfig.loader {
+      load(context, config, cb) { const ok = cb.onSuccess, late = opt.slow && context.frag ? 1500 : 0; super.load(context, config, { ...cb, onSuccess: (...a) => late ? setTimeout(() => ok(...a), late) : ok(...a) }); }
+    }
+    const h = new Hls({ capLevelToPlayerSize: true, loader: SlowLoader }); video._hls = h; slowBuffer(h);
+    h.on(Hls.Events.FRAG_LOADING, () => { video._fragLoading = true; video.dispatchEvent(new Event('tg:fragloading')); });
+    [Hls.Events.FRAG_LOADED, Hls.Events.FRAG_LOAD_EMERGENCY_ABORTED, Hls.Events.ERROR].forEach(ev => h.on(ev, () => { video._fragLoading = false; }));
+    h.loadSource(src); h.attachMedia(video); return h;
+  }
+  video.src = src; return null;
+}
+function filmV1(box) {
+  box.innerHTML = `<img class="poster" alt="" src="${box.dataset.poster}">
+    <div class="media edge prog-sound is-paused at-start"><video playsinline disablepictureinpicture preload="none">
+      <track kind="subtitles" srclang="en" label="English" src="test-data/brush-en.vtt">
+      <track kind="subtitles" srclang="pt" label="Português" src="test-data/brush-pt.vtt">
+    </video></div>`;
+  const wrap = $('.media', box), video = $('video', box);
+  // Resting state, server-drawable: poster + time + icons. Mounted later.
+  const layer = document.createElement('div'); layer.className = 'layer';
+  layer.innerHTML = `
+    <div class="hit cur-play"></div>
+    <span class="playmark" aria-hidden="true">${icon('play-large', '')}</span>
+    <div class="chrome">
+      <span class="time tnum" aria-live="off">00:00</span>
+      <span class="cc-wrap">
+        <button class="btn-reset cc" aria-label="Captions: off" aria-haspopup="true" aria-expanded="false">${icon('captions-off')}</button>
+        <span class="cc-menu" role="menu" aria-label="Captions"></span>
+      </span>
+      <button class="btn-reset airplay" aria-label="AirPlay" hidden>${icon('airplay')}</button>
+      <button class="btn-reset fs" aria-label="Fullscreen">${icon('enter-fullscreen')}</button>
+    </div>
+    <div class="cc-text" aria-live="off"></div>
+    <div class="rail cur-scrub" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="track"><div class="rest"></div><div class="played"></div></div>
+      <svg class="snd" aria-hidden="true" preserveAspectRatio="none"><path class="snd-hollow"/><path class="snd-filled"/></svg>
+      <span class="pointer"></span>
+    </div>`;
+  wrap.appendChild(layer);
+  mountLater(() => {
+    hlsInto(video, box.dataset.src);
+    const e = engine(video, { ratio: null, captions: { active: false, update: false }, fullscreen: { enabled: true, fallback: true, iosNative: true, container: null } });
+    e.plyr.on('ready', () => { e.plyr.elements.container.appendChild(layer); });
+    wrap.classList.add('is-mounted');
+    attachLoading(e, layer, 'film');
+    lockToClock(layer);   // the wheel on the page timeline, the clock the wait motion reads
+    const hit = $('.hit', layer), time = $('.time', layer), played = $('.played', layer), rail = $('.rail', layer), ptr = $('.pointer', layer);
+    let aimAt = null;   // seconds under the pointer while it is on the edge; the time field shows it instead of the playhead
+    // ---- Progress as the film's sound: one-sided, rising from the frame's bottom edge ----
+    // Same peaks as the mixes (bin/audio-peaks.py on the soundtrack), same corner spacing
+    // as the Waveform switch (the mix's value), white with difference like the header.
+    const snd = $('.snd', rail), sh = $('.snd-hollow', snd), sf = $('.snd-filled', snd), SND_H = 32;
+    let filmPeaks = null;
+    // The line is only the sound's top: no stroke along the frame's bottom or up its sides.
+    // The played part is the same shape closed down to the edge, filled, with no outline.
+    // paint() writes both from the base values; `k(x)` (0..1 along the width) scales each point's
+    // height, so a wait motion bends the one continuous line instead of cutting it in pieces.
+    let base = null;   // { w, v }
+    const paint = k => {
+      if (!base) return;
+      const { w, v } = base, n = v.length;
+      let top = '';
+      for (let i = 0; i < n; i++) { const x = i / (n - 1); top += `${i ? ' L' : 'M'}${(x * w).toFixed(1)} ${(SND_H - 1 - Math.max(0.04, v[i]) * (k ? k(x) : 1) * (SND_H - 2)).toFixed(1)}`; }
+      sh.setAttribute('d', top);
+      sf.setAttribute('d', `M0 ${SND_H} L${top.slice(1)} L${w} ${SND_H} Z`);
+    };
+    const drawSnd = () => {
+      const w = rail.getBoundingClientRect().width; if (!filmPeaks || !w) return;
+      snd.setAttribute('viewBox', `0 0 ${w} ${SND_H}`);
+      const n = Math.max(6, Math.floor(w / stepFor(false))), v = resample(contrasted(series(filmPeaks, opt.film), opt.contrast), n);
+      base = { w, v };
+      paint(null);
+    };
+    // Wait motion (D5 "Dance ahead", decided): while the film waits with the edge open, the part of
+    // the line still to come dances in step with the wheel; the played part stays still.
+    waitMotion({ media: video, visible: () => wrap.classList.contains('edge-open'), waiting: () => layer.classList.contains('is-waiting'), paint, watch: [layer, wrap] });
+    peaksOf(box.dataset.peaks).then(p => { filmPeaks = p; drawSnd(); sync(); });
+    new ResizeObserver(() => requestAnimationFrame(drawSnd)).observe(rail);
+    box._redraw = drawSnd;
+    // Pointer switch: the pointer line at 60%, and the playhead at 45% (on a test caption) if the film has not started
+    box._simEdge = on => {
+      const d = e.plyr.duration || (filmPeaks && filmPeaks.duration) || 0;
+      wrap.classList.toggle('edge-open', on);
+      if (!on) { aimAt = null; sync(); return; }
+      // the film may not have its metadata yet (preload none): load it, then park the playhead
+      const park = () => { if ((e.plyr.currentTime || 0) < 0.5) e.seek(e.plyr.duration * 0.45); };
+      if (video.readyState < 1) { video.preload = 'metadata'; video.addEventListener('loadedmetadata', park, { once: true }); } else park();
+      ptr.style.left = '60%'; aimAt = 0.6 * d; sync();
+    };
+    // The time field: at 00:00, untouched, only the length ("00:32"); once it plays, stops
+    // somewhere, or the pointer is on the edge: "now / length" ("00:14 / 00:32")
+    const paintP = t => { const d = e.plyr.duration || (filmPeaks && filmPeaks.duration) || 0, f = d ? Math.min(1, t / d) : 0; played.style.transform = `scaleX(${f})`; rail.style.setProperty('--p', f * 100 + '%'); };
+    const prog = smoothClock(video, paintP);
+    const sync = () => {
+      const d = e.plyr.duration || (filmPeaks && filmPeaks.duration) || 0, t = e.plyr.currentTime || 0;
+      paintP(prog.now());
+      const at = aimAt != null || t > 0 || !video.paused;
+      time.textContent = !d ? clock(aimAt ?? t) : at ? clock(aimAt ?? t) + ' / ' + clock(d) : clock(d);
+      // At 00:00, untouched, there is no progress: the edge is not a seek zone, a click there plays
+      const atStart = t === 0 && video.paused;
+      wrap.classList.toggle('at-start', atStart); rail.tabIndex = atStart ? -1 : 0;
+      if (atStart && !body.classList.contains('sim-edge')) wrap.classList.remove('edge-open');
+      rail.setAttribute('aria-valuenow', d ? Math.round(t / d * 100) : 0);
+    };
+    ['timeupdate', 'loadedmetadata', 'seeked', 'play', 'pause'].forEach(t => video.addEventListener(t, sync));
+    const state = () => { const paused = video.paused; wrap.classList.toggle('is-paused', paused); hit.className = 'hit ' + (paused ? 'cur-play' : 'cur-pause'); if (!paused) box.classList.add('is-started'); };
+    ['play', 'pause', 'playing'].forEach(t => video.addEventListener(t, state));
+    // A play from the visitor (click on the picture, Space) enters fullscreen first, every time,
+    // like production's fullscreen-on-play.js; a pause never leaves it: only Esc or the
+    // exit-fullscreen icon do. (Films that loop or autoplay would be left out, as in production.)
+    const visitorToggle = () => { if (video.paused) box._fsEnter(); e.toggle(); };
+    hit.addEventListener('click', visitorToggle);
+    // Plyr toggles fullscreen on a double click anywhere in its frame: two quick clicks on the
+    // picture (pause, play) left fullscreen. The layer keeps double clicks to itself.
+    layer.addEventListener('dblclick', ev => { ev.stopPropagation(); ev.preventDefault(); });
+    // Space or K plays and pauses wherever focus is in the film, except on a button (Space on a
+    // focused button presses it: after a click on the fullscreen icon, Space used to leave fullscreen)
+    hit.tabIndex = -1;
+    layer.addEventListener('keydown', ev => { if ((ev.key === ' ' || ev.key === 'k') && !ev.target.closest('button')) { visitorToggle(); ev.preventDefault(); } });
+    // Idle: while the film plays, 3s without the pointer moving or a key closes everything (the
+    // row, the open edge, the pointer line, the hover time; in fullscreen the cursor too), even
+    // with the pointer still resting in the controls band or the rail focused by a click. The
+    // timer restarts on play, so a click on the edge that resumes playback hides too.
+    // Never while paused, dragging, or with the caption menu open.
+    let idle;
+    const goIdle = () => {
+      if (video.paused) return;
+      if (rail.classList.contains('drag') || wrap.classList.contains('menu-open')) return wake();
+      wrap.classList.add('is-idle'); wrap.classList.remove('is-active');
+      inBand = false; aimAt = null; open(); sync();
+    };
+    const wake = () => { wrap.classList.remove('is-idle'); clearTimeout(idle); idle = setTimeout(goIdle, 3000); };
+    layer.addEventListener('pointermove', () => { wrap.classList.add('is-active'); wake(); });
+    layer.addEventListener('pointerdown', wake);
+    wrap.addEventListener('keydown', () => { wrap.classList.add('is-active'); wake(); });
+    video.addEventListener('play', wake);
+    video.addEventListener('pause', () => { clearTimeout(idle); wrap.classList.remove('is-idle'); });
+    // ---- Captions: a word list over the picture (English · Português · Off) ----
+    // Only drawn when the film has caption tracks. Our layer renders the cue text;
+    // Plyr's own caption box is hidden. (The build uses hls.js subtitle renditions
+    // and iPhone's native player; this preview uses sidecar .vtt files.)
+    const tracks = [...video.textTracks].filter(t => t.kind === 'subtitles' || t.kind === 'captions');
+    const ccWrap = $('.cc-wrap', layer), cc = $('.cc', layer), menu = $('.cc-menu', layer), ccText = $('.cc-text', layer);
+    if (!tracks.length) ccWrap.remove();
+    let current = null;
+    const items = [...tracks.map(t => ({ label: t.label, track: t })), { label: 'Off', track: null }];
+    menu.innerHTML = `<div class="cc-list" role="none">${items.map((it, i) => ccItem(it.label, i)).join('')}</div>`;
+    menu.classList.add('as-box');
+    const showCue = () => { const cue = current && current.activeCues && current.activeCues[0]; ccText.innerHTML = cue ? cue.text.split('\n').map(l => `<span>${l.replace(/</g, '&lt;')}</span>`).join('<br>') : ''; };
+    const choose = it => {
+      tracks.forEach(t => { t.mode = 'disabled'; t.oncuechange = null; });
+      current = it.track;
+      if (current) { current.mode = 'hidden'; current.oncuechange = showCue; }
+      showCue();
+      $$('button', menu).forEach((b, i) => b.setAttribute('aria-checked', items[i] === it ? 'true' : 'false'));
+      cc.innerHTML = icon(current ? 'captions-on' : 'captions-off');
+      cc.setAttribute('aria-label', 'Captions: ' + it.label);
+      // keep the page's Captions switch in step with the player's own menu
+      opt.cc = current ? current.language : 'off';
+      $$('.switch button[data-cc]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cc === opt.cc ? 'true' : 'false'));
+    };
+    // Captions switch on the page: choose a language as the menu would; when paused, park the
+    // playhead on a cue (the two-line one at 8s unless already on one) so the look shows at once
+    box._caption = code => {
+      const it = items.find(i => (i.track ? i.track.language : 'off') === code); if (!it) return;
+      choose(it);
+      if (!it.track || !video.paused) return;
+      const t = video.currentTime, cues = it.track.cues ? [...it.track.cues] : [];
+      e.seek(cues.some(c => t >= c.startTime && t < c.endTime) ? t : 8);
+      setTimeout(showCue, 250);
+    };
+    const openMenu = open => { ccOpen(menu, open); wrap.classList.toggle('menu-open', open); cc.setAttribute('aria-expanded', open); if (open) $('[aria-checked="true"]', menu)?.focus(); };
+    cc.addEventListener('click', ev => { ev.stopPropagation(); openMenu(!ccIsOpen(menu)); });
+    menu.addEventListener('click', ev => { const b = ev.target.closest('button'); if (!b) return; ev.stopPropagation(); choose(items[+b.dataset.i]); openMenu(false); cc.focus(); });
+    menu.addEventListener('keydown', ev => { const bs = $$('button', menu), i = bs.indexOf(document.activeElement); if (ev.key === 'ArrowDown') { bs[(i + 1) % bs.length].focus(); ev.preventDefault(); } if (ev.key === 'ArrowUp') { bs[(i - 1 + bs.length) % bs.length].focus(); ev.preventDefault(); } if (ev.key === 'Escape') { openMenu(false); cc.focus(); } });
+    document.addEventListener('click', ev => { if (!ccWrap.contains(ev.target)) openMenu(false); });
+    e.plyr.on('ready', () => choose(items[items.length - 1]));   // default: Off
+    if (tracks.length) choose(items[items.length - 1]);
+
+    const fs = $('.fs', layer);
+    airplay(video, $('.airplay', layer));
+    // Fullscreen, one way for every entry (the icon, the page's button, a play): the whole film
+    // box, the size container the captions measure. Where the browser refuses (the app's preview
+    // pane does) the box fills the window instead (.sim-fs). Only Esc or the exit icon leave it.
+    // iPhone has no element fullscreen: Plyr hands the video to Apple's player (iosNative).
+    const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+    const fsOn = () => fsEl() === box || box.classList.contains('sim-fs');
+    const fsShow = () => { const on = fsOn(); fs.innerHTML = icon(on ? 'exit-fullscreen' : 'enter-fullscreen'); fs.setAttribute('aria-label', on ? 'Exit fullscreen' : 'Fullscreen'); requestAnimationFrame(drawSnd); };
+    box._fsEnter = () => {
+      if (fsOn()) return;
+      const req = box.requestFullscreen || box.webkitRequestFullscreen;
+      if (!req) { e.plyr.fullscreen.enter(); return; }
+      try { const p = req.call(box); if (p && p.catch) p.catch(() => {}); } catch (err) {}
+      // focus on the picture, so Space plays and pauses instead of pressing the icon just clicked
+      hit.focus({ preventScroll: true });
+      // some hosts neither grant nor refuse: if nothing is fullscreen after 400ms, fill the window
+      setTimeout(() => { if (!fsEl()) { box.classList.add('sim-fs'); fsShow(); } }, 400);
+    };
+    const fsExit = () => { if (fsEl()) (document.exitFullscreen || document.webkitExitFullscreen).call(document); box.classList.remove('sim-fs'); fsShow(); };
+    box._fullscreen = () => fsOn() ? fsExit() : box._fsEnter();
+    fs.addEventListener('click', ev => { ev.stopPropagation(); box._fullscreen(); });
+    ['fullscreenchange', 'webkitfullscreenchange'].forEach(t => document.addEventListener(t, fsShow));
+    document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && box.classList.contains('sim-fs')) fsExit(); });
+    const frac = ev => { const r = rail.getBoundingClientRect(); return Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)); };
+    rail.addEventListener('pointermove', ev => { const f = frac(ev); ptr.style.left = f * 100 + '%'; aimAt = f * (e.plyr.duration || 0); sync(); if (rail.classList.contains('drag')) e.seek(f * e.plyr.duration); });
+    // .edge-open: the pointer is anywhere in the controls band at the bottom of the frame (from
+    // the edge up to a gutter above the time), or the edge has keyboard focus, or a drag runs.
+    // The band is taller while open (the row has risen by the sound's height), so the edge does
+    // not flicker shut as the row moves up under the pointer. Never at 00:00, untouched.
+    // A mouse click focuses the rail too, but only keyboard focus (:focus-visible) holds it open
+    const held = () => body.classList.contains('sim-edge') || rail.classList.contains('drag') || (document.activeElement === rail && rail.matches(':focus-visible'));
+    const px = name => parseFloat(getComputedStyle(wrap).getPropertyValue(name)) || 0;
+    const bandH = () => px('--p-gutter') * 2 + px('--p-time') + (wrap.classList.contains('edge-open') ? px('--p-sound') : 0);
+    let inBand = false;
+    const open = () => wrap.classList.toggle('edge-open', !wrap.classList.contains('at-start') && (body.classList.contains('sim-edge') || (!wrap.classList.contains('is-idle') && (inBand || held()))));
+    layer.addEventListener('pointermove', ev => { const r = wrap.getBoundingClientRect(); inBand = r.bottom - ev.clientY <= bandH(); open(); });
+    wrap.addEventListener('pointerleave', () => { inBand = false; open(); });
+    rail.addEventListener('focus', open);
+    rail.addEventListener('blur', open);
+    rail.addEventListener('pointerleave', () => { if (body.classList.contains('sim-edge')) return; aimAt = null; sync(); });
+    rail.addEventListener('pointerdown', ev => { rail.setPointerCapture(ev.pointerId); rail.classList.add('drag'); e.seek(frac(ev) * e.plyr.duration); });
+    rail.addEventListener('pointerup', () => { rail.classList.remove('drag'); open(); });
+    rail.addEventListener('keydown', ev => { if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') { e.seek(e.plyr.currentTime + (ev.key === 'ArrowRight' ? 1 : -1) * (ev.shiftKey ? 60 : 10)); ev.preventDefault(); } });
+    // the film's shape, for the captions' picture height (--pic-h) when fullscreen letterboxes it
+    const shape = () => { if (video.videoWidth) box.style.setProperty('--ar', video.videoHeight / video.videoWidth); };
+    ['loadedmetadata', 'resize'].forEach(t => video.addEventListener(t, shape)); shape();
+    video.preload = 'metadata';
+  });
+}
+
+/* ============================================================
+   Gallery video: Ambient and Player
+   ============================================================ */
+// One observer: Ambient videos (and Player videos that are muted and loop) play while in view and
+// pause out of view; any other video pauses when it leaves the view. A self-playing Player video
+// that the visitor paused stays paused until they play it again.
+const view = new IntersectionObserver(entries => entries.forEach(en => { const e = en.target._engine; if (!e) return; en.target.dataset.inView = en.isIntersecting ? '1' : '0'; if (e.ambient || (e.auto && !e.heldByVisitor)) { en.isIntersecting ? e.plyr.play() : e.pause(); } else if (!en.isIntersecting) e.pause(); }), { threshold: 0.15 });
+function galleryAmbient(box) {
+  box.innerHTML = `<img class="poster" alt="" src="${box.dataset.poster}"><div class="media"><video muted loop playsinline disablepictureinpicture preload="none" src="${box.dataset.src}"></video></div>`;
+  const wrap = $('.media', box), video = $('video', box);
+  mountLater(() => {
+    const e = engine(video, { ambient: true, muted: true, loop: { active: true }, clickToPlay: false, ratio: null });
+    wrap.classList.add('is-mounted'); video.preload = 'metadata';
+    video.addEventListener('playing', () => box.classList.add('is-started'));
+    box._engine = e; view.observe(box);
+  });
+}
+// Player preset (Tiago, 22 Nov): play / pause only. Loop is a per-video option (data-loop), and a
+// video that is muted AND loops plays by itself while in view (as Ambient), still pausable.
+function galleryPlayer(box) {
+  const sound = box.dataset.sound === '1', loop = box.dataset.loop === '1', auto = loop && !sound;
+  box.innerHTML = `<img class="poster" alt="" src="${box.dataset.poster}"><div class="media gv"><video ${sound ? '' : 'muted'} ${loop ? 'loop' : ''} playsinline disablepictureinpicture preload="none" src="${box.dataset.src}"></video></div>`;
+  const wrap = $('.media', box), video = $('video', box);
+  wrap.insertAdjacentHTML('beforeend', `<div class="hit cur-play" style="position:absolute;inset:0;z-index:2"></div>
+    <span class="playmark" aria-hidden="true">${icon('play-large', '')}</span>`);
+  mountLater(() => {
+    const e = engine(video, { muted: !sound, loop: { active: loop }, clickToPlay: false, ratio: null });
+    e.auto = auto;
+    wrap.classList.add('is-mounted'); video.preload = 'metadata';
+    box._engine = e; view.observe(box);
+    attachLoading(e, box, 'picture');
+    const hit = $('.hit', wrap);
+    hit.addEventListener('click', () => { e.heldByVisitor = !video.paused; e.toggle(); });
+    ['play', 'pause'].forEach(t => video.addEventListener(t, () => { const paused = video.paused; hit.className = 'hit ' + (paused ? 'cur-play' : 'cur-pause'); wrap.classList.toggle('is-playing', !paused); if (!paused) box.classList.add('is-started'); }));
+  });
+}
+
+/* ============================================================
+   Envelope (A2): the mix cursor's drawing, made long
+   ============================================================ */
+/* ---------- Wait motion: "Dance ahead" (decided, Tiago 22 Nov; was D5 of five) ----------
+   While a player waits for data, the part of its sound shape still to come dances; the played
+   part stays still. Same effect on the film's sound edge and on every audio envelope.
+   - In step with the loading wheel: time is the page timeline, the clock the wheel's 1.2s turn
+     runs on (its animation is started at 0); every part rises and falls once per turn (slow), to at most 32% below its height (half the first draft).
+   - One unbroken line: each frame the whole path is redrawn with a height factor per point
+     (never slices moved apart). Neighbours share almost the same timing, so it ripples.
+   - Only the stretches NOT downloaded yet dance, and only while data is really arriving
+     (Tiago 22 Nov): a fragment loading (hls.js), `progress` events, the buffer growing, or the
+     player stalled waiting for it. Played and buffered parts stay still; a film playing from its
+     buffer with nothing loading does not move at all.
+   - No kinks: the dance fades in over 3% of the width from every still edge (the playhead, each
+     buffered range), and each point eases in and out over time, so when a fragment lands its
+     stretch settles instead of snapping still.
+   - prefers-reduced-motion: still. */
+const TURN = 1200;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const BUCKETS = 1000, FADE = 0.03, EASE = 0.12;
+// Is data arriving for this media right now?
+function downloadWatch(media) {
+  let lastGrow = -1e9, lastProgress = -1e9, total = 0;
+  media.addEventListener('progress', () => { lastProgress = performance.now(); });
+  return () => {
+    const now = performance.now(), b = media.buffered; let sum = 0;
+    for (let i = 0; i < b.length; i++) sum += b.end(i) - b.start(i);
+    if (sum > total + 0.01) lastGrow = now; total = sum;
+    return !!media._fragLoading || now - lastProgress < 700 || now - lastGrow < 700;
+  };
+}
+// Where the shape may dance: 0 on the played part and on every buffered range, rising to 1 over
+// FADE of the width beyond their edges. Written into `out` (BUCKETS values across the width).
+// While the wheel turns (stalled), the whole line after the playhead dances, buffered or not:
+// the wheel and the line say the same thing.
+function danceTarget(media, out, stalled) {
+  const d = media.duration; if (!d) { out.fill(0); return; }
+  const still = [[0, media.currentTime / d]], b = media.buffered;
+  if (!stalled) for (let i = 0; i < b.length; i++) still.push([b.start(i) / d, b.end(i) / d]);
+  for (let i = 0; i < BUCKETS; i++) {
+    const x = i / (BUCKETS - 1); let dist = 1;
+    for (const [a, z] of still) dist = Math.min(dist, x < a ? a - x : x > z ? x - z : 0);
+    const u = Math.min(1, dist / FADE); out[i] = u * u * (3 - 2 * u);
+  }
+}
+// Calls paint(k) every frame while anything dances, k = x (0..1) -> height factor; once all has
+// settled, paints the still shape once (k = null). visible(): the shape is on screen (the film's
+// edge is open); waiting(): the player is stalled for data (or the page's Hold switch).
+function waitMotion({ media, visible, waiting, paint, watch }) {
+  const arriving = downloadWatch(media), w = new Float32Array(BUCKETS), target = new Float32Array(BUCKETS);
+  let raf = 0;
+  const frame = () => {
+    const stalled = waiting(), on = visible() && !reduceMotion.matches && (stalled || arriving());
+    if (on) danceTarget(media, target, stalled); else target.fill(0);
+    let any = false;
+    for (let i = 0; i < BUCKETS; i++) { w[i] += (target[i] - w[i]) * EASE; if (w[i] < 0.002) w[i] = 0; else any = true; }
+    if (!any && !on) { raf = 0; paint(null); return; }
+    const a = 2 * Math.PI * document.timeline.currentTime / TURN;
+    paint(x => {
+      const ph = 5.5 * Math.sin(2.7 * x + 0.4) + 3.2 * Math.sin(7.9 * x);   // timing drifts smoothly along the width
+      return 1 - w[Math.min(BUCKETS - 1, Math.max(0, Math.round(x * (BUCKETS - 1))))] * 0.16 * (1 + Math.sin(a + ph));
+    });
+    raf = requestAnimationFrame(frame);
+  };
+  const start = () => { if (!raf) raf = requestAnimationFrame(frame); };
+  watch.forEach(el => new MutationObserver(start).observe(el, { attributes: true, attributeFilter: ['class'] }));
+  ['progress', 'waiting', 'stalled', 'play', 'seeking', 'tg:fragloading'].forEach(t => media.addEventListener(t, start));
+}
+// The played part at a constant speed, films and audio alike. `timeupdate` comes only about
+// four times a second, and currentTime read per frame still jitters (14-19ms steps for a 16.7ms
+// frame), so the fill jumped. Instead, while the media really plays, each frame moves the shown
+// time by exactly the frame's elapsed time (x playbackRate) and eases it onto currentTime (8% of
+// the difference per frame; a jump of more than 0.3s, a seek, is taken at once). On pause,
+// waiting (stall), seeking or end the loop stops and the exact time is painted, so the fill never
+// runs ahead of a file that has stopped. paint(t) gets seconds; now() is the time shown.
+// AirPlay (Tiago, 22 Nov: keep it), films and mixes: the button shows only while Safari reports
+// an AirPlay device nearby; elsewhere (Chrome, Firefox) it never appears, so it is never a dead
+// control. Pressing it opens Safari's own device picker; while sending, the icon is dimmed.
+// For the build: hls.js plays through MediaSource, which AirPlay cannot carry; a film on hls.js
+// must switch to native HLS (or a ManagedMediaSource fallback) when AirPlay is chosen.
+function airplay(media, btn) {
+  if (!btn || !window.WebKitPlaybackTargetAvailabilityEvent) return;
+  media.addEventListener('webkitplaybacktargetavailabilitychanged', ev => { btn.hidden = ev.availability !== 'available'; });
+  media.addEventListener('webkitcurrentplaybacktargetiswirelesschanged', () => btn.classList.toggle('is-on', !!media.webkitCurrentPlaybackTargetIsWireless));
+  btn.addEventListener('click', ev => { ev.stopPropagation(); media.webkitShowPlaybackTargetPicker(); });
+}
+function smoothClock(media, paint) {
+  let raf = 0, base = 0, at = 0;
+  const exact = () => { base = media.currentTime || 0; at = performance.now(); };
+  const shown = now => base + (now - at) / 1000 * (media.playbackRate || 1);
+  const live = () => !media.paused && !media.ended && !media.seeking && media.readyState >= 3;
+  const frame = now => {
+    if (!live()) { raf = 0; exact(); paint(base); return; }
+    const err = media.currentTime - shown(now);
+    if (Math.abs(err) > 0.3) { base = media.currentTime; at = now; } else base += err * 0.08;
+    paint(Math.max(0, shown(now)));
+    raf = requestAnimationFrame(frame);
+  };
+  const start = () => { if (!raf && live()) { exact(); raf = requestAnimationFrame(frame); } };
+  ['play', 'playing', 'canplay', 'seeked'].forEach(t => media.addEventListener(t, start));
+  ['pause', 'waiting', 'seeking', 'ended', 'loadedmetadata', 'timeupdate'].forEach(t => media.addEventListener(t, () => { if (!raf) { exact(); paint(base); } }));
+  return { now: () => raf ? Math.max(0, shown(performance.now())) : (media.currentTime || 0) };
+}
+// The wheel on the same clock: whenever an animation starts inside `el` (the wheel appearing),
+// every endless one there is started at time 0 of the page timeline, so the wheel's 1.2s turn
+// and the wait motion (which reads that timeline) share one beat however late each began.
+function lockToClock(el) {
+  el.addEventListener('animationstart', () => requestAnimationFrame(() => el.getAnimations({ subtree: true })
+    .forEach(a => { if (a.startTime !== 0 && a.effect && a.effect.getTiming().iterations === Infinity) a.startTime = 0; })));
+}
+const peaksCache = {};
+async function peaksOf(url) { return peaksCache[url] ||= fetch(url).then(r => r.json()); }
+function resample(values, n) {   // max of each bucket, so a short loud hit is never lost
+  const out = new Array(n).fill(0);
+  for (let i = 0; i < values.length; i++) { const k = Math.min(n - 1, Math.floor(i / values.length * n)); if (values[i] > out[k]) out[k] = values[i]; }
+  return out;
+}
+// Contrast: a mastered mix is loud all the way through, so its raw envelope is a flat
+// band. Contrast lifts the floor: c = 0 is the raw shape, c = 1 maps the quietest tenth
+// of the mix to the spine, so breakdowns narrow and drops swell.
+// The floor and ceiling are taken over every list given together (left and right share
+// them), so a quieter channel stays quieter. hi = the 98th percentile, so one stray peak
+// cannot squash the whole shape.
+function contrastedTogether(lists, c) {
+  if (!c) return lists;
+  const sorted = lists.flat().sort((a, b) => a - b), lo = sorted[Math.floor(sorted.length * 0.1)] * c, hi = sorted[Math.floor(sorted.length * 0.98)] || 1;
+  return lists.map(values => values.map(v => Math.min(1, Math.max(0, (v - lo) / (hi - lo)))));
+}
+const contrasted = (values, c) => contrastedTogether([values], c)[0];
+
+// What one side of the envelope shows. Stored per file: peak / rms (mono, L, R) and, for
+// films, lufs. dB is not stored: it is the RMS on a log scale, floor -48 dB.
+const toDb = v => Math.max(0, (20 * Math.log10(Math.max(v, 1e-6)) + 48) / 48);
+function series(data, measure, ch = '') {
+  if (measure === 'lufs') return data.lufs || data['rms' + ch];
+  const base = data[(measure === 'peak' ? 'peak' : 'rms') + ch] || data[measure === 'peak' ? 'peak' : 'rms'];
+  return measure === 'db' ? base.map(toDb) : base;
+}
+
+// Detail (Tiago, 22 Nov: Fine chosen). Fine = a corner every 4px on the full-width mix
+// and the film, 6px in gallery tiles; Finer = 2px / 3px, to compare.
+const STEPS = { fine: [4, 6], finer: [2, 3] };
+const stepFor = isTile => STEPS[opt.detail][isTile ? 1 : 0];
+
+// Top and bottom may differ (Stereo L/R): top = the left channel, bottom = the right.
+// envelopeValues() does the costly part once per size (contrast, resample); envelopeShape()
+// writes the path, and takes an optional k(x) height factor for the wait motion (waitMotion).
+function envelopeValues(topValues, bottomValues, w, step) {
+  const n = Math.max(6, Math.floor(w / step));
+  const [tc, bc] = contrastedTogether([topValues, bottomValues], opt.contrast);
+  return { n, vt: resample(tc, n), vb: resample(bc, n) };
+}
+function envelopeShape({ n, vt, vb }, w, h, k) {
+  const mid = h / 2, amp = h / 2 - 2, min = 0.04, pad = 1;
+  const xs = i => pad + i / (n - 1) * (w - 2 * pad), f = i => (k ? k(i / (n - 1)) : 1);
+  let top = '', bottom = '';
+  for (let i = 0; i < n; i++) { const a = Math.max(min, vt[i]) * f(i) * amp; top += (i ? ' L' : 'M') + xs(i).toFixed(1) + ' ' + (mid - a).toFixed(1); }
+  for (let i = n - 1; i >= 0; i--) { const a = Math.max(min, vb[i]) * f(i) * amp; bottom += ' L' + xs(i).toFixed(1) + ' ' + (mid + a).toFixed(1); }
+  return top + bottom + ' Z';
+}
+function envelopePath(topValues, bottomValues, w, h, step) { return envelopeShape(envelopeValues(topValues, bottomValues, w, step), w, h); }
+function envelopePlayer(host) {
+  const kind = host.dataset.kind, isTile = kind === 'tile';
+  // No title, no sound control (the visitor's system sets the level; to silence, pause).
+  // One interaction for the mix and the gallery tiles (Tiago, 22 Nov): with a mouse, a click on
+  // the wave plays or pauses (play / pause cursor) and only the playhead's edge can be dragged.
+  // Mix: the wave, then one row: the play button (touch only), AirPlay (where available) and
+  // the time; no ±30s buttons. Tiles: no time, no row; on touch the plain play mark in the middle
+  // of the wave while paused (nothing while playing), and the wave fills the cell.
+  const lens = `<button class="btn-reset lensbtn cur-play" aria-label="Play ${host.dataset.title}">${icon('play-large', '')}</button>`;
+  host.innerHTML = `<div class="env${isTile ? ' is-tile' : ''}" style="${isTile ? '--env-h:80px' : ''}">
+      <div class="wave cur-play" role="slider" tabindex="0" aria-label="Play ${host.dataset.title}" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0">
+        <svg class="shape" aria-hidden="true"><defs><linearGradient id="g-${Math.random().toString(36).slice(2)}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" style="stop-color:var(--tg-paper-bottom)"/><stop offset="1" style="stop-color:var(--tg-paper-top)"/></linearGradient></defs>
+          <path class="hollow" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <path class="filled" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <div class="marks"></div>
+        <div class="pointer"></div>
+        ${isTile ? `<span class="playmark" aria-hidden="true">${icon('play', '')}</span>` : ''}
+      </div>
+      ${isTile ? '' : `<div class="foot">${lens}<button class="btn-reset airplay" aria-label="AirPlay" hidden>${icon('airplay')}</button>
+        <span class="spacer"></span><span class="time tnum"></span></div>`}
+      <audio preload="none" src="${host.dataset.src}"></audio></div>`;
+  const env = $('.env', host), wave = $('.wave', host), svg = $('svg.shape', host), hollow = $('.hollow', host), filled = $('.filled', host), grad = $('linearGradient', svg), audio = $('audio', host), timeEl = $('.time', host), pointer = $('.pointer', host), btn = $('.lensbtn', host);
+  hollow.setAttribute('fill', `url(#${grad.id})`); hollow.setAttribute('stroke', 'var(--tg-ink)');
+  filled.setAttribute('fill', 'var(--tg-ink)'); filled.setAttribute('stroke', 'var(--tg-ink)');
+  let data = null, duration = 0, aimAt = null;   // aimAt: seconds under the pointer while it is on the wave
+  let shape = null;   // { vals, w, h }: the envelope's values at the current size
+  const paint = k => { if (!shape) return; const d = envelopeShape(shape.vals, shape.w, shape.h, k); hollow.setAttribute('d', d); filled.setAttribute('d', d); };
+  const draw = () => { if (!data) return; const r = wave.getBoundingClientRect(); svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`); const st = opt.sides === 'stereo'; shape = { vals: envelopeValues(series(data, opt.audio, st ? 'L' : ''), series(data, opt.audio, st ? 'R' : ''), r.width, stepFor(isTile)), w: r.width, h: r.height }; paint(null); };
+  // Wait motion (Dance ahead, the same as the film's): while the audio waits, the envelope still
+  // to come dances in step with the wheel; the played (filled) part stays still.
+  waitMotion({ media: audio, visible: () => true, waiting: () => wave.classList.contains('is-waiting'), paint, watch: [wave] });
+  lockToClock(wave);
+  peaksOf(host.dataset.peaks).then(p => { data = p; duration = p.duration; if (timeEl) timeEl.textContent = clock(duration); wave.setAttribute('aria-valuemax', Math.round(duration)); draw(); });
+  let raf = 0; new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); }).observe(wave);
+  host._redraw = draw;
+  mountLater(() => {
+    const e = engine(audio, { muted: false });
+    env.classList.add('is-mounted');
+    attachLoading(e, wave, 'sound');   // audio never shows a wheel: the line's dance is its only waiting sign
+    // scrubTo: while the edge is dragged (and until the seek it ends with has landed), the edge is
+    // drawn there instead of at the playhead, so it never jumps back on screen
+    let scrubTo = null;
+    const paintP = t => { if (scrubTo != null) t = scrubTo; const d = audio.duration || duration, f = d ? Math.min(1, t / d) : 0; env.style.setProperty('--progress', f * 100 + '%'); pointer.style.left = f * 100 + '%'; };
+    const prog = smoothClock(audio, paintP);
+    const sync = () => { const t = audio.currentTime || 0, d = audio.duration || duration; paintP(prog.now()); const at = aimAt != null || t > 0 || !audio.paused;
+      // mix: "now / length" (only the length at 00:00, untouched); tiles have no time at all
+      if (timeEl) timeEl.textContent = at ? clock(aimAt ?? scrubTo ?? t) + ' / ' + clock(d) : clock(d); wave.setAttribute('aria-valuenow', Math.round(t)); wave.setAttribute('aria-valuetext', `${minutes(t)} minutes of ${minutes(d)}`); };
+    audio.addEventListener('timeupdate', sync);
+    ['play', 'pause'].forEach(t => audio.addEventListener(t, () => { const p = audio.paused; env.classList.toggle('is-playing', !p); if (btn) { btn.innerHTML = icon(p ? 'play-large' : 'pause-large', ''); btn.className = 'btn-reset lensbtn ' + (p ? 'cur-play' : 'cur-pause'); btn.setAttribute('aria-label', (p ? 'Play ' : 'Pause ') + host.dataset.title); } tileCursor(); }));
+    if (btn) btn.addEventListener('click', ev => { ev.stopPropagation(); e.toggle(); });
+    const frac = ev => { const r = wave.getBoundingClientRect(); return Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)); };
+    let edgeDrag = false, swallowClick = false;
+    function tileCursor() {
+      wave.classList.remove('cur-play', 'cur-pause', 'cur-scrub');
+      wave.classList.add(wave.classList.contains('on-edge') || edgeDrag ? 'cur-scrub' : audio.paused ? 'cur-play' : 'cur-pause');
+    }
+    {
+      // A click plays or pauses; only the playhead's edge drags (8px either side for a mouse, 22px
+      // for a finger), and only once it has been played (at 00:00 there is no edge yet). Letting go
+      // of a drag never toggles. While dragging, the mix's time field says the time at the edge.
+      // The keyboard still moves ←/→ through it (Shift: 60s), Space / Enter play and pause.
+      // The drag only moves the edge (a preview); the one real seek happens on release, and the
+      // edge stays at the drop point until that seek has landed. Seeking on every mouse move sent
+      // dozens of seeks into a file still downloading, and a browser could keep the old position.
+      const nearEdge = ev => {
+        const d = audio.duration || duration; if (!d || (audio.currentTime === 0 && audio.paused)) return false;
+        const r = wave.getBoundingClientRect(), x = r.left + prog.now() / d * r.width;
+        return Math.abs(ev.clientX - x) <= (ev.pointerType === 'touch' ? 22 : 8);
+      };
+      wave.addEventListener('pointermove', ev => {
+        if (edgeDrag) { scrubTo = frac(ev) * (audio.duration || duration); aimAt = scrubTo; sync(); return; }
+        wave.classList.toggle('on-edge', ev.pointerType !== 'touch' && nearEdge(ev)); tileCursor();
+      });
+      wave.addEventListener('pointerleave', () => { if (!edgeDrag) { wave.classList.remove('on-edge'); tileCursor(); } });
+      wave.addEventListener('pointerdown', ev => {
+        swallowClick = false;
+        if (!nearEdge(ev)) return;
+        edgeDrag = true; scrubTo = prog.now(); wave.setPointerCapture(ev.pointerId); wave.classList.add('dragging'); tileCursor(); ev.preventDefault();
+      });
+      let landed = null;
+      const endDrag = ev => {
+        if (!edgeDrag) return;
+        edgeDrag = false; swallowClick = true; wave.classList.remove('dragging'); tileCursor();
+        aimAt = null;
+        if (ev.type === 'pointercancel') { scrubTo = null; sync(); return; }
+        const target = frac(ev) * (audio.duration || duration);
+        scrubTo = target; sync();
+        const done = () => { if (Math.abs(audio.currentTime - target) < 1) { scrubTo = null; audio.removeEventListener('seeked', done); clearTimeout(landed); } };
+        audio.addEventListener('seeked', done); clearTimeout(landed);
+        landed = setTimeout(() => { audio.removeEventListener('seeked', done); scrubTo = null; paintP(prog.now()); }, 4000);   // never hold it longer
+        e.seek(target);
+      };
+      wave.addEventListener('pointerup', endDrag); wave.addEventListener('pointercancel', endDrag);
+      wave.addEventListener('click', () => { if (swallowClick) { swallowClick = false; return; } e.toggle(); });
+      wave.addEventListener('keydown', ev => { const s = ev.shiftKey ? 60 : 10; if (ev.key === 'ArrowRight') { e.seek(audio.currentTime + s); ev.preventDefault(); } if (ev.key === 'ArrowLeft') { e.seek(audio.currentTime - s); ev.preventDefault(); } if (ev.key === ' ' || ev.key === 'Enter') { e.toggle(); ev.preventDefault(); } });
+    }
+    airplay(audio, $('.airplay', host));
+    if (kind === 'mix' && 'mediaSession' in navigator) audio.addEventListener('play', () => { navigator.mediaSession.metadata = new MediaMetadata({ title: host.dataset.title, artist: "Tiags' Space", album: '4K Lento', artwork: [{ src: new URL(host.dataset.artwork, location.href).href, sizes: '940x940', type: 'image/jpeg' }] }); });
+  });
+}
+
+/* ============================================================
+   Panel
+   ============================================================ */
+const body = document.body;
+const pages = { 'gradient-light': ['scheme-light', 'page-gradient'], 'gradient-dark': ['scheme-dark', 'page-gradient'], 'dark': ['scheme-dark', 'page-gradient'], 'white': ['scheme-light', 'page-white'] };
+$('#opt-page').addEventListener('change', ev => { body.classList.remove('scheme-light', 'scheme-dark', 'page-gradient', 'page-white'); body.classList.add(...pages[ev.target.value]); });
+$('#opt-icon').addEventListener('input', ev => { document.documentElement.style.setProperty('--icon', ev.target.value + 'px'); $('#opt-icon-v').textContent = ev.target.value + 'px'; });
+const redrawAll = () => $$('.env-host, .film-v1').forEach(h => h._redraw && h._redraw());
+// The four switches. Each one: a data-* attribute on its buttons, the option it sets,
+// its key, and its values in cycle order. Every copy (top bar, Film, Mix, Gallery audio)
+// stays in step.
+const SWITCHES = [
+  { attr: 'audio',  key: 'a', values: ['peak', 'rms', 'db'] },
+  { attr: 'sides',  key: 's', values: ['mirror', 'stereo'] },
+  { attr: 'film',   key: 'f', values: ['peak', 'rms', 'db', 'lufs'] },
+  { attr: 'detail', key: 'd', values: ['fine', 'finer'] },
+  { attr: 'edge',   key: 'h', values: ['off', 'on'], apply: v => { body.classList.toggle('sim-edge', v === 'on'); $$('.film-v1, .env-host').forEach(b => b._simEdge && b._simEdge(v === 'on')); } },
+  { attr: 'cc',     key: 'c', values: ['off', 'en', 'pt'], apply: v => $$('.film-v1').forEach(b => b._caption && b._caption(v)) },
+  // Holds every player (film and audio) in its waiting state (wheel on), to look at the wait motion without a slow network
+  { attr: 'hold',   key: 'w', values: ['off', 'on'], apply: v => $$('.film-v1 .layer, .env .wave').forEach(l => l.classList.toggle('is-waiting', v === 'on')) },
+  // Production's per-film caption fields (ACF on the film): text colour, and box or shadow
+  { attr: 'cccolor', key: null, values: ['white', 'yellow'], apply: v => document.documentElement.style.setProperty('--cc-color', v === 'yellow' ? '#ffe100' : '#fff') },
+  { attr: 'ccstyle', key: null, values: ['box', 'shadow'], apply: v => body.classList.toggle('cc-shadow', v === 'shadow') },
+];
+// Caption menu demos: Words (open, as it sits over the picture) and Box (click the icon)
+{
+  const words = ['English', 'Português', 'Off'], list = `<div class="cc-list" role="none">${words.map(ccItem).join('')}</div>`;
+  $('#cc-mark-demos').innerHTML =
+    `<div><p class="tag">BOX · R1 (click the captions icon)</p><div class="cc-demo"><span class="cc-wrap"><button class="btn-reset cc" aria-label="Captions: Português" aria-haspopup="true" aria-expanded="false">${icon('captions-on')}</button><span class="cc-menu as-box" role="menu" aria-label="Captions">${list}</span></span></div></div>`;
+  $$('#cc-mark-demos .cc-menu').forEach(menu => {
+    const wrap = menu.closest('.cc-wrap'), cc = wrap && $('.cc', wrap);
+    const pick = b => { $$('button', menu).forEach(x => x.setAttribute('aria-checked', x === b ? 'true' : 'false')); if (cc) { cc.innerHTML = icon(b.textContent === 'Off' ? 'captions-off' : 'captions-on'); cc.setAttribute('aria-label', 'Captions: ' + b.textContent); } };
+    pick($$('button', menu)[1]);
+    menu.addEventListener('click', ev => { const b = ev.target.closest('button'); if (!b) return; ev.stopPropagation(); pick(b); if (cc) { ccOpen(menu, false); cc.setAttribute('aria-expanded', 'false'); cc.focus(); } });
+    if (!cc) return;
+    cc.addEventListener('click', ev => { ev.stopPropagation(); const open = !ccIsOpen(menu); ccOpen(menu, open); cc.setAttribute('aria-expanded', open); if (open) $('[aria-checked="true"]', menu)?.focus(); });
+    menu.addEventListener('keydown', ev => { const bs = $$('button', menu), i = bs.indexOf(document.activeElement); if (ev.key === 'ArrowDown') { bs[(i + 1) % bs.length].focus(); ev.preventDefault(); } if (ev.key === 'ArrowUp') { bs[(i - 1 + bs.length) % bs.length].focus(); ev.preventDefault(); } if (ev.key === 'Escape') { ccOpen(menu, false); cc.focus(); } });
+    document.addEventListener('click', ev => { if (!wrap.contains(ev.target)) { ccOpen(menu, false); cc.setAttribute('aria-expanded', 'false'); } });
+  });
+}
+const setOpt = (sw, value) => { opt[sw.attr] = value; $$(`.switch button[data-${sw.attr}]`).forEach(b => b.setAttribute('aria-pressed', b.dataset[sw.attr] === value ? 'true' : 'false')); if (sw.apply) sw.apply(value); redrawAll(); };
+SWITCHES.forEach(sw => $$(`.switch button[data-${sw.attr}]`).forEach(b => b.addEventListener('click', () => setOpt(sw, b.dataset[sw.attr]))));
+document.addEventListener('keydown', ev => {
+  if (ev.metaKey || ev.ctrlKey || ev.altKey || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  const sw = SWITCHES.find(s => s.key === ev.key.toLowerCase()); if (!sw) return;
+  setOpt(sw, sw.values[(sw.values.indexOf(opt[sw.attr]) + 1) % sw.values.length]);
+});
+$('#opt-contrast').addEventListener('input', ev => { opt.contrast = ev.target.value / 100; $('#opt-contrast-v').textContent = ev.target.value + '%'; redrawAll(); });
+$('#opt-slow').checked = opt.slow;
+$('#opt-slow').addEventListener('change', ev => { opt.slow = ev.target.checked; $$('video').forEach(v => v._hls && slowBuffer(v._hls)); });
+$('#opt-fullscreen').addEventListener('click', () => $$('.film-v1').forEach(b => b._fullscreen && b._fullscreen()));
+$('#opt-stall').addEventListener('click', () => all.forEach(e => e.stall()));
+$('#opt-touch').addEventListener('change', ev => body.classList.toggle('touch', ev.target.checked));
+$('#opt-tnum').addEventListener('change', ev => body.classList.toggle('tabular', ev.target.checked));
+$('#opt-mount').addEventListener('change', ev => { opt.mountDelay = +ev.target.value; location.hash = 'mount=' + ev.target.value; location.reload(); });
+const m = /mount=(\d+)/.exec(location.hash); if (m) { opt.mountDelay = +m[1]; $('#opt-mount').value = m[1]; }
+// ?autotest=gv-pause: for checking a browser without clicking: scrolls to the first gallery
+// video, plays it muted, pauses it after 2.5s, and writes what it sees in a line at the top.
+if (new URLSearchParams(location.search).get('autotest') === 'gv-pause') setTimeout(async () => {
+  const gv = $('.gv'), v = $('video', gv), note = document.createElement('div');
+  note.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:30000;background:#ff0;color:#000;font:14px system-ui;padding:6px';
+  body.appendChild(note); gv.scrollIntoView({ block: 'center' }); v.muted = true;
+  const say = s => { note.textContent = s; };
+  try { await gv.closest('.box')._engine.plyr.play(); } catch (err) { say('play refused: ' + err.message); return; }
+  say('playing…');
+  setTimeout(() => {
+    $('.hit', gv).click();
+    setTimeout(() => {
+      const how = v.paused ? 'paused by the click' : (v.pause(), 'the click did not pause it: paused directly');
+      setTimeout(() => {
+        const t1 = v.currentTime;
+        setTimeout(() => say(`${how} · really paused: ${v.paused} · at ${t1.toFixed(2)}s, 2s later ${v.currentTime.toFixed(2)}s · media: ${gv.className} · LOOK: is the picture there?`), 2000);
+      }, 300);
+    }, 600);
+  }, 2500);
+}, 1500);
+// A touch device turns "Simulate touch" on by itself: a phone, the iOS Simulator, an iPad (which
+// reports itself as a Mac but has touch points), or the ?mobile preview below.
+const isTouchDevice = matchMedia('(hover: none), (pointer: coarse)').matches || navigator.maxTouchPoints > 1;
+if (isTouchDevice) { body.classList.add('touch'); $('#opt-touch').checked = true; }
+// Mobile preview: test.html?mobile is the page as a phone gets it (touch on). The button opens it
+// in a 390 x 844 frame over this page, so the phone breakpoints apply too (a real narrow viewport,
+// not a narrowed column). Esc or the backdrop closes it. Slow network carries over.
+if (new URLSearchParams(location.search).has('mobile')) { body.classList.add('touch', 'is-mobile-preview'); $('#opt-touch').checked = true; }
+$('#opt-mobile').addEventListener('click', () => {
+  const shade = document.createElement('div'); shade.className = 'phone-shade';
+  shade.innerHTML = `<div class="phone"><iframe title="Mobile preview" src="test.html?mobile${opt.slow ? '&slow' : ''}"></iframe></div><button type="button" class="phone-close">Close</button>`;
+  const close = () => { shade.remove(); document.removeEventListener('keydown', esc); };
+  const esc = ev => { if (ev.key === 'Escape') close(); };
+  shade.addEventListener('click', ev => { if (ev.target === shade || ev.target.classList.contains('phone-close')) close(); });
+  document.addEventListener('keydown', esc);
+  body.appendChild(shade);
+});
+
+/* ============================================================
+   Build
+   ============================================================ */
+// Loading demos: always on, each drawn by the same markup the players use
+$$('.l-demo').forEach(d => { d.innerHTML = loadingMarkup(); $('.loading', d).style.color = 'var(--tg-ink)'; });
+$$('.film-v1').forEach(filmV1);
+$$('.gv-ambient').forEach(galleryAmbient);
+$$('.gv-player').forEach(galleryPlayer);
+$$('.env-host').forEach(envelopePlayer);
+</script>
+</body>
+</html>

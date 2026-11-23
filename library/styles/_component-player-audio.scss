@@ -1,0 +1,135 @@
+// --------------------------------------------------
+// Player skin: audio, the envelope (gallery tiles and mixes; library/audio/player.php).
+// Tokens from _component-player-base.scss; the look is decided on library/players/test.html.
+// --------------------------------------------------
+
+// ----- The envelope -----
+// Inside: the page gradient (a gradient per player, its stops on --tg-paper-*), line: ink 1.5px,
+// the played part filled with ink (clip-path moved by --progress at a constant speed).
+.env__wave {
+  position: relative;
+  height: 120px;
+  touch-action: none;
+  outline: none;
+}
+@media (max-width: 600px) {
+  .env__wave {
+    height: 60px;
+  }
+}
+.env__wave:focus-visible {
+  outline: var(--p-line) solid var(--tg-ink);
+  outline-offset: 4px;
+}
+.env__shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.env__hollow,
+.env__filled {
+  stroke: var(--tg-ink);
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.env__filled {
+  fill: var(--tg-ink);
+  clip-path: inset(0 calc(100% - var(--progress, 0%)) 0 0);
+}
+// The playhead's edge: a fine line (white with difference, so it reads over the filled ink and
+// the page gradient alike), only while the pointer is on the edge or dragging it.
+.env__pointer {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  width: var(--p-line);
+  margin-left: calc(var(--p-line) / -2);
+  background: #fff;
+  mix-blend-mode: difference;
+  opacity: 0;
+  pointer-events: none;
+}
+.env__wave.on-edge .env__pointer,
+.env__wave.dragging .env__pointer {
+  opacity: 1;
+}
+
+// ----- The native element: replaced by the envelope; shown only without JavaScript -----
+html.tg-media .media--audio:not(.is-native) .media__audio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.media--audio .media__audio {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+}
+
+// ----- A gallery tile: the envelope fills the cell (Tiago, 22 Nov) -----
+// The gallery item's .imgcontainer reserves the cell (3:4, or the file's cover ratio); the same
+// padding on all four sides, the envelope takes every pixel inside it. No time, no row.
+.media[data-media-kind="gallery-audio"] {
+  position: absolute;
+  inset: 0;
+}
+.media--tile .media__frame {
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  box-sizing: border-box;
+}
+.media--tile .env__wave {
+  flex: 1 1 0;
+  height: auto;
+  min-height: 0;
+}
+.media--tile .media__playmark {
+  color: var(--tg-ink);
+}
+
+// ----- A mix: the envelope at full width, then one row -----
+// The play lens (touch only: with a mouse the envelope is the button), AirPlay (where Safari has
+// a device), the time.
+.media--mix {
+  margin: 0 0 1.5em;
+}
+.env__foot {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+  color: var(--tg-ink);
+}
+.env__spacer {
+  flex: 1;
+}
+.env__time {
+  font-size: $font-size-content;
+  line-height: 1;
+  white-space: nowrap;
+}
+.env__lens {
+  display: none;
+}
+html.tg-touch .env__lens {
+  display: flex;
+}
+.env__lens-icon {
+  width: var(--p-lens);
+  height: var(--p-lens);
+  display: block;
+  color: var(--tg-ink);
+}
+.env__airplay[hidden] {
+  display: none;
+}
+.env__airplay.is-on {
+  opacity: .55;
+}

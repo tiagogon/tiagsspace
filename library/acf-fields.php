@@ -707,7 +707,23 @@ add_action( 'acf/include_fields', function() {
 		'title' => 'Video player per attachment',
 		'fields' => array(
 			array(
+				'key' => 'field_6a3c1e0b7f001',
+				'label' => 'Gallery videos',
+				'name' => 'video_behaviour',
+				'type' => 'select',
+				'instructions' => 'Ambient: no controls, muted, loops, plays by itself while on screen. Player: play / pause only; with Loop and Mute it also plays by itself while on screen. Custom: the old ticks. (A video with sound never starts by itself.)',
+				'choices' => array(
+					'default' => "Default (the post's choice, else the post type's)",
+					'ambient' => 'Ambient',
+					'player'  => 'Player',
+					'custom'  => 'Custom',
+				),
+				'default_value' => 'default',
+				'return_format' => 'value',
+			),
+			array(
 				'key' => 'field_69696da4d1811',
+				'wrapper' => array( 'class' => 'acf-hidden' ),   // old Video.js option: kept, no longer used
 				'label' => 'Alternative video player',
 				'name' => 'alternative_video_player_options',
 				'type' => 'true_false',
@@ -719,7 +735,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Controls',
 				'name' => 'video_controls',
 				'type' => 'true_false',
-				'conditional_logic' => array( array( array( 'field' => 'field_69696da4d1811', 'operator' => '==', 'value' => '1' ) ) ),
+				'conditional_logic' => array( array( array( 'field' => 'field_6a3c1e0b7f001', 'operator' => '==', 'value' => 'custom' ) ) ),
 			),
 			array(
 				'key' => 'field_69696da4d1818',
@@ -727,7 +743,7 @@ add_action( 'acf/include_fields', function() {
 				'name' => 'video_mute',
 				'type' => 'true_false',
 				'instructions' => 'It will also hide the sound button.',
-				'conditional_logic' => array( array( array( 'field' => 'field_69696da4d1811', 'operator' => '==', 'value' => '1' ) ) ),
+				'conditional_logic' => array( array( array( 'field' => 'field_6a3c1e0b7f001', 'operator' => '==', 'value' => 'player' ) ), array( array( 'field' => 'field_6a3c1e0b7f001', 'operator' => '==', 'value' => 'custom' ) ) ),
 				'message' => 'Mute the video',
 			),
 			array(
@@ -735,7 +751,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Loop',
 				'name' => 'video_loop',
 				'type' => 'true_false',
-				'conditional_logic' => array( array( array( 'field' => 'field_69696da4d1811', 'operator' => '==', 'value' => '1' ) ) ),
+				'conditional_logic' => array( array( array( 'field' => 'field_6a3c1e0b7f001', 'operator' => '==', 'value' => 'player' ) ), array( array( 'field' => 'field_6a3c1e0b7f001', 'operator' => '==', 'value' => 'custom' ) ) ),
 				'message' => 'Play it in loop',
 			),
 			array(
@@ -744,7 +760,7 @@ add_action( 'acf/include_fields', function() {
 				'name' => 'video_autoplay',
 				'type' => 'true_false',
 				'instructions' => 'Autoplays will just play on iOS devices if the video is also mute.',
-				'conditional_logic' => array( array( array( 'field' => 'field_69696da4d1811', 'operator' => '==', 'value' => '1' ) ) ),
+				'conditional_logic' => array( array( array( 'field' => 'field_6a3c1e0b7f001', 'operator' => '==', 'value' => 'custom' ) ) ),
 				'message' => 'Start to play the video on page load (does not work on iOS)',
 			),
 			array(
@@ -752,7 +768,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Pause other videos',
 				'name' => 'video_pauseothervideos',
 				'type' => 'true_false',
-				'conditional_logic' => array( array( array( 'field' => 'field_69696da4d1811', 'operator' => '==', 'value' => '1' ) ) ),
+				'wrapper' => array( 'class' => 'acf-hidden' ),   // old Video.js option: kept, no longer used
 				'message' => 'Pause other videos playing at the same time',
 			),
 			array(
@@ -760,7 +776,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Preload',
 				'name' => 'video_preload',
 				'type' => 'radio',
-				'conditional_logic' => array( array( array( 'field' => 'field_69696da4d1811', 'operator' => '==', 'value' => '1' ) ) ),
+				'wrapper' => array( 'class' => 'acf-hidden' ),   // old Video.js option: kept, no longer used
 				'choices' => array(
 					'metadata' => 'Load just the metadata',
 					'auto' => 'Load around 1minute (does not work on mobile)',
@@ -774,7 +790,7 @@ add_action( 'acf/include_fields', function() {
 				'name' => 'video_schema',
 				'type' => 'true_false',
 				'instructions' => 'Add video schema for the first video on Twitter and Facebook.',
-				'conditional_logic' => array( array( array( 'field' => 'field_69696da4d1811', 'operator' => '==', 'value' => '1' ) ) ),
+				'wrapper' => array( 'class' => 'acf-hidden' ),   // old Video.js option: kept, no longer used
 			),
 		),
 		'location' => array(
@@ -791,7 +807,23 @@ add_action( 'acf/include_fields', function() {
 		'title' => 'Video player(s) per post',
 		'fields' => array(
 			array(
+				'key' => 'field_6a3c1e0b7f002',
+				'label' => 'Gallery videos',
+				'name' => 'post_video_behaviour',
+				'type' => 'select',
+				'instructions' => 'Ambient: no controls, muted, loops, plays by itself while on screen. Player: play / pause only; with Loop and Mute it also plays by itself while on screen. Custom: the old ticks. (A video with sound never starts by itself.)',
+				'choices' => array(
+					'default' => "Default (the post type's: Ambient on Log and Blwww, Player elsewhere)",
+					'ambient' => 'Ambient',
+					'player'  => 'Player',
+					'custom'  => 'Custom',
+				),
+				'default_value' => 'default',
+				'return_format' => 'value',
+			),
+			array(
 				'key' => 'field_59cf9efdaeb67',
+				'wrapper' => array( 'class' => 'acf-hidden' ),   // old Video.js option: kept, no longer used
 				'label' => 'Alternative video player(s)',
 				'name' => 'alternative_video_player_options_on_post',
 				'type' => 'true_false',
@@ -803,7 +835,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Controls',
 				'name' => 'post_video_controls',
 				'type' => 'true_false',
-				'conditional_logic' => array( array( array( 'field' => 'field_59cf9efdaeb67', 'operator' => '==', 'value' => '1' ) ) ),
+				'conditional_logic' => array( array( array( 'field' => 'field_6a3c1e0b7f002', 'operator' => '==', 'value' => 'custom' ) ) ),
 			),
 			array(
 				'key' => 'field_59cfa9f1c71a2',
@@ -811,7 +843,7 @@ add_action( 'acf/include_fields', function() {
 				'name' => 'post_video_mute',
 				'type' => 'true_false',
 				'instructions' => 'It will also hide the sound button.',
-				'conditional_logic' => array( array( array( 'field' => 'field_59cf9efdaeb67', 'operator' => '==', 'value' => '1' ) ) ),
+				'conditional_logic' => array( array( array( 'field' => 'field_6a3c1e0b7f002', 'operator' => '==', 'value' => 'player' ) ), array( array( 'field' => 'field_6a3c1e0b7f002', 'operator' => '==', 'value' => 'custom' ) ) ),
 				'message' => 'Mute the video',
 			),
 			array(
@@ -819,7 +851,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Loop',
 				'name' => 'post_video_loop',
 				'type' => 'true_false',
-				'conditional_logic' => array( array( array( 'field' => 'field_59cf9efdaeb67', 'operator' => '==', 'value' => '1' ) ) ),
+				'conditional_logic' => array( array( array( 'field' => 'field_6a3c1e0b7f002', 'operator' => '==', 'value' => 'player' ) ), array( array( 'field' => 'field_6a3c1e0b7f002', 'operator' => '==', 'value' => 'custom' ) ) ),
 				'message' => 'Play it in loop',
 			),
 			array(
@@ -828,7 +860,7 @@ add_action( 'acf/include_fields', function() {
 				'name' => 'post_video_autoplay',
 				'type' => 'true_false',
 				'instructions' => 'Autoplays will just play on iOS devices if the video is also mute.',
-				'conditional_logic' => array( array( array( 'field' => 'field_59cf9efdaeb67', 'operator' => '==', 'value' => '1' ) ) ),
+				'conditional_logic' => array( array( array( 'field' => 'field_6a3c1e0b7f002', 'operator' => '==', 'value' => 'custom' ) ) ),
 				'message' => 'Start to play the video on page load (does not work on iOS)',
 			),
 			array(
@@ -836,7 +868,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Pause other videos',
 				'name' => 'post_video_pauseothervideos',
 				'type' => 'true_false',
-				'conditional_logic' => array( array( array( 'field' => 'field_59cf9efdaeb67', 'operator' => '==', 'value' => '1' ) ) ),
+				'wrapper' => array( 'class' => 'acf-hidden' ),   // old Video.js option: kept, no longer used
 				'message' => 'Pause other videos playing at the same time',
 			),
 			array(
@@ -844,7 +876,7 @@ add_action( 'acf/include_fields', function() {
 				'label' => 'Preload',
 				'name' => 'post_video_preload',
 				'type' => 'radio',
-				'conditional_logic' => array( array( array( 'field' => 'field_59cf9efdaeb67', 'operator' => '==', 'value' => '1' ) ) ),
+				'wrapper' => array( 'class' => 'acf-hidden' ),   // old Video.js option: kept, no longer used
 				'choices' => array(
 					'metadata' => 'Load just the metadata',
 					'auto' => 'Load around 1minute (does not work on mobile)',
@@ -858,7 +890,7 @@ add_action( 'acf/include_fields', function() {
 				'name' => 'video_schema',
 				'type' => 'true_false',
 				'instructions' => 'Add video schema for the first video on Twitter and Facebook.',
-				'conditional_logic' => array( array( array( 'field' => 'field_59cf9efdaeb67', 'operator' => '==', 'value' => '1' ) ) ),
+				'wrapper' => array( 'class' => 'acf-hidden' ),   // old Video.js option: kept, no longer used
 			),
 		),
 		'location' => array(
@@ -869,6 +901,8 @@ add_action( 'acf/include_fields', function() {
 			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'log' ) ),
 			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'hyper' ) ),
 			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'films' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'cidade' ) ),
+			array( array( 'param' => 'post_type', 'operator' => '==', 'value' => '4k-lento' ) ),
 		),
 		'active' => true,
 	) );
@@ -940,3 +974,33 @@ add_filter( 'acf/validate_post_id', function( $post_id, $_post_id ) {
 	}
 	return $cache[ $post_id ];
 }, 11, 2 );
+
+// ------------------------------------------------------------
+// Gallery videos: the preset select shows the old tick set as its preset
+// ------------------------------------------------------------
+// The selects `video_behaviour` (attachment) and `post_video_behaviour` (post) are new (Nov 2026);
+// thousands of videos and posts were set with the old ticks and were never migrated. When the
+// select was never saved, it shows what the old ticks mean (tiagsspace_gallery_video_legacy_choice()
+// in library/media/behaviour.php), so opening and saving an editor changes nothing.
+foreach ( array(
+	'field_6a3c1e0b7f001' => array( 'alternative_video_player_options', '' ),
+	'field_6a3c1e0b7f002' => array( 'alternative_video_player_options_on_post', 'post_' ),
+) as $tiagsspace_field_key => $tiagsspace_legacy ) {
+	add_filter( 'acf/load_value/key=' . $tiagsspace_field_key, function ( $value, $post_id, $field ) use ( $tiagsspace_legacy ) {
+		// ACF has already put the field's default ('default') in $value when nothing is stored,
+		// so ask the database whether the select was ever saved.
+		if ( ! is_numeric( $post_id ) || metadata_exists( 'post', (int) $post_id, $field['name'] ) || ! function_exists( 'tiagsspace_gallery_video_legacy_choice' ) ) {
+			return $value;
+		}
+		list( $gate, $p ) = $tiagsspace_legacy;
+		return tiagsspace_gallery_video_legacy_choice(
+			get_post_meta( $post_id, $gate, true ),
+			array(
+				'controls' => get_post_meta( $post_id, $p . 'video_controls', true ),
+				'muted'    => get_post_meta( $post_id, $p . 'video_mute', true ),
+				'loop'     => get_post_meta( $post_id, $p . 'video_loop', true ),
+				'autoplay' => get_post_meta( $post_id, $p . 'video_autoplay', true ),
+			)
+		);
+	}, 10, 3 );
+}

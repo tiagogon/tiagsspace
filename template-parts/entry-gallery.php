@@ -50,7 +50,6 @@ if($attachmens){
     $item_max_heigh = '';
     $gallery_gap = 'default'; // 0, 2, 4, 8, 16, 20 or 'default' (the page gutter): see tiagsspace_gallery_gap()
     $deactivat_masonry = false;
-    $there_is_video = '';
     $there_is_3d = '';
     $light_box = 'none';
 
@@ -136,98 +135,8 @@ if($attachmens){
 
 
 
-    // DEFAULT VIDEO PLAYER OPTIONS
-    // THESE WILL OVERRIDE ANYTHING YOU’VE SET IN THE PLUGIN SETTINGS OR ATTACHMENT DETAILS
-
-        // $video_endofvideooverlay = "http://www.example.com/end_image.jpg"; // sets the image shown when the video ends.
-        // $video_volume = "0.x"; // pre-sets the volume for unusually loud videos. Value between 0 and 1.
-            // $post_video_mute = "true/false"; // sets the mute button on or off.
-        // $post_video_controlbar = "docked/floating/none"; // sets the controlbar position. Video.js only responds to the “none” option.
-            // $post_video_loop = "true/false"
-            // $post_video_autoplay = "true/false"
-            // $post_video_pauseothervideos = "false"; // video will pause other videos on the page when it starts playing.
-            // $post_video_preload = "metadata/auto"; // indicate how much of the video should be loaded when the page loads. Metadata just loads video dimentsions for rendering
-        // $post_video_start = "mm:ss"; // video will start playing at this timecode.
-        // $post_video_watermark = "http://www.example.com/image.png"; // or "false"; // to disable.
-        // $post_video_watermark_link_to = "home/parent/attachment/download/false"
-        // $post_video_watermark_url = "http://www.example.com/"; // or "false"; // to disable. If this is set, it will override the watermark_link_to setting.
-        // $post_video_title = "Video Title"; // or "false"; // to disable.
-        // $post_video_embedcode = "html code"; // changes text displayed in the embed code overlay in order to provide a custom method for embedding a video or "false"; // to disable.
-        // $post_video_view_count = "true/false"; // turns the view count on or off.
-        // $post_video_caption = "Caption"; // text that is displayed below the video (not subtitles or closed captioning)
-        // $post_video_description = "Description"; // Used for metadata only.
-        // $post_video_downloadlink = "true/false"; // generates a link below the video to make it easier for users to save the video file to their computers.
-        // post_video_right_click = "true/false"; // allow or disable right-clicking on the video player.
-        // $post_video_resize = "true/false"; // allow or disable responsive resizing.
-        // $post_video_auto_res = "automatic/highest/lowest"; // specify the video resolution when the page loads.
-        // $post_video_pixel_ratio = "true/false"; // account for high-density (retina) displays when choosing automatic video resolution.
-        // $post_video_schema = "true/false"; // allow or disable Schema.org search engine metadata.
-
-
-    //THESE OPTIONS WILL ONLY AFFECT VIDEO.JS PLAYBACK
-
-        // $post_video_skin = "example-css-class"; // Completely change the look of the video player. Video.js provides a custom skin designer here.
-        // $post_video_nativecontrolsfortouch = "true/false disable Video.js"; // styling and show the built-in video controls on mobile devices. This will disable the resolution selection button.
-
-
-    // DEFAULT VIDEO PLAYER OPTIONS PER POST TYPE
-
-        //define variables:
-        $post_video_controls = true;
-        $post_video_mute = '';
-        $post_video_loop = '';
-        $post_video_autoplay = '';
-        $post_video_pauseothervideos = '';
-        $post_video_preload = '';
-        $post_video_schema = '';
-
-        // Dusk posts
-        if ( is_singular( 'dusk' )) {
-
-        }
-
-        // HYPER
-        elseif ( is_singular( 'hyper' )) {
-            $post_video_schema = false;
-            $post_video_controls = true;
-        }
-
-        // Emulsion
-        elseif ( is_singular( 'log' )) {
-            $post_video_controls = false;
-            $post_video_mute = true;
-            $post_video_loop = true;
-            $post_video_autoplay = true;
-            $post_video_pauseothervideos = false;
-            $post_video_schema = "false";
-
-        }
-
-        // Others
-        else {
-            // LOG > blwww brunch
-            if (has_term( 'blwww', 'log-branch' ) ) {
-                $post_video_controls = false;
-                $post_video_mute = true;
-                $post_video_loop = true;
-                $post_video_autoplay = true;
-                $post_video_pauseothervideos = false;
-                $post_video_schema = "false";
-
-            }
-        }
-
-
-    // DEFAULT VIDEO PLAYER OPTIONS PER POST TYPE
-        if ( get_field('alternative_video_player_options_on_post')) {
-            $post_video_controls = get_field('post_video_controls');
-            $post_video_mute = get_field('post_video_mute');
-            $post_video_loop = get_field('post_video_loop');
-            $post_video_autoplay = get_field('post_video_autoplay');
-            $post_video_pauseothervideos = get_field('post_video_pauseothervideos');
-            $post_video_preload = get_field('post_video_preload');
-            $post_video_schema = get_field('post_video_schema');
-        }
+    // Gallery videos: their behaviour (Ambient / Player / Custom, by attachment, post and post
+    // type) is read per video by tiagsspace_gallery_video_behaviour() (library/media/behaviour.php).
 
 
     // -------------------------------
@@ -484,68 +393,6 @@ if($attachmens){
         </script><?php
     }
 
-    // VIDEO - Intersection Observer for smart autoplay
-    if ($there_is_video == true && tiagsspace_once( 'gallery-video-observer' )) { ?>
-        <script type="text/javascript">
-            (function() {
-                // Intersection Observer for viewport-based autoplay
-                // Only plays videos when they're 50% visible, prevents scroll issues
-                if (!('IntersectionObserver' in window)) {
-                    return; // Graceful degradation for old browsers
-                }
-
-                // One observer per page: this script is printed with every gallery
-                // that has a video (Log listings, Infinite Scroll pages).
-                const videoObserver = window.tiagsspaceGalleryVideoObserver = window.tiagsspaceGalleryVideoObserver || new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) {
-                        const container = entry.target;
-                        const shouldAutoplay = container.getAttribute('data-should-autoplay') === 'true';
-                        
-                        if (!shouldAutoplay) return;
-
-                        // Find Video.js player or native video element
-                        const videoElement = container.querySelector('video');
-                        if (!videoElement) return;
-
-                        if (entry.isIntersecting) {
-                            // Prevent browser scroll-to-video on autoplay
-                            const scrollY = window.scrollY || window.pageYOffset;
-                            
-                            // Video entered viewport - play if muted
-                            if (videoElement.muted || videoElement.volume === 0) {
-                                videoElement.play().then(function() {
-                                    // Restore scroll position immediately after play starts
-                                    window.scrollTo({
-                                        top: scrollY,
-                                        behavior: 'instant'
-                                    });
-                                }).catch(function(err) {
-                                    console.log('Autoplay prevented:', err);
-                                });
-                            }
-                        } else {
-                            // Video left viewport - pause to save resources
-                            if (!videoElement.paused) {
-                                videoElement.pause();
-                            }
-                        }
-                    });
-                }, {
-                    threshold: 0.1, // Trigger when just 10% visible - earlier detection, smoother experience
-                    rootMargin: '100px' // Start observing 100px before video enters viewport
-                });
-
-                // Wait for Video.js to initialize, then observe all video containers
-                setTimeout(function() {
-                    const videoContainers = document.querySelectorAll('.media-video[data-should-autoplay="true"]:not([data-video-observed])');
-                    videoContainers.forEach(function(container) {
-                        container.setAttribute('data-video-observed', '');
-                        videoObserver.observe(container);
-                    });
-                }, 1000); // Give Video.js time to initialize
-            })();
-        </script><?php
-    }
     // 3d
     if ($there_is_3d == true && tiagsspace_once( 'model-viewer-js' )) { ?>
         <script type="module" src="<?php bloginfo('template_url'); ?>/library/js/model-viewer/model-viewer.min.js"></script>

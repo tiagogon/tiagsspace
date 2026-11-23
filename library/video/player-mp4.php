@@ -25,13 +25,17 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-if (!function_exists('tiagsspace_render_video_mp4')) {
+if (!function_exists('tiagsspace_video_mp4_sources')) {
     /**
-     * @param int   $attachment_id Video attachment ID.
-     * @param array $args          Renderer args (see render_video_player()).
-     * @return string
+     * The progressive MP4 ladder of a video attachment: the original plus its encoded children
+     * (Videopack resolutions), de-duplicated, each with its real MIME, the default rung first.
+     * Shared by the film renderer below and the gallery video renderer.
+     *
+     * @param int $attachment_id Video attachment ID.
+     * @return array{sources: array<int, array{src: string, type: string, size: int}>, default: int, original: string|false}
+     *               `default` is the default rung's height (0 when there is no usable source).
      */
-    function tiagsspace_render_video_mp4($attachment_id, $args) {
+    function tiagsspace_video_mp4_sources($attachment_id) {
         $original_url  = wp_get_attachment_url($attachment_id);
 
         // Collect ladder sources, de-duplicated by pixel height and URL. Each
@@ -86,11 +90,7 @@ if (!function_exists('tiagsspace_render_video_mp4')) {
         }
 
         if (empty($sources)) {
-            // No usable video source — offer the original as a download only.
-            if ($original_url) {
-                return '<div class="video-player-fallback"><a href="' . esc_url($original_url) . '" download>' . esc_html__('Download video', 'tiagsspace') . '</a></div>';
-            }
-            return '';
+            return ['sources' => [], 'default' => 0, 'original' => $original_url];
         }
 
         // Default quality: largest rung <= 1080; else the smallest available.
@@ -106,6 +106,30 @@ if (!function_exists('tiagsspace_render_video_mp4')) {
             if ($b['size'] === $default_size) return 1;
             return $b['size'] - $a['size'];
         });
+
+        return ['sources' => $sources, 'default' => $default_size, 'original' => $original_url];
+    }
+}
+
+if (!function_exists('tiagsspace_render_video_mp4')) {
+    /**
+     * @param int   $attachment_id Video attachment ID.
+     * @param array $args          Renderer args (see render_video_player()).
+     * @return string
+     */
+    function tiagsspace_render_video_mp4($attachment_id, $args) {
+        $ladder       = tiagsspace_video_mp4_sources($attachment_id);
+        $sources      = $ladder['sources'];
+        $default_size = $ladder['default'];
+        $original_url = $ladder['original'];
+
+        if (empty($sources)) {
+            // No usable video source — offer the original as a download only.
+            if ($original_url) {
+                return '<div class="video-player-fallback"><a href="' . esc_url($original_url) . '" download>' . esc_html__('Download video', 'tiagsspace') . '</a></div>';
+            }
+            return '';
+        }
 
         $poster         = tiagsspace_video_poster($args);
         $caption_tracks = tiagsspace_video_caption_tracks($attachment_id, $args);

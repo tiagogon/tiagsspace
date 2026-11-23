@@ -24,11 +24,11 @@ $cursor-set: straight;
 // Hotspot of each cursor in px. The cursors are 28px (Tiago, Nov 2026), drawn on a
 // 36-unit square: px = unit × 28/36, rounded.
 $cursor-hotspots: (
-  straight: (arrow: 2 2, hand: 5 3, folder: 3 5, external: 14 14, magnify: 14 14, close: 14 14, previous: 2 14, next: 26 14, grab: 14 15, grabbing: 13 13, play: 14 14, pause: 14 14, stack: 14 14, single: 14 14, mix: 14 14)
+  straight: (arrow: 2 2, hand: 5 3, folder: 3 5, external: 14 14, magnify: 14 14, close: 14 14, previous: 2 14, next: 26 14, grab: 14 15, grabbing: 13 13, play: 14 14, pause: 14 14, stack: 14 14, single: 14 14, mix: 14 14, scrub: 14 14)
 );
 
 // System cursor if the file fails to load.
-$cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, grabbing: grabbing);
+$cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, grabbing: grabbing, scrub: ew-resize);
 
 @mixin cursor($set, $name, $mode, $important: false) {
   $hs: map-get(map-get($cursor-hotspots, $set), $name);
@@ -136,6 +136,41 @@ $cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, 
   }
   .container-video .plyr--playing .plyr__video-wrapper {
     @include cursor($set, pause, $mode);
+  }
+  // The media players (library/media/README.md): a picture that plays and pauses
+  // (gallery videos), play at rest, pause while it plays.
+  .media .media__hit {
+    @include cursor($set, play, $mode);
+  }
+  .media.is-playing .media__hit {
+    @include cursor($set, pause, $mode);
+  }
+  // The film (the Edge player): play / pause over the picture, scrub on the bottom edge;
+  // in fullscreen, idle while playing, no cursor at all.
+  .film__hit {
+    @include cursor($set, play, $mode);
+  }
+  .media.is-playing .film__hit {
+    @include cursor($set, pause, $mode);
+  }
+  .film__rail {
+    @include cursor($set, scrub, $mode);
+  }
+  .media--film:fullscreen.is-idle .film__hit,
+  .media--film:fullscreen.is-idle .film__rail,
+  .media--film.sim-fs.is-idle .film__hit,
+  .media--film.sim-fs.is-idle .film__rail {
+    cursor: none;
+  }
+  // The envelope (gallery audio, mixes): play / pause, scrub on the playhead's edge
+  .env__wave {
+    @include cursor($set, play, $mode);
+  }
+  .media.is-playing .env__wave {
+    @include cursor($set, pause, $mode);
+  }
+  .env__wave.on-scrub {
+    @include cursor($set, scrub, $mode);
   }
   .container-video .plyr--hide-controls:fullscreen .plyr__video-wrapper,
   .container-video .plyr--fullscreen-fallback.plyr--hide-controls .plyr__video-wrapper {

@@ -61,10 +61,14 @@ Categories are disabled.
 │   ├── seo-and-feed.php        # Feed formatting, Yoast overrides
 │   ├── admin.php               # Dashboard cleanup
 │   │
-│   ├── video/                  # Portable video module (Plyr + HLS) — see § Video
+│   ├── media/                  # The media players' glue (kinds, loader, icons, presets) — README.md
+│   ├── audio/                  # Audio: peaks on upload, the envelope renderer
+│   ├── video/                  # Video module (Plyr as engine + HLS) — see § Video
 │   │   ├── player.php          # render_video_player() dispatcher + helpers
-│   │   ├── player-mp4.php      # progressive MP4 quality ladder
-│   │   ├── player-hls.php      # HLS (.m3u8) renderer
+│   │   ├── player-film.php     # films: the Edge player
+│   │   ├── player-gallery.php  # gallery videos
+│   │   ├── player-mp4.php      # progressive MP4 quality ladder (tiagsspace_video_mp4_sources())
+│   │   ├── player-hls.php      # HLS (.m3u8) renderer (the old film player; unused since the Edge player)
 │   │   ├── hls-import.php      # Media Library .hlspack.zip → HLS attachment
 │   │   └── enqueues.php        # conditional asset registration
 │   │
@@ -128,14 +132,26 @@ The theme uses a custom **48-column** Bootstrap grid (not the default 12-column)
 
 ## Video
 
-Films (`films` post type) play through the portable module in `library/video/`. The
-attachment chosen in the **Self Host Film** field decides the tech automatically:
+Every player on the site (films, gallery videos, gallery audio, the mixes in post text)
+is one system drawn like the cursors: **read `library/media/README.md`**. Its looks were
+decided on the design page `library/players/test.html` (kept in the repo; on MAMP it plays
+local files, on tiags.space production's). Plyr is only the playback engine underneath.
 
-- an **`.m3u8`** attachment → **HLS** (adaptive; native on Safari/iOS, hls.js elsewhere)
-- any other video file → the **progressive MP4 ladder** (Plyr + `plyr-adaptive-quality.js`)
+Films (`films`, and the Hyper posts with a film) play on the **Edge** player
+(`library/video/player-film.php`, `library/js/media/film.js`). The attachment chosen in the
+**Self Host Film** field decides the tech automatically:
 
-Videopack is still used for archive thumbnail loops and gallery videos — only films use
-this module.
+- an **`.m3u8`** attachment → **HLS** (hls.js wherever MediaSource exists, native elsewhere;
+  on iPhone a film with in-manifest subtitles plays in Apple's own player)
+- any other video file → the **progressive MP4 ladder** (the default rung, ≤1080p; no
+  quality menu any more: convert a film to HLS for adaptive quality)
+
+Gallery videos are Ambient / Player / Custom (a select on the video and on the post).
+Videopack now only encodes (smaller versions, thumbnails); its Video.js player is gone.
+
+**Envelopes**: every audio file, original video and HLS film gets its loudness shape
+computed with ffmpeg a minute after upload (`library/audio/peaks.php`, WP-Cron; log in
+`uploads/audio-peaks.log`). For existing files: `wp tiagsspace audio-peaks --all`.
 
 ### MP4 workflow (simple, unchanged)
 
@@ -166,8 +182,8 @@ Notes:
 - Import problems are logged to `wp-content/uploads/hls/import.log` and shown as an admin
   notice; the zip is left intact on failure.
 - Deleting the attachment removes its `uploads/hls/<id>/` folder.
-- Add `?video_debug=1` to a film URL to log the playback engine, quality switches and
-  bandwidth to the browser console.
+- Add `?video_debug=1` to a film URL to log the playback engine and level switches to the
+  browser console.
 
 **Server (one-time on prod):** ensure nginx serves `.m3u8` as
 `application/vnd.apple.mpegurl` and `.m4s` as `video/iso.segment`, and that the long-cache
