@@ -5664,40 +5664,6 @@ audio {
 video.plyr-thumbnail-front {
   pointer-events: none; }
 
-.background-w-light-color .plyr--audio .plyr__control {
-  color: #000; }
-  .background-w-light-color .plyr--audio .plyr__control.plyr__tab-focus, .background-w-light-color .plyr--audio .plyr__control:hover, .background-w-light-color .plyr--audio .plyr__control[aria-expanded='true'] {
-    background: none !important;
-    color: #000; }
-.background-w-light-color .plyr--audio .plyr__controls {
-  color: #000; }
-.background-w-light-color .plyr--audio .plyr__tooltip {
-  background: transparent;
-  color: #000;
-  font-size: 16px;
-  font-weight: 400; }
-.background-w-light-color .plyr--full-ui input[type='range'] {
-  color: #000;
-  width: 98%; }
-
-.plyr--audio .plyr__control.plyr__tab-focus, .plyr--audio .plyr__control:hover, .plyr--audio .plyr__control[aria-expanded='true'] {
-  background: transparent; }
-
-.background-w-dark-color .plyr--audio .plyr__controls {
-  color: #fff; }
-  .background-w-dark-color .plyr--audio .plyr__controls.plyr__tab-focus, .background-w-dark-color .plyr--audio .plyr__controls:hover, .background-w-dark-color .plyr--audio .plyr__controls[aria-expanded='true'] {
-    background: none !important;
-    color: #fff; }
-.background-w-dark-color .plyr--audio .plyr__controls {
-  color: #fff; }
-.background-w-dark-color .plyr--audio .plyr__tooltip {
-  background: transparent;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 400; }
-.background-w-dark-color .plyr--full-ui input[type='range'] {
-  color: #fff; }
-
 .plyr__captions,
 .plyr:fullscreen .plyr__captions,
 .plyr--fullscreen-fallback .plyr__captions {
