@@ -281,29 +281,6 @@ video.plyr-thumbnail-front {
 
 
 // --------------------------------------------------
-// Audio inside gallery thumbnails
-// --------------------------------------------------
-
-.thumbnail.media-audio {
-    .plyr {
-        position: absolute;
-        bottom: 0;
-    }
-    .plyr--audio .plyr__controls {
-        .plyr__volume {
-            display: none;
-        }
-        .plyr__menu {
-            display: none;
-        }
-        .plyr__time {
-            display: none;
-        }
-    }
-}
-
-
-// --------------------------------------------------
 // Caption styling — responsive sizing
 // --------------------------------------------------
 // One set of sizes for inline AND fullscreen. Plyr's own stylesheet bumps

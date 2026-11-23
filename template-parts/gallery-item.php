@@ -200,10 +200,13 @@
                     // INTRINSTIC RATIO
 
                         // AUDIO or 3D
-                        if ( $attachmen->post_mime_type == "audio/wav" OR $attachmen->post_mime_type == "audio/mpeg") {
+                        if ( 0 === strpos( (string) $attachmen->post_mime_type, 'audio/' ) ) {
 
-                            // TO CODE
-                            // $intrinsic_ratio of audio container
+                            // The audio tile's cell: its cover's ratio when it has one, else 3:4
+                            // (the Hyper galleries' portrait cells, the design page's tiles).
+                            // Before Nov 2026 this was a stub and the previous item's ratio leaked in.
+                            $audio_cover = wp_get_attachment_image_src( get_post_thumbnail_id( $attachmen->ID ), 'thumbnail' );
+                            $intrinsic_ratio = ( $audio_cover && ! empty( $audio_cover[1] ) ) ? $audio_cover[2] * 100 / $audio_cover[1] : 400 / 3;
 
                         // VIDEO
                         } elseif ( 0 === strpos( (string) $attachmen->post_mime_type, 'video/' ) ) {
@@ -269,7 +272,7 @@
                     // ----------------------------------------
 
                     // AUDIO
-                    if ( $attachmen->post_mime_type == "audio/wav" OR $attachmen->post_mime_type == "audio/mpeg" ) { ?>
+                    if ( 0 === strpos( (string) $attachmen->post_mime_type, 'audio/' ) ) { ?>
 
                         <div class="thumbnail item <?php echo $class_thumbnail;?> media-audio attachmen-<?php echo $count_item;?>"<?php echo $item_edit_attrs; ?>  attachmentId="<?php echo $attachmen->ID;?>" attachmentOrder="<?php echo $attachmen->menu_order;?>">
 
@@ -281,21 +284,18 @@
                             }
                             ?>
 
-                            <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" style="<?php atachement_custom_margin($attachmen->ID); ?>">
+                            <figure style="<?php atachement_custom_margin($attachmen->ID); ?>">
                                 <div class="imgcontainer" style="position: relative; padding-bottom: <?php echo $intrinsic_ratio; ?>%; height: 0; overflow: hidden; max-width: 100%;">
-
-                                        <?php
-
-                                        $audio_url = wp_get_attachment_url( $attachmen->ID );?>
-
-                                        <audio class="plyr" controls>
-                                              <source src="<?php echo $audio_url;?>" type="audio/mpeg">
-                                            Your browser does not support the audio element.
-                                        </audio>
-
-
-
-
+                                    <?php
+                                    // The envelope fills the cell (library/audio/player.php)
+                                    echo render_audio_player( array(
+                                        'attachment_id' => $attachmen->ID,
+                                        'src'           => wp_get_attachment_url( $attachmen->ID ),
+                                        'mime'          => $attachmen->post_mime_type,
+                                        'title'         => $attachmen->post_title,
+                                        'context'       => 'gallery',
+                                    ) );
+                                    ?>
                                 </div>
                             </figure>
                         </div><?php
