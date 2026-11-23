@@ -1,6 +1,6 @@
 <?php
 /*
-Template: Self-hosted video (Plyr — MP4 ladder or HLS)
+Template: Self-hosted film (the Edge player — HLS or the MP4 ladder)
 
 Gathers the film's ACF values and hands them to the portable video module
 (library/video/*). The selected attachment decides the playback tech: an
@@ -19,12 +19,9 @@ if (!is_array($player_options)) {
     $player_options = [];
 }
 
-// Caption styling (ACF, group "Video Player Options"). Only non-default values
-// reach the markup, so an untouched film renders exactly as before. Colour goes
-// out as Plyr's own custom property (plyr.css reads --plyr-captions-text-color
-// on .plyr__caption); contrast is a modifier class styled in _component-plyr.scss.
-// Both sit on .embed-container, an ancestor of everything Plyr builds, so they
-// survive fullscreen. iPhone's native player ignores both by design.
+// Caption styling (ACF, group "Video Player Options"): the text colour (white / yellow /
+// custom) and box or shadow, drawn by the film's own caption layer. iPhone's native player
+// ignores both by design (system caption style).
 $caption_color = get_field('caption_color');
 $caption_hex   = '';
 if ($caption_color === 'yellow') {
@@ -34,33 +31,30 @@ if ($caption_color === 'yellow') {
 }
 $caption_contrast = get_field('caption_contrast') === 'shadow' ? 'shadow' : 'box';
 
-$embed_classes = 'embed-container' . ($caption_contrast === 'shadow' ? ' captions-contrast--shadow' : '');
-$embed_style   = $caption_hex ? ' style="--plyr-captions-text-color: ' . esc_attr($caption_hex) . '"' : '';
-
 // Caption tracks live on the .m3u8 ATTACHMENT, not this post — the HLS bundle
 // they generate into is keyed by attachment ID. These sidecar <track> elements
-// are only a fallback: once renditions exist in the playlist, player-hls.php
+// are only a fallback: once renditions exist in the playlist, the renderer
 // drops them (both would load and every cue would render twice). MP4 films fall
 // back to Videopack's _kgvid-meta inside the module, untouched.
 $caption_tracks = function_exists('tiagsspace_film_caption_tracks')
     ? tiagsspace_film_caption_tracks($attachment_id)
     : [];
 
-// Enqueue the matching playback engine (footer scripts, so late enqueue is fine).
-if (function_exists('tiagsspace_video_is_hls') && tiagsspace_video_is_hls($attachment_id)) {
-    tiagsspace_video_enqueue_hls();
-} else {
-    tiagsspace_video_enqueue_mp4();
-}
+// The Edge player (library/video/player-film.php, library/js/media/film.js): it brings its
+// own engine (hls.js / native HLS / the MP4 ladder) through the media loader, so the old
+// film scripts (init-hls.js, fullscreen-on-play.js, ios-native-captions.js,
+// plyr-adaptive-quality.js) are no longer enqueued for it.
 ?>
 
 <div class="container-fluid container-video">
-    <div class="<?php echo esc_attr($embed_classes); ?>"<?php echo $embed_style; ?>>
+    <div class="embed-container">
         <?php
-        echo render_video_player([
-            'attachment_id'  => $attachment_id,
-            'player_options' => $player_options,
-            'caption_tracks' => $caption_tracks,
+        echo tiagsspace_render_film($attachment_id, [
+            'player_options'   => $player_options,
+            'caption_tracks'   => $caption_tracks,
+            'caption_color'    => $caption_hex,
+            'caption_contrast' => $caption_contrast,
+            'title'            => get_the_title(),
         ]);
         ?>
     </div>

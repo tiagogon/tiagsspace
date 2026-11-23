@@ -26,6 +26,7 @@ if (!defined('ABSPATH')) {
 require_once __DIR__ . '/player-mp4.php';
 require_once __DIR__ . '/player-hls.php';
 require_once __DIR__ . '/player-gallery.php';   // gallery videos (the media players' markup, library/media/)
+require_once __DIR__ . '/player-film.php';      // films: the Edge player (the media players' markup)
 
 if (!function_exists('render_video_player')) {
     /**

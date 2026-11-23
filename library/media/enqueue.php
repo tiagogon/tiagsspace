@@ -75,6 +75,7 @@ function tiagsspace_media_loader_markup() {
 	$uri    = get_template_directory_uri();
 	$config = array(
 		'plyr' => $uri . '/library/js/plyr/plyr.js?ver=' . tiagsspace_asset_ver( '/library/js/plyr/plyr.js' ),
+		'hls'  => $uri . '/library/js/hls/hls.min.js?ver=' . tiagsspace_asset_ver( '/library/js/hls/hls.min.js' ),
 	);
 	return '<script>window.tiagsspaceMediaConfig=' . wp_json_encode( $config ) . ';</script>'
 		. '<script type="module" src="' . esc_url( $uri . '/library/js/media/loader.js?v=' . tiagsspace_media_js_version() ) . '"></script>';

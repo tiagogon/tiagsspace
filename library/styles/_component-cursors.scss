@@ -145,6 +145,23 @@ $cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, 
   .media.is-playing .media__hit {
     @include cursor($set, pause, $mode);
   }
+  // The film (the Edge player): play / pause over the picture, scrub on the bottom edge;
+  // in fullscreen, idle while playing, no cursor at all.
+  .film__hit {
+    @include cursor($set, play, $mode);
+  }
+  .media.is-playing .film__hit {
+    @include cursor($set, pause, $mode);
+  }
+  .film__rail {
+    @include cursor($set, scrub, $mode);
+  }
+  .media--film:fullscreen.is-idle .film__hit,
+  .media--film:fullscreen.is-idle .film__rail,
+  .media--film.sim-fs.is-idle .film__hit,
+  .media--film.sim-fs.is-idle .film__rail {
+    cursor: none;
+  }
   // The envelope (gallery audio, mixes): play / pause, scrub on the playhead's edge
   .env__wave {
     @include cursor($set, play, $mode);

@@ -37,3 +37,364 @@
 .media.is-native .media__playmark {
   display: none;
 }
+
+// ----- The film: the Edge player (Tiago, 22 Nov; library/video/player-film.php) -----
+// The picture alone. The film box (.media) is the size container the captions measure
+// (cqw / cqh), and the element that goes fullscreen.
+.media[data-media-kind="film"] {
+  width: 100%;
+  height: 100%;
+  container-type: size;
+  --edge-band: 12px;
+  --pic-h: #{unquote("min(100cqh, 100cqw * var(--ar, .5625))")};
+  --pic-w: #{unquote("min(100cqw, 100cqh / var(--ar, .5625))")};
+}
+.media--film .media__frame {
+  overflow: hidden;
+}
+.media--film .media__poster,
+.media--film video {
+  object-fit: contain;
+}
+.media--film .plyr,
+.media--film .plyr__video-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.media--film:fullscreen,
+.media--film.sim-fs {
+  background: #000;
+}
+.media--film.sim-fs {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  width: auto;
+  height: auto;
+}
+// iPhone films with in-manifest subtitles play in Apple's own player: no layer, no poster on top.
+.media--film.is-apple-player .film__layer,
+.media--film.is-apple-player .media__poster {
+  display: none;
+}
+.media--film.is-apple-player video {
+  opacity: 1;
+  pointer-events: auto;
+}
+.media--film.is-native .film__layer {
+  display: none;
+}
+
+.film__layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.film__hit {
+  appearance: none;
+  position: absolute;
+  inset: 0 0 var(--edge-band) 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: auto;
+  outline: none;
+}
+.media--film.at-start .film__hit {
+  bottom: 0;
+}
+
+// The time row: the gutter in from the sides and the bottom; while the pointer is in the
+// controls band (.edge-open) it slides up by the sound's height, and the sound line rises from
+// the edge into its place a beat later.
+.film__chrome {
+  position: absolute;
+  left: var(--p-gutter);
+  right: var(--p-gutter);
+  bottom: var(--p-gutter);
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s, transform .5s var(--p-rise) .08s;
+}
+.media--film.edge-open .film__chrome {
+  transform: translateY(calc(-1 * var(--p-sound)));
+  transition: opacity .25s, transform .5s var(--p-rise);
+}
+.media--film.is-paused .film__chrome,
+.media--film.is-active .film__chrome,
+.media--film.menu-open .film__chrome {
+  opacity: 1;
+  pointer-events: auto;
+}
+.media--film.is-idle .film__chrome {
+  opacity: 0;
+  pointer-events: none;
+}
+// Text over a picture: white with difference, as the header line
+.film__time {
+  flex: 1;
+  color: #fff;
+  mix-blend-mode: difference;
+  font-size: var(--p-time);
+  line-height: 1;
+  white-space: nowrap;
+}
+.film__chrome .ico {
+  width: var(--p-icon);
+  height: var(--p-icon);
+}
+.film__airplay[hidden] {
+  display: none;
+}
+.film__airplay.is-on {
+  opacity: .55;
+}
+
+// The edge: the progress exists only while the pointer is in the controls band (or on focus,
+// or dragging). With sound, the soundtrack's top line rising from the bottom edge, the played
+// part filled; without, a flat 1.5px line. At 00:00, untouched, the band belongs to the picture.
+.film__rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--edge-band);
+  pointer-events: auto;
+  outline: none;
+}
+.media--film.at-start .film__rail {
+  pointer-events: none;
+}
+.media--film.edge-open .film__rail {
+  height: var(--p-sound);
+}
+.film__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--p-line);
+  background: linear-gradient(to right, #fff var(--p, 0%), rgba(255, 255, 255, .32) var(--p, 0%));
+  mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.media--film:not(.has-sound).edge-open .film__line,
+html.tg-touch .media--film:not(.has-sound).is-active:not(.at-start) .film__line {
+  opacity: 1;
+}
+.film__snd {
+  display: none;
+}
+.media--film.has-sound .film__snd {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: var(--p-sound);
+  overflow: visible;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform .45s var(--p-rise), opacity .2s;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+.media--film.has-sound.edge-open .film__snd,
+html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__snd {
+  opacity: 1;
+  transform: scaleY(1);
+  transition: transform .55s var(--p-rise) .08s, opacity .2s .08s;
+}
+.film__snd-hollow {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.film__snd-filled {
+  fill: #fff;
+  stroke: none;
+  clip-path: inset(0 calc(100% - var(--p, 0%)) 0 0);
+}
+// Where a click would land: a fine vertical line; the time field says the time there.
+.film__pointer {
+  position: absolute;
+  bottom: 0;
+  height: calc(var(--p-sound) + 6px);
+  width: var(--p-line);
+  margin-left: calc(var(--p-line) / -2);
+  background: #fff;
+  mix-blend-mode: difference;
+  opacity: 0;
+  pointer-events: none;
+}
+.film__rail:hover .film__pointer,
+.film__rail.drag .film__pointer {
+  opacity: 1;
+}
+.media--film.is-idle .film__pointer {
+  opacity: 0;
+}
+// Touch: when a tap shows the edge, the row rises above it as with a mouse
+html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__chrome {
+  transform: translateY(calc(-1 * var(--p-sound)));
+}
+@media (prefers-reduced-motion: reduce) {
+  .film__chrome,
+  .film__snd {
+    transition: opacity .2s !important; // no slide, no rise: they only appear
+  }
+}
+
+// ----- Captions: today's look, sized by the picture (Tiago, 22 Nov) -----
+// Lora 400, white on a square 27% black box (or a shadow), the film's colour; 3.1% of the
+// picture's WIDTH (about 42 characters a line), never under 15px or over 54px, never more than
+// 7.5% of its height; 5% of the picture's height above its bottom; lines wrap at 80% of its
+// width. The picture is the film box, or smaller when fullscreen letterboxes it (--ar).
+.film__cc-text {
+  position: absolute;
+  left: calc((100cqw - var(--pic-w)) / 2);
+  right: calc((100cqw - var(--pic-w)) / 2);
+  bottom: calc((100cqh - var(--pic-h)) / 2 + var(--pic-h) * .05);
+  padding: 0 calc(var(--pic-w) * .1);
+  text-align: center;
+  font-weight: 400;
+  font-size: #{unquote("clamp(15px, min(var(--pic-w) * .031, var(--pic-h) * .075), 54px)")};
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 2;
+  transform: translateY(var(--cc-lift, 0px));
+  transition: transform .5s var(--p-rise);
+}
+.film__cc-text span {
+  background: #00000045;
+  color: var(--cc-color, #fff);
+  line-height: 1.6;
+  padding: .1em .5em;
+  white-space: pre-wrap;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.media--film.cc-shadow .film__cc-text span {
+  background: transparent;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .55), 0 0 8px rgba(0, 0, 0, .55);
+}
+.media--film.is-paused .film__cc-text,
+.media--film.is-active .film__cc-text {
+  --cc-lift: calc(-1 * (var(--p-time) + var(--p-gutter)));
+}
+.media--film.edge-open .film__cc-text {
+  --cc-lift: calc(-1 * (var(--p-time) + var(--p-gutter) + var(--p-sound)));
+}
+.media--film.is-idle .film__cc-text {
+  --cc-lift: 0px;
+}
+
+// ----- The captions box: grows out of the captions icon (Tiago, 22 Nov) -----
+// The closed size is the icon's rectangle exactly (x 3-33, y 8-28 on the 36 grid, plus the
+// line). One look on light and dark pages, like captions on a film: the dark page's gradient
+// inside, white words, R1 marks and line; the line turns white as the box opens.
+.cc-wrap {
+  position: relative;
+  display: inline-flex;
+  --u: calc(var(--p-icon) / 36);
+}
+.cc-menu {
+  position: absolute;
+  right: calc(var(--u) * 2.036);
+  bottom: calc(var(--u) * 7.036);
+  width: calc(var(--u) * 31.93);
+  height: calc(var(--u) * 21.93);
+  box-sizing: border-box;
+  border: calc(var(--u) * 1.9286) solid #16161b;
+  background: linear-gradient(to top, #1d1a17, #16161b);
+  color: #fff;
+  overflow: hidden;
+  z-index: 3;
+  display: none;
+  transition: width .34s var(--p-rise), height .34s var(--p-rise), border-color .2s;
+}
+.cc-menu.open {
+  display: block;
+}
+.cc-menu.grown {
+  border-color: #fff;
+  transition: width .34s var(--p-rise), height .34s var(--p-rise), border-color .2s .1s;
+}
+.cc-list {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  padding: .4em .55em .45em 1em;
+  font-size: $font-size-content;
+  opacity: 0;
+  transition: opacity .12s;
+}
+.cc-menu.grown .cc-list {
+  opacity: 1;
+  transition: opacity .2s .16s;
+}
+.cc-item {
+  appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: 1.25;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: .45em;
+  outline: none;
+}
+// R1: a 1.5px ring beside every language; the chosen one has the lens rim with a dot in it;
+// hover and keyboard focus show the dot at half strength.
+.cc-item .mk {
+  width: .85em;
+  height: .85em;
+  flex: none;
+  display: block;
+  overflow: visible;
+}
+.cc-item .mk > * {
+  opacity: 0;
+}
+.cc-item .mk-ring {
+  stroke-width: var(--p-line);
+  opacity: 1;
+}
+.cc-item:hover .mk-dot,
+.cc-item:focus-visible .mk-dot {
+  opacity: .5;
+}
+.cc-item[aria-checked="true"] .mk-ring {
+  opacity: 0;
+}
+.cc-item[aria-checked="true"] .mk-lens,
+.cc-item[aria-checked="true"] .mk-dot {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cc-menu,
+  .cc-list {
+    transition: none !important;
+  }
+}
