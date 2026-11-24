@@ -670,6 +670,42 @@ function tiagsspace_gallery_item_factor( $attachment_id ) {
  *
  * Returns [ xs, sm, md, lg ] spans.
  */
+/**
+ * The cell shape of every audio item without a cover, from its neighbours (Tiago, 24 Nov 2026):
+ * the picture just before it in the gallery; if it is the first, the picture just after it; if
+ * the gallery has no pictures, 3:4. So an audio tile sits in the gallery's rhythm instead of
+ * breaking it. Only pictures (image/*) count as neighbours; the list is the visible gallery, in
+ * order (hidden items are not in it).
+ *
+ * @param WP_Post[] $attachments The gallery's visible attachments, in order.
+ * @return array<int, float> attachment ID => padding-bottom ratio (height x 100 / width).
+ */
+function tiagsspace_gallery_audio_ratios( $attachments ) {
+	$ratio = function ( $post ) {
+		if ( 0 !== strpos( (string) $post->post_mime_type, 'image/' ) ) {
+			return 0;
+		}
+		$src = wp_get_attachment_image_src( $post->ID, false );
+		return ( $src && ! empty( $src[1] ) ) ? $src[2] * 100 / $src[1] : 0;
+	};
+	$list = array_values( (array) $attachments );
+	$out  = array();
+	foreach ( $list as $i => $post ) {
+		if ( 0 !== strpos( (string) $post->post_mime_type, 'audio/' ) || get_post_thumbnail_id( $post->ID ) ) {
+			continue;
+		}
+		$found = 0;
+		for ( $j = $i - 1; $j >= 0 && ! $found; $j-- ) {
+			$found = $ratio( $list[ $j ] );
+		}
+		for ( $j = $i + 1; $j < count( $list ) && ! $found; $j++ ) {
+			$found = $ratio( $list[ $j ] );
+		}
+		$out[ $post->ID ] = $found ? $found : 400 / 3;
+	}
+	return $out;
+}
+
 function tiagsspace_gallery_sizer_spans( $attachments, $cols ) {
 	$gcd = array( 0, 0, 0, 0 );
 	foreach ( $attachments as $attachment ) {

@@ -312,6 +312,10 @@ if($attachmens){
             <?php
             $count_item = 0;
 
+            // Audio items without a cover take the shape of a neighbouring picture
+            // (tiagsspace_gallery_audio_ratios(), read in gallery-item.php).
+            $gallery_audio_ratios = tiagsspace_gallery_audio_ratios( $attachmens );
+
             // loop the atached images
             foreach($attachmens as $attachmen){
 

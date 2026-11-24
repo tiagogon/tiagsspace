@@ -5943,14 +5943,6 @@ html.tg-touch .media:not(.is-playing) .media__playmark {
   width: auto;
   height: auto; }
 
-.media--film.is-apple-player .film__layer,
-.media--film.is-apple-player .media__poster {
-  display: none; }
-
-.media--film.is-apple-player video {
-  opacity: 1;
-  pointer-events: auto; }
-
 .media--film.is-native .film__layer {
   display: none; }
 
@@ -6002,6 +5994,7 @@ html.tg-touch .media:not(.is-playing) .media__playmark {
 
 .film__time {
   flex: 1;
+  font-variant-numeric: tabular-nums;
   color: #fff;
   mix-blend-mode: difference;
   font-size: var(--p-time);
@@ -6025,7 +6018,8 @@ html.tg-touch .media:not(.is-playing) .media__playmark {
   bottom: 0;
   height: var(--edge-band);
   pointer-events: auto;
-  outline: none; }
+  outline: none;
+  touch-action: none; }
 
 .media--film.at-start .film__rail {
   pointer-events: none; }
@@ -6329,6 +6323,7 @@ html.tg-media .media--audio:not(.is-native) .media__audio {
 
 .env__time {
   font-size: 23px;
+  font-variant-numeric: tabular-nums;
   line-height: 1;
   white-space: nowrap; }
 
