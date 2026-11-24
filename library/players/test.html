@@ -1030,9 +1030,10 @@ function resample(values, n) {   // max of each bucket, so a short loud hit is n
 // The floor and ceiling are taken over every list given together (left and right share
 // them), so a quieter channel stays quieter. hi = the 98th percentile, so one stray peak
 // cannot squash the whole shape.
-function contrastedTogether(lists, c) {
+// cap: the ceiling's percentile; 1 = no flat tops (gallery audio, Tiago 24 Nov), mixes keep 0.98
+function contrastedTogether(lists, c, cap = 0.98) {
   if (!c) return lists;
-  const sorted = lists.flat().sort((a, b) => a - b), lo = sorted[Math.floor(sorted.length * 0.1)] * c, hi = sorted[Math.floor(sorted.length * 0.98)] || 1;
+  const sorted = lists.flat().sort((a, b) => a - b), lo = sorted[Math.floor(sorted.length * 0.1)] * c, hi = sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * cap))] || 1;
   return lists.map(values => values.map(v => Math.min(1, Math.max(0, (v - lo) / (hi - lo)))));
 }
 const contrasted = (values, c) => contrastedTogether([values], c)[0];
@@ -1054,9 +1055,9 @@ const stepFor = isTile => STEPS[opt.detail][isTile ? 1 : 0];
 // Top and bottom may differ (Stereo L/R): top = the left channel, bottom = the right.
 // envelopeValues() does the costly part once per size (contrast, resample); envelopeShape()
 // writes the path, and takes an optional k(x) height factor for the wait motion (waitMotion).
-function envelopeValues(topValues, bottomValues, w, step) {
+function envelopeValues(topValues, bottomValues, w, step, cap = 0.98) {
   const n = Math.max(6, Math.floor(w / step));
-  const [tc, bc] = contrastedTogether([topValues, bottomValues], opt.contrast);
+  const [tc, bc] = contrastedTogether([topValues, bottomValues], opt.contrast, cap);
   return { n, vt: resample(tc, n), vb: resample(bc, n) };
 }
 function envelopeShape({ n, vt, vb }, w, h, k) {
@@ -1095,7 +1096,7 @@ function envelopePlayer(host) {
   let data = null, duration = 0, aimAt = null;   // aimAt: seconds under the pointer while it is on the wave
   let shape = null;   // { vals, w, h }: the envelope's values at the current size
   const paint = k => { if (!shape) return; const d = envelopeShape(shape.vals, shape.w, shape.h, k); hollow.setAttribute('d', d); filled.setAttribute('d', d); };
-  const draw = () => { if (!data) return; const r = wave.getBoundingClientRect(); svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`); const st = opt.sides === 'stereo'; shape = { vals: envelopeValues(series(data, opt.audio, st ? 'L' : ''), series(data, opt.audio, st ? 'R' : ''), r.width, stepFor(isTile)), w: r.width, h: r.height }; paint(null); };
+  const draw = () => { if (!data) return; const r = wave.getBoundingClientRect(); svg.setAttribute('viewBox', `0 0 ${r.width} ${r.height}`); const st = opt.sides === 'stereo'; shape = { vals: envelopeValues(series(data, opt.audio, st ? 'L' : ''), series(data, opt.audio, st ? 'R' : ''), r.width, stepFor(isTile), isTile ? 1 : 0.98), w: r.width, h: r.height }; paint(null); };
   // Wait motion (Dance ahead, the same as the film's): while the audio waits, the envelope still
   // to come dances in step with the wheel; the played (filled) part stays still.
   waitMotion({ media: audio, visible: () => true, waiting: () => wave.classList.contains('is-waiting'), paint, watch: [wave] });

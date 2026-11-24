@@ -32,20 +32,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * The envelope's numbers, the same maths as library/js/media/envelope.js (dB of the RMS, floor
- * -48 dB; contrast over both channels together; max per bucket).
+ * -48 dB; contrast over both channels together; max per bucket). $cap is the ceiling's
+ * percentile: 0.98 for mixes, 1 for gallery audio (no flat tops; Tiago, 24 Nov).
  *
- * @param array $peaks Stored peaks (rmsL, rmsR).
- * @param int   $n     Points.
+ * @param array $peaks    Stored peaks (rmsL, rmsR).
+ * @param int   $n        Points.
+ * @param float $contrast
+ * @param float $cap
  * @return array{0: float[], 1: float[]} Top (left) and bottom (right), 0..1.
  */
-function tiagsspace_audio_envelope_values( $peaks, $n, $contrast = 0.8 ) {
+function tiagsspace_audio_envelope_values( $peaks, $n, $contrast = 0.8, $cap = 0.98 ) {
 	$db    = function ( $v ) { return max( 0, ( 20 * log10( max( $v, 1e-6 ) ) + 48 ) / 48 ); };
 	$left  = array_map( $db, $peaks['rmsL'] );
 	$right = array_map( $db, $peaks['rmsR'] );
 	$all   = array_merge( $left, $right );
 	sort( $all );
 	$lo    = $all[ (int) floor( count( $all ) * 0.1 ) ] * $contrast;
-	$hi    = $all[ (int) floor( count( $all ) * 0.98 ) ] ?: 1;
+	$hi    = $all[ min( count( $all ) - 1, (int) floor( count( $all ) * $cap ) ) ] ?: 1;
 	$scale = function ( $v ) use ( $lo, $hi ) { return min( 1, max( 0, ( $v - $lo ) / ( ( $hi - $lo ) ?: 1 ) ) ); };
 	$out   = array();
 	foreach ( array( $left, $right ) as $list ) {
@@ -127,7 +130,7 @@ if ( ! function_exists( 'render_audio_player' ) ) {
 		list( $w, $h, $n ) = $tile ? array( 300, 400, 100 ) : array( 1200, 120, 600 );
 		$path = '';
 		if ( $peaks ) {
-			list( $top, $bottom ) = tiagsspace_audio_envelope_values( $peaks, $n );
+			list( $top, $bottom ) = tiagsspace_audio_envelope_values( $peaks, $n, 0.8, $tile ? 1.0 : 0.98 );
 			$path = tiagsspace_audio_envelope_path( $top, $bottom, $w, $h );
 		}
 		$grad = 'tg-env-' . wp_unique_id();

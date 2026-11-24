@@ -20,10 +20,11 @@
  *   resample, contrasted, contrastedTogether          building blocks (the film edge uses them)
  */
 
-// contrast: audio envelopes. Films (Tiago, 24 Nov, on the design page's sound line lab): loudness
+// contrast: audio envelopes; tileCap: gallery audio has no flat tops (Tiago, 24 Nov), mixes keep
+// the 98th-percentile ceiling. Films (Tiago, 24 Nov, on the design page's sound line lab): loudness
 // as heard (LUFS), contrast 0 and no top cut, i.e. the stored values as they are; a film whose
 // peaks were computed before LUFS existed draws dB.
-export const DEFAULTS = { measure: 'db', contrast: 0.8, filmMeasure: 'lufs', filmContrast: 0, step: { full: 2, tile: 3 } };
+export const DEFAULTS = { measure: 'db', contrast: 0.8, cap: 0.98, tileCap: 1, filmMeasure: 'lufs', filmContrast: 0, step: { full: 2, tile: 3 } };
 
 /** Max of each bucket, so a short loud hit is never lost. */
 export function resample( values, n ) {
@@ -39,12 +40,14 @@ export function resample( values, n ) {
  * Contrast: a mastered mix is loud all the way through, so its raw envelope is a flat band.
  * c = 0 is the raw shape, c = 1 maps the quietest tenth to the spine, so breakdowns narrow and
  * drops swell. Floor and ceiling are taken over every list together (left and right share
- * them); the ceiling is the 98th percentile, so one stray peak cannot squash the whole shape.
+ * them); the ceiling is the 98th percentile (`cap`), so one stray peak cannot squash the whole
+ * shape, at the price of flat tops on the loudest 2%. cap = 1: the loudest point is the ceiling,
+ * every peak keeps its point (gallery audio, Tiago 24 Nov).
  */
-export function contrastedTogether( lists, c ) {
+export function contrastedTogether( lists, c, cap = 0.98 ) {
 	if ( ! c ) return lists;
 	const sorted = lists.flat().sort( ( a, b ) => a - b );
-	const lo = sorted[ Math.floor( sorted.length * 0.1 ) ] * c, hi = sorted[ Math.floor( sorted.length * 0.98 ) ] || 1;
+	const lo = sorted[ Math.floor( sorted.length * 0.1 ) ] * c, hi = sorted[ Math.min( sorted.length - 1, Math.floor( sorted.length * cap ) ) ] || 1;
 	return lists.map( values => values.map( v => Math.min( 1, Math.max( 0, ( v - lo ) / ( hi - lo ) ) ) ) );
 }
 export const contrasted = ( values, c ) => contrastedTogether( [ values ], c )[ 0 ];
@@ -59,9 +62,9 @@ export function series( data, measure = DEFAULTS.measure, ch = '' ) {
 	return measure === 'db' ? base.map( toDb ) : base;
 }
 
-export function envelopeValues( topValues, bottomValues, w, step, contrast = DEFAULTS.contrast ) {
+export function envelopeValues( topValues, bottomValues, w, step, contrast = DEFAULTS.contrast, cap = DEFAULTS.cap ) {
 	const n = Math.max( 6, Math.floor( w / step ) );
-	const [ tc, bc ] = contrastedTogether( [ topValues, bottomValues ], contrast );
+	const [ tc, bc ] = contrastedTogether( [ topValues, bottomValues ], contrast, cap );
 	return { n, vt: resample( tc, n ), vb: resample( bc, n ) };
 }
 

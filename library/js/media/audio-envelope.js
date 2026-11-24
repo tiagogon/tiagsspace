@@ -60,7 +60,7 @@ export function mount( el ) {
 		const step = tile ? DEFAULTS.step.tile : DEFAULTS.step.full;
 		const top = data ? series( data, DEFAULTS.measure, 'L' ) : [ 0, 0 ];
 		const bottom = data ? series( data, DEFAULTS.measure, 'R' ) : [ 0, 0 ];
-		shape = { vals: envelopeValues( top, bottom, r.width, step ), w: r.width, h: r.height };
+		shape = { vals: envelopeValues( top, bottom, r.width, step, DEFAULTS.contrast, tile ? DEFAULTS.tileCap : DEFAULTS.cap ), w: r.width, h: r.height };
 		paint( null );
 	};
 	let raf = 0;
