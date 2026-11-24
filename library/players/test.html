@@ -811,7 +811,11 @@ function filmV1(box) {
     // not flicker shut as the row moves up under the pointer. Never at 00:00, untouched.
     // A mouse click focuses the rail too, but only keyboard focus (:focus-visible) holds it open
     const held = () => body.classList.contains('sim-edge') || rail.classList.contains('drag') || (document.activeElement === rail && rail.matches(':focus-visible'));
-    const px = name => parseFloat(getComputedStyle(wrap).getPropertyValue(name)) || 0;
+    // A custom property reads back unresolved (var(...) or a container clamp), so a hidden probe resolves it
+    const probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;left:0;top:0;height:0;visibility:hidden;pointer-events:none';
+    wrap.appendChild(probe);
+    const px = name => { probe.style.width = `var(${name}, 0px)`; return probe.getBoundingClientRect().width; };
     const bandH = () => px('--p-gutter') * 2 + px('--p-time') + (wrap.classList.contains('edge-open') ? px('--p-sound') : 0);
     let inBand = false;
     // Touch (24 Nov): while a film is paused after it has played, the edge stays up so a finger can drag it

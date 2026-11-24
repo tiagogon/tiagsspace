@@ -271,7 +271,13 @@ export async function mount( el ) {
 	// ----- Idle: 3s into play without movement, everything hides -----
 	let idle = 0, inBand = false;
 	const held = () => rail.classList.contains( 'drag' ) || ( document.activeElement === rail && rail.matches( ':focus-visible' ) );
-	const px = name => parseFloat( getComputedStyle( $( '.media__frame' ) ).getPropertyValue( name ) ) || 0;
+	// The band sizes are container steps (clamp() on cqw, the tg-player-step mixin): reading the
+	// custom property gives back that unresolved text, so a hidden probe in the frame resolves it.
+	const probe = document.createElement( 'span' );
+	probe.setAttribute( 'aria-hidden', 'true' );
+	probe.style.cssText = 'position:absolute;left:0;top:0;height:0;visibility:hidden;pointer-events:none';
+	$( '.media__frame' ).appendChild( probe );
+	const px = name => { probe.style.width = `var(${ name }, 0px)`; return probe.getBoundingClientRect().width; };
 	const bandH = () => px( '--p-gutter' ) * 2 + px( '--p-time' ) + ( el.classList.contains( 'edge-open' ) ? px( '--p-sound' ) : 0 );
 	// On a touch screen there is no pointer to bring the edge up: while a film is paused (after it
 	// has played) the edge stays up, so a finger can drag it; a tap on the picture plays again.
