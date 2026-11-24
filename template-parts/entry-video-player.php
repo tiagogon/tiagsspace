@@ -2,10 +2,10 @@
 /*
 Template: Self-hosted film (the Edge player — HLS or the MP4 ladder)
 
-Gathers the film's ACF values and hands them to the portable video module
-(library/video/*). The selected attachment decides the playback tech: an
-`.m3u8` attachment plays via HLS, any other video plays the progressive MP4
-ladder. See library/video/player.php.
+Gathers the film's ACF values and hands them to the film renderer
+(library/video/player-film.php). The selected attachment decides the playback
+tech: an `.m3u8` attachment plays via HLS, any other video plays the progressive
+MP4 ladder.
 */
 
 $video_source = get_field('self_host_film');
@@ -41,9 +41,7 @@ $caption_tracks = function_exists('tiagsspace_film_caption_tracks')
     : [];
 
 // The Edge player (library/video/player-film.php, library/js/media/film.js): it brings its
-// own engine (hls.js / native HLS / the MP4 ladder) through the media loader, so the old
-// film scripts (init-hls.js, fullscreen-on-play.js, ios-native-captions.js,
-// plyr-adaptive-quality.js) are no longer enqueued for it.
+// own engine (hls.js / native HLS / the MP4 ladder) through the media loader.
 ?>
 
 <div class="container-fluid container-video">

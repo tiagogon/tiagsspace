@@ -463,7 +463,12 @@ Index of posts for Home and Archives
                                             echo tiagsspace_render_picture_from_attachment($poster_thumb_id, $index_sizes_map, $fallback_sizes_attr, 'thumb-poster', esc_attr(get_the_title()), $thumb_img_attrs);
                                         }
                                     ?>
-                                    <?php // preload="none", no autoplay: footer.php loads and plays it near the viewport ?>
+                                    <?php
+                                    // preload="none", no autoplay: footer.php loads and plays it near the viewport.
+                                    // Plyr loads only on pages that print a teaser (registered in functions.php).
+                                    wp_enqueue_script('plyr');
+                                    wp_enqueue_style('plyr');
+                                    ?>
                                     <video
                                         class="plyr-thumbnail-front<?php echo $poster_thumb_id ? ' teaser-over-poster' : ''; ?>"
                                         muted

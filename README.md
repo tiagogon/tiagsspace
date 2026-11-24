@@ -64,11 +64,10 @@ Categories are disabled.
 │   ├── media/                  # The media players' glue (kinds, loader, icons, presets) — README.md
 │   ├── audio/                  # Audio: peaks on upload, the envelope renderer
 │   ├── video/                  # Video module (Plyr as engine + HLS) — see § Video
-│   │   ├── player.php          # render_video_player() dispatcher + helpers
+│   │   ├── player.php          # helpers (HLS test, poster, caption tracks) + the renderers
 │   │   ├── player-film.php     # films: the Edge player
 │   │   ├── player-gallery.php  # gallery videos
 │   │   ├── player-mp4.php      # progressive MP4 quality ladder (tiagsspace_video_mp4_sources())
-│   │   ├── player-hls.php      # HLS (.m3u8) renderer (the old film player; unused since the Edge player)
 │   │   ├── hls-import.php      # Media Library .hlspack.zip → HLS attachment
 │   │   └── enqueues.php        # conditional asset registration
 │   │
@@ -86,8 +85,7 @@ Categories are disabled.
 │   │
 │   └── js/
 │       ├── header-helpers.js          # showText/showYear hover helpers
-│       ├── plyr-adaptive-quality.js   # MP4 films only: hand-rolled quality switch
-│       ├── video-player/init-hls.js   # HLS: native (Safari) / hls.js + Plyr menu
+│       ├── media/                     # the media players' modules (loader, film, gallery-video, audio-envelope…)
 │       ├── simple-ajax-example.js     # Gallery AJAX (logged-in only)
 │       ├── bootstrap.min.js           # Compiled Bootstrap JS
 │       └── (third-party libraries — do not edit)

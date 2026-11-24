@@ -12,7 +12,7 @@
  * fullscreen player. Nothing re-encodes video.
  *
  * @see library/video/hls-subtitles.php  the generator
- * @see library/video/player-hls.php     reads _tiagsspace_hls_subs
+ * @see library/video/player-film.php    reads _tiagsspace_hls_subs
  */
 
 if (!defined('ABSPATH')) {

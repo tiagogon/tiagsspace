@@ -50,7 +50,7 @@ States set on `.media`: `is-mounted`, `is-native` (the module failed: the browse
 
 ## Rules
 
-- **Plyr is the engine only.** `engine()` in `engine.js` is the only `new Plyr()`; it has no controls, so there is no Plyr control CSS to fight. `plyr.css` stays its own request in the head.
+- **Plyr is the engine only.** `engine()` in `engine.js` is the only `new Plyr()`; it has no controls, so there is no Plyr control CSS to fight. Plyr's files load only where they are used: the loader brings `plyr.css` with the page's first player and `plyr.js` on demand; listing pages load both for the archive teasers.
 - **Sizes follow the player's width**, not the screen: compact below 768px of player, wide from 768px, gutter 16px from 992px. This Sass drops `@container` blocks, so the steps are written as `clamp()` on `100cqw` (the `tg-player-step` mixin).
 - **Nothing in the visitor's browser** (storage off), **no Picture-in-Picture**, every `<video>` carries `disablepictureinpicture`.
 - **One version for the module folder**: the loader's `?v=` is a hash of every file in `library/js/media/`, and every module is imported with it. Never import a media module without `ctx.version` / `new URL( import.meta.url ).search`.

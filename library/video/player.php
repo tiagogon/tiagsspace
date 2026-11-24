@@ -2,20 +2,22 @@
 /**
  * Video Player Module — entry point & shared helpers
  *
- * Portable player module (Plyr + optional HLS). Renders a self-hosted video
- * player from a single WordPress attachment. The attachment's type decides the
- * playback tech:
- *   - `.m3u8` attachment  → HLS  (native on Safari/iOS, hls.js elsewhere)
- *   - regular video file  → progressive MP4 ladder (Plyr + adaptive-quality JS)
+ * Self-hosted video from a WordPress attachment, drawn by the media players
+ * (library/media/README.md): films on the Edge player (player-film.php), gallery
+ * videos (player-gallery.php). The attachment's type decides the playback tech:
+ *   - `.m3u8` attachment  → HLS  (hls.js where MediaSource exists, native elsewhere)
+ *   - regular video file  → progressive MP4 ladder (player-mp4.php)
+ * The old Plyr-skinned film renderers (render_video_player(), player-hls.php) and
+ * their scripts were removed in Nov 2026, after the Edge player passed on iPhone.
  *
  * PORTABILITY CONTRACT: nothing in library/video/* may call theme-specific
  * helpers (get_field, ACF, custom post types). Callers gather those values and
  * pass them in via $args. This keeps the module copy-pasteable into other
  * themes (e.g. lento.world) with only a require + enqueue.
  *
- * @see library/video/player-mp4.php  progressive MP4 renderer
- * @see library/video/player-hls.php  HLS renderer
- * @see library/video/enqueues.php    conditional asset loading
+ * @see library/video/player-film.php    films (the Edge player)
+ * @see library/video/player-gallery.php gallery videos
+ * @see library/video/player-mp4.php     the MP4 ladder (tiagsspace_video_mp4_sources())
  * @see library/video/hls-import.php  Media Library .hlspack.zip import
  */
 
@@ -24,43 +26,8 @@ if (!defined('ABSPATH')) {
 }
 
 require_once __DIR__ . '/player-mp4.php';
-require_once __DIR__ . '/player-hls.php';
 require_once __DIR__ . '/player-gallery.php';   // gallery videos (the media players' markup, library/media/)
 require_once __DIR__ . '/player-film.php';      // films: the Edge player (the media players' markup)
-
-if (!function_exists('render_video_player')) {
-    /**
-     * Render a video player for an attachment, dispatching HLS vs MP4.
-     *
-     * @param array $args {
-     *     @type int    $attachment_id  Required. The video/playlist attachment ID.
-     *     @type string $poster_url     Optional. Poster image URL. Falls back to
-     *                                  the current post's featured image (xlarge).
-     *     @type string $title          Optional. Player title. Falls back to
-     *                                  get_the_title().
-     *     @type array  $player_options Optional. Flags from ACF film_player_options
-     *                                  (controls/keyboard/loop/autoplay/muted).
-     *     @type array  $extra_attrs    Optional. Extra HTML attributes for <video>.
-     * }
-     * @return string HTML markup, or '' on invalid input.
-     */
-    function render_video_player($args) {
-        if (!is_array($args)) {
-            return '';
-        }
-
-        $attachment_id = isset($args['attachment_id']) ? intval($args['attachment_id']) : 0;
-        if (!$attachment_id) {
-            return '';
-        }
-
-        if (tiagsspace_video_is_hls($attachment_id)) {
-            return tiagsspace_render_video_hls($attachment_id, $args);
-        }
-
-        return tiagsspace_render_video_mp4($attachment_id, $args);
-    }
-}
 
 if (!function_exists('tiagsspace_video_is_hls')) {
     /**
@@ -175,110 +142,3 @@ if (!function_exists('tiagsspace_video_caption_tracks')) {
     }
 }
 
-if (!function_exists('tiagsspace_video_build_config')) {
-    /**
-     * Build the Plyr JSON config shared by both playback paths.
-     *
-     * @param array $args      Renderer args (title, player_options).
-     * @param array $overrides Path-specific overrides merged last (e.g. quality).
-     * @return array Plyr config, ready for wp_json_encode.
-     */
-    function tiagsspace_video_build_config($args, $overrides = []) {
-        $player_options = isset($args['player_options']) && is_array($args['player_options'])
-            ? $args['player_options']
-            : [];
-
-        $title = isset($args['title']) && $args['title'] !== ''
-            ? $args['title']
-            : get_the_title();
-
-        $config = [
-            'title'    => $title,
-            'settings' => ['captions', 'quality'],
-            'captions' => ['active' => true, 'language' => 'auto', 'update' => true],
-            'ratio'    => '16:9',
-            'tooltips' => ['controls' => false, 'seek' => false],
-            'seekTime' => 10,
-            'ads'      => ['enabled' => false],
-            'previewThumbnails' => ['enabled' => false],
-            'fullscreen' => ['enabled' => true, 'fallback' => true, 'iosNative' => true, 'container' => null],
-            'pip'      => ['enabled' => false],
-            // Nothing kept in the visitor's browser (Nov 2026: the site has no cookie
-            // policy and stores nothing that outlives a visit). Plyr would otherwise
-            // save volume / mute / captions / speed / quality in localStorage ("plyr"),
-            // and fetch its icon sprite from cdn.plyr.io (a third party) and keep a
-            // copy in localStorage ("cache-sprite-plyr"). A same-origin iconUrl is used
-            // in place (<use href>), never fetched into storage.
-            'storage'  => ['enabled' => false],
-            'iconUrl'  => get_template_directory_uri() . '/library/js/plyr/plyr.svg?ver=' . tiagsspace_asset_ver('/library/js/plyr/plyr.svg'),
-        ];
-
-        // Controls: a fixed set when enabled, otherwise none (background videos).
-        // The mute toggle only earns its place when the film starts muted — there it is
-        // the affordance to turn sound on. Otherwise it is noise.
-        if (in_array('controls', $player_options, true)) {
-            $config['controls'] = array_merge(
-                ['play-large', 'play', 'progress', 'current-time'],
-                in_array('muted', $player_options, true) ? ['mute'] : [],
-                ['captions', 'settings', 'fullscreen']
-            );
-        } else {
-            $config['controls'] = false;
-        }
-
-        if (in_array('keyboard', $player_options, true)) {
-            $config['keyboard'] = ['focused' => true, 'global' => false];
-        }
-        if (in_array('loop', $player_options, true)) {
-            $config['loop'] = ['active' => true];
-        }
-        if (in_array('autoplay', $player_options, true)) {
-            $config['autoplay'] = true;
-        }
-        if (in_array('muted', $player_options, true)) {
-            $config['muted'] = true;
-        }
-
-        return array_merge($config, $overrides);
-    }
-}
-
-if (!function_exists('tiagsspace_video_boolean_attrs')) {
-    /**
-     * Boolean HTML attributes for the <video> element from player options.
-     *
-     * @param array $player_options
-     * @return string e.g. "muted autoplay "
-     */
-    function tiagsspace_video_boolean_attrs($player_options) {
-        if (!is_array($player_options)) {
-            return '';
-        }
-        $out = '';
-        foreach (['muted', 'autoplay', 'loop', 'controls'] as $flag) {
-            if (in_array($flag, $player_options, true)) {
-                $out .= $flag . ' ';
-            }
-        }
-        return $out;
-    }
-}
-
-if (!function_exists('tiagsspace_video_extra_attrs')) {
-    /**
-     * Serialize caller-provided extra HTML attributes.
-     *
-     * @param array $args
-     * @return string
-     */
-    function tiagsspace_video_extra_attrs($args) {
-        if (empty($args['extra_attrs']) || !is_array($args['extra_attrs'])) {
-            return '';
-        }
-        $out = '';
-        foreach ($args['extra_attrs'] as $attr => $value) {
-            $out .= esc_attr($attr) . '="' . esc_attr($value) . '" ';
-        }
-        return $out;
-    }
-}

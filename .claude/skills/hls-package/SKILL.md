@@ -109,7 +109,7 @@ Tell the user to:
 - The export is **identical** for captioned films — captions are NOT encoded
   into the HLS bundle. They stay sidecar WebVTT files, uploaded separately and
   wired via Videopack's `_kgvid-meta` **on the .m3u8 attachment** (same workflow
-  as MP4 films; `library/video/player-hls.php` renders them as `<track>`
+  as MP4 films; `library/video/player-film.php` renders them as `<track>`
   elements, which work with both hls.js and native Safari HLS).
 - The script stamps `CLOSED-CAPTIONS=NONE` on every `#EXT-X-STREAM-INF` line of
   `master.m3u8`. That only declares "no *embedded* CEA-608 captions in the video
