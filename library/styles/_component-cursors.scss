@@ -124,19 +124,6 @@ $cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, 
     @include cursor($set, next, $mode);
   }
 
-  // The film player (template-parts/entry-video-player.php; a click on the picture
-  // plays or pauses, Plyr's clickToPlay): play while paused, also on the big centre
-  // button, pause while it plays. In fullscreen, when the mouse rests and Plyr
-  // hides its controls, the cursor goes too (Plyr's own cursor: none sits on the
-  // container, which this wrapper rule would otherwise override); inline it stays.
-  // Archive teasers are outside .container-video and keep their link's play.
-  .container-video .plyr--paused .plyr__video-wrapper,
-  .container-video .plyr--paused .plyr__control--overlaid {
-    @include cursor($set, play, $mode);
-  }
-  .container-video .plyr--playing .plyr__video-wrapper {
-    @include cursor($set, pause, $mode);
-  }
   // The media players (library/media/README.md): a picture that plays and pauses
   // (gallery videos), play at rest, pause while it plays.
   .media .media__hit {
@@ -171,10 +158,6 @@ $cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, 
   }
   .env__wave.on-scrub {
     @include cursor($set, scrub, $mode);
-  }
-  .container-video .plyr--hide-controls:fullscreen .plyr__video-wrapper,
-  .container-video .plyr--fullscreen-fallback.plyr--hide-controls .plyr__video-wrapper {
-    cursor: none;
   }
 
   // A picture that opens: the lightbox, Hyper's Intense images

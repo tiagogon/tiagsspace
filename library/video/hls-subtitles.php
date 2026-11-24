@@ -25,7 +25,7 @@
  *
  * @see library/film-captions.php  ACF glue + WP-CLI
  * @see library/video/hls-import.php  bundle layout, path guard, rrmdir
- * @see library/video/player-hls.php  reads _tiagsspace_hls_subs to drop sidecar tracks
+ * @see library/video/player-film.php reads _tiagsspace_hls_subs to drop sidecar tracks
  */
 
 if (!defined('ABSPATH')) {

@@ -77,6 +77,10 @@ function tiagsspace_media_loader_markup() {
 		'plyr' => $uri . '/library/js/plyr/plyr.js?ver=' . tiagsspace_asset_ver( '/library/js/plyr/plyr.js' ),
 		'hls'  => $uri . '/library/js/hls/hls.min.js?ver=' . tiagsspace_asset_ver( '/library/js/hls/hls.min.js' ),
 	);
-	return '<script>window.tiagsspaceMediaConfig=' . wp_json_encode( $config ) . ';</script>'
+	// Plyr's own CSS (its wrapper's layout), before the page's first player, so nothing jumps
+	// when a player mounts. Plyr's JS comes on demand with the loader (config.plyr).
+	$plyr_css = $uri . '/library/js/plyr/plyr.css?ver=' . tiagsspace_asset_ver( '/library/js/plyr/plyr.css' );
+	return ( wp_style_is( 'plyr', 'done' ) || wp_style_is( 'plyr', 'enqueued' ) ? '' : '<link rel="stylesheet" href="' . esc_url( $plyr_css ) . '">' )
+		. '<script>window.tiagsspaceMediaConfig=' . wp_json_encode( $config ) . ';</script>'
 		. '<script type="module" src="' . esc_url( $uri . '/library/js/media/loader.js?v=' . tiagsspace_media_js_version() ) . '"></script>';
 }

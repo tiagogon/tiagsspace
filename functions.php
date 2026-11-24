@@ -12,8 +12,8 @@ sidebars, comments, ect.
 require_once('library/helpers.php');          // WP cleanup, pagination, content filters
 
 // Video Player module (portable: Plyr + HLS)
-require_once('library/video/player.php');     // render_video_player() dispatcher (MP4 ladder / HLS)
-require_once('library/video/enqueues.php');   // conditional player asset registration
+require_once('library/video/player.php');     // video module: film (Edge) + gallery renderers, HLS / MP4 helpers
+require_once('library/video/enqueues.php');   // tiagsspace_asset_ver(): ?ver= on every theme asset
 require_once('library/video/hls-import.php'); // Media Library .hlspack.zip → HLS attachment
 require_once('library/video/hls-subtitles.php'); // EXT-X-MEDIA subtitle renditions in a bundle
 require_once('library/film-captions.php');    // ACF glue: caption rows → subtitle renditions
@@ -87,7 +87,10 @@ function tiagsspace_enqueue_assets() {
     $template_dir = get_template_directory_uri();
 
     // ----- CSS ----- (order matters)
-    wp_enqueue_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], tiagsspace_asset_ver('/library/js/plyr/plyr.css'));
+    // Plyr (the engine under the archive teasers and the media players) is only REGISTERED here:
+    // archive-grid.php enqueues it when it prints a teaser, and the media players' loader brings
+    // it with the page's first player (library/media/enqueue.php). Pages with neither load none.
+    wp_register_style('plyr', $template_dir . '/library/js/plyr/plyr.css', [], tiagsspace_asset_ver('/library/js/plyr/plyr.css'));
     // Versioned by filemtime: the server sends a 1-year Cache-Control on static files, so an
     // unversioned URL leaves visitors on a stale stylesheet after every recompile.
     wp_enqueue_style('theme-style', $template_dir . '/library/styles/main.min.css', [], tiagsspace_asset_ver('/library/styles/main.min.css'));
@@ -111,8 +114,13 @@ function tiagsspace_enqueue_assets() {
 
         // Header helpers to replace inline scripts
         wp_enqueue_script('header-helpers', $template_dir . '/library/js/header-helpers.js', array('jquery'), tiagsspace_asset_ver('/library/js/header-helpers.js'), true);
-    // Plyr
-    wp_enqueue_script('plyr', $template_dir . '/library/js/plyr/plyr.js', [], tiagsspace_asset_ver('/library/js/plyr/plyr.js'), true);
+    // Plyr: registered only (see the CSS note above)
+    wp_register_script('plyr', $template_dir . '/library/js/plyr/plyr.js', [], tiagsspace_asset_ver('/library/js/plyr/plyr.js'), true);
+    // Listings load it up front: Infinite Scroll may bring the first teaser on a later page.
+    if (is_home() || is_front_page() || is_archive() || is_search()) {
+        wp_enqueue_script('plyr');
+        wp_enqueue_style('plyr');
+    }
 
     // Bootstrap
     wp_enqueue_script('bootstrap', $template_dir . '/library/js/bootstrap.min.js', ['jquery'], tiagsspace_asset_ver('/library/js/bootstrap.min.js'), true);

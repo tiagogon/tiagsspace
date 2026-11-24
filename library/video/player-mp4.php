@@ -1,24 +1,15 @@
 <?php
 /**
- * Video Player Module — progressive MP4 renderer
+ * Video Player Module — the progressive MP4 ladder
  *
- * Renders the Plyr <video> with a de-duplicated, correctly-typed quality ladder
- * built from the original attachment plus its encoded child attachments
- * (Videopack resolutions). Adaptive quality is handled client-side by
- * library/js/plyr-adaptive-quality.js.
+ * tiagsspace_video_mp4_sources( $attachment_id ): the original plus its encoded
+ * child attachments (Videopack resolutions), de-duplicated by height and URL, each
+ * with its REAL MIME (a .mov master is a video/quicktime rung: Safari / Chrome / iOS
+ * play it, Firefox skips that <source>), the default rung (largest <= 1080) first in
+ * the DOM so browsers never auto-load the big master. Used by the film
+ * (player-film.php) and gallery video (player-gallery.php) renderers.
  *
- * Corrections over the old library/plyr-player.php:
- *   - real MIME per <source> (was hardcoded video/mp4) — a .mov master is now
- *     a selectable rung tagged video/quicktime (plays in Safari/Chrome/iOS;
- *     Firefox skips it and falls through to the MP4 rungs), no longer served
- *     first-and-mislabeled the way it used to be
- *   - sources de-duplicated by size and URL (killed the triple-1080p menu)
- *   - default quality first in DOM (browsers load the first source) and
- *     quality.default computed from the ladder instead of a hardcoded 1080
- *   - preload="metadata"; dropped invalid crossorigin on <track>/<video>
- *   - no debug echo side-effects
- *
- * @see library/video/player.php  shared helpers & dispatcher
+ * @see library/video/player.php
  */
 
 if (!defined('ABSPATH')) {
@@ -108,76 +99,5 @@ if (!function_exists('tiagsspace_video_mp4_sources')) {
         });
 
         return ['sources' => $sources, 'default' => $default_size, 'original' => $original_url];
-    }
-}
-
-if (!function_exists('tiagsspace_render_video_mp4')) {
-    /**
-     * @param int   $attachment_id Video attachment ID.
-     * @param array $args          Renderer args (see render_video_player()).
-     * @return string
-     */
-    function tiagsspace_render_video_mp4($attachment_id, $args) {
-        $ladder       = tiagsspace_video_mp4_sources($attachment_id);
-        $sources      = $ladder['sources'];
-        $default_size = $ladder['default'];
-        $original_url = $ladder['original'];
-
-        if (empty($sources)) {
-            // No usable video source — offer the original as a download only.
-            if ($original_url) {
-                return '<div class="video-player-fallback"><a href="' . esc_url($original_url) . '" download>' . esc_html__('Download video', 'tiagsspace') . '</a></div>';
-            }
-            return '';
-        }
-
-        $poster         = tiagsspace_video_poster($args);
-        $caption_tracks = tiagsspace_video_caption_tracks($attachment_id, $args);
-        $player_options = isset($args['player_options']) && is_array($args['player_options']) ? $args['player_options'] : [];
-
-        $config = tiagsspace_video_build_config($args, [
-            'quality' => ['default' => $default_size],
-        ]);
-        $json = wp_json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
-        $extra_attrs   = tiagsspace_video_extra_attrs($args);
-        $boolean_attrs = tiagsspace_video_boolean_attrs($player_options);
-
-        ob_start();
-        ?>
-        <video class="plyr film-player" data-debug="0"
-            <?php echo $extra_attrs; ?>
-            <?php if ($poster) : ?>poster="<?php echo $poster; ?>"<?php endif; ?>
-            data-plyr-config='<?php echo esc_attr($json); ?>'
-            preload="metadata"
-            webkit-playsinline
-            playsinline
-            disablePictureInPicture
-            <?php echo $boolean_attrs; ?>
-        >
-            <?php foreach ($sources as $source) : ?>
-                <source src="<?php echo esc_url($source['src']); ?>" type="<?php echo esc_attr($source['type']); ?>" size="<?php echo esc_attr($source['size']); ?>" label="<?php echo esc_attr($source['size'] . 'p'); ?>">
-            <?php endforeach; ?>
-
-            <?php
-            // Only one <track> may carry `default`: whichever row was flagged,
-            // or the first row when none was.
-            $default_index = 0;
-            foreach ($caption_tracks as $index => $track) {
-                if (!empty($track['default'])) {
-                    $default_index = $index;
-                    break;
-                }
-            }
-            ?>
-            <?php foreach ($caption_tracks as $index => $track) : ?>
-                <track kind="<?php echo $track['kind']; ?>" src="<?php echo $track['src']; ?>" srclang="<?php echo $track['srclang']; ?>" label="<?php echo $track['label']; ?>"<?php echo ($index === $default_index) ? ' default' : ''; ?>>
-            <?php endforeach; ?>
-
-            <?php esc_html_e('Your browser does not support the video tag.', 'tiagsspace'); ?>
-            <?php if ($original_url) : ?><a href="<?php echo esc_url($original_url); ?>" download><?php esc_html_e('Download', 'tiagsspace'); ?></a><?php endif; ?>
-        </video>
-        <?php
-        return ob_get_clean();
     }
 }
