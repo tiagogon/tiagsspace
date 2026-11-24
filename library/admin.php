@@ -71,6 +71,7 @@ function tiagsspace_meta_box_order_first() {
 		'acf-group_tumblr',         // Tumblr      (tumblr-posting-api, ACF group)
 		'fediverse-posting-box',    // Fediverse   (wp-fediverse-posting)
 		'acf-group_55d328d2d8225',  // Gallery
+		'acf-group_59cf9e9e8f51f',  // Videos in this gallery (how gallery videos play)
 		'acf-group_58247bb8c1dbd',  // Video Player Options
 		'acf-group_576838826520e',  // Background & Around
 	);

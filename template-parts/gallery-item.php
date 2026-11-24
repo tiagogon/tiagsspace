@@ -202,11 +202,18 @@
                         // AUDIO or 3D
                         if ( 0 === strpos( (string) $attachmen->post_mime_type, 'audio/' ) ) {
 
-                            // The audio tile's cell: its cover's ratio when it has one, else 3:4
-                            // (the Hyper galleries' portrait cells, the design page's tiles).
-                            // Before Nov 2026 this was a stub and the previous item's ratio leaked in.
+                            // The audio tile's cell: its cover's ratio when it has one, else the
+                            // picture just before it, else just after it, else 3:4 (Tiago, 24 Nov;
+                            // tiagsspace_gallery_audio_ratios()). Before Nov 2026 this was a stub
+                            // and the previous item's ratio leaked in.
                             $audio_cover = wp_get_attachment_image_src( get_post_thumbnail_id( $attachmen->ID ), 'thumbnail' );
-                            $intrinsic_ratio = ( $audio_cover && ! empty( $audio_cover[1] ) ) ? $audio_cover[2] * 100 / $audio_cover[1] : 400 / 3;
+                            if ( $audio_cover && ! empty( $audio_cover[1] ) ) {
+                                $intrinsic_ratio = $audio_cover[2] * 100 / $audio_cover[1];
+                            } elseif ( isset( $gallery_audio_ratios[ $attachmen->ID ] ) ) {
+                                $intrinsic_ratio = $gallery_audio_ratios[ $attachmen->ID ];
+                            } else {
+                                $intrinsic_ratio = 400 / 3;
+                            }
 
                         // VIDEO
                         } elseif ( 0 === strpos( (string) $attachmen->post_mime_type, 'video/' ) ) {

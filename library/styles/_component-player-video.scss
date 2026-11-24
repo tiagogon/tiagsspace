@@ -74,15 +74,8 @@
   width: auto;
   height: auto;
 }
-// iPhone films with in-manifest subtitles play in Apple's own player: no layer, no poster on top.
-.media--film.is-apple-player .film__layer,
-.media--film.is-apple-player .media__poster {
-  display: none;
-}
-.media--film.is-apple-player video {
-  opacity: 1;
-  pointer-events: auto;
-}
+// iPhone films with in-manifest subtitles (.is-apple-tap): the Edge look at rest over a plain
+// <video>; a tap opens Apple's fullscreen player (film.js). Nothing else differs here.
 .media--film.is-native .film__layer {
   display: none;
 }
@@ -140,6 +133,7 @@
 // Text over a picture: white with difference, as the header line
 .film__time {
   flex: 1;
+  font-variant-numeric: tabular-nums; // every digit the same width: the time never shifts while counting (Tiago, 24 Nov)
   color: #fff;
   mix-blend-mode: difference;
   font-size: var(--p-time);
@@ -168,6 +162,7 @@
   height: var(--edge-band);
   pointer-events: auto;
   outline: none;
+  touch-action: none; // a finger drags the edge instead of scrolling the page
 }
 .media--film.at-start .film__rail {
   pointer-events: none;

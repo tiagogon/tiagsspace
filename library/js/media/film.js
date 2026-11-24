@@ -46,6 +46,7 @@ const config = window.tiagsspaceMediaConfig || {};
 const debug = /[?&]video_debug=1\b/.test( location.search );
 const log = ( ...a ) => { if ( debug ) console.log( '[film]', ...a ); };
 const IPHONE = /iPhone|iPod/i.test( navigator.userAgent );
+const TOUCH = () => document.documentElement.classList.contains( 'tg-touch' );
 const SND_H = 32;   // the sound edge's drawing height (the box scales it to --p-sound)
 
 let hlsReady = null;
@@ -93,16 +94,35 @@ export async function mount( el ) {
 	const title = el.dataset.title || '';
 	const src = video.dataset.hlsSrc || '';
 
-	// ----- iPhone + in-manifest subtitles: Apple's player, inline included -----
+	// ----- iPhone + in-manifest subtitles: the Edge look at rest, Apple's player on a tap -----
+	// Only a plain <video> (no Plyr, no hls.js) gets iOS to paint in-manifest subtitles, and only in
+	// its own fullscreen player (device-tested). So the video stays plain, under the poster and the
+	// resting layer (time, play mark, fullscreen icon); without playsinline, the tap's play() makes
+	// iOS open its fullscreen player, captions included. Leaving it pauses, and the layer is back.
+	// No seeking edge, captions box or AirPlay inline here: Apple's player has its own.
 	if ( el.dataset.manifestSubs === '1' && IPHONE && video.canPlayType( 'application/vnd.apple.mpegurl' ) ) {
-		log( 'engine: native HLS, Apple player (manifest subs)' );
-		el.classList.add( 'is-apple-player' );
-		video.controls = true;
+		log( 'engine: native HLS, Apple player on tap (manifest subs)' );
+		el.classList.add( 'is-apple-tap' );
+		video.controls = false;
 		if ( ! ambient ) {
-			// Without playsinline iOS goes fullscreen by itself when playback starts.
 			video.removeAttribute( 'playsinline' );
 			video.removeAttribute( 'webkit-playsinline' );
 		}
+		[ '.cc-wrap', '.film__airplay', '.film__rail', '.film__cc-text' ].forEach( s => { const n = $( s ); if ( n ) n.remove(); } );
+		const hit = $( '.film__hit' ), fs = $( '.film__fs' ), time = $( '.film__time' );
+		const go = () => { const p = video.paused ? video.play() : video.pause(); if ( p && p.catch ) p.catch( () => {} ); };
+		hit.addEventListener( 'click', go );
+		fs.addEventListener( 'click', ev => { ev.stopPropagation(); if ( video.paused ) go(); } );
+		video.addEventListener( 'loadedmetadata', () => { if ( ! time.textContent && video.duration ) time.textContent = clock( video.duration ); } );
+		const show = () => {
+			const paused = video.paused;
+			el.classList.toggle( 'is-paused', paused );
+			el.classList.toggle( 'is-playing', ! paused );
+			if ( ! paused ) el.classList.add( 'is-started' );
+		};
+		[ 'play', 'pause', 'playing', 'ended' ].forEach( t => video.addEventListener( t, show ) );
+		video.addEventListener( 'webkitendfullscreen', () => { if ( ! ambient ) video.pause(); show(); } );
+		show();
 		return;
 	}
 
@@ -206,6 +226,7 @@ export async function mount( el ) {
 		el.classList.toggle( 'is-playing', ! paused );
 		hit.setAttribute( 'aria-label', ( paused ? 'Play' : 'Pause' ) + ( title ? ' ' + title : '' ) );
 		if ( ! paused ) el.classList.add( 'is-started' );
+		open();   // declared further down; state() only runs on media events, after mount() has finished
 	};
 	[ 'play', 'pause', 'playing', 'ended' ].forEach( t => video.addEventListener( t, state ) );
 
@@ -252,7 +273,10 @@ export async function mount( el ) {
 	const held = () => rail.classList.contains( 'drag' ) || ( document.activeElement === rail && rail.matches( ':focus-visible' ) );
 	const px = name => parseFloat( getComputedStyle( $( '.media__frame' ) ).getPropertyValue( name ) ) || 0;
 	const bandH = () => px( '--p-gutter' ) * 2 + px( '--p-time' ) + ( el.classList.contains( 'edge-open' ) ? px( '--p-sound' ) : 0 );
-	const open = () => el.classList.toggle( 'edge-open', ! el.classList.contains( 'at-start' ) && ! el.classList.contains( 'is-idle' ) && ( inBand || held() ) );
+	// On a touch screen there is no pointer to bring the edge up: while a film is paused (after it
+	// has played) the edge stays up, so a finger can drag it; a tap on the picture plays again.
+	const touchPaused = () => TOUCH() && video.paused && ! video.ended;
+	const open = () => el.classList.toggle( 'edge-open', ! el.classList.contains( 'at-start' ) && ! el.classList.contains( 'is-idle' ) && ( inBand || held() || touchPaused() ) );
 	const goIdle = () => {
 		if ( video.paused ) return;
 		if ( rail.classList.contains( 'drag' ) || el.classList.contains( 'menu-open' ) ) { wake(); return; }

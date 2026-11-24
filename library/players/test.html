@@ -355,7 +355,7 @@ video::-webkit-media-controls-start-playback-button { display: none !important; 
   <button id="opt-stall" type="button">Stall now</button>
   <label><input id="opt-touch" type="checkbox"> Simulate touch</label>
   <button id="opt-mobile" type="button" title="The page in a 390 × 844 phone frame, touch on (or open test.html?mobile)">Mobile preview</button>
-  <label><input id="opt-tnum" type="checkbox"> Tabular figures</label>
+  <label><input id="opt-tnum" type="checkbox" checked> Tabular figures</label>
   <label>Mount after <select id="opt-mount"><option value="0">0 s</option><option value="1500">1.5 s</option><option value="4000">4 s</option></select></label>
 </div>
 
@@ -814,7 +814,10 @@ function filmV1(box) {
     const px = name => parseFloat(getComputedStyle(wrap).getPropertyValue(name)) || 0;
     const bandH = () => px('--p-gutter') * 2 + px('--p-time') + (wrap.classList.contains('edge-open') ? px('--p-sound') : 0);
     let inBand = false;
-    const open = () => wrap.classList.toggle('edge-open', !wrap.classList.contains('at-start') && (body.classList.contains('sim-edge') || (!wrap.classList.contains('is-idle') && (inBand || held()))));
+    // Touch (24 Nov): while a film is paused after it has played, the edge stays up so a finger can drag it
+    const touchPaused = () => body.classList.contains('touch') && video.paused && !video.ended;
+    const open = () => wrap.classList.toggle('edge-open', !wrap.classList.contains('at-start') && (body.classList.contains('sim-edge') || (!wrap.classList.contains('is-idle') && (inBand || held() || touchPaused()))));
+    ['play', 'pause', 'ended'].forEach(t => video.addEventListener(t, () => open()));
     layer.addEventListener('pointermove', ev => { const r = wrap.getBoundingClientRect(); inBand = r.bottom - ev.clientY <= bandH(); open(); });
     wrap.addEventListener('pointerleave', () => { inBand = false; open(); });
     rail.addEventListener('focus', open);
@@ -1184,6 +1187,7 @@ $('#opt-fullscreen').addEventListener('click', () => $$('.film-v1').forEach(b =>
 $('#opt-stall').addEventListener('click', () => all.forEach(e => e.stall()));
 $('#opt-touch').addEventListener('change', ev => body.classList.toggle('touch', ev.target.checked));
 $('#opt-tnum').addEventListener('change', ev => body.classList.toggle('tabular', ev.target.checked));
+body.classList.toggle('tabular', $('#opt-tnum').checked);   // decided 24 Nov: on (the time never shifts while counting)
 $('#opt-mount').addEventListener('change', ev => { opt.mountDelay = +ev.target.value; location.hash = 'mount=' + ev.target.value; location.reload(); });
 const m = /mount=(\d+)/.exec(location.hash); if (m) { opt.mountDelay = +m[1]; $('#opt-mount').value = m[1]; }
 // ?autotest=gv-pause: for checking a browser without clicking: scrolls to the first gallery

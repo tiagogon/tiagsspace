@@ -73,7 +73,7 @@ html.tg-media .media--audio:not(.is-native) .media__audio {
 }
 
 // ----- A gallery tile: the envelope fills the cell (Tiago, 22 Nov) -----
-// The gallery item's .imgcontainer reserves the cell (3:4, or the file's cover ratio); the same
+// The gallery item's .imgcontainer reserves the cell (the file's cover ratio, else the picture before / after it, else 3:4); the same
 // padding on all four sides, the envelope takes every pixel inside it. No time, no row.
 .media[data-media-kind="gallery-audio"] {
   position: absolute;
@@ -112,6 +112,7 @@ html.tg-media .media--audio:not(.is-native) .media__audio {
 }
 .env__time {
   font-size: $font-size-content;
+  font-variant-numeric: tabular-nums; // every digit the same width: the time never shifts while counting (Tiago, 24 Nov)
   line-height: 1;
   white-space: nowrap;
 }
