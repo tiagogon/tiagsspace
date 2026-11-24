@@ -20,7 +20,8 @@
  *   resample, contrasted, contrastedTogether          building blocks (the film edge uses them)
  */
 
-export const DEFAULTS = { measure: 'db', contrast: 0.8, step: { full: 2, tile: 3 } };
+// contrast: audio envelopes; filmContrast: the film's sound edge (Tiago, 24 Nov: 0.2, a gentler shape)
+export const DEFAULTS = { measure: 'db', contrast: 0.8, filmContrast: 0.2, step: { full: 2, tile: 3 } };
 
 /** Max of each bucket, so a short loud hit is never lost. */
 export function resample( values, n ) {

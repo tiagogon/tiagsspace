@@ -5795,8 +5795,7 @@ html.tg-touch .media:not(.is-playing) .media__playmark {
 .film__layer {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  z-index: 3; }
+  pointer-events: none; }
 
 .film__hit {
   appearance: none;
@@ -5822,11 +5821,11 @@ html.tg-touch .media:not(.is-playing) .media__playmark {
   gap: 14px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s, transform 0.5s var(--p-rise) 0.08s; }
+  transition: opacity 0.25s, bottom 0.5s var(--p-rise) 0.08s; }
 
 .media--film.edge-open .film__chrome {
-  transform: translateY(calc(-1 * var(--p-sound)));
-  transition: opacity 0.25s, transform 0.5s var(--p-rise); }
+  bottom: calc(var(--p-gutter) + var(--p-sound));
+  transition: opacity 0.25s, bottom 0.5s var(--p-rise); }
 
 .media--film.is-paused .film__chrome,
 .media--film.is-active .film__chrome,
@@ -5945,7 +5944,7 @@ html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__snd {
   opacity: 0; }
 
 html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__chrome {
-  transform: translateY(calc(-1 * var(--p-sound))); }
+  bottom: calc(var(--p-gutter) + var(--p-sound)); }
 
 @media (prefers-reduced-motion: reduce) {
   .film__chrome,

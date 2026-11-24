@@ -140,19 +140,20 @@ video::-webkit-media-controls-start-playback-button { display: none !important; 
 .film-v1:fullscreen > .poster, .film-v1.sim-fs > .poster, .film-v1:fullscreen video, .film-v1.sim-fs video { object-fit: contain; }
 
 /* ---------- V1 Edge ---------- */
-.edge .layer { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+/* no z-index: it would isolate the difference blend of the time and the sound edge from the picture (24 Nov) */
+.edge .layer { position: absolute; inset: 0; pointer-events: none; }
 .edge .hit { position: absolute; inset: 0 0 var(--edge-band) 0; pointer-events: auto; outline: none; }
 /* The time and icons sit the theme's gutter in from the left, right and bottom. When the
    pointer reaches the bottom edge (.edge-open) they slide up by the sound's height, and the
    sound line rises from the edge into its place a beat later; on leaving, the line sinks
    first and the row comes back down after it. */
-.edge .chrome { position: absolute; left: var(--p-gutter); right: var(--p-gutter); bottom: var(--p-gutter); display: flex; align-items: flex-end; gap: 14px; opacity: 0; transition: opacity .25s, transform .5s var(--rise) .08s; pointer-events: none; }
-.edge.prog-sound.edge-open .chrome { transform: translateY(calc(-1 * var(--p-sound))); transition: opacity .25s, transform .5s var(--rise); }
+.edge .chrome { position: absolute; left: var(--p-gutter); right: var(--p-gutter); bottom: var(--p-gutter); display: flex; align-items: flex-end; gap: 14px; opacity: 0; transition: opacity .25s, bottom .5s var(--rise) .08s; pointer-events: none; }
+.edge.prog-sound.edge-open .chrome { bottom: calc(var(--p-gutter) + var(--p-sound)); transition: opacity .25s, bottom .5s var(--rise); }
 .edge.is-paused .chrome, .edge.is-active .chrome { opacity: 1; pointer-events: auto; }
 /* The time is always the heading size (36px), playing or paused, whatever it shows */
 .edge .time { color: #fff; mix-blend-mode: difference; font-size: var(--p-time); line-height: 1; flex: 1; white-space: nowrap; }
 /* Touch: when a tap shows the sound line, the row rises above it as it does on a mouse */
-.touch .edge.prog-sound.is-active:not(.at-start) .chrome { transform: translateY(calc(-1 * var(--p-sound))); }
+.touch .edge.prog-sound.is-active:not(.at-start) .chrome { bottom: calc(var(--p-gutter) + var(--p-sound)); }
 .touch .edge.prog-sound.is-active:not(.at-start) .cc-text { --cc-lift: calc(-1 * (var(--p-time) + var(--p-gutter) + var(--p-sound))); }
 .edge .rail { position: absolute; left: 0; right: 0; bottom: 0; height: var(--edge-band); pointer-events: auto; display: flex; align-items: flex-end; }
 /* Art film player: the progress line does not exist until the pointer is on the frame's
@@ -350,7 +351,7 @@ video::-webkit-media-controls-start-playback-button { display: none !important; 
   <span class="switch" role="group" aria-label="Film measure"><b>Film</b> <button type="button" data-film="peak" aria-pressed="false">Peak</button><button type="button" data-film="rms" aria-pressed="false">RMS</button><button type="button" data-film="db" aria-pressed="true">dB</button><button type="button" data-film="lufs" aria-pressed="false">LUFS</button> <kbd>F</kbd></span>
   <span class="switch" role="group" aria-label="Detail"><b>Detail</b> <button type="button" data-detail="fine" aria-pressed="false">Fine</button><button type="button" data-detail="finer" aria-pressed="true">Finer</button> <kbd>D</kbd></span>
   <span class="switch" role="group" aria-label="Simulate the pointer on the film's edge"><b>Pointer</b> <button type="button" data-edge="off" aria-pressed="true">Off</button><button type="button" data-edge="on" aria-pressed="false">On the edge</button> <kbd>H</kbd></span>
-  <label>Contrast <input id="opt-contrast" type="range" min="0" max="100" value="80"> <span id="opt-contrast-v">80%</span></label>
+  <label>Contrast <input id="opt-contrast" type="range" min="0" max="100" value="80"> <span id="opt-contrast-v">80%</span></label> <label>Film contrast <input id="opt-film-contrast" type="range" min="0" max="100" value="20"> <span id="opt-film-contrast-v">20%</span></label>
   <label><input id="opt-slow" type="checkbox"> Slow network</label>
   <button id="opt-stall" type="button">Stall now</button>
   <label><input id="opt-touch" type="checkbox"> Simulate touch</label>
@@ -468,7 +469,7 @@ if (!LOCAL_HOST) {
   document.documentElement.style.setProperty('--photo', `url("${film.dataset.poster}")`);
 }
 
-const opt = { slow: new URLSearchParams(location.search).has('slow'), audio: 'db', film: 'db', sides: 'stereo', mountDelay: 0, contrast: 0.8, detail: 'finer', edge: 'off', cc: 'off', hold: 'off', cccolor: 'white', ccstyle: 'box' };
+const opt = { slow: new URLSearchParams(location.search).has('slow'), audio: 'db', film: 'db', sides: 'stereo', mountDelay: 0, contrast: 0.8, filmContrast: 0.2, detail: 'finer', edge: 'off', cc: 'off', hold: 'off', cccolor: 'white', ccstyle: 'box' };
 const PLYR_BASE = { controls: [], storage: { enabled: false }, loadSprite: false, iconUrl: '', tooltips: { controls: false, seek: false }, pip: false, keyboard: { focused: false, global: false }, fullscreen: { enabled: true, fallback: true, iosNative: true } };
 const all = [];   // every mounted engine, for pause-the-others and the stall button
 
@@ -669,7 +670,7 @@ function filmV1(box) {
     const drawSnd = () => {
       const w = rail.getBoundingClientRect().width; if (!filmPeaks || !w) return;
       snd.setAttribute('viewBox', `0 0 ${w} ${SND_H}`);
-      const n = Math.max(6, Math.floor(w / stepFor(false))), v = resample(contrasted(series(filmPeaks, opt.film), opt.contrast), n);
+      const n = Math.max(6, Math.floor(w / stepFor(false))), v = resample(contrasted(series(filmPeaks, opt.film), opt.filmContrast), n);
       base = { w, v };
       paint(null);
     };
@@ -1185,6 +1186,7 @@ document.addEventListener('keydown', ev => {
   setOpt(sw, sw.values[(sw.values.indexOf(opt[sw.attr]) + 1) % sw.values.length]);
 });
 $('#opt-contrast').addEventListener('input', ev => { opt.contrast = ev.target.value / 100; $('#opt-contrast-v').textContent = ev.target.value + '%'; redrawAll(); });
+$('#opt-film-contrast').addEventListener('input', ev => { opt.filmContrast = ev.target.value / 100; $('#opt-film-contrast-v').textContent = ev.target.value + '%'; redrawAll(); });
 $('#opt-slow').checked = opt.slow;
 $('#opt-slow').addEventListener('change', ev => { opt.slow = ev.target.checked; $$('video').forEach(v => v._hls && slowBuffer(v._hls)); });
 $('#opt-fullscreen').addEventListener('click', () => $$('.film-v1').forEach(b => b._fullscreen && b._fullscreen()));

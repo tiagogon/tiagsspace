@@ -84,7 +84,10 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 3;
+  // No z-index (Tiago, 24 Nov): one would make the layer its own stacking context, and the time,
+  // the sound edge and the line (white, mix-blend-mode: difference, as the header line) would
+  // invert against the empty layer instead of the picture: white on a white frame. It comes after
+  // .plyr (z-index 0) in the markup, so it still paints above the video.
 }
 .film__hit {
   appearance: none;
@@ -103,7 +106,8 @@
 
 // The time row: the gutter in from the sides and the bottom; while the pointer is in the
 // controls band (.edge-open) it slides up by the sound's height, and the sound line rises from
-// the edge into its place a beat later.
+// the edge into its place a beat later. It moves by `bottom`, never by a transform: a transform
+// would isolate the time's difference blend from the picture (see .film__layer).
 .film__chrome {
   position: absolute;
   left: var(--p-gutter);
@@ -114,11 +118,11 @@
   gap: 14px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .25s, transform .5s var(--p-rise) .08s;
+  transition: opacity .25s, bottom .5s var(--p-rise) .08s;
 }
 .media--film.edge-open .film__chrome {
-  transform: translateY(calc(-1 * var(--p-sound)));
-  transition: opacity .25s, transform .5s var(--p-rise);
+  bottom: calc(var(--p-gutter) + var(--p-sound));
+  transition: opacity .25s, bottom .5s var(--p-rise);
 }
 .media--film.is-paused .film__chrome,
 .media--film.is-active .film__chrome,
@@ -244,7 +248,7 @@ html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__snd {
 }
 // Touch: when a tap shows the edge, the row rises above it as with a mouse
 html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__chrome {
-  transform: translateY(calc(-1 * var(--p-sound)));
+  bottom: calc(var(--p-gutter) + var(--p-sound));
 }
 @media (prefers-reduced-motion: reduce) {
   .film__chrome,

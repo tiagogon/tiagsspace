@@ -195,7 +195,7 @@ export async function mount( el ) {
 		if ( ! peaks || ! w ) return;
 		snd.setAttribute( 'viewBox', `0 0 ${ w } ${ SND_H }` );
 		const n = Math.max( 6, Math.floor( w / DEFAULTS.step.full ) );
-		base = { w, v: resample( contrasted( series( peaks, DEFAULTS.measure ), DEFAULTS.contrast ), n ) };
+		base = { w, v: resample( contrasted( series( peaks, DEFAULTS.measure ), DEFAULTS.filmContrast ), n ) };
 		paint( null );
 	};
 	waitMotion( { media: video, visible: () => el.classList.contains( 'edge-open' ), waiting: () => el.classList.contains( 'is-waiting' ), paint, watch: [ el ] } );
