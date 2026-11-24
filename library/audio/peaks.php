@@ -15,8 +15,12 @@
  *      of the left (`rmsL`) and of the right channel (`rmsR`). A mono file gives L = R.
  *   3. The three lists are divided by the loudest slice of the three, so the loudest is 1 and
  *      left and right stay comparable. Rounded to 3 decimals.
+ *   4. Videos and HLS films also get `lufs` (Tiago, 24 Nov: films draw their sound edge as
+ *      loudness as heard): ffmpeg's ebur128 momentary loudness (a 400 ms window, every 100 ms),
+ *      the loudest reading per slice, mapped from [-60 LUFS, the film's loudest] to [0, 1].
+ *      As bin/audio-peaks.py --lufs.
  *   Stored in meta `_tiagsspace_audio_peaks` as JSON:
- *     {"v":2,"slices":2000,"duration":2799.1,"rms":[…],"rmsL":[…],"rmsR":[…]}
+ *     {"v":2,"slices":2000,"duration":2799.1,"rms":[…],"rmsL":[…],"rmsR":[…],"lufs":[…]}
  *   A file without sound stores {"v":2,"none":true}: the film draws its flat line.
  *   dB, contrast and the resampling to the player's width happen in the browser (or in the
  *   renderer for the first paint); they are not stored.
@@ -47,6 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 const TIAGSSPACE_PEAKS_META   = '_tiagsspace_audio_peaks';
 const TIAGSSPACE_PEAKS_SLICES = 2000;
 const TIAGSSPACE_PEAKS_RATE   = 8000;
+const TIAGSSPACE_LUFS_FLOOR   = -60.0;
 
 /**
  * Full path of an ffmpeg tool, or '' when it is not installed.
@@ -230,13 +235,49 @@ function tiagsspace_audio_rms_slices( $pcm, $channels, $slices ) {
 }
 
 /**
+ * Momentary loudness per slice (ffmpeg ebur128, 400 ms window every 100 ms), the loudest reading
+ * of each slice, mapped from [floor, the loudest] to [0, 1]. As bin/audio-peaks.py lufs_of().
+ *
+ * @param string $file
+ * @param int    $slices
+ * @param float  $duration Seconds.
+ * @return float[]|WP_Error
+ */
+function tiagsspace_audio_lufs_slices( $file, $slices, $duration ) {
+	list( $code, $out, $err ) = tiagsspace_audio_run( array_merge(
+		array( tiagsspace_audio_tool( 'ffmpeg' ), '-hide_banner', '-nostats' ),
+		tiagsspace_audio_input_args( $file ),
+		array( '-vn', '-af', 'ebur128=metadata=1,ametadata=print:key=lavfi.r128.M:file=-', '-f', 'null', '-' )
+	) );
+	if ( 0 !== $code ) {
+		return new WP_Error( 'peaks_lufs', 'ffmpeg ebur128 failed: ' . trim( substr( $err, -300 ) ) );
+	}
+	preg_match_all( '/pts_time:([0-9.]+)/', $out, $times );
+	preg_match_all( '/lavfi\.r128\.M=(-?[0-9.]+|-inf)/', $out, $values );
+	$best = array_fill( 0, $slices, TIAGSSPACE_LUFS_FLOOR );
+	$n    = min( count( $times[1] ), count( $values[1] ) );
+	for ( $i = 0; $i < $n; $i++ ) {
+		$m = '-inf' === $values[1][ $i ] ? -120.0 : (float) $values[1][ $i ];
+		$k = $duration > 0 ? min( $slices - 1, (int) ( (float) $times[1][ $i ] / $duration * $slices ) ) : 0;
+		$best[ $k ] = max( $best[ $k ], $m );
+	}
+	for ( $i = 1; $i < $slices; $i++ ) {   // a slice between two readings keeps the last one
+		if ( TIAGSSPACE_LUFS_FLOOR === $best[ $i ] && $best[ $i - 1 ] > TIAGSSPACE_LUFS_FLOOR ) {
+			$best[ $i ] = $best[ $i - 1 ];
+		}
+	}
+	$span = ( max( $best ) - TIAGSSPACE_LUFS_FLOOR ) ?: 1;
+	return array_map( function ( $v ) use ( $span ) { return round( max( 0.0, ( $v - TIAGSSPACE_LUFS_FLOOR ) / $span ), 3 ); }, $best );
+}
+
+/**
  * Compute the peaks of a file.
  *
  * @param string $file   Local path (an audio or video file, or an .m3u8 playlist).
  * @param int    $slices
  * @return array|WP_Error The data to store.
  */
-function tiagsspace_audio_peaks_compute( $file, $slices = TIAGSSPACE_PEAKS_SLICES ) {
+function tiagsspace_audio_peaks_compute( $file, $slices = TIAGSSPACE_PEAKS_SLICES, $lufs = false ) {
 	if ( pack( 'S', 1 ) !== "\x01\x00" ) {
 		return new WP_Error( 'peaks_endian', 'big-endian machine: s16le cannot be read with unpack(s)' );
 	}
@@ -282,7 +323,7 @@ function tiagsspace_audio_peaks_compute( $file, $slices = TIAGSSPACE_PEAKS_SLICE
 	$norm  = function ( $values ) use ( $top ) {
 		return array_map( function ( $v ) use ( $top ) { return round( $v / $top, 3 ); }, $values );
 	};
-	return array(
+	$data = array(
 		'v'        => 2,
 		'slices'   => $slices,
 		'duration' => round( (float) $duration, 2 ),
@@ -290,6 +331,14 @@ function tiagsspace_audio_peaks_compute( $file, $slices = TIAGSSPACE_PEAKS_SLICE
 		'rmsL'     => $norm( $left ),
 		'rmsR'     => $norm( $right ),
 	);
+	if ( $lufs ) {
+		$l = tiagsspace_audio_lufs_slices( $file, $slices, (float) $duration );
+		if ( is_wp_error( $l ) ) {
+			return $l;
+		}
+		$data['lufs'] = $l;
+	}
+	return $data;
 }
 
 /**
@@ -318,7 +367,9 @@ function tiagsspace_audio_peaks_generate( $id, $force = false ) {
 
 	$file    = get_attached_file( $id );
 	$started = microtime( true );
-	$data    = tiagsspace_audio_peaks_compute( (string) $file );
+	$mime    = (string) get_post_mime_type( $id );
+	$is_film = 0 === strpos( $mime, 'video/' ) || 'application/vnd.apple.mpegurl' === $mime;   // films draw LUFS
+	$data    = tiagsspace_audio_peaks_compute( (string) $file, TIAGSSPACE_PEAKS_SLICES, $is_film );
 	delete_transient( $lock );
 
 	if ( is_wp_error( $data ) ) {

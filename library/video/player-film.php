@@ -136,7 +136,10 @@ if ( ! function_exists( 'tiagsspace_render_film' ) ) {
 			$html .= '<script type="application/json" class="media__peaks">' . wp_json_encode( array(
 				'duration' => (float) $peaks['duration'],
 				'rms'      => array_map( function ( $v ) { return round( $v, 3 ); }, tiagsspace_film_peaks_resample( $peaks['rms'], 1000 ) ),
-			) ) . '</script>';
+			) + ( empty( $peaks['lufs'] ) ? array() : array(
+				// Films draw loudness as heard (Tiago, 24 Nov); a film computed before has only rms
+				'lufs' => array_map( function ( $v ) { return round( $v, 3 ); }, tiagsspace_film_peaks_resample( $peaks['lufs'], 1000 ) ),
+			) ) ) . '</script>';
 		}
 		$html .= '</div>' . tiagsspace_media_close();
 		return $html;

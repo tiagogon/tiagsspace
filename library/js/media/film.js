@@ -6,7 +6,8 @@
  *     shows while paused. A visitor's play enters fullscreen first, every time (as the old
  *     fullscreen-on-play.js did); a pause never leaves it: only Esc or the exit icon do. Films that
  *     loop or autoplay are ambient: they never seize the screen.
- *   - The progress is the film's soundtrack (its stored peaks, dB), rising from the bottom edge,
+ *   - The progress is the film's soundtrack (its stored loudness as heard, LUFS, as stored: no
+ *     contrast, no top cut; Tiago 24 Nov; dB for a film computed before), rising from the bottom edge,
  *     there only while the pointer is in the controls band (or on keyboard focus, or dragging).
  *     A film without sound or peaks has a flat 1.5px line instead. At 00:00, untouched, there is
  *     no progress at all: the band belongs to the picture.
@@ -195,7 +196,8 @@ export async function mount( el ) {
 		if ( ! peaks || ! w ) return;
 		snd.setAttribute( 'viewBox', `0 0 ${ w } ${ SND_H }` );
 		const n = Math.max( 6, Math.floor( w / DEFAULTS.step.full ) );
-		base = { w, v: resample( contrasted( series( peaks, DEFAULTS.measure ), DEFAULTS.filmContrast ), n ) };
+		const measure = peaks.lufs ? DEFAULTS.filmMeasure : 'db';
+		base = { w, v: resample( contrasted( series( peaks, measure ), DEFAULTS.filmContrast ), n ) };
 		paint( null );
 	};
 	waitMotion( { media: video, visible: () => el.classList.contains( 'edge-open' ), waiting: () => el.classList.contains( 'is-waiting' ), paint, watch: [ el ] } );

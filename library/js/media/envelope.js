@@ -20,8 +20,10 @@
  *   resample, contrasted, contrastedTogether          building blocks (the film edge uses them)
  */
 
-// contrast: audio envelopes; filmContrast: the film's sound edge (Tiago, 24 Nov: 0.2, a gentler shape)
-export const DEFAULTS = { measure: 'db', contrast: 0.8, filmContrast: 0.2, step: { full: 2, tile: 3 } };
+// contrast: audio envelopes. Films (Tiago, 24 Nov, on the design page's sound line lab): loudness
+// as heard (LUFS), contrast 0 and no top cut, i.e. the stored values as they are; a film whose
+// peaks were computed before LUFS existed draws dB.
+export const DEFAULTS = { measure: 'db', contrast: 0.8, filmMeasure: 'lufs', filmContrast: 0, step: { full: 2, tile: 3 } };
 
 /** Max of each bucket, so a short loud hit is never lost. */
 export function resample( values, n ) {
