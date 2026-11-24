@@ -151,6 +151,19 @@ html.tg-media .media:not(.is-mounted) audio {
   justify-content: center;
   position: relative;
 }
+// No browser highlight anywhere in a player (Tiago, 24 Nov): Bootstrap's `button:focus`
+// (Safari's blue ring, Firefox's dotted grey) outranks a plain class, and it ringed the picture's
+// play button (a line just above the film's bottom edge) and the chosen caption language. Keyboard
+// focus is drawn by the players' own :focus-visible rules, which come after this one. No tap
+// flash on phones and no blue text selection from quick clicks either.
+.media :focus {
+  outline: none;
+}
+.media {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
 .media-btn:focus {
   outline: none;
 }

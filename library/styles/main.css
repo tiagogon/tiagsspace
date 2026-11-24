@@ -5651,6 +5651,14 @@ html.tg-media .media:not(.is-mounted) audio {
   justify-content: center;
   position: relative; }
 
+.media :focus {
+  outline: none; }
+
+.media {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none; }
+
 .media-btn:focus {
   outline: none; }
 
