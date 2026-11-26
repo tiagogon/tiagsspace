@@ -1020,6 +1020,11 @@ function lockToClock(el) {
 const peaksCache = {};
 async function peaksOf(url) { return peaksCache[url] ||= fetch(url).then(r => r.json()); }
 function resample(values, n) {   // max of each bucket, so a short loud hit is never lost
+  const len = values.length;      // fewer values than buckets: stretch them (empty buckets would draw teeth)
+  if (len < n) return len < 2 ? new Array(n).fill(len ? values[0] : 0) : Array.from({ length: n }, (_, k) => {
+    const p = k / (n - 1) * (len - 1), i = Math.min(len - 2, Math.floor(p)), f = p - i;
+    return values[i] + (values[i + 1] - values[i]) * f;
+  });
   const out = new Array(n).fill(0);
   for (let i = 0; i < values.length; i++) { const k = Math.min(n - 1, Math.floor(i / values.length * n)); if (values[i] > out[k]) out[k] = values[i]; }
   return out;

@@ -26,8 +26,21 @@
 // peaks were computed before LUFS existed draws dB.
 export const DEFAULTS = { measure: 'db', contrast: 0.8, cap: 0.98, tileCap: 1, filmMeasure: 'lufs', filmContrast: 0, step: { full: 2, tile: 3 } };
 
-/** Max of each bucket, so a short loud hit is never lost. */
+/**
+ * Max of each bucket, so a short loud hit is never lost. With fewer values than buckets (a film
+ * sends 1,000; a rail over 2,000px wide wants more) the values are stretched, linearly between
+ * neighbours: bucketing would leave buckets empty, at 0, and the line would drop to the floor
+ * every few points (teeth along the edge).
+ */
 export function resample( values, n ) {
+	const len = values.length;
+	if ( len < n ) {
+		if ( len < 2 ) return new Array( n ).fill( len ? values[ 0 ] : 0 );
+		return Array.from( { length: n }, ( _, k ) => {
+			const p = k / ( n - 1 ) * ( len - 1 ), i = Math.min( len - 2, Math.floor( p ) ), f = p - i;
+			return values[ i ] + ( values[ i + 1 ] - values[ i ] ) * f;
+		} );
+	}
 	const out = new Array( n ).fill( 0 );
 	for ( let i = 0; i < values.length; i++ ) {
 		const k = Math.min( n - 1, Math.floor( i / values.length * n ) );
