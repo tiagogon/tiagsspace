@@ -19,14 +19,6 @@ $grey-light-cold-vibe-contrast:   #F2EFE3; // rgba(242,239,227,1)
 $dark-lighten-vibe:               #16161b; // rgba(22,22,27,1)
 $dark-lighten-vibe-contrast:      #1d1a17; // rgba(29,26,23,1)
 
-// Bootstrap palette overrides (its $primary, $warning… derive from these). Since
-// Nov 2026 no theme rule reads them: the per-colour page classes they served
-// (.blue, .lime, .yellow) were never printed.
-$blue-earth:       #00349E;
-$blue:             $blue-earth;
-$lime:             #aeff2b;
-$yellow:           #fffb2b;
-
 // Main page index colors and gradients
 $tiagsssss-color:                   $grey-light-cold-vibe;
 $tiagsssss-color-gradient:          linear-gradient(0deg, $grey-light-cold-vibe-contrast 0%, $grey-light-cold-vibe 100%);
