@@ -7069,18 +7069,37 @@ div.pswp__img--placeholder,
       font-size: 36px;
       margin-left: 13px;
       line-height: inherit; }
-      #site-header #topbar a .long,
-      #site-header .slicknav_nav a .long {
-        display: none; }
-      #site-header #topbar a .short,
-      #site-header .slicknav_nav a .short {
-        display: inline; }
-      #site-header #topbar a:hover .short,
-      #site-header .slicknav_nav a:hover .short {
-        display: none; }
-      #site-header #topbar a:hover .long,
-      #site-header .slicknav_nav a:hover .long {
-        display: inline; }
+  #site-header #topbar .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    height: 43.2px;
+    padding: 0 8px;
+    margin-right: -8px;
+    vertical-align: top; }
+  #site-header .menu-folder {
+    display: block;
+    width: 28px;
+    height: 28px;
+    overflow: visible; }
+    #site-header .menu-folder path {
+      fill: #000;
+      stroke: currentColor;
+      stroke-width: 1.9286;
+      stroke-linejoin: round;
+      stroke-linecap: round; }
+  #site-header .menu-folder__front {
+    transform-box: view-box;
+    transform-origin: 18px 30px;
+    transform: skewX(0deg) scale(1, 1);
+    transition: transform 0.35s cubic-bezier(0.45, 0, 0.2, 1); }
+    #site-header .menu-folder__front path {
+      vector-effect: non-scaling-stroke;
+      stroke-width: 1.5px; }
+    @media (prefers-reduced-motion: reduce) {
+      #site-header .menu-folder__front {
+        transition: none; } }
+  #site-header .menu-toggle.is-open .menu-folder__front {
+    transform: skewX(16deg) scale(0.9, 0.5); }
   #site-header .header-other-pages-title {
     display: none !important; }
 

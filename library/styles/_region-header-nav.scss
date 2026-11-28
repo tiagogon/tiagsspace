@@ -161,13 +161,52 @@
       font-size: $font-size-nav;
       margin-left: 13px;
       line-height: inherit; // 1.2 from #topbar — keeps the baseline level with the title
-      .long { display: none; }
-      .short { display: inline; }
-      &:hover {
-        .short { display: none; }
-        .long { display: inline; }
-      }
     }
+  }
+
+  // The menu icon (header.php): the folder cursor, drawn on the cursors' 36-unit grid at 28px
+  // with their 1.5px line. Centred in the title's line box (36px × 1.2), so it sits level with
+  // the words on the left; 8px of padding each side makes a 44px-wide target without moving it.
+  // Line = currentColor (white, inverted by #topbar's difference blend like the words); inside
+  // = black, which difference leaves unchanged: it reads as empty, yet hides the back's lines
+  // behind the front. Opening (.is-open, library/js/header-helpers.js) drops the front forward
+  // in Bootstrap's collapse time (.35s); the front keeps a true 1.5px line while squashed.
+  #topbar .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    height: $font-size-nav * 1.2;
+    padding: 0 8px;
+    margin-right: -8px;
+    vertical-align: top;
+  }
+  .menu-folder {
+    display: block;
+    width: 28px;
+    height: 28px;
+    overflow: visible;
+    path {
+      fill: #000;
+      stroke: currentColor;
+      stroke-width: 1.9286;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+  }
+  .menu-folder__front {
+    transform-box: view-box;
+    transform-origin: 18px 30px;
+    transform: skewX(0deg) scale(1, 1);
+    transition: transform .35s cubic-bezier(.45, 0, .2, 1);
+    path {
+      vector-effect: non-scaling-stroke;
+      stroke-width: 1.5px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+  .menu-toggle.is-open .menu-folder__front {
+    transform: skewX(16deg) scale(.9, .5);
   }
 
   .header-other-pages-title {

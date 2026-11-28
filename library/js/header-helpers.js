@@ -44,11 +44,18 @@
   // once (menu, top title, lower date); Bootstrap rewrites the trigger's
   // aria-expanded after each one, and the last processed is a title being hidden,
   // so the word ended up inverted. shown/hidden fire after the whole toggle.
+  // The menu icon (the folder) moves with the menu from the start of the toggle, so it
+  // follows show/hide, on a class of its own (.is-open) that Bootstrap never rewrites.
   function bindMenuWord(){
     if (!window.jQuery) { return; }
     var $menu = jQuery('#collapseMenu');
     var $trigger = jQuery('#topbar a[href="#collapseMenu"]');
     if (!$menu.length || !$trigger.length) { return; }
+    $trigger.toggleClass('is-open', $menu.hasClass('show'));
+    $menu.on('show.bs.collapse hide.bs.collapse', function(e){
+      if (e.target !== this) { return; }
+      $trigger.toggleClass('is-open', e.type === 'show');
+    });
     $menu.on('shown.bs.collapse hidden.bs.collapse', function(e){
       if (e.target !== this) { return; } // ignore nested collapses (Log branches) bubbling up
       $trigger.attr('aria-expanded', e.type === 'shown' ? 'true' : 'false');

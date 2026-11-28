@@ -77,6 +77,7 @@ All rules live in `_component-cursors.scss`, mouse and trackpad only (`hover: ho
 `test.html` (local only: it is in `.gitignore` and never deployed; open it through the local site, e.g. `http://localhost:8888/tiagsspace/wp-content/themes/tiagsspace/library/images/cursors/test.html`) shows the set, for checking a new or changed drawing before it goes live:
 
 - the drawings at 4× with the hotspot in red, and at real size on four backgrounds;
-- a light/dark page switch, a size slider, and hover cards for each context.
+- a light/dark page switch, a size slider, and hover cards for each context;
+- **menu icon proposals** (Nov 2026; **3c is on the site**, inline in `header.php`, the others stay here): drawings for the Reveal / Hide toggle in the same language (1 lines → cross, drawn as 6d's closed lines, 3 folder opens, 3b the same with the rising photograph in solid ink, 3c the folder only opening (like 📁 → 📂), 3d the ink document climbing high with a page-coloured band around it, 6c folders rise from a drawer, 6d menu lines that unfold into that drawer; folders are built by `folderBack()` in the page script), animated with CSS transitions on their open state (`aria-expanded`), at 4× and real size, and in a mock header blended with difference like the header words (inside black, which difference leaves unchanged).
 
 Its set list and hotspots are its own copy: keep them in step with the SCSS map. Screenshots never show the cursor, so judge by hand, on a Retina screen too.
