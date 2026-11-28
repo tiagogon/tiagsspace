@@ -274,80 +274,16 @@ const TIAGSSPACE_DUSK_TO_CIDADE = array(
 
 /**
  * Moves the posts of TIAGSSPACE_DUSK_TO_CIDADE from dusk to cidade (or back with 'reverse').
- * Same arguments as tiagsspace_migrate_cityburns_to_cidade(). Idempotent.
+ * Same arguments as tiagsspace_migrate_cityburns_to_cidade(). Idempotent. The move itself is
+ * tiagsspace_move_sets() (library/move-sets.php).
  */
 function tiagsspace_move_dusk_to_cidade( $args = array() ) {
-	global $wpdb;
-	$dry   = ! empty( $args['dry_run'] );
-	$log   = isset( $args['log'] ) && is_callable( $args['log'] ) ? $args['log'] : function ( $line ) { echo $line, "\n"; };
-	$from  = empty( $args['reverse'] ) ? 'dusk' : 'cidade';
-	$to    = empty( $args['reverse'] ) ? 'cidade' : 'dusk';
-	$label = $dry ? '[dry run] ' : '';
-	$log( "{$label}Moving " . count( TIAGSSPACE_DUSK_TO_CIDADE ) . " sets {$from} → {$to}" );
-
-	$move = $problems = array();
-	foreach ( TIAGSSPACE_DUSK_TO_CIDADE as $id => $slug ) {
-		$p = get_post( $id );
-		if ( ! $p || $p->post_name !== $slug ) {
-			$problems[] = "{$id}: expected slug {$slug}, found " . ( $p ? "{$p->post_type}/{$p->post_name}" : 'nothing' );
-			continue;
-		}
-		if ( $p->post_type === $to ) {
-			continue; // Already moved.
-		}
-		if ( $p->post_type !== $from ) {
-			$problems[] = "{$id}: is a {$p->post_type}, not a {$from}";
-			continue;
-		}
-		$clash = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s AND post_name = %s AND post_status <> 'trash'", $to, $slug ) );
-		if ( $clash ) {
-			$problems[] = "{$id}: slug {$slug} is already used in {$to} by {$clash}";
-			continue;
-		}
-		$move[] = $id;
-		$log( sprintf( '  %-6d %-8s %s', $id, $p->post_status, $slug ) );
-	}
-	foreach ( $problems as $pr ) {
-		$log( "  PROBLEM {$pr}" );
-	}
-	if ( $problems ) {
-		$log( 'STOP: nothing moved.' );
-		return array( 'stopped' => true );
-	}
-	$log( '  to move: ' . count( $move ) . ' (already moved: ' . ( count( TIAGSSPACE_DUSK_TO_CIDADE ) - count( $move ) ) . ')' );
-	if ( $dry || ! $move ) {
-		$log( $dry ? '[dry run] nothing written.' : 'Nothing to do.' );
-		return array( 'moved' => 0 );
-	}
-
-	$in = implode( ',', array_map( 'intval', $move ) );
-	$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_type = %s WHERE ID IN ({$in})", $to ) );
-	foreach ( $move as $id ) {
-		clean_post_cache( $id );
-	}
-	// Yoast keeps each post's permalink: drop the records, rebuild them under the new type.
-	$table = $wpdb->prefix . 'yoast_indexable';
-	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) === $table ) {
-		$ix = $wpdb->get_col( "SELECT id FROM {$table} WHERE object_type = 'post' AND object_id IN ({$in})" );
-		if ( $ix ) {
-			$ixin = implode( ',', array_map( 'intval', $ix ) );
-			$wpdb->query( "DELETE FROM {$wpdb->prefix}yoast_indexable_hierarchy WHERE indexable_id IN ({$ixin}) OR ancestor_id IN ({$ixin})" );
-			$wpdb->query( "DELETE FROM {$table} WHERE id IN ({$ixin})" );
-		}
-		if ( function_exists( 'YoastSEO' ) ) {
-			try {
-				foreach ( $move as $id ) {
-					YoastSEO()->meta->for_post( $id );
-				}
-			} catch ( \Throwable $e ) {
-				$log( '  yoast rebuild stopped: ' . $e->getMessage() . ' (the rest is rebuilt on first visit)' );
-			}
-		}
-	}
-	update_option( 'tiagsspace_archive_stats_salt', time(), false );
-	wp_cache_flush();
-	$log( 'Moved: ' . count( $move ) . '. Flush the page cache (W3TC) so /dusk/<slug>/ stops serving the old page.' );
-	return array( 'moved' => count( $move ) );
+	$reverse = ! empty( $args['reverse'] );
+	return tiagsspace_move_sets( TIAGSSPACE_DUSK_TO_CIDADE, $reverse ? 'dusk' : 'cidade', array(
+		'from'    => $reverse ? 'cidade' : 'dusk',
+		'dry_run' => ! empty( $args['dry_run'] ),
+		'log'     => isset( $args['log'] ) ? $args['log'] : null,
+	) );
 }
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {

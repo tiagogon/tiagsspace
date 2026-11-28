@@ -176,7 +176,7 @@ if ( ! defined( 'TIAGSSPACE_AI_POLICY_URL' ) ) {
 /** Public post types that carry archive material (used for share images,
  *  the label variable and the language field). */
 function tiagsspace_seo_post_types() {
-    return array( 'post', 'dusk', 'films', 'log', 'hyper', 'cidade', '4k-lento' );
+    return array( 'post', 'dusk', 'films', 'log', 'hyper', 'cidade', 'campo', '4k-lento' );
 }
 
 
@@ -863,7 +863,7 @@ function tiagsspace_title_templates() {
         'title-search-wpseo'  => '%%searchphrase%%' . $s . 'Search' . $s . $site,
         'title-404-wpseo'     => 'Not found' . $s . $site,
     );
-    foreach ( array( 'dusk', 'hyper', 'cidade', '4k-lento', 'films', 'log' ) as $pt ) {
+    foreach ( array( 'dusk', 'hyper', 'cidade', 'campo', '4k-lento', 'films', 'log' ) as $pt ) {
         $t[ 'title-' . $pt ]           = '%%title%%' . $s . tiagsspace_series_name( $pt, 'single' ) . $s . $site;
         $t[ 'title-ptarchive-' . $pt ] = tiagsspace_series_name( $pt, 'archive' ) . ' %%pagenumber%%' . $s . $site;
     }

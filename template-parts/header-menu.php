@@ -131,6 +131,9 @@ $menu_groups_class = "col-sm-24 col-md-16 col-xl-9 menu-group";
 								<li>
 									<a href="<?php echo get_post_type_archive_link('cidade'); ?>" class="<?php if (is_post_type_archive('cidade')) { echo "active"; } if (is_singular('cidade')) { echo " active"; } ?>"><?php echo esc_html( tiagsspace_series_ui_name( 'cidade' ) ); ?></a>
 								</li>
+								<li>
+									<a href="<?php echo get_post_type_archive_link('campo'); ?>" class="<?php if (is_post_type_archive('campo')) { echo "active"; } if (is_singular('campo')) { echo " active"; } ?>"><?php echo esc_html( tiagsspace_series_ui_name( 'campo' ) ); ?></a>
+								</li>
 							</ul>
 						</li>
 						<li>

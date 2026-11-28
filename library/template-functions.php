@@ -66,6 +66,7 @@ function tiagsspace_series_name( $post_type, $context = 'archive' ) {
         'dusk'      => array( 'archive' => 'Dusk Series',    'single' => 'Dusk Series' ),
         'hyper'     => array( 'archive' => 'Hyper Series',   'single' => 'Hyper Series' ),
         'cidade'    => array( 'archive' => 'Cidade Series',  'single' => 'Cidade Series' ),
+        'campo'     => array( 'archive' => 'Campo Series',   'single' => 'Campo Series' ),
         '4k-lento'  => array( 'archive' => '4K Lento Mixes', 'single' => '4K Lento Mix' ),
         'films'     => array( 'archive' => 'Films',          'single' => 'Film' ),
         'log'       => array( 'archive' => 'Log',            'single' => 'Log' ),
@@ -93,6 +94,7 @@ function tiagsspace_series_ui_name( $post_type, $context = 'archive' ) {
         'dusk'   => 'Dusk',
         'hyper'  => 'Hyper',
         'cidade' => 'Cidade',
+        'campo'  => 'Campo',
     );
     return isset( $plain[ $post_type ] ) ? $plain[ $post_type ] : tiagsspace_series_name( $post_type, $context );
 }
@@ -253,7 +255,7 @@ function color_background_parameters ($parameter) {
 			$background_color_class = 'white-darkmode';
 	} elseif (is_singular( 'dusk' )) {
 			$background_color_class = 'white-darkmode';
-	} elseif (is_singular( 'cidade' )) {
+	} elseif (is_singular( array( 'cidade', 'campo' ) )) {
 			$background_color_class = 'white-darkmode';
 	} elseif (  is_singular( 'log' )
 							OR is_post_type_archive('log')

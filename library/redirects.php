@@ -141,7 +141,7 @@ function tiagsspace_redirect_old_slug_keys() {
 
 /** Post types whose old slugs are looked up. */
 function tiagsspace_redirect_series_types() {
-	return array( 'cidade', 'dusk', 'hyper' );
+	return array( 'cidade', 'campo', 'dusk', 'hyper' );
 }
 
 /**
@@ -251,10 +251,12 @@ add_action( 'template_redirect', function () {
 	}
 
 	// A set moved from one series to another keeps its slug (the 2012–2014 digital
-	// sets went from Dusk to Cidade in Nov 2026): /dusk/<slug>/ → /cidade/<slug>/.
-	if ( preg_match( '#^/(dusk|cidade|hyper)/([^/]+)/?$#', $bare, $m ) ) {
+	// sets went from Dusk to Cidade in Nov 2026, Atendimento e Madrugada from Cidade to
+	// Campo): /dusk/<slug>/ → /cidade/<slug>/. The series are tiagsspace_redirect_series_types().
+	$series = tiagsspace_redirect_series_types();
+	if ( preg_match( '#^/(' . implode( '|', $series ) . ')/([^/]+)/?$#', $bare, $m ) ) {
 		$moved = get_posts( array(
-			'post_type'        => array_values( array_diff( array( 'dusk', 'cidade', 'hyper' ), array( $m[1] ) ) ),
+			'post_type'        => array_values( array_diff( $series, array( $m[1] ) ) ),
 			'post_status'      => 'publish',
 			'name'             => sanitize_title( rawurldecode( $m[2] ) ),
 			'fields'           => 'ids',

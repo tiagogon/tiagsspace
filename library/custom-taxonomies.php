@@ -39,7 +39,7 @@ function places_taxonomy() {
     'show_tagcloud'              => true,
     'show_in_rest'               => true,
   );
-  register_taxonomy( 'places', array( 'post', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cidade', '4k-lento'), $args );
+  register_taxonomy( 'places', array( 'post', 'featuring', 'dusk', 'hyper', 'log', 'films', 'cidade', 'campo', '4k-lento'), $args );
 }
 add_action( 'init', 'places_taxonomy', 0 );
 
@@ -76,7 +76,7 @@ function medium_taxonomy() {
     'show_tagcloud'              => true,
     'show_in_rest'               => true,
   );
-  register_taxonomy( 'medium', array( 'post', 'dusk', 'hyper', 'log', 'films', 'cidade', '4k-lento'  ), $args );
+  register_taxonomy( 'medium', array( 'post', 'dusk', 'hyper', 'log', 'films', 'cidade', 'campo', '4k-lento'  ), $args );
 
 }
 add_action( 'init', 'medium_taxonomy', 0 );
@@ -148,7 +148,7 @@ function year_from_taxonomy() {
     'show_tagcloud'              => true,
     'show_in_rest'               => true,
   );
-  register_taxonomy( 'from', array('post', 'dusk', 'hyper', 'log', 'films', 'cidade', '4k-lento' ), $args );
+  register_taxonomy( 'from', array('post', 'dusk', 'hyper', 'log', 'films', 'cidade', 'campo', '4k-lento' ), $args );
 }
 add_action( 'init', 'year_from_taxonomy', 0 );
 
@@ -185,7 +185,7 @@ add_action( 'restrict_manage_posts', 'kc_add_taxonomy_filters' );
 // Tag and Category archive queries default to querying only the post post type, to add your custom post type to those queries, you can use the pre_get_posts action:
 function wpa_cpt_tags( $query ) {
     if ( $query->is_tag() && $query->is_main_query() ) {
-        $query->set( 'post_type', array( 'post', 'dusk', 'hyper', 'log', 'films', 'cidade', '4k-lento' ) );
+        $query->set( 'post_type', array( 'post', 'dusk', 'hyper', 'log', 'films', 'cidade', 'campo', '4k-lento' ) );
     }
 }
 add_action( 'pre_get_posts', 'wpa_cpt_tags' );

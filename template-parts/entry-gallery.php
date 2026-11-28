@@ -80,8 +80,8 @@ if($attachmens){
             $deactivat_masonry      = true;
         }
 
-        // Cidade (City Series until Nov 2026)
-        elseif ( is_singular( 'cidade' )) {
+        // Cidade (City Series until Nov 2026) and Campo (Nov 2026), set up alike
+        elseif ( is_singular( array( 'cidade', 'campo' ) )) {
             $class_container        = 'container-fluid';
             $number_of_columns_xs   = 1;
             $number_of_columns_sm   = 1;

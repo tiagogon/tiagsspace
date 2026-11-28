@@ -2,12 +2,52 @@
 /**
  * Custom Post Type registrations and related query modifications.
  *
- * Registers: films, dusk, hyper, 4k-lento, log, cidade (archived; was cityburns until Nov 2026).
+ * Registers: films, dusk, hyper, 4k-lento, log, cidade (archived; was cityburns until Nov 2026),
+ * campo (archived, Nov 2026).
  * Includes: log-branch admin filter, admin menu order, CPTs in main loop/feed/archives.
  *
  * @package tiagsspace
  */
 
+
+/**
+ * Admin labels of a photographic series (Dusk, Hyper, Cidade, Campo), in set words:
+ * "All Sets", "Add New Set", "Edit Set" (Tiago, Nov 2026: these are sets, not posts).
+ * The admin menu keeps the plain series name.
+ *
+ * @param string $name    The series name as the admin menu shows it ("Dusk").
+ * @param string $general The general name, when it differs ("Cidade Series").
+ * @return array          Labels for register_post_type().
+ */
+function tiagsspace_series_labels( $name, $general = '' ) {
+  return array(
+    'name'                     => $general ? $general : $name,
+    'singular_name'            => $name,
+    'menu_name'                => $name,
+    'parent_item_colon'        => 'Parent set:',
+    'all_items'                => 'All Sets',
+    'add_new'                  => 'Add New Set',
+    'add_new_item'             => 'Add New Set',
+    'new_item'                 => 'New Set',
+    'edit_item'                => 'Edit Set',
+    'update_item'              => 'Update Set',
+    'view_item'                => 'View Set',
+    'view_items'               => 'View Sets',
+    'search_items'             => 'Search Sets',
+    'not_found'                => 'No sets found',
+    'not_found_in_trash'       => 'No sets found in Trash',
+    'items_list'               => 'Sets list',
+    'items_list_navigation'    => 'Sets list navigation',
+    'filter_items_list'        => 'Filter sets list',
+    'item_published'           => 'Set published.',
+    'item_published_privately' => 'Set published privately.',
+    'item_reverted_to_draft'   => 'Set reverted to draft.',
+    'item_scheduled'           => 'Set scheduled.',
+    'item_updated'             => 'Set updated.',
+    'item_link'                => 'Set Link',
+    'item_link_description'    => 'A link to a set.',
+  );
+}
 
 // Register Custom Post Type Film
 function custom_post_type_films() {
@@ -57,21 +97,7 @@ add_action( 'init', 'custom_post_type_films', 0 );
 
 // Register Custom Post Type DUSK
 function custom_post_type_dusk() {
-  $labels = array(
-    'name'                => _x( 'Dusk', 'Post Type General Name', 'text_domain' ),
-    'singular_name'       => _x( 'Dusk', 'Post Type Singular Name', 'text_domain' ),
-    'menu_name'           => __( 'Dusk', 'text_domain' ),
-    'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
-    'all_items'           => __( 'All Dusk Posts', 'text_domain' ),
-    'view_item'           => __( 'View Dusk Post', 'text_domain' ),
-    'add_new_item'        => __( 'Add New Dusk Post', 'text_domain' ),
-    'add_new'             => __( 'Add New Dusk Post', 'text_domain' ),
-    'edit_item'           => __( 'Edit Dusk Post', 'text_domain' ),
-    'update_item'         => __( 'Update Dusk Post', 'text_domain' ),
-    'search_items'        => __( 'Search Dusk Post', 'text_domain' ),
-    'not_found'           => __( 'Not found', 'text_domain' ),
-    'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
-  );
+  $labels = tiagsspace_series_labels( 'Dusk' );
   $args = array(
     'label'               => __( 'dusk', 'text_domain' ),
     'description'         => __( 'The sun below the horizon.', 'text_domain' ),
@@ -102,21 +128,7 @@ add_action( 'init', 'custom_post_type_dusk', 0 );
 
 // Register Custom Post Type HYPER
 function custom_post_type_hyper() {
-  $labels = array(
-    'name'                => _x( 'Hyper', 'Post Type General Name', 'text_domain' ),
-    'singular_name'       => _x( 'Hyper', 'Post Type Singular Name', 'text_domain' ),
-    'menu_name'           => __( 'Hyper', 'text_domain' ),
-    'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
-    'all_items'           => __( 'All Hyper Posts', 'text_domain' ),
-    'view_item'           => __( 'View Hyper Post', 'text_domain' ),
-    'add_new_item'        => __( 'Add New Hyper Post', 'text_domain' ),
-    'add_new'             => __( 'Add New Hyper Post', 'text_domain' ),
-    'edit_item'           => __( 'Edit Hyper Post', 'text_domain' ),
-    'update_item'         => __( 'Update Hyper Post', 'text_domain' ),
-    'search_items'        => __( 'Search Hyper Post', 'text_domain' ),
-    'not_found'           => __( 'Not found', 'text_domain' ),
-    'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
-  );
+  $labels = tiagsspace_series_labels( 'Hyper' );
   $args = array(
     'label'               => __( 'hyper', 'text_domain' ),
     'description'         => __( 'Hyper description.', 'text_domain' ),
@@ -286,21 +298,7 @@ function tsm_convert_id_to_term_in_query($query) {
     // Called cityburns ("City Series", /cityburns/) until Nov 2026; library/migrate-cidade.php
     // moved the posts and library/redirects.php sends the old addresses here.
     function custom_post_type_cidade() {
-      $labels = array(
-        'name'                => _x( 'Cidade Series', 'Post Type General Name', 'text_domain' ),
-        'singular_name'       => _x( 'Cidade', 'Post Type Singular Name', 'text_domain' ),
-        'menu_name'           => __( 'Cidade', 'text_domain' ),
-        'parent_item_colon'   => __( 'Parent Item:', 'text_domain' ),
-        'all_items'           => __( 'All Cidade Posts', 'text_domain' ),
-        'view_item'           => __( 'View Cidade Post', 'text_domain' ),
-        'add_new_item'        => __( 'Add New Cidade Post', 'text_domain' ),
-        'add_new'             => __( 'Add New Cidade Post', 'text_domain' ),
-        'edit_item'           => __( 'Edit Cidade Post', 'text_domain' ),
-        'update_item'         => __( 'Update Cidade Post', 'text_domain' ),
-        'search_items'        => __( 'Search Cidade Post', 'text_domain' ),
-        'not_found'           => __( 'Not found', 'text_domain' ),
-        'not_found_in_trash'  => __( 'Not found in Trash', 'text_domain' ),
-      );
+      $labels = tiagsspace_series_labels( 'Cidade', 'Cidade Series' );
       $args = array(
         'label'               => __( 'cidade', 'text_domain' ),
         'description'         => __( 'The sun below the horizon.', 'text_domain' ),
@@ -330,6 +328,38 @@ function tsm_convert_id_to_term_in_query($query) {
     add_action( 'init', 'custom_post_type_cidade', 0 );
 
 
+    // Register Custom Post Type campo // ARCHIVED
+    // Added Nov 2026, set up like Cidade (gallery, taxonomies, SEO). Its first set,
+    // Atendimento e Madrugada, came from Cidade (wp tiagsspace move-set).
+    function custom_post_type_campo() {
+      $args = array(
+        'label'               => __( 'campo', 'text_domain' ),
+        'description'         => '',
+        'labels'              => tiagsspace_series_labels( 'Campo', 'Campo Series' ),
+        'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'trackbacks', 'revisions', 'custom-fields', ),
+        'taxonomies'          => array( 'category', 'post_tag' ),
+        'hierarchical'        => false,
+        'public'              => true,
+        'show_ui'             => true,
+        'show_in_rest'        => true,
+        'show_in_menu'        => true,
+        'show_in_nav_menus'   => true,
+        'show_in_admin_bar'   => true,
+        'menu_position'       => 21,
+        'menu_icon'           => 'dashicons-media-archive',
+        'can_export'          => true,
+        'has_archive'         => true,
+        'rewrite'             => array( 'slug' => 'campo', 'with_front' => false ),
+        'exclude_from_search' => false,
+        'publicly_queryable'  => true,
+        'capability_type'     => 'post',
+        'yarpp_support'       => true,
+      );
+      register_post_type( 'campo', $args );
+    }
+    add_action( 'init', 'custom_post_type_campo', 0 );
+
+
 
 // ----- Change admin menu order -----
 
@@ -350,7 +380,7 @@ function tsm_convert_id_to_term_in_query($query) {
 function my_get_posts( $query ) {
 
     if ( is_home() && $query->is_main_query() )
-        $query->set( 'post_type', array( 'post', 'dusk', 'films', 'hyper', 'log', 'cidade', '4k-lento') );
+        $query->set( 'post_type', array( 'post', 'dusk', 'films', 'hyper', 'log', 'cidade', 'campo', '4k-lento') );
 
     return $query;
 }
@@ -358,7 +388,7 @@ add_filter( 'pre_get_posts', 'my_get_posts' );
 
 function myfeed_request($qv) {
     if (isset($qv['feed']) && !isset($qv['post_type']))
-        $qv['post_type'] = array('post', 'dusk', 'films', 'hyper', 'log', 'cidade', '4k-lento');
+        $qv['post_type'] = array('post', 'dusk', 'films', 'hyper', 'log', 'cidade', 'campo', '4k-lento');
     return $qv;
 }
 add_filter('request', 'myfeed_request');
@@ -383,7 +413,7 @@ function query_post_type($query) {
         if($post_type) {
             $post_type = $post_type;
         } else {
-            $post_type = array('post', 'dusk', 'films', 'hyper', 'log', 'cidade', '4k-lento'); // replace CPT to your custom post type
+            $post_type = array('post', 'dusk', 'films', 'hyper', 'log', 'cidade', 'campo', '4k-lento'); // replace CPT to your custom post type
         }
         $query->set('post_type',$post_type);
 
