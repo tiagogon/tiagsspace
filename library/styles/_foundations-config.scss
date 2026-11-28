@@ -30,9 +30,10 @@ $tiagsssss-color-darkmode-gradient: linear-gradient(0deg, $tiagsssss-color-darkm
 // (bold/italic available for prose via <strong>/<em>)
 // --------------------------------------------------
 
+// One typeface, set once: Bootstrap's reboot puts it on <body> and everything inherits
+// it (form fields too: reboot gives them `font-family: inherit`). Never set it again
+// on an element.
 $font-family-base:       "Lora", serif;
-$font-family-headings:   $font-family-base;
-$font-family-menu:       $font-family-base;
 
 // The type scale: every font size in the theme is one of these steps, one name each.
 // Change a size here, once. (Merging two steps changes the look: decide it on the site.)

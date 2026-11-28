@@ -117,7 +117,6 @@
     }
     p.footer-meta {
       margin-bottom: 0px;
-      font-family: $font-family-headings;
       line-height: 1.3em;
       color: var(--tg-ink);
     }
@@ -298,7 +297,6 @@
     margin-bottom: $grid-gutter-width;
     span {
       a {
-        font-family: $font-family-headings;
         font-size: $font-size;
         line-height: 1.3;
         color: var(--tg-ink);

@@ -13,7 +13,6 @@
   background: inherit;
   overflow: hidden;
   list-style: none;
-  font-family: $font-family-menu;
   .row {
     padding-top: 60px;
     height: 102vh;
@@ -94,7 +93,6 @@
   margin: 0;
   overflow: visible;
   pointer-events: none;
-  font-family: $font-family-menu;
 
   .row {
     margin: 0; // the row is empty; its negative gutters would overflow the viewport
@@ -124,7 +122,6 @@
     max-width: 66vw; // the old col-32 width, so long hover labels wrap the same way
     h1, .site-title, a {
       font-size: $font-size;
-      font-family: $font-family-menu;
       color: $white; // blend base — inverted by the block's mix-blend-mode
     }
     // A single work: the title crumb is the page's <h1>, inline in the line
@@ -246,7 +243,6 @@
   width: auto;
   max-width: none;
   flex: none;
-  font-family: $font-family-menu;
   mix-blend-mode: difference;
   .row {
     .left-side {
@@ -255,7 +251,6 @@
       flex: none;
       h1, .site-title, a {
         font-size: $font-size;
-        font-family: $font-family-menu;
         color: $white; // blend base — inverted by the bar's mix-blend-mode
       }
     }
