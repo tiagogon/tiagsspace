@@ -23,10 +23,6 @@
 
 // Per page background (body class)
 .tiagsssss-color .pswp__bg { background: $tiagsssss-color; }
-.indigo .pswp__bg          { background: $indigo; }
-.blue .pswp__bg            { background: $blue; }
-.lime .pswp__bg            { background: $lime; }
-.yellow .pswp__bg          { background: $yellow; }
 
 
 // --------------------------------------------------
@@ -58,7 +54,7 @@
   text-align: center;
   pointer-events: none !important; // spans the width: clicks go to the image
   font-family: $font-family-base;
-  font-size: 36px;
+  font-size: $font-size;
   line-height: 1;
   color: $dark;
   @media (prefers-color-scheme: dark) {
@@ -96,7 +92,7 @@
   max-width: 100%;
   padding-right: 36px;
   font-family: $font-family-base;
-  font-size: 14px;
+  font-size: $font-size-label;
   line-height: 18px;
   letter-spacing: 1px;
   text-align: left;

@@ -62,7 +62,7 @@
 // Responsive: tweaks for smaller screens
 @include media-breakpoint-down(sm) {
     .table-index {
-        font-size: 12px;
+        font-size: $font-size-meta;
 
         th,
         td {

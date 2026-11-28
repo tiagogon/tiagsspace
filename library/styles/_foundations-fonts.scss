@@ -1,31 +1,4 @@
 // --------------------------------------------------
-// Colors
-// --------------------------------------------------
-
-$white:                   #fff;
-$dark:                    #000;
-$white-darkmode:          $dark;
-
-// Index page vibe greys (feed the $tiagsssss-color tokens below)
-$grey-light-cold-vibe:            #E3E5F2; // rgba(227,229,242,1)
-$grey-light-cold-vibe-contrast:   #F2EFE3; // rgba(242,239,227,1)
-$dark-lighten-vibe:               #16161b; // rgba(22,22,27,1)
-$dark-lighten-vibe-contrast:      #1d1a17; // rgba(29,26,23,1)
-
-// Accent colors (used by the lightbox + single-content section coloring)
-$blue-earth:       #00349E;
-$blue:             $blue-earth;
-$lime:             #aeff2b;
-$yellow:           #fffb2b;
-
-// Main page index colors and gradients
-$tiagsssss-color:                   $grey-light-cold-vibe;
-$tiagsssss-color-gradient:          linear-gradient(0deg, $grey-light-cold-vibe-contrast 0%, $grey-light-cold-vibe 100%);
-$tiagsssss-color-darkmode:          $dark-lighten-vibe;
-$tiagsssss-color-darkmode-gradient: linear-gradient(0deg, $dark-lighten-vibe-contrast 0%, $dark-lighten-vibe 100%);
-
-
-// --------------------------------------------------
 // Font faces — Lora (SIL OFL 1.1), files from @fontsource/lora 5.3.0, woff2 only.
 // Real 400/600 × normal/italic faces so <strong>/<em> resolve in prose.
 //
@@ -57,50 +30,3 @@ $lora-faces: (400 normal, 400 italic, 600 normal, 600 italic);
         }
     }
 }
-
-
-// --------------------------------------------------
-// Type system — one family, one size, 400 default
-// (bold/italic available for prose via <strong>/<em>)
-// --------------------------------------------------
-
-$font-family-base:       "Lora", serif;
-$font-family-sans-serif: $font-family-base;   // Bootstrap base reads this name
-$font-family-headings:   $font-family-base;
-$font-family-menu:       $font-family-base;
-
-$font-size:         36px;   // chrome + titles: header, nav, menu, index, post titles
-$font-size-content: 23px;   // prose inside posts/pages (section.post-content)
-$font-size-p:       $font-size;
-$font-size-heading: $font-size;
-$font-size-nav:     $font-size;
-$font-size-menu:    $font-size;
-
-$font-weight-normal:   400;
-$font-weight-bold:     600;   // bold — post-content <strong>/<b>
-$headings-font-weight: 400;   // titles stay regular weight
-
-
-// --------------------------------------------------
-// Body & link colors
-// --------------------------------------------------
-
-$body-color:            #000;
-
-$link-color:            #000;
-$link-decoration:       none;
-$link-hover-color:      none;
-$link-hover-decoration: underline;
-
-
-// --------------------------------------------------
-// Grid
-// --------------------------------------------------
-
-$grid-columns:              48;
-$grid-gutter-width:         16px;
-$grid-gutter-width-mobile:  12px; // phones & tablets (below lg breakpoint)
-
-$container-max-widths: (
-  xl: 1280px
-) !default;

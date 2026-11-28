@@ -5,7 +5,8 @@
 
 // ----- Foundations (variables, fonts) -----
 
-@import "foundations-fonts"; // must come before Bootstrap to override variables
+@import "foundations-config"; // settings: must come before Bootstrap to override its variables
+@import "foundations-fonts"; // @font-face (Lora)
 
 // ----- Bootstrap (selective) -----
 
