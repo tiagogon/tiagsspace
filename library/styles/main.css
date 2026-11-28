@@ -6740,6 +6740,8 @@ div.pswp__img--placeholder,
     margin: 0;
     pointer-events: auto;
     mix-blend-mode: difference; }
+  #site-header #topbar {
+    mix-blend-mode: normal; }
   #site-header .topbar-left.collapsing {
     position: fixed; }
   #site-header .topbar-left {
@@ -6783,15 +6785,19 @@ div.pswp__img--placeholder,
     vertical-align: top; }
   #site-header .menu-folder {
     display: block;
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
     overflow: visible; }
     #site-header .menu-folder path {
-      fill: #000;
-      stroke: currentColor;
-      stroke-width: 1.5;
+      fill: url(#menu-folder-paper);
+      stroke: var(--tg-ink);
+      stroke-width: 1.2857;
       stroke-linejoin: round;
       stroke-linecap: round; }
+  #site-header .menu-folder__paper-bottom {
+    stop-color: var(--tg-paper-bottom); }
+  #site-header .menu-folder__paper-top {
+    stop-color: var(--tg-paper-top); }
   #site-header .menu-folder__front {
     transform-box: view-box;
     transform-origin: 18px 30px;
@@ -6799,7 +6805,7 @@ div.pswp__img--placeholder,
     transition: transform 0.35s cubic-bezier(0.45, 0, 0.2, 1); }
     #site-header .menu-folder__front path {
       vector-effect: non-scaling-stroke;
-      stroke-width: 1.5px; }
+      stroke-width: 1px; }
     @media (prefers-reduced-motion: reduce) {
       #site-header .menu-folder__front {
         transition: none; } }

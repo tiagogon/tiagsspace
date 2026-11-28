@@ -111,6 +111,9 @@
     pointer-events: auto;
     mix-blend-mode: difference;
   }
+  #topbar {
+    mix-blend-mode: normal; // the menu icon draws in the page's ink and paper, like the cursor
+  }
   // Bootstrap's `.collapsing { position: relative }` would pull the title block
   // into flow while the menu toggles it; keep it fixed throughout.
   .topbar-left.collapsing {
@@ -154,13 +157,16 @@
     }
   }
 
-  // The menu icon (header.php): the folder cursor, drawn on the cursors' 36-unit grid at 36px (the height of the title line, $font-size × 1.2)
-  // with their 1.5px line. Centred in the title's line box ($font-size × 1.2), so it sits level with
-  // the words on the left; 8px of padding each side makes a 44px-wide target without moving it.
-  // Line = currentColor (white, inverted by #topbar's difference blend like the words); inside
-  // = black, which difference leaves unchanged: it reads as empty, yet hides the back's lines
-  // behind the front. Opening (.is-open, library/js/header-helpers.js) drops the front forward
-  // in Bootstrap's collapse time (.35s); the front keeps a true 1.5px line while squashed.
+  // The menu icon (header.php): the folder cursor itself, same drawing, size and look
+  // (Tiago, 28 Nov 2026): 28px, a 1px line in the page's ink (--tg-ink: black on a
+  // light page, white on a dark one), the inside filled with the page gradient
+  // (--tg-paper-bottom/-top, the gradient's stops in header.php), exactly as
+  // library/images/cursors/straight/{light,dark}/folder.svg. So #topbar does NOT
+  // blend: it holds only this icon, which reads on photographs as the cursor does.
+  // Centred in the title's line box ($font-size × 1.2); 8px of padding each side makes
+  // a 44px-wide target without moving it. Opening (.is-open, library/js/header-helpers.js)
+  // drops the front forward in Bootstrap's collapse time (.35s); the front keeps a true
+  // 1px line while squashed.
   #topbar .menu-toggle {
     display: inline-flex;
     align-items: center;
@@ -171,16 +177,22 @@
   }
   .menu-folder {
     display: block;
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
     overflow: visible;
     path {
-      fill: $dark;
-      stroke: currentColor;
-      stroke-width: 1.5; // 1.5px at 36px on the 36-unit grid
+      fill: url(#menu-folder-paper);
+      stroke: var(--tg-ink);
+      stroke-width: 1.2857; // 1px at 28px on the 36-unit grid, as the cursor
       stroke-linejoin: round;
       stroke-linecap: round;
     }
+  }
+  .menu-folder__paper-bottom {
+    stop-color: var(--tg-paper-bottom);
+  }
+  .menu-folder__paper-top {
+    stop-color: var(--tg-paper-top);
   }
   .menu-folder__front {
     transform-box: view-box;
@@ -189,7 +201,7 @@
     transition: transform .35s cubic-bezier(.45, 0, .2, 1);
     path {
       vector-effect: non-scaling-stroke;
-      stroke-width: 1.5px;
+      stroke-width: 1px;
     }
     @media (prefers-reduced-motion: reduce) {
       transition: none;
