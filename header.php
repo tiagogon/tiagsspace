@@ -37,7 +37,7 @@
 						// for screen readers. Designed on library/images/graphics.html (proposal 3c).
 						?>
 						<a class="menu-toggle" data-toggle="collapse" data-target=".multi-collapse" href="#collapseMenu" role="button" aria-expanded="false" aria-controls="collapseMenu">
-							<svg class="menu-folder" viewBox="0 0 36 36" width="24" height="24" aria-hidden="true" focusable="false"><path d="M3 28V8Q3 6 5 6H12.5Q14 6 15 7.5L15.8 8.5H31Q33 8.5 33 10.5V28Q33 30 31 30H5Q3 30 3 28Z"/><g class="menu-folder__front"><path d="M3 28V15Q3 13 5 13H31Q33 13 33 15V28Q33 30 31 30H5Q3 30 3 28Z"/></g></svg>
+							<svg class="menu-folder" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true" focusable="false"><path d="M3 28V8Q3 6 5 6H12.5Q14 6 15 7.5L15.8 8.5H31Q33 8.5 33 10.5V28Q33 30 31 30H5Q3 30 3 28Z"/><g class="menu-folder__front"><path d="M3 28V15Q3 13 5 13H31Q33 13 33 15V28Q33 30 31 30H5Q3 30 3 28Z"/></g></svg>
 							<span class="reveal sr-only">Reveal</span>
 							<span class="hide sr-only">Hide</span>
 						</a>

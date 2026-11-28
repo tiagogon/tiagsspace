@@ -6783,13 +6783,13 @@ div.pswp__img--placeholder,
     vertical-align: top; }
   #site-header .menu-folder {
     display: block;
-    width: 24px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
     overflow: visible; }
     #site-header .menu-folder path {
       fill: #000;
       stroke: currentColor;
-      stroke-width: 2.25;
+      stroke-width: 1.5;
       stroke-linejoin: round;
       stroke-linecap: round; }
   #site-header .menu-folder__front {
