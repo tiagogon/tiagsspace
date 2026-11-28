@@ -1,0 +1,113 @@
+// --------------------------------------------------
+// Page themes: the page's background, and its ink
+// --------------------------------------------------
+// Every page carries two body classes from color_background_parameters()
+// (library/template-functions.php):
+//   the background   .tiagsssss-color (archives, home, Index, search, 404), .white-darkmode
+//                    (Hyper, Strings, Dusk, Cidade, Campo, Log, Links), .dark (Films,
+//                    4K Lento), .white (any other single: it ignores dark mode)
+//   its mode         .background-w-light-color or .background-w-dark-color (.dark only)
+//
+// So a page is DARK when it is .background-w-dark-color, or when it is .white-darkmode or
+// .tiagsssss-color and the system is in dark mode. That rule is written once, here, as
+// tokens, and everything that must contrast with the page reads them:
+//   --tg-ink            text and lines: #000 on a light page, #fff on a dark one
+//   --tg-paper-bottom   the page gradient, bottom and top (the cursors' and the players'
+//   --tg-paper-top      insides, the icon sprite's gradient stops)
+// Write `color: var(--tg-ink)` instead of black plus a dark-page override. Colours that
+// are not ink (the tag pills, the Log footer's inverted block, the lightbox, which follows
+// the system scheme only) keep their own rules where they are.
+// The cursors (_component-cursors.scss) follow the same page rule with their own files.
+
+
+// --------------------------------------------------
+// Ink and paper
+// --------------------------------------------------
+
+:where(body) {
+  --tg-ink: #000;
+  --tg-paper-bottom: #{$grey-light-cold-vibe-contrast};
+  --tg-paper-top: #{$grey-light-cold-vibe};
+}
+:where(body.background-w-dark-color) {
+  --tg-ink: #fff;
+  --tg-paper-bottom: #{$dark-lighten-vibe-contrast};
+  --tg-paper-top: #{$dark-lighten-vibe};
+}
+@media (prefers-color-scheme: dark) {
+  :where(body.white-darkmode),
+  :where(body.tiagsssss-color) {
+    --tg-ink: #fff;
+    --tg-paper-bottom: #{$dark-lighten-vibe-contrast};
+    --tg-paper-top: #{$dark-lighten-vibe};
+  }
+}
+
+
+// --------------------------------------------------
+// Root and body colours
+// --------------------------------------------------
+
+// <html> must carry its own background: the fixed headers' mix-blend-mode
+// blends against the root group, and this background is what makes that group
+// opaque over plain areas (otherwise the white text would stay white there).
+// Body covers 100vh, so it only ever peeks out on over-scroll; keep it
+// scheme-matched.
+//
+// Do NOT add `isolation: isolate` to <body>: it turns the page into a separate
+// off-screen surface, which Firefox (WebRender) re-rasterises in pieces after a
+// re-layout (menu collapse, fullscreen exit) and leaves 1px horizontal seams
+// across the viewport. Blending against the root needs no isolation.
+html {
+  background: $white;
+  @media (prefers-color-scheme: dark) {
+    background: $white-darkmode;
+  }
+}
+
+// Body text: white under the dark scheme on every page (.white pages included: their
+// own elements paint themselves with the ink), and always on dark pages.
+body {
+  @media (prefers-color-scheme: dark) {
+    color: $white;
+  }
+}
+
+body.background-w-dark-color {
+  color: $white;
+}
+
+
+// --------------------------------------------------
+// Page backgrounds
+// --------------------------------------------------
+
+.tiagsssss-color {
+  background-color: $tiagsssss-color;
+  background: $tiagsssss-color-gradient;
+  @media (max-width: map-get($grid-breakpoints, sm)) {
+    background: $tiagsssss-color; // iOS status bar breaks with gradients
+  }
+  @media (prefers-color-scheme: dark) {
+    background-color: $tiagsssss-color-darkmode;
+    background: $tiagsssss-color-darkmode-gradient;
+    @media (max-width: map-get($grid-breakpoints, sm)) {
+      background: $tiagsssss-color-darkmode; // iOS status bar breaks with gradients
+    }
+  }
+}
+
+.white {
+  background: $white;
+}
+
+.white-darkmode {
+  background: $white;
+  @media (prefers-color-scheme: dark) {
+    background: $white-darkmode;
+  }
+}
+
+.dark {
+  background-color: $dark;
+}

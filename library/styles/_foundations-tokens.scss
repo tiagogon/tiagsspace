@@ -2,23 +2,6 @@
 // Body defaults
 // --------------------------------------------------
 
-// <html> must carry its own background: the fixed headers' mix-blend-mode
-// blends against the root group, and this background is what makes that group
-// opaque over plain areas (otherwise the white text would stay white there).
-// Body covers 100vh, so it only ever peeks out on over-scroll; keep it
-// scheme-matched.
-//
-// Do NOT add `isolation: isolate` to <body>: it turns the page into a separate
-// off-screen surface, which Firefox (WebRender) re-rasterises in pieces after a
-// re-layout (menu collapse, fullscreen exit) and leaves 1px horizontal seams
-// across the viewport. Blending against the root needs no isolation.
-html {
-  background: $white;
-  @media (prefers-color-scheme: dark) {
-    background: $white-darkmode;
-  }
-}
-
 body {
   font-size: $font-size;
   line-height: 1.5;
@@ -32,46 +15,5 @@ body {
   a:hover {
     text-decoration: underline; // hover = underline only, never a colour change
   }
-  @media (prefers-color-scheme: dark) {
-    color: $white;
-  }
 }
-
-body.background-w-dark-color {
-  color: $white;
-}
-
-
-// --------------------------------------------------
-// Background color utility classes
-// --------------------------------------------------
-
-.tiagsssss-color {
-  background-color: $tiagsssss-color;
-  background: $tiagsssss-color-gradient;
-  @media (max-width: map-get($grid-breakpoints, sm)) {
-    background: $tiagsssss-color; // iOS status bar breaks with gradients
-  }
-  @media (prefers-color-scheme: dark) {
-    background-color: $tiagsssss-color-darkmode;
-    background: $tiagsssss-color-darkmode-gradient;
-    @media (max-width: map-get($grid-breakpoints, sm)) {
-      background: $tiagsssss-color-darkmode; // iOS status bar breaks with gradients
-    }
-  }
-}
-
-.white {
-  background: $white;
-}
-
-.white-darkmode {
-  background: $white;
-  @media (prefers-color-scheme: dark) {
-    background: $white-darkmode;
-  }
-}
-
-.dark {
-  background-color: $dark;
-}
+// Colours (html, body, page backgrounds, ink): _foundations-themes.scss.

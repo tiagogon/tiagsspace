@@ -21,25 +21,8 @@
 // ----- Ink and paper: the cursors' colours, by the page's scheme -----
 // Ink = the line (black on light pages, white on dark), paper = the inside (the page gradient,
 // bottom to top). The icon sprite's gradient stops read --tg-paper-*; its line is currentColor.
-// Same page rules as _component-cursors.scss.
-:where(body) {
-  --tg-ink: #000;
-  --tg-paper-bottom: #{$grey-light-cold-vibe-contrast};
-  --tg-paper-top: #{$grey-light-cold-vibe};
-}
-:where(body.background-w-dark-color) {
-  --tg-ink: #fff;
-  --tg-paper-bottom: #{$dark-lighten-vibe-contrast};
-  --tg-paper-top: #{$dark-lighten-vibe};
-}
-@media (prefers-color-scheme: dark) {
-  :where(body.white-darkmode),
-  :where(body.tiagsssss-color) {
-    --tg-ink: #fff;
-    --tg-paper-bottom: #{$dark-lighten-vibe-contrast};
-    --tg-paper-top: #{$dark-lighten-vibe};
-  }
-}
+// Same page rules as _component-cursors.scss; the tokens are defined in _foundations-themes.scss.
+// (defined in _foundations-themes.scss)
 
 // ----- Sizes: by the player's own width, at Bootstrap's breakpoints (Tiago, 22 Nov) -----
 // Below 768px of player (not of screen) the compact set, matched to the paragraph size; from

@@ -264,17 +264,14 @@
 
 
 // --------------------------------------------------
-// Default color overrides (tiagsssss-color / white-darkmode)
+// Menu words: the page's ink, on the pages that turn dark with the system
+// (.white pages keep the plain link colour; dark pages get white below)
 // --------------------------------------------------
-
 
 .tiagsssss-color, .white-darkmode {
   #collapseMenu {
     a, h1, .site-title {
-      color: $dark;
-      @media (prefers-color-scheme: dark) {
-        color: $white;
-      }
+      color: var(--tg-ink);
     }
   }
 }
