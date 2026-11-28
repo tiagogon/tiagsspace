@@ -158,15 +158,16 @@
   }
 
   // The menu icon (header.php): the folder cursor itself, same drawing, size and look
-  // (Tiago, 28 Nov 2026): 28px, a 1px line in the page's ink (--tg-ink: black on a
+  // (Tiago, 28 Nov 2026): the folder cursor's size and line, read from
+  // _component-cursors-built.scss (bin/cursors-derive.py: SIZES × SCALE), in the page's ink (--tg-ink: black on a
   // light page, white on a dark one), the inside filled with the page gradient
   // (--tg-paper-bottom/-top, the gradient's stops in header.php), exactly as
   // library/images/cursors/straight/{light,dark}/folder.svg. So #topbar does NOT
   // blend: it holds only this icon, which reads on photographs as the cursor does.
   // Centred in the title's line box ($font-size × 1.2); 8px of padding each side makes
   // a 44px-wide target without moving it. Opening (.is-open, library/js/header-helpers.js)
-  // drops the front forward in Bootstrap's collapse time (.35s); the front keeps a true
-  // 1px line while squashed.
+  // drops the front forward in Bootstrap's collapse time (.35s); the front keeps the
+  // cursor's true line while squashed.
   #topbar .menu-toggle {
     display: inline-flex;
     align-items: center;
@@ -177,13 +178,13 @@
   }
   .menu-folder {
     display: block;
-    width: 28px;
-    height: 28px;
+    width: map-get($cursor-sizes, folder);
+    height: map-get($cursor-sizes, folder);
     overflow: visible;
     path {
       fill: url(#menu-folder-paper);
       stroke: var(--tg-ink);
-      stroke-width: 1.2857; // 1px at 28px on the 36-unit grid, as the cursor
+      stroke-width: $cursor-line / map-get($cursor-sizes, folder) * 36; // the cursor's line, in units of the 36-unit grid
       stroke-linejoin: round;
       stroke-linecap: round;
     }
@@ -201,7 +202,7 @@
     transition: transform .35s cubic-bezier(.45, 0, .2, 1);
     path {
       vector-effect: non-scaling-stroke;
-      stroke-width: 1px;
+      stroke-width: $cursor-line;
     }
     @media (prefers-reduced-motion: reduce) {
       transition: none;

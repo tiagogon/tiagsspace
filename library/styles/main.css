@@ -6381,71 +6381,71 @@ div.pswp__img--placeholder,
 
 @media (hover: hover) and (pointer: fine) {
   :where(body) {
-    cursor: url("../images/cursors/straight/light/arrow.svg?v=744f3a17c6") 1 1, auto; }
+    cursor: url("../images/cursors/straight/light/arrow.svg?v=09436a505c") 2 2, auto; }
   :where(body) a,
   :where(body) button,
   :where(body) summary,
   :where(body) label[for],
   :where(body) [role="button"],
   :where(body) tr[data-href] {
-    cursor: url("../images/cursors/straight/light/hand.svg?v=744f3a17c6") 5 3, pointer; }
+    cursor: url("../images/cursors/straight/light/hand.svg?v=09436a505c") 8 4, pointer; }
   :where(body) #collapseMenu a:not([data-toggle]):not([target]),
   :where(body) .site-title a,
   :where(body) .footer-meta a:not(.post-edit-link):not(.gallery-edit-toggle):not([id^="download-all"]) {
-    cursor: url("../images/cursors/straight/light/folder.svg?v=744f3a17c6") 3 5, pointer; }
+    cursor: url("../images/cursors/straight/light/folder.svg?v=09436a505c") 4 8, pointer; }
   :where(body) a[target="_blank"],
   :where(body) a[href^="mailto:"],
   :where(body) a[rel~="external"] {
-    cursor: url("../images/cursors/straight/light/external.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/external.svg?v=09436a505c") 22 22, pointer; }
   :where(body) a[rel="prev"],
   :where(body) a.pagination__previous {
-    cursor: url("../images/cursors/straight/light/previous.svg?v=744f3a17c6") 2 14, pointer; }
+    cursor: url("../images/cursors/straight/light/previous.svg?v=09436a505c") 3 22, pointer; }
   :where(body) a[rel="next"],
   :where(body) a.pagination__next {
-    cursor: url("../images/cursors/straight/light/next.svg?v=744f3a17c6") 26 14, pointer; }
+    cursor: url("../images/cursors/straight/light/next.svg?v=09436a505c") 40 22, pointer; }
   :where(body) a[data-opens="film"],
   :where(body) tr[data-opens="film"] {
-    cursor: url("../images/cursors/straight/light/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body) a[data-opens="mix"],
   :where(body) tr[data-opens="mix"] {
-    cursor: url("../images/cursors/straight/light/mix.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/mix.svg?v=09436a505c") 22 22, pointer; }
   :where(body) a[data-opens="set"],
   :where(body) tr[data-opens="set"],
   :where(body) .single-title-heading a {
-    cursor: url("../images/cursors/straight/light/stack.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/stack.svg?v=09436a505c") 22 22, pointer; }
   :where(body) a[data-opens="single"],
   :where(body) tr[data-opens="single"] {
-    cursor: url("../images/cursors/straight/light/single.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/single.svg?v=09436a505c") 22 22, pointer; }
   :where(body) .hgallery--classic .hgallery__track {
-    cursor: url("../images/cursors/straight/light/grab.svg?v=744f3a17c6") 14 15, grab; }
+    cursor: url("../images/cursors/straight/light/grab.svg?v=09436a505c") 22 23, grab; }
   :where(body) .hgallery--classic .hgallery__track.is-grabbing {
-    cursor: url("../images/cursors/straight/light/grabbing.svg?v=744f3a17c6") 13 13, grabbing; }
+    cursor: url("../images/cursors/straight/light/grabbing.svg?v=09436a505c") 20 19, grabbing; }
   :where(body) .hgallery--still .hgallery__track {
-    cursor: url("../images/cursors/straight/light/next.svg?v=744f3a17c6") 26 14, pointer; }
+    cursor: url("../images/cursors/straight/light/next.svg?v=09436a505c") 40 22, pointer; }
   :where(body) .media .media__hit {
-    cursor: url("../images/cursors/straight/light/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body) .media.is-playing .media__hit {
-    cursor: url("../images/cursors/straight/light/pause.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/pause.svg?v=09436a505c") 22 22, pointer; }
   :where(body) .film__hit {
-    cursor: url("../images/cursors/straight/light/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body) .media.is-playing .film__hit {
-    cursor: url("../images/cursors/straight/light/pause.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/pause.svg?v=09436a505c") 22 22, pointer; }
   :where(body) .film__rail {
-    cursor: url("../images/cursors/straight/light/scrub.svg?v=744f3a17c6") 14 14, ew-resize; }
+    cursor: url("../images/cursors/straight/light/scrub.svg?v=09436a505c") 22 22, ew-resize; }
   :where(body) .media--film:fullscreen.is-idle .film__hit,
   :where(body) .media--film:fullscreen.is-idle .film__rail,
   :where(body) .media--film.sim-fs.is-idle .film__hit,
   :where(body) .media--film.sim-fs.is-idle .film__rail {
     cursor: none; }
   :where(body) .env__wave {
-    cursor: url("../images/cursors/straight/light/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body) .media.is-playing .env__wave {
-    cursor: url("../images/cursors/straight/light/pause.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/light/pause.svg?v=09436a505c") 22 22, pointer; }
   :where(body) .env__wave.on-scrub {
-    cursor: url("../images/cursors/straight/light/scrub.svg?v=744f3a17c6") 14 14, ew-resize; }
+    cursor: url("../images/cursors/straight/light/scrub.svg?v=09436a505c") 22 22, ew-resize; }
   :where(body) .gallery-lightbox a.lightbox-link,
   :where(body) .intense {
-    cursor: url("../images/cursors/straight/light/magnify.svg?v=744f3a17c6") 14 14, zoom-in; }
+    cursor: url("../images/cursors/straight/light/magnify.svg?v=09436a505c") 22 22, zoom-in; }
   :where(body) textarea,
   :where(body) [contenteditable],
   :where(body) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
@@ -6457,71 +6457,71 @@ div.pswp__img--placeholder,
     cursor: text; }
 
   :where(body.background-w-dark-color) {
-    cursor: url("../images/cursors/straight/dark/arrow.svg?v=744f3a17c6") 1 1, auto; }
+    cursor: url("../images/cursors/straight/dark/arrow.svg?v=09436a505c") 2 2, auto; }
   :where(body.background-w-dark-color) a,
   :where(body.background-w-dark-color) button,
   :where(body.background-w-dark-color) summary,
   :where(body.background-w-dark-color) label[for],
   :where(body.background-w-dark-color) [role="button"],
   :where(body.background-w-dark-color) tr[data-href] {
-    cursor: url("../images/cursors/straight/dark/hand.svg?v=744f3a17c6") 5 3, pointer; }
+    cursor: url("../images/cursors/straight/dark/hand.svg?v=09436a505c") 8 4, pointer; }
   :where(body.background-w-dark-color) #collapseMenu a:not([data-toggle]):not([target]),
   :where(body.background-w-dark-color) .site-title a,
   :where(body.background-w-dark-color) .footer-meta a:not(.post-edit-link):not(.gallery-edit-toggle):not([id^="download-all"]) {
-    cursor: url("../images/cursors/straight/dark/folder.svg?v=744f3a17c6") 3 5, pointer; }
+    cursor: url("../images/cursors/straight/dark/folder.svg?v=09436a505c") 4 8, pointer; }
   :where(body.background-w-dark-color) a[target="_blank"],
   :where(body.background-w-dark-color) a[href^="mailto:"],
   :where(body.background-w-dark-color) a[rel~="external"] {
-    cursor: url("../images/cursors/straight/dark/external.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/external.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) a[rel="prev"],
   :where(body.background-w-dark-color) a.pagination__previous {
-    cursor: url("../images/cursors/straight/dark/previous.svg?v=744f3a17c6") 2 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/previous.svg?v=09436a505c") 3 22, pointer; }
   :where(body.background-w-dark-color) a[rel="next"],
   :where(body.background-w-dark-color) a.pagination__next {
-    cursor: url("../images/cursors/straight/dark/next.svg?v=744f3a17c6") 26 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/next.svg?v=09436a505c") 40 22, pointer; }
   :where(body.background-w-dark-color) a[data-opens="film"],
   :where(body.background-w-dark-color) tr[data-opens="film"] {
-    cursor: url("../images/cursors/straight/dark/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) a[data-opens="mix"],
   :where(body.background-w-dark-color) tr[data-opens="mix"] {
-    cursor: url("../images/cursors/straight/dark/mix.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/mix.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) a[data-opens="set"],
   :where(body.background-w-dark-color) tr[data-opens="set"],
   :where(body.background-w-dark-color) .single-title-heading a {
-    cursor: url("../images/cursors/straight/dark/stack.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/stack.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) a[data-opens="single"],
   :where(body.background-w-dark-color) tr[data-opens="single"] {
-    cursor: url("../images/cursors/straight/dark/single.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/single.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) .hgallery--classic .hgallery__track {
-    cursor: url("../images/cursors/straight/dark/grab.svg?v=744f3a17c6") 14 15, grab; }
+    cursor: url("../images/cursors/straight/dark/grab.svg?v=09436a505c") 22 23, grab; }
   :where(body.background-w-dark-color) .hgallery--classic .hgallery__track.is-grabbing {
-    cursor: url("../images/cursors/straight/dark/grabbing.svg?v=744f3a17c6") 13 13, grabbing; }
+    cursor: url("../images/cursors/straight/dark/grabbing.svg?v=09436a505c") 20 19, grabbing; }
   :where(body.background-w-dark-color) .hgallery--still .hgallery__track {
-    cursor: url("../images/cursors/straight/dark/next.svg?v=744f3a17c6") 26 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/next.svg?v=09436a505c") 40 22, pointer; }
   :where(body.background-w-dark-color) .media .media__hit {
-    cursor: url("../images/cursors/straight/dark/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) .media.is-playing .media__hit {
-    cursor: url("../images/cursors/straight/dark/pause.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/pause.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) .film__hit {
-    cursor: url("../images/cursors/straight/dark/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) .media.is-playing .film__hit {
-    cursor: url("../images/cursors/straight/dark/pause.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/pause.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) .film__rail {
-    cursor: url("../images/cursors/straight/dark/scrub.svg?v=744f3a17c6") 14 14, ew-resize; }
+    cursor: url("../images/cursors/straight/dark/scrub.svg?v=09436a505c") 22 22, ew-resize; }
   :where(body.background-w-dark-color) .media--film:fullscreen.is-idle .film__hit,
   :where(body.background-w-dark-color) .media--film:fullscreen.is-idle .film__rail,
   :where(body.background-w-dark-color) .media--film.sim-fs.is-idle .film__hit,
   :where(body.background-w-dark-color) .media--film.sim-fs.is-idle .film__rail {
     cursor: none; }
   :where(body.background-w-dark-color) .env__wave {
-    cursor: url("../images/cursors/straight/dark/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) .media.is-playing .env__wave {
-    cursor: url("../images/cursors/straight/dark/pause.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/pause.svg?v=09436a505c") 22 22, pointer; }
   :where(body.background-w-dark-color) .env__wave.on-scrub {
-    cursor: url("../images/cursors/straight/dark/scrub.svg?v=744f3a17c6") 14 14, ew-resize; }
+    cursor: url("../images/cursors/straight/dark/scrub.svg?v=09436a505c") 22 22, ew-resize; }
   :where(body.background-w-dark-color) .gallery-lightbox a.lightbox-link,
   :where(body.background-w-dark-color) .intense {
-    cursor: url("../images/cursors/straight/dark/magnify.svg?v=744f3a17c6") 14 14, zoom-in; }
+    cursor: url("../images/cursors/straight/dark/magnify.svg?v=09436a505c") 22 22, zoom-in; }
   :where(body.background-w-dark-color) textarea,
   :where(body.background-w-dark-color) [contenteditable],
   :where(body.background-w-dark-color) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
@@ -6534,7 +6534,7 @@ div.pswp__img--placeholder,
 @media (hover: hover) and (pointer: fine) and (prefers-color-scheme: dark) {
   :where(body.white-darkmode),
   :where(body.tiagsssss-color) {
-    cursor: url("../images/cursors/straight/dark/arrow.svg?v=744f3a17c6") 1 1, auto; }
+    cursor: url("../images/cursors/straight/dark/arrow.svg?v=09436a505c") 2 2, auto; }
   :where(body.white-darkmode) a,
   :where(body.white-darkmode) button,
   :where(body.white-darkmode) summary,
@@ -6547,77 +6547,77 @@ div.pswp__img--placeholder,
   :where(body.tiagsssss-color) label[for],
   :where(body.tiagsssss-color) [role="button"],
   :where(body.tiagsssss-color) tr[data-href] {
-    cursor: url("../images/cursors/straight/dark/hand.svg?v=744f3a17c6") 5 3, pointer; }
+    cursor: url("../images/cursors/straight/dark/hand.svg?v=09436a505c") 8 4, pointer; }
   :where(body.white-darkmode) #collapseMenu a:not([data-toggle]):not([target]),
   :where(body.white-darkmode) .site-title a,
   :where(body.white-darkmode) .footer-meta a:not(.post-edit-link):not(.gallery-edit-toggle):not([id^="download-all"]),
   :where(body.tiagsssss-color) #collapseMenu a:not([data-toggle]):not([target]),
   :where(body.tiagsssss-color) .site-title a,
   :where(body.tiagsssss-color) .footer-meta a:not(.post-edit-link):not(.gallery-edit-toggle):not([id^="download-all"]) {
-    cursor: url("../images/cursors/straight/dark/folder.svg?v=744f3a17c6") 3 5, pointer; }
+    cursor: url("../images/cursors/straight/dark/folder.svg?v=09436a505c") 4 8, pointer; }
   :where(body.white-darkmode) a[target="_blank"],
   :where(body.white-darkmode) a[href^="mailto:"],
   :where(body.white-darkmode) a[rel~="external"],
   :where(body.tiagsssss-color) a[target="_blank"],
   :where(body.tiagsssss-color) a[href^="mailto:"],
   :where(body.tiagsssss-color) a[rel~="external"] {
-    cursor: url("../images/cursors/straight/dark/external.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/external.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) a[rel="prev"],
   :where(body.white-darkmode) a.pagination__previous,
   :where(body.tiagsssss-color) a[rel="prev"],
   :where(body.tiagsssss-color) a.pagination__previous {
-    cursor: url("../images/cursors/straight/dark/previous.svg?v=744f3a17c6") 2 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/previous.svg?v=09436a505c") 3 22, pointer; }
   :where(body.white-darkmode) a[rel="next"],
   :where(body.white-darkmode) a.pagination__next,
   :where(body.tiagsssss-color) a[rel="next"],
   :where(body.tiagsssss-color) a.pagination__next {
-    cursor: url("../images/cursors/straight/dark/next.svg?v=744f3a17c6") 26 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/next.svg?v=09436a505c") 40 22, pointer; }
   :where(body.white-darkmode) a[data-opens="film"],
   :where(body.white-darkmode) tr[data-opens="film"],
   :where(body.tiagsssss-color) a[data-opens="film"],
   :where(body.tiagsssss-color) tr[data-opens="film"] {
-    cursor: url("../images/cursors/straight/dark/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) a[data-opens="mix"],
   :where(body.white-darkmode) tr[data-opens="mix"],
   :where(body.tiagsssss-color) a[data-opens="mix"],
   :where(body.tiagsssss-color) tr[data-opens="mix"] {
-    cursor: url("../images/cursors/straight/dark/mix.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/mix.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) a[data-opens="set"],
   :where(body.white-darkmode) tr[data-opens="set"],
   :where(body.white-darkmode) .single-title-heading a,
   :where(body.tiagsssss-color) a[data-opens="set"],
   :where(body.tiagsssss-color) tr[data-opens="set"],
   :where(body.tiagsssss-color) .single-title-heading a {
-    cursor: url("../images/cursors/straight/dark/stack.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/stack.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) a[data-opens="single"],
   :where(body.white-darkmode) tr[data-opens="single"],
   :where(body.tiagsssss-color) a[data-opens="single"],
   :where(body.tiagsssss-color) tr[data-opens="single"] {
-    cursor: url("../images/cursors/straight/dark/single.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/single.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) .hgallery--classic .hgallery__track,
   :where(body.tiagsssss-color) .hgallery--classic .hgallery__track {
-    cursor: url("../images/cursors/straight/dark/grab.svg?v=744f3a17c6") 14 15, grab; }
+    cursor: url("../images/cursors/straight/dark/grab.svg?v=09436a505c") 22 23, grab; }
   :where(body.white-darkmode) .hgallery--classic .hgallery__track.is-grabbing,
   :where(body.tiagsssss-color) .hgallery--classic .hgallery__track.is-grabbing {
-    cursor: url("../images/cursors/straight/dark/grabbing.svg?v=744f3a17c6") 13 13, grabbing; }
+    cursor: url("../images/cursors/straight/dark/grabbing.svg?v=09436a505c") 20 19, grabbing; }
   :where(body.white-darkmode) .hgallery--still .hgallery__track,
   :where(body.tiagsssss-color) .hgallery--still .hgallery__track {
-    cursor: url("../images/cursors/straight/dark/next.svg?v=744f3a17c6") 26 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/next.svg?v=09436a505c") 40 22, pointer; }
   :where(body.white-darkmode) .media .media__hit,
   :where(body.tiagsssss-color) .media .media__hit {
-    cursor: url("../images/cursors/straight/dark/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) .media.is-playing .media__hit,
   :where(body.tiagsssss-color) .media.is-playing .media__hit {
-    cursor: url("../images/cursors/straight/dark/pause.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/pause.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) .film__hit,
   :where(body.tiagsssss-color) .film__hit {
-    cursor: url("../images/cursors/straight/dark/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) .media.is-playing .film__hit,
   :where(body.tiagsssss-color) .media.is-playing .film__hit {
-    cursor: url("../images/cursors/straight/dark/pause.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/pause.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) .film__rail,
   :where(body.tiagsssss-color) .film__rail {
-    cursor: url("../images/cursors/straight/dark/scrub.svg?v=744f3a17c6") 14 14, ew-resize; }
+    cursor: url("../images/cursors/straight/dark/scrub.svg?v=09436a505c") 22 22, ew-resize; }
   :where(body.white-darkmode) .media--film:fullscreen.is-idle .film__hit,
   :where(body.white-darkmode) .media--film:fullscreen.is-idle .film__rail,
   :where(body.white-darkmode) .media--film.sim-fs.is-idle .film__hit,
@@ -6629,18 +6629,18 @@ div.pswp__img--placeholder,
     cursor: none; }
   :where(body.white-darkmode) .env__wave,
   :where(body.tiagsssss-color) .env__wave {
-    cursor: url("../images/cursors/straight/dark/play.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/play.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) .media.is-playing .env__wave,
   :where(body.tiagsssss-color) .media.is-playing .env__wave {
-    cursor: url("../images/cursors/straight/dark/pause.svg?v=744f3a17c6") 14 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/pause.svg?v=09436a505c") 22 22, pointer; }
   :where(body.white-darkmode) .env__wave.on-scrub,
   :where(body.tiagsssss-color) .env__wave.on-scrub {
-    cursor: url("../images/cursors/straight/dark/scrub.svg?v=744f3a17c6") 14 14, ew-resize; }
+    cursor: url("../images/cursors/straight/dark/scrub.svg?v=09436a505c") 22 22, ew-resize; }
   :where(body.white-darkmode) .gallery-lightbox a.lightbox-link,
   :where(body.white-darkmode) .intense,
   :where(body.tiagsssss-color) .gallery-lightbox a.lightbox-link,
   :where(body.tiagsssss-color) .intense {
-    cursor: url("../images/cursors/straight/dark/magnify.svg?v=744f3a17c6") 14 14, zoom-in; }
+    cursor: url("../images/cursors/straight/dark/magnify.svg?v=09436a505c") 22 22, zoom-in; }
   :where(body.white-darkmode) textarea,
   :where(body.white-darkmode) [contenteditable],
   :where(body.white-darkmode) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
@@ -6665,24 +6665,24 @@ div.pswp__img--placeholder,
 @media (hover: hover) and (pointer: fine) {
   body > figure[style*="z-index: 999999"],
   body > figure[style*="z-index: 999999"] * {
-    cursor: url("../images/cursors/straight/dark/close.svg?v=744f3a17c6") 14 14, zoom-out !important; }
+    cursor: url("../images/cursors/straight/dark/close.svg?v=09436a505c") 22 22, zoom-out !important; }
   body .pswp .pswp__scroll-wrap,
   body .pswp .pswp__item,
   body .pswp .pswp__zoom-wrap {
-    cursor: url("../images/cursors/straight/light/close.svg?v=744f3a17c6") 14 14, zoom-out; }
+    cursor: url("../images/cursors/straight/light/close.svg?v=09436a505c") 22 22, zoom-out; }
   body .pswp .pswp__img {
-    cursor: url("../images/cursors/straight/light/next.svg?v=744f3a17c6") 26 14, pointer; }
+    cursor: url("../images/cursors/straight/light/next.svg?v=09436a505c") 40 22, pointer; }
   body .pswp.pswp--img-left .pswp__img {
-    cursor: url("../images/cursors/straight/light/previous.svg?v=744f3a17c6") 2 14, pointer; } }
+    cursor: url("../images/cursors/straight/light/previous.svg?v=09436a505c") 3 22, pointer; } }
 @media (hover: hover) and (pointer: fine) and (prefers-color-scheme: dark) {
   body .pswp .pswp__scroll-wrap,
   body .pswp .pswp__item,
   body .pswp .pswp__zoom-wrap {
-    cursor: url("../images/cursors/straight/dark/close.svg?v=744f3a17c6") 14 14, zoom-out; }
+    cursor: url("../images/cursors/straight/dark/close.svg?v=09436a505c") 22 22, zoom-out; }
   body .pswp .pswp__img {
-    cursor: url("../images/cursors/straight/dark/next.svg?v=744f3a17c6") 26 14, pointer; }
+    cursor: url("../images/cursors/straight/dark/next.svg?v=09436a505c") 40 22, pointer; }
   body .pswp.pswp--img-left .pswp__img {
-    cursor: url("../images/cursors/straight/dark/previous.svg?v=744f3a17c6") 2 14, pointer; } }
+    cursor: url("../images/cursors/straight/dark/previous.svg?v=09436a505c") 3 22, pointer; } }
 
 #collapseMenu {
   position: fixed;
@@ -6785,13 +6785,13 @@ div.pswp__img--placeholder,
     vertical-align: top; }
   #site-header .menu-folder {
     display: block;
-    width: 28px;
-    height: 28px;
+    width: 43px;
+    height: 43px;
     overflow: visible; }
     #site-header .menu-folder path {
       fill: url(#menu-folder-paper);
       stroke: var(--tg-ink);
-      stroke-width: 1.2857;
+      stroke-width: 1.2999348837;
       stroke-linejoin: round;
       stroke-linecap: round; }
   #site-header .menu-folder__paper-bottom {
@@ -6805,7 +6805,7 @@ div.pswp__img--placeholder,
     transition: transform 0.35s cubic-bezier(0.45, 0, 0.2, 1); }
     #site-header .menu-folder__front path {
       vector-effect: non-scaling-stroke;
-      stroke-width: 1px; }
+      stroke-width: 1.5527px; }
     @media (prefers-reduced-motion: reduce) {
       #site-header .menu-folder__front {
         transition: none; } }
