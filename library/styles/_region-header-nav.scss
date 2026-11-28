@@ -119,12 +119,6 @@
     position: fixed;
   }
 
-  .slicknav_menutxt {
-    display: none;
-  }
-  .slicknav_nav.slicknav_hidden {
-    display: block!important;
-  }
   .topbar-left  {
     @include header-side-offset(left);
     max-width: 66vw; // the old col-32 width, so long hover labels wrap the same way
@@ -148,8 +142,7 @@
     // title's baseline; with the body's 1.5 it sat ~6px lower (visible on phones).
     line-height: 1.2;
   }
-  #topbar,
-  .slicknav_nav {
+  #topbar {
     text-align: right;
     a {
       text-align: right;
@@ -209,9 +202,6 @@
     transform: skewX(16deg) scale(.9, .5);
   }
 
-  .header-other-pages-title {
-    display: none!important;
-  }
 }
 
 // A single work on a phone (body.header-entry-title, set by library/page-title/):
@@ -272,59 +262,11 @@
   }
 }
 
-// --------------------------------------------------
-// Light background color overrides
-// --------------------------------------------------
-
-.background-w-light-color {
-  #site-header {
-    // NOTE: title (.topbar-left) + Reveal word (#topbar) are intentionally not
-    // colored here — the header's mix-blend-mode: difference inverts them vs the backdrop.
-    @media (max-width: map-get($grid-breakpoints, md)) {
-      .slicknav_menu {
-        .slicknav_btn {
-          .slicknav_menutxt {
-            color: $dark;
-          }
-        }
-        .slicknav_nav {
-          a {
-            color: $dark;
-          }
-          .slicknav_row:hover {
-            color: $dark;
-          }
-        }
-        * {
-          box-sizing: border-box;
-        }
-      }
-    }
-      .slicknav_nav {
-            a, h1, .site-title {
-              color: $dark;
-            }
-      }
-  }
-}
 
 // --------------------------------------------------
 // Default color overrides (tiagsssss-color / white-darkmode)
 // --------------------------------------------------
 
-.tiagsssss-color, .white-darkmode {
-  #site-header {
-    // Title (.topbar-left) + Reveal word (#topbar) use mix-blend-mode instead.
-    .slicknav_nav {
-      a, h1, .site-title {
-        color: $dark;
-        @media (prefers-color-scheme: dark) {
-          color: $white;
-        }
-      }
-    }
-  }
-}
 
 .tiagsssss-color, .white-darkmode {
   #collapseMenu {
@@ -342,8 +284,7 @@
 // --------------------------------------------------
 
 // Make text white for dark color backgrounds
-.background-w-dark-color,
-.background-w-dark-color-header {
+.background-w-dark-color {
   a, h1, .site-title {
     color: $white;
   }
@@ -352,7 +293,6 @@
 // Link hover for header and menu elements: underline only, no colour change
 body #site-header #topbar a:hover,
 body #site-header .topbar-left a:hover,
-body #site-header .slicknav_nav a:hover,
 body #lower-header a:hover,
 body #collapseMenu a:hover {
   text-decoration: underline;

@@ -34,28 +34,8 @@
     height: 100%;
   }
 
-  // iPhone native player (manifest-subs films skip Plyr entirely there —
-  // see init-hls.js). The raw <video> must fill the 16:9 box itself.
-  video.film-player--native {
-    height: 100%;
-    width: 100%;
-    background: #000;
-  }
 }
 
-.player {
-  .captions {
-    >span {
-      font-size: 0.9em !important;
-      color: $yellow !important;
-      line-height: 1.3em;
-      margin-bottom: 0.8em;
-      background: none;
-      border-radius: 0px;
-      padding: 0.2em .3em .3em;
-    }
-  }
-}
 
 // --------------------------------------------------
 // Single content base styles
@@ -422,111 +402,10 @@
   }
 }
 
-// The second .tiagsssss-color block is the canonical one (overrides the first above)
-.tiagsssss-color {
-  .single-content {
-    footer {
-      ul {
-        li {
-          a {
-            color: $tiagsssss-color;
-            background-color: $white;
-            @include transition(all 1s ease-out);
-            &:hover {
-              color: $white;
-              background-color: $tiagsssss-color;
-              @include transition(all 1s ease-out);
-            }
-          }
-        }
-      }
-    }
-  }
-}
 
-.indigo {
-  .single-content {
-    footer {
-      ul {
-        li {
-          a {
-            color: $indigo;
-            background-color: $white;
-            @include transition(all 1s ease-out);
-            &:hover {
-              color: $white;
-              background-color: $indigo;
-              @include transition(all 1s ease-out);
-            }
-          }
-        }
-      }
-    }
-  }
-}
 
-.blue {
-  .single-content {
-    footer {
-      ul {
-        li {
-          a {
-            color: $blue;
-            background-color: $white;
-            @include transition(all 1s ease-out);
-            &:hover {
-              color: $white;
-              background-color: $blue;
-              @include transition(all 1s ease-out);
-            }
-          }
-        }
-      }
-    }
-  }
-}
 
-.lime {
-  .single-content {
-    footer {
-      ul {
-        li {
-          a {
-            color: $lime;
-            background-color: $dark;
-            @include transition(all 1s ease-out);
-            &:hover {
-              color: $dark;
-              background-color: $lime;
-              @include transition(all 1s ease-out);
-            }
-          }
-        }
-      }
-    }
-  }
-}
 
-.yellow {
-  .single-content {
-    footer {
-      ul {
-        li {
-          a {
-            color: $yellow;
-            background-color: $dark;
-            @include transition(all 1s ease-out);
-            &:hover {
-              color: $dark;
-              background-color: $yellow;
-              @include transition(all 1s ease-out);
-            }
-          }
-        }
-      }
-    }
-  }
-}
 
 
 // --------------------------------------------------

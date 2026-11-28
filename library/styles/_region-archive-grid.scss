@@ -15,22 +15,6 @@
 // Index block padding
 // --------------------------------------------------
 
-// Side padding matching viewport/gutter constraints
-.index-block, .container {
-  padding-left: $grid-gutter-width-mobile;
-  padding-right: $grid-gutter-width-mobile;
-  @media (min-width: map-get($grid-breakpoints, lg)) {
-      padding-left: $grid-gutter-width;
-      padding-right: $grid-gutter-width;
-  }
-}
-
-.yarpp-related{
-    .index-block{
-        padding-top: 0;
-    }
-}
-
 // --------------------------------------------------
 // Year separator
 // --------------------------------------------------
@@ -96,6 +80,9 @@
   .archive-navigation{
     display: none!important;
   }
+  .index-block{
+    padding-top: 0;
+  }
 }
 
 // Masonry fix: zero-height sizer prevents layout jump on load
@@ -106,7 +93,7 @@
 }
 
 // Side padding matching viewport/gutter constraints
-.side-padding, .container {
+.index-block, .side-padding, .container {
   padding-left: $grid-gutter-width-mobile;
   padding-right: $grid-gutter-width-mobile;
   @media (min-width: map-get($grid-breakpoints, lg)) {
@@ -205,7 +192,7 @@ li.masonry-item {
     .nav-previous {
       float: right;
     }
-  .nav-previous, .nav-next, .more-sets {
+  .nav-previous, .nav-next {
     a {
       color: $black;
       font-family: $font-family-menu;
@@ -221,7 +208,7 @@ li.masonry-item {
 
 .background-w-dark-color {
   .archive-navigation {
-    .nav-previous, .nav-next, .more-sets {
+    .nav-previous, .nav-next {
       a {
         color: $white;
       }

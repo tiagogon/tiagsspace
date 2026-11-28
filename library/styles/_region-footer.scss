@@ -45,47 +45,6 @@
       }
     }
   }
-  .email-form {
-    margin-bottom: 40px;
-    form {
-      margin-bottom: 10px;
-      input.input-field {
-        width: 240px;
-        max-width: 64%;
-        background: $white;
-        color: $tiagsssss-color;
-        padding: 8px 12px;
-        border-width: 0px;
-        border-style: inset;
-        border-color: $white;
-        border-image: initial;
-        font-size: 16px;
-        margin-bottom: 10px;
-        text-align: center;
-        @media (min-width: map-get($grid-breakpoints, sm)) {
-          margin-bottom: 0px;
-        }
-      }
-      input.input-field::placeholder {
-        color: $tiagsssss-color;
-        font-size: 16px;
-      }
-      input.input-button {
-        background: $tiagsssss-color;
-        color: $white;
-        padding: 8px 12px;
-        border-width: 0px;
-        border-style: inset;
-        border-color: $white;
-        border-image: initial;
-        font-size: 16px;
-        border-radius: 0px;
-      }
-    }
-    p {
-      font-size: 12px;
-    }
-  }
 }
 
 
@@ -129,23 +88,6 @@
         li {
           a {
             color: $white;
-          }
-        }
-      }
-      .email-form{
-        form{
-          input.input-field{
-            background: $white;
-            color: $tiagsssss-color;
-            border-color: $tiagsssss-color;
-          }
-          input.input-field::placeholder {
-            color: $tiagsssss-color;
-          }
-          input.input-button{
-            background: $white;
-            color: $tiagsssss-color;
-            border-color: $tiagsssss-color;
           }
         }
       }

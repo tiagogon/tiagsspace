@@ -14,6 +14,9 @@
 // something references are kept, below. bin/css-class-usage.py lists every
 // Bootstrap class the theme, the front-end plugins and the posts reference; run
 // it before removing one, and a cosmetic class that becomes needed is one line here.
+// Some classes are built in PHP from a variable, which a word search cannot see:
+// library/page-title/render.php prints d-{sm,md,lg,xl}-inline / -none (the short and
+// long forms of a crumb), so the display utilities must stay whole.
 //
 // Bootstrap's order is kept (align, borders, clearfix, display, embed, flex, float,
 // position, screen readers, shadows, sizing, spacing, text, visibility): two

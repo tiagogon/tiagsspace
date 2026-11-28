@@ -43,10 +43,12 @@ VENDOR = re.compile(
     r'^library/(bootstrap|players)/|^library/js/(plyr|photoswipe|hls|masonry|bootstrap|intense|'
     r'infinite-scroll\.pkgd|jquery|sortable)|cursors/test|^tumblr/')
 
-# Class families built in PHP from numbers (a word search cannot see them).
+# Class families built in PHP from variables (a word search cannot see them).
 DYNAMIC = [
     (r'^col-(sm-|md-|lg-)?([1-9]|[1-3][0-9]|4[0-8])$',
      'template-parts/gallery-item.php, entry-gallery.php (sizer), archive-grid.php'),
+    (r'^d-(sm|md|lg|xl)-(inline|none)$',
+     'library/page-title/render.php: short / long crumb forms, "responsive" breakpoint'),
 ]
 
 BOOTSTRAP_CLASS = re.compile(

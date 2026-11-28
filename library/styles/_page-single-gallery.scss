@@ -56,7 +56,6 @@ div.gallery {
   div.thumbnail{
   	float: left;
     -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
       box-sizing: border-box;
     display:inline-block;
 		figure{
@@ -226,7 +225,6 @@ div.thumbnail {
 				opacity: 0.8;
 				-webkit-animation: scale 3s infinite; /* Chrome, Safari, Opera */
 				animation: scale 3s infinite;
-				-ms-transform: scale(1.2); /* IE 9 */
 				-webkit-transform: scale(1.2); /* Chrome, Safari, Opera */
 				transform: scale(1.2);
 				-webkit-animation-direction: alternate; /* Chrome, Safari, Opera */
@@ -239,12 +237,10 @@ div.thumbnail {
 
 @keyframes scale {
   0% {
-  	-ms-transform: scale(1); /* IE 9 */
   	-webkit-transform: scale(1); /* Chrome, Safari, Opera */
     transform: scale(1);
   }
   100% {
-  	-ms-transform: scale(1.2); /* IE 9 */
   	-webkit-transform: scale(1.2); /* Chrome, Safari, Opera */
     transform: scale(1.2);
   }
