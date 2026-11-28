@@ -46,7 +46,7 @@
     .single-title {
       margin-top: 0;
       margin-bottom: $grid-gutter-width;
-      font-size: $font-size-heading;
+      font-size: $font-size;
       font-weight: 500; // Bootstrap heading defaults, kept now that the wrapper is a <div>
       line-height: 1.2;
       color: var(--tg-ink);
@@ -87,7 +87,7 @@
     }
   }
   section.post-content {
-    font-size: $font-size-content; // prose in posts + pages; title/meta stay at $font-size-heading
+    font-size: $font-size-content; // prose in posts + pages; title/meta stay at $font-size
     p {
       color: var(--tg-ink);
       a {
@@ -154,7 +154,7 @@
 // here only. Listings' entry titles keep the title size (they have no date line, no footer).
 .single-content .page-header .single-title.entry-date,
 .single-content footer {
-  font-size: $font-size-entry-meta;
+  font-size: $font-size-small;
 }
 // Log archive: smaller title on mobile
 @media (max-width: map-get($grid-breakpoints, sm)) {
@@ -162,7 +162,7 @@
     .single-content {
       .page-header {
         .single-title {
-          font-size: $font-size-p;
+          font-size: $font-size;
         }
       }
     }
@@ -299,7 +299,7 @@
     span {
       a {
         font-family: $font-family-headings;
-        font-size: $font-size-heading;
+        font-size: $font-size;
         line-height: 1.3;
         color: var(--tg-ink);
         background-color: transparent;

@@ -48,7 +48,7 @@
   bottom: -6px;
   width: var(--p-line);
   margin-left: calc(var(--p-line) / -2);
-  background: #fff;
+  background: $white;
   mix-blend-mode: difference;
   opacity: 0;
   pointer-events: none;

@@ -20,7 +20,7 @@
 // --------------------------------------------------
 
 .year-separator {
-  font-size: $font-size-heading;
+  font-size: $font-size;
   font-family: $font-family-headings;
   @media (prefers-color-scheme: dark) {
     color: $white;
@@ -52,7 +52,7 @@
     }
     h3 {
         color: $dark;
-        font-size: $font-size-heading;
+        font-size: $font-size;
         line-height: 1.3;
         background-color: transparent;
         display: inline-block;
@@ -194,9 +194,9 @@ li.masonry-item {
     }
   .nav-previous, .nav-next {
     a {
-      color: $black;
+      color: $dark;
       font-family: $font-family-menu;
-      font-size: $font-size-heading;
+      font-size: $font-size;
       line-height: 1.3;
       @media (prefers-color-scheme: dark) {
         color: $white;

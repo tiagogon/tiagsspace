@@ -28,8 +28,8 @@
         }
         li {
           margin-left: none;
-          margin-bottom: $font-size-heading/2;
-          font-size: $font-size-menu;
+          margin-bottom: $font-size/2;
+          font-size: $font-size;
           .active {
             text-decoration: underline;
           }
@@ -123,7 +123,7 @@
     @include header-side-offset(left);
     max-width: 66vw; // the old col-32 width, so long hover labels wrap the same way
     h1, .site-title, a {
-      font-size: $font-size-nav;
+      font-size: $font-size;
       font-family: $font-family-menu;
       color: $white; // blend base — inverted by the block's mix-blend-mode
     }
@@ -151,14 +151,14 @@
       display: inline-block;
       outline: none;
       color: $white;
-      font-size: $font-size-nav;
+      font-size: $font-size;
       margin-left: 13px;
       line-height: inherit; // 1.2 from #topbar — keeps the baseline level with the title
     }
   }
 
   // The menu icon (header.php): the folder cursor, drawn on the cursors' 36-unit grid at 28px
-  // with their 1.5px line. Centred in the title's line box ($font-size-nav × 1.2), so it sits level with
+  // with their 1.5px line. Centred in the title's line box ($font-size × 1.2), so it sits level with
   // the words on the left; 8px of padding each side makes a 44px-wide target without moving it.
   // Line = currentColor (white, inverted by #topbar's difference blend like the words); inside
   // = black, which difference leaves unchanged: it reads as empty, yet hides the back's lines
@@ -167,7 +167,7 @@
   #topbar .menu-toggle {
     display: inline-flex;
     align-items: center;
-    height: $font-size-nav * 1.2;
+    height: $font-size * 1.2;
     padding: 0 8px;
     margin-right: -8px;
     vertical-align: top;
@@ -178,7 +178,7 @@
     height: 28px;
     overflow: visible;
     path {
-      fill: #000;
+      fill: $dark;
       stroke: currentColor;
       stroke-width: 1.9286;
       stroke-linejoin: round;
@@ -254,7 +254,7 @@
       max-width: none;
       flex: none;
       h1, .site-title, a {
-        font-size: $font-size-nav;
+        font-size: $font-size;
         font-family: $font-family-menu;
         color: $white; // blend base — inverted by the bar's mix-blend-mode
       }

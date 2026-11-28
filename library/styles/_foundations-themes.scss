@@ -25,21 +25,21 @@
 // --------------------------------------------------
 
 :where(body) {
-  --tg-ink: #000;
-  --tg-paper-bottom: #{$grey-light-cold-vibe-contrast};
-  --tg-paper-top: #{$grey-light-cold-vibe};
+  --tg-ink: #{$dark};
+  --tg-paper-bottom: #{$tiagsssss-color-bottom};
+  --tg-paper-top: #{$tiagsssss-color};
 }
 :where(body.background-w-dark-color) {
-  --tg-ink: #fff;
-  --tg-paper-bottom: #{$dark-lighten-vibe-contrast};
-  --tg-paper-top: #{$dark-lighten-vibe};
+  --tg-ink: #{$white};
+  --tg-paper-bottom: #{$tiagsssss-color-darkmode-bottom};
+  --tg-paper-top: #{$tiagsssss-color-darkmode};
 }
 @media (prefers-color-scheme: dark) {
   :where(body.white-darkmode),
   :where(body.tiagsssss-color) {
-    --tg-ink: #fff;
-    --tg-paper-bottom: #{$dark-lighten-vibe-contrast};
-    --tg-paper-top: #{$dark-lighten-vibe};
+    --tg-ink: #{$white};
+    --tg-paper-bottom: #{$tiagsssss-color-darkmode-bottom};
+    --tg-paper-top: #{$tiagsssss-color-darkmode};
   }
 }
 
@@ -61,7 +61,7 @@
 html {
   background: $white;
   @media (prefers-color-scheme: dark) {
-    background: $white-darkmode;
+    background: $dark;
   }
 }
 
@@ -104,7 +104,7 @@ body.background-w-dark-color {
 .white-darkmode {
   background: $white;
   @media (prefers-color-scheme: dark) {
-    background: $white-darkmode;
+    background: $dark;
   }
 }
 

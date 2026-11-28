@@ -29,7 +29,7 @@
   outline: none;
 }
 .media__hit:focus-visible {
-  outline: var(--p-line) solid #fff;
+  outline: var(--p-line) solid $white;
   outline-offset: -4px;
 }
 // The browser's own controls, only when the module could not start (.is-native)
@@ -65,7 +65,7 @@
 }
 .media--film:fullscreen,
 .media--film.sim-fs {
-  background: #000;
+  background: $dark;
 }
 .media--film.sim-fs {
   position: fixed;
@@ -138,7 +138,7 @@
 .film__time {
   flex: 1;
   font-variant-numeric: tabular-nums; // every digit the same width: the time never shifts while counting (Tiago, 24 Nov)
-  color: #fff;
+  color: $white;
   mix-blend-mode: difference;
   font-size: var(--p-time);
   line-height: 1;
@@ -180,7 +180,7 @@
   right: 0;
   bottom: 0;
   height: var(--p-line);
-  background: linear-gradient(to right, #fff var(--p, 0%), rgba(255, 255, 255, .32) var(--p, 0%));
+  background: linear-gradient(to right, $white var(--p, 0%), rgba(255, 255, 255, .32) var(--p, 0%));
   mix-blend-mode: difference;
   opacity: 0;
   transition: opacity .2s;
@@ -216,14 +216,14 @@ html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__snd {
 }
 .film__snd-hollow {
   fill: none;
-  stroke: #fff;
+  stroke: $white;
   stroke-width: 1.5;
   stroke-linejoin: round;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
 }
 .film__snd-filled {
-  fill: #fff;
+  fill: $white;
   stroke: none;
   clip-path: inset(0 calc(100% - var(--p, 0%)) 0 0);
 }
@@ -234,7 +234,7 @@ html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__snd {
   height: calc(var(--p-sound) + 6px);
   width: var(--p-line);
   margin-left: calc(var(--p-line) / -2);
-  background: #fff;
+  background: $white;
   mix-blend-mode: difference;
   opacity: 0;
   pointer-events: none;
@@ -319,7 +319,7 @@ html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__chrome {
   box-sizing: border-box;
   border: calc(var(--u) * 1.9286) solid #16161b;
   background: linear-gradient(to top, #1d1a17, #16161b);
-  color: #fff;
+  color: $white;
   overflow: hidden;
   z-index: 3;
   display: none;
@@ -329,7 +329,7 @@ html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__chrome {
   display: block;
 }
 .cc-menu.grown {
-  border-color: #fff;
+  border-color: $white;
   transition: width .34s var(--p-rise), height .34s var(--p-rise), border-color .2s .1s;
 }
 .cc-list {

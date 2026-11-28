@@ -11,21 +11,18 @@
 // Colors
 // --------------------------------------------------
 
+// One name per colour.
 $white:                   #fff;
-$dark:                    #000;
-$white-darkmode:          $dark;
+$dark:                    #000;   // black: text, and the dark pages' background
 
-// Index page vibe greys (feed the $tiagsssss-color tokens below)
-$grey-light-cold-vibe:            #E3E5F2; // rgba(227,229,242,1)
-$grey-light-cold-vibe-contrast:   #F2EFE3; // rgba(242,239,227,1)
-$dark-lighten-vibe:               #16161b; // rgba(22,22,27,1)
-$dark-lighten-vibe-contrast:      #1d1a17; // rgba(29,26,23,1)
-
-// Main page index colors and gradients
-$tiagsssss-color:                   $grey-light-cold-vibe;
-$tiagsssss-color-gradient:          linear-gradient(0deg, $grey-light-cold-vibe-contrast 0%, $grey-light-cold-vibe 100%);
-$tiagsssss-color-darkmode:          $dark-lighten-vibe;
-$tiagsssss-color-darkmode-gradient: linear-gradient(0deg, $dark-lighten-vibe-contrast 0%, $dark-lighten-vibe 100%);
+// The page gradient (archives, home, Index): light, and its dark-scheme version.
+// It runs bottom to top; the plain colour is the top, used where a gradient cannot be.
+$tiagsssss-color:                   #E3E5F2; // rgba(227,229,242,1), top
+$tiagsssss-color-bottom:            #F2EFE3; // rgba(242,239,227,1)
+$tiagsssss-color-darkmode:          #16161b; // rgba(22,22,27,1), top
+$tiagsssss-color-darkmode-bottom:   #1d1a17; // rgba(29,26,23,1)
+$tiagsssss-color-gradient:          linear-gradient(0deg, $tiagsssss-color-bottom 0%, $tiagsssss-color 100%);
+$tiagsssss-color-darkmode-gradient: linear-gradient(0deg, $tiagsssss-color-darkmode-bottom 0%, $tiagsssss-color-darkmode 100%);
 
 
 // --------------------------------------------------
@@ -37,22 +34,15 @@ $font-family-base:       "Lora", serif;
 $font-family-headings:   $font-family-base;
 $font-family-menu:       $font-family-base;
 
-// The type scale: every font size in the theme is one of these steps. Change a
-// size here, once. (Merging two steps changes the look: decide it on the site.)
-$font-size:          30px;   // titles and chrome: header, nav, menu, index, post titles, lightbox loading text
+// The type scale: every font size in the theme is one of these steps, one name each.
+// Change a size here, once. (Merging two steps changes the look: decide it on the site.)
+$font-size:          30px;   // titles and chrome: header, menu, nav, Index, entry titles, prev/next, lightbox loading text
 $font-size-content:  22px;   // body default, prose inside posts and pages (section.post-content), the players' time
 $font-size-small:    18px;   // a work's date line, its "+" and the details it opens; footer: social block
 $font-size-caption:  16px;   // footer: attribution text
 $font-size-label:    14px;   // gallery figcaptions, lightbox title
 $font-size-meta:     12px;   // post meta line, the Index table on phones
 $font-size-micro:    11px;   // tag pills in a post's footer
-
-// Roles that follow the title size. Kept as names so one role can change alone.
-$font-size-p:       $font-size;
-$font-size-heading: $font-size;
-$font-size-nav:     $font-size;
-$font-size-menu:    $font-size;
-$font-size-entry-meta: $font-size-small;   // date line + "+" + expanded details (_page-single-content.scss)
 
 // Line height of body text and post prose (Bootstrap's reboot reads this name too).
 $line-height-base: 1.4;
@@ -65,9 +55,9 @@ $headings-font-weight: 400;   // titles stay regular weight
 // Body & link colors
 // --------------------------------------------------
 
-$body-color:            #000;
+$body-color:            $dark;
 
-$link-color:            #000;
+$link-color:            $dark;
 // `none` is not a colour: browsers drop reboot's `a:hover { color }`, so a hovered link
 // keeps its own colour (the white links on dark pages stay white). Bootstrap's default,
 // a darker $link-color, would turn every hovered link black. Keep it.
