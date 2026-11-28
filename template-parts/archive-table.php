@@ -6,7 +6,7 @@
  */
 
 // Post types to query
-$table_post_types = array( 'post', 'films', 'dusk', 'hyper', '4k-lento', 'log', 'cidade', 'campo', 'events' );
+$table_post_types = array( 'post', 'films', 'dusk', 'hyper', 'strings', '4k-lento', 'log', 'cidade', 'campo', 'events' );
 
 // Query all posts (exclude hidden from archives)
 $table_query = new WP_Query( array(

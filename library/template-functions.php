@@ -65,6 +65,7 @@ function tiagsspace_series_name( $post_type, $context = 'archive' ) {
     $names = array(
         'dusk'      => array( 'archive' => 'Dusk Series',    'single' => 'Dusk Series' ),
         'hyper'     => array( 'archive' => 'Hyper Series',   'single' => 'Hyper Series' ),
+        'strings'   => array( 'archive' => 'Strings Series', 'single' => 'Strings Series' ),
         'cidade'    => array( 'archive' => 'Cidade Series',  'single' => 'Cidade Series' ),
         'campo'     => array( 'archive' => 'Campo Series',   'single' => 'Campo Series' ),
         '4k-lento'  => array( 'archive' => '4K Lento Mixes', 'single' => '4K Lento Mix' ),
@@ -93,6 +94,7 @@ function tiagsspace_series_ui_name( $post_type, $context = 'archive' ) {
     $plain = array(
         'dusk'   => 'Dusk',
         'hyper'  => 'Hyper',
+        'strings' => 'Strings',
         'cidade' => 'Cidade',
         'campo'  => 'Campo',
     );
@@ -251,7 +253,7 @@ function color_background_parameters ($parameter) {
 
 	global $post;
 
-	if (is_singular( 'hyper' )) {
+	if (is_singular( array( 'hyper', 'strings' ) )) {
 			$background_color_class = 'white-darkmode';
 	} elseif (is_singular( 'dusk' )) {
 			$background_color_class = 'white-darkmode';

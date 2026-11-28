@@ -34,10 +34,11 @@ return array(
 
     // The short form of a series name: the part that is always shown; the rest
     // of the name ("Mixes", "Mix") only from the responsive breakpoint up. Where the
-    // UI name is the short form itself (Dusk, Hyper, Cidade, Campo) nothing is added.
+    // UI name is the short form itself (Dusk, Hyper, Strings, Cidade, Campo) nothing is added.
     'short' => array(
         'dusk'      => 'Dusk',
         'hyper'     => 'Hyper',
+        'strings'   => 'Strings',
         'cidade'    => 'Cidade',
         'campo'     => 'Campo',
         '4k-lento'  => '4K Lento',

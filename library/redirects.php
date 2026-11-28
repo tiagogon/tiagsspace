@@ -141,7 +141,7 @@ function tiagsspace_redirect_old_slug_keys() {
 
 /** Post types whose old slugs are looked up. */
 function tiagsspace_redirect_series_types() {
-	return array( 'cidade', 'campo', 'dusk', 'hyper' );
+	return array( 'cidade', 'campo', 'dusk', 'hyper', 'strings' );
 }
 
 /**
@@ -255,7 +255,7 @@ add_action( 'template_redirect', function () {
 	// Campo): /dusk/<slug>/ → /cidade/<slug>/. The series are tiagsspace_redirect_series_types().
 	$series = tiagsspace_redirect_series_types();
 	if ( preg_match( '#^/(' . implode( '|', $series ) . ')/([^/]+)/?$#', $bare, $m ) ) {
-		$moved = get_posts( array(
+		$moved_args = array(
 			'post_type'        => array_values( array_diff( $series, array( $m[1] ) ) ),
 			'post_status'      => 'publish',
 			'name'             => sanitize_title( rawurldecode( $m[2] ) ),
@@ -263,7 +263,17 @@ add_action( 'template_redirect', function () {
 			'numberposts'      => 1,
 			'no_found_rows'    => true,
 			'suppress_filters' => true,
+		);
+		// First the set that was moved out of this very series (move-sets.php stores
+		// `_tiagsspace_moved_from`): another series may have its own set with the same
+		// slug (Dusk's "tilia" and the Tilia moved from Hyper to Strings). Then any set
+		// with that slug in another series (moves made before the meta existed).
+		$moved = get_posts( $moved_args + array(
+			'meta_query' => array( array( 'key' => '_tiagsspace_moved_from', 'value' => $m[1] ) ),
 		) );
+		if ( ! $moved ) {
+			$moved = get_posts( $moved_args );
+		}
 		if ( $moved ) {
 			tiagsspace_redirect_to( get_permalink( $moved[0] ), 301 );
 		}

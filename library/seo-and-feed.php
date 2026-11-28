@@ -104,7 +104,7 @@ function wptuts_feedimgs($content) {
             // get images atached to the post
             $content =  $imageshtml;
 
-        } elseif ($post_type == 'hyper' OR $post_type == '4k-lento') {
+        } elseif ($post_type == 'hyper' OR $post_type == 'strings' OR $post_type == '4k-lento') {
 
             $imageshtml = '<a href="'. get_permalink($post->ID) .'" class="webfeedsFeaturedVisual"><img src="'. wp_get_attachment_url( get_post_thumbnail_id($post->ID) ).'"/></a>
                     <p>view the complete set <a href="'. get_permalink($post->ID) .'">here</a>.</p>';
@@ -176,7 +176,7 @@ if ( ! defined( 'TIAGSSPACE_AI_POLICY_URL' ) ) {
 /** Public post types that carry archive material (used for share images,
  *  the label variable and the language field). */
 function tiagsspace_seo_post_types() {
-    return array( 'post', 'dusk', 'films', 'log', 'hyper', 'cidade', 'campo', '4k-lento' );
+    return array( 'post', 'dusk', 'films', 'log', 'hyper', 'strings', 'cidade', 'campo', '4k-lento' );
 }
 
 
@@ -863,7 +863,7 @@ function tiagsspace_title_templates() {
         'title-search-wpseo'  => '%%searchphrase%%' . $s . 'Search' . $s . $site,
         'title-404-wpseo'     => 'Not found' . $s . $site,
     );
-    foreach ( array( 'dusk', 'hyper', 'cidade', 'campo', '4k-lento', 'films', 'log' ) as $pt ) {
+    foreach ( array( 'dusk', 'hyper', 'strings', 'cidade', 'campo', '4k-lento', 'films', 'log' ) as $pt ) {
         $t[ 'title-' . $pt ]           = '%%title%%' . $s . tiagsspace_series_name( $pt, 'single' ) . $s . $site;
         $t[ 'title-ptarchive-' . $pt ] = tiagsspace_series_name( $pt, 'archive' ) . ' %%pagenumber%%' . $s . $site;
     }

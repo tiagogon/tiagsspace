@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string[]
  */
 function tiagsspace_duplicatable_post_types() {
-	$types = array( 'post', 'films', 'dusk', 'hyper', '4k-lento', 'log', 'cidade', 'campo' );
+	$types = array( 'post', 'films', 'dusk', 'hyper', 'strings', '4k-lento', 'log', 'cidade', 'campo' );
 
 	/**
 	 * Filter the list of post types that expose the Duplicate UI.
@@ -52,6 +52,7 @@ function tiagsspace_duplicate_meta_denylist() {
 		'_wp_trash_meta_time',
 		'_pingme',
 		'_encloseme',
+		'_tiagsspace_moved_from', // the series a set left (library/move-sets.php): only true of the original
 	);
 
 	/**

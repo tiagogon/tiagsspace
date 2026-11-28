@@ -11,6 +11,9 @@
  * runs: nothing is re-posted to Mastodon, Instagram, Tumblr or the queue, and the
  * modified date stays. Yoast's records of the posts are rebuilt under the new type.
  *
+ * Each moved post gets a `_tiagsspace_moved_from` row with the type it left, so the
+ * redirect finds it even when another series has a set with the same slug.
+ *
  * @package tiagsspace
  */
 
@@ -46,7 +49,7 @@ function tiagsspace_move_sets( $posts, $to, $args = array() ) {
 		return array( 'stopped' => true );
 	}
 
-	$move = $problems = array();
+	$move = $problems = $left = array();
 	foreach ( $posts as $id => $slug ) {
 		$id = (int) $id;
 		$p  = get_post( $id );
@@ -70,7 +73,8 @@ function tiagsspace_move_sets( $posts, $to, $args = array() ) {
 			$problems[] = "{$id}: slug {$p->post_name} is already used in {$to} by {$clash}";
 			continue;
 		}
-		$move[] = $id;
+		$move[]      = $id;
+		$left[ $id ] = $p->post_type;
 		$log( sprintf( '  %-6d %-8s %s/%s', $id, $p->post_status, $p->post_type, $p->post_name ) );
 	}
 	foreach ( $problems as $pr ) {
@@ -89,6 +93,8 @@ function tiagsspace_move_sets( $posts, $to, $args = array() ) {
 	$in = implode( ',', array_map( 'intval', $move ) );
 	$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_type = %s WHERE ID IN ({$in})", $to ) );
 	foreach ( $move as $id ) {
+		// The series it left, for the redirect of its old address (library/redirects.php).
+		add_post_meta( $id, '_tiagsspace_moved_from', $left[ $id ] );
 		clean_post_cache( $id );
 	}
 	// Yoast keeps each post's permalink: drop the records, rebuild them under the new type.
@@ -127,7 +133,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	 * : One or more post ids.
 	 *
 	 * --to=<post_type>
-	 * : The series to move them to (dusk, hyper, cidade, campo…).
+	 * : The series to move them to (dusk, hyper, strings, cidade, campo…).
 	 *
 	 * [--dry-run]
 	 * : Only report what would change.

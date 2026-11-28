@@ -2,7 +2,7 @@
 /**
  * Custom Post Type registrations and related query modifications.
  *
- * Registers: films, dusk, hyper, 4k-lento, log, cidade (archived; was cityburns until Nov 2026),
+ * Registers: films, dusk, hyper, strings (Nov 2026, set up like Hyper), 4k-lento, log, cidade (archived; was cityburns until Nov 2026),
  * campo (archived, Nov 2026).
  * Includes: log-branch admin filter, admin menu order, CPTs in main loop/feed/archives.
  *
@@ -11,7 +11,7 @@
 
 
 /**
- * Admin labels of a photographic series (Dusk, Hyper, Cidade, Campo), in set words:
+ * Admin labels of a photographic series (Dusk, Hyper, Strings, Cidade, Campo), in set words:
  * "All Sets", "Add New Set", "Edit Set" (Tiago, Nov 2026: these are sets, not posts).
  * The admin menu keeps the plain series name.
  *
@@ -155,6 +155,37 @@ function custom_post_type_hyper() {
 }
 // Hook into the 'init' action
 add_action( 'init', 'custom_post_type_hyper', 0 );
+
+
+// Register Custom Post Type STRINGS (Nov 2026): set up like Hyper; its default gallery
+// is one column, edge to edge, no lightbox (template-parts/entry-gallery.php).
+function custom_post_type_strings() {
+  $labels = tiagsspace_series_labels( 'Strings' );
+  $args = array(
+    'label'               => __( 'strings', 'text_domain' ),
+    'description'         => __( 'Strings description.', 'text_domain' ),
+    'labels'              => $labels,
+    'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'trackbacks', 'revisions', 'custom-fields', 'post-formats', ),
+    'taxonomies'          => array( 'category', 'post_tag' ),
+    'hierarchical'        => false,
+    'public'              => true,
+    'show_ui'             => true,
+    'show_in_rest'        => true,
+    'show_in_menu'        => true,
+    'show_in_nav_menus'   => true,
+    'show_in_admin_bar'   => true,
+    'menu_position'       => 4,
+    'menu_icon'           => 'dashicons-format-gallery',
+    'can_export'          => true,
+    'has_archive'         => true,
+    'exclude_from_search' => false,
+    'publicly_queryable'  => true,
+    'capability_type'     => 'post',
+    'yarpp_support'       => true,
+  );
+  register_post_type( 'strings', $args );
+}
+add_action( 'init', 'custom_post_type_strings', 0 );
 
 
 // Register Custom Post Type 4K LENTO
@@ -380,7 +411,7 @@ function tsm_convert_id_to_term_in_query($query) {
 function my_get_posts( $query ) {
 
     if ( is_home() && $query->is_main_query() )
-        $query->set( 'post_type', array( 'post', 'dusk', 'films', 'hyper', 'log', 'cidade', 'campo', '4k-lento') );
+        $query->set( 'post_type', array( 'post', 'dusk', 'films', 'hyper', 'strings', 'log', 'cidade', 'campo', '4k-lento') );
 
     return $query;
 }
@@ -388,7 +419,7 @@ add_filter( 'pre_get_posts', 'my_get_posts' );
 
 function myfeed_request($qv) {
     if (isset($qv['feed']) && !isset($qv['post_type']))
-        $qv['post_type'] = array('post', 'dusk', 'films', 'hyper', 'log', 'cidade', 'campo', '4k-lento');
+        $qv['post_type'] = array('post', 'dusk', 'films', 'hyper', 'strings', 'log', 'cidade', 'campo', '4k-lento');
     return $qv;
 }
 add_filter('request', 'myfeed_request');
@@ -413,7 +444,7 @@ function query_post_type($query) {
         if($post_type) {
             $post_type = $post_type;
         } else {
-            $post_type = array('post', 'dusk', 'films', 'hyper', 'log', 'cidade', 'campo', '4k-lento'); // replace CPT to your custom post type
+            $post_type = array('post', 'dusk', 'films', 'hyper', 'strings', 'log', 'cidade', 'campo', '4k-lento'); // replace CPT to your custom post type
         }
         $query->set('post_type',$post_type);
 

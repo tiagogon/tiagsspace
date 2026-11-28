@@ -40,6 +40,9 @@ $menu_groups_class = "col-sm-24 col-md-16 col-xl-9 menu-group";
 					<a href="<?php echo get_post_type_archive_link('hyper'); ?>" class="<?php if (is_post_type_archive('hyper')) { echo "active"; } if (is_singular('hyper')) { echo " active"; } ?>"><?php echo esc_html( tiagsspace_series_ui_name( 'hyper' ) ); ?></a>
 				</li>
 				<li>
+					<a href="<?php echo get_post_type_archive_link('strings'); ?>" class="<?php if (is_post_type_archive('strings')) { echo "active"; } if (is_singular('strings')) { echo " active"; } ?>"><?php echo esc_html( tiagsspace_series_ui_name( 'strings' ) ); ?></a>
+				</li>
+				<li>
 					<a href="<?php echo get_post_type_archive_link('4k-lento'); ?>" class="<?php if (is_post_type_archive('4k-lento')) { echo "active"; } if (is_singular('4k-lento')) { echo " active"; } ?>"><?php /* Short name on purpose: "4K Lento Mixes" is wider than the menu column and wraps onto two lines from 768px up. */ ?>4K Lento</a>
 				</li>
 				<!-- <li>

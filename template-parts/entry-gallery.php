@@ -80,6 +80,18 @@ if($attachmens){
             $deactivat_masonry      = true;
         }
 
+        // STRINGS (Nov 2026): what Arena and the first Strings sets store with Alternative
+        // gallery on, so a new set looks the same without ticking it: one column, edge to edge.
+        elseif ( is_singular( 'strings' )) {
+            $class_container        = 'container-fluid';
+            $number_of_columns_xs   = 1;
+            $number_of_columns_sm   = 1;
+            $number_of_columns_md   = 1;
+            $number_of_columns_lg   = 1;
+            $gallery_gap            = 0;
+            $light_box              = 'none';
+        }
+
         // Cidade (City Series until Nov 2026) and Campo (Nov 2026), set up alike
         elseif ( is_singular( array( 'cidade', 'campo' ) )) {
             $class_container        = 'container-fluid';

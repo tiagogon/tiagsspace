@@ -49,7 +49,7 @@ require_once('library/move-sets.php');          // Move sets between series, kee
 
 // Disable comments entirely
 add_action('init', function() {
-	$types = ['post', 'page', 'films', 'dusk', 'hyper', '4k-lento', 'log', 'cidade', 'campo'];
+	$types = ['post', 'page', 'films', 'dusk', 'hyper', 'strings', '4k-lento', 'log', 'cidade', 'campo'];
 	foreach ($types as $type) {
 		remove_post_type_support($type, 'comments');
 		remove_post_type_support($type, 'trackbacks');
@@ -464,7 +464,7 @@ function index_next_post_type($current_post_id) {
 
     $args = array(
         'posts_per_page' => 1,
-        'post_type' => array( 'post', 'dusk', 'films', 'hyper', 'log', 'cidade', 'campo'),
+        'post_type' => array( 'post', 'dusk', 'films', 'hyper', 'strings', 'log', 'cidade', 'campo'),
         'post_status' => array( 'publish' ),
     );
     $inner_query = new WP_Query( $args );

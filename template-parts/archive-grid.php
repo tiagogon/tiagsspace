@@ -66,7 +66,7 @@ Index of posts for Home and Archives
                   $grid_array = array(48, 14, 14, 14);
 
               }
-              if ($post_type == "hyper" or $post_type == "dusk") {
+              if ($post_type == "hyper" or $post_type == "strings" or $post_type == "dusk") {
                   $grid_array = array(16, 12, 12, 10);
               }
               if ($post_type == "4k-lento" ) {
