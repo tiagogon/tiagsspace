@@ -41,7 +41,7 @@ FRONT_END_PLUGINS = [
 # Vendored code inside the theme: never a source of the theme's own classes.
 VENDOR = re.compile(
     r'^library/(bootstrap|players)/|^library/js/(plyr|photoswipe|hls|masonry|bootstrap|intense|'
-    r'infinite-scroll\.pkgd|jquery|sortable)|cursors/test|^tumblr/')
+    r'infinite-scroll\.pkgd|jquery|sortable)|images/graphics|^tumblr/')
 
 # Class families built in PHP from variables (a word search cannot see them).
 DYNAMIC = [

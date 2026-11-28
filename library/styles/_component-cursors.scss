@@ -2,9 +2,10 @@
 // Cursors: the theme's drawn set (library/images/cursors/)
 // --------------------------------------------------
 // Native CSS cursors (the system draws them, so they never lag the hand).
-// The site uses the "straight" set, 1.5px line, 28px (Tiago, Nov 2026; a grease-pencil
-// "contact sheet" set was tried and dropped). $cursor-set names it: a new set
-// is a folder beside straight/ and an entry in $cursor-hotspots.
+// The site uses the "straight" set, 1px line, arrow 20px and the others 28px (Tiago,
+// Nov 2026; a grease-pencil "contact sheet" set was tried and dropped). Sizes, line and
+// hotspots are set in bin/cursors-derive.py. $cursor-set names the set: a new set is a
+// folder beside straight/.
 //
 // Each set has a light/ and a dark/ version: the outer line always contrasts
 // with the page (black outline on light pages, white outline on dark ones).
@@ -16,16 +17,10 @@
 // on a class (Plyr's controls, the front-end gallery editor) keeps its own.
 // Mouse and trackpad only: touch screens get nothing.
 
-@import "component-cursors-version"; // $cursor-version, written by bin/cursors-derive.py
+@import "component-cursors-built"; // $cursor-hotspots and $cursor-version, written by bin/cursors-derive.py
 
 $cursor-path: "../images/cursors";
 $cursor-set: straight;
-
-// Hotspot of each cursor in px. The cursors are 28px (Tiago, Nov 2026), drawn on a
-// 36-unit square: px = unit × 28/36, rounded.
-$cursor-hotspots: (
-  straight: (arrow: 2 2, hand: 5 3, folder: 3 5, external: 14 14, magnify: 14 14, close: 14 14, previous: 2 14, next: 26 14, grab: 14 15, grabbing: 13 13, play: 14 14, pause: 14 14, stack: 14 14, single: 14 14, mix: 14 14, scrub: 14 14)
-);
 
 // System cursor if the file fails to load.
 $cursor-fallbacks: (arrow: auto, magnify: zoom-in, close: zoom-out, grab: grab, grabbing: grabbing, scrub: ew-resize);

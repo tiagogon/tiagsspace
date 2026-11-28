@@ -154,7 +154,7 @@
     }
   }
 
-  // The menu icon (header.php): the folder cursor, drawn on the cursors' 36-unit grid at 28px
+  // The menu icon (header.php): the folder cursor, drawn on the cursors' 36-unit grid at 24px
   // with their 1.5px line. Centred in the title's line box ($font-size × 1.2), so it sits level with
   // the words on the left; 8px of padding each side makes a 44px-wide target without moving it.
   // Line = currentColor (white, inverted by #topbar's difference blend like the words); inside
@@ -171,13 +171,13 @@
   }
   .menu-folder {
     display: block;
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     overflow: visible;
     path {
       fill: $dark;
       stroke: currentColor;
-      stroke-width: 1.9286;
+      stroke-width: 2.25; // 1.5px at 24px on the 36-unit grid
       stroke-linejoin: round;
       stroke-linecap: round;
     }

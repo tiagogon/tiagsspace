@@ -2,7 +2,7 @@
 
 The theme's own mouse cursors: native CSS cursors (`cursor: url(…) x y, fallback`), drawn as SVG. The system draws them, so they never lag behind the hand. There is no JavaScript follower.
 
-**The set:** `straight/` (Tiago, Nov 2026). 1.5px line, 28px (a 1px line was tried and dropped). A grease-pencil "contact sheet" set was tried and dropped. The stylesheet names the set in one variable, `$cursor-set`. A new set would be a folder beside `straight/` (with the same names), an entry in `$cursor-hotspots`, and that variable.
+**The set:** `straight/` (Tiago, Nov 2026). **1px line, the arrow at 20px and the others at 28px** (Tiago, 28 Nov 2026; before: 1.5px and 28px for all, when the titles were 36px). The others are a little bigger than the arrow so they look the same size beside it. Sizes, line and hotspots are set in `bin/cursors-derive.py` (`SIZES`, `OTHER_SIZE`, `LINE`, `HOTSPOTS`), never in the drawings. A grease-pencil "contact sheet" set was tried and dropped. The stylesheet names the set in one variable, `$cursor-set`. A new set would be a folder beside `straight/` (with the same names), an entry in `$cursor-hotspots`, and that variable.
 
 ## Files
 
@@ -21,15 +21,15 @@ Names: `arrow`; `hand` (links); `folder` (links to an archive); `external` (link
 
 ## Drawing rules
 
-- `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 36 36">`: drawn on a 36-unit square, shown at **28px** (Tiago, Nov 2026). 1 unit = 0.778px.
-- **32px is the ceiling** (they are 28). Chrome replaces a cursor bigger than 32 × 32 with the system one wherever it would cross the browser's own toolbar, and Windows clips large cursors.
+- `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 36 36">`: drawn on a 36-unit square at 28px. The drawings stay at that size; the derive script writes each built file at its own size (20 / 28px).
+- **32px is the ceiling**. Chrome replaces a cursor bigger than 32 × 32 with the system one wherever it would cross the browser's own toolbar, and Windows clips large cursors.
 - **Outer line contrasts with the page.** Light files have a black outer line, so the cursor reads on white, on the theme gradient and on photographs. The dark files have a white one.
 - Leave about 1 unit of margin so round caps and outer strokes are not cut at the edge.
 - One idea per glyph. No text: it would be about 9px tall.
 
 ### Straight
 
-- White shapes with a 1.5px black line: `fill="#fff" stroke="#000" stroke-width="1.9286" stroke-linejoin="round" stroke-linecap="round"` (1.9286 units = 1.5px at 28).
+- White shapes with a 1.5px black line: `fill="#fff" stroke="#000" stroke-width="1.9286" stroke-linejoin="round" stroke-linecap="round"` (1.9286 units = 1.5px at 28). The derive script rescales every stroke so the built files have a `LINE` px line at their own size.
 - Inner detail lines (the hand's knuckles) use the same line.
 - `magnify` and `close` are a pair, drawn big (disc radius 16 units) so they look as large as the arrow and the hand: a black disc with a white ellipse turned -25°, which gives the ring Lora-like stress, thicker at the sides. Inside, `+` opens and `×` closes, in the same line, round caps.
 - `next` is the `arrow` path itself, turned to point right: `transform="translate(36.62 18) rotate(135)"`.
@@ -37,7 +37,7 @@ Names: `arrow`; `hand` (links); `folder` (links to an archive); `external` (link
 
 ## Hotspots
 
-The hotspot is the pixel that clicks. Hotspots live in `$cursor-hotspots` in `library/styles/_component-cursors.scss`, in px at 28 (units × 28/36, rounded).
+The hotspot is the pixel that clicks. Hotspots are set in drawing units in `HOTSPOTS` in `bin/cursors-derive.py` (the rest click at the centre, 18 18); the script writes them in px at each cursor's size (units × size/36, rounded) as `$cursor-hotspots` into `library/styles/_component-cursors-built.scss`.
 
 - `arrow` and `hand`: the tip. **The hands are turned** (Tiago, chosen with the test page's Hand angle slider): all three (pointing, open, closed) −21°. Each file is the upright drawing in `<g transform="translate(…) rotate(<angle> 17 17)">`, the translate re-centring it in the square. The pointing hand clicks at its fingertip (5 3); the open and closed hands at the middle of the palm (14 15, 13 13).
 - `folder`: its top-left corner.
@@ -70,14 +70,14 @@ All rules live in `_component-cursors.scss`, mouse and trackpad only (`hover: ho
 - **Hyper's viewer (Intense).** While a picture is open, the whole viewer shows the dark `close`. Intense sets its cursor inline, so this rule (`cursor-intense`) is the one `!important`.
 - **Lightbox halves.** `library/js/lightbox.js` sets `.pswp--img-left` while the pointer is on the image's left half: a mouse click there goes to the previous picture, on the right half to the next, beside the image it closes. A tap on a touch screen always goes to the next (no cursor there to explain the halves).
 - **Base for every device.** Outside the mouse-only block, plain system cursors keep clickable things looking clickable where the drawn set does not apply (pointer on the Index rows, the date "+" and the lightbox picture, zoom-out beside it, zoom-in on `.intense`). They are weighted to beat PhotoSwipe's own CSS and lose to the drawn cursors.
-- **Versions.** Every cursor URL ends in `?v=$cursor-version`, a hash the derive script writes into `library/styles/_component-cursors-version.scss`, so a redraw is a new URL.
+- **Versions.** Every cursor URL ends in `?v=$cursor-version`, a hash the derive script writes into `library/styles/_component-cursors-built.scss`, so a redraw is a new URL.
 
 ## Preview
 
-`test.html` (local only: it is in `.gitignore` and never deployed; open it through the local site, e.g. `http://localhost:8888/tiagsspace/wp-content/themes/tiagsspace/library/images/cursors/test.html`) shows the set, for checking a new or changed drawing before it goes live:
+`library/images/graphics.html` (the design sheet for every graphic, cursors and menu icons; local only: it is in `.gitignore` and never deployed; open it through the local site, e.g. `http://localhost:8888/tiagsspace/wp-content/themes/tiagsspace/library/images/graphics.html`) shows the set, for checking a new or changed drawing before it goes live:
 
 - the drawings at 4× with the hotspot in red, and at real size on four backgrounds;
-- a light/dark page switch, a size slider, and hover cards for each context;
+- a light/dark page switch, **Arrow** and **Others** size sliders and a **Line** slider (to use what they show on the site, set `SIZES` / `OTHER_SIZE` / `LINE` in `bin/cursors-derive.py` and run it; keep `SITE_LINE` in the sheet equal to `LINE`), and hover cards for each context;
 - **menu icon proposals** (Nov 2026; **3c is on the site**, inline in `header.php`, the others stay here): drawings for the Reveal / Hide toggle in the same language (1 lines → cross, drawn as 6d's closed lines, 3 folder opens, 3b the same with the rising photograph in solid ink, 3c the folder only opening (like 📁 → 📂), 3d the ink document climbing high with a page-coloured band around it, 6c folders rise from a drawer, 6d menu lines that unfold into that drawer; folders are built by `folderBack()` in the page script), animated with CSS transitions on their open state (`aria-expanded`), at 4× and real size, and in a mock header blended with difference like the header words (inside black, which difference leaves unchanged).
 
-Its set list and hotspots are its own copy: keep them in step with the SCSS map. Screenshots never show the cursor, so judge by hand, on a Retina screen too.
+Its set list and hotspots are its own copy: keep them in step with `HOTSPOTS` in the derive script. Screenshots never show the cursor, so judge by hand, on a Retina screen too.
