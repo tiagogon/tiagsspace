@@ -46,9 +46,9 @@ $font-family-menu:       $font-family-base;
 
 // The type scale: every font size in the theme is one of these steps. Change a
 // size here, once. (Merging two steps changes the look: decide it on the site.)
-$font-size:          36px;   // titles and chrome: header, nav, menu, index, post titles, lightbox loading text
-$font-size-content:  23px;   // prose inside posts and pages (section.post-content), the players' time
-$font-size-small:    18px;   // footer: social block heading and links
+$font-size:          30px;   // titles and chrome: header, nav, menu, index, post titles, lightbox loading text
+$font-size-content:  22px;   // body default, prose inside posts and pages (section.post-content), the players' time
+$font-size-small:    18px;   // a work's date line, its "+" and the details it opens; footer: social block
 $font-size-caption:  16px;   // footer: attribution text
 $font-size-label:    14px;   // gallery figcaptions, lightbox title
 $font-size-meta:     12px;   // post meta line, the Index table on phones
@@ -59,6 +59,10 @@ $font-size-p:       $font-size;
 $font-size-heading: $font-size;
 $font-size-nav:     $font-size;
 $font-size-menu:    $font-size;
+$font-size-entry-meta: $font-size-small;   // date line + "+" + expanded details (_page-single-content.scss)
+
+// Line height of body text and post prose (Bootstrap's reboot reads this name too).
+$line-height-base: 1.4;
 
 $font-weight-normal:   400;
 $font-weight-bold:     600;   // bold — post-content <strong>/<b>

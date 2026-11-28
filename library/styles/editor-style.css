@@ -2,7 +2,7 @@
    Editor Style — mirrors front-end post content
    ---------------------------------------------------------------------------
    Sizes are copied from the compiled front end and must be kept in sync by hand:
-   prose = $font-size-content (23px, section.post-content, _foundations-fonts.scss),
+   prose = $font-size-content (22px, section.post-content, _foundations-fonts.scss),
    headings = Bootstrap's h1–h6 scale (2.5rem … 1rem on a 16px root, line-height 1.2),
    which is what a heading block inside post content actually renders at.
    ========================================================================== */
@@ -88,8 +88,8 @@
    skin can disagree. */
 body {
   font-family: "Lora", serif;
-  font-size: 23px; /* $font-size-content */
-  line-height: 1.5;
+  font-size: 22px; /* $font-size-content */
+  line-height: 1.4; /* $line-height-base */
   color: #000;
   /* macOS smoothing as on the front end (_foundations-tokens.scss) */
   -webkit-font-smoothing: antialiased;
@@ -99,8 +99,8 @@ body {
 p {
   margin: 0 0 16px;
   font-family: "Lora", serif;
-  font-size: 23px; /* $font-size-content */
-  line-height: 1.5;
+  font-size: 22px; /* $font-size-content */
+  line-height: 1.4; /* $line-height-base */
   color: inherit;
 }
 
@@ -123,6 +123,13 @@ h3 { font-size: 28px; }
 h4 { font-size: 24px; }
 h5 { font-size: 20px; }
 h6 { font-size: 16px; }
+
+/* The post title: on the site it is in the header line ($font-size, line-height 1.2),
+   not a 40px h1 in the text. */
+.editor-post-title {
+  font-size: 30px; /* $font-size */
+  line-height: 1.2;
+}
 
 /* Links */
 a {

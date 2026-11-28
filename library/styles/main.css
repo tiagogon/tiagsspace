@@ -77,7 +77,7 @@ body {
   font-family: "Lora", serif;
   font-size: 1rem;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.4;
   color: #000;
   text-align: left;
   background-color: #fff; }
@@ -5141,23 +5141,40 @@ mark,
 .invisible {
   visibility: hidden !important; }
 
+body {
+  font-size: 22px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh; }
+  body a:hover {
+    text-decoration: underline; }
+
+:where(body) {
+  --tg-ink: #000;
+  --tg-paper-bottom: #F2EFE3;
+  --tg-paper-top: #E3E5F2; }
+
+:where(body.background-w-dark-color) {
+  --tg-ink: #fff;
+  --tg-paper-bottom: #1d1a17;
+  --tg-paper-top: #16161b; }
+
+@media (prefers-color-scheme: dark) {
+  :where(body.white-darkmode),
+  :where(body.tiagsssss-color) {
+    --tg-ink: #fff;
+    --tg-paper-bottom: #1d1a17;
+    --tg-paper-top: #16161b; } }
 html {
   background: #fff; }
   @media (prefers-color-scheme: dark) {
     html {
       background: #000; } }
 
-body {
-  font-size: 36px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh; }
-  body a:hover {
-    text-decoration: underline; }
-  @media (prefers-color-scheme: dark) {
-    body {
-      color: #fff; } }
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #fff; } }
 
 body.background-w-dark-color {
   color: #fff; }
@@ -5276,22 +5293,6 @@ video.plyr-thumbnail-front {
 audio {
   width: 100%; }
 
-:where(body) {
-  --tg-ink: #000;
-  --tg-paper-bottom: #F2EFE3;
-  --tg-paper-top: #E3E5F2; }
-
-:where(body.background-w-dark-color) {
-  --tg-ink: #fff;
-  --tg-paper-bottom: #1d1a17;
-  --tg-paper-top: #16161b; }
-
-@media (prefers-color-scheme: dark) {
-  :where(body.white-darkmode),
-  :where(body.tiagsssss-color) {
-    --tg-ink: #fff;
-    --tg-paper-bottom: #1d1a17;
-    --tg-paper-top: #16161b; } }
 .media {
   position: relative;
   container-type: inline-size; }
@@ -5301,7 +5302,7 @@ audio {
   width: 100%;
   height: 100%;
   --p-line: 1.5px;
-  --p-time: 23px;
+  --p-time: 22px;
   --p-icon: 24px;
   --p-sound: 24px;
   --p-gutter: 12px;
@@ -5312,7 +5313,7 @@ audio {
 
 @supports (width: 1cqw) {
   .media__frame {
-    --p-time: clamp(23px, (100cqw - 767.5px) * 1000, 36px);
+    --p-time: clamp(22px, (100cqw - 767.5px) * 1000, 30px);
     --p-icon: clamp(24px, (100cqw - 767.5px) * 1000, 32px);
     --p-sound: clamp(24px, (100cqw - 767.5px) * 1000, 32px);
     --p-lens: clamp(40px, (100cqw - 767.5px) * 1000, 48px);
@@ -5751,7 +5752,7 @@ html.tg-touch .media--film.has-sound.is-active:not(.at-start) .film__chrome {
   align-items: flex-end;
   gap: 4px;
   padding: .4em .55em .45em 1em;
-  font-size: 23px;
+  font-size: 22px;
   opacity: 0;
   transition: opacity .12s; }
 
@@ -5894,7 +5895,7 @@ html.tg-media .media--audio:not(.is-native) .media__audio {
   flex: 1; }
 
 .env__time {
-  font-size: 23px;
+  font-size: 22px;
   font-variant-numeric: tabular-nums;
   line-height: 1;
   white-space: nowrap; }
@@ -6298,7 +6299,7 @@ div.pswp__img--placeholder,
   text-align: center;
   pointer-events: none !important;
   font-family: "Lora", serif;
-  font-size: 36px;
+  font-size: 30px;
   line-height: 1;
   color: #000;
   opacity: 0;
@@ -6705,8 +6706,8 @@ div.pswp__img--placeholder,
           margin-top: 8px; }
         #collapseMenu .row .menu-group ul li {
           margin-left: none;
-          margin-bottom: 18px;
-          font-size: 36px; }
+          margin-bottom: 15px;
+          font-size: 30px; }
           #collapseMenu .row .menu-group ul li .active {
             text-decoration: underline; }
           #collapseMenu .row .menu-group ul li li {
@@ -6752,7 +6753,7 @@ div.pswp__img--placeholder,
       #site-header .topbar-left {
         left: 16px; } }
     #site-header .topbar-left h1, #site-header .topbar-left .site-title, #site-header .topbar-left a {
-      font-size: 36px;
+      font-size: 30px;
       font-family: "Lora", serif;
       color: #fff; }
     #site-header .topbar-left .site-title-heading {
@@ -6775,13 +6776,13 @@ div.pswp__img--placeholder,
       display: inline-block;
       outline: none;
       color: #fff;
-      font-size: 36px;
+      font-size: 30px;
       margin-left: 13px;
       line-height: inherit; }
   #site-header #topbar .menu-toggle {
     display: inline-flex;
     align-items: center;
-    height: 43.2px;
+    height: 36px;
     padding: 0 8px;
     margin-right: -8px;
     vertical-align: top; }
@@ -6839,15 +6840,12 @@ div.pswp__img--placeholder,
     max-width: none;
     flex: none; }
     #lower-header .row .left-side h1, #lower-header .row .left-side .site-title, #lower-header .row .left-side a {
-      font-size: 36px;
+      font-size: 30px;
       font-family: "Lora", serif;
       color: #fff; }
 
 .tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1, .tiagsssss-color #collapseMenu .site-title, .white-darkmode #collapseMenu a, .white-darkmode #collapseMenu h1, .white-darkmode #collapseMenu .site-title {
-  color: #000; }
-  @media (prefers-color-scheme: dark) {
-    .tiagsssss-color #collapseMenu a, .tiagsssss-color #collapseMenu h1, .tiagsssss-color #collapseMenu .site-title, .white-darkmode #collapseMenu a, .white-darkmode #collapseMenu h1, .white-darkmode #collapseMenu .site-title {
-      color: #fff; } }
+  color: var(--tg-ink); }
 
 .background-w-dark-color a, .background-w-dark-color h1, .background-w-dark-color .site-title {
   color: #fff; }
@@ -6862,7 +6860,7 @@ body #collapseMenu a:hover {
   padding-top: 83.2px; }
 
 .year-separator {
-  font-size: 36px;
+  font-size: 30px;
   font-family: "Lora", serif; }
   @media (prefers-color-scheme: dark) {
     .year-separator {
@@ -6884,7 +6882,7 @@ body #collapseMenu a:hover {
       background-color: #16161b; } }
   .yarpp-related-header h3 {
     color: #000;
-    font-size: 36px;
+    font-size: 30px;
     line-height: 1.3;
     background-color: transparent;
     display: inline-block;
@@ -6984,7 +6982,7 @@ li.masonry-item {
   .archive-navigation .nav-previous a, .archive-navigation .nav-next a {
     color: #000;
     font-family: "Lora", serif;
-    font-size: 36px;
+    font-size: 30px;
     line-height: 1.3; }
     @media (prefers-color-scheme: dark) {
       .archive-navigation .nav-previous a, .archive-navigation .nav-next a {
@@ -7239,12 +7237,12 @@ div.thumbnail figure img.intense--loading {
 .single-content .page-header .single-title {
   margin-top: 0;
   margin-bottom: 16px;
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 500;
   line-height: 1.2;
-  color: #000; }
+  color: var(--tg-ink); }
   .single-content .page-header .single-title a {
-    color: #000; }
+    color: var(--tg-ink); }
   .single-content .page-header .single-title .single-title-heading {
     display: inline;
     margin: 0;
@@ -7266,40 +7264,39 @@ div.thumbnail figure img.intense--loading {
   .single-content .page-header .entry-date .entry-date-toggle:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: -6px; }
-.single-content .page-header p.meta {
-  margin-bottom: 36px;
-  font-size: 12px;
-  display: none; }
 .single-content section.post-content {
-  font-size: 23px;
+  font-size: 22px;
   margin-bottom: 16px; }
   .single-content section.post-content p {
-    color: #000; }
+    color: var(--tg-ink); }
     .single-content section.post-content p a {
       text-decoration: underline;
-      color: #000; }
+      color: var(--tg-ink); }
+  .single-content section.post-content h1 a, .single-content section.post-content h2 a, .single-content section.post-content h3 a, .single-content section.post-content h4 a, .single-content section.post-content h5 a {
+    color: var(--tg-ink); }
   .single-content section.post-content ol, .single-content section.post-content ul, .single-content section.post-content dl {
     padding: 16px;
-    color: #000; }
+    color: var(--tg-ink); }
 .single-content footer {
   margin-top: 16px;
   margin-bottom: 16px;
-  color: #000; }
+  color: var(--tg-ink); }
+  .single-content footer a {
+    color: var(--tg-ink); }
   .single-content footer p.footer-meta {
     margin-bottom: 0px;
-    font-size: 36px;
     font-family: "Lora", serif;
     line-height: 1.3em;
-    color: #000; }
+    color: var(--tg-ink); }
   .single-content footer ul {
     margin-bottom: 16px; }
     .single-content footer ul li {
       display: inline-block;
       margin: 0 5px 7px 0px;
       line-height: 1;
-      color: #000; }
+      color: var(--tg-ink); }
       .single-content footer ul li a {
-        color: #000;
+        color: var(--tg-ink);
         background-color: #000;
         padding: 3px 5px 2px;
         font-style: normal;
@@ -7309,7 +7306,7 @@ div.thumbnail figure img.intense--loading {
           .single-content footer ul li a {
             transition: none; } }
         .single-content footer ul li a:hover {
-          color: #000;
+          color: var(--tg-ink);
           background-color: #fff;
           transition: all 1s ease-out; }
           @media screen and (prefers-reduced-motion: reduce) {
@@ -7319,98 +7316,33 @@ div.thumbnail figure img.intense--loading {
 .single-content header + footer {
   margin-top: 0; }
 
+.single-content .page-header .single-title.entry-date,
+.single-content footer {
+  font-size: 18px; }
+
 @media (max-width: 576px) {
   .post-type-archive-log .single-content .page-header .single-title, .tax-log-branch .single-content .page-header .single-title {
-    font-size: 36px; }
-  .post-type-archive-log .single-content footer p.footer-meta, .tax-log-branch .single-content footer p.footer-meta {
-    font-size: 36px; } }
-.background-w-dark-color .single-navigation .nav-previous span a, .background-w-dark-color .single-navigation .nav-next span a {
-  color: #fff; }
-
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content .page-header .single-title, .white-darkmode .single-content .page-header .single-title {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content .page-header .single-title a, .white-darkmode .single-content .page-header .single-title a {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content section.post-content h1, .tiagsssss-color .single-content section.post-content h2, .tiagsssss-color .single-content section.post-content h3, .tiagsssss-color .single-content section.post-content h4, .tiagsssss-color .single-content section.post-content h5, .tiagsssss-color .single-content section.post-content p, .white-darkmode .single-content section.post-content h1, .white-darkmode .single-content section.post-content h2, .white-darkmode .single-content section.post-content h3, .white-darkmode .single-content section.post-content h4, .white-darkmode .single-content section.post-content h5, .white-darkmode .single-content section.post-content p {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content section.post-content h1 a, .tiagsssss-color .single-content section.post-content h2 a, .tiagsssss-color .single-content section.post-content h3 a, .tiagsssss-color .single-content section.post-content h4 a, .tiagsssss-color .single-content section.post-content h5 a, .tiagsssss-color .single-content section.post-content p a, .white-darkmode .single-content section.post-content h1 a, .white-darkmode .single-content section.post-content h2 a, .white-darkmode .single-content section.post-content h3 a, .white-darkmode .single-content section.post-content h4 a, .white-darkmode .single-content section.post-content h5 a, .white-darkmode .single-content section.post-content p a {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content section.post-content ol, .tiagsssss-color .single-content section.post-content ul, .tiagsssss-color .single-content section.post-content dl, .white-darkmode .single-content section.post-content ol, .white-darkmode .single-content section.post-content ul, .white-darkmode .single-content section.post-content dl {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content footer, .white-darkmode .single-content footer {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content footer p.footer-meta, .white-darkmode .single-content footer p.footer-meta {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content footer a, .white-darkmode .single-content footer a {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content footer ul li, .white-darkmode .single-content footer ul li {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content footer ul li a, .white-darkmode .single-content footer ul li a {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-content footer ul li a:hover, .white-darkmode .single-content footer ul li a:hover {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .tiagsssss-color .single-navigation .nav-previous span a, .tiagsssss-color .single-navigation .nav-next span a, .white-darkmode .single-navigation .nav-previous span a, .white-darkmode .single-navigation .nav-next span a {
-    color: #fff; } }
-
-.background-w-dark-color .single-content .page-header .single-title {
-  color: #fff; }
-  .background-w-dark-color .single-content .page-header .single-title a {
-    color: #fff; }
-.background-w-dark-color .single-content .page-header p.meta {
-  color: #fff; }
-  .background-w-dark-color .single-content .page-header p.meta a {
-    color: #fff; }
+    font-size: 30px; } }
 .background-w-dark-color .single-content section.post-content {
   margin-bottom: 16px; }
-  .background-w-dark-color .single-content section.post-content p {
-    color: #fff; }
-    .background-w-dark-color .single-content section.post-content p a {
-      color: #fff;
-      border-bottom: 1px solid transparent;
-      transition: all 1s ease-out; }
-      @media screen and (prefers-reduced-motion: reduce) {
-        .background-w-dark-color .single-content section.post-content p a {
-          transition: none; } }
-      .background-w-dark-color .single-content section.post-content p a:hover {
-        text-decoration: none; }
-.background-w-dark-color .single-content footer p.footer-meta {
-  color: #fff; }
-  .background-w-dark-color .single-content footer p.footer-meta a {
-    color: #fff; }
+  .background-w-dark-color .single-content section.post-content p a {
+    border-bottom: 1px solid transparent;
+    transition: all 1s ease-out; }
+    @media screen and (prefers-reduced-motion: reduce) {
+      .background-w-dark-color .single-content section.post-content p a {
+        transition: none; } }
+    .background-w-dark-color .single-content section.post-content p a:hover {
+      text-decoration: none; }
 
-@media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content .page-header p.meta {
-    color: #fff; } }
-@media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content .page-header p.meta a {
-    color: #fff; } }
 .white-darkmode .single-content section.post-content {
   margin-bottom: 16px; }
   .white-darkmode .single-content section.post-content p a {
     transition: all 1s ease-out; }
-    @media (prefers-color-scheme: dark) {
-      .white-darkmode .single-content section.post-content p a {
-        color: #fff; } }
     @media screen and (prefers-reduced-motion: reduce) {
       .white-darkmode .single-content section.post-content p a {
         transition: none; } }
     .white-darkmode .single-content section.post-content p a:hover {
       text-decoration: none; }
-@media (prefers-color-scheme: dark) {
-  .white-darkmode .single-content footer p.footer-meta a {
-    color: #fff; } }
 
 .tiagsssss-color .single-content footer ul li a {
   color: #E3E5F2;
@@ -7430,7 +7362,6 @@ div.thumbnail figure img.intense--loading {
 .dark .single-content section.post-content {
   margin-bottom: 16px; }
   .dark .single-content section.post-content p a {
-    color: #fff;
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
       .dark .single-content section.post-content p a {
@@ -7467,8 +7398,9 @@ div.thumbnail figure img.intense--loading {
   margin-bottom: 16px; }
   .single-navigation .nav-previous span a, .single-navigation .nav-next span a {
     font-family: "Lora", serif;
-    font-size: 36px;
+    font-size: 30px;
     line-height: 1.3;
+    color: var(--tg-ink);
     background-color: transparent;
     transition: all 1s ease-out; }
     @media screen and (prefers-reduced-motion: reduce) {
@@ -7496,7 +7428,7 @@ div.thumbnail figure img.intense--loading {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 36px;
+  font-size: 30px;
   font-family: "Lora", serif;
   line-height: 1.45; }
   .table-index th,

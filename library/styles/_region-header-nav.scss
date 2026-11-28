@@ -158,7 +158,7 @@
   }
 
   // The menu icon (header.php): the folder cursor, drawn on the cursors' 36-unit grid at 28px
-  // with their 1.5px line. Centred in the title's line box (36px × 1.2), so it sits level with
+  // with their 1.5px line. Centred in the title's line box ($font-size-nav × 1.2), so it sits level with
   // the words on the left; 8px of padding each side makes a 44px-wide target without moving it.
   // Line = currentColor (white, inverted by #topbar's difference blend like the words); inside
   // = black, which difference leaves unchanged: it reads as empty, yet hides the back's lines

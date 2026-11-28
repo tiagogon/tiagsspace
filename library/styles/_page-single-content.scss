@@ -117,7 +117,6 @@
     }
     p.footer-meta {
       margin-bottom: 0px;
-      font-size: $font-size-heading;
       font-family: $font-family-headings;
       line-height: 1.3em;
       color: var(--tg-ink);
@@ -150,17 +149,19 @@
 .single-content header + footer {
   margin-top: 0;
 }
+// A work's date line ("20250913 +", the "+" follows with font: inherit) and the details
+// it opens (the whole footer: terms, Edit, Download and its file list) share one size, set
+// here only. Listings' entry titles keep the title size (they have no date line, no footer).
+.single-content .page-header .single-title.entry-date,
+.single-content footer {
+  font-size: $font-size-entry-meta;
+}
 // Log archive: smaller title on mobile
 @media (max-width: map-get($grid-breakpoints, sm)) {
   .post-type-archive-log, .tax-log-branch {
     .single-content {
       .page-header {
         .single-title {
-          font-size: $font-size-p;
-        }
-      }
-      footer {
-        p.footer-meta {
           font-size: $font-size-p;
         }
       }

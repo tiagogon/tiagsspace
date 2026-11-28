@@ -3,8 +3,8 @@
 // --------------------------------------------------
 
 body {
-  font-size: $font-size;
-  line-height: 1.5;
+  font-size: $font-size-content; // text with no size of its own reads as text (search results, 404)
+  line-height: $line-height-base; // post prose inherits it
   // Match the reference rendering (fontsource.org): grayscale antialiasing on
   // macOS, so strokes read as designed instead of the heavier subpixel default.
   // No effect on other platforms. Do NOT add font-feature-settings: kern/liga/calt
