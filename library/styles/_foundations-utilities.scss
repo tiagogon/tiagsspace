@@ -1,0 +1,65 @@
+// --------------------------------------------------
+// Utilities: Bootstrap 4's placement utilities, without its colour kit
+// (replaces @import "../bootstrap/scss/utilities", Nov 2026)
+// --------------------------------------------------
+// Kept whole, at every breakpoint, for future layout work (Tiago, Nov 2026: "keep
+// the stuff that allows to put stuff in the place we want"): vertical align,
+// clearfix, display, embed, flex, float, position, screen readers, sizing,
+// spacing, text alignment and wrapping, visibility. These are Bootstrap's own
+// files, so they behave exactly as before.
+//
+// Left out: the cosmetic utilities, which carry Bootstrap's palette, not the
+// site's (bg-*, text colours, border colours and widths, rounded and shadow
+// variants, font weights, text transforms). Of those, only the few classes that
+// something references are kept, below. bin/css-class-usage.py lists every
+// Bootstrap class the theme, the front-end plugins and the posts reference; run
+// it before removing one, and a cosmetic class that becomes needed is one line here.
+//
+// Bootstrap's order is kept (align, borders, clearfix, display, embed, flex, float,
+// position, screen readers, shadows, sizing, spacing, text, visibility): two
+// utilities on one element resolve exactly as before.
+
+// stylelint-disable declaration-no-important
+
+@import "../bootstrap/scss/utilities/align";
+
+// Borders: only the classes referenced (ActivityPub, Videopack; "rounded" as a word)
+.border         { border: $border-width solid $border-color !important; }
+.border-top     { border-top: $border-width solid $border-color !important; }
+.border-right   { border-right: $border-width solid $border-color !important; }
+.border-bottom  { border-bottom: $border-width solid $border-color !important; }
+.border-left    { border-left: $border-width solid $border-color !important; }
+
+.rounded { border-radius: $border-radius !important; }
+
+@import "../bootstrap/scss/utilities/clearfix";
+@import "../bootstrap/scss/utilities/display";
+@import "../bootstrap/scss/utilities/embed";
+@import "../bootstrap/scss/utilities/flex";
+@import "../bootstrap/scss/utilities/float";
+@import "../bootstrap/scss/utilities/position";
+@import "../bootstrap/scss/utilities/screenreaders";
+
+// Shadows: only the class referenced (as a word, kept to be safe)
+.shadow { box-shadow: $box-shadow !important; }
+
+@import "../bootstrap/scss/utilities/sizing";
+@import "../bootstrap/scss/utilities/spacing";
+
+// Text: alignment and wrapping (Bootstrap's _text.scss without the colours,
+// transforms, weights and monospace)
+.text-justify  { text-align: justify !important; }
+.text-nowrap   { white-space: nowrap !important; }
+.text-truncate { @include text-truncate; }
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  @include media-breakpoint-up($breakpoint) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+    .text#{$infix}-left   { text-align: left !important; }
+    .text#{$infix}-right  { text-align: right !important; }
+    .text#{$infix}-center { text-align: center !important; }
+  }
+}
+
+@import "../bootstrap/scss/utilities/visibility";

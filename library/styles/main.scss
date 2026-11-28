@@ -13,12 +13,11 @@
 @import "../bootstrap/scss/variables";
 @import "../bootstrap/scss/mixins";
 
-@import "../bootstrap/scss/root";
 @import "../bootstrap/scss/reboot";
 @import "../bootstrap/scss/type";
-@import "../bootstrap/scss/grid";
+@import "../bootstrap/scss/grid"; // the whole grid: every column, offset and order class (kept for future layouts)
 @import "../bootstrap/scss/transitions"; // needed for Bootstrap Collapse Component
-@import "../bootstrap/scss/utilities";
+@import "foundations-utilities"; // placement utilities whole, colour utilities only where used
 
 // ----- Foundations (tokens) -----
 
