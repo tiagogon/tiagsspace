@@ -8,7 +8,9 @@ Lists, for library/styles/_*.scss and main.scss:
      imported Bootstrap file, and no Bootstrap setting that is itself in use
   2. Bootstrap settings set to Bootstrap's own default (a no-op), unless the theme
      reads the name itself (its palette: $white, $dark)
-  3. mixins, functions, placeholders and keyframes that are never used
+  3. variables that only repeat another variable (one name per value; Bootstrap's
+     own settings are exempt)
+  4. mixins, functions, placeholders and keyframes that are never used
 
 The rule (Tiago, Nov 2026): what changes nothing is removed, not kept "to be safe".
 After removing something, let Koala compile and check main.css is byte-identical
@@ -114,6 +116,14 @@ def main():
     for name, (p, value) in sorted(defined.items()):
         if name in bs_vars and norm(value) == norm(bs_vars[name]) and reads(name, all_theme) == 0:
             print(f'  {name:30s} {norm(value)}  ({rel(p)})')
+
+    # One name per value: a theme variable whose value is only another variable is a
+    # second name for it. Bootstrap's own settings are exempt ($link-color: $dark sets
+    # Bootstrap's link colour; it is not an alias).
+    print('\nVariables that only repeat another variable:')
+    for name, (p, value) in sorted(defined.items()):
+        if name not in bs_vars and re.fullmatch(r'\$[\w-]+', norm(value)):
+            print(f'  {name:30s} = {norm(value)}  ({rel(p)})')
 
     print('\nMixins, functions, placeholders, keyframes never used:')
     for p, s in theme.items():

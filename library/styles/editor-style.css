@@ -2,7 +2,7 @@
    Editor Style — mirrors front-end post content
    ---------------------------------------------------------------------------
    Sizes are copied from the compiled front end and must be kept in sync by hand:
-   prose = $font-size-content (22px, section.post-content, _foundations-fonts.scss),
+   prose = $font-size-content (22px, section.post-content, _foundations-config.scss),
    headings = Bootstrap's h1–h6 scale (2.5rem … 1rem on a 16px root, line-height 1.2),
    which is what a heading block inside post content actually renders at.
    ========================================================================== */
