@@ -5,6 +5,9 @@
 # Local-only dev notes (test accounts, local URLs)
 .claude/rules/local-dev.md
 
+# Claude Code plans (working drafts; decisions live in the code and docs)
+.claude/plans/
+
 # Tumblr theme preview pages (built by tumblr/preview.js from live posts)
 tumblr/preview/
 
