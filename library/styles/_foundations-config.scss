@@ -3,6 +3,8 @@
 // --------------------------------------------------
 // Imported first, before Bootstrap: Bootstrap's variables are !default, so the
 // values set here win (grid, type, link colours). Nothing in this file prints CSS.
+// A Bootstrap setting is here only when it changes something: one equal to Bootstrap's
+// default, or read by nothing, is removed (bin/scss-unused.py lists them).
 
 
 // --------------------------------------------------
@@ -32,7 +34,6 @@ $tiagsssss-color-darkmode-gradient: linear-gradient(0deg, $dark-lighten-vibe-con
 // --------------------------------------------------
 
 $font-family-base:       "Lora", serif;
-$font-family-sans-serif: $font-family-base;   // Bootstrap base reads this name
 $font-family-headings:   $font-family-base;
 $font-family-menu:       $font-family-base;
 
@@ -56,8 +57,7 @@ $font-size-entry-meta: $font-size-small;   // date line + "+" + expanded details
 // Line height of body text and post prose (Bootstrap's reboot reads this name too).
 $line-height-base: 1.4;
 
-$font-weight-normal:   400;
-$font-weight-bold:     600;   // bold — post-content <strong>/<b>
+$font-weight-bold:     600;   // Bootstrap's <dt> weight (its <strong>/<b> are `bolder`)
 $headings-font-weight: 400;   // titles stay regular weight
 
 
@@ -68,9 +68,10 @@ $headings-font-weight: 400;   // titles stay regular weight
 $body-color:            #000;
 
 $link-color:            #000;
-$link-decoration:       none;
+// `none` is not a colour: browsers drop reboot's `a:hover { color }`, so a hovered link
+// keeps its own colour (the white links on dark pages stay white). Bootstrap's default,
+// a darker $link-color, would turn every hovered link black. Keep it.
 $link-hover-color:      none;
-$link-hover-decoration: underline;
 
 
 // --------------------------------------------------
