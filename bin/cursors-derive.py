@@ -51,12 +51,12 @@ DRAWN_LINE = 1.5
 LINE = 1      # px, at every size (before SCALE)
 SIZES = {'arrow': 20}   # px (before SCALE); the arrow is small, the others a little bigger so they look alike
 OTHER_SIZE = 28
-# One multiplier on sizes and line together. 1.5527 is macOS's Pointer size
-# (Accessibility > Display) that Tiago judged the set with on 28 Nov 2026
-# (mouseDriverCursorSize = 1.552729925968109): with Pointer size back at Normal,
-# the cursors look as they did then. The menu icon follows (it reads
+# One multiplier on sizes and line together, set by the arrow (Tiago, 28 Nov 2026):
+# the arrow is 30px and everything else keeps its proportion to it (the others
+# 28 × 1.5 = 42px, the line 1 × 1.5 = 1.5px). The menu icon follows (it reads
 # $cursor-sizes and $cursor-line from _component-cursors-built.scss).
-SCALE = 1.552729925968109
+ARROW = 30
+SCALE = ARROW / SIZES['arrow']
 
 # Click point of each cursor, in drawing units (36 = the whole square); the rest
 # click at the centre (18 18). Per set.

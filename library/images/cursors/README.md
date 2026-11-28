@@ -2,7 +2,7 @@
 
 The theme's own mouse cursors: native CSS cursors (`cursor: url(…) x y, fallback`), drawn as SVG. The system draws them, so they never lag behind the hand. There is no JavaScript follower.
 
-**The set:** `straight/` (Tiago, Nov 2026). **Arrow 31px, the others 43px, a 1.55px line** (Tiago, 28 Nov 2026): set as 20px / 28px / 1px times `SCALE = 1.5527`, the macOS Pointer size (Accessibility → Display) the set was judged with, so the cursors look the same with Pointer size back at Normal. **Above 32px**: Chrome and Firefox show the system cursor instead wherever a cursor bigger than 32px would cross the browser's own toolbar (the top ~43px of the page), and Windows may clip it. Before: 1.5px and 28px for all, when the titles were 36px. The others are a little bigger than the arrow so they look the same size beside it. Sizes, line, multiplier and hotspots are set in `bin/cursors-derive.py` (`SIZES`, `OTHER_SIZE`, `LINE`, `SCALE`, `HOTSPOTS`), never in the drawings; the script also writes `$cursor-sizes` and `$cursor-line`, which the header's menu icon reads. A grease-pencil "contact sheet" set was tried and dropped. The stylesheet names the set in one variable, `$cursor-set`. A new set would be a folder beside `straight/` (with the same names), an entry in `$cursor-hotspots`, and that variable.
+**The set:** `straight/` (Tiago, Nov 2026). **Arrow 30px, the others 42px, a 1.5px line** (Tiago, 28 Nov 2026): the arrow sets the scale (`ARROW = 30`, so `SCALE = 30 / 20 = 1.5`) and the others keep their proportion to it: 28px × 1.5, 1px × 1.5. Judged on a Mac with Pointer size at Normal (the set was first judged at 1.55, which macOS applies to every cursor). **Above 32px**: Chrome and Firefox show the system cursor instead wherever a cursor bigger than 32px would cross the browser's own toolbar (the top ~42px of the page), and Windows may clip it. Before: 1.5px and 28px for all, when the titles were 36px. The others are a little bigger than the arrow so they look the same size beside it. Sizes, line, multiplier and hotspots are set in `bin/cursors-derive.py` (`SIZES`, `OTHER_SIZE`, `LINE`, `ARROW` → `SCALE`, `HOTSPOTS`), never in the drawings; the script also writes `$cursor-sizes` and `$cursor-line`, which the header's menu icon reads. A grease-pencil "contact sheet" set was tried and dropped. The stylesheet names the set in one variable, `$cursor-set`. A new set would be a folder beside `straight/` (with the same names), an entry in `$cursor-hotspots`, and that variable.
 
 ## Files
 
@@ -21,7 +21,7 @@ Names: `arrow`; `hand` (links); `folder` (links to an archive); `external` (link
 
 ## Drawing rules
 
-- `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 36 36">`: drawn on a 36-unit square at 28px. The drawings stay at that size; the derive script writes each built file at its own size (31 / 43px).
+- `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 36 36">`: drawn on a 36-unit square at 28px. The drawings stay at that size; the derive script writes each built file at its own size (30 / 42px).
 - **32px is the ceiling**. Chrome replaces a cursor bigger than 32 × 32 with the system one wherever it would cross the browser's own toolbar, and Windows clips large cursors.
 - **Outer line contrasts with the page.** Light files have a black outer line, so the cursor reads on white, on the theme gradient and on photographs. The dark files have a white one.
 - Leave about 1 unit of margin so round caps and outer strokes are not cut at the edge.

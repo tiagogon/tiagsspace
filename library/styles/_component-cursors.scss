@@ -2,7 +2,7 @@
 // Cursors: the theme's drawn set (library/images/cursors/)
 // --------------------------------------------------
 // Native CSS cursors (the system draws them, so they never lag the hand).
-// The site uses the "straight" set, arrow 31px, the others 43px, 1.55px line (20/28/1px × SCALE 1.5527; Tiago,
+// The site uses the "straight" set, arrow 30px, the others 42px, 1.5px line (20/28/1px × 1.5, set by ARROW = 30; Tiago,
 // Nov 2026; a grease-pencil "contact sheet" set was tried and dropped). Sizes, line and
 // hotspots are set in bin/cursors-derive.py. $cursor-set names the set: a new set is a
 // folder beside straight/.
